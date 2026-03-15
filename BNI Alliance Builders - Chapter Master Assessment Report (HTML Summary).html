@@ -1,0 +1,985 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BNI Alliance Builders - Chapter Master Assessment Report</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+  
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: #f0f2f5;
+    color: #1a1a2e;
+    line-height: 1.6;
+  }
+
+  .header {
+    background: linear-gradient(135deg, #b91c1c 0%, #7f1d1d 50%, #1a1a2e 100%);
+    color: white;
+    padding: 40px 0 30px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    opacity: 0.5;
+  }
+  .header-content { position: relative; z-index: 1; max-width: 900px; margin: 0 auto; padding: 0 20px; }
+  .header .badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 20px;
+    padding: 4px 16px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .header h1 { font-size: 32px; font-weight: 800; margin-bottom: 6px; letter-spacing: -0.5px; }
+  .header h2 { font-size: 18px; font-weight: 400; opacity: 0.9; margin-bottom: 4px; }
+  .header .subtitle { font-size: 13px; opacity: 0.7; }
+  .header-meta {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+  }
+  .header-meta-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    opacity: 0.85;
+  }
+
+  .container { max-width: 1100px; margin: 0 auto; padding: 24px 16px; }
+
+  /* Quick Stats Bar */
+  .stats-bar {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 12px;
+    margin: -40px 0 24px;
+    position: relative;
+    z-index: 2;
+  }
+  .stat-card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px 16px;
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    transition: transform 0.2s;
+  }
+  .stat-card:hover { transform: translateY(-2px); }
+  .stat-card .stat-icon { font-size: 24px; margin-bottom: 6px; }
+  .stat-card .stat-value { font-size: 28px; font-weight: 800; color: #b91c1c; }
+  .stat-card .stat-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: #666; margin-top: 2px; }
+
+  /* Section Cards */
+  .section { 
+    background: white; 
+    border-radius: 16px; 
+    padding: 28px; 
+    margin-bottom: 20px; 
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  }
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    padding-bottom: 14px;
+    border-bottom: 2px solid #f0f0f0;
+  }
+  .section-icon {
+    width: 42px; height: 42px;
+    background: linear-gradient(135deg, #b91c1c, #dc2626);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+  .section-header h3 { font-size: 18px; font-weight: 700; color: #1a1a2e; }
+  .section-header .section-sub { font-size: 12px; color: #888; font-weight: 400; }
+
+  /* Meeting Info */
+  .meeting-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 12px;
+  }
+  .meeting-item {
+    background: #f8f9fa;
+    border-radius: 10px;
+    padding: 14px 16px;
+    border-left: 3px solid #b91c1c;
+  }
+  .meeting-item .label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: #999; }
+  .meeting-item .value { font-size: 14px; font-weight: 600; color: #1a1a2e; margin-top: 2px; }
+
+  /* Tables */
+  .table-wrap { overflow-x: auto; margin-top: 12px; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  thead th {
+    background: #1a1a2e;
+    color: white;
+    padding: 10px 12px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+  }
+  thead th:first-child { border-radius: 8px 0 0 0; }
+  thead th:last-child { border-radius: 0 8px 0 0; }
+  tbody td {
+    padding: 9px 12px;
+    border-bottom: 1px solid #f0f0f0;
+    vertical-align: top;
+  }
+  tbody tr:hover { background: #fef2f2; }
+  tbody tr:nth-child(even) { background: #fafafa; }
+  tbody tr:nth-child(even):hover { background: #fef2f2; }
+
+  /* Flags */
+  .flag { display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; border-radius: 6px; font-size: 11px; font-weight: 600; }
+  .flag-red { background: #fef2f2; color: #b91c1c; }
+  .flag-yellow { background: #fefce8; color: #a16207; }
+  .flag-green { background: #f0fdf4; color: #15803d; }
+
+  /* Contact Spheres */
+  .sphere-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 14px; }
+  .sphere-card {
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 16px;
+    position: relative;
+    overflow: hidden;
+  }
+  .sphere-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+  }
+  .sphere-card.home::before { background: #ea580c; }
+  .sphere-card.finance::before { background: #0284c7; }
+  .sphere-card.realestate::before { background: #7c3aed; }
+  .sphere-card.health::before { background: #059669; }
+  .sphere-card.marketing::before { background: #db2777; }
+  .sphere-card h4 { font-size: 14px; font-weight: 700; margin-bottom: 6px; }
+  .sphere-card .seats { font-size: 11px; color: #666; margin-bottom: 6px; }
+  .sphere-card .insight { font-size: 12px; color: #444; line-height: 1.5; }
+  .seat-count-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: #f3f4f6;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 11px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  /* Priority List */
+  .priority-list { display: flex; flex-direction: column; gap: 8px; }
+  .priority-item {
+    display: grid;
+    grid-template-columns: 36px 1fr auto;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    background: #f8f9fa;
+    border-radius: 10px;
+    transition: all 0.2s;
+  }
+  .priority-item:hover { background: #fef2f2; }
+  .priority-num {
+    width: 32px; height: 32px;
+    background: linear-gradient(135deg, #b91c1c, #dc2626);
+    color: white;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 14px;
+  }
+  .priority-info h4 { font-size: 14px; font-weight: 600; }
+  .priority-info .category { font-size: 11px; color: #888; }
+  .priority-info .triggers { font-size: 11px; color: #666; margin-top: 2px; }
+  .region-count {
+    background: #e0f2fe;
+    color: #0369a1;
+    padding: 2px 8px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+
+  /* Vendor Cards */
+  .vendor-section { margin-bottom: 20px; }
+  .vendor-section-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    padding: 10px 14px;
+    background: linear-gradient(90deg, #fef2f2, transparent);
+    border-radius: 8px;
+    border-left: 4px solid #b91c1c;
+  }
+  .vendor-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 10px; }
+  .vendor-card {
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 14px;
+    font-size: 12px;
+    transition: all 0.2s;
+  }
+  .vendor-card:hover { border-color: #b91c1c; box-shadow: 0 2px 8px rgba(185,28,28,0.1); }
+  .vendor-card .v-name { font-size: 13px; font-weight: 700; color: #1a1a2e; margin-bottom: 4px; }
+  .vendor-card .v-detail { color: #666; margin-bottom: 2px; }
+  .vendor-card .v-fit { color: #059669; font-weight: 500; margin-top: 4px; font-style: italic; }
+  .vendor-card .v-angle { color: #7c3aed; font-weight: 500; margin-top: 2px; }
+
+  /* Execution Timeline */
+  .timeline { position: relative; padding-left: 24px; }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 8px; top: 0; bottom: 0;
+    width: 2px;
+    background: #e5e7eb;
+  }
+  .timeline-week {
+    font-size: 14px;
+    font-weight: 700;
+    color: #b91c1c;
+    margin: 16px 0 8px;
+    position: relative;
+  }
+  .timeline-week::before {
+    content: '';
+    position: absolute;
+    left: -20px; top: 4px;
+    width: 12px; height: 12px;
+    background: #b91c1c;
+    border-radius: 50%;
+    border: 2px solid white;
+    box-shadow: 0 0 0 2px #b91c1c;
+  }
+  .timeline-item {
+    position: relative;
+    padding: 8px 14px;
+    margin-bottom: 6px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    font-size: 12px;
+  }
+  .timeline-item .day { font-weight: 700; color: #1a1a2e; }
+  .timeline-item .action { color: #444; }
+  .timeline-item .who { color: #7c3aed; font-weight: 500; }
+
+  /* Bars Chart */
+  .bar-chart { margin-top: 12px; }
+  .bar-row {
+    display: grid;
+    grid-template-columns: 120px 1fr 50px;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+    font-size: 12px;
+  }
+  .bar-label { font-weight: 600; color: #444; text-align: right; }
+  .bar-track { background: #f0f0f0; border-radius: 6px; height: 22px; overflow: hidden; }
+  .bar-fill {
+    height: 100%;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    padding-left: 8px;
+    font-size: 10px;
+    font-weight: 700;
+    color: white;
+    transition: width 0.8s ease;
+  }
+  .bar-value { font-weight: 700; color: #1a1a2e; }
+
+  /* Recommendations */
+  .rec-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .rec-card {
+    padding: 16px;
+    border-radius: 12px;
+    font-size: 13px;
+  }
+  .rec-card.strength { background: #f0fdf4; border: 1px solid #bbf7d0; }
+  .rec-card.opportunity { background: #fefce8; border: 1px solid #fef08a; }
+  .rec-card h4 { font-size: 14px; font-weight: 700; margin-bottom: 8px; }
+  .rec-card ul { padding-left: 18px; }
+  .rec-card li { margin-bottom: 4px; line-height: 1.5; }
+
+  /* Growth Target */
+  .growth-target {
+    background: linear-gradient(135deg, #1a1a2e, #2d2d4e);
+    color: white;
+    border-radius: 16px;
+    padding: 28px;
+    text-align: center;
+    margin-top: 20px;
+  }
+  .growth-target h3 { font-size: 20px; font-weight: 800; margin-bottom: 12px; }
+  .growth-numbers {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin: 16px 0;
+  }
+  .growth-num {
+    font-size: 48px;
+    font-weight: 800;
+  }
+  .growth-num.current { color: #fca5a5; }
+  .growth-num.target { color: #4ade80; }
+  .growth-arrow { font-size: 32px; opacity: 0.6; }
+  .growth-label { font-size: 12px; opacity: 0.7; text-transform: uppercase; letter-spacing: 1px; }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    padding: 30px 20px;
+    font-size: 12px;
+    color: #888;
+  }
+  .footer a { color: #b91c1c; text-decoration: none; font-weight: 600; }
+  .footer-logos {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+  }
+  .footer-logo-item { font-weight: 700; font-size: 14px; }
+
+  /* Hidden Gems */
+  .gem-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px;
+    background: #fffbeb;
+    border: 1px solid #fde68a;
+    border-radius: 10px;
+    margin-bottom: 8px;
+  }
+  .gem-icon { font-size: 24px; flex-shrink: 0; }
+  .gem-info h4 { font-size: 13px; font-weight: 700; }
+  .gem-info p { font-size: 12px; color: #666; margin-top: 2px; }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .header h1 { font-size: 24px; }
+    .stats-bar { grid-template-columns: repeat(3, 1fr); }
+    .stat-card .stat-value { font-size: 22px; }
+    .rec-grid { grid-template-columns: 1fr; }
+    .sphere-grid { grid-template-columns: 1fr; }
+    .vendor-cards { grid-template-columns: 1fr; }
+    .section { padding: 20px 16px; }
+    .growth-num { font-size: 36px; }
+  }
+
+  @media (max-width: 480px) {
+    .stats-bar { grid-template-columns: repeat(2, 1fr); }
+    .header-meta { flex-direction: column; align-items: center; gap: 8px; }
+    .bar-row { grid-template-columns: 80px 1fr 40px; }
+  }
+
+  .print-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #b91c1c;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 30px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(185,28,28,0.3);
+    z-index: 100;
+    transition: all 0.2s;
+  }
+  .print-btn:hover { background: #991b1b; transform: translateY(-1px); }
+
+  @media print {
+    .print-btn { display: none; }
+    body { background: white; }
+    .section { box-shadow: none; border: 1px solid #e5e7eb; break-inside: avoid; }
+    .stat-card { box-shadow: none; border: 1px solid #e5e7eb; }
+  }
+</style>
+</head>
+<body>
+
+<button class="print-btn" onclick="window.print()">🖨️ Print / Save PDF</button>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-content">
+    <div class="badge">🏆 Chapter Master Assessment Report</div>
+    <h1>BNI Alliance Builders</h1>
+    <h2>CA San Francisco North Bay Region</h2>
+    <p class="subtitle">In-Person Chapter • Santa Rosa, CA</p>
+    <div class="header-meta">
+      <div class="header-meta-item">📅 March 2026</div>
+      <div class="header-meta-item">🤖 Prepared by Higgins AI</div>
+      <div class="header-meta-item">👤 CDC: Ryan Nolan</div>
+      <div class="header-meta-item">📞 (707) 899-7161</div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+<!-- STATS BAR -->
+<div class="stats-bar">
+  <div class="stat-card">
+    <div class="stat-icon">👥</div>
+    <div class="stat-value">29</div>
+    <div class="stat-label">Members</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon">🤝</div>
+    <div class="stat-value">139</div>
+    <div class="stat-label">Referrals Given (90d)</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon">📥</div>
+    <div class="stat-value">159</div>
+    <div class="stat-label">Referrals Received (90d)</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon">🧑‍🤝‍🧑</div>
+    <div class="stat-value">459</div>
+    <div class="stat-label">1-2-1s (90d)</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon">👋</div>
+    <div class="stat-value">13</div>
+    <div class="stat-label">Visitors (90d)</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon">🎯</div>
+    <div class="stat-value">40+</div>
+    <div class="stat-label">6-Mo Growth Target</div>
+  </div>
+</div>
+
+<!-- MEETING DETAILS -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-icon">📍</div>
+    <div><h3>Chapter Overview</h3><span class="section-sub">Meeting Details & Leadership</span></div>
+  </div>
+  <div class="meeting-grid">
+    <div class="meeting-item">
+      <div class="label">Meeting Day & Time</div>
+      <div class="value">Friday at 7:00 AM</div>
+    </div>
+    <div class="meeting-item">
+      <div class="label">Format</div>
+      <div class="value">In-Person</div>
+    </div>
+    <div class="meeting-item">
+      <div class="label">Location</div>
+      <div class="value">Druids Hall, 1011 College Ave, Santa Rosa, CA 95404</div>
+    </div>
+    <div class="meeting-item">
+      <div class="label">Chapter Director Consultant</div>
+      <div class="value">Ryan Nolan • (707) 393-8754</div>
+    </div>
+    <div class="meeting-item">
+      <div class="label">President</div>
+      <div class="value">David Crowhurst • (707) 953-1976</div>
+    </div>
+    <div class="meeting-item">
+      <div class="label">Vice President</div>
+      <div class="value">Nicholas Caston • (707) 200-8042</div>
+    </div>
+    <div class="meeting-item">
+      <div class="label">Secretary / Treasurer</div>
+      <div class="value">James Eakin • (707) 483-5574</div>
+    </div>
+    <div class="meeting-item">
+      <div class="label">Regional Office</div>
+      <div class="value">BNI San Francisco Bay • director@bnisfbay.com</div>
+    </div>
+  </div>
+  <div style="margin-top:16px; padding:12px 16px; background:#fefce8; border:1px solid #fef08a; border-radius:10px; font-size:12px;">
+    <strong>⚠️ Leadership Vacancies:</strong> Community Builder, Quality Assurance, Member Engagement, Member Relations — Filling these Membership Committee roles will strengthen accountability and retention.
+  </div>
+</div>
+
+<!-- CHAPTER ROSTER -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-icon">📊</div>
+    <div><h3>Chapter Roster</h3><span class="section-sub">29 Current Seats Filled — 90-Day Performance</span></div>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>#</th><th>Category</th><th>Classification</th><th>Member</th><th>Company</th><th>G</th><th>R</th><th>V</th><th>1-2-1</th><th>Abs</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>1</td><td>Construction</td><td>Roofing & Gutters</td><td>Jesse Adams</td><td>Sonoma County Roofing Inc</td><td>0</td><td>4</td><td>0</td><td>7</td><td>0</td></tr>
+        <tr><td>2</td><td>Construction</td><td>Tile Worker</td><td>Ampelio Aguilar</td><td>Aguilar Tile Installation</td><td>7</td><td>4</td><td>0</td><td>16</td><td>1</td></tr>
+        <tr><td>3</td><td>Legal & Accounting</td><td>Estate Planning Law</td><td>Max Bernard</td><td>Bernard Law Office</td><td>12</td><td>8</td><td>1</td><td>32</td><td>0</td></tr>
+        <tr><td>4</td><td>Cleaning Services</td><td>Cleaning – Residential</td><td>Norma Bowen</td><td>Essential Hands Cleaning</td><td>8</td><td>7</td><td>1</td><td>31</td><td>0</td></tr>
+        <tr><td>5</td><td>Finance & Insurance</td><td>Residential Mortgages</td><td>Gregory Brausen</td><td>Guild Mortgage</td><td>1</td><td>1</td><td>0</td><td>40</td><td>0</td></tr>
+        <tr><td>6</td><td>Construction</td><td>Pools, Spas & Saunas</td><td>Frank Bustamante</td><td>Holy Paradise Pools</td><td>2</td><td>1</td><td>0</td><td>8</td><td>0</td></tr>
+        <tr><td>7</td><td>Finance & Insurance</td><td>Financial Advisor</td><td>Ryan Cassidy</td><td>Moraes & Cassidy Group</td><td>2</td><td>3</td><td>0</td><td>12</td><td>1</td></tr>
+        <tr><td>8</td><td>Training & Coaching</td><td>Business Consultant</td><td>Nicholas Caston</td><td>Financial Prodigy Inc</td><td>13</td><td>5</td><td>1</td><td>16</td><td>1</td></tr>
+        <tr><td>9</td><td>Legal & Accounting</td><td>Bookkeeping</td><td>David Crowhurst</td><td>Eagle Bookkeeping</td><td>6</td><td>3</td><td>0</td><td>24</td><td>0</td></tr>
+        <tr><td>10</td><td>Landscaping & Garden</td><td>Landscape Services</td><td>Jonathan Dominguez</td><td>The Great Landscape LLC</td><td>1</td><td>5</td><td>0</td><td>11</td><td>1</td></tr>
+        <tr><td>11</td><td>Finance & Insurance</td><td>Life & Disability Insurance</td><td>James Eakin</td><td>Northwestern Mutual</td><td>2</td><td>3</td><td>0</td><td>24</td><td>0</td></tr>
+        <tr><td>12</td><td>Construction</td><td>Electrician</td><td>Michael Eggers</td><td>Sonoma United Electric</td><td>12</td><td>19</td><td>1</td><td>29</td><td>0</td></tr>
+        <tr><td>13</td><td>Health & Wellness</td><td>Massage Therapist</td><td>Tiffany Gann</td><td>The Natural Gift Wellness</td><td>3</td><td>2</td><td>0</td><td>4</td><td>0</td></tr>
+        <tr><td>14</td><td>Landscaping & Garden</td><td>Tree Services</td><td>Desiree Gardner</td><td>Systemic Tree Service</td><td>10</td><td>7</td><td>1</td><td>13</td><td>0</td></tr>
+        <tr><td>15</td><td>Advertising & Marketing</td><td>Digital Marketing</td><td>Rhett Graff</td><td>Affex Marketing</td><td>0</td><td>17</td><td>0</td><td>14</td><td>1</td></tr>
+        <tr><td>16</td><td>Real Estate</td><td>Residential Real Estate</td><td>Laura Hall</td><td>Corcoran Icon Properties</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td></tr>
+        <tr><td>17</td><td>Cleaning Services</td><td>Carpet & Upholstery</td><td>James Hernandez</td><td>(Not Listed)</td><td>2</td><td>3</td><td>0</td><td>0</td><td>2</td></tr>
+        <tr><td>18</td><td>Construction</td><td>Plumbing</td><td>Peter Kopriva</td><td>Goodolplumbers</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td></tr>
+        <tr><td>19</td><td>Organizations & Other</td><td>Non-Profits/Fundraising</td><td>Alethea Larson</td><td>The Living Room</td><td>18</td><td>8</td><td>1</td><td>35</td><td>0</td></tr>
+        <tr><td>20</td><td>Construction</td><td>Builder/General Contractor</td><td>Richard Lindsay</td><td>Housewright Builders</td><td>7</td><td>9</td><td>1</td><td>8</td><td>0</td></tr>
+        <tr><td>21</td><td>Car & Motorcycle</td><td>Auto/Car Repair</td><td>Mat McCoy Sr</td><td>McCoy's German Auto</td><td>1</td><td>8</td><td>0</td><td>6</td><td>0</td></tr>
+        <tr><td>22</td><td>Construction</td><td>HVAC – Heating & Air</td><td>Chris Mills</td><td>Valley Comfort Heating</td><td>1</td><td>4</td><td>0</td><td>15</td><td>1</td></tr>
+        <tr><td>23</td><td>Health & Wellness</td><td>Chiropractor</td><td>Chad Mordecai</td><td>Mordecai Chiropractic</td><td>1</td><td>3</td><td>0</td><td>17</td><td>0</td></tr>
+        <tr><td>24</td><td>Real Estate</td><td>Buying Agent</td><td>Kristen Preuss</td><td>Corcoran Icon Properties</td><td>9</td><td>3</td><td>2</td><td>29</td><td>0</td></tr>
+        <tr><td>25</td><td>Health & Wellness</td><td>Acupuncture</td><td>Pamela Sauers</td><td>Core Essence Acupuncture</td><td>5</td><td>0</td><td>0</td><td>14</td><td>0</td></tr>
+        <tr><td>26</td><td>Sports & Leisure</td><td>Personal Trainer</td><td>Michael Stauber</td><td>Culture Fitness</td><td>0</td><td>8</td><td>0</td><td>13</td><td>2</td></tr>
+        <tr><td>27</td><td>Construction</td><td>Handyman</td><td>Anthony Tanner</td><td>Prime Time HandyMan</td><td>0</td><td>2</td><td>0</td><td>3</td><td>0</td></tr>
+        <tr><td>28</td><td>Finance & Insurance</td><td>Commercial Insurance</td><td>Christopher Wilson</td><td>Calender Robinson Comm. Ins.</td><td>11</td><td>23</td><td>3</td><td>29</td><td>0</td></tr>
+        <tr><td>29</td><td>Food & Beverage</td><td>Caterer</td><td>Dawn Zaft</td><td>Criminal Baking Co</td><td>6</td><td>3</td><td>0</td><td>10</td><td>0</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Flags -->
+  <div style="margin-top:20px;">
+    <h4 style="font-size:14px; font-weight:700; margin-bottom:10px;">📌 Notes & Flags</h4>
+    <div style="display:flex; flex-direction:column; gap:6px;">
+      <div style="display:flex; align-items:flex-start; gap:8px; padding:8px 12px; background:#fef2f2; border-radius:8px; font-size:12px;">
+        <span class="flag flag-red">🔴 Overlap</span>
+        <span>Laura Hall & Kristen Preuss — both at Corcoran Icon Properties. Membership Committee should verify classifications are distinct.</span>
+      </div>
+      <div style="display:flex; align-items:flex-start; gap:8px; padding:8px 12px; background:#fefce8; border-radius:8px; font-size:12px;">
+        <span class="flag flag-yellow">🟡 Low Activity</span>
+        <span>Laura Hall (0G/0R/0V, 1 1-2-1) & Peter Kopriva (0G/0R/0V, 1 1-2-1) — need mentor engagement.</span>
+      </div>
+      <div style="display:flex; align-items:flex-start; gap:8px; padding:8px 12px; background:#fefce8; border-radius:8px; font-size:12px;">
+        <span class="flag flag-yellow">🟡 Absence Alert</span>
+        <span>James Hernandez (2 abs) & Michael Stauber (2 abs) — approaching 3-absence limit.</span>
+      </div>
+      <div style="display:flex; align-items:flex-start; gap:8px; padding:8px 12px; background:#f0fdf4; border-radius:8px; font-size:12px;">
+        <span class="flag flag-green">🟢 Top Givers</span>
+        <span>Larson (18G), Caston (13G), Bernard (12G), Eggers (12G), Wilson (11G)</span>
+      </div>
+      <div style="display:flex; align-items:flex-start; gap:8px; padding:8px 12px; background:#f0fdf4; border-radius:8px; font-size:12px;">
+        <span class="flag flag-green">🟢 Top Receivers</span>
+        <span>Wilson (23R), Eggers (19R), Graff (17R), Lindsay (9R)</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Key Metric Bars -->
+  <div style="margin-top:20px;">
+    <h4 style="font-size:14px; font-weight:700; margin-bottom:10px;">📈 Key Engagement Insights</h4>
+    <div class="bar-chart">
+      <div class="bar-row">
+        <div class="bar-label">Avg 1-2-1/Member</div>
+        <div class="bar-track"><div class="bar-fill" style="width:79%; background:linear-gradient(90deg,#7c3aed,#a78bfa);">15.8</div></div>
+        <div class="bar-value">15.8</div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">Members w/ 0 Given</div>
+        <div class="bar-track"><div class="bar-fill" style="width:21%; background:linear-gradient(90deg,#f59e0b,#fbbf24);">21%</div></div>
+        <div class="bar-value">6/29</div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">Members w/ 0 Visitors</div>
+        <div class="bar-track"><div class="bar-fill" style="width:76%; background:linear-gradient(90deg,#ef4444,#f87171);">76%</div></div>
+        <div class="bar-value">22/29</div>
+      </div>
+    </div>
+    <div style="margin-top:10px; padding:10px 14px; background:#eff6ff; border:1px solid #bfdbfe; border-radius:8px; font-size:12px; color:#1e40af;">
+      <strong>💡 Key Insight:</strong> 1-2-1 activity is exceptional (459 total), but visitor generation is the #1 growth lever — only 24% of members brought visitors. Activating visitor invitations will dramatically accelerate chapter growth.
+    </div>
+  </div>
+</div>
+
+<!-- CONTACT SPHERES -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-icon">🔍</div>
+    <div><h3>Contact Sphere Analysis</h3><span class="section-sub">5 Spheres Mapped, Growth Opportunities Identified</span></div>
+  </div>
+  <div class="sphere-grid">
+    <div class="sphere-card home">
+      <h4>🏠 Home Services & Construction</h4>
+      <div class="seat-count-badge">🪑 10 Seats</div>
+      <div class="seats">Roofing, Tile, Pools, Electrician, Builder/GC, HVAC, Handyman, Plumbing, Landscape, Tree Services</div>
+      <div class="insight"><strong>Strongest sphere.</strong> Add Flooring, Interior Design, Painter, Solar to complete the ecosystem.</div>
+    </div>
+    <div class="sphere-card finance">
+      <h4>💰 Financial & Professional Services</h4>
+      <div class="seat-count-badge">🪑 6 Seats</div>
+      <div class="seats">Mortgages, Financial Advisor, Commercial Insurance, Life Insurance, Bookkeeping, Estate Planning Law</div>
+      <div class="insight"><strong>Solid foundation.</strong> Add P&C Insurance, Tax Advisor, Banking, CPA, Wealth Management for dominance.</div>
+    </div>
+    <div class="sphere-card realestate">
+      <h4>🏡 Real Estate & Property</h4>
+      <div class="seat-count-badge">🪑 2 Seats</div>
+      <div class="seats">Residential Real Estate Agent, Buying Agent</div>
+      <div class="insight"><strong>High-referral sphere — underdeveloped.</strong> Add Commercial RE, Property Mgmt, Home Staging, Title Services.</div>
+    </div>
+    <div class="sphere-card health">
+      <h4>💆 Health & Wellness</h4>
+      <div class="seat-count-badge">🪑 4 Seats</div>
+      <div class="seats">Chiropractor, Massage Therapist, Acupuncture, Personal Trainer</div>
+      <div class="insight"><strong>Good base.</strong> Add Alt Wellness, Nutritionist, Counselor, Senior Service Provider to round out.</div>
+    </div>
+    <div class="sphere-card marketing">
+      <h4>📢 Marketing & Creative</h4>
+      <div class="seat-count-badge">🪑 1 Seat</div>
+      <div class="seats">Digital Marketing</div>
+      <div class="insight"><strong>⚠️ Critical gap!</strong> Add Graphic Designer, Photographer, Web Designer, Videographer, Social Media.</div>
+    </div>
+  </div>
+</div>
+
+<!-- MISSING PROFESSIONS -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-icon">🎯</div>
+    <div><h3>Top 10 Missing Professions</h3><span class="section-sub">Prioritized by Referral Potential & Chapter Synergy</span></div>
+  </div>
+  <div class="priority-list">
+    <div class="priority-item">
+      <div class="priority-num">1</div>
+      <div class="priority-info">
+        <h4>Property & Casualty Insurance</h4>
+        <div class="category">Finance & Insurance</div>
+        <div class="triggers">🎯 "I just bought a new home" / "I'm starting a renovation project"</div>
+      </div>
+      <div class="region-count">25 chapters</div>
+    </div>
+    <div class="priority-item">
+      <div class="priority-num">2</div>
+      <div class="priority-info">
+        <h4>Interior Design</h4>
+        <div class="category">Real Estate Services</div>
+        <div class="triggers">🎯 "We're remodeling our kitchen" / "We just closed on a new house"</div>
+      </div>
+      <div class="region-count">16 chapters</div>
+    </div>
+    <div class="priority-item">
+      <div class="priority-num">3</div>
+      <div class="priority-info">
+        <h4>Banking Services</h4>
+        <div class="category">Finance & Insurance</div>
+        <div class="triggers">🎯 "I'm opening a new business account" / "I need a business line of credit"</div>
+      </div>
+      <div class="region-count">14 chapters</div>
+    </div>
+    <div class="priority-item">
+      <div class="priority-num">4</div>
+      <div class="priority-info">
+        <h4>IT Consultants</h4>
+        <div class="category">Computer & Programming</div>
+        <div class="triggers">🎯 "Our computers keep crashing" / "We need to upgrade our network"</div>
+      </div>
+      <div class="region-count">12 chapters</div>
+    </div>
+    <div class="priority-item">
+      <div class="priority-num">5</div>
+      <div class="priority-info">
+        <h4>Cosmetics / Skin Care</h4>
+        <div class="category">Health & Wellness</div>
+        <div class="triggers">🎯 "My skin has been so dry" / "I want to look refreshed for an event"</div>
+      </div>
+      <div class="region-count">12 chapters</div>
+    </div>
+    <div class="priority-item">
+      <div class="priority-num">6</div>
+      <div class="priority-info">
+        <h4>Flooring</h4>
+        <div class="category">Construction</div>
+        <div class="triggers">🎯 "We're replacing our old carpet" / "The hardwood needs refinishing"</div>
+      </div>
+      <div class="region-count">10 chapters</div>
+    </div>
+    <div class="priority-item">
+      <div class="priority-num">7</div>
+      <div class="priority-info">
+        <h4>Photographer</h4>
+        <div class="category">Advertising & Marketing</div>
+        <div class="triggers">🎯 "We need professional headshots" / "We're listing our home"</div>
+      </div>
+      <div class="region-count">10 chapters</div>
+    </div>
+    <div class="priority-item">
+      <div class="priority-num">8</div>
+      <div class="priority-info">
+        <h4>Personal Injury Law</h4>
+        <div class="category">Legal & Accounting</div>
+        <div class="triggers">🎯 "I was just in a car accident" / "I got hurt at work"</div>
+      </div>
+      <div class="region-count">9 chapters</div>
+    </div>
+    <div class="priority-item">
+      <div class="priority-num">9</div>
+      <div class="priority-info">
+        <h4>Graphic Designer</h4>
+        <div class="category">Advertising & Marketing</div>
+        <div class="triggers">🎯 "I need a new logo" / "We're rebranding our company"</div>
+      </div>
+      <div class="region-count">8 chapters</div>
+    </div>
+    <div class="priority-item">
+      <div class="priority-num">10</div>
+      <div class="priority-info">
+        <h4>Senior Service Provider</h4>
+        <div class="category">Health & Wellness</div>
+        <div class="triggers">🎯 "My parents need help at home" / "We're looking into assisted living"</div>
+      </div>
+      <div class="region-count">7 chapters</div>
+    </div>
+  </div>
+
+  <!-- Hidden Gems -->
+  <div style="margin-top:20px;">
+    <h4 style="font-size:14px; font-weight:700; margin-bottom:10px;">💎 Overlooked / Non-Obvious Professions</h4>
+    <div class="gem-card">
+      <div class="gem-icon">📋</div>
+      <div class="gem-info">
+        <h4>Notary</h4>
+        <p>Constant demand for real estate closings, estate planning, and business documents. Connects with Estate Planning Law, Real Estate, Mortgages.</p>
+      </div>
+    </div>
+    <div class="gem-card">
+      <div class="gem-icon">✈️</div>
+      <div class="gem-info">
+        <h4>Travel Agent</h4>
+        <p>Wine country destination market. Connects with Caterer, Photographer, and high-net-worth clients. Generates "thank you" referrals.</p>
+      </div>
+    </div>
+    <div class="gem-card">
+      <div class="gem-icon">🏘️</div>
+      <div class="gem-info">
+        <h4>Property Management</h4>
+        <p>Bridges Real Estate with Builder/GC, HVAC, Electrician, Plumbing, Handyman, Cleaning. Needs ALL the trades already in this chapter!</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- LOCAL VENDORS -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-icon">🔎</div>
+    <div><h3>Local Vendor Search Results</h3><span class="section-sub">50 Vendors Found • Within 30 Miles of Santa Rosa, CA</span></div>
+  </div>
+
+  <div class="vendor-section">
+    <div class="vendor-section-title">1️⃣ Property & Casualty Insurance</div>
+    <div class="vendor-cards">
+      <div class="vendor-card"><div class="v-name">Barber Insurance Agency</div><div class="v-detail">📞 (707) 526-7900 • 620 College Ave, Santa Rosa</div><div class="v-fit">✅ Steps from the meeting venue on College Ave</div><div class="v-angle">🎯 Proximity + 29-member referral pipeline</div></div>
+      <div class="vendor-card"><div class="v-name">Jeff Lecoeuche Insurance</div><div class="v-detail">📞 (707) 526-5222 • 726 Mendocino Ave, Santa Rosa</div><div class="v-fit">✅ Independent P&C agency (4.9 rating)</div><div class="v-angle">🎯 Real estate & construction partnerships</div></div>
+      <div class="vendor-card"><div class="v-name">Valley West Insurance Services</div><div class="v-detail">📞 (707) 575-9378 • 1630 Sebastopol Rd, Santa Rosa</div><div class="v-fit">✅ Personal & commercial lines (4.9 rating)</div><div class="v-angle">🎯 Complements existing Commercial Insurance seat</div></div>
+      <div class="vendor-card"><div class="v-name">Loewen Insurance Services</div><div class="v-detail">📞 (707) 528-8483 • 100 Stony Point Rd, Santa Rosa</div><div class="v-fit">✅ Established brokerage (4.7 rating)</div><div class="v-angle">🎯 Community partnerships + contractor referrals</div></div>
+      <div class="vendor-card"><div class="v-name">Eddie Sandoval – State Farm</div><div class="v-detail">📞 (707) 536-9492 • 348 College Ave, Santa Rosa</div><div class="v-fit">✅ College Ave location, high-volume (4.9 rating)</div><div class="v-angle">🎯 Brand recognition + referral reciprocity</div></div>
+    </div>
+    <div style="font-size:11px; color:#888; margin-top:6px;">👤 Best inviter(s): Christopher Wilson, Gregory Brausen, Laura Hall/Kristen Preuss</div>
+  </div>
+
+  <div class="vendor-section">
+    <div class="vendor-section-title">2️⃣ Interior Design</div>
+    <div class="vendor-cards">
+      <div class="vendor-card"><div class="v-name">Humanity Design Works</div><div class="v-detail">📞 (707) 595-5046 • 799 Piner Rd, Santa Rosa</div><div class="v-fit">✅ Full-service interior design (4.8 rating)</div></div>
+      <div class="vendor-card"><div class="v-name">Rock House Design</div><div class="v-detail">📞 (707) 595-1709 • 5027 Boulder Ln, Santa Rosa</div><div class="v-fit">✅ Residential focus (5.0 rating)</div></div>
+      <div class="vendor-card"><div class="v-name">Integrated Design</div><div class="v-detail">📞 (707) 568-0108 • 804 College Ave, Santa Rosa</div><div class="v-fit">✅ Right on College Ave near venue! (5.0 rating)</div></div>
+      <div class="vendor-card"><div class="v-name">Tamera Embree Designs</div><div class="v-detail">📞 (707) 545-7221 • 2129 4th St, Santa Rosa</div><div class="v-fit">✅ Established local designer (5.0 rating)</div></div>
+      <div class="vendor-card"><div class="v-name">Zeitgeist Sonoma</div><div class="v-detail">📞 (707) 526-4161 • 723 Humboldt St, Santa Rosa</div><div class="v-fit">✅ Architecture + Interior Design (5.0 rating)</div></div>
+    </div>
+    <div style="font-size:11px; color:#888; margin-top:6px;">👤 Best inviter(s): Richard Lindsay, Kristen Preuss, Laura Hall, Ampelio Aguilar</div>
+  </div>
+
+  <div class="vendor-section">
+    <div class="vendor-section-title">3️⃣ IT Consultants</div>
+    <div class="vendor-cards">
+      <div class="vendor-card"><div class="v-name">Wooden Spoon Managed IT</div><div class="v-detail">📞 (707) 520-9141 • 521 College Ave, Santa Rosa</div><div class="v-fit">✅ Right on College Ave! (5.0 rating)</div></div>
+      <div class="vendor-card"><div class="v-name">SR Technologies</div><div class="v-detail">📞 (800) 250-7122 • 1550 Airport Blvd, Santa Rosa</div><div class="v-fit">✅ Full-service managed IT (4.9 rating)</div></div>
+      <div class="vendor-card"><div class="v-name">TeamLogic IT North Bay</div><div class="v-detail">📞 (707) 582-0510 • 2455 Bennett Valley Rd, Santa Rosa</div><div class="v-fit">✅ IT franchise — understands networking (5.0)</div></div>
+      <div class="vendor-card"><div class="v-name">dmi Networking</div><div class="v-detail">📞 (707) 523-5915 • 320 Tesconi Cir, Santa Rosa</div><div class="v-fit">✅ Local IT networking specialist (4.9)</div></div>
+      <div class="vendor-card"><div class="v-name">True IT</div><div class="v-detail">📞 (707) 755-5858 • 1500 4th St, Santa Rosa</div><div class="v-fit">✅ Downtown IT support (5.0 rating)</div></div>
+    </div>
+    <div style="font-size:11px; color:#888; margin-top:6px;">👤 Best inviter(s): Rhett Graff, Nicholas Caston, Christopher Wilson</div>
+  </div>
+
+  <div class="vendor-section">
+    <div class="vendor-section-title">4️⃣ Personal Injury Law</div>
+    <div class="vendor-cards">
+      <div class="vendor-card"><div class="v-name">Flahavan Law Offices</div><div class="v-detail">📞 (707) 525-2917 • 400 College Ave, Santa Rosa</div><div class="v-fit">✅ On College Ave near venue (4.8 rating)</div></div>
+      <div class="vendor-card"><div class="v-name">Henderson Law</div><div class="v-detail">📞 (707) 843-3743 • 400 College Ave #A, Santa Rosa</div><div class="v-fit">✅ PI attorney on College Ave (4.7)</div></div>
+      <div class="vendor-card"><div class="v-name">Law Offices of Max G. Arnold</div><div class="v-detail">📞 (707) 306-4600 • 1410 Neotomas Ave, Santa Rosa</div><div class="v-fit">✅ Dedicated PI practice (4.9, 48 reviews)</div></div>
+      <div class="vendor-card"><div class="v-name">Law Offices of Julia Parranto</div><div class="v-detail">📞 (707) 573-8868 • 819 Sonoma Ave, Santa Rosa</div><div class="v-fit">✅ Established local PI attorney (5.0)</div></div>
+      <div class="vendor-card"><div class="v-name">North Bay Legal</div><div class="v-detail">📞 (707) 636-3287 • 420 E St, Santa Rosa</div><div class="v-fit">✅ "North Bay" focus matches region (5.0)</div></div>
+    </div>
+    <div style="font-size:11px; color:#888; margin-top:6px;">👤 Best inviter(s): Max Bernard, Chad Mordecai, Mat McCoy Sr</div>
+  </div>
+
+  <div class="vendor-section">
+    <div class="vendor-section-title">5️⃣ Senior Service Provider</div>
+    <div class="vendor-cards">
+      <div class="vendor-card"><div class="v-name">Senior Helpers North Bay</div><div class="v-detail">📞 (707) 297-9187 • 30 Kawana Springs Rd, Santa Rosa</div><div class="v-fit">✅ Strong local presence (4.8 rating)</div></div>
+      <div class="vendor-card"><div class="v-name">Amada Senior Care</div><div class="v-detail">📞 (707) 387-0733 • 2135 Armory Dr, Santa Rosa</div><div class="v-fit">✅ Premium in-home care (4.9 rating)</div></div>
+      <div class="vendor-card"><div class="v-name">At Home Caregivers</div><div class="v-detail">📞 (707) 575-4663 • 891 2nd St, Santa Rosa</div><div class="v-fit">✅ Long-standing local agency (4.9)</div></div>
+      <div class="vendor-card"><div class="v-name">Hillendale Home Care</div><div class="v-detail">📞 (707) 360-1669 • 131A Stony Cir, Santa Rosa</div><div class="v-fit">✅ Exceptional quality (5.0 rating)</div></div>
+      <div class="vendor-card"><div class="v-name">Right at Home</div><div class="v-detail">📞 (707) 843-5192 • 1221 Farmers Ln, Santa Rosa</div><div class="v-fit">✅ National franchise, local expertise (4.9)</div></div>
+    </div>
+    <div style="font-size:11px; color:#888; margin-top:6px;">👤 Best inviter(s): Max Bernard, Ryan Cassidy, James Eakin</div>
+  </div>
+
+  <div style="font-size:12px; color:#666; background:#f8f9fa; padding:14px; border-radius:10px; margin-top:8px;">
+    <strong>📌 Additional vendors identified for:</strong> Banking Services (5), Cosmetics/Skin Care (5), Photographer (5), Graphic Designer (5), Flooring (5) — See full report for details. <strong>Total: 50 vendors across 10 professions.</strong>
+  </div>
+</div>
+
+<!-- EXECUTION PLAN -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-icon">📈</div>
+    <div><h3>2-Week Recruitment Execution Plan</h3><span class="section-sub">Day-by-Day Actions with Assigned Members</span></div>
+  </div>
+
+  <div style="margin-bottom:20px;">
+    <h4 style="font-size:14px; font-weight:700; margin-bottom:10px;">🏆 Top 5 Professions to Recruit FIRST</h4>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Priority</th><th>Profession</th><th>Assigned Member</th><th>Rationale</th></tr></thead>
+        <tbody>
+          <tr><td><strong>1</strong></td><td>Property & Casualty Insurance</td><td>Christopher Wilson</td><td>Completes homeowner referral loop with Mortgages, Real Estate, and Construction seats</td></tr>
+          <tr><td><strong>2</strong></td><td>Interior Design</td><td>Richard Lindsay</td><td>Ties 10 construction members together as the "quarterback" for renovation projects</td></tr>
+          <tr><td><strong>3</strong></td><td>IT Consultants</td><td>Rhett Graff</td><td>Universal need — receives referrals from virtually every member</td></tr>
+          <tr><td><strong>4</strong></td><td>Personal Injury Law</td><td>Max Bernard</td><td>High-value referrals synergized with Chiropractor, Auto Repair, and Massage</td></tr>
+          <tr><td><strong>5</strong></td><td>Senior Service Provider</td><td>James Eakin</td><td>Sonoma County's growing senior population + Estate Planning, Financial, Health connections</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="timeline">
+    <div class="timeline-week">📅 WEEK 1 — Initial Outreach</div>
+    <div class="timeline-item"><span class="day">Monday:</span> <span class="action">Email invitations → 5 P&C Insurance + 5 Interior Design vendors</span> <span class="who">• C. Wilson + R. Lindsay</span></div>
+    <div class="timeline-item"><span class="day">Tuesday:</span> <span class="action">Email invitations → 5 IT Consultants + 5 PI Law vendors</span> <span class="who">• R. Graff + M. Bernard</span></div>
+    <div class="timeline-item"><span class="day">Wednesday:</span> <span class="action">Email invitations → 5 Senior Service vendors + SMS follow-ups to all 25</span> <span class="who">• J. Eakin + all Week 1 members</span></div>
+    <div class="timeline-item"><span class="day">Thursday:</span> <span class="action">Phone calls to non-responders</span> <span class="who">• All assigned members</span></div>
+    <div class="timeline-item"><span class="day">Friday:</span> <span class="action">Chapter meeting — announce recruitment push, ask ALL members for contacts</span> <span class="who">• All 29 members</span></div>
+
+    <div class="timeline-week">📅 WEEK 2 — Follow-Up & Expand</div>
+    <div class="timeline-item"><span class="day">Monday:</span> <span class="action">48-hr follow-up emails + begin outreach to Photographer, Graphic Design, Banking</span> <span class="who">• L. Hall, R. Graff, D. Crowhurst</span></div>
+    <div class="timeline-item"><span class="day">Tuesday:</span> <span class="action">Phone calls to Week 1 non-responders</span> <span class="who">• All assigned members</span></div>
+    <div class="timeline-item"><span class="day">Wednesday:</span> <span class="action">SMS follow-ups to Week 2 vendors (15 total)</span> <span class="who">• Week 2 members</span></div>
+    <div class="timeline-item"><span class="day">Thursday:</span> <span class="action">Confirm all visitor RSVPs for Friday meeting</span> <span class="who">• R. Cassidy + R. Lindsay (Visitor Hosts)</span></div>
+    <div class="timeline-item"><span class="day">Friday:</span> <span class="action">Welcome visitors, introductions, assign follow-up owners</span> <span class="who">• All members + Visitor Hosts</span></div>
+  </div>
+</div>
+
+<!-- RECOMMENDATIONS -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-icon">🎯</div>
+    <div><h3>Final Summary & Recommendations</h3></div>
+  </div>
+  <div class="rec-grid">
+    <div class="rec-card strength">
+      <h4>✅ Chapter Strengths</h4>
+      <ul>
+        <li><strong>Dominant Home Services Power Team</strong> — 10 seats in construction/home services</li>
+        <li><strong>Exceptional 1-2-1 culture</strong> — 459 total, 15.8 avg per member</li>
+        <li><strong>Strong top performers</strong> — Wilson, Eggers, Larson, Bernard, Caston leading activity</li>
+        <li><strong>Engaged leadership</strong> — Most key roles filled with active members</li>
+      </ul>
+    </div>
+    <div class="rec-card opportunity">
+      <h4>⚠️ Key Growth Opportunities</h4>
+      <ul>
+        <li><strong>Visitor generation</strong> — 76% of members brought zero visitors (biggest lever!)</li>
+        <li><strong>Fill 4 vacant MC roles</strong> — Community Builder, QA, Engagement, Relations</li>
+        <li><strong>Activate 6 zero-referral members</strong> — Mentor attention needed</li>
+        <li><strong>Expand Marketing sphere</strong> — Only 1 seat currently (Digital Marketing)</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- GROWTH TARGET -->
+<div class="growth-target">
+  <h3>📊 6-Month Growth Target</h3>
+  <p style="opacity:0.7; font-size:13px;">Fill the top 10 missing professions to accelerate chapter growth</p>
+  <div class="growth-numbers">
+    <div>
+      <div class="growth-num current">29</div>
+      <div class="growth-label">Current Members</div>
+    </div>
+    <div class="growth-arrow">→</div>
+    <div>
+      <div class="growth-num target">40+</div>
+      <div class="growth-label">Target Members</div>
+    </div>
+  </div>
+  <p style="opacity:0.6; font-size:12px; margin-top:8px;">50 local vendors identified • 5 invitation templates ready • 2-week execution plan in place</p>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <div class="footer-logos">
+    <div class="footer-logo-item" style="color:#b91c1c;">🤖 Higgins AI</div>
+    <div class="footer-logo-item" style="color:#1a1a2e;">🌐 BNI Alliance Builders</div>
+  </div>
+  <p>This report was generated by <a href="https://higgins.ai">Higgins AI</a> for BNI Alliance Builders (In-Person)</p>
+  <p style="margin-top:6px;">
+    📞 Higgins Support: <strong>855-737-3386</strong> | 📧 <a href="mailto:support@higgins.ai">support@higgins.ai</a> | 🌐 <a href="https://higgins.ai">higgins.ai</a>
+  </p>
+  <p style="margin-top:4px;">
+    📞 BNI SF Bay: <strong>(707) 899-7161</strong> | 📧 <a href="mailto:director@bnisfbay.com">director@bnisfbay.com</a>
+  </p>
+  <p style="margin-top:12px; opacity:0.6;">© 2026 BNI Global LLC. All Rights Reserved. Report data as of March 2026.</p>
+</div>
+
+</div><!-- /container -->
+
+</body>
+</html>
