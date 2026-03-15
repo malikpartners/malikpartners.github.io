@@ -1,0 +1,470 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BNI Athens Referral Factory — Executive Summary</title>
+<style>
+  :root {
+    --red: #c0392b;
+    --dark: #1a1a2e;
+    --blue: #16213e;
+    --gold: #f39c12;
+    --green: #27ae60;
+    --light: #f8f9fa;
+    --white: #ffffff;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #f0f2f5; color: #333; line-height: 1.6; }
+
+  .header {
+    background: linear-gradient(135deg, var(--dark) 0%, var(--blue) 40%, var(--red) 100%);
+    color: white; padding: 40px 30px; text-align: center;
+  }
+  .header h1 { font-size: 2.2em; margin-bottom: 4px; }
+  .header .sub { opacity: 0.9; font-size: 1.05em; margin-bottom: 18px; }
+  .header .badges { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+  .header .badge { background: rgba(255,255,255,0.15); padding: 5px 16px; border-radius: 20px; font-size: 0.85em; border: 1px solid rgba(255,255,255,0.25); backdrop-filter: blur(5px); }
+
+  .container { max-width: 1100px; margin: 0 auto; padding: 25px 20px; }
+
+  .section-title {
+    font-size: 1.35em; color: var(--dark); margin: 30px 0 15px;
+    padding-bottom: 8px; border-bottom: 3px solid var(--red);
+    display: flex; align-items: center; gap: 10px;
+  }
+  .section-title:first-of-type { margin-top: 0; }
+
+  /* KPI Cards */
+  .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 14px; margin-bottom: 25px; }
+  .kpi {
+    background: var(--white); border-radius: 12px; padding: 20px 14px; text-align: center;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.08); border-top: 4px solid var(--red);
+    transition: transform 0.2s;
+  }
+  .kpi:hover { transform: translateY(-4px); }
+  .kpi .num { font-size: 2.4em; font-weight: 800; color: var(--dark); }
+  .kpi .lbl { font-size: 0.78em; color: #777; margin-top: 2px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+  /* Cards */
+  .card { background: var(--white); border-radius: 12px; box-shadow: 0 3px 12px rgba(0,0,0,0.07); padding: 22px; margin-bottom: 18px; }
+
+  /* Tables */
+  .tbl-wrap { overflow-x: auto; border-radius: 10px; border: 1px solid #e0e0e0; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.86em; }
+  th { background: var(--dark); color: white; padding: 10px 8px; text-align: left; font-weight: 600; white-space: nowrap; }
+  td { padding: 9px 8px; border-bottom: 1px solid #eee; vertical-align: top; }
+  tr:nth-child(even) td { background: #fafafa; }
+  tr:hover td { background: #fef9e7; }
+
+  /* Sphere bars */
+  .sphere { display: flex; align-items: center; gap: 12px; padding: 12px 16px; background: var(--white); border-radius: 10px; margin-bottom: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); border-left: 5px solid var(--red); }
+  .sphere .icon { font-size: 1.6em; }
+  .sphere .info { flex: 1; }
+  .sphere .name { font-weight: 700; color: var(--dark); font-size: 0.95em; }
+  .sphere .seats { font-size: 0.8em; color: #666; margin-top: 2px; }
+  .sphere .bar-bg { height: 8px; background: #eee; border-radius: 4px; margin-top: 6px; overflow: hidden; }
+  .sphere .bar-fill { height: 100%; border-radius: 4px; background: linear-gradient(90deg, var(--red), var(--gold)); }
+
+  /* Priority list */
+  .priority-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 12px; }
+  .priority-item {
+    display: flex; gap: 14px; align-items: flex-start; padding: 14px 16px;
+    background: var(--white); border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    border-left: 5px solid var(--gold); transition: transform 0.2s;
+  }
+  .priority-item:hover { transform: translateX(4px); }
+  .priority-item .rank { font-size: 1.8em; font-weight: 800; color: var(--red); min-width: 36px; text-align: center; }
+  .priority-item .details h4 { color: var(--dark); font-size: 0.95em; margin-bottom: 3px; }
+  .priority-item .details p { font-size: 0.8em; color: #666; }
+  .priority-item .details .trigger { font-size: 0.75em; color: var(--red); font-style: italic; margin-top: 4px; }
+
+  /* Vendor summary */
+  .vendor-summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; }
+  .vendor-group {
+    background: var(--white); border-radius: 10px; padding: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    border-top: 4px solid var(--dark);
+  }
+  .vendor-group h4 { color: var(--dark); font-size: 0.92em; margin-bottom: 8px; }
+  .vendor-group ul { list-style: none; }
+  .vendor-group li { font-size: 0.82em; padding: 4px 0; border-bottom: 1px solid #f0f0f0; display: flex; justify-content: space-between; }
+  .vendor-group li:last-child { border-bottom: none; }
+  .vendor-group .phone { color: #888; font-size: 0.9em; }
+  .vendor-group .best-member { font-size: 0.78em; color: var(--red); margin-top: 8px; font-style: italic; }
+
+  /* Timeline */
+  .week-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media(max-width:700px) { .week-grid { grid-template-columns: 1fr; } }
+  .week-card { background: var(--white); border-radius: 10px; padding: 18px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+  .week-card h4 { color: var(--dark); margin-bottom: 12px; padding-bottom: 6px; border-bottom: 2px solid var(--gold); }
+  .day-row { display: flex; gap: 8px; padding: 6px 0; border-bottom: 1px solid #f5f5f5; font-size: 0.82em; }
+  .day-row:last-child { border-bottom: none; }
+  .day-label { font-weight: 700; color: var(--red); min-width: 38px; }
+
+  /* Flags */
+  .flag { padding: 10px 14px; border-radius: 8px; margin-bottom: 8px; font-size: 0.88em; display: flex; align-items: flex-start; gap: 8px; }
+  .flag.warn { background: #fff8e1; border-left: 4px solid var(--gold); }
+  .flag.info { background: #e3f2fd; border-left: 4px solid #2196f3; }
+
+  /* Hidden gems */
+  .gems { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
+  .gem { background: linear-gradient(135deg, #f8f0ff, #fff); border-radius: 10px; padding: 16px; border-left: 5px solid #8e44ad; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+  .gem h5 { color: #6c3483; margin-bottom: 4px; }
+  .gem p { font-size: 0.82em; color: #555; }
+
+  .footer { text-align: center; padding: 30px; color: #999; font-size: 0.8em; margin-top: 20px; }
+  .footer a { color: var(--red); text-decoration: none; }
+
+  .print-btn {
+    position: fixed; bottom: 18px; right: 18px; background: var(--dark); color: white; border: none;
+    padding: 12px 22px; border-radius: 50px; cursor: pointer; font-weight: 700; font-size: 0.88em;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.3); z-index: 999; transition: all 0.3s;
+  }
+  .print-btn:hover { background: var(--red); transform: scale(1.05); }
+
+  @media print {
+    .print-btn { display: none; }
+    body { background: white; }
+    .header { padding: 20px; }
+    .kpi { border-top-width: 2px; }
+  }
+  @media(max-width:600px) {
+    .header h1 { font-size: 1.5em; }
+    .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+    .priority-list, .vendor-summary, .gems { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>🏗️ BNI Athens Referral Factory</h1>
+  <div class="sub">Executive Summary — Chapter Growth Analysis & Recruitment Plan</div>
+  <div class="badges">
+    <span class="badge">📍 Chapter #000107</span>
+    <span class="badge">📅 Thursday 7:30 AM</span>
+    <span class="badge">🏌️ Jennings Mill Country Club, Watkinsville, GA</span>
+    <span class="badge">🌐 GA Northeast Region</span>
+    <span class="badge">🎯 In-Person</span>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- KPIs -->
+  <div class="kpi-grid">
+    <div class="kpi"><div class="num">31</div><div class="lbl">Current Members</div></div>
+    <div class="kpi"><div class="num">5</div><div class="lbl">Active Contact Spheres</div></div>
+    <div class="kpi"><div class="num">20</div><div class="lbl">Missing Professions</div></div>
+    <div class="kpi"><div class="num">50</div><div class="lbl">Local Vendors Identified</div></div>
+    <div class="kpi"><div class="num">10</div><div class="lbl">Invitation Templates</div></div>
+    <div class="kpi"><div class="num">14</div><div class="lbl">Day Outreach Plan</div></div>
+  </div>
+
+  <!-- Flags -->
+  <div class="section-title">⚠️ Flags & Action Items</div>
+  <div class="card">
+    <div class="flag warn"><span>⚠️</span><div><strong>Overlap Check:</strong> Wills/Trusts (Ryan Reynolds) vs. Business Law (Tim Sanders) — ensure clear referral lanes: estate planning → Reynolds; contracts/entity → Sanders.</div></div>
+    <div class="flag warn"><span>⚠️</span><div><strong>Overlap Check:</strong> Health & Wellness Products (Raymond Stewart) vs. Recovery & Performance (David Chamblee) — similar client base, recommend clear differentiation.</div></div>
+    <div class="flag warn"><span>⚠️</span><div><strong>Classification Mismatch:</strong> Laura Green holds Copywriter/Writer seat but company is Ovation Funding Solutions. Verify alignment.</div></div>
+    <div class="flag info"><span>ℹ️</span><div><strong>Vacant Leadership:</strong> Events Coordinator, Growth Coordinator, and Chapter Webmaster roles unfilled.</div></div>
+  </div>
+
+  <!-- Contact Spheres -->
+  <div class="section-title">🔗 Top 5 Contact Spheres</div>
+  <div class="sphere">
+    <div class="icon">🏠</div>
+    <div class="info">
+      <div class="name">Home Services Sphere <span style="color:var(--red);font-size:0.75em;">★ STRONGEST</span></div>
+      <div class="seats">HVAC · Fences · Painter · Handyman · Restoration · Pest Control · Junk Removal · Carpet Cleaner · Home Inspection</div>
+      <div class="bar-bg"><div class="bar-fill" style="width:95%"></div></div>
+    </div>
+  </div>
+  <div class="sphere">
+    <div class="icon">🏡</div>
+    <div class="info">
+      <div class="name">Real Estate & Home Buying Sphere</div>
+      <div class="seats">Real Estate Agent · Mortgages · Home Inspection · P&C Insurance · Wills/Trusts</div>
+      <div class="bar-bg"><div class="bar-fill" style="width:75%"></div></div>
+    </div>
+  </div>
+  <div class="sphere">
+    <div class="icon">💼</div>
+    <div class="info">
+      <div class="name">Business & Professional Services Sphere</div>
+      <div class="seats">CPA · Business Law · Payroll · Wealth Management · Virtual Assistant · Copywriter</div>
+      <div class="bar-bg"><div class="bar-fill" style="width:65%"></div></div>
+    </div>
+  </div>
+  <div class="sphere">
+    <div class="icon">🩺</div>
+    <div class="info">
+      <div class="name">Health & Wellness Sphere</div>
+      <div class="seats">Chiropractor · Massage · Recovery & Performance · Health Insurance · Wellness Products · Veterinarian</div>
+      <div class="bar-bg"><div class="bar-fill" style="width:60%"></div></div>
+    </div>
+  </div>
+  <div class="sphere">
+    <div class="icon">📣</div>
+    <div class="info">
+      <div class="name">Marketing & Creative Sphere</div>
+      <div class="seats">Web Design · Printer · Videographer · Copywriter</div>
+      <div class="bar-bg"><div class="bar-fill" style="width:45%"></div></div>
+    </div>
+  </div>
+
+  <!-- Top 10 Missing Professions -->
+  <div class="section-title">🎯 Top 10 Missing Professions to Recruit</div>
+  <div class="priority-list">
+    <div class="priority-item"><div class="rank">1</div><div class="details"><h4>🔨 Roofing & Gutters</h4><p>#1 seat across 17 regional chapters. Completes Home Services sphere.</p><div class="trigger">🗣️ "My roof is leaking after that storm"</div></div></div>
+    <div class="priority-item"><div class="rank">2</div><div class="details"><h4>💰 Financial Advisor</h4><p>Massive referral exchange with CPA, insurance & attorneys.</p><div class="trigger">🗣️ "I'm retiring and need to roll over my 401k"</div></div></div>
+    <div class="priority-item"><div class="rank">3</div><div class="details"><h4>🔧 Plumbing</h4><p>Essential trade missing from strongest sphere. Daily referral partner for HVAC, Restoration, Handyman.</p><div class="trigger">🗣️ "Water is dripping under my sink"</div></div></div>
+    <div class="priority-item"><div class="rank">4</div><div class="details"><h4>⚡ Electrician</h4><p>Completes trades trifecta (HVAC + Plumbing + Electrical). Every renovation needs all three.</p><div class="trigger">🗣️ "My breaker keeps tripping"</div></div></div>
+    <div class="priority-item"><div class="rank">5</div><div class="details"><h4>⚖️ Personal Injury Law</h4><p>Referral loop with Chiropractor, Massage, Recovery & P&C Insurance.</p><div class="trigger">🗣️ "I was in a car accident last week"</div></div></div>
+    <div class="priority-item"><div class="rank">6</div><div class="details"><h4>📱 Digital Marketing</h4><p>Completes Marketing sphere. Every member is a potential client.</p><div class="trigger">🗣️ "My business isn't showing up on Google"</div></div></div>
+    <div class="priority-item"><div class="rank">7</div><div class="details"><h4>🧹 Cleaning Service (Residential)</h4><p>Perfect overlap with Real Estate, Restoration & Carpet Cleaner.</p><div class="trigger">🗣️ "We're moving out and need the house cleaned"</div></div></div>
+    <div class="priority-item"><div class="rank">8</div><div class="details"><h4>🏗️ Builder / General Contractor</h4><p>The "hub" connecting all construction trades in the chapter.</p><div class="trigger">🗣️ "We're building an addition onto our house"</div></div></div>
+    <div class="priority-item"><div class="rank">9</div><div class="details"><h4>📒 Bookkeeper</h4><p>Natural partner for CPA & Payroll. Every small business needs bookkeeping.</p><div class="trigger">🗣️ "I'm behind on my books and tax season is coming"</div></div></div>
+    <div class="priority-item"><div class="rank">10</div><div class="details"><h4>🌿 Landscape Services</h4><p>Exterior partner for Fences, Painter, Pest Control & Real Estate.</p><div class="trigger">🗣️ "The curb appeal is terrible"</div></div></div>
+  </div>
+
+  <!-- Hidden Gems -->
+  <div class="section-title">🔍 Overlooked "Hidden Gem" Professions</div>
+  <div class="gems">
+    <div class="gem"><h5>👴 Senior In-Home Care</h5><p>Growing Athens senior population. Refers to/from Wills/Trusts, Health Insurance, CPA, Real Estate & Chiropractor.</p></div>
+    <div class="gem"><h5>📸 Photographer</h5><p>Every listing, website & event needs photos. Partners with Real Estate, Web Design, Videographer & Non-Profits.</p></div>
+    <div class="gem"><h5>💳 Credit Repair</h5><p>Mortgage, real estate, auto & insurance members encounter credit issues daily. Turns "not-yet-ready" into future referrals.</p></div>
+  </div>
+
+  <!-- Vendor Search Summary -->
+  <div class="section-title">🔍 Local Vendor Search — 50 Vendors Across 10 Professions</div>
+  <div class="vendor-summary">
+    <div class="vendor-group">
+      <h4>🔨 Roofing & Gutters</h4>
+      <ul>
+        <li><span>Milledge Roofing Co.</span><span class="phone">(706) 391-6564</span></li>
+        <li><span>Findlay Roofing</span><span class="phone">(706) 989-8037</span></li>
+        <li><span>Premier Home Solutions</span><span class="phone">(706) 206-9677</span></li>
+        <li><span>Eastside Roofing</span><span class="phone">(706) 308-0890</span></li>
+        <li><span>Ridgeline Roofing</span><span class="phone">(706) 310-4201</span></li>
+      </ul>
+      <div class="best-member">🎯 Best inviters: Ross Kesterson, MC Horne, Paul Lavelle</div>
+    </div>
+    <div class="vendor-group">
+      <h4>💰 Financial Advisor</h4>
+      <ul>
+        <li><span>Fully Financial</span><span class="phone">(706) 389-8426</span></li>
+        <li><span>Arch Financial Planning</span><span class="phone">(706) 204-9068</span></li>
+        <li><span>Elevate Wealth Advisory</span><span class="phone">(706) 353-2728</span></li>
+        <li><span>Carson Advisory</span><span class="phone">(706) 353-1190</span></li>
+        <li><span>Ability Wealth Group</span><span class="phone">(706) 530-2805</span></li>
+      </ul>
+      <div class="best-member">🎯 Best inviters: James Hasler, Ryan Reynolds, Paul Lavelle</div>
+    </div>
+    <div class="vendor-group">
+      <h4>🔧 Plumbing</h4>
+      <ul>
+        <li><span>Royal Flush Plumbing</span><span class="phone">(762) 257-2284</span></li>
+        <li><span>Blueprint Plumbing</span><span class="phone">(706) 389-4508</span></li>
+        <li><span>Empire Plumbing</span><span class="phone">(706) 254-1273</span></li>
+        <li><span>Roseman Plumbing</span><span class="phone">(706) 247-2074</span></li>
+        <li><span>Remedy Plumbing</span><span class="phone">(706) 551-9257</span></li>
+      </ul>
+      <div class="best-member">🎯 Best inviters: Nathan Coker, Ross Kesterson, Cullen Gossett</div>
+    </div>
+    <div class="vendor-group">
+      <h4>⚡ Electrician</h4>
+      <ul>
+        <li><span>Classic City Electric</span><span class="phone">(706) 614-9711</span></li>
+        <li><span>Blue Moon Electric</span><span class="phone">(678) 907-5945</span></li>
+        <li><span>Thunderbolt Electric</span><span class="phone">(706) 613-7727</span></li>
+        <li><span>Revamp Athens Electrical</span><span class="phone">(706) 248-1131</span></li>
+        <li><span>Guardian Electric</span><span class="phone">(678) 446-4602</span></li>
+      </ul>
+      <div class="best-member">🎯 Best inviters: Nathan Coker, Cullen Gossett, Ross Kesterson</div>
+    </div>
+    <div class="vendor-group">
+      <h4>⚖️ Personal Injury Law</h4>
+      <ul>
+        <li><span>Day Injury Law</span><span class="phone">(706) 425-4500</span></li>
+        <li><span>Norris Injury Law</span><span class="phone">(706) 420-6400</span></li>
+        <li><span>Hall & Collins</span><span class="phone">(706) 351-6055</span></li>
+        <li><span>Joshua W. Branch</span><span class="phone">(706) 717-7675</span></li>
+        <li><span>Larrison Law Firm</span><span class="phone">(706) 445-5055</span></li>
+      </ul>
+      <div class="best-member">🎯 Best inviters: Ken Cook, Paul Lavelle, Corey Harper</div>
+    </div>
+    <div class="vendor-group">
+      <h4>📱 Digital Marketing</h4>
+      <ul>
+        <li><span>Bipper Media</span><span class="phone">(706) 350-1063</span></li>
+        <li><span>Kaptiv8</span><span class="phone">(888) 470-9997</span></li>
+        <li><span>Lightmark Media</span><span class="phone">(706) 621-4810</span></li>
+        <li><span>Millner Digital Mktg</span><span class="phone">(706) 715-5647</span></li>
+        <li><span>The Adsmith</span><span class="phone">(706) 543-5555</span></li>
+      </ul>
+      <div class="best-member">🎯 Best inviters: Scott Brantley, Laura Green, Marshall Manning</div>
+    </div>
+    <div class="vendor-group">
+      <h4>🧹 Cleaning Service</h4>
+      <ul>
+        <li><span>Dogwood Cleaning Co.</span><span class="phone">(706) 612-4630</span></li>
+        <li><span>Team Clean Athens</span><span class="phone">(706) 297-8109</span></li>
+        <li><span>Maid Right of Athens</span><span class="phone">(470) 260-6836</span></li>
+        <li><span>Hometown Cleaning</span><span class="phone">(706) 765-8030</span></li>
+        <li><span>MAID 4 U</span><span class="phone">(706) 621-9981</span></li>
+      </ul>
+      <div class="best-member">🎯 Best inviters: Pamela Jessurum, Ross Kesterson, Jared Reeves</div>
+    </div>
+    <div class="vendor-group">
+      <h4>🏗️ Builder / GC</h4>
+      <ul>
+        <li><span>Cambria Construction</span><span class="phone">(770) 530-6698</span></li>
+        <li><span>JOMA Construction</span><span class="phone">(706) 372-1052</span></li>
+        <li><span>Cecil Jennings Const.</span><span class="phone">(706) 255-6528</span></li>
+        <li><span>ProBuilt Athens</span><span class="phone">(706) 395-6113</span></li>
+        <li><span>Resource Construction</span><span class="phone">(706) 340-0092</span></li>
+      </ul>
+      <div class="best-member">🎯 Best inviters: Nathan Coker, Hosea Foote, Andrew Blanchard</div>
+    </div>
+    <div class="vendor-group">
+      <h4>📒 Bookkeeping</h4>
+      <ul>
+        <li><span>Peach BPO</span><span class="phone">(770) 268-0373</span></li>
+        <li><span>Moss Business Solutions</span><span class="phone">(706) 705-9154</span></li>
+        <li><span>Inside Out Accounting</span><span class="phone">(404) 907-1925</span></li>
+        <li><span>Beyond The Numbers</span><span class="phone">(706) 548-1128</span></li>
+        <li><span>Trinity Accounting</span><span class="phone">(706) 546-1422</span></li>
+      </ul>
+      <div class="best-member">🎯 Best inviters: James Hasler, Julian Maluret, Robin Hill</div>
+    </div>
+    <div class="vendor-group">
+      <h4>🌿 Landscape Services</h4>
+      <ul>
+        <li><span>LangScapes Athens</span><span class="phone">(706) 255-8721</span></li>
+        <li><span>Greenbriar Landscape</span><span class="phone">(706) 316-0702</span></li>
+        <li><span>Green Scene Landscape</span><span class="phone">(706) 224-6300</span></li>
+        <li><span>Reynolds Landscape</span><span class="phone">(706) 353-0810</span></li>
+        <li><span>GreenWorks Ecoscape</span><span class="phone">(706) 201-4949</span></li>
+      </ul>
+      <div class="best-member">🎯 Best inviters: Andrew Blanchard, Sandra Williamson, Pamela Jessurum</div>
+    </div>
+  </div>
+
+  <!-- Recruitment Priority -->
+  <div class="section-title">🚀 Top 5 Recruit-First Priorities</div>
+  <div class="card">
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>#</th><th>Profession</th><th>Why Recruit First</th></tr></thead>
+        <tbody>
+          <tr><td><strong>1</strong></td><td><strong>Roofing & Gutters</strong></td><td>#1 seat regionally. Huge synergy with 5+ existing members. Every storm & home sale triggers referrals.</td></tr>
+          <tr><td><strong>2</strong></td><td><strong>Plumbing</strong></td><td>Essential trade missing from strongest sphere. HVAC, Handyman & Restoration can refer immediately.</td></tr>
+          <tr><td><strong>3</strong></td><td><strong>Personal Injury Law</strong></td><td>Completes Health & Wellness sphere. Chiropractor, massage & insurance see injury clients weekly.</td></tr>
+          <tr><td><strong>4</strong></td><td><strong>Electrician</strong></td><td>Completes trades trifecta (HVAC + Plumbing + Electrical). Every renovation needs all three.</td></tr>
+          <tr><td><strong>5</strong></td><td><strong>Digital Marketing</strong></td><td>Completes Marketing sphere. Every member is a potential client. Activates Web Design, Videographer & Copywriter.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 2-Week Outreach Plan -->
+  <div class="section-title">📅 2-Week Outreach Execution Plan</div>
+  <div class="week-grid">
+    <div class="week-card">
+      <h4>📆 Week 1 — Initial Contact</h4>
+      <div class="day-row"><span class="day-label">Mon</span><span>Email all 5 <strong>Roofing</strong> vendors → Ross K. & MC Horne</span></div>
+      <div class="day-row"><span class="day-label">Tue</span><span>Email all 5 <strong>Plumbing</strong> vendors → Nathan C. & Cullen G.</span></div>
+      <div class="day-row"><span class="day-label">Wed</span><span>Email all 5 <strong>PI Law</strong> vendors → Ken Cook & Paul Lavelle</span></div>
+      <div class="day-row"><span class="day-label">Thu</span><span>🎯 <strong>Chapter Meeting</strong> — announce recruitment push & assign remaining</span></div>
+      <div class="day-row"><span class="day-label">Fri</span><span>Email all 5 <strong>Electrician</strong> vendors → Nathan C. & Ross K.</span></div>
+    </div>
+    <div class="week-card">
+      <h4>📆 Week 2 — Follow-Up & Expand</h4>
+      <div class="day-row"><span class="day-label">Mon</span><span>48-hr follow-up calls on Roofing & Plumbing no-replies</span></div>
+      <div class="day-row"><span class="day-label">Tue</span><span>Email <strong>Digital Mktg, Cleaning & Bookkeeping</strong> vendors</span></div>
+      <div class="day-row"><span class="day-label">Wed</span><span>Email <strong>GC & Landscaping</strong> vendors + follow-up PI Law</span></div>
+      <div class="day-row"><span class="day-label">Thu</span><span>🎯 <strong>Chapter Meeting</strong> — celebrate RSVPs, re-assign as needed</span></div>
+      <div class="day-row"><span class="day-label">Fri</span><span>Final follow-ups on all outstanding. SMS to non-responders.</span></div>
+    </div>
+  </div>
+
+  <!-- Chapter Roster Summary -->
+  <div class="section-title">👥 Chapter Roster — 31 Members by Category</div>
+  <div class="card">
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>#</th><th>Category</th><th>Classification</th><th>Member</th><th>Company</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Animals</td><td>Veterinarian</td><td>Jeff Bangle</td><td>Oconee Veterinary Hospital</td></tr>
+          <tr><td>2</td><td>Advertising & Marketing</td><td>Copywriter/Writer</td><td>Laura Green</td><td>Ovation Funding Solutions</td></tr>
+          <tr><td>3</td><td>Advertising & Marketing</td><td>Printer</td><td>Stephanie Field</td><td>Athens Printing Company</td></tr>
+          <tr><td>4</td><td>Advertising & Marketing</td><td>Videographer</td><td>Marshall Manning</td><td>Video Bulldog</td></tr>
+          <tr><td>5</td><td>Advertising & Marketing</td><td>Web Design</td><td>Scott Brantley</td><td>DawgTown Website</td></tr>
+          <tr><td>6</td><td>Car & Motorcycle</td><td>Auto Body Shop</td><td>Thomas A. Durrence</td><td>Specialty Paint & Body</td></tr>
+          <tr><td>7</td><td>Cleaning Services</td><td>Carpet/Upholstery Cleaner</td><td>Jared Reeves</td><td>Certified Clean Care</td></tr>
+          <tr><td>8</td><td>Construction & Trades</td><td>Fences</td><td>Andrew Blanchard</td><td>Blanchard Fence LLC</td></tr>
+          <tr><td>9</td><td>Construction & Trades</td><td>Handyman</td><td>Cullen Gossett</td><td>The Trusted Toolbox</td></tr>
+          <tr><td>10</td><td>Construction & Trades</td><td>HVAC</td><td>Nathan Coker</td><td>Stanfield Air Systems</td></tr>
+          <tr><td>11</td><td>Construction & Trades</td><td>Junk Removal</td><td>Matt McCue</td><td>Junk South</td></tr>
+          <tr><td>12</td><td>Construction & Trades</td><td>Painter & Decorator</td><td>Hosea Foote</td><td>Five Star Painting</td></tr>
+          <tr><td>13</td><td>Construction & Trades</td><td>Pest Control</td><td>Sandra Williamson</td><td>Wynne Pest Solutions</td></tr>
+          <tr><td>14</td><td>Construction & Trades</td><td>Restoration</td><td>Ross Kesterson</td><td>Restore Pros</td></tr>
+          <tr><td>15</td><td>Event & Business Services</td><td>Virtual Assistant</td><td>Robin Hill</td><td>Virtual Office Assist</td></tr>
+          <tr><td>16</td><td>Finance & Insurance</td><td>Health Insurance</td><td>Corey Harper</td><td>Compass Health Consultants</td></tr>
+          <tr><td>17</td><td>Finance & Insurance</td><td>P&C Insurance</td><td>Paul Lavelle</td><td>State Farm Insurance</td></tr>
+          <tr><td>18</td><td>Finance & Insurance</td><td>Payroll Service</td><td>Julian Maluret</td><td>Payentry</td></tr>
+          <tr><td>19</td><td>Finance & Insurance</td><td>Residential Mortgages</td><td>Bob Slocum</td><td>Capital City Home Loans</td></tr>
+          <tr><td>20</td><td>Finance & Insurance</td><td>Wealth Management</td><td>Akshay Patel</td><td>Mitchell Investment Group</td></tr>
+          <tr><td>21</td><td>Health & Wellness</td><td>Chiropractor</td><td>Ken Cook</td><td>Chiropractic Works</td></tr>
+          <tr><td>22</td><td>Health & Wellness</td><td>Massage Therapist</td><td>Audrey Blanchard</td><td>Blanchard Wellness Clinic</td></tr>
+          <tr><td>23</td><td>Health & Wellness</td><td>Recovery & Performance</td><td>David Chamblee</td><td>O2 Performance</td></tr>
+          <tr><td>24</td><td>Health & Wellness</td><td>Wellness Products</td><td>Raymond Stewart</td><td>Dr. Ray's Wellness</td></tr>
+          <tr><td>25</td><td>Legal & Accounting</td><td>Business Law</td><td>Tim Sanders</td><td>Timothy F Sanders, Atty</td></tr>
+          <tr><td>26</td><td>Legal & Accounting</td><td>CPA</td><td>James A Hasler</td><td>GarciaHasler</td></tr>
+          <tr><td>27</td><td>Legal & Accounting</td><td>Wills/Trusts</td><td>Ryan Reynolds</td><td>Law Office of Ryan J. Reynolds</td></tr>
+          <tr><td>28</td><td>Organizations & Other</td><td>Non-Profits</td><td>Cathy Kesterson</td><td>Georgia Options</td></tr>
+          <tr><td>29</td><td>Real Estate Services</td><td>Home Inspection</td><td>MC Horne</td><td>The BrickKicker</td></tr>
+          <tr><td>30</td><td>Real Estate Services</td><td>Residential Real Estate</td><td>Pamela Jessurum</td><td>Corcoran Classic Living</td></tr>
+          <tr><td>31</td><td>Retail</td><td>Apparel</td><td>Brandt Farmer</td><td>Farmhouse Apparel</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Invitation Templates Available -->
+  <div class="section-title">✉️ Invitation Templates Ready</div>
+  <div class="card">
+    <p style="font-size:0.9em;color:#555;margin-bottom:12px;">Complete Email, SMS, Phone Script & 48-Hour Follow-Up templates have been generated for all 10 target professions. Each template is personalized with chapter details and ready to copy, customize, and send.</p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>#</th><th>Profession</th><th>Example Vendor</th><th>Channels</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Roofing & Gutters</td><td>Milledge Roofing Co.</td><td>📧 Email · 📱 SMS · 📞 Call · ⏰ Follow-Up</td></tr>
+          <tr><td>2</td><td>Financial Advisor</td><td>Fully Financial</td><td>📧 Email · 📱 SMS · 📞 Call · ⏰ Follow-Up</td></tr>
+          <tr><td>3</td><td>Plumbing</td><td>Royal Flush Plumbing</td><td>📧 Email · 📱 SMS · 📞 Call · ⏰ Follow-Up</td></tr>
+          <tr><td>4</td><td>Electrician</td><td>Thunderbolt Electric</td><td>📧 Email · 📱 SMS · 📞 Call · ⏰ Follow-Up</td></tr>
+          <tr><td>5</td><td>Personal Injury Law</td><td>Day Injury Law</td><td>📧 Email · 📱 SMS · 📞 Call · ⏰ Follow-Up</td></tr>
+          <tr><td>6</td><td>Digital Marketing</td><td>Bipper Media</td><td>📧 Email · 📱 SMS · 📞 Call · ⏰ Follow-Up</td></tr>
+          <tr><td>7</td><td>Cleaning Service</td><td>Dogwood Cleaning Co.</td><td>📧 Email · 📱 SMS · 📞 Call · ⏰ Follow-Up</td></tr>
+          <tr><td>8</td><td>Builder / GC</td><td>Resource Construction</td><td>📧 Email · 📱 SMS · 📞 Call · ⏰ Follow-Up</td></tr>
+          <tr><td>9</td><td>Bookkeeping</td><td>Peach BPO</td><td>📧 Email · 📱 SMS · 📞 Call · ⏰ Follow-Up</td></tr>
+          <tr><td>10</td><td>Landscape Services</td><td>GreenWorks Ecoscape</td><td>📧 Email · 📱 SMS · 📞 Call · ⏰ Follow-Up</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<button class="print-btn" onclick="window.print()">🖨️ Print Summary</button>
+
+<div class="footer">
+  <p>Executive Summary generated by <a href="https://higgins.ai">Higgins AI</a> for BNI Athens Referral Factory (Chapter #000107)</p>
+  <p>All vendor information sourced from publicly available business listings. Verify contact details before outreach.</p>
+  <p style="margin-top:6px;">📞 855-737-3386 · ✉️ support@higgins.ai · 🌐 higgins.ai</p>
+</div>
+
+</body>
+</html>
