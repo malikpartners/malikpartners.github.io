@@ -1,0 +1,392 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BNI CA Northern PALMS Report | Higgins Reports</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#000;color:#e0e0e0;font-family:'Segoe UI',system-ui,Arial,sans-serif;min-height:100vh}
+.header{background:#0d0d0d;border-bottom:3px solid #CF2030;padding:12px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.header img{height:48px}
+.header-right{text-align:right}
+.header-right h1{color:#CF2030;font-size:1.3em;letter-spacing:.5px}
+.header-right p{color:#888;font-size:.82em}
+.nav{background:#CF2030;display:flex;flex-wrap:wrap;position:sticky;top:0;z-index:100}
+.nav button{background:transparent;color:#fff;border:none;padding:13px 22px;cursor:pointer;font-size:.92em;font-weight:600;transition:background .2s;white-space:nowrap}
+.nav button:hover{background:rgba(0,0,0,.25)}
+.nav button.active{background:rgba(0,0,0,.4)}
+.content{padding:20px 24px;max-width:1600px;margin:0 auto}
+.tab{display:none}.tab.active{display:block}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin:18px 0}
+.card{background:#111;border:1px solid #222;border-radius:8px;padding:18px 14px;text-align:center;border-top:3px solid #CF2030;transition:transform .15s}
+.card:hover{transform:translateY(-2px)}
+.card .val{font-size:1.9em;color:#CF2030;font-weight:700}
+.card .lbl{color:#999;font-size:.82em;margin-top:4px}
+.tbl-wrap{overflow-x:auto;margin:16px 0;border-radius:8px;border:1px solid #222}
+table{width:100%;border-collapse:collapse;background:#0d0d0d;font-size:.85em}
+th{background:#CF2030;color:#fff;padding:10px 10px;cursor:pointer;white-space:nowrap;user-select:none;position:sticky;top:0;z-index:10;font-size:.8em}
+th:hover{background:#a01828}
+th .arrow{font-size:.7em;margin-left:3px;opacity:.6}
+td{padding:7px 10px;border-bottom:1px solid #1a1a1a;white-space:nowrap}
+tr:nth-child(even){background:#111}
+tr:hover{background:#1a1a1a}
+.search-bar{display:flex;gap:10px;margin:14px 0;flex-wrap:wrap;align-items:center}
+.search-bar input,.search-bar select{background:#111;border:1px solid #333;color:#e0e0e0;padding:9px 14px;border-radius:6px;font-size:.9em}
+.search-bar input:focus,.search-bar select:focus{border-color:#CF2030;outline:none}
+.search-bar input{min-width:220px;flex:1;max-width:400px}
+.chart-box{background:#111;border-radius:8px;padding:18px;border:1px solid #222}
+.chart-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(420px,1fr));gap:16px;margin:16px 0}
+.btn{background:#CF2030;color:#fff;border:none;padding:7px 14px;border-radius:5px;cursor:pointer;font-size:.8em;transition:background .2s}
+.btn:hover{background:#a01828}
+.btn-sm{padding:4px 10px;font-size:.75em}
+.btn-outline{background:transparent;border:1px solid #CF2030;color:#CF2030}
+.btn-outline:hover{background:#CF2030;color:#fff}
+.footer{background:#0d0d0d;border-top:2px solid #CF2030;padding:16px 24px;text-align:center;margin-top:40px}
+.footer img{height:28px;margin-bottom:6px;opacity:.8}
+.footer p{color:#555;font-size:.78em;margin:2px 0}
+h2{color:#CF2030;margin:22px 0 10px;font-size:1.25em;border-bottom:1px solid #222;padding-bottom:6px}
+h3{color:#CF2030;margin:14px 0 8px;font-size:1.05em}
+.badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:.72em;font-weight:600}
+.bg{background:#0a2e0a;color:#4caf50}.by{background:#3e2e00;color:#ffc107}.br{background:#3e0a0a;color:#f44336}
+.modal-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.85);z-index:1000;justify-content:center;align-items:center;padding:20px}
+.modal-overlay.active{display:flex}
+.modal{background:#141414;border:1px solid #CF2030;border-radius:10px;padding:28px;max-width:640px;width:100%;max-height:85vh;overflow-y:auto}
+.modal h3{color:#CF2030;margin-bottom:12px;font-size:1.15em}
+.modal textarea{width:100%;background:#0a0a0a;color:#e0e0e0;border:1px solid #333;border-radius:6px;padding:14px;min-height:260px;font-family:inherit;font-size:.88em;line-height:1.5;resize:vertical}
+.modal input[type=text]{width:100%;background:#0a0a0a;color:#e0e0e0;border:1px solid #333;border-radius:6px;padding:10px;font-size:.9em;margin-bottom:10px}
+.modal .brow{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
+.perf-bar{height:6px;border-radius:3px;background:#222;overflow:hidden;margin-top:3px}
+.perf-fill{height:100%;border-radius:3px;transition:width .4s}
+::-webkit-scrollbar{width:7px;height:7px}
+::-webkit-scrollbar-track{background:#0a0a0a}
+::-webkit-scrollbar-thumb{background:#CF2030;border-radius:4px}
+@media(max-width:768px){.header{padding:10px 14px}.header img{height:36px}.header-right h1{font-size:1em}.nav button{padding:10px 14px;font-size:.82em}.content{padding:12px 14px}.chart-grid{grid-template-columns:1fr}.cards{grid-template-columns:repeat(auto-fit,minmax(140px,1fr))}}
+.highlight{color:#CF2030;font-weight:600}
+.subtle{color:#666}
+</style>
+</head>
+<body>
+<div class="header">
+<img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports" onerror="this.outerHTML='<span style=color:#CF2030;font-size:1.4em;font-weight:700>📊 Higgins Reports</span>'">
+<div class="header-right"><h1>BNI CA Northern · PALMS Report</h1><p>February 2026 · Region Analysis</p></div>
+</div>
+<div class="nav" id="mainNav">
+<button class="active" onclick="showTab('region',this)">🏢 Region Overview</button>
+<button onclick="showTab('chapters',this)">📊 Chapter Summary</button>
+<button onclick="showTab('members',this)">👤 Member Detail</button>
+<button onclick="showTab('alerts',this)">⚠️ Coaching Alerts</button>
+</div>
+<div class="content">
+<div id="tab-region" class="tab active"></div>
+<div id="tab-chapters" class="tab"></div>
+<div id="tab-members" class="tab"></div>
+<div id="tab-alerts" class="tab"></div>
+</div>
+<div class="modal-overlay" id="emailModal">
+<div class="modal">
+<h3>📧 PALMS Coaching Email</h3>
+<p id="emailTo" style="color:#999;margin-bottom:10px"></p>
+<p style="color:#ccc;margin-bottom:4px;font-weight:600;font-size:.85em">Subject:</p>
+<input type="text" id="emailSubject">
+<p style="color:#ccc;margin-bottom:4px;font-weight:600;font-size:.85em">Message:</p>
+<textarea id="emailBody"></textarea>
+<div class="brow">
+<button class="btn" onclick="sendEmail()">📤 Open in Email Client</button>
+<button class="btn" style="background:#333" onclick="copyEmail()">📋 Copy</button>
+<button class="btn" style="background:#333" onclick="closeModal()">✕ Close</button>
+</div>
+</div>
+</div>
+<div class="footer">
+<img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports" onerror="this.outerHTML='<span style=color:#CF2030;font-size:.9em;font-weight:700>Higgins Reports</span>'">
+<p>Powered by Higgins AI · higgins.ai · support@higgins.ai · 855-737-3386</p>
+<p style="margin-top:2px">© 2026 Higgins Reports. BNI® is a registered trademark of BNI Global, LLC.</p>
+</div>
+<script>
+const CH=["24 Karat Business Builders","BNI Business Exchange of Redding","BNI North State Business Professionals","Chico Business Builders","Eureka BNI Northcoast Networkers","High Noon Networkers","Profit Builders","Prosperity Partners","Redding BNI Business Connection","Rockstar Referrals"];
+const COLS=["Present","Absent","Lates","Subs","Visitors","Refs Given","Refs Recv","1-to-1s","TYFCB","CEUs","Activities","Revenue $","Points"];
+const D=[
+[0,"Diana De Marco",26,2,0,0,0,0,1,8,2,0,9,0,1],[0,"Tessa Marmorstein, CFP®",26,2,0,0,0,2,2,0,3,0,17,220,10],[0,"Leslie Post",26,0,0,0,2,7,4,0,1,0,23,4487,18],[0,"Emilee Key",26,0,0,0,2,1,0,0,2,0,17,0,33],[0,"Steven Grizoffi",25,1,0,0,2,0,0,0,3,0,23,1500,8],[0,"Christoph Schopfer",23,5,0,0,0,0,0,1,1,0,5,400,0],[0,"Julie Moore",27,1,0,0,0,1,4,1,0,0,27,365,13],[0,"Stephanie Henry",22,1,0,0,0,1,0,0,1,0,13,7115,1],
+[1,"Jeremy Hufft",17,2,1,0,1,6,6,3,4,0,5,1200,1],[1,"Kristel Maikranz",21,0,0,0,0,2,6,3,6,0,13,10,12],[1,"Danielle Sherbundy",18,0,0,3,0,1,3,7,0,0,3,2264,2],[1,"Ben Andrews",21,0,0,0,0,15,5,2,4,0,17,17404,4],[1,"Jantina Ingraham",20,0,0,0,1,1,4,0,1,0,8,805,22],[1,"Michael Strong",20,1,0,0,0,2,1,19,6,0,6,2943,15],[1,"Mike Heberlein",20,0,0,0,1,0,2,8,0,0,19,60700,3],[1,"Morgan Bigelow",20,1,0,0,0,3,1,2,11,2,8,91074,21],[1,"Matthew Brown",15,3,0,3,0,0,0,2,4,0,7,13849,0],[1,"Brett Faulknor",17,3,0,0,1,4,5,0,3,0,14,144460,1],[1,"Jose Leal",21,0,0,0,0,1,13,6,13,0,15,15235,26],[1,"Jason Bowman",19,2,0,0,0,0,1,4,10,0,0,95125,0],[1,"Bryan Ragle",8,0,0,0,0,2,2,0,1,0,7,275,2],[1,"Ryan Harrison",2,0,0,0,0,0,0,0,0,0,3,0,0],[1,"Scott Pewitt",19,0,0,0,2,3,16,1,7,0,21,33457,17],[1,"Todd Royse",18,2,0,0,1,3,0,2,7,1,8,5040,4],[1,"Emily Rene Ellison",16,0,0,0,1,3,4,4,5,0,7,52,0],[1,"Richard Komarek",21,0,0,0,0,7,10,0,7,3,26,441,28],[1,"Chris Jeantet",20,0,0,0,1,1,15,1,4,2,7,54150,24],[1,"Angie Hawkins",19,2,0,0,0,1,6,0,2,0,4,9800,27],[1,"Alexander Klaschus",18,0,0,0,3,0,1,0,0,0,17,0,2],
+[2,"Peter Hurst",10,1,0,0,0,2,5,0,5,0,6,2343,41],[2,"Jeremiah Wheeler",22,0,0,0,1,4,14,0,8,0,78,5619,210],[2,"Stephen Groff",21,1,0,0,1,7,4,1,4,0,50,6840,58],[2,"Ryan Dorosz",21,1,0,0,1,1,2,5,1,0,45,21620,26],[2,"Scott Shoffner",22,0,0,0,1,6,4,1,4,0,41,3965,26],[2,"William Eddy",21,1,0,0,1,1,5,0,11,1,44,22057,44],[2,"Nick Drumheller",12,1,0,0,0,0,2,4,2,0,15,0,57],[2,"OWEN DUTTON",20,2,0,0,1,1,3,17,12,2,32,20950,45],[2,"Jason Meeks",9,0,0,0,0,1,2,4,2,0,15,0,7],[2,"Heather Place",23,0,0,0,0,1,3,2,4,0,31,29727,55],[2,"Shantasy England",1,0,0,0,0,0,0,0,0,0,2,0,3],[2,"James (Mike) Cary",21,2,0,0,0,7,4,15,12,1,73,2716,54],[2,"Kevin Rhoderick",19,2,0,0,2,8,8,2,2,0,47,28706,128],[2,"Crystal Arellano",22,0,0,1,0,2,9,2,1,0,31,8750,47],[2,"Joe Spencer",21,1,0,0,1,6,4,2,5,1,29,6215,24],
+[3,"Juliana Sih",3,1,0,1,1,0,2,0,1,0,2,0,0],[3,"Tim Kemper",22,0,0,0,0,2,11,2,3,0,23,2210,14],[3,"JD Elam",1,0,0,0,0,0,0,0,0,0,0,0,0],[3,"Dustin Smith",1,0,0,0,0,0,0,0,0,0,0,0,0],[3,"Jacob Smith",17,2,1,0,2,1,1,5,2,1,8,898,7],[3,"Charlotte Hall",22,0,0,0,0,2,4,2,1,0,15,278,2],[3,"Samantha Bakke",20,1,0,0,1,6,10,4,10,1,19,18644,43],[3,"Emmett Jacobi",21,0,0,0,1,4,7,1,4,0,13,14336,13],[3,"Alan Hivale",17,2,0,0,3,2,2,2,2,0,9,11435,6],[3,"Sara Tracy",20,1,0,0,1,6,1,1,2,6,28,797,37],[3,"Tashina Anderson",20,1,1,0,0,9,8,10,10,0,20,621,11],[3,"Bret Hinerman",21,0,0,0,1,2,4,1,1,1,26,60,20],[3,"Jeremy Bailey",21,0,0,0,1,5,7,8,8,2,15,1030,10],[3,"Mikaela Hengst",20,0,0,0,2,2,3,1,3,5,14,1469,11],[3,"Tara Campbell",21,1,0,0,0,6,6,2,4,1,12,13148,15],[3,"Ian Macmillan",21,1,0,0,0,5,4,4,4,0,8,7660,26],[3,"Jason Juarez",22,0,0,0,0,0,1,1,3,0,7,28000,0],[3,"Amy Quinto",17,5,0,0,0,2,2,1,6,2,12,4550,9],[3,"Dylan Cane",13,4,1,1,3,1,4,1,6,0,5,75050,0],[3,"Felicia Haslem",15,2,0,0,0,3,1,2,0,1,20,920,20],[3,"Geena Day",21,0,0,0,1,1,11,3,12,0,13,424,5],[3,"Andrea Patania",11,0,0,1,1,2,2,3,4,0,15,0,5],[3,"James Card",21,1,0,0,0,0,1,11,10,0,8,9352,4],[3,"Luke Haight",5,1,0,0,1,0,0,1,1,0,2,0,0],[3,"Adam Birchard",19,0,0,0,3,2,3,0,1,0,4,10166,11],
+[4,"Carlos Sanchez",22,1,0,1,1,18,6,16,11,0,29,9547,16],[4,"Malachi Pratton",6,0,0,0,0,5,5,2,1,0,9,300,6],[4,"Ali McCall",18,5,1,1,0,2,2,3,8,0,19,600,28],[4,"Ebelyn Miranda",7,0,0,18,0,1,5,5,18,0,13,260,8],[4,"Heather Ponsano",14,0,0,11,0,24,6,1,4,1,27,23643,264],[4,"Jessie James",24,0,0,0,1,16,3,26,13,2,45,94111,109],[4,"Kari Procton",16,1,4,3,1,12,8,5,5,4,43,1066,19],[4,"Annalise von Borstel",24,0,0,0,1,21,13,2,17,9,47,653066,20],[4,"Maria Herrera",23,0,0,0,2,10,16,1,6,0,58,53777,26],[4,"Monica Gray",19,2,0,3,1,18,1,2,3,2,47,26170,52],[4,"Sebastian Elrite",25,0,0,0,0,12,3,66,8,0,21,25487,14],[4,"Nazeli Alejandrez",20,2,2,0,1,12,1,9,5,1,15,2380,16],[4,"Theatta Smith",23,0,0,1,1,5,36,11,15,5,59,7222,40],[4,"Calista LaBolle",25,0,0,0,0,26,12,7,6,2,83,11538,33],[4,"Rebecca Wissing",23,1,1,0,0,16,5,3,3,2,41,3592,18],[4,"Monica Ballard",20,2,1,0,2,4,9,28,10,3,44,905,58],[4,"Samantha Beridon",18,1,1,2,3,25,9,29,26,1,38,4793,19],[4,"Laura Berrey",17,1,6,1,0,14,8,9,6,0,13,46900,20],[4,"Keith Crossley",24,0,0,0,1,42,18,52,15,7,81,256862,212],[4,"Igyann Jimenez",18,0,2,0,1,4,2,91,29,0,22,1493,8],[4,"Laura Patterson",23,0,0,2,0,10,12,2,3,0,34,3043,25],[4,"Heather Roche-Waldo",24,0,0,0,1,24,11,4,3,6,64,91432,38],[4,"Lacey Timbrook",20,0,1,0,0,5,14,4,8,1,31,393213,10],[4,"Jeffrey Gerbic",14,1,0,10,0,3,3,2,14,0,14,5200,9],[4,"Kristina Hunt",21,1,0,1,2,6,4,0,2,0,17,2039,29],[4,"Sean Knight",16,0,0,0,0,3,1,12,5,7,34,6225,37],[4,"Chantele Leatherwood",23,0,0,0,2,7,24,5,8,1,20,9843,44],[4,"Catherine Wachel",18,1,4,1,1,6,10,3,1,0,23,7714,21],[4,"Nichole Collins",15,0,0,0,0,19,0,4,2,3,55,1012,35],[4,"Izza Mora",9,0,0,2,0,2,6,2,3,1,8,108,10],[4,"Cory Nunes",23,2,0,0,0,12,3,0,4,0,55,14731,26],[4,"Jordan Chasescott",6,0,0,0,0,3,2,0,0,1,9,1,2],[4,"Johanna Gross",22,1,0,1,1,2,15,4,8,0,32,5554,22],[4,"Liz Link",18,1,3,1,2,2,1,1,4,0,32,9876,21],[4,"Seth Gaynor",5,1,0,0,0,6,3,0,2,0,11,218,2],[4,"Carole Crossley",24,0,0,0,1,24,38,4,16,9,87,454192,92],[4,"Malachi Levvi",21,2,0,1,1,6,5,1,9,0,17,3888,69],[4,"Crystal Dean",5,0,0,0,1,4,9,1,3,0,6,700,6],[4,"JJ Richards",17,4,2,1,1,2,2,0,12,0,28,0,34],
+[5,"Doug Bryant",17,2,0,0,1,21,17,2,5,1,16,15112,7],[5,"Dino Benson",18,2,0,0,0,0,0,9,13,0,9,463,0],[5,"Justin Maier",18,0,0,0,2,27,4,2,2,0,24,17456,24],[5,"Tyler Light",15,4,1,0,0,1,6,1,4,1,9,3336,0],[5,"Mitzi Rodriguez",18,1,0,0,1,3,11,3,8,2,18,100375,4],[5,"Andrea Rockwell",14,3,0,0,3,0,0,1,1,1,28,192,0],[5,"Tyler Rowley",13,1,0,2,4,2,4,1,6,0,13,1872,13],[5,"Sierra Cheadle",20,0,0,0,0,0,2,5,4,0,114,0,0],[5,"Nathan Mackay",20,0,0,0,0,0,5,2,3,1,11,758,0],[5,"Ashley Martin",17,1,0,0,2,0,3,9,4,7,23,0,1],[5,"Amanda Carrick",19,1,0,0,0,2,11,2,7,0,30,22172,14],[5,"Kelsey Barnes",18,0,0,0,2,19,21,37,17,1,73,2168,26],[5,"John Gardner",17,1,0,0,2,7,10,0,9,1,15,58428,7],[5,"Esther Campbell",18,1,0,0,1,1,8,1,4,5,16,4150,3],[5,"Jenna Rodriguez",16,0,0,0,0,5,15,5,14,1,31,751,6],[5,"Rebekah LaRobardiere",17,3,0,0,0,14,4,0,4,0,21,3660,20],[5,"Tony Munroe",10,0,0,0,0,1,0,4,1,0,11,0,8],[5,"Sarah Daly",18,1,0,0,1,14,3,11,2,0,33,56198,4],[5,"Rob Foss",19,1,0,0,0,13,4,3,3,1,18,873,1],[5,"Kelli Stephens",8,0,0,0,0,0,1,1,1,0,4,160,0],[5,"Jose D. Leal",14,0,0,0,6,12,1,4,10,1,18,6290,3],[5,"Kacee Gibbs",18,0,0,0,2,15,13,14,3,3,24,5520,4],[5,"Benjamin Bradshaw",6,0,0,0,1,0,0,3,1,0,0,0,0],[5,"Hoyt Buick",19,1,0,0,0,5,7,3,6,1,12,6824,23],[5,"Dylan Sacco",17,3,0,0,0,1,7,3,5,2,33,801,0],[5,"Joshua Littlefield",15,0,0,0,5,8,8,3,2,1,43,986,20],[5,"Michael Landsem",18,0,0,0,2,10,4,1,10,0,17,23594,0],[5,"Kirk Wayman",19,1,0,0,0,10,7,8,1,0,21,37273,4],[5,"Brad Reeder",19,1,0,0,0,9,9,11,13,4,16,10757,0],[5,"Rosemarie Brown",19,0,1,0,0,7,4,3,13,1,23,80136,7],[5,"Antoinette Mendoza",19,1,0,0,0,9,5,4,6,0,45,17867,16],[5,"Jordan Valenzuela",18,1,0,0,1,6,14,11,15,2,19,1192,0],[5,"Andrew Elliott",18,0,1,0,1,2,6,13,12,0,24,4595,2],[5,"Jenner Francis",17,2,0,0,1,2,2,4,19,1,31,5726,0],[5,"Adrian Peirce",16,0,0,0,4,13,5,0,6,1,37,568,17],[5,"Nathan Sweeney",19,1,0,0,0,11,3,2,2,0,10,15661,0],[5,"Lane Amlin",20,0,0,0,0,1,3,25,28,1,6,3371,0],[5,"Michael Jones",16,0,0,0,4,11,29,13,7,6,36,11192,22],[5,"Sandra Smith",16,1,0,0,3,0,11,10,15,1,20,735,1],[5,"Bryan Meredith",17,0,0,0,3,4,36,19,22,1,45,31464,9],[5,"Jesse Eline",19,1,0,0,0,2,21,1,7,0,10,75476,0],[5,"Alan Serna",17,0,1,0,2,0,1,1,6,0,19,80,4],
+[6,"Peter Marshall",17,3,0,0,0,3,7,3,10,0,69,967,10],[6,"Rebecca Lehman",15,4,0,1,0,0,3,0,6,0,36,13707,0],[6,"Blue Raby",15,4,0,0,1,0,14,2,8,0,6,9500,0],[6,"Astrid Withrow",18,1,0,1,0,1,13,2,5,2,52,10425,21],[6,"John Hughes",20,0,0,0,0,0,20,1,27,0,51,39175,2],[6,"Matt Nelson",14,1,0,0,0,0,0,1,14,0,7,0,0],[6,"Benjamin Gunnels",5,4,0,0,1,1,2,2,3,0,6,0,0],[6,"Lori Templeton",3,0,0,0,0,0,0,0,0,0,2,0,0],[6,"Byron Pontoni",20,0,0,0,0,4,10,0,18,0,55,64499,30],[6,"Rebecca Misek",16,3,0,0,1,0,8,0,3,0,16,5570,14],[6,"Caleb Diehl",18,2,0,0,0,1,17,8,18,1,11,3017,22],[6,"Catherine King",18,2,0,0,0,4,56,4,43,4,56,51131,9],[6,"Julia Dedmon",20,0,0,0,0,2,39,0,14,9,38,25873,3],[6,"Tiffany Gilbert",18,1,0,0,1,8,11,0,17,0,41,11551,26],[6,"Jodi Friebel",15,5,0,0,0,1,2,0,3,0,17,0,7],
+[7,"Jonathan Cook",10,4,0,9,0,1,1,0,3,0,10,0,3],[7,"Heather Howland",17,0,2,1,3,2,10,1,15,0,30,5049,18],[7,"Raymond Laager",19,1,1,0,2,2,21,2,5,1,15,9575,16],[7,"Jacob Darr",19,1,3,0,0,3,8,0,8,0,23,10525,19],[7,"Tom Majewski",22,0,1,0,0,0,4,0,7,0,26,0,22],[7,"Jonathon Zimmer",20,1,1,0,1,0,9,0,16,1,18,250,7],[7,"Dana Campbell",19,0,2,1,1,2,13,0,13,1,26,20386,40],[7,"David Green",19,1,2,0,1,0,4,0,7,0,13,0,25],[7,"Amy White",20,0,0,0,3,0,3,0,1,1,31,7530,15],[7,"Kimberley Hutton",18,1,0,4,0,0,6,1,2,0,8,1000,21],[7,"Danielle Vogel",13,1,0,7,2,2,11,1,3,1,29,4330,39],[7,"Keith Maguire",22,0,0,0,1,1,5,3,5,0,39,20,46],
+[8,"Dana Jacobs",2,0,0,0,0,0,0,0,0,0,0,0,0],[8,"Jonas Eichenberger",21,2,0,0,1,4,24,10,12,0,18,1009,3],[8,"Mindy Odell",24,0,0,0,0,18,10,0,1,1,27,4743,19],[8,"Laurie Curto",22,1,0,0,1,2,12,21,1,8,71,49958,10],[8,"Steven Francis",20,1,0,0,3,4,3,0,11,0,21,340,1],[8,"Howard Martin",19,1,0,2,2,16,16,1,10,0,22,9969,0],[8,"Sarah Davis",21,1,0,0,2,43,11,2,13,2,18,13950,17],[8,"Marina Ferrari",9,0,0,13,2,4,9,23,5,0,16,1545,31],[8,"Josh Peyton",23,1,0,0,0,4,2,14,27,0,33,19990,0],[8,"Jonathan Reeves",21,3,0,0,0,7,0,9,10,0,6,3707,0],[8,"Karina Lapp",20,1,0,0,3,15,6,1,6,1,26,33379,42],[8,"Dennis Blount",13,4,0,6,1,2,3,6,2,0,34,1925,1],[8,"Anthony Thompson",18,4,1,0,1,20,3,5,1,1,11,15763,0],[8,"Trevor Cyphers",21,0,0,0,3,9,7,11,16,2,17,6230,1],[8,"John Jones",19,0,0,0,5,13,24,6,14,4,38,74693,21],[8,"Cristy Ellis",22,0,0,0,2,23,7,47,4,15,26,521214,38],[8,"Megan Runsten",22,2,0,0,0,3,7,2,3,0,12,924,13],[8,"Roby Harris",21,0,0,0,3,9,6,11,23,0,7,36406,5],[8,"Paul Fago't",22,1,0,0,1,8,3,7,5,1,9,9222,0],[8,"Julie Reuter",22,0,0,2,0,12,13,3,6,5,36,17349,14],[8,"Nate Molter",24,0,0,0,0,17,13,1,4,5,14,14931,18],[8,"Curtis Davis",22,0,0,0,2,9,17,11,11,0,36,6540,13],[8,"Michele Dutra",22,0,0,0,2,1,0,0,7,0,15,4592,0],[8,"Jen Peterson",24,0,0,0,0,29,14,8,5,0,8,13923,4],[8,"Tyler Parker",19,2,1,0,2,0,7,2,10,2,13,6425,5],[8,"Heidi Haskins",20,2,0,0,2,4,9,2,10,0,16,1022,7],[8,"Parker McClain",14,2,0,0,0,0,0,4,2,3,25,4538,3],[8,"Cole Wagner",17,1,0,0,6,8,21,6,26,4,16,8306,15],[8,"Jessica Ryan",21,1,0,1,1,1,24,5,6,12,53,16318,34],[8,"Jason Sanchez",23,0,0,1,0,12,24,15,28,1,14,100335,47],[8,"Matthew Montes",15,0,0,0,0,0,3,5,4,1,16,1223,0],[8,"Andy Nilsen",24,0,0,0,0,32,19,52,21,19,52,37942,12],[8,"John Pohlmeyer",21,1,0,0,2,14,10,2,5,1,36,5857,41],[8,"Karese Nelson",12,0,0,0,1,3,2,13,4,1,13,6732,0],[8,"Gary Ogle",19,0,0,0,5,42,10,2,2,4,25,27112,17],[8,"Mark Griffith",23,1,0,0,0,29,1,12,4,0,6,13683,5],[8,"Craig Winton",21,1,0,0,2,15,12,12,3,0,12,31397,28],[8,"Joshua Divine",12,0,0,0,0,3,5,2,7,0,30,980,2],[8,"Dr. Daniel Sorrick",23,1,0,0,0,16,1,31,13,0,5,66344,10],[8,"Justin Green",18,1,0,0,5,8,4,8,5,0,11,15308,0],[8,"Jimmy Sims",9,0,0,3,0,2,7,7,2,0,7,500,4],[8,"Scott Strouf",10,0,0,0,0,7,2,12,10,1,19,3681,2],[8,"Dulce Arellano",23,1,0,0,0,2,0,48,17,0,14,5367,7],[8,"Carl Harvey Ebersole",23,0,0,0,1,1,8,0,6,0,6,3927,0],[8,"Rupert Corkill",17,1,0,0,6,0,9,0,6,0,7,23399,0],[8,"Kristina Phillips",4,0,0,0,1,2,4,0,0,1,8,0,2],[8,"Rachael Townsley",20,2,0,2,0,5,11,6,7,1,11,6237,19],[8,"Sabrina Schmitt",20,1,1,0,2,6,3,1,14,0,15,13098,19],[8,"Steven Wyatt",23,1,0,0,0,4,1,6,16,0,9,18617,0],[8,"Jeannine Hendrickson",22,1,0,0,1,29,3,3,8,0,9,5228,6],[8,"Chrissy Schwerdt",21,2,0,0,1,16,22,1,7,1,10,270381,0],
+[9,"Cynthia Thomas",15,0,0,0,2,3,3,1,2,1,10,0,0],[9,"Michelle Marks",20,1,0,0,2,2,1,4,4,0,40,640,5],[9,"Eva Ochoa",14,0,0,0,0,0,2,3,2,3,19,195,0],[9,"Tricia Reilly",23,0,0,0,0,8,3,3,9,4,47,3188,62],[9,"Christopher Moore",1,0,0,0,1,0,0,1,0,0,0,0,0],[9,"Nathaniel Magnuson",19,1,0,0,3,1,2,0,3,2,37,3838,24],[9,"Jason Smith",23,0,0,0,0,0,8,2,3,3,18,977,82],[9,"Kathleen Kelley",20,1,1,0,1,0,1,1,5,0,19,1175,0],[9,"Maria Jeantet",21,0,0,0,2,2,14,1,1,5,31,13936,19],[9,"Evan Redmon",14,0,0,9,0,2,1,0,0,0,12,1700,0],[9,"April Matthews",22,0,0,0,1,4,1,4,0,1,33,3479,14],[9,"Janet Carter",21,0,0,0,2,1,0,3,4,7,28,1224,20],[9,"Jason Phipps",19,1,0,0,3,6,4,29,1,1,9,4982,0],[9,"Stacy Pohlmeyer",17,2,0,0,4,0,4,4,5,0,23,5700,26],[9,"Laura Burgdorf",17,3,0,0,0,5,3,1,2,0,22,408,13],[9,"Crystal Stephens",17,6,0,0,0,5,7,0,2,0,8,2179,15],[9,"Taylor Melcher",17,1,0,0,0,1,3,0,1,0,25,28,116]
+];
+const ci=0,ni=1,pi=2,ai=3,li=4,si=5,vi=6,rgi=7,rri=8,otoi=9,tyi=10,cei=11,tri=12,revi=13,pti=14;
+let charts={};
+function fmt$(v){return v>=1e6?'$'+(v/1e6).toFixed(1)+'M':v>=1e3?'$'+(v/1e3).toFixed(1)+'K':'$'+v}
+function fmtN(v){return v>=1e6?(v/1e6).toFixed(1)+'M':v>=1e3?(v/1e3).toFixed(1)+'K':v.toString()}
+function getChap(c){return D.filter(r=>r[ci]===c)}
+function sumCol(arr,idx){return arr.reduce((s,r)=>s+r[idx],0)}
+function avgCol(arr,idx){return arr.length?Math.round(sumCol(arr,idx)/arr.length*10)/10:0}
+function destroyCharts(){Object.values(charts).forEach(c=>{try{c.destroy()}catch(e){}});charts={}}
+function mkChart(id,cfg){const cv=document.getElementById(id);if(!cv)return;charts[id]=new Chart(cv,cfg)}
+function showTab(t,btn){
+document.querySelectorAll('.tab').forEach(e=>e.classList.remove('active'));
+document.querySelectorAll('.nav button').forEach(e=>e.classList.remove('active'));
+document.getElementById('tab-'+t).classList.add('active');
+if(btn)btn.classList.add('active');
+destroyCharts();
+if(t==='region')renderRegion();
+else if(t==='chapters')renderChapters();
+else if(t==='members')renderMembers();
+else if(t==='alerts')renderAlerts();
+}
+function renderRegion(){
+const el=document.getElementById('tab-region');
+const totalMem=D.length;
+const totalRev=sumCol(D,revi);
+const totalRG=sumCol(D,rgi);
+const totalRR=sumCol(D,rri);
+const total121=sumCol(D,otoi);
+const totalTY=sumCol(D,tyi);
+const totalVis=sumCol(D,vi);
+const avgP=avgCol(D,pi);
+el.innerHTML=`
+<h2>🏢 CA Northern Region Overview</h2>
+<div class="cards">
+<div class="card"><div class="val">${CH.length}</div><div class="lbl">Chapters</div></div>
+<div class="card"><div class="val">${totalMem}</div><div class="lbl">Total Members</div></div>
+<div class="card"><div class="val">${fmt$(totalRev)}</div><div class="lbl">Total Revenue</div></div>
+<div class="card"><div class="val">${fmtN(totalRG)}</div><div class="lbl">Referrals Given</div></div>
+<div class="card"><div class="val">${fmtN(totalRR)}</div><div class="lbl">Referrals Received</div></div>
+<div class="card"><div class="val">${fmtN(total121)}</div><div class="lbl">One-to-Ones</div></div>
+<div class="card"><div class="val">${fmtN(totalTY)}</div><div class="lbl">TYFCB</div></div>
+<div class="card"><div class="val">${totalVis}</div><div class="lbl">Visitors</div></div>
+</div>
+<div class="chart-grid">
+<div class="chart-box"><h3>💰 Revenue by Chapter</h3><canvas id="c1" height="300"></canvas></div>
+<div class="chart-box"><h3>👥 Members per Chapter</h3><canvas id="c2" height="300"></canvas></div>
+<div class="chart-box"><h3>📈 Avg Refs Given per Member</h3><canvas id="c3" height="300"></canvas></div>
+<div class="chart-box"><h3>🤝 Avg One-to-Ones per Member</h3><canvas id="c4" height="300"></canvas></div>
+</div>
+<h2>📋 Region Chapter Comparison</h2>
+<div class="tbl-wrap"><table id="regionTbl">
+<thead><tr><th>Chapter</th><th>Members</th><th>Avg Present</th><th>Total Visitors</th><th>Total Refs Given</th><th>Total Refs Recv</th><th>Total 1-to-1s</th><th>Total TYFCB</th><th>Total CEUs</th><th>Total Revenue</th></tr></thead>
+<tbody>${CH.map((ch,i)=>{
+const m=getChap(i);
+return`<tr><td style="color:#CF2030;font-weight:600">${ch}</td><td>${m.length}</td><td>${avgCol(m,pi)}</td><td>${sumCol(m,vi)}</td><td>${sumCol(m,rgi)}</td><td>${sumCol(m,rri)}</td><td>${sumCol(m,otoi)}</td><td>${sumCol(m,tyi)}</td><td>${sumCol(m,cei)}</td><td style="color:#4caf50">${fmt$(sumCol(m,revi))}</td></tr>`;
+}).join('')}</tbody></table></div>
+<h2>🏆 Top 15 Revenue Generators (Region)</h2>
+<div class="tbl-wrap"><table>
+<thead><tr><th>Rank</th><th>Member</th><th>Chapter</th><th>Revenue</th><th>Refs Given</th><th>1-to-1s</th></tr></thead>
+<tbody>${[...D].sort((a,b)=>b[revi]-a[revi]).slice(0,15).map((r,i)=>`<tr><td style="color:#CF2030;font-weight:700">#${i+1}</td><td>${r[ni]}</td><td style="font-size:.8em;color:#999">${CH[r[ci]]}</td><td style="color:#4caf50;font-weight:600">${fmt$(r[revi])}</td><td>${r[rgi]}</td><td>${r[otoi]}</td></tr>`).join('')}</tbody></table></div>`;
+const shortCH=CH.map(c=>c.length>18?c.substring(0,16)+'…':c);
+const revData=CH.map((_,i)=>sumCol(getChap(i),revi));
+const memData=CH.map((_,i)=>getChap(i).length);
+const avgRG=CH.map((_,i)=>avgCol(getChap(i),rgi));
+const avg121=CH.map((_,i)=>avgCol(getChap(i),otoi));
+const chartOpts={responsive:true,plugins:{legend:{display:false}},scales:{x:{ticks:{color:'#999',font:{size:10},maxRotation:45},grid:{color:'#222'}},y:{ticks:{color:'#999'},grid:{color:'#222'}}}};
+mkChart('c1',{type:'bar',data:{labels:shortCH,datasets:[{data:revData,backgroundColor:'#CF2030',borderRadius:4}]},options:{...chartOpts,scales:{...chartOpts.scales,y:{...chartOpts.scales.y,ticks:{...chartOpts.scales.y.ticks,callback:v=>fmt$(v)}}}}});
+mkChart('c2',{type:'bar',data:{labels:shortCH,datasets:[{data:memData,backgroundColor:'#2196F3',borderRadius:4}]},options:chartOpts});
+mkChart('c3',{type:'bar',data:{labels:shortCH,datasets:[{data:avgRG,backgroundColor:'#4caf50',borderRadius:4}]},options:chartOpts});
+mkChart('c4',{type:'bar',data:{labels:shortCH,datasets:[{data:avg121,backgroundColor:'#ff9800',borderRadius:4}]},options:chartOpts});
+}
+function renderChapters(){
+const el=document.getElementById('tab-chapters');
+let html='<h2>📊 Chapter Detail Summary</h2><div class="search-bar"><select id="chapSelect" onchange="renderChapterDetail()"><option value="-1">— Select a Chapter —</option>';
+CH.forEach((c,i)=>html+=`<option value="${i}">${c}</option>`);
+html+='</select></div><div id="chapDetail"></div>';
+el.innerHTML=html;
+}
+function renderChapterDetail(){
+const sel=document.getElementById('chapSelect').value;
+const det=document.getElementById('chapDetail');
+if(sel===-1||sel==='-1'){det.innerHTML='<p style="color:#666;padding:20px">Select a chapter above to view detailed analytics.</p>';return;}
+const ci2=parseInt(sel);
+const m=getChap(ci2);
+const tRev=sumCol(m,revi);const tRG=sumCol(m,rgi);const tRR=sumCol(m,rri);const t121=sumCol(m,otoi);const tTY=sumCol(m,tyi);const tV=sumCol(m,vi);
+det.innerHTML=`
+<h3 style="font-size:1.2em;margin-top:16px">${CH[ci2]}</h3>
+<div class="cards">
+<div class="card"><div class="val">${m.length}</div><div class="lbl">Members</div></div>
+<div class="card"><div class="val">${avgCol(m,pi)}</div><div class="lbl">Avg Attendance</div></div>
+<div class="card"><div class="val">${fmt$(tRev)}</div><div class="lbl">Total Revenue</div></div>
+<div class="card"><div class="val">${tRG}</div><div class="lbl">Refs Given</div></div>
+<div class="card"><div class="val">${tRR}</div><div class="lbl">Refs Received</div></div>
+<div class="card"><div class="val">${t121}</div><div class="lbl">One-to-Ones</div></div>
+<div class="card"><div class="val">${tTY}</div><div class="lbl">TYFCB</div></div>
+<div class="card"><div class="val">${tV}</div><div class="lbl">Visitors</div></div>
+</div>
+<div class="chart-grid">
+<div class="chart-box"><h3>💰 Revenue by Member</h3><canvas id="cd1" height="350"></canvas></div>
+<div class="chart-box"><h3>📊 Referrals Given by Member</h3><canvas id="cd2" height="350"></canvas></div>
+</div>
+<h3>📋 Chapter Member Table</h3>
+<div class="tbl-wrap"><table>
+<thead><tr><th>Member</th>${COLS.map(c=>'<th>'+c+'</th>').join('')}<th>Action</th></tr></thead>
+<tbody>${m.map((r,idx)=>{
+const gi=D.indexOf(r);
+const badge=r[revi]>20000?'bg':r[revi]>5000?'by':'br';
+return`<tr><td style="font-weight:600">${r[ni]}</td><td>${r[pi]}</td><td>${r[ai]}</td><td>${r[li]}</td><td>${r[si]}</td><td>${r[vi]}</td><td>${r[rgi]}</td><td>${r[rri]}</td><td>${r[otoi]}</td><td>${r[tyi]}</td><td>${r[cei]}</td><td>${r[tri]}</td><td><span class="badge ${badge}">${fmt$(r[revi])}</span></td><td>${r[pti]}</td><td><button class="btn btn-sm" onclick="openEmail(${gi})">📧 Coach</button></td></tr>`;
+}).join('')}</tbody></table></div>`;
+destroyCharts();
+const names=m.map(r=>r[ni].length>14?r[ni].substring(0,12)+'…':r[ni]);
+const revs=m.map(r=>r[revi]);
+const refs=m.map(r=>r[rgi]);
+const opts2={responsive:true,indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{ticks:{color:'#999'},grid:{color:'#222'}},y:{ticks:{color:'#ccc',font:{size:9}},grid:{color:'#1a1a1a'}}}};
+mkChart('cd1',{type:'bar',data:{labels:names,datasets:[{data:revs,backgroundColor:'#CF2030',borderRadius:3}]},options:{...opts2,scales:{...opts2.scales,x:{...opts2.scales.x,ticks:{...opts2.scales.x.ticks,callback:v=>fmt$(v)}}}}});
+mkChart('cd2',{type:'bar',data:{labels:names,datasets:[{data:refs,backgroundColor:'#4caf50',borderRadius:3}]},options:opts2});
+}
+let memberSort={col:-1,dir:1};
+let memberFilter={search:'',chapter:'-1'};
+function renderMembers(){
+const el=document.getElementById('tab-members');
+el.innerHTML=`
+<h2>👤 Member Detail</h2>
+<div class="search-bar">
+<input type="text" id="memSearch" placeholder="🔍 Search member name..." oninput="filterMembers()">
+<select id="memChapFilter" onchange="filterMembers()"><option value="-1">All Chapters</option>${CH.map((c,i)=>`<option value="${i}">${c}</option>`).join('')}</select>
+<button class="btn btn-outline" onclick="exportCSV()">📥 Export CSV</button>
+</div>
+<div class="tbl-wrap" style="max-height:70vh;overflow-y:auto"><table id="memTbl">
+<thead><tr><th onclick="sortMem(-1)">Chapter <span class="arrow">⇅</span></th><th onclick="sortMem(0)">Member <span class="arrow">⇅</span></th>${COLS.map((c,i)=>`<th onclick="sortMem(${i+1})">${c} <span class="arrow">⇅</span></th>`).join('')}<th>Action</th></tr></thead>
+<tbody id="memBody"></tbody>
+</table></div>
+<p style="color:#666;font-size:.78em;margin-top:8px" id="memCount"></p>`;
+filterMembers();
+}
+function filterMembers(){
+const search=(document.getElementById('memSearch')?.value||'').toLowerCase();
+const chf=document.getElementById('memChapFilter')?.value||'-1';
+let filtered=D.filter(r=>{
+if(chf!=='-1'&&r[ci]!==parseInt(chf))return false;
+if(search&&!r[ni].toLowerCase().includes(search)&&!CH[r[ci]].toLowerCase().includes(search))return false;
+return true;
+});
+if(memberSort.col!==-2){
+filtered.sort((a,b)=>{
+let va,vb;
+if(memberSort.col===-1){va=CH[a[ci]];vb=CH[b[ci]];return memberSort.dir*(va<vb?-1:va>vb?1:0)}
+if(memberSort.col===0){va=a[ni].toLowerCase();vb=b[ni].toLowerCase();return memberSort.dir*(va<vb?-1:va>vb?1:0)}
+va=a[memberSort.col+1];vb=b[memberSort.col+1];return memberSort.dir*(va-vb);
+});
+}
+const body=document.getElementById('memBody');
+if(!body)return;
+body.innerHTML=filtered.map(r=>{
+const gi=D.indexOf(r);
+const badge=r[revi]>20000?'bg':r[revi]>5000?'by':'br';
+return`<tr><td style="font-size:.78em;color:#CF2030">${CH[r[ci]]}</td><td style="font-weight:600">${r[ni]}</td><td>${r[pi]}</td><td>${r[ai]}</td><td>${r[li]}</td><td>${r[si]}</td><td>${r[vi]}</td><td>${r[rgi]}</td><td>${r[rri]}</td><td>${r[otoi]}</td><td>${r[tyi]}</td><td>${r[cei]}</td><td>${r[tri]}</td><td><span class="badge ${badge}">${fmt$(r[revi])}</span></td><td>${r[pti]}</td><td><button class="btn btn-sm" onclick="openEmail(${gi})">📧</button></td></tr>`;
+}).join('');
+const cnt=document.getElementById('memCount');
+if(cnt)cnt.textContent=`Showing ${filtered.length} of ${D.length} members`;
+}
+function sortMem(col){
+if(memberSort.col===col)memberSort.dir*=-1;
+else{memberSort.col=col;memberSort.dir=col<=0?1:-1;}
+filterMembers();
+}
+function renderAlerts(){
+const el=document.getElementById('tab-alerts');
+const highAbsence=D.filter(r=>r[ai]>=4).sort((a,b)=>b[ai]-a[ai]);
+const zeroRefs=D.filter(r=>r[rgi]===0&&r[pi]>=5);
+const zeroVisitors=D.filter(r=>r[vi]===0&&r[pi]>=10);
+const zero121=D.filter(r=>r[otoi]===0&&r[pi]>=5);
+const lowAttend=D.filter(r=>r[pi]<=5&&r[pi]>0);
+el.innerHTML=`
+<h2>⚠️ Coaching Alerts & Opportunities</h2>
+<p style="color:#999;margin-bottom:16px">Members who may benefit from targeted coaching based on their PALMS metrics.</p>
+<div class="cards">
+<div class="card" style="border-top-color:#f44336"><div class="val" style="color:#f44336">${highAbsence.length}</div><div class="lbl">High Absences (4+)</div></div>
+<div class="card" style="border-top-color:#ff9800"><div class="val" style="color:#ff9800">${zeroRefs.length}</div><div class="lbl">Zero Refs Given</div></div>
+<div class="card" style="border-top-color:#2196f3"><div class="val" style="color:#2196f3">${zeroVisitors.length}</div><div class="lbl">Zero Visitors</div></div>
+<div class="card" style="border-top-color:#9c27b0"><div class="val" style="color:#9c27b0">${zero121.length}</div><div class="lbl">Zero 1-to-1s</div></div>
+<div class="card" style="border-top-color:#607d8b"><div class="val" style="color:#607d8b">${lowAttend.length}</div><div class="lbl">Low Attendance (≤5)</div></div>
+</div>
+<div class="chart-grid"><div class="chart-box"><h3>⚠️ Alerts Distribution by Chapter</h3><canvas id="ca1" height="300"></canvas></div>
+<div class="chart-box"><h3>📊 Avg Revenue: Active vs Low-Engagement</h3><canvas id="ca2" height="300"></canvas></div></div>
+${alertTable('🔴 High Absences (4+)',highAbsence,'These members have 4 or more absences. BNI policy allows 3 absences per 6-month period.')}
+${alertTable('🟠 Zero Referrals Given (5+ meetings attended)',zeroRefs,'Members attending regularly but not yet giving referrals may need coaching on how to identify referral opportunities.')}
+${alertTable('🔵 Zero Visitors Brought (10+ meetings)',zeroVisitors,'Bringing visitors is critical for chapter growth. These members could benefit from visitor invitation strategies.')}
+${alertTable('🟣 Zero One-to-Ones (5+ meetings)',zero121,'One-to-ones are essential for building referral relationships. These members should prioritize scheduling them.')}
+`;
+const alertsByCh=CH.map((_,i)=>{const m=getChap(i);return{ha:m.filter(r=>r[ai]>=4).length,zr:m.filter(r=>r[rgi]===0&&r[pi]>=5).length,zv:m.filter(r=>r[vi]===0&&r[pi]>=10).length};});
+const shortCH2=CH.map(c=>c.length>16?c.substring(0,14)+'…':c);
+mkChart('ca1',{type:'bar',data:{labels:shortCH2,datasets:[
+{label:'High Absences',data:alertsByCh.map(a=>a.ha),backgroundColor:'#f44336'},
+{label:'Zero Refs Given',data:alertsByCh.map(a=>a.zr),backgroundColor:'#ff9800'},
+{label:'Zero Visitors',data:alertsByCh.map(a=>a.zv),backgroundColor:'#2196f3'}
+]},options:{responsive:true,plugins:{legend:{labels:{color:'#ccc',font:{size:10}}}},scales:{x:{ticks:{color:'#999',font:{size:9},maxRotation:45},grid:{color:'#222'},stacked:true},y:{ticks:{color:'#999'},grid:{color:'#222'},stacked:true}}}});
+const activeMembers=D.filter(r=>r[pi]>=15&&r[rgi]>=3);
+const lowEngMembers=D.filter(r=>r[pi]<10||r[rgi]===0);
+const avgActive=activeMembers.length?Math.round(sumCol(activeMembers,revi)/activeMembers.length):0;
+const avgLow=lowEngMembers.length?Math.round(sumCol(lowEngMembers,revi)/lowEngMembers.length):0;
+mkChart('ca2',{type:'bar',data:{labels:['Active & Engaged','Low Engagement'],datasets:[{data:[avgActive,avgLow],backgroundColor:['#4caf50','#f44336'],borderRadius:6}]},options:{responsive:true,indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{ticks:{color:'#999',callback:v=>fmt$(v)},grid:{color:'#222'}},y:{ticks:{color:'#ccc',font:{size:12}},grid:{color:'#1a1a1a'}}}}});
+}
+function alertTable(title,arr,desc){
+if(!arr.length)return`<h3>${title}</h3><p style="color:#4caf50;margin-bottom:16px">✅ No members in this category. Great job!</p>`;
+return`<h3>${title}</h3><p style="color:#888;font-size:.82em;margin-bottom:8px">${desc}</p>
+<div class="tbl-wrap" style="max-height:350px;overflow-y:auto"><table>
+<thead><tr><th>Member</th><th>Chapter</th><th>Present</th><th>Absent</th><th>Visitors</th><th>Refs Given</th><th>1-to-1s</th><th>Revenue</th><th>Action</th></tr></thead>
+<tbody>${arr.map(r=>{const gi=D.indexOf(r);return`<tr><td style="font-weight:600">${r[ni]}</td><td style="font-size:.78em;color:#999">${CH[r[ci]]}</td><td>${r[pi]}</td><td>${r[ai]}</td><td>${r[vi]}</td><td>${r[rgi]}</td><td>${r[otoi]}</td><td>${fmt$(r[revi])}</td><td><button class="btn btn-sm" onclick="openEmail(${gi})">📧 Coach</button></td></tr>`}).join('')}</tbody></table></div>`;
+}
+function generatePALMSCoaching(r){
+const name=r[ni],ch=CH[r[ci]],pres=r[pi],abs=r[ai],lates=r[li],subs=r[si],vis=r[vi],rg=r[rgi],rr=r[rri],oto=r[otoi],ty=r[tyi],ce=r[cei],rev=r[revi];
+let strengths=[],improvements=[];
+if(pres>=20)strengths.push('Outstanding attendance — attending consistently is the #1 driver of BNI success.');
+else if(pres>=15)strengths.push('Solid attendance record — keep showing up and the results will follow.');
+if(rg>=10)strengths.push(`Impressive referral giving (${rg} referrals given)! Givers Gain® is alive and well.`);
+if(oto>=10)strengths.push(`Great one-to-one activity (${oto})! Strong relationships fuel strong referrals.`);
+if(rev>=20000)strengths.push(`Excellent revenue generation (${fmt$(rev)})! The BNI system is clearly working.`);
+if(vis>=3)strengths.push(`Thank you for bringing ${vis} visitors — this is how chapters grow!`);
+if(ty>=10)strengths.push(`Strong TYFCB numbers (${ty}) — closing business and acknowledging it builds trust.`);
+if(abs>=4)improvements.push({area:'Attendance',tip:`With ${abs} absences, attendance improvement should be the top priority. BNI Policy allows 3 absences in a 6-month period. Consider:\n   • Setting a recurring, non-negotiable calendar block for meetings\n   • Sending a qualified substitute when unable to attend\n   • Communicating with the Membership Committee if facing challenges`});
+if(rg<3)improvements.push({area:'Referrals Given',tip:`Only ${rg} referrals given this period. Remember: Givers Gain®! Techniques to increase referral giving:\n   • Schedule more one-to-ones to learn members' ideal referral triggers\n   • Review the member roster weekly and think "Who do I know that needs..."\n   • Set a personal goal of giving at least 1 referral per week\n   • Listen carefully during weekly presentations for referral opportunities`});
+if(oto<3)improvements.push({area:'One-to-Ones',tip:`With only ${oto} one-to-one meetings, deepening relationships should be a focus. Techniques:\n   • Schedule at least 1-2 one-to-ones per week with different members\n   • Use the BNI GAINS profile exchange to learn about each member\n   • Ask great questions: "Who is your ideal client?" and "What are your referral triggers?"\n   • Follow up each one-to-one with a specific action item`});
+if(vis<1&&pres>=10)improvements.push({area:'Visitor Invitations',tip:`No visitors brought yet. Visitors are the lifeblood of chapter growth. Techniques:\n   • Identify 3-5 professionals in your contact sphere to invite this month\n   • Use Higgins AI Visitor Invite tools to create compelling invitations\n   • Think of professionals who naturally complement your business\n   • Remember: the best visitors are people YOU would refer business to`});
+if(ce===0&&pres>=10)improvements.push({area:'CEUs (Education)',tip:`No CEUs earned. Investing in BNI education makes you a stronger referral partner. Ways to earn CEUs:\n   • Listen to BNI Podcast episodes (4-5 episodes = 1 CEU)\n   • Watch BNI Business Builder videos (1 CEU per hour)\n   • Read BNI-approved books like "Networking Like a Pro"\n   • Attend BNI training events and workshops`});
+if(rev===0&&pres>=10)improvements.push({area:'Revenue Generation',tip:`No revenue recorded. Focus on closing the referrals received and tracking business generated:\n   • Follow up promptly on every referral received (within 24 hours)\n   • Report all Thank You For Closed Business to keep momentum\n   • Ask referral partners to provide warm introductions, not just names\n   • Track and celebrate every closed deal in the chapter`});
+let email=`Dear ${name},\n\nI hope this message finds you well! I'm reaching out regarding your PALMS report for the ${ch} chapter. Taking a moment to review our networking activity is a great way to identify opportunities for even greater success.\n\n`;
+if(strengths.length){email+=`🌟 AREAS OF STRENGTH\n${strengths.map((s,i)=>`${i+1}. ${s}`).join('\n')}\n\n`;}
+if(improvements.length){
+email+=`📈 OPPORTUNITIES FOR GROWTH\n`;
+improvements.forEach((imp,i)=>{email+=`\n${i+1}. ${imp.area.toUpperCase()}\n${imp.tip}\n`;});
+email+='\n';
+}
+email+=`📊 YOUR CURRENT PALMS SNAPSHOT\n• Meetings Present: ${pres}  |  Absences: ${abs}  |  Lates: ${lates}\n• Visitors Brought: ${vis}\n• Referrals Given: ${rg}  |  Referrals Received: ${rr}\n• One-to-Ones: ${oto}  |  TYFCB: ${ty}\n• CEUs: ${ce}  |  Revenue: ${fmt$(rev)}\n\n`;
+email+=`Remember, the PALMS system is designed to help every member succeed. Small, consistent improvements in each area create compounding results over time. The difference between good and great in BNI often comes down to just one more referral, one more one-to-one, or one more visitor per week.\n\nIf you have questions or would like to discuss strategies, please don't hesitate to reach out. We're all here to help each other succeed!\n\nGivers Gain®,\n\n[Your Name]\n[Your Chapter Role]\n${ch} · BNI CA Northern\n\n---\nGenerated by Higgins Reports · higgins.ai · support@higgins.ai`;
+return email;
+}
+function openEmail(idx){
+const r=D[idx];
+const subject=`Your BNI PALMS Report Review — ${CH[r[ci]]} Chapter`;
+const body=generatePALMSCoaching(r);
+document.getElementById('emailTo').textContent=`To: ${r[ni]} · ${CH[r[ci]]}`;
+document.getElementById('emailSubject').value=subject;
+document.getElementById('emailBody').value=body;
+document.getElementById('emailModal').classList.add('active');
+}
+function closeModal(){document.getElementById('emailModal').classList.remove('active')}
+function sendEmail(){
+const subj=encodeURIComponent(document.getElementById('emailSubject').value);
+const body=encodeURIComponent(document.getElementById('emailBody').value);
+window.open(`mailto:?subject=${subj}&body=${body}`,'_blank');
+}
+function copyEmail(){
+const body=document.getElementById('emailBody').value;
+const subj=document.getElementById('emailSubject').value;
+navigator.clipboard.writeText(`Subject: ${subj}\n\n${body}`).then(()=>{
+const btn=event.target;btn.textContent='✅ Copied!';setTimeout(()=>btn.textContent='📋 Copy',2000);
+}).catch(()=>alert('Copy failed. Please select and copy manually.'));
+}
+function exportCSV(){
+let csv='Chapter,Member,'+COLS.join(',')+'\n';
+D.forEach(r=>{csv+=`"${CH[r[ci]]}","${r[ni]}",${r.slice(2).join(',')}\n`});
+const blob=new Blob([csv],{type:'text/csv'});
+const a=document.createElement('a');a.href=URL.createObjectURL(blob);
+a.download='BNI_CA_Northern_PALMS_Feb2026.csv';a.click();
+}
+document.getElementById('emailModal').addEventListener('click',function(e){if(e.target===this)closeModal()});
+renderRegion();
+</script>
+</body>
+</html>
