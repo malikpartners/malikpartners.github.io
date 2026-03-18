@@ -1,0 +1,685 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BNI Athens Referral Factory — Chapter Growth Analysis</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#000;color:#e2e8f0;line-height:1.6}
+.container{max-width:1440px;margin:0 auto;padding:20px}
+
+/* Header */
+.header{text-align:center;padding:30px 20px 10px;border-bottom:3px solid #CF2030}
+.header img{max-width:420px;width:90%;height:auto;margin-bottom:12px}
+.header h1{font-size:1.6rem;color:#CF2030;margin-top:8px;letter-spacing:.5px}
+.header .subtitle{color:#94a3b8;font-size:.88rem;margin-top:6px}
+.header-badges{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;margin-top:10px}
+.header-badge{display:inline-block;background:#1a1a1a;color:#CF2030;padding:4px 14px;border-radius:14px;font-size:.75rem;border:1px solid #CF203044;font-weight:600}
+
+/* Navigation */
+.nav{display:flex;flex-wrap:wrap;gap:6px;background:#0a0a0a;padding:12px;border-radius:12px;margin:20px 0;position:sticky;top:0;z-index:100;box-shadow:0 4px 24px rgba(0,0,0,.7);border:1px solid #1a1a1a}
+.nav button{background:#1a1a1a;color:#e2e8f0;border:1px solid #333;padding:8px 14px;border-radius:8px;cursor:pointer;font-size:.78rem;transition:all .2s;font-weight:500}
+.nav button:hover,.nav button.active{background:#CF2030;color:#fff;border-color:#CF2030}
+
+/* Sections */
+.section{display:none;animation:fadeIn .3s}
+.section.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+h2{font-size:1.35rem;color:#CF2030;margin:20px 0 12px;border-bottom:2px solid #1a1a1a;padding-bottom:8px}
+h3{font-size:1.05rem;color:#f0a0a8;margin:15px 0 8px}
+
+/* Cards */
+.card{background:#0d0d0d;border-radius:12px;padding:20px;margin-bottom:16px;border:1px solid #1a1a1a;box-shadow:0 2px 12px rgba(0,0,0,.4)}
+.card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+.stat-card{background:linear-gradient(135deg,#0d0d0d,#000);border:1px solid #1a1a1a;border-radius:12px;padding:18px;text-align:center}
+.stat-card .value{font-size:2.2rem;font-weight:700;color:#CF2030}
+.stat-card .label{font-size:.8rem;color:#94a3b8;margin-top:4px}
+.stat-card.green .value{color:#4ade80}
+.stat-card.blue .value{color:#38bdf8}
+.stat-card.gold .value{color:#fbbf24}
+
+/* Tables */
+.overflow-x{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:.82rem}
+th{background:#1a1a1a;color:#CF2030;padding:10px 8px;text-align:left;cursor:pointer;user-select:none;white-space:nowrap;font-weight:600}
+th:hover{background:#252525}
+th .si{margin-left:4px;font-size:.68rem;opacity:.5}
+th.asc .si,th.desc .si{opacity:1;color:#CF2030}
+td{padding:8px;border-bottom:1px solid #141414;vertical-align:top}
+tr:hover{background:#0f0f0f}
+
+/* Search */
+.search-box{width:100%;padding:10px 14px;background:#000;border:1px solid #222;border-radius:8px;color:#e2e8f0;font-size:.88rem;margin-bottom:12px}
+.search-box:focus{outline:none;border-color:#CF2030;box-shadow:0 0 0 3px rgba(207,32,48,.15)}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;gap:4px;padding:5px 12px;border-radius:6px;border:none;cursor:pointer;font-size:.74rem;font-weight:600;transition:all .2s;text-decoration:none;white-space:nowrap}
+.btn-call{background:#059669;color:#fff}.btn-call:hover{background:#047857}
+.btn-email{background:#2563eb;color:#fff}.btn-email:hover{background:#1d4ed8}
+.btn-sms{background:#7c3aed;color:#fff}.btn-sms:hover{background:#6d28d9}
+.btn-invite{background:#CF2030;color:#fff}.btn-invite:hover{background:#a81828}
+
+/* Alerts */
+.alert{padding:12px 16px;border-radius:8px;margin:10px 0;font-size:.84rem}
+.alert-warn{background:#78350f33;border:1px solid #f59e0b33;color:#fbbf24}
+.alert-info{background:#0f2a4a44;border:1px solid #38bdf833;color:#38bdf8}
+.alert-success{background:#05966933;border:1px solid #4ade8033;color:#4ade80}
+.alert-red{background:#CF203015;border:1px solid #CF203033;color:#f0a0a8}
+
+/* Tabs */
+.tabs{display:flex;gap:4px;margin-bottom:12px;flex-wrap:wrap}
+.tabs button{background:#0d0d0d;color:#94a3b8;border:1px solid #222;padding:6px 14px;border-radius:8px 8px 0 0;cursor:pointer;font-size:.76rem;transition:all .2s}
+.tabs button.active{background:#1a1a1a;color:#CF2030;border-bottom-color:#1a1a1a;font-weight:600}
+.tab-content{display:none}.tab-content.active{display:block}
+
+/* Info rows */
+.info-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #111}
+.info-row .lbl{color:#94a3b8;font-size:.84rem}.info-row .val{color:#e2e8f0;font-weight:500;font-size:.84rem}
+
+/* Charts */
+.chart-box{position:relative;height:320px;margin:16px 0}
+.chart-sm{position:relative;height:220px;margin:14px 0}
+
+/* Modal */
+.modal-bg{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.8);z-index:1000;align-items:center;justify-content:center}
+.modal-bg.show{display:flex}
+.modal{background:#0d0d0d;border-radius:12px;padding:24px;max-width:660px;width:95%;max-height:80vh;overflow-y:auto;border:1px solid #CF203044}
+.modal h3{color:#CF2030;margin-bottom:10px}
+.modal textarea{width:100%;min-height:210px;background:#000;color:#e2e8f0;border:1px solid #222;border-radius:8px;padding:12px;font-size:.84rem;font-family:inherit;resize:vertical}
+.modal .btn-row{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.modal .btn-close{background:#333;color:#e2e8f0;padding:8px 20px;border-radius:8px;border:none;cursor:pointer;font-size:.84rem}
+
+/* Priority badges */
+.pri{display:inline-block;padding:2px 10px;border-radius:10px;font-size:.72rem;font-weight:700}
+.pri-1{background:#CF203022;color:#CF2030;border:1px solid #CF203055}
+.pri-2{background:#f59e0b22;color:#fbbf24;border:1px solid #fbbf2455}
+.pri-3{background:#38bdf822;color:#38bdf8;border:1px solid #38bdf855}
+
+/* Footer */
+.footer{text-align:center;padding:30px 20px;color:#555;font-size:.78rem;border-top:1px solid #1a1a1a;margin-top:30px}
+.footer img{max-width:180px;width:50%;height:auto;margin-bottom:10px;opacity:.7}
+.footer a{color:#CF2030;text-decoration:none}
+
+@media(max-width:768px){.nav{flex-direction:column}.card-grid{grid-template-columns:1fr}.header h1{font-size:1.2rem}table{font-size:.72rem}th,td{padding:6px 4px}.header img{max-width:280px}}
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- HEADER -->
+<div class="header">
+<img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports">
+<h1>🏗️ BNI Athens Referral Factory — Chapter Growth Analysis</h1>
+<p class="subtitle"><strong>GA NE BNI Athens Referral Factory</strong> | Chapter #000107 | GA Northeast Region</p>
+<div class="header-badges">
+<span class="header-badge">📍 Watkinsville, GA</span>
+<span class="header-badge">👥 31 Members</span>
+<span class="header-badge">📅 Thursdays 7:30 AM</span>
+<span class="header-badge">🏢 In-Person</span>
+</div>
+</div>
+
+<!-- NAV -->
+<nav class="nav" id="mainNav">
+<button class="active" onclick="go('overview')">📍 Overview</button>
+<button onclick="go('roster')">📊 Roster</button>
+<button onclick="go('spheres')">🔍 Spheres</button>
+<button onclick="go('missing')">🎯 Missing Seats</button>
+<button onclick="go('vendors')">🔎 Vendors</button>
+<button onclick="go('invites')">✉️ Invitations</button>
+<button onclick="go('plan')">📈 Exec Plan</button>
+<button onclick="go('tracking')">📋 Tracking</button>
+</nav>
+
+<!-- ==================== OVERVIEW ==================== -->
+<div id="overview" class="section active">
+<h2>📍 STEP 1 — Chapter Overview & Meeting Details</h2>
+<div class="card-grid">
+<div class="card">
+<h3>Chapter Information</h3>
+<div class="info-row"><span class="lbl">Chapter Name</span><span class="val">GA NE BNI Athens Referral Factory</span></div>
+<div class="info-row"><span class="lbl">Chapter ID</span><span class="val">#000107</span></div>
+<div class="info-row"><span class="lbl">Region</span><span class="val">GA Northeast</span></div>
+<div class="info-row"><span class="lbl">Format</span><span class="val">In-Person</span></div>
+<div class="info-row"><span class="lbl">Meeting Day/Time</span><span class="val">Thursday at 7:30 AM</span></div>
+<div class="info-row"><span class="lbl">Location</span><span class="val">Jennings Mill Country Club, 1150 Chambers Ct, Watkinsville, GA 30677</span></div>
+<div class="info-row"><span class="lbl">Members</span><span class="val" style="color:#CF2030;font-size:1.1rem;font-weight:700">31</span></div>
+</div>
+<div class="card">
+<h3>Director Consultant</h3>
+<div class="info-row"><span class="lbl">Name</span><span class="val">Cathy Barbieri</span></div>
+<div class="info-row"><span class="lbl">Phone</span><span class="val"><a href="tel:6782648708" class="btn btn-call">📞 (678) 264-8708</a></span></div>
+<div style="margin-top:18px">
+<h3>Higgins AI Support</h3>
+<div class="info-row"><span class="lbl">Phone</span><span class="val"><a href="tel:8557373386" class="btn btn-call">📞 855-737-3386</a></span></div>
+<div class="info-row"><span class="lbl">Email</span><span class="val"><a href="mailto:support@higgins.ai" class="btn btn-email">✉️ support@higgins.ai</a></span></div>
+<div class="info-row"><span class="lbl">Web</span><span class="val"><a href="https://higgins.ai" style="color:#CF2030" target="_blank">higgins.ai</a></span></div>
+</div>
+</div>
+</div>
+
+<h3>⚠️ Notes & Flags</h3>
+<div class="card">
+<div class="alert alert-warn">⚠️ <strong>Potential Overlap:</strong> Wills/Trusts (Ryan Reynolds) vs Business Law (Tim Sanders) — Distinct classifications but Membership Committee should ensure clear lanes.</div>
+<div class="alert alert-warn">⚠️ <strong>Potential Overlap:</strong> Health & Wellness Products (Raymond Stewart) vs Training: Recovery & Performance (David Chamblee) — Similar client base. Clear differentiation recommended.</div>
+<div class="alert alert-red">⚠️ <strong>Company Mismatch:</strong> Laura Green holds Copywriter/Writer seat but company is "Ovation Funding Solutions." MC should verify classification alignment.</div>
+<div class="alert alert-info">ℹ️ <strong>Vacant Leadership Roles:</strong> Events Coordinator, Growth Coordinator, and Chapter Webmaster are currently unfilled.</div>
+</div>
+</div>
+
+<!-- ==================== ROSTER ==================== -->
+<div id="roster" class="section">
+<h2>📊 STEP 2 — Normalized Chapter Roster (31 Members)</h2>
+<div class="card overflow-x">
+<input type="text" class="search-box" placeholder="🔍 Search by name, company, category, or classification..." oninput="filterT('rosterT',this.value)">
+<table id="rosterT">
+<thead><tr>
+<th onclick="sortT('rosterT',0)"># <span class="si">⇅</span></th>
+<th onclick="sortT('rosterT',1)">Category <span class="si">⇅</span></th>
+<th onclick="sortT('rosterT',2)">Classification (Seat) <span class="si">⇅</span></th>
+<th onclick="sortT('rosterT',3)">Member <span class="si">⇅</span></th>
+<th onclick="sortT('rosterT',4)">Company <span class="si">⇅</span></th>
+</tr></thead>
+<tbody>
+<tr><td>1</td><td>Animals</td><td>Veterinarian</td><td>Jeff Bangle</td><td>Oconee Veterinary Hospital</td></tr>
+<tr><td>2</td><td>Health & Wellness</td><td>Massage Therapist</td><td>Audrey Blanchard</td><td>Blanchard Wellness Clinic, LLC</td></tr>
+<tr><td>3</td><td>Construction & Trades</td><td>Fences</td><td>Andrew Blanchard</td><td>Blanchard Fence LLC</td></tr>
+<tr><td>4</td><td>Advertising & Marketing</td><td>Web Design</td><td>Scott Brantley</td><td>DawgTown Website</td></tr>
+<tr><td>5</td><td>Health & Wellness</td><td>Training: Recovery & Performance</td><td>David Chamblee</td><td>O2 Performance and Recovery</td></tr>
+<tr><td>6</td><td>Construction & Trades</td><td>HVAC - Heating & Air</td><td>Nathan Coker</td><td>Stanfield Air Systems</td></tr>
+<tr><td>7</td><td>Health & Wellness</td><td>Chiropractor</td><td>Ken Cook</td><td>Chiropractic Works</td></tr>
+<tr><td>8</td><td>Car & Motorcycle</td><td>Auto/Car Body Shop</td><td>Thomas A. Durrence</td><td>Specialty Paint & Body Repair</td></tr>
+<tr><td>9</td><td>Retail</td><td>Apparel</td><td>Brandt Farmer</td><td>Farmhouse Apparel, LLC</td></tr>
+<tr><td>10</td><td>Advertising & Marketing</td><td>Printer</td><td>Stephanie Field</td><td>Athens Printing Company</td></tr>
+<tr><td>11</td><td>Construction & Trades</td><td>Painter & Decorator</td><td>Hosea Foote</td><td>Five Star Painting of Athens</td></tr>
+<tr><td>12</td><td>Construction & Trades</td><td>Handyman</td><td>Cullen Gossett</td><td>The Trusted Toolbox</td></tr>
+<tr><td>13</td><td>Advertising & Marketing</td><td>Copywriter/Writer</td><td>Laura Green</td><td>Ovation Funding Solutions</td></tr>
+<tr><td>14</td><td>Finance & Insurance</td><td>Health Insurance</td><td>Corey Harper</td><td>Compass Health Consultants</td></tr>
+<tr><td>15</td><td>Legal & Accounting</td><td>CPA</td><td>James A Hasler</td><td>GarciaHasler</td></tr>
+<tr><td>16</td><td>Event & Business Services</td><td>Virtual Assistant</td><td>Robin Hill</td><td>Virtual Office Assist, LLC</td></tr>
+<tr><td>17</td><td>Real Estate Services</td><td>Home Inspection</td><td>MC Horne</td><td>The BrickKicker</td></tr>
+<tr><td>18</td><td>Real Estate Services</td><td>Residential Real Estate Agent</td><td>Pamela Jessurum</td><td>Corcoran Classic Living</td></tr>
+<tr><td>19</td><td>Organizations & Other</td><td>Non-Profits/Fundraising</td><td>Cathy Kesterson</td><td>Georgia Options</td></tr>
+<tr><td>20</td><td>Construction & Trades</td><td>Restoration</td><td>Ross Kesterson</td><td>Restore Pros</td></tr>
+<tr><td>21</td><td>Finance & Insurance</td><td>Property & Casualty Insurance</td><td>Paul Lavelle</td><td>State Farm Insurance</td></tr>
+<tr><td>22</td><td>Finance & Insurance</td><td>Payroll Service</td><td>Julian Maluret</td><td>Payentry</td></tr>
+<tr><td>23</td><td>Advertising & Marketing</td><td>Videographer/Film Producer</td><td>Marshall Manning</td><td>Video Bulldog</td></tr>
+<tr><td>24</td><td>Construction & Trades</td><td>Junk Removal</td><td>Matt McCue</td><td>Junk South</td></tr>
+<tr><td>25</td><td>Finance & Insurance</td><td>Wealth Management</td><td>Akshay Patel</td><td>Mitchell Investment Group</td></tr>
+<tr><td>26</td><td>Cleaning Services</td><td>Carpet, Upholstery Cleaner</td><td>Jared Reeves</td><td>Certified Clean Care</td></tr>
+<tr><td>27</td><td>Legal & Accounting</td><td>Wills/Trusts</td><td>Ryan Reynolds</td><td>Law Office of Ryan J. Reynolds</td></tr>
+<tr><td>28</td><td>Legal & Accounting</td><td>Business Law</td><td>Tim Sanders</td><td>Timothy F Sanders, Attorney</td></tr>
+<tr><td>29</td><td>Finance & Insurance</td><td>Residential Mortgages</td><td>Bob Slocum</td><td>Capital City Home Loans</td></tr>
+<tr><td>30</td><td>Health & Wellness</td><td>Health & Wellness Products</td><td>Raymond Stewart</td><td>Dr. Ray's Wellness</td></tr>
+<tr><td>31</td><td>Construction & Trades</td><td>Pest Control</td><td>Sandra Williamson</td><td>Wynne Pest Solutions</td></tr>
+</tbody>
+</table>
+</div>
+<div class="card">
+<h3>📊 Members by Category</h3>
+<div class="chart-box"><canvas id="chartCat"></canvas></div>
+</div>
+</div>
+
+<!-- ==================== SPHERES ==================== -->
+<div id="spheres" class="section">
+<h2>🔍 STEP 3 — Contact Sphere Analysis</h2>
+<div class="card overflow-x">
+<h3>Top 5 Contact Spheres Represented</h3>
+<input type="text" class="search-box" placeholder="🔍 Search spheres..." oninput="filterT('sphereT',this.value)">
+<table id="sphereT">
+<thead><tr>
+<th onclick="sortT('sphereT',0)">Contact Sphere <span class="si">⇅</span></th>
+<th onclick="sortT('sphereT',1)">Seats <span class="si">⇅</span></th>
+<th>Supporting Members</th>
+<th>Why It Matters</th>
+</tr></thead>
+<tbody>
+<tr><td>🏠 Home Services</td><td>9</td><td>HVAC, Fences, Painter, Handyman, Restoration, Pest Control, Junk Removal, Carpet Cleaner, Home Inspection</td><td>Chapter's strongest sphere. Natural homeowner cross-referrals on every project.</td></tr>
+<tr><td>🏡 Real Estate & Home Buying</td><td>5</td><td>Real Estate Agent, Mortgages, Home Inspection, P&C Insurance, Wills/Trusts</td><td>Classic BNI power team. Every home sale triggers referrals across all seats.</td></tr>
+<tr><td>💼 Business & Prof. Services</td><td>6</td><td>CPA, Business Law, Payroll, Wealth Mgmt, Virtual Assistant, Copywriter</td><td>Serves small business owners. Strong foundation — needs bookkeeping, banking, IT.</td></tr>
+<tr><td>🩺 Health & Wellness</td><td>6</td><td>Chiropractor, Massage, Recovery & Perf., Health Insurance, Wellness Products, Vet</td><td>Healthy representation. PI Law and Physical Therapy would complete this sphere.</td></tr>
+<tr><td>📣 Marketing & Creative</td><td>4</td><td>Web Design, Printer, Videographer, Copywriter</td><td>Good creative bench. Needs Digital Marketing, Social Media, Promotional Products.</td></tr>
+</tbody>
+</table>
+</div>
+<div class="card">
+<h3>📊 Contact Sphere Seat Distribution</h3>
+<div class="chart-sm"><canvas id="chartSpheres"></canvas></div>
+</div>
+</div>
+
+<!-- ==================== MISSING ==================== -->
+<div id="missing" class="section">
+<h2>🎯 Missing Professions — Prioritized Top 20</h2>
+<div class="card overflow-x">
+<input type="text" class="search-box" placeholder="🔍 Search missing professions, categories, triggers..." oninput="filterT('missT',this.value)">
+<table id="missT">
+<thead><tr>
+<th onclick="sortT('missT',0)">Pri <span class="si">⇅</span></th>
+<th onclick="sortT('missT',1)">Missing Profession <span class="si">⇅</span></th>
+<th onclick="sortT('missT',2)">Category <span class="si">⇅</span></th>
+<th>Why High Value</th>
+<th>Top Seats to Refer</th>
+<th>Referral Triggers</th>
+</tr></thead>
+<tbody>
+<tr><td>1</td><td>Roofing & Gutters</td><td>Construction & Trades</td><td>#1 most common seat across 17 region chapters. Completes Home Services sphere.</td><td>Restoration, Painter, Home Inspector</td><td>"Roof is leaking" / "Inspection found damage"</td></tr>
+<tr><td>2</td><td>Financial Advisor</td><td>Finance & Insurance</td><td>Tied #1 regionally. Massive referral exchange with CPA, insurance, attorneys.</td><td>CPA, P&C Insurance, Wills/Trusts</td><td>"Got an inheritance" / "Retiring, need 401k rollover"</td></tr>
+<tr><td>3</td><td>Plumbing</td><td>Construction & Trades</td><td>Every homeowner needs a plumber. Natural partner for HVAC, Restoration, Handyman.</td><td>HVAC, Restoration, Handyman</td><td>"Water dripping under sink" / "Remodeling bathroom"</td></tr>
+<tr><td>4</td><td>Electrician</td><td>Construction & Trades</td><td>Essential trade. Partners with HVAC, Handyman, Painter on every project.</td><td>HVAC, Handyman, Restoration</td><td>"Breaker keeps tripping" / "Need outlets added"</td></tr>
+<tr><td>5</td><td>Personal Injury Law</td><td>Legal & Accounting</td><td>Creates referral loop with Chiropractor, Massage, Insurance.</td><td>Chiropractor, Health Insurance, P&C Insurance</td><td>"In a car accident" / "Got hurt at work"</td></tr>
+<tr><td>6</td><td>Digital Marketing</td><td>Advertising & Marketing</td><td>Completes Marketing sphere. Every member is a potential client.</td><td>Web Design, Copywriter, Videographer</td><td>"Not showing up on Google" / "Need more leads"</td></tr>
+<tr><td>7</td><td>Cleaning Service (Residential)</td><td>Cleaning Services</td><td>Perfect overlap with Real Estate, Restoration, Carpet Cleaner.</td><td>Real Estate, Restoration, Carpet Cleaner</td><td>"Moving out, need house cleaned" / "Remodel mess"</td></tr>
+<tr><td>8</td><td>Builder/General Contractor</td><td>Construction & Trades</td><td>The "hub" of all construction trades. GCs refer to every trade seat.</td><td>HVAC, Painter, Fences</td><td>"Building an addition" / "Need renovation manager"</td></tr>
+<tr><td>9</td><td>Bookkeeper</td><td>Legal & Accounting</td><td>Natural partner for CPA and Payroll. Every small biz needs bookkeeping.</td><td>CPA, Payroll, Virtual Assistant</td><td>"Behind on books" / "Need QuickBooks help"</td></tr>
+<tr><td>10</td><td>Landscape Services</td><td>Architecture & Engineering</td><td>Exterior partner for Fences, Painter, Pest Control. Constant referrals.</td><td>Fences, Pest Control, Real Estate</td><td>"Yard is overgrown" / "Curb appeal terrible"</td></tr>
+<tr><td>11</td><td>Commercial Insurance</td><td>Finance & Insurance</td><td>8 chapters regionally. Every business owner is a potential client.</td><td>Business Law, CPA, Payroll</td><td>"Starting new business" / "Premiums went up"</td></tr>
+<tr><td>12</td><td>Flooring</td><td>Construction & Trades</td><td>Partners with Painter, Handyman, Restoration on every reno/home sale.</td><td>Painter, Restoration, Real Estate</td><td>"Water damage, need new floors" / "Updating before listing"</td></tr>
+<tr><td>13</td><td>IT Consultants</td><td>Computer & Programming</td><td>Every member needs IT support. Partners with Web Design, VA.</td><td>Web Design, Virtual Assistant, Payroll</td><td>"Network keeps going down" / "Need office tech setup"</td></tr>
+<tr><td>14</td><td>Family Law</td><td>Legal & Accounting</td><td>Referral partner for Wills/Trusts, CPA, Real Estate.</td><td>Wills/Trusts, Real Estate, CPA</td><td>"Going through divorce" / "Need custody update"</td></tr>
+<tr><td>15</td><td>Power Washing</td><td>Construction & Trades</td><td>Low-cost, high-volume. Complements Painter, Fences, Real Estate.</td><td>Painter, Real Estate, Fences</td><td>"Deck/driveway look terrible" / "Cleaning before painting"</td></tr>
+<tr><td>16</td><td>Banking Services</td><td>Finance & Insurance</td><td>Business banker refers to CPA, Payroll, Insurance, Biz Law.</td><td>CPA, Business Law, Payroll</td><td>"Opening new business" / "Need line of credit"</td></tr>
+<tr><td>17</td><td>Property Management</td><td>Real Estate Services</td><td>Works with RE, Handyman, HVAC, Pest Control for tenant needs.</td><td>Real Estate, HVAC, Handyman</td><td>"Bought rental property" / "Need tenant maintenance"</td></tr>
+<tr><td>18</td><td>Travel Agent</td><td>Travel</td><td>Lifestyle seat connecting Wealth Mgmt, Non-Profits, Apparel.</td><td>Wealth Mgmt, Non-Profits, Apparel</td><td>"Planning family vacation" / "Need company retreat"</td></tr>
+<tr><td>19</td><td>Interior Design</td><td>Construction & Trades</td><td>Natural partner for Painter, Flooring, Builder, Real Estate.</td><td>Painter, Real Estate, Restoration</td><td>"Redesign living room" / "Help choosing finishes"</td></tr>
+<tr><td>20</td><td>Auto/Car Repair</td><td>Car & Motorcycle</td><td>Different from Body Shop. Refers to/from P&C Insurance.</td><td>P&C Insurance, Auto Body, Health Insurance</td><td>"Car making weird noise" / "Check engine light on"</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="card">
+<h3>🔎 Overlooked / Non-Obvious Hidden Gems</h3>
+<table>
+<thead><tr><th>Profession</th><th>Category</th><th>Why It's a Hidden Gem</th></tr></thead>
+<tbody>
+<tr><td><strong>Senior In-Home Care</strong></td><td>Health & Wellness</td><td>Growing senior population. Refers to/from Wills/Trusts, Health Insurance, CPA, Real Estate, Chiropractor.</td></tr>
+<tr><td><strong>Photographer</strong></td><td>Advertising & Marketing</td><td>Every RE listing, website, and event needs photos. Partners with RE, Web Design, Videographer, Non-Profits.</td></tr>
+<tr><td><strong>Credit Repair</strong></td><td>Finance & Insurance</td><td>Mortgage, RE, auto, and insurance members encounter credit issues daily. Turns "not-yet-ready" clients into future referrals.</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="card">
+<h3>📊 Missing Professions — Priority Ranking</h3>
+<div class="chart-box"><canvas id="chartMissing"></canvas></div>
+</div>
+</div>
+
+<!-- ==================== VENDORS ==================== -->
+<div id="vendors" class="section">
+<h2>🔎 STEP 4 — Local Vendor Search Results (10 Professions)</h2>
+<p style="color:#94a3b8;margin-bottom:12px;font-size:.84rem">All vendors within ~30 miles of 1150 Chambers Ct, Watkinsville, GA 30677. Click ✉️ to generate a personalized invitation email.</p>
+
+<div class="tabs" id="vTabs">
+<button class="active" onclick="vTab('v1')">Roofing</button>
+<button onclick="vTab('v2')">Fin. Advisor</button>
+<button onclick="vTab('v3')">Plumbing</button>
+<button onclick="vTab('v4')">Electrician</button>
+<button onclick="vTab('v5')">PI Law</button>
+<button onclick="vTab('v6')">Digital Mktg</button>
+<button onclick="vTab('v7')">Cleaning</button>
+<button onclick="vTab('v8')">Builder/GC</button>
+<button onclick="vTab('v9')">Bookkeeping</button>
+<button onclick="vTab('v10')">Landscape</button>
+</div>
+
+<!-- V1: Roofing -->
+<div id="v1" class="tab-content active"><div class="card overflow-x">
+<h3>1️⃣ Roofing & Gutters</h3>
+<p style="color:#777;font-size:.78rem;margin-bottom:8px">Best inviter(s): Ross Kesterson (Restoration), MC Horne (Home Inspection), Paul Lavelle (P&C Insurance)</p>
+<input type="text" class="search-box" placeholder="🔍 Search..." oninput="filterT('vT1',this.value)">
+<table id="vT1"><thead><tr><th>#</th><th onclick="sortT('vT1',1)">Business <span class="si">⇅</span></th><th>Phone</th><th>Location</th><th onclick="sortT('vT1',4)">Rating <span class="si">⇅</span></th><th>Best Angle</th><th>Actions</th></tr></thead><tbody>
+<tr><td>1</td><td>Milledge Roofing Company</td><td>(706) 391-6564</td><td>Watkinsville, GA</td><td>—</td><td>Local roofer right in Watkinsville — perfect proximity</td><td><a href="tel:7063916564" class="btn btn-call">📞</a> <button class="btn btn-email" onclick="eModal('Milledge Roofing Company','Roofing & Gutters','Our chapter includes a home inspector, restoration company, P&C insurance agent, and a painter — all of whom regularly encounter clients who need roofing work. Right now, there is no roofer at the table to receive those referrals. That means warm, qualified introductions are waiting for a trusted roofing professional.')">✉️ Invite</button></td></tr>
+<tr><td>2</td><td>Findlay Roofing (Athens)</td><td>(706) 989-8037</td><td>Athens, GA</td><td>—</td><td>Grow Athens presence through trusted referrals</td><td><a href="tel:7069898037" class="btn btn-call">📞</a> <button class="btn btn-email" onclick="eModal('Findlay Roofing','Roofing & Gutters','With 31 local professionals including a restoration specialist, home inspector, and insurance agent, our chapter generates consistent roofing referrals. Findlay Roofing could grow its Athens presence through trusted professional introductions rather than cold leads.')">✉️ Invite</button></td></tr>
+<tr><td>3</td><td>Premier Home Solutions Roofers</td><td>(706) 206-9677</td><td>Watkinsville, GA</td><td>4.9★</td><td>Local Watkinsville roofer — storm/sale-related referrals</td><td><a href="tel:7062069677" class="btn btn-call">📞</a> <button class="btn btn-email" onclick="eModal('Premier Home Solutions Roofers','Roofing & Gutters','Based right here in Watkinsville with a stellar 4.9-star rating, Premier Home Solutions is perfectly positioned. Our realtors, insurance agents, and home inspectors encounter roofing needs every week — and they need a trusted local partner to refer to.')">✉️ Invite</button></td></tr>
+<tr><td>4</td><td>Eastside Roofing, LLC</td><td>(706) 308-0890</td><td>Bogart, GA</td><td>5.0★</td><td>Building partnerships with restoration, painting, HVAC</td><td><a href="tel:7063080890" class="btn btn-call">📞</a> <button class="btn btn-email" onclick="eModal('Eastside Roofing','Roofing & Gutters','With a perfect 5.0-star rating, Eastside Roofing represents the quality our members want to refer. Our restoration specialist, painter, and HVAC professional encounter roofing needs on nearly every project — and they are looking for a trusted roofer.')">✉️ Invite</button></td></tr>
+<tr><td>5</td><td>Ridgeline Roofing and Exteriors</td><td>(706) 310-4201</td><td>Athens, GA</td><td>4.9★</td><td>High-quality referrals vs. online lead generation</td><td><a href="tel:7063104201" class="btn btn-call">📞</a> <button class="btn btn-email" onclick="eModal('Ridgeline Roofing and Exteriors','Roofing & Gutters','Imagine receiving warm, pre-qualified roofing referrals from 31 local professionals every week — instead of competing on lead generation sites. Our home inspector, restoration company, and insurance agents encounter roofing needs constantly.')">✉️ Invite</button></td></tr>
+</tbody></table></div></div>
+
+<!-- V2: Financial Advisor -->
+<div id="v2" class="tab-content"><div class="card overflow-x">
+<h3>2️⃣ Financial Advisor</h3>
+<p style="color:#777;font-size:.78rem;margin-bottom:8px">Best inviter(s): James Hasler (CPA), Ryan Reynolds (Wills/Trusts), Paul Lavelle (P&C Insurance)</p>
+<div class="alert alert-warn">⚠️ Chapter already has Akshay Patel (Wealth Management). MC should confirm Financial Advisor is a distinct seat.</div>
+<table id="vT2"><thead><tr><th>#</th><th>Business</th><th>Phone</th><th>Location</th><th>Rating</th><th>Actions</th></tr></thead><tbody>
+<tr><td>1</td><td>Fully Financial</td><td>(706) 389-8426</td><td>Athens, GA</td><td>5.0★</td><td><a href="tel:7063898426" class="btn btn-call">📞</a> <button class="btn btn-email" onclick="eModal('Fully Financial','Financial Advisory','Our chapter includes a CPA, estate planning attorney, P&C insurance agent, and mortgage professional — all of whom regularly encounter clients who need financial planning guidance. Only one Financial Advisor can hold this seat, meaning all referrals from 30+ professionals go to one trusted advisor.')">✉️ Invite</button></td></tr>
+<tr><td>2</td><td>Arch Financial Planning</td><td>(706) 204-9068</td><td>Athens, GA</td><td>5.0★</td><td><a href="tel:7062049068" class="btn btn-call">📞</a> <button class="btn btn-email" onclick="eModal('Arch Financial Planning','Financial Advisory','Families going through major life transitions — home purchases, retirement, inheritance — are the exact clients our CPA, estate attorney, and insurance professionals encounter daily. They need a trusted financial advisor to refer to.')">✉️ Invite</button></td></tr>
+<tr><td>3</td><td>Elevate Wealth Advisory</td><td>(706) 353-2728</td><td>Athens, GA</td><td>5.0★</td><td><a href="tel:7063532728" class="btn btn-call">📞</a> <button class="btn btn-email" onclick="eModal('Elevate Wealth Advisory','Financial Advisory','Our attorneys and CPAs serve clients holistically and need a trusted financial advisor to complete the service circle. With 31 local professionals actively looking for referral opportunities, Elevate Wealth Advisory would receive consistent, quality introductions.')">✉️ Invite</button></td></tr>
+<tr><td>4</td><td>Carson Advisory</td><td>(706) 353-1190</td><td>Athens, GA</td><td>5.0★</td><td><a href="tel:7063531190" class="btn btn-call">📞</a> <button class="btn btn-email" onclick="eModal('Carson Advisory','Financial Advisory','Warm introductions to families and business owners through trusted community partners — that is what BNI delivers. Our CPA, insurance agents, and estate planning attorney encounter financial planning needs every week.')">✉️ Invite</button></td></tr>
+<tr><td>5</td><td>Ability Wealth Group</td><td>(706) 530-2805</td><td>Watkinsville, GA</td><td>5.0★</td><td><a href="tel:7065302805" class="btn btn-call">📞</a> <button class="btn btn-email" onclick="eModal('Ability Wealth Group','Financial Advisory','Located right in Watkinsville, Ability Wealth Group would benefit immediately from being plugged into the local professional community. Our CPA, payroll specialist, and insurance professionals regularly encounter clients needing financial guidance.')">✉️ Invite</button></td></tr>
+</tbody></table></div></div>
+
+<!-- V3: Plumbing -->
+<div id="v3" class="tab-content"><div class="card overflow-x">
+<h3>3️⃣ Plumbing</h3>
+<p style="color:#777;font-size:.78rem;margin-bottom:8px">Best inviter(s): Nathan Coker (HVAC), Ross Kesterson (Restoration), Cullen Gossett (Handyman)</p>
+<table id="vT3"><thead><tr><th>#</th><th>Business</th><th>Phone</th><th>Location</th><th>Rating</th><th>Actions</th></tr></thead><tbody>
+<tr><td>1</td><td>Royal Flush Plumbing</td><td>(762) 257-2284</td><td>Athens, GA</td><td>4.9★</td><td><a href="tel:7622572284" class="btn btn-call">📞</a> <button class="btn btn-email" onclick="eModal('Royal Flush Plumbing','Plumbing Services','Our HVAC professional, restoration specialist, handyman, and home inspector all encounter plumbing needs regularly — and right now they have no one in the chapter to refer those clients to. Only one plumber per chapter means every plumbing referral from 30+ professionals goes to one trusted partner.')">✉️ Invite</button></td></tr>
+<tr><td>2</td><td>Blueprint Plumbing Services</td><td>(706) 389-4508</td><td>Athens, GA</td><td>4.9★</td><td><a href="tel:7063894508" class="btn btn-call">📞</a> <button class="btn btn-email" onclick="eModal('Blueprint Plumbing Services','Plumbing Services','Our home inspectors and real estate agents encounter plumbing issues on nearly every transaction. Blueprint Plumbing would receive warm, qualified referrals for move-in plumbing repairs, remodel projects, and emergency calls.')">✉️ Invite</button></td></tr>
+<tr><td>3</td><td>Empire Plumbing, Inc.</td><td>(706) 254-1273</td><td>Athens, GA</td><td>5.0★</td><td><a href="tel:7062541273" class="btn btn-call">📞</a> <button class="btn btn-email" onclick="eModal('Empire Plumbing','Plumbing Services','With a perfect 5.0-star rating, Empire Plumbing represents exactly the quality our members want to refer. Our restoration specialist and general contractor members need a reliable plumbing partner for consistent project referrals.')">✉️ Invite</button></td></tr>
+<tr><td>4</td><td>Roseman Plumbing, LLC</td><td>(706) 247-2074</td><td>Bishop, GA</td><td>5.0★</td><td><a href="tel:7062472074" class="btn btn-call">📞</a> <button class="btn btn-email" onclick="eModal('Roseman Plumbing','Plumbing Services','Based in neighboring Bishop and close to Watkinsville, Roseman Plumbing would connect with local trades professionals for consistent, quality referrals — from emergency repairs to bathroom remodels.')">✉️ Invite</button></td></tr>
+<tr><td>5</td><td>Remedy Plumbing</td><td>(706) 551-9257</td><td>Athens, GA</td><td>4.9★</td><td><a href="tel:7065519257" class="btn btn-call">📞</a> <button class="btn btn-email" onclick="eModal('Remedy Plumbing','Plumbing Services','Structured networking builds trust-based referral partnerships that outperform pay-per-lead marketing. Our HVAC tech, handyman, and restoration pro are all waiting to refer a trusted plumber — and they generate plumbing referrals every week.')">✉️ Invite</button></td></tr>
+</tbody></table></div></div>
+
+<!-- V4: Electrician -->
+<div id="v4" class="tab-content"><div class="card overflow-x">
+<h3>4️⃣ Electrician</h3>
+<p style="color:#777;font-size:.78rem;margin-bottom:8px">Best inviter(s): Nathan Coker (HVAC), Cullen Gossett (Handyman), Ross Kesterson (Restoration)</p>
+<table id="vT4"><thead><tr><th>#</th><th>Business</th><th>Phone</th><th>Location</th><th>Rating</th><th>Actions</th></tr></thead><tbody>
+<tr><td>1</td><td>Classic City Electric</td><td>(706) 614-9711</td><td>Athens, GA</td><td>5.0★</td><td><a href="tel:7066149711" class="btn btn-call">📞</a> <button class="btn btn-email" onclick="eModal('Classic City Electric','Electrical Services','Our HVAC professional, handyman, and restoration specialist encounter electrical needs on nearly every job. They need a trusted electrician to refer to — and that exclusive seat means all electrical referrals from 30+ professionals go to one partner.')">✉️ Invite</button></td></tr>
+<tr><td>2</td><td>Blue Moon Electric</td><td>(678) 907-5945</td><td>Athens, GA</td><td>4.9★</td><td><a href="tel:6789075945" class="btn btn-call">📞</a> <button class="btn btn-email" onclick="eModal('Blue Moon Electric','Electrical Services','Building a steady stream of homeowner referrals through our real estate and home inspection connections. Our 31 members include trades pros, realtors, and insurance agents — all generating electrical referral needs.')">✉️ Invite</button></td></tr>
+<tr><td>3</td><td>Thunderbolt Electric</td><td>(706) 613-7727</td><td>Watkinsville, GA</td><td>4.9★</td><td><a href="tel:7066137727" class="btn btn-call">📞</a> <button class="btn btn-email" onclick="eModal('Thunderbolt Electric','Electrical Services','Located right here in Watkinsville, Thunderbolt Electric would thrive with local referral partnerships. Our HVAC tech, handyman, and painter encounter electrical needs on every renovation and repair project.')">✉️ Invite</button></td></tr>
+<tr><td>4</td><td>Revamp Athens Electrical</td><td>(706) 248-1131</td><td>Athens, GA</td><td>5.0★</td><td><a href="tel:7062481131" class="btn btn-call">📞</a> <button class="btn btn-email" onclick="eModal('Revamp Athens Electrical','Electrical Services','Partnering with painters, HVAC techs, and builders who encounter electrical needs on every job. With a perfect 5.0-star rating, Revamp Athens would be the trusted electrician our 31 members confidently recommend.')">✉️ Invite</button></td></tr>
+<tr><td>5</td><td>Guardian Electric</td><td>(678) 446-4602</td><td>Athens, GA</td><td>5.0★</td><td><a href="tel:6784464602" class="btn btn-call">📞</a> <button class="btn btn-email" onclick="eModal('Guardian Electric','Electrical Services','Growing through trusted professional referrals rather than online ads alone. Our chapter of 31 members generates consistent electrical referral opportunities from home renovations, inspections, and HVAC installations.')">✉️ Invite</button></td></tr>
+</tbody></table></div></div>
+
+<!-- V5: PI Law -->
+<div id="v5" class="tab-content"><div class="card overflow-x">
+<h3>5️⃣ Personal Injury Law</h3>
+<p style="color:#777;font-size:.78rem;margin-bottom:8px">Best inviter(s): Ken Cook (Chiropractor), Paul Lavelle (P&C Insurance), Corey Harper (Health Insurance)</p>
+<table id="vT5"><thead><tr><th>#</th><th>Business</th><th>Phone</th><th>Location</th><th>Rating</th><th>Actions</th></tr></thead><tbody>
+<tr><td>1</td><td>Day Injury Law - Watkinsville</td><td>(706) 425-4500</td><td>Watkinsville, GA</td><td>5.0★ (110)</td><td><a href="tel:7064254500" class="btn btn-call">📞</a> <button class="btn btn-email" onclick="eModal('Day Injury Law','Personal Injury Law','Our chapter includes a chiropractor, massage therapist, P&C insurance agent, health insurance consultant, and recovery specialist — all professionals whose clients regularly need PI representation. With 110 five-star reviews and a Watkinsville location, Day Injury Law is a natural fit.')">✉️ Invite</button></td></tr>
+<tr><td>2</td><td>Norris Injury Law</td><td>(706) 420-6400</td><td>Athens, GA</td><td>5.0★ (150)</td><td><a href="tel:7064206400" class="btn btn-call">📞</a> <button class="btn btn-email" onclick="eModal('Norris Injury Law','Personal Injury Law','Building referral relationships with chiropractors and health providers who see accident victims first. Our 31 members include health and insurance professionals who encounter injury cases weekly — and they have no PI attorney to refer to.')">✉️ Invite</button></td></tr>
+<tr><td>3</td><td>Hall & Collins Injury Lawyers</td><td>(706) 351-6055</td><td>Athens, GA</td><td>5.0★ (212)</td><td><a href="tel:7063516055" class="btn btn-call">📞</a> <button class="btn btn-email" onclick="eModal('Hall \\x26 Collins Injury Lawyers','Personal Injury Law','With 212 five-star reviews, Hall & Collins is one of the highest-rated PI firms in Athens. Connecting with our P&C insurance agents and health professionals would create a powerful referral pipeline for client cases.')">✉️ Invite</button></td></tr>
+<tr><td>4</td><td>Law Offices of Joshua W. Branch</td><td>(706) 717-7675</td><td>Athens, GA</td><td>4.9★ (268)</td><td><a href="tel:7067177675" class="btn btn-call">📞</a> <button class="btn btn-email" onclick="eModal('Law Offices of Joshua W. Branch','Personal Injury Law','With 268 reviews and a 4.9-star rating, this established practice would thrive partnering with wellness, chiropractic, and insurance professionals who encounter injury cases regularly. BNI provides warm, qualified referrals — not cold leads.')">✉️ Invite</button></td></tr>
+<tr><td>5</td><td>Larrison Law Firm</td><td>(706) 445-5055</td><td>Athens, GA</td><td>5.0★ (96)</td><td><a href="tel:7064455055" class="btn btn-call">📞</a> <button class="btn btn-email" onclick="eModal('Larrison Law Firm','Personal Injury Law','Growing a practice through trusted professional referrals from the health and legal community. Our chiropractor, massage therapist, and insurance agents see injury clients weekly and need a trusted PI attorney to connect them with.')">✉️ Invite</button></td></tr>
+</tbody></table></div></div>
+
+<!-- V6: Digital Marketing -->
+<div id="v6" class="tab-content"><div class="card overflow-x">
+<h3>6️⃣ Digital Marketing</h3>
+<p style="color:#777;font-size:.78rem;margin-bottom:8px">Best inviter(s): Scott Brantley (Web Design), Laura Green (Copywriter), Marshall Manning (Videographer)</p>
+<table id="vT6"><thead><tr><th>#</th><th>Business</th><th>Phone</th><th>Location</th><th>Rating</th><th>Actions</th></tr></thead><tbody>
+<tr><td>1</td><td>Bipper Media</td><td>(706) 350-1063</td><td>Athens, GA</td><td>4.8★</td><td><a href="tel:7063501063" class="btn btn-call">📞</a> <button class="btn btn-email" onclick="eModal('Bipper Media','Digital Marketing','Our chapter already has a web designer, videographer, copywriter, and printer. A digital marketing professional completes this creative sphere and unlocks bundled referral opportunities. Plus, every one of our 31 members is a business owner who needs marketing.')">✉️ Invite</button></td></tr>
+<tr><td>2</td><td>Kaptiv8</td><td>(888) 470-9997</td><td>Athens, GA</td><td>5.0★</td><td><a href="tel:8884709997" class="btn btn-call">📞</a> <button class="btn btn-email" onclick="eModal('Kaptiv8','Digital Marketing','Building a referral network with 31 local business owners who all need digital visibility. Kaptiv8 would hold the exclusive digital marketing seat — meaning every marketing referral from the entire chapter comes to one trusted partner.')">✉️ Invite</button></td></tr>
+<tr><td>3</td><td>Lightmark Media</td><td>(706) 621-4810</td><td>Athens, GA</td><td>5.0★</td><td><a href="tel:7066214810" class="btn btn-call">📞</a> <button class="btn btn-email" onclick="eModal('Lightmark Media','Digital Marketing','Partnering with our web designer and copywriter to deliver complete client solutions. When our 31 members hear a client say they need more leads, Lightmark Media would be the first name they mention.')">✉️ Invite</button></td></tr>
+<tr><td>4</td><td>Millner Digital Marketing</td><td>(706) 715-5647</td><td>Athens, GA</td><td>5.0★</td><td><a href="tel:7067155647" class="btn btn-call">📞</a> <button class="btn btn-email" onclick="eModal('Millner Digital Marketing','Digital Marketing','Growing a client base through trusted introductions from 31 business service professionals. Our web designer, videographer, and copywriter are all looking for a digital marketing partner to complete the creative Power Team.')">✉️ Invite</button></td></tr>
+<tr><td>5</td><td>The Adsmith</td><td>(706) 543-5555</td><td>Athens, GA</td><td>5.0★</td><td><a href="tel:7065435555" class="btn btn-call">📞</a> <button class="btn btn-email" onclick="eModal('The Adsmith','Digital Marketing','An established Athens marketing agency like The Adsmith would thrive with long-term referral partnerships. Our 31 members serve hundreds of local business clients who need digital marketing — and they want to refer someone they trust.')">✉️ Invite</button></td></tr>
+</tbody></table></div></div>
+
+<!-- V7: Cleaning -->
+<div id="v7" class="tab-content"><div class="card overflow-x">
+<h3>7️⃣ Cleaning Service (Residential)</h3>
+<p style="color:#777;font-size:.78rem;margin-bottom:8px">Best inviter(s): Pamela Jessurum (Real Estate), Ross Kesterson (Restoration), Jared Reeves (Carpet Cleaner)</p>
+<table id="vT7"><thead><tr><th>#</th><th>Business</th><th>Phone</th><th>Location</th><th>Rating</th><th>Actions</th></tr></thead><tbody>
+<tr><td>1</td><td>Dogwood Cleaning Company</td><td>(706) 612-4630</td><td>Athens, GA</td><td>5.0★</td><td><a href="tel:7066124630" class="btn btn-call">📞</a> <button class="btn btn-email" onclick="eModal('Dogwood Cleaning Company','Residential Cleaning','Our real estate agent needs move-in/move-out cleaning partners. Our restoration company needs post-project cleans. Our carpet cleaner can bundle services. The referral triggers are constant — and there is no cleaning pro at the table to receive them.')">✉️ Invite</button></td></tr>
+<tr><td>2</td><td>Team Clean Athens</td><td>(706) 297-8109</td><td>Athens, GA</td><td>4.9★</td><td><a href="tel:7062978109" class="btn btn-call">📞</a> <button class="btn btn-email" onclick="eModal('Team Clean Athens','Residential Cleaning','Building relationships with real estate, restoration, and property management professionals. Every week, 31 professionals are actively looking for business to refer — and cleaning is one of the most universally needed services.')">✉️ Invite</button></td></tr>
+<tr><td>3</td><td>Maid Right of Athens</td><td>(470) 260-6836</td><td>Athens, GA</td><td>4.8★</td><td><a href="tel:4702606836" class="btn btn-call">📞</a> <button class="btn btn-email" onclick="eModal('Maid Right of Athens','Residential Cleaning','Connecting with carpet cleaners, painters, and realtors for bundled service referrals. As a franchise, Maid Right already understands structured systems — and BNI\\'s referral marketing system works the same way.')">✉️ Invite</button></td></tr>
+<tr><td>4</td><td>Hometown Cleaning</td><td>(706) 765-8030</td><td>Athens, GA</td><td>4.8★</td><td><a href="tel:7067658030" class="btn btn-call">📞</a> <button class="btn btn-email" onclick="eModal('Hometown Cleaning','Residential Cleaning','Growing through community partnerships and trusted local professional networks. Our 31 members and their clients represent a continuous pipeline of cleaning needs — from move-in cleans to post-renovation deep cleans.')">✉️ Invite</button></td></tr>
+<tr><td>5</td><td>MAID 4 U Cleaning Service</td><td>(706) 621-9981</td><td>Athens, GA</td><td>5.0★</td><td><a href="tel:7066219981" class="btn btn-call">📞</a> <button class="btn btn-email" onclick="eModal('MAID 4 U Cleaning Service','Residential Cleaning','Building a referral pipeline with home service professionals who encounter cleaning needs daily. Only one cleaning pro per chapter — all cleaning referrals from 31 members would go to one trusted partner.')">✉️ Invite</button></td></tr>
+</tbody></table></div></div>
+
+<!-- V8: Builder/GC -->
+<div id="v8" class="tab-content"><div class="card overflow-x">
+<h3>8️⃣ Builder / General Contractor</h3>
+<p style="color:#777;font-size:.78rem;margin-bottom:8px">Best inviter(s): Nathan Coker (HVAC), Hosea Foote (Painter), Andrew Blanchard (Fences)</p>
+<table id="vT8"><thead><tr><th>#</th><th>Business</th><th>Phone</th><th>Location</th><th>Rating</th><th>Actions</th></tr></thead><tbody>
+<tr><td>1</td><td>Cambria Construction Group</td><td>(770) 530-6698</td><td>Athens, GA</td><td>5.0★</td><td><a href="tel:7705306698" class="btn btn-call">📞</a> <button class="btn btn-email" onclick="eModal('Cambria Construction Group','General Contracting','Our chapter includes HVAC, painting, fencing, handyman, restoration, pest control, and carpet cleaning. A general contractor connects and activates referrals across all of these seats — becoming the hub of the trades sphere.')">✉️ Invite</button></td></tr>
+<tr><td>2</td><td>JOMA Construction</td><td>(706) 372-1052</td><td>Athens, GA</td><td>4.8★</td><td><a href="tel:7063721052" class="btn btn-call">📞</a> <button class="btn btn-email" onclick="eModal('JOMA Construction','General Contracting','Building trade partnerships for consistent, quality project referrals. Our 7 trade professionals are all looking for a general contractor to tie their services together — and every construction referral from 30+ members would go to one trusted GC.')">✉️ Invite</button></td></tr>
+<tr><td>3</td><td>Cecil Jennings Construction</td><td>(706) 255-6528</td><td>Athens, GA</td><td>4.9★</td><td><a href="tel:7062556528" class="btn btn-call">📞</a> <button class="btn btn-email" onclick="eModal('Cecil Jennings Construction','General Contracting','Partnering with realtors and trade professionals for renovation and build projects. Our real estate agent, home inspector, and mortgage professional all encounter homeowners who need construction work.')">✉️ Invite</button></td></tr>
+<tr><td>4</td><td>ProBuilt Athens</td><td>(706) 395-6113</td><td>Athens, GA</td><td>5.0★</td><td><a href="tel:7063956113" class="btn btn-call">📞</a> <button class="btn btn-email" onclick="eModal('ProBuilt Athens','General Contracting','Growing through referral relationships with home inspectors, realtors, and insurance professionals. With a perfect 5.0-star rating, ProBuilt Athens represents the quality our 31 members want to confidently recommend.')">✉️ Invite</button></td></tr>
+<tr><td>5</td><td>Resource Construction</td><td>(706) 340-0092</td><td>Athens, GA (Jennings Mill)</td><td>5.0★</td><td><a href="tel:7063400092" class="btn btn-call">📞</a> <button class="btn btn-email" onclick="eModal('Resource Construction','General Contracting','Located on Jennings Mill Rd — literally steps from our meeting venue! Resource Construction would benefit from being connected to the 7 trades and professional services members already in the chapter. This is a hyper-local referral fit.')">✉️ Invite</button></td></tr>
+</tbody></table></div></div>
+
+<!-- V9: Bookkeeping -->
+<div id="v9" class="tab-content"><div class="card overflow-x">
+<h3>9️⃣ Bookkeeping</h3>
+<p style="color:#777;font-size:.78rem;margin-bottom:8px">Best inviter(s): James Hasler (CPA), Julian Maluret (Payroll), Robin Hill (Virtual Assistant)</p>
+<table id="vT9"><thead><tr><th>#</th><th>Business</th><th>Phone</th><th>Location</th><th>Rating</th><th>Actions</th></tr></thead><tbody>
+<tr><td>1</td><td>Peach BPO</td><td>(770) 268-0373</td><td>Athens, GA</td><td>5.0★</td><td><a href="tel:7702680373" class="btn btn-call">📞</a> <button class="btn btn-email" onclick="eModal('Peach BPO','Bookkeeping Services','Our CPA, payroll specialist, and virtual assistant all encounter small business owners who need bookkeeping help. These are warm, qualified referrals waiting for a trusted bookkeeper — and bookkeeping demand is year-round, not seasonal.')">✉️ Invite</button></td></tr>
+<tr><td>2</td><td>Moss Business Solutions</td><td>(706) 705-9154</td><td>Athens, GA</td><td>5.0★</td><td><a href="tel:7067059154" class="btn btn-call">📞</a> <button class="btn btn-email" onclick="eModal('Moss Business Solutions','Bookkeeping Services','Connecting with business law attorneys and virtual assistants for comprehensive small business support. Our CPA needs a bookkeeping partner for clients — that is a direct, immediate referral pipeline.')">✉️ Invite</button></td></tr>
+<tr><td>3</td><td>Inside Out Accounting</td><td>(404) 907-1925</td><td>Athens, GA</td><td>5.0★</td><td><a href="tel:4049071925" class="btn btn-call">📞</a> <button class="btn btn-email" onclick="eModal('Inside Out Accounting','Bookkeeping Services','Building referral relationships with CPAs who need bookkeeping partners for their clients. Our CPA, James Hasler, is one of the chapter\\'s most active members and regularly encounters businesses that need bookkeeping support.')">✉️ Invite</button></td></tr>
+<tr><td>4</td><td>Beyond The Numbers LLC</td><td>(706) 548-1128</td><td>Athens, GA</td><td>5.0★</td><td><a href="tel:7065481128" class="btn btn-call">📞</a> <button class="btn btn-email" onclick="eModal('Beyond The Numbers','Bookkeeping Services','Growing a client base through trusted introductions from payroll, legal, and financial professionals. Every small business member in our 31-person chapter is a potential client or referral source for bookkeeping services.')">✉️ Invite</button></td></tr>
+<tr><td>5</td><td>Trinity Accounting Group</td><td>(706) 546-1422</td><td>Athens, GA</td><td>5.0★</td><td><a href="tel:7065461422" class="btn btn-call">📞</a> <button class="btn btn-email" onclick="eModal('Trinity Accounting Group','Bookkeeping Services','Partnering with small business service providers for year-round referral opportunities. Our CPA and payroll specialist are the natural referral partners — and all bookkeeping referrals from 30+ members go to one trusted partner.')">✉️ Invite</button></td></tr>
+</tbody></table></div></div>
+
+<!-- V10: Landscape -->
+<div id="v10" class="tab-content"><div class="card overflow-x">
+<h3>🔟 Landscape Services</h3>
+<p style="color:#777;font-size:.78rem;margin-bottom:8px">Best inviter(s): Andrew Blanchard (Fences), Sandra Williamson (Pest Control), Pamela Jessurum (Real Estate)</p>
+<table id="vT10"><thead><tr><th>#</th><th>Business</th><th>Phone</th><th>Location</th><th>Rating</th><th>Actions</th></tr></thead><tbody>
+<tr><td>1</td><td>LangScapes Athens LLC</td><td>(706) 255-8721</td><td>Athens, GA</td><td>4.9★</td><td><a href="tel:7062558721" class="btn btn-call">📞</a> <button class="btn btn-email" onclick="eModal('LangScapes Athens','Landscape Services','Our fence builder, pest control specialist, and real estate agent all regularly encounter clients with landscaping needs. They have no one in the chapter to refer those clients to — and landscaping referral triggers happen year-round.')">✉️ Invite</button></td></tr>
+<tr><td>2</td><td>Greenbriar Landscape Mgmt</td><td>(706) 316-0702</td><td>Athens, GA</td><td>4.8★</td><td><a href="tel:7063160702" class="btn btn-call">📞</a> <button class="btn btn-email" onclick="eModal('Greenbriar Landscape Management','Landscape Services','Building long-term referral partnerships with real estate and home service professionals. From spring clean-ups to fall hardscaping, our members encounter landscaping needs on every project.')">✉️ Invite</button></td></tr>
+<tr><td>3</td><td>Green Scene Landscape</td><td>(706) 224-6300</td><td>Athens, GA</td><td>5.0★</td><td><a href="tel:7062246300" class="btn btn-call">📞</a> <button class="btn btn-email" onclick="eModal('Green Scene Landscape','Landscape Services','Growing through trusted professional introductions vs. online ad spend. Our 31 members include a fence builder, pest control specialist, painter, and realtor — all natural referral partners for a landscaping professional.')">✉️ Invite</button></td></tr>
+<tr><td>4</td><td>Reynolds Landscape Contractors</td><td>(706) 353-0810</td><td>Athens, GA</td><td>4.8★</td><td><a href="tel:7063530810" class="btn btn-call">📞</a> <button class="btn btn-email" onclick="eModal('Reynolds Landscape Contractors','Landscape Services','Connecting with painters, fence builders, and real estate agents for curb appeal and renovation referrals. Our realtor prepares homes for sale regularly and needs a trusted landscaper to recommend.')">✉️ Invite</button></td></tr>
+<tr><td>5</td><td>GreenWorks Ecoscape</td><td>(706) 201-4949</td><td>Watkinsville, GA</td><td>4.7★</td><td><a href="tel:7062014949" class="btn btn-call">📞</a> <button class="btn btn-email" onclick="eModal('GreenWorks Ecoscape','Landscape Services','Located on Macon Hwy near Watkinsville — a hyper-local landscaper who would benefit from Oconee County referral partnerships. Our fence builder and pest control specialist work the same neighborhoods and generate constant landscaping referrals.')">✉️ Invite</button></td></tr>
+</tbody></table></div></div>
+</div>
+
+<!-- ==================== INVITATIONS ==================== -->
+<div id="invites" class="section">
+<h2>✉️ STEP 5 — Invitation Template Sets</h2>
+<p style="color:#94a3b8;margin-bottom:14px;font-size:.84rem">Pre-built invitation sets for each of the 10 missing professions. Click to expand and copy.</p>
+<div class="card" id="invAcc"></div>
+</div>
+
+<!-- ==================== EXEC PLAN ==================== -->
+<div id="plan" class="section">
+<h2>📈 STEP 6 — Recruitment Execution Plan</h2>
+
+<h3>🎯 Top 5 Professions to Recruit FIRST</h3>
+<div class="card overflow-x">
+<table><thead><tr><th>Priority</th><th>Profession</th><th>Why Recruit First</th></tr></thead><tbody>
+<tr><td style="color:#CF2030;font-weight:700">1</td><td>Roofing & Gutters</td><td>Most common seat across 17 regional chapters. Huge referral synergy with 5+ existing members.</td></tr>
+<tr><td style="color:#CF2030;font-weight:700">2</td><td>Plumbing</td><td>Essential trade missing from the strongest sphere. HVAC, Handyman, and Restoration can refer immediately.</td></tr>
+<tr><td style="color:#CF2030;font-weight:700">3</td><td>Personal Injury Law</td><td>Completes Health & Wellness sphere. Chiropractor and insurance see injury clients weekly.</td></tr>
+<tr><td style="color:#CF2030;font-weight:700">4</td><td>Electrician</td><td>Completes the trades trifecta (HVAC + Plumbing + Electrical). Every reno needs all three.</td></tr>
+<tr><td style="color:#CF2030;font-weight:700">5</td><td>Digital Marketing</td><td>Completes Marketing sphere. Every member is a potential client. Activates Web Design + Videographer.</td></tr>
+</tbody></table>
+</div>
+
+<h3>📅 WEEK 1: Initial Contact</h3>
+<div class="card overflow-x">
+<table><thead><tr><th>Day</th><th>Action</th><th>Who Invites</th><th>Professions</th><th>Vendors</th></tr></thead><tbody>
+<tr><td>Mon</td><td>Email Roofing vendors</td><td>Ross Kesterson & MC Horne</td><td>Roofing & Gutters</td><td>2–3 each</td></tr>
+<tr><td>Tue</td><td>Email Plumbing vendors</td><td>Nathan Coker & Cullen Gossett</td><td>Plumbing</td><td>2–3 each</td></tr>
+<tr><td>Wed</td><td>Email PI Law vendors</td><td>Ken Cook & Paul Lavelle</td><td>Personal Injury Law</td><td>2–3 each</td></tr>
+<tr><td>Thu</td><td>Chapter meeting — announce push</td><td>All members</td><td>All 10</td><td>—</td></tr>
+<tr><td>Fri</td><td>Email Electrician vendors</td><td>Nathan Coker & Ross Kesterson</td><td>Electrician</td><td>2–3 each</td></tr>
+</tbody></table>
+</div>
+
+<h3>📅 WEEK 2: Follow-Up & Expand</h3>
+<div class="card overflow-x">
+<table><thead><tr><th>Day</th><th>Action</th><th>Who Invites</th><th>Professions</th><th>Method</th></tr></thead><tbody>
+<tr><td>Mon</td><td>48-hr follow-ups + phone calls</td><td>Week 1 members</td><td>Roofing, Plumbing</td><td>Email + Phone</td></tr>
+<tr><td>Tue</td><td>Email Digital Mktg, Cleaning, Bookkeeping</td><td>Scott B., Pamela J., James H.</td><td>3 new professions</td><td>Email</td></tr>
+<tr><td>Wed</td><td>Email GC & Landscape + Follow-up PI</td><td>Andrew B., Sandra W.</td><td>Builder/GC, Landscape</td><td>Email</td></tr>
+<tr><td>Thu</td><td>Chapter meeting — celebrate RSVPs</td><td>All members</td><td>All 10</td><td>In-meeting</td></tr>
+<tr><td>Fri</td><td>Final follow-ups. SMS to non-responders.</td><td>All assigned</td><td>All 10</td><td>SMS + Phone</td></tr>
+</tbody></table>
+</div>
+
+<div class="card">
+<h3>📊 Priority Score Visualization</h3>
+<div class="chart-box"><canvas id="chartPlan"></canvas></div>
+</div>
+</div>
+
+<!-- ==================== TRACKING ==================== -->
+<div id="tracking" class="section">
+<h2>📋 Recruitment Tracking Template</h2>
+<div class="card overflow-x">
+<input type="text" class="search-box" placeholder="🔍 Search by profession, vendor, or member..." oninput="filterT('trackT',this.value)">
+<table id="trackT">
+<thead><tr>
+<th onclick="sortT('trackT',0)">Profession <span class="si">⇅</span></th>
+<th onclick="sortT('trackT',1)">Vendor <span class="si">⇅</span></th>
+<th onclick="sortT('trackT',2)">Invited By <span class="si">⇅</span></th>
+<th>Date</th><th>Method</th><th>RSVP</th><th>Attended</th><th>Follow-Up</th><th>Outcome</th>
+</tr></thead>
+<tbody id="trackBody"></tbody>
+</table>
+</div>
+</div>
+
+<!-- EMAIL MODAL -->
+<div class="modal-bg" id="emailMod">
+<div class="modal">
+<h3>✉️ Visitor Invitation Email</h3>
+<p style="color:#777;font-size:.84rem;margin-bottom:8px" id="modSubj"></p>
+<textarea id="modBody" rows="14"></textarea>
+<div class="btn-row">
+<a id="modSend" href="#" class="btn btn-email" style="padding:10px 20px;font-size:.88rem">📧 Open in Email Client</a>
+<button class="btn btn-invite" onclick="copyMod()" style="padding:10px 20px;font-size:.88rem">📋 Copy to Clipboard</button>
+<button class="btn-close" onclick="closeMod()">✕ Close</button>
+</div>
+</div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+<img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=500w" alt="Higgins Reports">
+<p>Generated by <strong style="color:#CF2030">Higgins AI</strong> for BNI Athens Referral Factory</p>
+<p>📞 <a href="tel:8557373386">855-737-3386</a> | ✉️ <a href="mailto:support@higgins.ai">support@higgins.ai</a> | 🌐 <a href="https://higgins.ai" target="_blank">higgins.ai</a></p>
+<p style="margin-top:6px">📍 2550 Pacific Ave. Suite 700, Dallas, TX 75226</p>
+</div>
+</div>
+
+<script>
+// Navigation
+function go(id){
+document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+document.getElementById(id).classList.add('active');
+document.querySelectorAll('#mainNav button').forEach(b=>b.classList.remove('active'));
+event.target.classList.add('active');
+if(id==='spheres')initSphC();
+if(id==='roster')initCatC();
+if(id==='missing'||id==='plan')initMissC();
+if(id==='plan')initPlanC();
+if(id==='invites')buildInv();
+if(id==='tracking')buildTrack();
+}
+
+// Vendor tabs
+function vTab(id){
+document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
+document.getElementById(id).classList.add('active');
+document.querySelectorAll('#vTabs button').forEach(b=>b.classList.remove('active'));
+event.target.classList.add('active');
+}
+
+// Filter
+function filterT(tid,q){
+const rows=document.getElementById(tid).querySelector('tbody').rows;
+const lq=q.toLowerCase();
+for(let r of rows){let m=false;for(let c of r.cells){if(c.textContent.toLowerCase().includes(lq)){m=true;break}}r.style.display=m?'':'none'}
+}
+
+// Sort
+const ss={};
+function sortT(tid,ci){
+const t=document.getElementById(tid),tb=t.querySelector('tbody'),rows=Array.from(tb.rows),ths=t.querySelectorAll('th');
+const k=tid+'_'+ci,asc=ss[k]!==true;ss[k]=asc;
+ths.forEach(h=>{h.classList.remove('asc','desc')});ths[ci].classList.add(asc?'asc':'desc');
+rows.sort((a,b)=>{let va=a.cells[ci]?.textContent.trim()||'',vb=b.cells[ci]?.textContent.trim()||'';const na=parseFloat(va),nb=parseFloat(vb);if(!isNaN(na)&&!isNaN(nb))return asc?na-nb:nb-na;return asc?va.localeCompare(vb):vb.localeCompare(va)});
+rows.forEach(r=>tb.appendChild(r));
+}
+
+// Email Modal
+function eModal(biz,prof,reason){
+const subj=`You're Invited: Join 31 Local Business Owners This Thursday at BNI Athens Referral Factory`;
+const body=`Dear ${biz} Team,\n\nI'm a member of BNI Athens Referral Factory, a structured professional referral group that meets every Thursday at 7:30 AM at Jennings Mill Country Club, 1150 Chambers Court, Watkinsville, GA 30677.\n\nI'm reaching out because I believe ${biz} would be an outstanding fit for our chapter as our ${prof} partner. Here's why:\n\n${reason}\n\nBNI is built on the philosophy of Givers Gain® — the idea that by helping others succeed, we all grow. Our members don't just hand out business cards; they actively look for business to refer to trusted partners every single week.\n\nTo visit our chapter, just complete this (***Visitor Invite***) simple form to reserve a seat and begin accelerating business.\n\nWe meet every Thursday at 7:30 AM at Jennings Mill Country Club, 1150 Chambers Court, Watkinsville, GA 30677.\n\nI'd love to welcome you as our guest — no cost, no commitment — just a chance to see the power of structured referral networking firsthand.\n\nLooking forward to connecting!\n\nWarm regards,\n[Your Name]\n[Your Company]\n[Your Phone]\n[Your Email]`;
+document.getElementById('modSubj').textContent='Subject: '+subj;
+document.getElementById('modBody').value=body;
+document.getElementById('modSend').href=`mailto:?subject=${encodeURIComponent(subj)}&body=${encodeURIComponent(body)}`;
+document.getElementById('emailMod').classList.add('show');
+}
+function closeMod(){document.getElementById('emailMod').classList.remove('show')}
+function copyMod(){const ta=document.getElementById('modBody');ta.select();document.execCommand('copy');const b=event.target;b.textContent='✅ Copied!';setTimeout(()=>b.textContent='📋 Copy to Clipboard',2000)}
+
+// Charts
+let catInit=false;
+function initCatC(){
+if(catInit)return;catInit=true;
+const d=[{l:'Construction & Trades',v:7},{l:'Finance & Insurance',v:5},{l:'Health & Wellness',v:4},{l:'Advertising & Marketing',v:4},{l:'Legal & Accounting',v:3},{l:'Real Estate Services',v:2},{l:'Cleaning Services',v:1},{l:'Car & Motorcycle',v:1},{l:'Event & Business',v:1},{l:'Organizations',v:1},{l:'Retail',v:1},{l:'Animals',v:1}];
+new Chart(document.getElementById('chartCat'),{type:'pie',data:{labels:d.map(x=>x.l+' ('+x.v+')'),datasets:[{data:d.map(x=>x.v),backgroundColor:['#CF2030','#fbbf24','#4ade80','#38bdf8','#a78bfa','#f472b6','#22d3ee','#fb923c','#818cf8','#e879f9','#34d399','#f87171']}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{color:'#e2e8f0',font:{size:10}}}}}});
+}
+
+let sphInit=false;
+function initSphC(){
+if(sphInit)return;sphInit=true;
+new Chart(document.getElementById('chartSpheres'),{type:'bar',data:{labels:['Home Services','Business & Prof.','Health & Wellness','Real Estate','Marketing'],datasets:[{label:'Seats',data:[9,6,6,5,4],backgroundColor:['#CF2030','#fbbf24','#4ade80','#38bdf8','#a78bfa'],borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:'#e2e8f0'},grid:{color:'#111'}},y:{ticks:{color:'#777'},grid:{color:'#111'}}}}});
+}
+
+let missInit=false;
+function initMissC(){
+if(missInit)return;missInit=true;
+const labels=['Roofing','Fin. Advisor','Plumbing','Electrician','PI Law','Dig. Marketing','Cleaning','Builder/GC','Bookkeeping','Landscaping'];
+const scores=[20,19,18,17,16,15,14,13,12,11];
+new Chart(document.getElementById('chartMissing'),{type:'bar',data:{labels,datasets:[{label:'Priority Score',data:scores,backgroundColor:scores.map((_,i)=>`hsl(${0+i*8},70%,${45+i*2}%)`),borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{ticks:{color:'#777'},grid:{color:'#111'}},y:{ticks:{color:'#e2e8f0',font:{size:11}},grid:{display:false}}}}});
+}
+
+let planInit=false;
+function initPlanC(){
+if(planInit)return;planInit=true;
+new Chart(document.getElementById('chartPlan'),{type:'bar',data:{labels:['Roofing','Plumbing','PI Law','Electrician','Digital Mktg'],datasets:[{label:'Recruitment Priority',data:[10,9,8,7,6],backgroundColor:['#CF2030','#e84855','#f07070','#f4a0a0','#f8c8c8'],borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:'#e2e8f0'},grid:{color:'#111'}},y:{ticks:{color:'#777'},grid:{color:'#111'}}}}});
+}
+
+// Invitation accordion
+let invB=false;
+function buildInv(){
+if(invB)return;invB=true;
+const inv=[
+{v:'Roofing & Gutters',ex:'Milledge Roofing',key:'Home inspector, restoration company, P&C insurance agent, and painter all encounter roofing needs regularly.',sms:'Our HVAC pro, handyman & restoration company need a roofer to refer to!',ph:'Our restoration pro and home inspector regularly encounter roofing needs.'},
+{v:'Financial Advisor',ex:'Fully Financial',key:'CPA, estate planning attorney, P&C insurance agent, and mortgage professional all encounter clients needing financial planning.',sms:'Our CPA, estate attorney & insurance members need a Financial Advisor!',ph:'Our CPA and estate attorney need to refer clients to a trusted financial advisor.'},
+{v:'Plumbing',ex:'Royal Flush Plumbing',key:'HVAC professional, restoration specialist, handyman, and home inspector all encounter plumbing needs regularly.',sms:'Our HVAC pro, handyman & restoration company need a plumber!',ph:'Our HVAC tech, handyman, and restoration pro all encounter plumbing needs.'},
+{v:'Electrician',ex:'Thunderbolt Electric',key:'HVAC, handyman, painter, restoration, and fence builder all encounter electrical needs on nearly every job.',sms:'Our HVAC, handyman & restoration members need an electrician!',ph:'Our trades professionals encounter electrical needs on every project.'},
+{v:'Personal Injury Law',ex:'Day Injury Law',key:'Chiropractor, massage therapist, P&C insurance agent, health insurance consultant, and recovery specialist all see clients with injuries.',sms:'Our chiropractor, massage therapist & insurance pros need a PI attorney!',ph:'Our chiropractor and insurance agents see injury clients weekly.'},
+{v:'Digital Marketing',ex:'Bipper Media',key:'Web designer, videographer, copywriter, and printer are already here. Digital marketing completes the creative sphere.',sms:'Our web designer, videographer & copywriter need a digital marketing pro!',ph:'Our creative team needs a digital marketing professional to complete the sphere.'},
+{v:'Cleaning Service',ex:'Dogwood Cleaning',key:'Real estate agent needs move-in/out cleans, restoration company needs post-project cleans, carpet cleaner can bundle services.',sms:'Our real estate agent & restoration company need a cleaning pro!',ph:'Our realtor and restoration company generate cleaning referrals constantly.'},
+{v:'Builder/GC',ex:'Resource Construction',key:'HVAC, painting, fencing, handyman, restoration, pest control — a GC connects all these trades and activates referrals.',sms:'31 pros including HVAC, painter, fences & restoration need a GC!',ph:'Our 7 trade professionals all need a general contractor to tie services together.'},
+{v:'Bookkeeping',ex:'Peach BPO',key:'CPA, payroll specialist, and virtual assistant all encounter small business owners who need bookkeeping help.',sms:'Our CPA & payroll specialist need a bookkeeper to refer to!',ph:'Our CPA and payroll professional need to refer clients to a trusted bookkeeper.'},
+{v:'Landscape Services',ex:'GreenWorks Ecoscape',key:'Fence builder, pest control specialist, painter, and real estate agent all regularly encounter landscaping needs.',sms:'Our fence builder, pest control & realtor need a landscaper!',ph:'Our fence builder and pest control specialist encounter landscaping needs regularly.'}
+];
+let h='';
+inv.forEach((x,i)=>{
+h+=`<div style="margin-bottom:10px"><button onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'" style="width:100%;text-align:left;background:#1a1a1a;color:#CF2030;border:1px solid #222;padding:12px 16px;border-radius:8px;cursor:pointer;font-size:.88rem;font-weight:600">📩 ${i+1}. ${x.v} (${x.ex}) — Click to Expand</button>
+<div style="display:none;padding:16px;background:#000;border:1px solid #1a1a1a;border-radius:0 0 8px 8px">
+<h3 style="color:#38bdf8">📧 Email Key Points:</h3><p style="color:#ccc;font-size:.84rem">${x.key}</p>
+<h3 style="color:#7c3aed;margin-top:10px">📱 SMS Template:</h3><p style="color:#ccc;font-size:.84rem">Hi! I'm with BNI Athens Referral Factory — 31 local pros in Watkinsville. ${x.sms} Visit Thu 7:30 AM? No cost. RSVP yes! (Visitor Invite)</p>
+<h3 style="color:#059669;margin-top:10px">📞 Phone Script:</h3><p style="color:#ccc;font-size:.84rem">"Hi, I'm [Member Name] from BNI Athens Referral Factory in Watkinsville. ${x.ph} Could I send you details about visiting? What's your best email?"</p>
+<div style="margin-top:10px"><button class="btn btn-email" onclick="eModal('${x.ex.replace(/'/g,"\\'")}','${x.v}','${x.key.replace(/'/g,"\\'")}')">✉️ Open Full Email Template</button></div>
+</div></div>`;
+});
+h+='<div class="alert alert-info" style="margin-top:14px">📌 <strong>Instructions:</strong> Copy templates from Higgins. Replace [Member Name] with your info. Replace (Visitor Invite) with your chapter URL. Replace [Date 1/2] with next two Thursday dates. Email, text, or call — then track!</div>';
+document.getElementById('invAcc').innerHTML=h;
+}
+
+// Tracking table
+let trackB=false;
+function buildTrack(){
+if(trackB)return;trackB=true;
+const data=[
+['Roofing','Milledge Roofing','Ross Kesterson'],['Roofing','Findlay Roofing','Ross Kesterson'],['Roofing','Premier Home Solutions','MC Horne'],['Roofing','Eastside Roofing','MC Horne'],['Roofing','Ridgeline Roofing','Paul Lavelle'],
+['Financial Advisor','Fully Financial','James Hasler'],['Financial Advisor','Arch Financial Planning','James Hasler'],['Financial Advisor','Elevate Wealth Advisory','Ryan Reynolds'],['Financial Advisor','Carson Advisory','Ryan Reynolds'],['Financial Advisor','Ability Wealth Group','Paul Lavelle'],
+['Plumbing','Royal Flush Plumbing','Nathan Coker'],['Plumbing','Blueprint Plumbing','Nathan Coker'],['Plumbing','Empire Plumbing','Cullen Gossett'],['Plumbing','Roseman Plumbing','Cullen Gossett'],['Plumbing','Remedy Plumbing','Ross Kesterson'],
+['Electrician','Classic City Electric','Nathan Coker'],['Electrician','Blue Moon Electric','Nathan Coker'],['Electrician','Thunderbolt Electric','Cullen Gossett'],['Electrician','Revamp Athens','Ross Kesterson'],['Electrician','Guardian Electric','Ross Kesterson'],
+['PI Law','Day Injury Law','Ken Cook'],['PI Law','Norris Injury Law','Ken Cook'],['PI Law','Hall & Collins','Paul Lavelle'],['PI Law','Joshua W. Branch','Paul Lavelle'],['PI Law','Larrison Law','Corey Harper'],
+['Digital Mktg','Bipper Media','Scott Brantley'],['Digital Mktg','Kaptiv8','Scott Brantley'],['Digital Mktg','Lightmark Media','Laura Green'],['Digital Mktg','Millner Digital','Marshall Manning'],['Digital Mktg','The Adsmith','Marshall Manning'],
+['Cleaning','Dogwood Cleaning','Pamela Jessurum'],['Cleaning','Team Clean Athens','Ross Kesterson'],['Cleaning','Maid Right','Jared Reeves'],['Cleaning','Hometown Cleaning','Pamela Jessurum'],['Cleaning','MAID 4 U','Jared Reeves'],
+['Builder/GC','Cambria Construction','Nathan Coker'],['Builder/GC','JOMA Construction','Hosea Foote'],['Builder/GC','Cecil Jennings','Andrew Blanchard'],['Builder/GC','ProBuilt Athens','Nathan Coker'],['Builder/GC','Resource Construction','Andrew Blanchard'],
+['Bookkeeping','Peach BPO','James Hasler'],['Bookkeeping','Moss Business Solutions','Julian Maluret'],['Bookkeeping','Inside Out Accounting','James Hasler'],['Bookkeeping','Beyond The Numbers','Robin Hill'],['Bookkeeping','Trinity Accounting','Julian Maluret'],
+['Landscape','LangScapes Athens','Andrew Blanchard'],['Landscape','Greenbriar Landscape','Sandra Williamson'],['Landscape','Green Scene Landscape','Pamela Jessurum'],['Landscape','Reynolds Landscape','Andrew Blanchard'],['Landscape','GreenWorks Ecoscape','Sandra Williamson']
+];
+const is='style="background:#000;color:#e2e8f0;border:1px solid #222;border-radius:4px;padding:3px 5px;font-size:.74rem"';
+let h='';
+data.forEach(r=>{
+h+=`<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td>
+<td><input type="date" ${is}></td>
+<td><select ${is}><option>—</option><option>Email</option><option>SMS</option><option>Phone</option></select></td>
+<td><select ${is}><option>—</option><option>Yes</option><option>No</option><option>Pending</option></select></td>
+<td><select ${is}><option>—</option><option>Yes</option><option>No</option></select></td>
+<td><input type="date" ${is}></td>
+<td><input type="text" placeholder="Notes..." ${is} style="width:110px;background:#000;color:#e2e8f0;border:1px solid #222;border-radius:4px;padding:3px 5px;font-size:.74rem"></td></tr>`;
+});
+document.getElementById('trackBody').innerHTML=h;
+}
+</script>
+</body>
+</html>

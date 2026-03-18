@@ -1,0 +1,1543 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Adeptrix — Interactive Client/Partner Assessment Dashboard</title>
+  <style>
+    :root{
+      --bg:#000000;
+      --panel:#0b0b0b;
+      --panel2:#0f0f0f;
+      --text:#e9e9e9;
+      --muted:#a9a9a9;
+      --grid:#1e1e1e;
+      --accent:#CF2030;
+      --accent2:#ff4b5a;
+      --ok:#33d17a;
+      --warn:#f5c542;
+      --bad:#ff6b6b;
+      --chip:#151515;
+      --shadow: 0 10px 30px rgba(0,0,0,.45);
+      --radius: 16px;
+      --radius2: 12px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+    }
+
+    *{ box-sizing: border-box; }
+    body{
+      margin:0;
+      font-family: var(--sans);
+      background: radial-gradient(1200px 700px at 20% -10%, rgba(207,32,48,0.22), rgba(0,0,0,0) 60%),
+                  radial-gradient(900px 500px at 90% 10%, rgba(207,32,48,0.12), rgba(0,0,0,0) 50%),
+                  var(--bg);
+      color: var(--text);
+    }
+
+    a{ color: var(--accent2); text-decoration: none; }
+    a:hover{ text-decoration: underline; }
+
+    /* Header/Footer */
+    header{
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(10px);
+      background: rgba(0,0,0,0.72);
+      border-bottom: 1px solid rgba(207,32,48,0.35);
+    }
+    .header-inner{
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 14px 18px;
+      display:flex;
+      gap:14px;
+      align-items:center;
+      justify-content: space-between;
+    }
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      min-width: 260px;
+    }
+    .brand img{
+      height: 34px;
+      width: auto;
+      display:block;
+      filter: drop-shadow(0 8px 18px rgba(0,0,0,.5));
+    }
+    .brand .title{
+      display:flex;
+      flex-direction:column;
+      line-height: 1.1;
+    }
+    .brand .title strong{
+      font-size: 14px;
+      letter-spacing: 0.2px;
+    }
+    .brand .title span{
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    nav{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+    .nav-btn{
+      border: 1px solid rgba(207,32,48,0.55);
+      background: linear-gradient(180deg, rgba(207,32,48,0.18), rgba(207,32,48,0.08));
+      color: var(--text);
+      padding: 8px 10px;
+      border-radius: 999px;
+      cursor: pointer;
+      font-size: 12px;
+      letter-spacing: .2px;
+      transition: transform .08s ease, border-color .15s ease, background .15s ease;
+      user-select:none;
+    }
+    .nav-btn:hover{ border-color: rgba(207,32,48,0.95); background: rgba(207,32,48,0.18); }
+    .nav-btn:active{ transform: translateY(1px); }
+
+    main{
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 18px;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .card-header{
+      padding: 14px 14px 10px 14px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      display:flex;
+      gap:10px;
+      align-items:flex-end;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+    .card-header h2{
+      margin:0;
+      font-size: 14px;
+      letter-spacing: .3px;
+    }
+    .card-header p{
+      margin:0;
+      color: var(--muted);
+      font-size: 12px;
+      max-width: 72ch;
+    }
+    .card-body{
+      padding: 14px;
+    }
+
+    /* Controls */
+    .controls{
+      display:flex;
+      gap:10px;
+      flex-wrap: wrap;
+      align-items:center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+    .controls-left, .controls-right{
+      display:flex;
+      gap:10px;
+      flex-wrap: wrap;
+      align-items:center;
+    }
+    .input, select{
+      background: rgba(0,0,0,0.35);
+      border: 1px solid rgba(255,255,255,0.12);
+      color: var(--text);
+      padding: 10px 10px;
+      border-radius: 12px;
+      min-width: 220px;
+      outline: none;
+      font-size: 13px;
+    }
+    .input::placeholder{ color: rgba(233,233,233,.45); }
+    select{ min-width: 190px; }
+    .btn{
+      background: rgba(207,32,48,0.18);
+      border: 1px solid rgba(207,32,48,0.55);
+      color: var(--text);
+      padding: 10px 12px;
+      border-radius: 12px;
+      cursor: pointer;
+      font-size: 13px;
+      transition: transform .08s ease, border-color .15s ease, background .15s ease;
+      user-select:none;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      white-space: nowrap;
+    }
+    .btn:hover{ border-color: rgba(207,32,48,0.95); background: rgba(207,32,48,0.24); }
+    .btn:active{ transform: translateY(1px); }
+    .btn.secondary{
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.14);
+    }
+    .btn.secondary:hover{ border-color: rgba(255,255,255,0.22); background: rgba(255,255,255,0.07); }
+
+    .chips{
+      display:flex; gap:8px; flex-wrap: wrap; align-items:center;
+    }
+    .chip{
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.10);
+      color: var(--muted);
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+    }
+    .chip strong{ color: var(--text); font-weight: 600; }
+
+    /* Table */
+    .table-wrap{
+      overflow:auto;
+      border-radius: var(--radius2);
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(0,0,0,0.30);
+    }
+    table{
+      border-collapse: collapse;
+      width: 100%;
+      min-width: 980px;
+      font-size: 12.5px;
+    }
+    thead th{
+      position: sticky;
+      top: 0;
+      z-index: 5;
+      background: rgba(10,10,10,0.95);
+      border-bottom: 1px solid rgba(207,32,48,0.35);
+      padding: 10px 10px;
+      text-align:left;
+      white-space: nowrap;
+      cursor: pointer;
+      user-select: none;
+    }
+    thead th .th{
+      display:flex; align-items:center; gap:8px;
+    }
+    thead th .sort{
+      font-family: var(--mono);
+      font-size: 11px;
+      color: rgba(233,233,233,0.55);
+    }
+    tbody td{
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      padding: 10px 10px;
+      vertical-align: top;
+    }
+    tbody tr:hover td{ background: rgba(207,32,48,0.06); }
+    .muted{ color: var(--muted); }
+
+    .score{
+      font-family: var(--mono);
+      font-weight: 700;
+      letter-spacing: 0.3px;
+    }
+    .score.ok{ color: var(--ok); }
+    .score.warn{ color: var(--warn); }
+    .score.bad{ color: var(--bad); }
+
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      padding: 4px 9px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.10);
+      font-size: 12px;
+      white-space: nowrap;
+    }
+    .pill.client{ border-color: rgba(51,209,122,0.35); }
+    .pill.partner{ border-color: rgba(245,197,66,0.35); }
+    .pill.multi{ border-color: rgba(207,32,48,0.55); }
+
+    .cell-actions{
+      display:flex;
+      gap:8px;
+      flex-wrap: wrap;
+      align-items:center;
+    }
+    .mini-btn{
+      padding: 6px 8px;
+      font-size: 12px;
+      border-radius: 10px;
+    }
+
+    /* Charts */
+    .charts{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+    @media (min-width: 980px){
+      .charts{
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+    .chart-card{
+      padding: 12px;
+      border-radius: var(--radius);
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(0,0,0,0.25);
+    }
+    .chart-title{
+      display:flex;
+      align-items:center;
+      justify-content: space-between;
+      gap:10px;
+      margin-bottom: 8px;
+    }
+    .chart-title h3{
+      margin:0;
+      font-size: 13px;
+      letter-spacing: .2px;
+    }
+    .chart-title span{
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--muted);
+    }
+    canvas{
+      width: 100%;
+      height: 240px;
+      display:block;
+      border-radius: 12px;
+      background: rgba(0,0,0,0.20);
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+
+    /* Footer */
+    footer{
+      margin-top: 18px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      background: rgba(0,0,0,0.55);
+    }
+    .footer-inner{
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 14px 18px;
+      display:flex;
+      gap: 12px;
+      align-items:center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .footer-inner img{
+      height: 18px;
+      width:auto;
+      opacity: 0.9;
+    }
+
+    /* Modal */
+    dialog{
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 16px;
+      background: rgba(10,10,10,0.92);
+      color: var(--text);
+      width: min(820px, 92vw);
+      box-shadow: var(--shadow);
+    }
+    dialog::backdrop{ background: rgba(0,0,0,0.65); }
+    .modal-header{
+      display:flex; align-items:flex-start; justify-content: space-between; gap: 10px;
+      padding: 14px 14px 10px 14px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .modal-header h3{ margin:0; font-size: 14px; }
+    .modal-body{ padding: 14px; }
+    textarea{
+      width: 100%;
+      min-height: 240px;
+      resize: vertical;
+      padding: 10px;
+      border-radius: 12px;
+      background: rgba(0,0,0,0.35);
+      border: 1px solid rgba(255,255,255,0.12);
+      color: var(--text);
+      font-family: var(--sans);
+      font-size: 13px;
+      outline: none;
+      line-height: 1.35;
+    }
+    .modal-actions{
+      display:flex; gap:10px; justify-content: flex-end; flex-wrap: wrap;
+      padding: 0 14px 14px 14px;
+    }
+
+    .note{
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.4;
+    }
+    .kpi{
+      display:grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap: 10px;
+    }
+    @media (min-width: 980px){
+      .kpi{ grid-template-columns: repeat(4, minmax(0,1fr)); }
+    }
+    .kpi .box{
+      background: rgba(0,0,0,0.25);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 14px;
+      padding: 12px;
+    }
+    .kpi .box .label{
+      color: var(--muted);
+      font-size: 11px;
+      margin-bottom: 6px;
+    }
+    .kpi .box .value{
+      font-family: var(--mono);
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: .2px;
+    }
+  </style>
+</head>
+
+<body>
+<header>
+  <div class="header-inner">
+    <div class="brand">
+      <img alt="Higgins Reports" src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w"/>
+      <div class="title">
+        <strong>Adeptrix — New Client Assessment</strong>
+        <span>Interactive dashboard (search/sort + charts + outreach actions)</span>
+      </div>
+    </div>
+    <nav>
+      <button class="nav-btn" onclick="scrollToEl('overview')">Overview</button>
+      <button class="nav-btn" onclick="scrollToEl('clients')">Clients Table</button>
+      <button class="nav-btn" onclick="scrollToEl('partners')">Partners Table</button>
+      <button class="nav-btn" onclick="scrollToEl('charts')">Charts</button>
+      <button class="nav-btn" onclick="downloadAllCSVs()">Download All CSVs</button>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section id="overview" class="card">
+    <div class="card-header">
+      <div>
+        <h2>Executive Summary (from report)</h2>
+        <p>Revenue priority: pilot projects & exoBAMS kit sales. Dashboard includes searchable/sortable tables + derived charts from all numeric fields available in the document sections provided.</p>
+      </div>
+      <div class="chips" id="overviewChips"></div>
+    </div>
+    <div class="card-body">
+      <div class="kpi" id="kpi"></div>
+      <p class="note" style="margin-top:12px;">
+        Data note: The Word doc largely contains company-level rows (not named individual contacts with emails). Where no email exists, the “Contact” button will open a chooser and can still draft a message to request the correct buyer/contact at that organization.
+      </p>
+    </div>
+  </section>
+
+  <section id="charts" class="card">
+    <div class="card-header">
+      <div>
+        <h2>Charts (all numbers)</h2>
+        <p>Client Fit distribution, Partner Fit distribution, and Top rankings by score. All charts are interactive via filtering in the tables (they update).</p>
+      </div>
+      <div class="controls-right">
+        <button class="btn secondary" onclick="resetFilters()">Reset Filters</button>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="charts">
+        <div class="chart-card">
+          <div class="chart-title">
+            <h3>Client Fit Score — distribution</h3>
+            <span id="chart1Meta">n/a</span>
+          </div>
+          <canvas id="clientDist"></canvas>
+        </div>
+        <div class="chart-card">
+          <div class="chart-title">
+            <h3>Partner Fit Score — distribution</h3>
+            <span id="chart2Meta">n/a</span>
+          </div>
+          <canvas id="partnerDist"></canvas>
+        </div>
+        <div class="chart-card">
+          <div class="chart-title">
+            <h3>Top Clients by Fit Score</h3>
+            <span id="chart3Meta">n/a</span>
+          </div>
+          <canvas id="topClients"></canvas>
+        </div>
+        <div class="chart-card">
+          <div class="chart-title">
+            <h3>Top Partners by Fit Score</h3>
+            <span id="chart4Meta">n/a</span>
+          </div>
+          <canvas id="topPartners"></canvas>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="clients" class="card">
+    <div class="card-header">
+      <div>
+        <h2>Master Contact Table — Top Companies (Clients / Client+Partner)</h2>
+        <p>Searchable/sortable. Includes outreach action buttons with auto-generated draft messaging based on Adeptrix offerings.</p>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="controls">
+        <div class="controls-left">
+          <input id="clientSearch" class="input" placeholder="Search clients (company, location, why, angle, risks)"/>
+          <select id="clientCategory">
+            <option value="">All categories</option>
+            <option value="Client">Client</option>
+            <option value="Client/Partner">Client/Partner</option>
+            <option value="Client (CRO)">Client (CRO)</option>
+          </select>
+          <select id="clientMinScore">
+            <option value="">Min score (any)</option>
+            <option value="70">70+</option>
+            <option value="75">75+</option>
+            <option value="80">80+</option>
+            <option value="85">85+</option>
+            <option value="90">90+</option>
+          </select>
+        </div>
+        <div class="controls-right">
+          <button class="btn" onclick="downloadCSV('clients')">Download Clients CSV</button>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table id="clientsTable">
+          <thead>
+            <tr>
+              <th data-col="Rank"><div class="th">Rank <span class="sort" id="sort-Rank"></span></div></th>
+              <th data-col="Company"><div class="th">Company <span class="sort" id="sort-Company"></span></div></th>
+              <th data-col="Industry"><div class="th">Industry <span class="sort" id="sort-Industry"></span></div></th>
+              <th data-col="Location"><div class="th">Location <span class="sort" id="sort-Location"></span></div></th>
+              <th data-col="Size"><div class="th">Size <span class="sort" id="sort-Size"></span></div></th>
+              <th data-col="ClientFitScore"><div class="th">Client Fit <span class="sort" id="sort-ClientFitScore"></span></div></th>
+              <th data-col="Category"><div class="th">Category <span class="sort" id="sort-Category"></span></div></th>
+              <th data-col="Confidence"><div class="th">Confidence <span class="sort" id="sort-Confidence"></span></div></th>
+              <th data-col="WhySuitable"><div class="th">Why Suitable <span class="sort" id="sort-WhySuitable"></span></div></th>
+              <th data-col="KeyRisks"><div class="th">Key Risks <span class="sort" id="sort-KeyRisks"></span></div></th>
+              <th data-col="BestOutreachAngle"><div class="th">Best Outreach Angle <span class="sort" id="sort-BestOutreachAngle"></span></div></th>
+              <th data-col="LinkedIn"><div class="th">LinkedIn <span class="sort" id="sort-LinkedIn"></span></div></th>
+              <th><div class="th">Actions</div></th>
+            </tr>
+          </thead>
+          <tbody id="clientsTbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section id="partners" class="card">
+    <div class="card-header">
+      <div>
+        <h2>Strategic Partners Table</h2>
+        <p>Searchable/sortable strategic partner candidates with next best action and partnership outreach drafting.</p>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="controls">
+        <div class="controls-left">
+          <input id="partnerSearch" class="input" placeholder="Search partners (company, why, risks, next action)"/>
+          <select id="partnerMinScore">
+            <option value="">Min score (any)</option>
+            <option value="70">70+</option>
+            <option value="75">75+</option>
+            <option value="80">80+</option>
+            <option value="85">85+</option>
+            <option value="90">90+</option>
+          </select>
+          <select id="partnerConfidence">
+            <option value="">All confidence</option>
+            <option value="High">High</option>
+            <option value="Medium">Medium</option>
+            <option value="Low">Low</option>
+          </select>
+        </div>
+        <div class="controls-right">
+          <button class="btn" onclick="downloadCSV('partners')">Download Partners CSV</button>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table id="partnersTable">
+          <thead>
+            <tr>
+              <th data-col="Rank"><div class="th">Rank <span class="sort" id="psort-Rank"></span></div></th>
+              <th data-col="Company"><div class="th">Company <span class="sort" id="psort-Company"></span></div></th>
+              <th data-col="PartnerFitScore"><div class="th">Partner Fit <span class="sort" id="psort-PartnerFitScore"></span></div></th>
+              <th data-col="Confidence"><div class="th">Confidence <span class="sort" id="psort-Confidence"></span></div></th>
+              <th data-col="WhySuitable"><div class="th">Why Suitable <span class="sort" id="psort-WhySuitable"></span></div></th>
+              <th data-col="KeyRisks"><div class="th">Key Risks <span class="sort" id="psort-KeyRisks"></span></div></th>
+              <th data-col="NextBestAction"><div class="th">Next Best Action <span class="sort" id="psort-NextBestAction"></span></div></th>
+              <th><div class="th">Actions</div></th>
+            </tr>
+          </thead>
+          <tbody id="partnersTbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <dialog id="contactModal">
+    <div class="modal-header">
+      <div>
+        <h3 id="modalTitle">Contact</h3>
+        <div class="note" id="modalSubtitle"></div>
+      </div>
+      <button class="btn secondary mini-btn" onclick="closeModal()">Close</button>
+    </div>
+    <div class="modal-body">
+      <div class="controls" style="margin:0 0 10px 0;">
+        <div class="controls-left">
+          <select id="contactChannel">
+            <option value="email">Email</option>
+            <option value="linkedin">LinkedIn</option>
+          </select>
+          <input id="contactTo" class="input" placeholder="Recipient email (if known) or leave blank"/>
+        </div>
+        <div class="controls-right">
+          <button class="btn secondary" onclick="copyDraft()">Copy Draft</button>
+          <button class="btn" onclick="launchContact()">Open in App</button>
+        </div>
+      </div>
+      <textarea id="contactDraft"></textarea>
+      <p class="note" style="margin-top:10px;">
+        Tip: if you don’t have a direct email, leave it blank and use the draft to request the right biomarker decision maker (VP/Director Translational Medicine/Biomarkers/Precision Medicine).
+      </p>
+    </div>
+    <div class="modal-actions"></div>
+  </dialog>
+</main>
+
+<footer>
+  <div class="footer-inner">
+    <div style="display:flex; align-items:center; gap:10px;">
+      <img alt="Higgins Reports" src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w"/>
+      <span>Built for decision-grade outreach: Adeptrix exoBAMS (pilot → repeat/scale → kit sales)</span>
+    </div>
+    <div>
+      <span class="muted">Theme: black background • Menu accent: CF2030</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // ---------------------------
+  // Data extracted from provided doc parts (companies + partners)
+  // ---------------------------
+
+  const reportMeta = {
+    company: "Adeptrix Corp",
+    website: "adeptrix.com",
+    hq: "100 Cummings Center, Ste. 339C, Beverly, MA 01915",
+    industry: "Life Science Tools / Proteomics / Liquid Biopsy",
+    offering: "exoBAMS technology: bead-assisted mass spectrometry kits and pilot project services for targeted exosome/EV profiling in liquid biopsies.",
+    outcomes: [
+      "Identify disease-specific biomarker candidates from liquid biopsies in ~1 week",
+      "Generate 500+ multiomic datapoints per sample",
+      "Enable ML/AI-ready datasets for biomarker triage",
+      "Eliminate need for tissue biopsies in early discovery"
+    ],
+    differentiators: [
+      "Lowest cost/multiomic datapoint in industry",
+      "EV-aware (tissue-specific liquid biopsy)",
+      "Automated high-throughput (2M+ datapoints/week)",
+      "Multiplex panels; MALDI-TOF based (fast, cheap)",
+      "42 patents granted/in process"
+    ],
+    cta: "Book a Pilot Project (discovery call → sample shipment → 1-week turnaround)"
+  };
+
+  const clients = [
+    {Rank:1, Company:"Roche", Industry:"Biotech", Location:"Basel, Switzerland", Size:"10,001+", ClientFitScore:95, Category:"Client", Confidence:"High",
+      LinkedIn:"https://www.linkedin.com/company/1602",
+      WhySuitable:"Diagnostics leader; Foundation Medicine ownership; liquid biopsy investment; oncology",
+      KeyRisks:"Long enterprise sales cycle; Swiss HQ adds complexity; may prefer internal build",
+      BestOutreachAngle:"EV proteomic layer complements genomic/liquid biopsy platform"},
+    {Rank:2, Company:"AstraZeneca", Industry:"Pharma", Location:"Cambridge, UK", Size:"10,001+", ClientFitScore:93, Category:"Client", Confidence:"High",
+      LinkedIn:"https://www.linkedin.com/company/1603",
+      WhySuitable:"Massive oncology pipeline (lung, colon); precision medicine commitment",
+      KeyRisks:"Bureaucratic procurement; long onboarding",
+      BestOutreachAngle:"Lung/colon biomarker strategy + EV-specific liquid biopsy with 1-week turnaround"},
+    {Rank:3, Company:"Pfizer", Industry:"Pharma", Location:"New York, NY", Size:"10,001+", ClientFitScore:92, Category:"Client", Confidence:"High",
+      LinkedIn:"https://www.linkedin.com/company/1185",
+      WhySuitable:"Oncology + neuroscience; large translational medicine teams",
+      KeyRisks:"Vendor qualification lengthy; potential internal tools",
+      BestOutreachAngle:"Cancer-specific EV biomarkers from blood; ML-ready multiomic output"},
+    {Rank:4, Company:"Bristol Myers Squibb", Industry:"Pharma", Location:"Lawrence, NJ", Size:"10,001+", ClientFitScore:91, Category:"Client", Confidence:"High",
+      LinkedIn:"https://www.linkedin.com/company/1773",
+      WhySuitable:"Immuno-oncology leader; biomarker-driven patient selection",
+      KeyRisks:"Competitive IO biomarker landscape; procurement complexity",
+      BestOutreachAngle:"Orthogonal EV-based liquid biopsy biomarkers for IO programs"},
+    {Rank:5, Company:"Merck (MSD)", Industry:"Pharma", Location:"Rahway, NJ", Size:"10,001+", ClientFitScore:91, Category:"Client", Confidence:"High",
+      LinkedIn:"https://www.linkedin.com/company/1486",
+      WhySuitable:"Keytruda drives biomarker investment; lung/colon focus aligns with case studies",
+      KeyRisks:"Large org; internal proteomics; vendor approval process",
+      BestOutreachAngle:"EV fingerprinting complements existing workflows; case studies show clean separation"},
+    {Rank:6, Company:"Novartis", Industry:"Pharma", Location:"Basel, Switzerland", Size:"10,001+", ClientFitScore:90, Category:"Client", Confidence:"High",
+      LinkedIn:"https://www.linkedin.com/company/1406",
+      WhySuitable:"Precision oncology investment; strong R&D budget",
+      KeyRisks:"Swiss HQ; enterprise procurement; established vendor preference",
+      BestOutreachAngle:"Next-gen liquid biopsy biomarkers; high-throughput EV profiling at low cost/datapoint"},
+    {Rank:7, Company:"Eli Lilly", Industry:"Pharma", Location:"Indianapolis, IN", Size:"10,001+", ClientFitScore:89, Category:"Client", Confidence:"High",
+      LinkedIn:"https://www.linkedin.com/company/1663",
+      WhySuitable:"Alzheimer’s program drives blood-based neuro biomarker urgency; neuro-EV capture relevance",
+      KeyRisks:"Shipping time; neuro teams may be unfamiliar with MALDI-EV",
+      BestOutreachAngle:"Neuron-derived EV profiling from blood (no spinal tap) + 1-week turnaround"},
+    {Rank:8, Company:"Genentech", Industry:"Biotech", Location:"S. San Francisco, CA", Size:"10,001+", ClientFitScore:88, Category:"Client", Confidence:"High",
+      LinkedIn:"https://www.linkedin.com/company/2276",
+      WhySuitable:"Oncology biomarker discovery core competency",
+      KeyRisks:"May defer to Roche parent for vendor decisions",
+      BestOutreachAngle:"EV-specific liquid biopsy to accelerate oncology biomarker triage"},
+    {Rank:9, Company:"Amgen", Industry:"Biotech", Location:"Thousand Oaks, CA", Size:"10,001+", ClientFitScore:87, Category:"Client", Confidence:"High",
+      LinkedIn:"https://www.linkedin.com/company/2068",
+      WhySuitable:"Growing oncology pipeline; strong translational medicine",
+      KeyRisks:"Internal capabilities; West Coast distance",
+      BestOutreachAngle:"High-content biomarker discovery fast (2M+ datapoints/week throughput)"},
+    {Rank:10, Company:"Gilead Sciences", Industry:"Biotech", Location:"San Mateo, CA", Size:"10,001+", ClientFitScore:87, Category:"Client", Confidence:"High",
+      LinkedIn:"https://www.linkedin.com/company/163993",
+      WhySuitable:"Oncology expansion (Trodelvy); well-funded R&D",
+      KeyRisks:"Newer oncology biomarker infrastructure",
+      BestOutreachAngle:"Tumor EV signatures to support companion biomarker needs"},
+    {Rank:11, Company:"Regeneron", Industry:"Biotech", Location:"Tarrytown, NY", Size:"10,001+", ClientFitScore:86, Category:"Client", Confidence:"High",
+      LinkedIn:"https://www.linkedin.com/company/13476",
+      WhySuitable:"Genetics-driven discovery; proteomics in-house; oncology + immunology",
+      KeyRisks:"May see as redundant vs internal proteomics",
+      BestOutreachAngle:"Orthogonal EV proteomic layer to complement genetics-first approach"},
+    {Rank:12, Company:"AbbVie", Industry:"Pharma", Location:"North Chicago, IL", Size:"10,001+", ClientFitScore:86, Category:"Client", Confidence:"High",
+      LinkedIn:"https://www.linkedin.com/company/1304385",
+      WhySuitable:"Oncology + immunology franchise; translational medicine capacity",
+      KeyRisks:"Vendor qualification; bureaucracy",
+      BestOutreachAngle:"EV liquid biopsy data in ~1 week to accelerate biomarker discovery"},
+    {Rank:13, Company:"Sanofi", Industry:"Pharma", Location:"Paris, France", Size:"10,001+", ClientFitScore:85, Category:"Client", Confidence:"High",
+      LinkedIn:"https://www.linkedin.com/company/1642",
+      WhySuitable:"Oncology + immunology; precision medicine investment; US R&D presence",
+      KeyRisks:"European HQ; long sales cycle",
+      BestOutreachAngle:"Targeted EV profiling for precision medicine biomarker programs"},
+    {Rank:14, Company:"Takeda", Industry:"Pharma", Location:"Tokyo / Cambridge, MA", Size:"10,001+", ClientFitScore:83, Category:"Client", Confidence:"High",
+      LinkedIn:"https://www.linkedin.com/company/5482",
+      WhySuitable:"GI oncology (colon) + neuroscience; Cambridge proximity for pilots",
+      KeyRisks:"Japanese decision cadence may be slower",
+      BestOutreachAngle:"Colon cancer EV signatures + easy pilot logistics (Cambridge/Beverly proximity)"},
+    {Rank:15, Company:"GSK", Industry:"Pharma", Location:"London, UK", Size:"10,001+", ClientFitScore:83, Category:"Client", Confidence:"High",
+      LinkedIn:"https://www.linkedin.com/company/1399",
+      WhySuitable:"Oncology precision medicine strategy",
+      KeyRisks:"UK HQ; may prefer European vendors",
+      BestOutreachAngle:"EV fingerprinting for biomarker triage with ML-ready output"},
+    {Rank:16, Company:"J&J (Janssen)", Industry:"Pharma", Location:"Raritan, NJ", Size:"10,001+", ClientFitScore:83, Category:"Client", Confidence:"High",
+      LinkedIn:"https://www.linkedin.com/company/1204",
+      WhySuitable:"Oncology + neuroscience + immunology; NJ proximity",
+      KeyRisks:"Complex procurement; very large org",
+      BestOutreachAngle:"Tissue-specific EV liquid biopsy from blood across multiple TAs"},
+    {Rank:17, Company:"Moderna", Industry:"Biotech", Location:"Cambridge, MA", Size:"1,001–5,000", ClientFitScore:82, Category:"Client", Confidence:"High",
+      LinkedIn:"https://www.linkedin.com/company/2281734",
+      WhySuitable:"mRNA oncology vaccines; close geographic proximity",
+      KeyRisks:"Newer oncology biomarkers; may lack proteomics workflows",
+      BestOutreachAngle:"Fast pilot near HQ: biomarker-driven selection/monitoring for trials"},
+    {Rank:18, Company:"Daiichi Sankyo", Industry:"Pharma", Location:"Basking Ridge, NJ", Size:"10,001+", ClientFitScore:82, Category:"Client", Confidence:"High",
+      LinkedIn:"https://www.linkedin.com/company/7635",
+      WhySuitable:"ADC leader (Enhertu); oncology biomarker needs",
+      KeyRisks:"Dual JP/US decision-making",
+      BestOutreachAngle:"HER2+ EV capture for ADC companion biomarker development"},
+    {Rank:19, Company:"Tempus AI", Industry:"Biotech", Location:"Chicago, IL", Size:"1,001–5,000", ClientFitScore:82, Category:"Client/Partner", Confidence:"Medium",
+      LinkedIn:"https://www.linkedin.com/company/10262473",
+      WhySuitable:"AI precision medicine; genomic+proteomic integration; oncology focus",
+      KeyRisks:"May prefer partnership/equity vs purchase",
+      BestOutreachAngle:"ML-ready EV multiomic data stream (2M+ datapoints/week) to enrich models"},
+    {Rank:20, Company:"BioNTech", Industry:"Biotech", Location:"Mainz, Germany", Size:"1,001–5,000", ClientFitScore:80, Category:"Client", Confidence:"Medium",
+      LinkedIn:"https://www.linkedin.com/company/4001311",
+      WhySuitable:"mRNA cancer vaccines; biomarker needs for oncology trials",
+      KeyRisks:"German HQ; early oncology programs",
+      BestOutreachAngle:"EV biomarkers to support individualized immunotherapy development"},
+    {Rank:21, Company:"GRAIL", Industry:"Biotech", Location:"Menlo Park, CA", Size:"1,001–5,000", ClientFitScore:80, Category:"Client/Partner", Confidence:"Medium",
+      LinkedIn:"https://www.linkedin.com/company/10399839",
+      WhySuitable:"Multi-cancer early detection; liquid biopsy leadership",
+      KeyRisks:"Methylation-focused modality",
+      BestOutreachAngle:"Proteomic EV layer complements methylation signals for detection/stratification"},
+    {Rank:22, Company:"Alnylam", Industry:"Biotech", Location:"Cambridge, MA", Size:"1,001–5,000", ClientFitScore:79, Category:"Client", Confidence:"Medium",
+      LinkedIn:"https://www.linkedin.com/company/48171",
+      WhySuitable:"RNA therapeutics; Cambridge proximity; potential tissue-specific EV monitoring",
+      KeyRisks:"Narrow therapeutic focus",
+      BestOutreachAngle:"Liver-specific EV profiling as non-invasive monitoring tool"},
+    {Rank:23, Company:"Incyte", Industry:"Pharma", Location:"Wilmington, DE", Size:"1,001–5,000", ClientFitScore:78, Category:"Client", Confidence:"Medium",
+      LinkedIn:"https://www.linkedin.com/company/6761",
+      WhySuitable:"Oncology + inflammation; nimbler procurement vs mega-pharma",
+      KeyRisks:"Smaller biomarker team; limited internal proteomics",
+      BestOutreachAngle:"Fast, affordable pilot projects to accelerate biomarker discovery"},
+    {Rank:24, Company:"Charles River Labs", Industry:"Biotech", Location:"Wilmington, MA", Size:"10,001+", ClientFitScore:77, Category:"Client (CRO)", Confidence:"High",
+      LinkedIn:"https://www.linkedin.com/company/8306",
+      WhySuitable:"CRO with biomarker services; 20 min from Adeptrix; can productize service",
+      KeyRisks:"Pricing pressure; needs proof of client demand",
+      BestOutreachAngle:"Add differentiated EV profiling to service menu quickly (local training/logistics)"},
+    {Rank:25, Company:"Neurocrine Biosciences", Industry:"Biotech", Location:"San Diego, CA", Size:"1,001–5,000", ClientFitScore:76, Category:"Client", Confidence:"Medium",
+      LinkedIn:"https://www.linkedin.com/company/9567",
+      WhySuitable:"Neuroscience focus; potential neuro-EV biomarkers",
+      KeyRisks:"Narrow focus; limited biomarker infrastructure (unknown)",
+      BestOutreachAngle:"Neuro-EV liquid biopsy for CNS drug monitoring/PD biomarkers"},
+    {Rank:26, Company:"Myriad Genetics", Industry:"Biotech", Location:"Salt Lake City, UT", Size:"1,001–5,000", ClientFitScore:76, Category:"Client", Confidence:"Medium",
+      LinkedIn:"https://www.linkedin.com/company/11901",
+      WhySuitable:"Companion diagnostics experience; oncology panels",
+      KeyRisks:"Genomics-centric organization",
+      BestOutreachAngle:"Orthogonal proteomic EV biomarkers to strengthen/extend diagnostic panels"},
+    {Rank:27, Company:"ICON plc", Industry:"Biotech", Location:"Dublin, Ireland", Size:"10,001+", ClientFitScore:74, Category:"Client (CRO)", Confidence:"Medium",
+      LinkedIn:"https://www.linkedin.com/company/5831",
+      WhySuitable:"Global CRO; biomarker services for trials; can differentiate with EV layer",
+      KeyRisks:"Cost sensitivity; needs clinical utility proof",
+      BestOutreachAngle:"Offer sponsors EV-based liquid biopsy biomarker discovery as add-on service"},
+    {Rank:28, Company:"Exelixis", Industry:"Biotech", Location:"Alameda, CA", Size:"1,001–5,000", ClientFitScore:74, Category:"Client", Confidence:"Medium",
+      LinkedIn:"https://www.linkedin.com/company/8013",
+      WhySuitable:"Oncology focus; growing pipeline",
+      KeyRisks:"Smaller translational team",
+      BestOutreachAngle:"High-content EV profiling for expanding oncology pipeline biomarker work"},
+    {Rank:29, Company:"Genmab", Industry:"Biotech", Location:"Copenhagen, Denmark", Size:"1,001–5,000", ClientFitScore:74, Category:"Client", Confidence:"Medium",
+      LinkedIn:"https://www.linkedin.com/company/12969",
+      WhySuitable:"Antibody therapeutics; oncology focus",
+      KeyRisks:"European vendor preferences; distance",
+      BestOutreachAngle:"Companion biomarker discovery for antibody programs via EV profiling"},
+    {Rank:30, Company:"Legend Biotech", Industry:"Biotech", Location:"Somerset, NJ", Size:"1,001–5,000", ClientFitScore:73, Category:"Client", Confidence:"Medium",
+      LinkedIn:"https://www.linkedin.com/company/22330287",
+      WhySuitable:"Cell therapy oncology; NJ proximity",
+      KeyRisks:"Biomarker needs differ in cell therapy",
+      BestOutreachAngle:"Response monitoring via tumor-specific EV profiling in cell therapy trials"}
+  ];
+
+  const partners = [
+    {Rank:1, Company:"Bruker Daltonics", PartnerFitScore:95, Confidence:"High",
+      WhySuitable:"Existing partnership since 2010; exoBAMS designed for Bruker MALDI-TOF; HQ proximity (Billerica, MA)",
+      KeyRisks:"May seek exclusivity; internal priorities may shift",
+      NextBestAction:"Propose co-marketing agreement + joint application note for exoBAMS on timsTOF"},
+    {Rank:2, Company:"Thermo Fisher Scientific", PartnerFitScore:85, Confidence:"Medium",
+      WhySuitable:"Dominant life science tools distribution; MALDI capabilities; global channels",
+      KeyRisks:"May prefer internal development; competitive dynamics (Danaher ecosystem)",
+      NextBestAction:"Exploratory meeting; position as consumables/reagent revenue + rapid application expansion"},
+    {Rank:3, Company:"Guardant Health", PartnerFitScore:85, Confidence:"Medium",
+      WhySuitable:"Liquid biopsy leader (ctDNA); exoBAMS adds orthogonal EV proteomic data",
+      KeyRisks:"May see as modality divergence from core",
+      NextBestAction:"Propose joint pilot: ctDNA + exoBAMS on same cohort to show lift"},
+    {Rank:4, Company:"SCIEX (Danaher)", PartnerFitScore:83, Confidence:"Medium",
+      WhySuitable:"MS leader; exoBAMS sample prep feeds LC-MS/MS validation workflows",
+      KeyRisks:"Danaher relationship complexity",
+      NextBestAction:"Position as sample prep partner; propose applications collaboration"},
+    {Rank:5, Company:"Agilent Technologies", PartnerFitScore:81, Confidence:"Medium",
+      WhySuitable:"MS + diagnostics tools; co-marketing/integration potential",
+      KeyRisks:"Potential channel conflict vs Bruker",
+      NextBestAction:"Exploratory applications partnership conversation"},
+    {Rank:6, Company:"bioMérieux", PartnerFitScore:78, Confidence:"Medium",
+      WhySuitable:"MALDI biotyping leader (VITEK MS); exoBAMS expands MALDI applications",
+      KeyRisks:"Clinical regulatory path is long",
+      NextBestAction:"Joint proof-of-concept study (RUO positioning first)"},
+    {Rank:7, Company:"Tempus AI", PartnerFitScore:77, Confidence:"Medium",
+      WhySuitable:"AI precision medicine; ML-ready multiomic datasets",
+      KeyRisks:"May want equity/data partnership",
+      NextBestAction:"Propose data partnership / co-publication concept note"},
+    {Rank:8, Company:"Foundation Medicine", PartnerFitScore:76, Confidence:"Medium",
+      WhySuitable:"CGP + liquid biopsy expansion; Boston proximity",
+      KeyRisks:"Roche parent decision flow",
+      NextBestAction:"Propose complementary pilot study + joint poster"},
+    {Rank:9, Company:"Waters Corporation", PartnerFitScore:75, Confidence:"Medium",
+      WhySuitable:"Mass spec ecosystem; sample prep partnerships",
+      KeyRisks:"Less established in clinical proteomics (unknown)",
+      NextBestAction:"Propose applications partnership and workflow positioning"},
+    {Rank:10, Company:"MESO SCALE DIAGNOSTICS (MSD)", PartnerFitScore:74, Confidence:"Medium",
+      WhySuitable:"Immunoassay leader; EV capture upstream compatibility",
+      KeyRisks:"Readout platform competition",
+      NextBestAction:"Propose side-by-side comparison study + workflow joint positioning"},
+    {Rank:11, Company:"10x Genomics", PartnerFitScore:72, Confidence:"Low",
+      WhySuitable:"Single-cell leader; adjacent biology space",
+      KeyRisks:"Different modality; low overlap today",
+      NextBestAction:"Monitor for convergence; keep in nurture list"},
+    {Rank:12, Company:"Flatiron Health (Roche)", PartnerFitScore:70, Confidence:"Low",
+      WhySuitable:"Real-world oncology data; biomarker data could enrich datasets",
+      KeyRisks:"Data partnership complexity; regulatory considerations",
+      NextBestAction:"Long-term: explore RWE + biomarker linkage concept (intro only)"}
+  ];
+
+  // ---------------------------
+  // State
+  // ---------------------------
+  let clientState = {
+    sortCol: "ClientFitScore",
+    sortDir: "desc",
+    search: "",
+    category: "",
+    minScore: null
+  };
+
+  let partnerState = {
+    sortCol: "PartnerFitScore",
+    sortDir: "desc",
+    search: "",
+    minScore: null,
+    confidence: ""
+  };
+
+  let filteredClients = [...clients];
+  let filteredPartners = [...partners];
+
+  // ---------------------------
+  // Helpers
+  // ---------------------------
+  const el = (id) => document.getElementById(id);
+
+  function scrollToEl(id){
+    const target = document.getElementById(id);
+    if(target) target.scrollIntoView({behavior:"smooth", block:"start"});
+  }
+
+  function scoreClass(v){
+    if(v >= 90) return "ok";
+    if(v >= 80) return "warn";
+    return "bad";
+  }
+
+  function categoryPill(category){
+    const c = (category || "").toLowerCase();
+    let cls = "pill";
+    if(c.includes("client/partner") || c.includes("multi")) cls += " multi";
+    else if(c.includes("partner")) cls += " partner";
+    else cls += " client";
+    return `<span class="${cls}">${escapeHtml(category||"Unknown")}</span>`;
+  }
+
+  function escapeHtml(str){
+    return (str ?? "").toString()
+      .replaceAll("&","&amp;")
+      .replaceAll("<","&lt;")
+      .replaceAll(">","&gt;")
+      .replaceAll('"',"&quot;")
+      .replaceAll("'","&#039;");
+  }
+
+  function normalize(str){
+    return (str ?? "").toString().toLowerCase();
+  }
+
+  function includesSearch(row, fields, q){
+    if(!q) return true;
+    const qq = normalize(q);
+    return fields.some(f => normalize(row[f]).includes(qq));
+  }
+
+  function toNumberMaybe(v){
+    if(typeof v === "number") return v;
+    const n = Number((v ?? "").toString().replaceAll(",","").replaceAll("+",""));
+    return Number.isFinite(n) ? n : null;
+  }
+
+  function compare(a,b,dir){
+    if(a === b) return 0;
+    if(a === null || a === undefined) return 1;
+    if(b === null || b === undefined) return -1;
+    if(typeof a === "number" && typeof b === "number"){
+      return dir === "asc" ? (a-b) : (b-a);
+    }
+    // string compare
+    const as = a.toString();
+    const bs = b.toString();
+    return dir === "asc" ? as.localeCompare(bs) : bs.localeCompare(as);
+  }
+
+  // ---------------------------
+  // Rendering
+  // ---------------------------
+  function renderOverview(){
+    // Executive summary counts based on currently loaded dataset
+    const totalClientRows = clients.length;
+    const totalPartnerRows = partners.length;
+    const topClient = [...clients].sort((a,b)=>b.ClientFitScore-a.ClientFitScore)[0];
+    const topPartner = [...partners].sort((a,b)=>b.PartnerFitScore-a.PartnerFitScore)[0];
+
+    const chips = [
+      {k:"Clients loaded", v: totalClientRows},
+      {k:"Partners loaded", v: totalPartnerRows},
+      {k:"Top Client", v: `${topClient.Company} (${topClient.ClientFitScore})`},
+      {k:"Top Partner", v: `${topPartner.Company} (${topPartner.PartnerFitScore})`}
+    ];
+    el("overviewChips").innerHTML = chips.map(c=>`<span class="chip"><strong>${escapeHtml(c.v)}</strong> <span class="muted">· ${escapeHtml(c.k)}</span></span>`).join("");
+
+    const kpis = [
+      {label:"Revenue Priority", value:"Pilots → Kits"},
+      {label:"Pilot Typical", value:"~$80K"},
+      {label:"Turnaround", value:"~1 week"},
+      {label:"Datapoints", value:"500+/sample"}
+    ];
+    el("kpi").innerHTML = kpis.map(k=>`
+      <div class="box">
+        <div class="label">${escapeHtml(k.label)}</div>
+        <div class="value">${escapeHtml(k.value)}</div>
+      </div>
+    `).join("");
+  }
+
+  function renderClientsTable(){
+    const tbody = el("clientsTbody");
+    tbody.innerHTML = filteredClients.map(r=>{
+      const linkedin = r.LinkedIn ? `<a href="${escapeHtml(r.LinkedIn)}" target="_blank" rel="noopener">Open</a>` : `<span class="muted">Unknown</span>`;
+      const score = r.ClientFitScore;
+      return `
+        <tr>
+          <td>${r.Rank}</td>
+          <td><strong>${escapeHtml(r.Company)}</strong></td>
+          <td>${escapeHtml(r.Industry)}</td>
+          <td>${escapeHtml(r.Location)}</td>
+          <td class="muted">${escapeHtml(r.Size)}</td>
+          <td><span class="score ${scoreClass(score)}">${score}</span></td>
+          <td>${categoryPill(r.Category)}</td>
+          <td class="muted">${escapeHtml(r.Confidence || "Unknown")}</td>
+          <td>${escapeHtml(r.WhySuitable)}</td>
+          <td class="muted">${escapeHtml(r.KeyRisks)}</td>
+          <td>${escapeHtml(r.BestOutreachAngle)}</td>
+          <td>${linkedin}</td>
+          <td>
+            <div class="cell-actions">
+              <button class="btn mini-btn" onclick="openContactModal('client', ${r.Rank})">Contact</button>
+              <button class="btn secondary mini-btn" onclick="copyRowAsJSON('client', ${r.Rank})">Copy Row</button>
+            </div>
+          </td>
+        </tr>
+      `;
+    }).join("");
+
+    // update sort indicators
+    [...document.querySelectorAll("#clientsTable thead th[data-col]")].forEach(th=>{
+      const c = th.getAttribute("data-col");
+      const node = el("sort-" + c);
+      if(!node) return;
+      if(c === clientState.sortCol){
+        node.textContent = clientState.sortDir === "asc" ? "↑" : "↓";
+      } else {
+        node.textContent = "";
+      }
+    });
+  }
+
+  function renderPartnersTable(){
+    const tbody = el("partnersTbody");
+    tbody.innerHTML = filteredPartners.map(r=>{
+      const score = r.PartnerFitScore;
+      return `
+        <tr>
+          <td>${r.Rank}</td>
+          <td><strong>${escapeHtml(r.Company)}</strong></td>
+          <td><span class="score ${scoreClass(score)}">${score}</span></td>
+          <td class="muted">${escapeHtml(r.Confidence || "Unknown")}</td>
+          <td>${escapeHtml(r.WhySuitable)}</td>
+          <td class="muted">${escapeHtml(r.KeyRisks)}</td>
+          <td>${escapeHtml(r.NextBestAction)}</td>
+          <td>
+            <div class="cell-actions">
+              <button class="btn mini-btn" onclick="openContactModal('partner', ${r.Rank})">Contact</button>
+              <button class="btn secondary mini-btn" onclick="copyRowAsJSON('partner', ${r.Rank})">Copy Row</button>
+            </div>
+          </td>
+        </tr>
+      `;
+    }).join("");
+
+    [...document.querySelectorAll("#partnersTable thead th[data-col]")].forEach(th=>{
+      const c = th.getAttribute("data-col");
+      const node = el("psort-" + c);
+      if(!node) return;
+      if(c === partnerState.sortCol){
+        node.textContent = partnerState.sortDir === "asc" ? "↑" : "↓";
+      } else {
+        node.textContent = "";
+      }
+    });
+  }
+
+  // ---------------------------
+  // Filtering/Sorting
+  // ---------------------------
+  function applyClientFilters(){
+    const q = clientState.search;
+    const category = clientState.category;
+    const minScore = clientState.minScore;
+
+    filteredClients = clients
+      .filter(r => includesSearch(r, ["Company","Industry","Location","Size","Category","Confidence","WhySuitable","KeyRisks","BestOutreachAngle","LinkedIn"], q))
+      .filter(r => !category ? true : (r.Category === category))
+      .filter(r => !minScore ? true : (r.ClientFitScore >= minScore));
+
+    filteredClients.sort((a,b)=> {
+      const col = clientState.sortCol;
+      const dir = clientState.sortDir;
+      let av = a[col], bv = b[col];
+      // numeric cols
+      if(col === "ClientFitScore" || col === "Rank"){
+        av = toNumberMaybe(av); bv = toNumberMaybe(bv);
+      }
+      return compare(av,bv,dir);
+    });
+
+    renderClientsTable();
+    renderCharts();
+  }
+
+  function applyPartnerFilters(){
+    const q = partnerState.search;
+    const minScore = partnerState.minScore;
+    const conf = partnerState.confidence;
+
+    filteredPartners = partners
+      .filter(r => includesSearch(r, ["Company","Confidence","WhySuitable","KeyRisks","NextBestAction"], q))
+      .filter(r => !minScore ? true : (r.PartnerFitScore >= minScore))
+      .filter(r => !conf ? true : (r.Confidence === conf));
+
+    filteredPartners.sort((a,b)=> {
+      const col = partnerState.sortCol;
+      const dir = partnerState.sortDir;
+      let av = a[col], bv = b[col];
+      if(col === "PartnerFitScore" || col === "Rank"){
+        av = toNumberMaybe(av); bv = toNumberMaybe(bv);
+      }
+      return compare(av,bv,dir);
+    });
+
+    renderPartnersTable();
+    renderCharts();
+  }
+
+  function resetFilters(){
+    clientState.search = "";
+    clientState.category = "";
+    clientState.minScore = null;
+    el("clientSearch").value = "";
+    el("clientCategory").value = "";
+    el("clientMinScore").value = "";
+
+    partnerState.search = "";
+    partnerState.minScore = null;
+    partnerState.confidence = "";
+    el("partnerSearch").value = "";
+    el("partnerMinScore").value = "";
+    el("partnerConfidence").value = "";
+
+    applyClientFilters();
+    applyPartnerFilters();
+  }
+
+  // ---------------------------
+  // Charts (simple canvas rendering)
+  // ---------------------------
+  function clearCanvas(ctx){
+    ctx.clearRect(0,0,ctx.canvas.width, ctx.canvas.height);
+  }
+
+  function resizeCanvas(canvas){
+    const rect = canvas.getBoundingClientRect();
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = Math.floor(rect.width * dpr);
+    canvas.height = Math.floor(rect.height * dpr);
+    const ctx = canvas.getContext("2d");
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    return ctx;
+  }
+
+  function drawBarChart(canvasId, labels, values, options={}){
+    const canvas = el(canvasId);
+    const ctx = resizeCanvas(canvas);
+    const W = canvas.getBoundingClientRect().width;
+    const H = canvas.getBoundingClientRect().height;
+
+    clearCanvas(ctx);
+
+    // paddings
+    const padL = 36, padR = 12, padT = 14, padB = 28;
+    const innerW = W - padL - padR;
+    const innerH = H - padT - padB;
+
+    // axes
+    ctx.strokeStyle = "rgba(255,255,255,0.12)";
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(padL, padT);
+    ctx.lineTo(padL, padT + innerH);
+    ctx.lineTo(padL + innerW, padT + innerH);
+    ctx.stroke();
+
+    const maxV = Math.max(1, ...values);
+    const barGap = options.barGap ?? 6;
+    const barW = (innerW - barGap*(values.length-1)) / Math.max(values.length,1);
+
+    values.forEach((v,i)=>{
+      const x = padL + i*(barW + barGap);
+      const h = (v / maxV) * innerH;
+      const y = padT + innerH - h;
+
+      const grad = ctx.createLinearGradient(0,y,0,y+h);
+      grad.addColorStop(0, "rgba(207,32,48,0.85)");
+      grad.addColorStop(1, "rgba(207,32,48,0.25)");
+      ctx.fillStyle = grad;
+      ctx.fillRect(x,y,barW,h);
+
+      // value label
+      ctx.fillStyle = "rgba(233,233,233,0.78)";
+      ctx.font = "11px " + getComputedStyle(document.body).fontFamily;
+      ctx.textAlign = "center";
+      ctx.fillText(String(v), x + barW/2, y - 4);
+
+      // x label
+      ctx.fillStyle = "rgba(233,233,233,0.60)";
+      ctx.font = "10px " + getComputedStyle(document.body).fontFamily;
+      ctx.save();
+      ctx.translate(x + barW/2, padT + innerH + 14);
+      const lab = labels[i] ?? "";
+      const short = lab.length > 12 ? (lab.slice(0,12) + "…") : lab;
+      ctx.fillText(short, 0, 0);
+      ctx.restore();
+    });
+
+    // y gridlines
+    ctx.strokeStyle = "rgba(255,255,255,0.06)";
+    ctx.fillStyle = "rgba(233,233,233,0.45)";
+    ctx.font = "10px " + getComputedStyle(document.body).fontFamily;
+    ctx.textAlign = "right";
+    const ticks = 4;
+    for(let t=0;t<=ticks;t++){
+      const y = padT + (innerH * t / ticks);
+      ctx.beginPath();
+      ctx.moveTo(padL, y);
+      ctx.lineTo(padL + innerW, y);
+      ctx.stroke();
+
+      const val = Math.round(maxV * (1 - t/ticks));
+      ctx.fillText(String(val), padL - 6, y + 3);
+    }
+  }
+
+  function histogram(values, binSize=5, min=60, max=100){
+    const bins = [];
+    for(let x=min; x<=max; x+=binSize){
+      bins.push({label: `${x}-${x+binSize-1}`, count: 0, start: x, end: x+binSize-1});
+    }
+    values.forEach(v=>{
+      const b = bins.find(bb => v >= bb.start && v <= bb.end);
+      if(b) b.count++;
+    });
+    return bins;
+  }
+
+  function renderCharts(){
+    // CLIENT distribution from filteredClients
+    const cVals = filteredClients.map(r=>r.ClientFitScore).filter(v=>typeof v==="number");
+    const cBins = histogram(cVals, 5, 70, 100);
+    el("chart1Meta").textContent = `n=${cVals.length} (filtered)`;
+    drawBarChart("clientDist", cBins.map(b=>b.label), cBins.map(b=>b.count), {barGap: 4});
+
+    // PARTNER distribution from filteredPartners
+    const pVals = filteredPartners.map(r=>r.PartnerFitScore).filter(v=>typeof v==="number");
+    const pBins = histogram(pVals, 5, 70, 100);
+    el("chart2Meta").textContent = `n=${pVals.length} (filtered)`;
+    drawBarChart("partnerDist", pBins.map(b=>b.label), pBins.map(b=>b.count), {barGap: 4});
+
+    // Top lists
+    const topC = [...filteredClients].sort((a,b)=>b.ClientFitScore-a.ClientFitScore).slice(0,8);
+    el("chart3Meta").textContent = `top ${topC.length}`;
+    drawBarChart("topClients", topC.map(r=>r.Company), topC.map(r=>r.ClientFitScore), {barGap: 6});
+
+    const topP = [...filteredPartners].sort((a,b)=>b.PartnerFitScore-a.PartnerFitScore).slice(0,8);
+    el("chart4Meta").textContent = `top ${topP.length}`;
+    drawBarChart("topPartners", topP.map(r=>r.Company), topP.map(r=>r.PartnerFitScore), {barGap: 6});
+  }
+
+  // ---------------------------
+  // Contact Modal + Drafting
+  // ---------------------------
+  let activeContact = null; // {type:'client'|'partner', row: object}
+
+  function openContactModal(type, rank){
+    const row = (type === "client")
+      ? clients.find(r=>r.Rank === rank)
+      : partners.find(r=>r.Rank === rank);
+
+    if(!row) return;
+
+    activeContact = {type, row};
+
+    const title = type === "client"
+      ? `Contact — ${row.Company} (Client Fit ${row.ClientFitScore})`
+      : `Contact — ${row.Company} (Partner Fit ${row.PartnerFitScore})`;
+
+    el("modalTitle").textContent = title;
+    el("modalSubtitle").textContent = type === "client"
+      ? "Draft is optimized for booking a pilot project discovery call."
+      : "Draft is optimized for a co-marketing / distribution / applications partnership intro.";
+
+    el("contactChannel").value = "email";
+    el("contactTo").value = ""; // Unknown in this dataset
+
+    el("contactDraft").value = buildDraft("email");
+    el("contactModal").showModal();
+  }
+
+  function closeModal(){
+    el("contactModal").close();
+    activeContact = null;
+  }
+
+  el("contactChannel").addEventListener("change", (e)=>{
+    el("contactDraft").value = buildDraft(e.target.value);
+  });
+
+  function buildDraft(channel){
+    if(!activeContact) return "";
+    const {type, row} = activeContact;
+
+    const signature =
+`—
+Vladislav Bergo, PhD
+Founder & CEO, Adeptrix Corp
+vbergo@adeptrix.com | (617) 302-6669
+`;
+
+    if(type === "client"){
+      const subject = `Liquid biopsy biomarker discovery — 1 week, 500+ datapoints/sample`;
+      const body =
+`Hi team at ${row.Company},
+
+Reaching out because your work in biomarker discovery / precision medicine appears well-aligned with what we deliver at Adeptrix.
+
+Adeptrix developed exoBAMS: a MALDI-based, EV-aware liquid biopsy workflow that generates 500+ multiomic datapoints per sample with ~1-week turnaround. The output is ML-ready data for biomarker triage, plus a CRO-ready protocol and a 96-reaction assay kit.
+
+Why this may be relevant for ${row.Company}:
+- ${row.WhySuitable}
+- Angle: ${row.BestOutreachAngle}
+
+If it’s helpful, we can start with a small pilot project (typ. ~$80K) using your samples (ship-to-lab → report in ~1 week).
+Would a 15-minute call next week make sense to confirm fit and identify the right biomarker decision maker to loop in?
+
+Best,
+${signature}`;
+
+      if(channel === "linkedin"){
+        return `Hi — I’m with Adeptrix. We built exoBAMS, an EV-aware liquid biopsy platform (500+ datapoints/sample, ~1-week turnaround) designed to accelerate biomarker discovery with ML-ready output.\n\nGiven ${row.Company}'s focus (${row.BestOutreachAngle}), I think a small pilot could be a quick way to validate impact. Open to a 15-min call?`;
+      }
+
+      return `Subject: ${subject}\n\n${body}`;
+    }
+
+    // partner
+    const subject = `exoBAMS + ${row.Company} — partnership to scale EV-based liquid biopsy`;
+    const body =
+`Hi team at ${row.Company},
+
+Adeptrix developed exoBAMS: a bead-assisted mass spectrometry platform for targeted exosome/EV profiling in liquid biopsies. We generate 2M+ multiomic biomarker datapoints/week, with 42 patents granted/in process.
+
+Why ${row.Company} is on our shortlist:
+- ${row.WhySuitable}
+
+A concrete next step we’d propose:
+- ${row.NextBestAction}
+
+Would you be open to a 15-minute intro call to explore a co-marketing / applications / distribution partnership (RUO-first), and align on the fastest path to a joint proof point?
+
+Best,
+${signature}`;
+
+    if(channel === "linkedin"){
+      return `Hi — I’m with Adeptrix. We developed exoBAMS, a high-throughput EV profiling platform for liquid biopsies (2M+ datapoints/week; 42 patents). ${row.Company} stood out as a strong partner because ${row.WhySuitable}.\n\nWould you be open to a quick 15-min chat to explore an applications/co-marketing collaboration?`;
+    }
+
+    return `Subject: ${subject}\n\n${body}`;
+  }
+
+  async function copyDraft(){
+    const text = el("contactDraft").value;
+    try{
+      await navigator.clipboard.writeText(text);
+      alert("Draft copied to clipboard.");
+    }catch(e){
+      alert("Copy failed. You can manually select and copy the text.");
+    }
+  }
+
+  function launchContact(){
+    if(!activeContact) return;
+    const channel = el("contactChannel").value;
+    const to = (el("contactTo").value || "").trim();
+    const draft = el("contactDraft").value;
+
+    if(channel === "linkedin"){
+      // Best-effort: open company LinkedIn if we have it (clients); partners do not have LinkedIn URLs in source table
+      const {type, row} = activeContact;
+      if(type === "client" && row.LinkedIn){
+        window.open(row.LinkedIn, "_blank", "noopener");
+      } else {
+        alert("No LinkedIn URL in this dataset for this row. Use the copied draft in your LinkedIn message.");
+      }
+      return;
+    }
+
+    // Email: populate mailto with subject/body
+    // Parse "Subject:" if present
+    let subject = "";
+    let body = draft;
+
+    const subjectMatch = draft.match(/^Subject:\s*(.*)\n\n([\s\S]*)$/m);
+    if(subjectMatch){
+      subject = subjectMatch[1].trim();
+      body = subjectMatch[2];
+    }
+
+    const mailto = `mailto:${encodeURIComponent(to)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    window.location.href = mailto;
+  }
+
+  function copyRowAsJSON(type, rank){
+    const row = (type === "client")
+      ? clients.find(r=>r.Rank === rank)
+      : partners.find(r=>r.Rank === rank);
+    if(!row) return;
+    const payload = JSON.stringify(row, null, 2);
+    navigator.clipboard.writeText(payload).then(()=>alert("Row copied as JSON."));
+  }
+
+  // ---------------------------
+  // CSV Downloads
+  // ---------------------------
+  function toCSV(rows, columns){
+    const esc = (v) => {
+      const s = (v ?? "").toString();
+      if(/[",\n]/.test(s)) return `"${s.replaceAll('"','""')}"`;
+      return s;
+    };
+    const header = columns.map(esc).join(",");
+    const lines = rows.map(r => columns.map(c => esc(r[c])).join(","));
+    return [header, ...lines].join("\n");
+  }
+
+  function downloadBlob(filename, text){
+    const blob = new Blob([text], {type:"text/csv;charset=utf-8"});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(()=>URL.revokeObjectURL(url), 1000);
+  }
+
+  function downloadCSV(which){
+    if(which === "clients"){
+      const cols = ["Rank","Company","Industry","Location","Size","ClientFitScore","Category","Confidence","LinkedIn","WhySuitable","KeyRisks","BestOutreachAngle"];
+      downloadBlob("adeptrix_clients.csv", toCSV(filteredClients, cols));
+    } else if(which === "partners"){
+      const cols = ["Rank","Company","PartnerFitScore","Confidence","WhySuitable","KeyRisks","NextBestAction"];
+      downloadBlob("adeptrix_partners.csv", toCSV(filteredPartners, cols));
+    }
+  }
+
+  function downloadAllCSVs(){
+    downloadCSV("clients");
+    downloadCSV("partners");
+  }
+
+  // ---------------------------
+  // Event wiring (sorting + filters)
+  // ---------------------------
+  function initEvents(){
+    el("clientSearch").addEventListener("input", (e)=>{
+      clientState.search = e.target.value;
+      applyClientFilters();
+    });
+    el("clientCategory").addEventListener("change", (e)=>{
+      clientState.category = e.target.value;
+      applyClientFilters();
+    });
+    el("clientMinScore").addEventListener("change", (e)=>{
+      const v = e.target.value;
+      clientState.minScore = v ? Number(v) : null;
+      applyClientFilters();
+    });
+
+    el("partnerSearch").addEventListener("input", (e)=>{
+      partnerState.search = e.target.value;
+      applyPartnerFilters();
+    });
+    el("partnerMinScore").addEventListener("change", (e)=>{
+      const v = e.target.value;
+      partnerState.minScore = v ? Number(v) : null;
+      applyPartnerFilters();
+    });
+    el("partnerConfidence").addEventListener("change", (e)=>{
+      partnerState.confidence = e.target.value;
+      applyPartnerFilters();
+    });
+
+    // client sort
+    document.querySelectorAll("#clientsTable thead th[data-col]").forEach(th=>{
+      th.addEventListener("click", ()=>{
+        const col = th.getAttribute("data-col");
+        if(clientState.sortCol === col){
+          clientState.sortDir = clientState.sortDir === "asc" ? "desc" : "asc";
+        } else {
+          clientState.sortCol = col;
+          clientState.sortDir = (col === "Company" || col === "Industry" || col === "Location" || col === "Category" || col === "Confidence") ? "asc" : "desc";
+        }
+        applyClientFilters();
+      });
+    });
+
+    // partner sort
+    document.querySelectorAll("#partnersTable thead th[data-col]").forEach(th=>{
+      th.addEventListener("click", ()=>{
+        const col = th.getAttribute("data-col");
+        if(partnerState.sortCol === col){
+          partnerState.sortDir = partnerState.sortDir === "asc" ? "desc" : "asc";
+        } else {
+          partnerState.sortCol = col;
+          partnerState.sortDir = (col === "Company" || col === "Confidence") ? "asc" : "desc";
+        }
+        applyPartnerFilters();
+      });
+    });
+
+    window.addEventListener("resize", ()=>{
+      renderCharts();
+    });
+  }
+
+  // ---------------------------
+  // Boot
+  // ---------------------------
+  renderOverview();
+  initEvents();
+  applyClientFilters();
+  applyPartnerFilters();
+</script>

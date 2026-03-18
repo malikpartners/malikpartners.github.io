@@ -1,0 +1,1067 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BNI Alliance Builders - Chapter Master Assessment Report</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:#000;color:#e0e0e0;font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;min-height:100vh;}
+header{background:linear-gradient(135deg,#111 0%,#1a1a1a 100%);padding:18px 30px;display:flex;align-items:center;justify-content:space-between;border-bottom:3px solid #CF2030;position:sticky;top:0;z-index:1000;}
+header img{height:52px;}
+header .hdr-right{color:#aaa;font-size:13px;text-align:right;}
+header .hdr-right span{color:#CF2030;font-weight:700;}
+nav{background:#111;border-bottom:2px solid #222;padding:0 20px;position:sticky;top:91px;z-index:999;overflow-x:auto;white-space:nowrap;}
+nav a{display:inline-block;color:#CF2030;text-decoration:none;padding:13px 18px;font-size:13.5px;font-weight:600;transition:all .2s;border-bottom:3px solid transparent;}
+nav a:hover,nav a.active{background:#1a1a1a;border-bottom:3px solid #CF2030;color:#fff;}
+.container{max-width:1500px;margin:0 auto;padding:20px 25px 60px;}
+h1{color:#CF2030;font-size:28px;margin:30px 0 5px;border-left:5px solid #CF2030;padding-left:15px;}
+h2{color:#CF2030;font-size:21px;margin:25px 0 10px;padding-bottom:6px;border-bottom:1px solid #333;}
+h3{color:#e0e0e0;font-size:16px;margin:18px 0 8px;}
+.subtitle{color:#888;font-size:14px;margin-bottom:20px;}
+.section{margin-bottom:40px;background:#111;border-radius:10px;padding:25px;border:1px solid #222;}
+.info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:15px;margin:15px 0;}
+.info-card{background:#1a1a1a;border-radius:8px;padding:16px;border-left:4px solid #CF2030;}
+.info-card label{color:#CF2030;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;}
+.info-card .val{color:#fff;font-size:15px;margin-top:4px;font-weight:500;}
+.metric-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:15px;margin:20px 0;}
+.metric-card{background:linear-gradient(135deg,#1a1a1a,#222);border-radius:10px;padding:20px;text-align:center;border:1px solid #333;}
+.metric-card .num{font-size:32px;font-weight:800;color:#CF2030;}
+.metric-card .lbl{font-size:12px;color:#aaa;margin-top:4px;text-transform:uppercase;letter-spacing:.5px;}
+.search-bar{width:100%;padding:11px 16px;background:#1a1a1a;border:1px solid #333;border-radius:8px;color:#fff;font-size:14px;margin-bottom:15px;outline:none;transition:border .2s;}
+.search-bar:focus{border-color:#CF2030;}
+.search-bar::placeholder{color:#555;}
+.tbl-wrap{overflow-x:auto;margin:10px 0;border-radius:8px;border:1px solid #222;}
+table{width:100%;border-collapse:collapse;font-size:13px;}
+thead{background:#CF2030;color:#fff;position:sticky;top:0;}
+th{padding:11px 12px;text-align:left;cursor:pointer;user-select:none;white-space:nowrap;font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.3px;}
+th:hover{background:#a51a28;}
+th .sort-arrow{margin-left:4px;font-size:10px;opacity:.6;}
+td{padding:10px 12px;border-bottom:1px solid #1a1a1a;}
+tr{background:#111;transition:background .15s;}
+tr:nth-child(even){background:#0d0d0d;}
+tr:hover{background:#1a1212;}
+.flag-red{color:#ff4444;font-weight:700;}
+.flag-yellow{color:#ffaa00;font-weight:700;}
+.flag-green{color:#44ff44;font-weight:700;}
+.btn{display:inline-block;padding:7px 14px;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;border:none;transition:all .2s;text-decoration:none;}
+.btn-contact{background:#CF2030;color:#fff;}
+.btn-contact:hover{background:#a51a28;transform:scale(1.05);}
+.btn-phone{background:#2a7a2a;color:#fff;}
+.btn-phone:hover{background:#1e5e1e;transform:scale(1.05);}
+.btn-email{background:#2a5a9a;color:#fff;margin-left:4px;}
+.btn-email:hover{background:#1e4478;transform:scale(1.05);}
+.btn-sms{background:#7a5a2a;color:#fff;margin-left:4px;}
+.btn-sms:hover{background:#5e441e;transform:scale(1.05);}
+.chart-container{background:#111;border-radius:10px;padding:20px;border:1px solid #222;margin:15px 0;max-width:100%;position:relative;}
+.chart-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(400px,1fr));gap:20px;margin:15px 0;}
+.badge{display:inline-block;padding:3px 8px;border-radius:4px;font-size:11px;font-weight:600;}
+.badge-high{background:#CF2030;color:#fff;}
+.badge-med{background:#aa7700;color:#fff;}
+.badge-low{background:#337733;color:#fff;}
+.vacancy{background:#331111;border:1px solid #CF2030;border-radius:8px;padding:12px 16px;margin:6px 0;color:#ff6666;}
+.sphere-card{background:#1a1a1a;border-radius:8px;padding:16px;margin:10px 0;border-left:4px solid #CF2030;}
+.sphere-card h4{color:#CF2030;font-size:15px;margin-bottom:6px;}
+.sphere-card p{color:#bbb;font-size:13px;line-height:1.5;}
+.invitation-box{background:#0d0d0d;border:1px solid #333;border-radius:8px;padding:18px;margin:12px 0;}
+.invitation-box h4{color:#CF2030;margin-bottom:8px;}
+.invitation-box pre{white-space:pre-wrap;word-wrap:break-word;color:#ccc;font-family:'Segoe UI',sans-serif;font-size:13px;line-height:1.6;}
+.copy-btn{background:#CF2030;color:#fff;border:none;padding:6px 14px;border-radius:5px;cursor:pointer;font-size:12px;font-weight:600;margin-top:8px;transition:all .2s;}
+.copy-btn:hover{background:#a51a28;}
+.tab-btns{display:flex;flex-wrap:wrap;gap:5px;margin:10px 0;}
+.tab-btn{padding:8px 16px;background:#1a1a1a;color:#aaa;border:1px solid #333;border-radius:6px 6px 0 0;cursor:pointer;font-size:12px;font-weight:600;transition:all .2s;}
+.tab-btn.active{background:#CF2030;color:#fff;border-color:#CF2030;}
+.tab-content{display:none;}
+.tab-content.active{display:block;}
+.week-label{background:#CF2030;color:#fff;padding:6px 14px;border-radius:5px;display:inline-block;font-weight:700;margin:10px 0 5px;font-size:13px;}
+footer{background:#111;border-top:3px solid #CF2030;padding:25px;text-align:center;color:#666;font-size:12px;}
+footer img{height:32px;margin-bottom:8px;}
+footer a{color:#CF2030;text-decoration:none;}
+.modal-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.85);z-index:2000;justify-content:center;align-items:center;}
+.modal-overlay.show{display:flex;}
+.modal{background:#1a1a1a;border-radius:12px;padding:30px;max-width:600px;width:90%;border:2px solid #CF2030;max-height:80vh;overflow-y:auto;}
+.modal h3{color:#CF2030;margin-bottom:15px;}
+.modal textarea{width:100%;min-height:180px;background:#0d0d0d;border:1px solid #333;border-radius:6px;color:#ddd;padding:12px;font-size:13px;font-family:inherit;resize:vertical;}
+.modal .close-btn{background:#333;color:#fff;border:none;padding:8px 18px;border-radius:6px;cursor:pointer;margin-top:12px;}
+.modal .send-btn{background:#CF2030;color:#fff;border:none;padding:8px 18px;border-radius:6px;cursor:pointer;margin-top:12px;margin-left:8px;font-weight:600;}
+.progress-bar{background:#222;border-radius:10px;height:18px;overflow:hidden;margin:5px 0;}
+.progress-fill{height:100%;background:linear-gradient(90deg,#CF2030,#ff4444);border-radius:10px;transition:width .5s;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff;}
+@media(max-width:768px){
+  header{flex-direction:column;gap:10px;text-align:center;}
+  nav a{padding:10px 12px;font-size:12px;}
+  .container{padding:12px;}
+  .section{padding:15px;}
+  h1{font-size:22px;}
+  .chart-row{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports">
+  <div class="hdr-right">
+    <div><span>BNI Alliance Builders</span> | CA San Francisco North Bay</div>
+    <div>Report Generated: March 2026</div>
+  </div>
+</header>
+
+<nav id="mainNav">
+  <a href="#overview" class="active" onclick="scrollToSection('overview')">📍 Overview</a>
+  <a href="#roster" onclick="scrollToSection('roster')">📊 Roster</a>
+  <a href="#health" onclick="scrollToSection('health')">❤️ Health</a>
+  <a href="#spheres" onclick="scrollToSection('spheres')">🔍 Spheres</a>
+  <a href="#missing" onclick="scrollToSection('missing')">🎯 Missing</a>
+  <a href="#vendors" onclick="scrollToSection('vendors')">🔎 Vendors</a>
+  <a href="#invitations" onclick="scrollToSection('invitations')">✉️ Invitations</a>
+  <a href="#execution" onclick="scrollToSection('execution')">📈 Execution</a>
+  <a href="#tracking" onclick="scrollToSection('tracking')">📋 Tracking</a>
+  <a href="#summary" onclick="scrollToSection('summary')">🎯 Summary</a>
+</nav>
+
+<div class="container">
+
+<!-- SECTION 1: OVERVIEW -->
+<div class="section" id="overview">
+<h1>📍 Chapter Overview & Meeting Details</h1>
+<div class="info-grid">
+  <div class="info-card"><label>Chapter Name</label><div class="val">BNI Alliance Builders (In-Person)</div></div>
+  <div class="info-card"><label>Region</label><div class="val">CA San Francisco North Bay</div></div>
+  <div class="info-card"><label>Country</label><div class="val">United States</div></div>
+  <div class="info-card"><label>Meeting Format</label><div class="val">In-Person</div></div>
+  <div class="info-card"><label>Meeting Day/Time</label><div class="val">Friday at 7:00 AM</div></div>
+  <div class="info-card"><label>Meeting Location</label><div class="val">Druids Hall, 1011 College Ave, Santa Rosa, CA 95404</div></div>
+  <div class="info-card"><label>Current Member Count</label><div class="val" style="color:#CF2030;font-size:24px;font-weight:800;">29</div></div>
+  <div class="info-card"><label>Growth Target</label><div class="val" style="color:#44ff44;font-size:24px;font-weight:800;">40+ in 6 months</div></div>
+</div>
+
+<h2>👥 Leadership Team</h2>
+<input class="search-bar" id="searchLT" placeholder="🔍 Search leadership team..." oninput="filterTable('ltTable','searchLT')">
+<div class="tbl-wrap">
+<table id="ltTable">
+<thead><tr><th onclick="sortTable('ltTable',0)">Role <span class="sort-arrow">⇅</span></th><th onclick="sortTable('ltTable',1)">Name <span class="sort-arrow">⇅</span></th><th onclick="sortTable('ltTable',2)">Phone <span class="sort-arrow">⇅</span></th><th>Contact</th></tr></thead>
+<tbody>
+<tr><td>President</td><td>David Crowhurst</td><td>(707) 953-1976</td><td><a href="tel:7079531976" class="btn btn-phone">📞 Call</a><a href="#" class="btn btn-email" onclick="openEmailModal('David Crowhurst','President','Eagle Bookkeeping','Bookkeeping');return false;">📧 Email</a></td></tr>
+<tr><td>Vice President</td><td>Nicholas Caston</td><td>(707) 200-8042</td><td><a href="tel:7072008042" class="btn btn-phone">📞 Call</a><a href="#" class="btn btn-email" onclick="openEmailModal('Nicholas Caston','Vice President','Financial Prodigy Inc','Business Consultant');return false;">📧 Email</a></td></tr>
+<tr><td>Secretary / Treasurer</td><td>James Eakin</td><td>(707) 483-5574</td><td><a href="tel:7074835574" class="btn btn-phone">📞 Call</a><a href="#" class="btn btn-email" onclick="openEmailModal('James Eakin','Secretary / Treasurer','Northwestern Mutual','Life & Disability Insurance');return false;">📧 Email</a></td></tr>
+<tr><td>Visitor Host</td><td>Ryan Cassidy</td><td>(415) 785-8934</td><td><a href="tel:4157858934" class="btn btn-phone">📞 Call</a><a href="#" class="btn btn-email" onclick="openEmailModal('Ryan Cassidy','Visitor Host','Moraes & Cassidy Group','Financial Advisor');return false;">📧 Email</a></td></tr>
+<tr><td>Visitor Host</td><td>Richard Lindsay</td><td>(707) 888-5404</td><td><a href="tel:7078885404" class="btn btn-phone">📞 Call</a><a href="#" class="btn btn-email" onclick="openEmailModal('Richard Lindsay','Visitor Host','Housewright Builders Inc','Builder/General Contractor');return false;">📧 Email</a></td></tr>
+<tr><td>Education Coordinator</td><td>Desiree Gardner</td><td>(707) 400-7724</td><td><a href="tel:7074007724" class="btn btn-phone">📞 Call</a><a href="#" class="btn btn-email" onclick="openEmailModal('Desiree Gardner','Education Coordinator','Systemic Tree Service, Inc.','Tree Services');return false;">📧 Email</a></td></tr>
+<tr><td>Events Coordinator</td><td>Norma Bowen</td><td>(707) 486-7447</td><td><a href="tel:7074867447" class="btn btn-phone">📞 Call</a><a href="#" class="btn btn-email" onclick="openEmailModal('Norma Bowen','Events Coordinator','Essential Hands Cleaning Professionals','Cleaning – Residential');return false;">📧 Email</a></td></tr>
+<tr><td>Mentor Coordinator</td><td>Michael Stauber</td><td>(707) 348-9647</td><td><a href="tel:7073489647" class="btn btn-phone">📞 Call</a><a href="#" class="btn btn-email" onclick="openEmailModal('Michael Stauber','Mentor Coordinator','Culture Fitness','Personal Trainer – Fitness');return false;">📧 Email</a></td></tr>
+<tr><td>Growth Coordinator</td><td>Christopher Wilson</td><td>(707) 480-3544</td><td><a href="tel:7074803544" class="btn btn-phone">📞 Call</a><a href="#" class="btn btn-email" onclick="openEmailModal('Christopher Wilson','Growth Coordinator','Calender Robinson Commercial Ins.','Commercial Insurance');return false;">📧 Email</a></td></tr>
+<tr><td>Chapter Webmaster</td><td>Rhett Graff</td><td>(707) 608-7555</td><td><a href="tel:7076087555" class="btn btn-phone">📞 Call</a><a href="#" class="btn btn-email" onclick="openEmailModal('Rhett Graff','Chapter Webmaster','Affex Marketing','Digital Marketing');return false;">📧 Email</a></td></tr>
+<tr><td>Membership Committee</td><td>Chad Mordecai</td><td>(707) 481-4785</td><td><a href="tel:7074814785" class="btn btn-phone">📞 Call</a><a href="#" class="btn btn-email" onclick="openEmailModal('Chad Mordecai','Membership Committee','Mordecai Chiropractic','Chiropractor');return false;">📧 Email</a></td></tr>
+<tr><td>Membership Committee</td><td>Michael Eggers</td><td>(707) 321-6024</td><td><a href="tel:7073216024" class="btn btn-phone">📞 Call</a><a href="#" class="btn btn-email" onclick="openEmailModal('Michael Eggers','Membership Committee','Sonoma United Electric, Inc','Electrician');return false;">📧 Email</a></td></tr>
+<tr><td>Membership Committee</td><td>Gregory Brausen</td><td>(707) 326-4709</td><td><a href="tel:7073264709" class="btn btn-phone">📞 Call</a><a href="#" class="btn btn-email" onclick="openEmailModal('Gregory Brausen','Membership Committee','Guild Mortgage','Residential Mortgages');return false;">📧 Email</a></td></tr>
+<tr><td>Membership Committee</td><td>Kristen Preuss</td><td>(707) 835-4897</td><td><a href="tel:7078354897" class="btn btn-phone">📞 Call</a><a href="#" class="btn btn-email" onclick="openEmailModal('Kristen Preuss','Membership Committee','Corcoran Icon Properties','Buying Agent');return false;">📧 Email</a></td></tr>
+<tr><td>Chapter Director Consultant</td><td>Ryan Nolan</td><td>(707) 393-8754</td><td><a href="tel:7073938754" class="btn btn-phone">📞 Call</a><a href="#" class="btn btn-email" onclick="openEmailModal('Ryan Nolan','Chapter Director Consultant','BNI SF Bay','Director Consultant');return false;">📧 Email</a></td></tr>
+</tbody>
+</table>
+</div>
+
+<h2>⚠️ Leadership Vacancies</h2>
+<div class="vacancy">🔴 Membership Committee – Community Builder: <strong>VACANT</strong></div>
+<div class="vacancy">🔴 Membership Committee – Quality Assurance: <strong>VACANT</strong></div>
+<div class="vacancy">🔴 Membership Committee – Member Engagement: <strong>VACANT</strong></div>
+<div class="vacancy">🔴 Membership Committee – Member Relations: <strong>VACANT</strong></div>
+<p style="color:#aaa;margin-top:10px;font-size:13px;"><em>Recommendation: Fill these roles to strengthen member accountability, engagement, and retention.</em></p>
+</div>
+
+<!-- SECTION 2: ROSTER -->
+<div class="section" id="roster">
+<h1>📊 Normalized Chapter Roster — 29 Members</h1>
+<input class="search-bar" id="searchRoster" placeholder="🔍 Search by name, company, category, classification..." oninput="filterTable('rosterTable','searchRoster')">
+<div class="tbl-wrap" style="max-height:600px;overflow-y:auto;">
+<table id="rosterTable">
+<thead><tr>
+<th onclick="sortTable('rosterTable',0)"># <span class="sort-arrow">⇅</span></th>
+<th onclick="sortTable('rosterTable',1)">Category <span class="sort-arrow">⇅</span></th>
+<th onclick="sortTable('rosterTable',2)">Classification <span class="sort-arrow">⇅</span></th>
+<th onclick="sortTable('rosterTable',3)">Member Name <span class="sort-arrow">⇅</span></th>
+<th onclick="sortTable('rosterTable',4)">Company <span class="sort-arrow">⇅</span></th>
+<th onclick="sortTable('rosterTable',5)">90D Given <span class="sort-arrow">⇅</span></th>
+<th onclick="sortTable('rosterTable',6)">90D Received <span class="sort-arrow">⇅</span></th>
+<th onclick="sortTable('rosterTable',7)">90D Visitors <span class="sort-arrow">⇅</span></th>
+<th onclick="sortTable('rosterTable',8)">90D 1-2-1 <span class="sort-arrow">⇅</span></th>
+<th onclick="sortTable('rosterTable',9)">Absences <span class="sort-arrow">⇅</span></th>
+</tr></thead>
+<tbody>
+<tr><td>1</td><td>Construction</td><td>Roofing & Gutters</td><td>Jesse Adams</td><td>Sonoma County Roofing Inc</td><td>0</td><td>4</td><td>0</td><td>7</td><td>0</td></tr>
+<tr><td>2</td><td>Construction</td><td>Tile Worker</td><td>Ampelio Aguilar</td><td>Aguilar Tile Installation</td><td>7</td><td>4</td><td>0</td><td>16</td><td>1</td></tr>
+<tr><td>3</td><td>Legal & Accounting</td><td>Estate Planning Law</td><td>Max Bernard</td><td>Bernard Law Office</td><td>12</td><td>8</td><td>1</td><td>32</td><td>0</td></tr>
+<tr><td>4</td><td>Cleaning Services</td><td>Cleaning – Residential</td><td>Norma Bowen</td><td>Essential Hands Cleaning Professionals</td><td>8</td><td>7</td><td>1</td><td>31</td><td>0</td></tr>
+<tr><td>5</td><td>Finance & Insurance</td><td>Residential Mortgages</td><td>Gregory Brausen</td><td>Guild Mortgage</td><td>1</td><td>1</td><td>0</td><td>40</td><td>0</td></tr>
+<tr><td>6</td><td>Construction</td><td>Pools, Spas & Saunas</td><td>Frank Bustamante</td><td>Holy Paradise Pools</td><td>2</td><td>1</td><td>0</td><td>8</td><td>0</td></tr>
+<tr><td>7</td><td>Finance & Insurance</td><td>Financial Advisor</td><td>Ryan Cassidy</td><td>Moraes & Cassidy Group</td><td>2</td><td>3</td><td>0</td><td>12</td><td>1</td></tr>
+<tr><td>8</td><td>Training & Coaching</td><td>Business Consultant</td><td>Nicholas Caston</td><td>Financial Prodigy Inc</td><td>13</td><td>5</td><td>1</td><td>16</td><td>1</td></tr>
+<tr><td>9</td><td>Legal & Accounting</td><td>Bookkeeping</td><td>David Crowhurst</td><td>Eagle Bookkeeping</td><td>6</td><td>3</td><td>0</td><td>24</td><td>0</td></tr>
+<tr><td>10</td><td>Landscaping & Garden</td><td>Landscape Services</td><td>Jonathan Dominguez</td><td>The Great Landscape LLC</td><td>1</td><td>5</td><td>0</td><td>11</td><td>1</td></tr>
+<tr><td>11</td><td>Finance & Insurance</td><td>Life & Disability Insurance</td><td>James Eakin</td><td>Northwestern Mutual</td><td>2</td><td>3</td><td>0</td><td>24</td><td>0</td></tr>
+<tr><td>12</td><td>Construction</td><td>Electrician</td><td>Michael Eggers</td><td>Sonoma United Electric, Inc</td><td>12</td><td>19</td><td>1</td><td>29</td><td>0</td></tr>
+<tr><td>13</td><td>Health & Wellness</td><td>Massage Therapist</td><td>Tiffany Gann</td><td>The Natural Gift Wellness & Massage</td><td>3</td><td>2</td><td>0</td><td>4</td><td>0</td></tr>
+<tr><td>14</td><td>Landscaping & Garden</td><td>Tree Services</td><td>Desiree Gardner</td><td>Systemic Tree Service, Inc.</td><td>10</td><td>7</td><td>1</td><td>13</td><td>0</td></tr>
+<tr><td>15</td><td>Advertising & Marketing</td><td>Digital Marketing</td><td>Rhett Graff</td><td>Affex Marketing</td><td>0</td><td>17</td><td>0</td><td>14</td><td>1</td></tr>
+<tr><td>16</td><td>Real Estate</td><td>Residential Real Estate Agent</td><td>Laura Hall</td><td>Corcoran Icon Properties</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td></tr>
+<tr><td>17</td><td>Cleaning Services</td><td>Cleaning – Carpet & Upholstery</td><td>James Hernandez</td><td>(Not Listed)</td><td>2</td><td>3</td><td>0</td><td>0</td><td>2</td></tr>
+<tr><td>18</td><td>Construction</td><td>Plumbing</td><td>Peter Kopriva</td><td>Goodolplumbers</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td></tr>
+<tr><td>19</td><td>Organizations & Other</td><td>Non-Profits/Fundraising</td><td>Alethea Larson</td><td>The Living Room</td><td>18</td><td>8</td><td>1</td><td>35</td><td>0</td></tr>
+<tr><td>20</td><td>Construction</td><td>Builder/General Contractor</td><td>Richard Lindsay</td><td>Housewright Builders Inc</td><td>7</td><td>9</td><td>1</td><td>8</td><td>0</td></tr>
+<tr><td>21</td><td>Car & Motorcycle</td><td>Auto/Car Repair</td><td>Mat McCoy Sr</td><td>McCoy's German Auto</td><td>1</td><td>8</td><td>0</td><td>6</td><td>0</td></tr>
+<tr><td>22</td><td>Construction</td><td>HVAC – Heating & Air</td><td>Chris Mills</td><td>Valley Comfort Heating and Air</td><td>1</td><td>4</td><td>0</td><td>15</td><td>1</td></tr>
+<tr><td>23</td><td>Health & Wellness</td><td>Chiropractor</td><td>Chad Mordecai</td><td>Mordecai Chiropractic</td><td>1</td><td>3</td><td>0</td><td>17</td><td>0</td></tr>
+<tr><td>24</td><td>Real Estate</td><td>Buying Agent</td><td>Kristen Preuss</td><td>Corcoran Icon Properties</td><td>9</td><td>3</td><td>2</td><td>29</td><td>0</td></tr>
+<tr><td>25</td><td>Health & Wellness</td><td>Acupuncture</td><td>Pamela Sauers</td><td>Core Essence Acupuncture and Wellness</td><td>5</td><td>0</td><td>0</td><td>14</td><td>0</td></tr>
+<tr><td>26</td><td>Sports & Leisure</td><td>Personal Trainer – Fitness</td><td>Michael Stauber</td><td>Culture Fitness</td><td>0</td><td>8</td><td>0</td><td>13</td><td>2</td></tr>
+<tr><td>27</td><td>Construction</td><td>Handyman</td><td>Anthony Tanner</td><td>Prime Time HandyMan</td><td>0</td><td>2</td><td>0</td><td>3</td><td>0</td></tr>
+<tr><td>28</td><td>Finance & Insurance</td><td>Commercial Insurance</td><td>Christopher Wilson</td><td>Calender Robinson Commercial Ins.</td><td>11</td><td>23</td><td>3</td><td>29</td><td>0</td></tr>
+<tr><td>29</td><td>Food & Beverage</td><td>Caterer</td><td>Dawn Zaft</td><td>Criminal Baking Co</td><td>6</td><td>3</td><td>0</td><td>10</td><td>0</td></tr>
+</tbody>
+</table>
+</div>
+
+<h2>📝 Notes & Flags</h2>
+<div style="margin:10px 0;">
+<div style="background:#331111;border-left:4px solid #ff4444;padding:12px 16px;border-radius:6px;margin:8px 0;"><span class="flag-red">🔴 Potential Overlap:</span> Laura Hall (Residential Real Estate Agent) and Kristen Preuss (Buying Agent) — Both at Corcoran Icon Properties. Membership Committee should clarify if these classifications are sufficiently distinct.</div>
+<div style="background:#332211;border-left:4px solid #ffaa00;padding:12px 16px;border-radius:6px;margin:8px 0;"><span class="flag-yellow">🟡 New/Low Activity:</span> Laura Hall (1 total 1-2-1, 0G/0R/0V), Peter Kopriva (1 total 1-2-1, 0G/0R/0V) — may need mentor attention.</div>
+<div style="background:#332211;border-left:4px solid #ffaa00;padding:12px 16px;border-radius:6px;margin:8px 0;"><span class="flag-yellow">🟡 Absence Alert:</span> James Hernandez (2 absences) and Michael Stauber (2 absences) — approaching the 3-absence limit.</div>
+<div style="background:#332211;border-left:4px solid #ffaa00;padding:12px 16px;border-radius:6px;margin:8px 0;"><span class="flag-yellow">🟡 Missing Company:</span> James Hernandez — No company name listed. Membership Committee should verify.</div>
+<div style="background:#113311;border-left:4px solid #44ff44;padding:12px 16px;border-radius:6px;margin:8px 0;"><span class="flag-green">🟢 Top Givers:</span> Alethea Larson (18G), Nicholas Caston (13G), Max Bernard (12G), Michael Eggers (12G), Christopher Wilson (11G)</div>
+<div style="background:#113311;border-left:4px solid #44ff44;padding:12px 16px;border-radius:6px;margin:8px 0;"><span class="flag-green">🟢 Top Receivers:</span> Christopher Wilson (23R), Michael Eggers (19R), Rhett Graff (17R), Richard Lindsay (9R)</div>
+<div style="background:#113311;border-left:4px solid #44ff44;padding:12px 16px;border-radius:6px;margin:8px 0;"><span class="flag-green">🟢 Top 1-2-1 Leaders:</span> Gregory Brausen (40), Alethea Larson (35), Max Bernard (32), Norma Bowen (31)</div>
+</div>
+</div>
+
+<!-- SECTION 3: HEALTH -->
+<div class="section" id="health">
+<h1>❤️ Chapter Health Summary (90-Day Snapshot)</h1>
+<div class="metric-grid">
+  <div class="metric-card"><div class="num">139</div><div class="lbl">Referrals Given</div></div>
+  <div class="metric-card"><div class="num">159</div><div class="lbl">Referrals Received</div></div>
+  <div class="metric-card"><div class="num">13</div><div class="lbl">Visitors Brought</div></div>
+  <div class="metric-card"><div class="num">459</div><div class="lbl">1-2-1s Conducted</div></div>
+  <div class="metric-card"><div class="num">15.8</div><div class="lbl">Avg 1-2-1 / Member</div></div>
+  <div class="metric-card"><div class="num" style="color:#ff4444;">6</div><div class="lbl">Members w/ 0 Given</div></div>
+  <div class="metric-card"><div class="num" style="color:#ff4444;">76%</div><div class="lbl">Members w/ 0 Visitors</div></div>
+  <div class="metric-card"><div class="num" style="color:#44ff44;">29</div><div class="lbl">Current Members</div></div>
+</div>
+
+<div class="chart-row">
+  <div class="chart-container"><h3 style="margin-bottom:10px;">Top 10 Members — Referrals Given (90 Days)</h3><canvas id="chartGiven"></canvas></div>
+  <div class="chart-container"><h3 style="margin-bottom:10px;">Top 10 Members — Referrals Received (90 Days)</h3><canvas id="chartReceived"></canvas></div>
+</div>
+<div class="chart-row">
+  <div class="chart-container"><h3 style="margin-bottom:10px;">Top 10 Members — 1-2-1 Meetings (90 Days)</h3><canvas id="chart121"></canvas></div>
+  <div class="chart-container"><h3 style="margin-bottom:10px;">Category Distribution</h3><canvas id="chartCategory"></canvas></div>
+</div>
+<div class="chart-row">
+  <div class="chart-container"><h3 style="margin-bottom:10px;">Visitor Generation (90 Days)</h3><canvas id="chartVisitors"></canvas></div>
+  <div class="chart-container"><h3 style="margin-bottom:10px;">Member Engagement — Given vs Received vs 1-2-1</h3><canvas id="chartEngagement"></canvas></div>
+</div>
+
+<div style="background:#1a1212;border:1px solid #CF2030;border-radius:8px;padding:16px;margin-top:20px;">
+<h3 style="color:#CF2030;">🔑 Key Insight</h3>
+<p style="color:#ccc;line-height:1.6;margin-top:8px;">1-2-1 activity is strong (459 total), but <strong style="color:#ff4444;">visitor generation is a significant growth opportunity</strong> — only 7 of 29 members brought visitors in the last 90 days. Focusing the recruitment plan on strategic visitor invitations can dramatically accelerate chapter growth.</p>
+</div>
+</div>
+
+<!-- SECTION 4: CONTACT SPHERES -->
+<div class="section" id="spheres">
+<h1>🔍 Contact Sphere Analysis</h1>
+<h2>Top 5 Contact Spheres Represented</h2>
+
+<div class="sphere-card">
+<h4>🏠 Home Services & Construction — 10 Seats</h4>
+<p><strong>Seats:</strong> Roofing, Tile, Pools, Electrician, Builder/GC, HVAC, Handyman, Plumbing, Landscape, Tree Services</p>
+<p style="margin-top:6px;"><strong>Growth Opportunity:</strong> Add Flooring, Interior Design, Painter, and Solar to complete the ecosystem.</p>
+</div>
+<div class="sphere-card">
+<h4>💰 Financial & Professional Services — 6 Seats</h4>
+<p><strong>Seats:</strong> Residential Mortgages, Financial Advisor, Commercial Insurance, Life Insurance, Bookkeeping, Estate Planning Law</p>
+<p style="margin-top:6px;"><strong>Growth Opportunity:</strong> Add P&C Insurance, Tax Advisor, Banking Services, CPA, and Wealth Management.</p>
+</div>
+<div class="sphere-card">
+<h4>🏡 Real Estate & Property — 2 Seats</h4>
+<p><strong>Seats:</strong> Residential Real Estate Agent, Buying Agent</p>
+<p style="margin-top:6px;"><strong>Growth Opportunity:</strong> Add Commercial Real Estate, Property Management, Home Staging, Home Inspector, and Title Services.</p>
+</div>
+<div class="sphere-card">
+<h4>💆 Health & Wellness — 4 Seats</h4>
+<p><strong>Seats:</strong> Chiropractor, Massage Therapist, Acupuncture, Personal Trainer</p>
+<p style="margin-top:6px;"><strong>Growth Opportunity:</strong> Add Alternative Wellness, Nutritionist, Counselor/Psychotherapist, and Senior Service Provider.</p>
+</div>
+<div class="sphere-card">
+<h4>📢 Marketing & Creative — 1 Seat</h4>
+<p><strong>Seats:</strong> Digital Marketing</p>
+<p style="margin-top:6px;"><strong>Growth Opportunity:</strong> Add Graphic Designer, Photographer, Web Designer, Videographer, and Social Media.</p>
+</div>
+
+<div class="chart-container" style="margin-top:20px;"><h3 style="margin-bottom:10px;">Contact Sphere Seat Count</h3><canvas id="chartSpheres"></canvas></div>
+</div>
+
+<!-- SECTION 5: MISSING PROFESSIONS -->
+<div class="section" id="missing">
+<h1>🎯 Missing Professions — Prioritized (Top 20)</h1>
+<input class="search-bar" id="searchMissing" placeholder="🔍 Search missing professions..." oninput="filterTable('missingTable','searchMissing')">
+<div class="tbl-wrap" style="max-height:700px;overflow-y:auto;">
+<table id="missingTable">
+<thead><tr>
+<th onclick="sortTable('missingTable',0)">Priority <span class="sort-arrow">⇅</span></th>
+<th onclick="sortTable('missingTable',1)">Missing Profession <span class="sort-arrow">⇅</span></th>
+<th onclick="sortTable('missingTable',2)">Category <span class="sort-arrow">⇅</span></th>
+<th>Why High Value</th>
+<th>Top Referrers</th>
+<th>Referral Triggers</th>
+</tr></thead>
+<tbody>
+<tr><td><span class="badge badge-high">1</span></td><td>Property & Casualty Insurance</td><td>Finance & Insurance</td><td>Every homeowner, business owner, and contractor needs P&C coverage.</td><td>Real Estate, Builder/GC, Commercial Insurance</td><td>"I just bought a new home" / "I'm starting a renovation"</td></tr>
+<tr><td><span class="badge badge-high">2</span></td><td>Interior Design</td><td>Real Estate Services</td><td>Natural referral partner for Real Estate, Builder/GC, Tile, Flooring.</td><td>Real Estate, Builder/GC, Buying Agent</td><td>"We're remodeling our kitchen" / "We just closed on a new house"</td></tr>
+<tr><td><span class="badge badge-high">3</span></td><td>Banking Services</td><td>Finance & Insurance</td><td>Every member and their clients need banking. Connects to mortgages, insurance, bookkeeping.</td><td>Financial Advisor, Bookkeeping, Commercial Insurance</td><td>"I'm opening a new business account" / "I need a line of credit"</td></tr>
+<tr><td><span class="badge badge-high">4</span></td><td>IT Consultants</td><td>Computer & Programming</td><td>Every business needs technology support. Serves all 29 members' clients.</td><td>Digital Marketing, Business Consultant, Commercial Insurance</td><td>"Our computers keep crashing" / "We need to upgrade our network"</td></tr>
+<tr><td><span class="badge badge-high">5</span></td><td>Cosmetics/Skin Care</td><td>Health & Wellness</td><td>Complements wellness sphere. High disposable income clientele.</td><td>Massage Therapist, Chiropractor, Acupuncture</td><td>"My skin has been so dry" / "I want to look refreshed for an event"</td></tr>
+<tr><td><span class="badge badge-med">6</span></td><td>Flooring</td><td>Construction</td><td>Every renovation and new build involves flooring.</td><td>Builder/GC, Tile Worker, Residential Real Estate</td><td>"We're replacing old carpet" / "Hardwood needs refinishing"</td></tr>
+<tr><td><span class="badge badge-med">7</span></td><td>Photographer</td><td>Advertising & Marketing</td><td>Serves real estate, marketing, events, and personal branding.</td><td>Real Estate, Digital Marketing, Caterer</td><td>"We need professional headshots" / "Listing our home"</td></tr>
+<tr><td><span class="badge badge-med">8</span></td><td>Personal Injury Law</td><td>Legal & Accounting</td><td>Connects with Auto Repair, Chiropractor. High-value referrals.</td><td>Auto/Car Repair, Chiropractor, Massage Therapist</td><td>"I was in a car accident" / "I got hurt at work"</td></tr>
+<tr><td><span class="badge badge-med">9</span></td><td>Graphic Designer</td><td>Advertising & Marketing</td><td>Partners with Digital Marketing. Universal branding need.</td><td>Digital Marketing, Commercial Insurance, Business Consultant</td><td>"I need a new logo" / "We're rebranding"</td></tr>
+<tr><td><span class="badge badge-med">10</span></td><td>Senior Service Provider</td><td>Health & Wellness</td><td>Large senior population. Connects to Estate Planning, Financial Advisor.</td><td>Estate Planning Law, Financial Advisor, Residential Real Estate</td><td>"My parents need help at home" / "Looking into assisted living"</td></tr>
+<tr><td><span class="badge badge-low">11</span></td><td>Solar</td><td>Construction</td><td>Wine country sunshine + eco-conscious community.</td><td>Electrician, Roofing, Builder/GC</td><td>"Electric bill is too high" / "Building a new home"</td></tr>
+<tr><td><span class="badge badge-low">12</span></td><td>Tax Advisor</td><td>Legal & Accounting</td><td>Completes financial Power Team.</td><td>Bookkeeping, Estate Planning Law, Financial Advisor</td><td>"Tax season is coming" / "Business taxes help"</td></tr>
+<tr><td><span class="badge badge-low">13</span></td><td>Credit Card/Merchant Services</td><td>Finance & Insurance</td><td>Every business owner processes payments.</td><td>Business Consultant, Bookkeeping, Commercial Insurance</td><td>"Processing fees too high" / "Opening a new store"</td></tr>
+<tr><td><span class="badge badge-low">14</span></td><td>Commercial Real Estate</td><td>Real Estate</td><td>Complements Residential Real Estate.</td><td>Commercial Insurance, Business Consultant, Banking</td><td>"Looking for office space" / "Invest in commercial property"</td></tr>
+<tr><td><span class="badge badge-low">15</span></td><td>Web Design</td><td>Advertising & Marketing</td><td>Every business needs a website.</td><td>Digital Marketing, Graphic Designer, Business Consultant</td><td>"Website looks outdated" / "Need a new website"</td></tr>
+<tr><td><span class="badge badge-low">16</span></td><td>Life Coach</td><td>Training & Coaching</td><td>Complements Business Consultant and wellness sphere.</td><td>Business Consultant, Chiropractor, Financial Advisor</td><td>"Feeling stuck in career" / "Need better goals"</td></tr>
+<tr><td><span class="badge badge-low">17</span></td><td>Health & Wellness (Other)</td><td>Health & Wellness</td><td>Broadens wellness sphere for health-conscious Sonoma County.</td><td>Chiropractor, Acupuncture, Massage Therapist</td><td>"Want a holistic approach to health"</td></tr>
+<tr><td><span class="badge badge-low">18</span></td><td>Professional Organizer</td><td>Event & Business Services</td><td>Serves real estate staging and residential clients.</td><td>Residential Real Estate, Buying Agent, Cleaning Residential</td><td>"I'm downsizing" / "Can't organize closets"</td></tr>
+<tr><td><span class="badge badge-low">19</span></td><td>Cleaning – Commercial</td><td>Cleaning Services</td><td>Serves every business owner in the chapter.</td><td>Commercial Insurance, Builder/GC, Commercial Real Estate</td><td>"Office needs cleaning" / "Moved into new space"</td></tr>
+<tr><td><span class="badge badge-low">20</span></td><td>Business Law</td><td>Legal & Accounting</td><td>Serves every business owner member.</td><td>Business Consultant, Commercial Insurance, Estate Planning Law</td><td>"Forming an LLC" / "Contract dispute"</td></tr>
+</tbody>
+</table>
+</div>
+
+<h2>🔎 Overlooked / Non-Obvious Professions</h2>
+<div class="sphere-card"><h4>📋 Notary</h4><p>In constant demand for real estate closings, estate planning, and business documents. Connects with Estate Planning Law, Real Estate, Mortgages, and Financial Advisor.</p></div>
+<div class="sphere-card"><h4>✈️ Travel Agent</h4><p>Wine country destination market. Connects with Caterer, Event Planner, Photographer, and high-net-worth clients. Often overlooked but generates "thank you" referrals.</p></div>
+<div class="sphere-card"><h4>🏘️ Property Management</h4><p>Bridges Residential Real Estate with Builder/GC, HVAC, Electrician, Plumbing, Handyman, and Cleaning. Instant referral machine.</p></div>
+</div>
+
+<!-- SECTION 6: VENDORS -->
+<div class="section" id="vendors">
+<h1>🔎 Local Vendor Search Results (Top 10 Professions)</h1>
+<p class="subtitle">All vendors within ~30 miles of 1011 College Ave, Santa Rosa, CA 95404</p>
+
+<div class="tab-btns" id="vendorTabs">
+  <div class="tab-btn active" onclick="showVendorTab(0)">1️⃣ P&C Insurance</div>
+  <div class="tab-btn" onclick="showVendorTab(1)">2️⃣ Interior Design</div>
+  <div class="tab-btn" onclick="showVendorTab(2)">3️⃣ Banking</div>
+  <div class="tab-btn" onclick="showVendorTab(3)">4️⃣ IT Consultants</div>
+  <div class="tab-btn" onclick="showVendorTab(4)">5️⃣ Skin Care</div>
+  <div class="tab-btn" onclick="showVendorTab(5)">6️⃣ Photographer</div>
+  <div class="tab-btn" onclick="showVendorTab(6)">7️⃣ PI Law</div>
+  <div class="tab-btn" onclick="showVendorTab(7)">8️⃣ Graphic Design</div>
+  <div class="tab-btn" onclick="showVendorTab(8)">9️⃣ Senior Services</div>
+  <div class="tab-btn" onclick="showVendorTab(9)">🔟 Flooring</div>
+</div>
+
+<div id="vendorContent">
+<!-- Tab 0: P&C Insurance -->
+<div class="tab-content active" id="vtab0">
+<h3>Property & Casualty Insurance <span class="badge badge-high">Priority #1</span></h3>
+<p style="color:#aaa;font-size:12px;margin:6px 0;">Best inviter(s): Christopher Wilson, Gregory Brausen, Laura Hall, Kristen Preuss</p>
+<input class="search-bar" placeholder="🔍 Search vendors..." oninput="filterTable('vt0','');" id="sv0">
+<div class="tbl-wrap">
+<table id="vt0"><thead><tr><th onclick="sortTable('vt0',0)">#</th><th onclick="sortTable('vt0',1)">Business Name</th><th onclick="sortTable('vt0',2)">Phone</th><th>Address</th><th>Why It Fits</th><th>Best Outreach Angle</th><th>Actions</th></tr></thead><tbody>
+<tr><td>1</td><td>Barber Insurance Agency</td><td>(707) 526-7900</td><td>620 College Ave, Santa Rosa, CA</td><td>Full-service P&C agency steps from meeting venue</td><td>Proximity + immediate referral pipeline from 29 members</td><td><a href="tel:7075267900" class="btn btn-phone">📞</a><a href="#" class="btn btn-email" onclick="openVendorEmail('Barber Insurance Agency','Property & Casualty Insurance','620 College Ave, Santa Rosa');return false;">📧</a></td></tr>
+<tr><td>2</td><td>Jeff Lecoeuche Insurance Agency</td><td>(707) 526-5222</td><td>726 Mendocino Ave, Santa Rosa, CA</td><td>Established independent P&C agency (4.9 rating)</td><td>Local visibility + partnerships with real estate and construction pros</td><td><a href="tel:7075265222" class="btn btn-phone">📞</a><a href="#" class="btn btn-email" onclick="openVendorEmail('Jeff Lecoeuche Insurance Agency','Property & Casualty Insurance','726 Mendocino Ave, Santa Rosa');return false;">📧</a></td></tr>
+<tr><td>3</td><td>Valley West Insurance Services</td><td>(707) 575-9378</td><td>1630 Sebastopol Rd #102, Santa Rosa, CA</td><td>Independent agency — personal & commercial lines (4.9)</td><td>Complements existing Commercial Insurance seat</td><td><a href="tel:7075759378" class="btn btn-phone">📞</a><a href="#" class="btn btn-email" onclick="openVendorEmail('Valley West Insurance Services','Property & Casualty Insurance','1630 Sebastopol Rd, Santa Rosa');return false;">📧</a></td></tr>
+<tr><td>4</td><td>Loewen Insurance Services</td><td>(707) 528-8483</td><td>100 Stony Point Rd #270, Santa Rosa, CA</td><td>Established brokerage with broad P&C offerings (4.7)</td><td>Strong community partnerships + contractor referrals</td><td><a href="tel:7075288483" class="btn btn-phone">📞</a><a href="#" class="btn btn-email" onclick="openVendorEmail('Loewen Insurance Services','Property & Casualty Insurance','100 Stony Point Rd, Santa Rosa');return false;">📧</a></td></tr>
+<tr><td>5</td><td>Eddie Sandoval – State Farm</td><td>(707) 536-9492</td><td>348 College Ave, Santa Rosa, CA</td><td>State Farm agent on College Ave (4.9 rating)</td><td>Brand recognition + high client volume = referral reciprocity</td><td><a href="tel:7075369492" class="btn btn-phone">📞</a><a href="#" class="btn btn-email" onclick="openVendorEmail('Eddie Sandoval – State Farm','Property & Casualty Insurance','348 College Ave, Santa Rosa');return false;">📧</a></td></tr>
+</tbody></table></div>
+</div>
+
+<!-- Tab 1: Interior Design -->
+<div class="tab-content" id="vtab1">
+<h3>Interior Design <span class="badge badge-high">Priority #2</span></h3>
+<p style="color:#aaa;font-size:12px;margin:6px 0;">Best inviter(s): Richard Lindsay, Kristen Preuss, Laura Hall, Ampelio Aguilar</p>
+<div class="tbl-wrap">
+<table id="vt1"><thead><tr><th>#</th><th>Business Name</th><th>Phone</th><th>Address</th><th>Why It Fits</th><th>Best Outreach Angle</th><th>Actions</th></tr></thead><tbody>
+<tr><td>1</td><td>Humanity Design Works</td><td>(707) 595-5046</td><td>799 Piner Rd Suite A, Santa Rosa, CA</td><td>Full-service interior design (4.8)</td><td>Immediate referral pipeline from Real Estate and Builder/GC</td><td><a href="tel:7075955046" class="btn btn-phone">📞</a><a href="#" class="btn btn-email" onclick="openVendorEmail('Humanity Design Works','Interior Design','799 Piner Rd, Santa Rosa');return false;">📧</a></td></tr>
+<tr><td>2</td><td>Rock House Design</td><td>(707) 595-1709</td><td>5027 Boulder Ln, Santa Rosa, CA</td><td>Local designer with residential focus (5.0)</td><td>Partnerships with construction members for remodel projects</td><td><a href="tel:7075951709" class="btn btn-phone">📞</a><a href="#" class="btn btn-email" onclick="openVendorEmail('Rock House Design','Interior Design','5027 Boulder Ln, Santa Rosa');return false;">📧</a></td></tr>
+<tr><td>3</td><td>Integrated Design</td><td>(707) 568-0108</td><td>804 College Ave, Santa Rosa, CA</td><td>Studio right on College Ave near meeting venue (5.0)</td><td>Walking distance to Druids Hall + home services power team</td><td><a href="tel:7075680108" class="btn btn-phone">📞</a><a href="#" class="btn btn-email" onclick="openVendorEmail('Integrated Design','Interior Design','804 College Ave, Santa Rosa');return false;">📧</a></td></tr>
+<tr><td>4</td><td>Tamera Embree Designs</td><td>(707) 545-7221</td><td>2129 4th St, Santa Rosa, CA</td><td>Established Santa Rosa designer (5.0)</td><td>Local expertise + referral partnerships with real estate</td><td><a href="tel:7075457221" class="btn btn-phone">📞</a><a href="#" class="btn btn-email" onclick="openVendorEmail('Tamera Embree Designs','Interior Design','2129 4th St, Santa Rosa');return false;">📧</a></td></tr>
+<tr><td>5</td><td>Zeitgeist Sonoma Architecture + Interior Design</td><td>(707) 526-4161</td><td>723 Humboldt St, Santa Rosa, CA</td><td>Combined architecture and interior design (5.0)</td><td>Dual expertise attracts high-value projects</td><td><a href="tel:7075264161" class="btn btn-phone">📞</a><a href="#" class="btn btn-email" onclick="openVendorEmail('Zeitgeist Sonoma','Interior Design','723 Humboldt St, Santa Rosa');return false;">📧</a></td></tr>
+</tbody></table></div>
+</div>
+
+<!-- Tab 2: Banking -->
+<div class="tab-content" id="vtab2">
+<h3>Banking Services <span class="badge badge-high">Priority #3</span></h3>
+<p style="color:#aaa;font-size:12px;margin:6px 0;">Best inviter(s): David Crowhurst, Ryan Cassidy, Nicholas Caston</p>
+<div class="tbl-wrap">
+<table id="vt2"><thead><tr><th>#</th><th>Business Name</th><th>Phone</th><th>Address</th><th>Why It Fits</th><th>Best Outreach Angle</th><th>Actions</th></tr></thead><tbody>
+<tr><td>1</td><td>Community First Credit Union</td><td>(707) 546-6000</td><td>501 College Ave, Santa Rosa, CA</td><td>Local credit union on College Ave (4.2)</td><td>Community partnerships + proximity</td><td><a href="tel:7075466000" class="btn btn-phone">📞</a><a href="#" class="btn btn-email" onclick="openVendorEmail('Community First Credit Union','Banking Services','501 College Ave, Santa Rosa');return false;">📧</a></td></tr>
+<tr><td>2</td><td>Exchange Bank</td><td>(707) 524-3044</td><td>Multiple Santa Rosa locations</td><td>Locally owned Sonoma County bank</td><td>Strong local brand + small business focus</td><td><a href="tel:7075243044" class="btn btn-phone">📞</a><a href="#" class="btn btn-email" onclick="openVendorEmail('Exchange Bank','Banking Services','Santa Rosa');return false;">📧</a></td></tr>
+<tr><td>3</td><td>Sonoma Federal Credit Union</td><td>(707) 527-6216</td><td>917 College Ave, Santa Rosa, CA</td><td>Credit union directly on College Ave (3.9)</td><td>Hyper-local + same community</td><td><a href="tel:7075276216" class="btn btn-phone">📞</a><a href="#" class="btn btn-email" onclick="openVendorEmail('Sonoma Federal Credit Union','Banking Services','917 College Ave, Santa Rosa');return false;">📧</a></td></tr>
+<tr><td>4</td><td>Summit State Bank</td><td>(707) 568-6000</td><td>500 Bicentennial Way, Santa Rosa, CA</td><td>Locally HQ'd community bank — business banking focus</td><td>Business banking aligns with Business Consultant referrals</td><td><a href="tel:7075686000" class="btn btn-phone">📞</a><a href="#" class="btn btn-email" onclick="openVendorEmail('Summit State Bank','Banking Services','500 Bicentennial Way, Santa Rosa');return false;">📧</a></td></tr>
+<tr><td>5</td><td>Poppy Bank</td><td>(707) 636-9010</td><td>438 1st St #100, Santa Rosa, CA</td><td>Community-focused bank (3.6)</td><td>Growing bank looking for community partnerships</td><td><a href="tel:7076369010" class="btn btn-phone">📞</a><a href="#" class="btn btn-email" onclick="openVendorEmail('Poppy Bank','Banking Services','438 1st St, Santa Rosa');return false;">📧</a></td></tr>
+</tbody></table></div>
+</div>
+
+<!-- Tab 3: IT -->
+<div class="tab-content" id="vtab3">
+<h3>IT Consultants <span class="badge badge-high">Priority #4</span></h3>
+<p style="color:#aaa;font-size:12px;margin:6px 0;">Best inviter(s): Rhett Graff, Nicholas Caston, Christopher Wilson</p>
+<div class="tbl-wrap">
+<table id="vt3"><thead><tr><th>#</th><th>Business Name</th><th>Phone</th><th>Address</th><th>Why It Fits</th><th>Best Outreach Angle</th><th>Actions</th></tr></thead><tbody>
+<tr><td>1</td><td>Wooden Spoon Managed IT Services</td><td>(707) 520-9141</td><td>521 College Ave #121, Santa Rosa, CA</td><td>Managed IT on College Ave (5.0)</td><td>Every business in the chapter is a potential client</td><td><a href="tel:7075209141" class="btn btn-phone">📞</a><a href="#" class="btn btn-email" onclick="openVendorEmail('Wooden Spoon Managed IT Services','IT Consulting','521 College Ave, Santa Rosa');return false;">📧</a></td></tr>
+<tr><td>2</td><td>SR Technologies Managed IT</td><td>(800) 250-7122</td><td>1550 Airport Blvd Ste 101, Santa Rosa, CA</td><td>Full-service managed IT (4.9)</td><td>Business technology partnerships</td><td><a href="tel:8002507122" class="btn btn-phone">📞</a><a href="#" class="btn btn-email" onclick="openVendorEmail('SR Technologies','IT Consulting','1550 Airport Blvd, Santa Rosa');return false;">📧</a></td></tr>
+<tr><td>3</td><td>TeamLogic IT North Bay</td><td>(707) 582-0510</td><td>2455 Bennett Valley Rd A112, Santa Rosa, CA</td><td>National IT franchise with local expertise (5.0)</td><td>Franchise model understands structured networking</td><td><a href="tel:7075820510" class="btn btn-phone">📞</a><a href="#" class="btn btn-email" onclick="openVendorEmail('TeamLogic IT North Bay','IT Consulting','2455 Bennett Valley Rd, Santa Rosa');return false;">📧</a></td></tr>
+<tr><td>4</td><td>dmi Networking</td><td>(707) 523-5915</td><td>320 Tesconi Cir #C-2, Santa Rosa, CA</td><td>Local IT networking specialist (4.9)</td><td>Technical expertise for small business networks</td><td><a href="tel:7075235915" class="btn btn-phone">📞</a><a href="#" class="btn btn-email" onclick="openVendorEmail('dmi Networking','IT Consulting','320 Tesconi Cir, Santa Rosa');return false;">📧</a></td></tr>
+<tr><td>5</td><td>True IT</td><td>(707) 755-5858</td><td>1500 4th St, Santa Rosa, CA</td><td>IT support downtown Santa Rosa (5.0)</td><td>Downtown location serves same business community</td><td><a href="tel:7077555858" class="btn btn-phone">📞</a><a href="#" class="btn btn-email" onclick="openVendorEmail('True IT','IT Consulting','1500 4th St, Santa Rosa');return false;">📧</a></td></tr>
+</tbody></table></div>
+</div>
+
+<!-- Tab 4: Skin Care -->
+<div class="tab-content" id="vtab4">
+<h3>Cosmetics / Skin Care <span class="badge badge-high">Priority #5</span></h3>
+<p style="color:#aaa;font-size:12px;margin:6px 0;">Best inviter(s): Tiffany Gann, Chad Mordecai, Pamela Sauers</p>
+<div class="tbl-wrap">
+<table id="vt4"><thead><tr><th>#</th><th>Business Name</th><th>Phone</th><th>Address</th><th>Why It Fits</th><th>Best Outreach Angle</th><th>Actions</th></tr></thead><tbody>
+<tr><td>1</td><td>The Skin Clinique Inc.</td><td>Not listed</td><td>4357 Montgomery Dr Suite I, Santa Rosa, CA</td><td>Established skin care clinic (4.9)</td><td>Wellness sphere partnership + shared clientele</td><td><a href="#" class="btn btn-email" onclick="openVendorEmail('The Skin Clinique Inc.','Cosmetics/Skin Care','4357 Montgomery Dr, Santa Rosa');return false;">📧</a></td></tr>
+<tr><td>2</td><td>Pure Skin Advanced</td><td>Not listed</td><td>445 Orchard St, Santa Rosa, CA</td><td>Boutique beauty salon, advanced skin care (5.0)</td><td>High-end clientele = quality referral opportunities</td><td><a href="#" class="btn btn-email" onclick="openVendorEmail('Pure Skin Advanced','Cosmetics/Skin Care','445 Orchard St, Santa Rosa');return false;">📧</a></td></tr>
+<tr><td>3</td><td>REAL Aesthetics + Wellness</td><td>Not listed</td><td>2322 Midway Dr, Santa Rosa, CA</td><td>Aesthetics + wellness combined (5.0)</td><td>Aligns perfectly with health sphere members</td><td><a href="#" class="btn btn-email" onclick="openVendorEmail('REAL Aesthetics + Wellness','Cosmetics/Skin Care','2322 Midway Dr, Santa Rosa');return false;">📧</a></td></tr>
+<tr><td>4</td><td>Morpheus Medical Aesthetics</td><td>Not listed</td><td>2800 Cleveland Ave D, Santa Rosa, CA</td><td>Medical aesthetics clinic (4.9)</td><td>Medical-grade services + high-income demographic</td><td><a href="#" class="btn btn-email" onclick="openVendorEmail('Morpheus Medical Aesthetics','Cosmetics/Skin Care','2800 Cleveland Ave, Santa Rosa');return false;">📧</a></td></tr>
+<tr><td>5</td><td>Santa Rosa Skin Studio</td><td>Not listed</td><td>4927 Sonoma Hwy Suite C, Santa Rosa, CA</td><td>Boutique skin care studio (5.0)</td><td>Local, independent — ideal BNI member profile</td><td><a href="#" class="btn btn-email" onclick="openVendorEmail('Santa Rosa Skin Studio','Cosmetics/Skin Care','4927 Sonoma Hwy, Santa Rosa');return false;">📧</a></td></tr>
+</tbody></table></div>
+</div>
+
+<!-- Tab 5: Photographer -->
+<div class="tab-content" id="vtab5">
+<h3>Photographer <span class="badge badge-med">Priority #7</span></h3>
+<p style="color:#aaa;font-size:12px;margin:6px 0;">Best inviter(s): Rhett Graff, Laura Hall, Dawn Zaft</p>
+<div class="tbl-wrap">
+<table id="vt5"><thead><tr><th>#</th><th>Business Name</th><th>Phone</th><th>Address</th><th>Why It Fits</th><th>Actions</th></tr></thead><tbody>
+<tr><td>1</td><td>Brian Davis Photography</td><td>(707) 508-6575</td><td>5430 Commerce Blvd, Santa Rosa, CA</td><td>Professional photographer (5.0, 62 reviews)</td><td><a href="tel:7075086575" class="btn btn-phone">📞</a><a href="#" class="btn btn-email" onclick="openVendorEmail('Brian Davis Photography','Photography','5430 Commerce Blvd, Santa Rosa');return false;">📧</a></td></tr>
+<tr><td>2</td><td>M.J. Wickham Photography</td><td>(707) 479-0533</td><td>977 Irwin Ln, Santa Rosa, CA</td><td>Professional studio (5.0)</td><td><a href="tel:7074790533" class="btn btn-phone">📞</a><a href="#" class="btn btn-email" onclick="openVendorEmail('M.J. Wickham Photography','Photography','977 Irwin Ln, Santa Rosa');return false;">📧</a></td></tr>
+<tr><td>3</td><td>Katie Monroe Brand Photography</td><td>(707) 326-0639</td><td>Santa Rosa, CA</td><td>Brand photography specialist (5.0)</td><td><a href="tel:7073260639" class="btn btn-phone">📞</a><a href="#" class="btn btn-email" onclick="openVendorEmail('Katie Monroe Brand Photography','Photography','Santa Rosa');return false;">📧</a></td></tr>
+<tr><td>4</td><td>Bella Photography & Design</td><td>(707) 526-3771</td><td>1404 4th St STE 100, Santa Rosa, CA</td><td>Photography + design studio (4.7)</td><td><a href="tel:7075263771" class="btn btn-phone">📞</a><a href="#" class="btn btn-email" onclick="openVendorEmail('Bella Photography & Design','Photography','1404 4th St, Santa Rosa');return false;">📧</a></td></tr>
+<tr><td>5</td><td>Shoey Sindel Photography</td><td>(510) 917-0659</td><td>613 4th St Suite #210, Santa Rosa, CA</td><td>Professional photography (5.0)</td><td><a href="tel:5109170659" class="btn btn-phone">📞</a><a href="#" class="btn btn-email" onclick="openVendorEmail('Shoey Sindel Photography','Photography','613 4th St, Santa Rosa');return false;">📧</a></td></tr>
+</tbody></table></div>
+</div>
+
+<!-- Tab 6: PI Law -->
+<div class="tab-content" id="vtab6">
+<h3>Personal Injury Law <span class="badge badge-med">Priority #8</span></h3>
+<p style="color:#aaa;font-size:12px;margin:6px 0;">Best inviter(s): Max Bernard, Chad Mordecai, Mat McCoy Sr</p>
+<div class="tbl-wrap">
+<table id="vt6"><thead><tr><th>#</th><th>Business Name</th><th>Phone</th><th>Address</th><th>Why It Fits</th><th>Actions</th></tr></thead><tbody>
+<tr><td>1</td><td>Flahavan Law Offices</td><td>(707) 525-2917</td><td>400 College Ave, Santa Rosa, CA</td><td>Established PI firm on College Ave (4.8)</td><td><a href="tel:7075252917" class="btn btn-phone">📞</a><a href="#" class="btn btn-email" onclick="openVendorEmail('Flahavan Law Offices','Personal Injury Law','400 College Ave, Santa Rosa');return false;">📧</a></td></tr>
+<tr><td>2</td><td>Henderson Law</td><td>(707) 843-3743</td><td>400 College Ave #A, Santa Rosa, CA</td><td>PI attorney on College Ave (4.7)</td><td><a href="tel:7078433743" class="btn btn-phone">📞</a><a href="#" class="btn btn-email" onclick="openVendorEmail('Henderson Law','Personal Injury Law','400 College Ave, Santa Rosa');return false;">📧</a></td></tr>
+<tr><td>3</td><td>Law Offices of Max G. Arnold</td><td>(707) 306-4600</td><td>1410 Neotomas Ave #100, Santa Rosa, CA</td><td>Dedicated PI practice (4.9, 48 reviews)</td><td><a href="tel:7073064600" class="btn btn-phone">📞</a><a href="#" class="btn btn-email" onclick="openVendorEmail('Law Offices of Max G. Arnold','Personal Injury Law','1410 Neotomas Ave, Santa Rosa');return false;">📧</a></td></tr>
+<tr><td>4</td><td>Law Offices of Julia J. Parranto</td><td>(707) 573-8868</td><td>819 Sonoma Ave, Santa Rosa, CA</td><td>Established local PI attorney (5.0)</td><td><a href="tel:7075738868" class="btn btn-phone">📞</a><a href="#" class="btn btn-email" onclick="openVendorEmail('Law Offices of Julia J. Parranto','Personal Injury Law','819 Sonoma Ave, Santa Rosa');return false;">📧</a></td></tr>
+<tr><td>5</td><td>North Bay Legal</td><td>(707) 636-3287</td><td>420 E St #140, Santa Rosa, CA</td><td>PI firm serving North Bay (5.0, 20 reviews)</td><td><a href="tel:7076363287" class="btn btn-phone">📞</a><a href="#" class="btn btn-email" onclick="openVendorEmail('North Bay Legal','Personal Injury Law','420 E St, Santa Rosa');return false;">📧</a></td></tr>
+</tbody></table></div>
+</div>
+
+<!-- Tab 7: Graphic Design -->
+<div class="tab-content" id="vtab7">
+<h3>Graphic Designer <span class="badge badge-med">Priority #9</span></h3>
+<p style="color:#aaa;font-size:12px;margin:6px 0;">Best inviter(s): Rhett Graff, Nicholas Caston, Christopher Wilson</p>
+<div class="tbl-wrap">
+<table id="vt7"><thead><tr><th>#</th><th>Business Name</th><th>Phone</th><th>Address</th><th>Why It Fits</th><th>Actions</th></tr></thead><tbody>
+<tr><td>1</td><td>Studio B Creative</td><td>(415) 279-3013</td><td>555 5th St, Santa Rosa, CA</td><td>Professional graphic design studio (4.9)</td><td><a href="tel:4152793013" class="btn btn-phone">📞</a><a href="#" class="btn btn-email" onclick="openVendorEmail('Studio B Creative','Graphic Design','555 5th St, Santa Rosa');return false;">📧</a></td></tr>
+<tr><td>2</td><td>LINK Creative Inc.</td><td>(707) 653-5465</td><td>205 5th St Suite J, Santa Rosa, CA</td><td>Full-service design firm (5.0)</td><td><a href="tel:7076535465" class="btn btn-phone">📞</a><a href="#" class="btn btn-email" onclick="openVendorEmail('LINK Creative Inc.','Graphic Design','205 5th St, Santa Rosa');return false;">📧</a></td></tr>
+<tr><td>3</td><td>CAVA Graphics</td><td>(707) 239-9144</td><td>1580 Sebastopol Rd, Santa Rosa, CA</td><td>Graphic design studio (4.8)</td><td><a href="tel:7072399144" class="btn btn-phone">📞</a><a href="#" class="btn btn-email" onclick="openVendorEmail('CAVA Graphics','Graphic Design','1580 Sebastopol Rd, Santa Rosa');return false;">📧</a></td></tr>
+<tr><td>4</td><td>smallnormous LLC</td><td>(707) 583-9505</td><td>971 Baird Rd, Santa Rosa, CA</td><td>Boutique design firm (5.0)</td><td><a href="tel:7075839505" class="btn btn-phone">📞</a><a href="#" class="btn btn-email" onclick="openVendorEmail('smallnormous LLC','Graphic Design','971 Baird Rd, Santa Rosa');return false;">📧</a></td></tr>
+<tr><td>5</td><td>Image360 Santa Rosa</td><td>(707) 575-5510</td><td>1257 Cleveland Ave A, Santa Rosa, CA</td><td>Custom signage and graphic design (4.9)</td><td><a href="tel:7075755510" class="btn btn-phone">📞</a><a href="#" class="btn btn-email" onclick="openVendorEmail('Image360 Santa Rosa','Graphic Design','1257 Cleveland Ave, Santa Rosa');return false;">📧</a></td></tr>
+</tbody></table></div>
+</div>
+
+<!-- Tab 8: Senior Services -->
+<div class="tab-content" id="vtab8">
+<h3>Senior Service Provider <span class="badge badge-med">Priority #10</span></h3>
+<p style="color:#aaa;font-size:12px;margin:6px 0;">Best inviter(s): Max Bernard, Ryan Cassidy, James Eakin</p>
+<div class="tbl-wrap">
+<table id="vt8"><thead><tr><th>#</th><th>Business Name</th><th>Phone</th><th>Address</th><th>Why It Fits</th><th>Actions</th></tr></thead><tbody>
+<tr><td>1</td><td>Senior Helpers North Bay</td><td>(707) 297-9187</td><td>30 Kawana Springs Rd Suite B, Santa Rosa, CA</td><td>In-home senior care (4.8)</td><td><a href="tel:7072979187" class="btn btn-phone">📞</a><a href="#" class="btn btn-email" onclick="openVendorEmail('Senior Helpers North Bay','Senior Care Services','30 Kawana Springs Rd, Santa Rosa');return false;">📧</a></td></tr>
+<tr><td>2</td><td>Amada Senior Care</td><td>(707) 387-0733</td><td>2135 Armory Dr #100, Santa Rosa, CA</td><td>Premium in-home senior care (4.9)</td><td><a href="tel:7073870733" class="btn btn-phone">📞</a><a href="#" class="btn btn-email" onclick="openVendorEmail('Amada Senior Care','Senior Care Services','2135 Armory Dr, Santa Rosa');return false;">📧</a></td></tr>
+<tr><td>3</td><td>At Home Caregivers</td><td>(707) 575-4663</td><td>891 2nd St, Santa Rosa, CA</td><td>Local in-home care agency (4.9)</td><td><a href="tel:7075754663" class="btn btn-phone">📞</a><a href="#" class="btn btn-email" onclick="openVendorEmail('At Home Caregivers','Senior Care Services','891 2nd St, Santa Rosa');return false;">📧</a></td></tr>
+<tr><td>4</td><td>Hillendale Home Care</td><td>(707) 360-1669</td><td>131A Stony Cir Suite 532, Santa Rosa, CA</td><td>Home care with exceptional quality (5.0)</td><td><a href="tel:7073601669" class="btn btn-phone">📞</a><a href="#" class="btn btn-email" onclick="openVendorEmail('Hillendale Home Care','Senior Care Services','131A Stony Cir, Santa Rosa');return false;">📧</a></td></tr>
+<tr><td>5</td><td>Right at Home</td><td>(707) 843-5192</td><td>1221 Farmers Ln Ste A, Santa Rosa, CA</td><td>National franchise, local expertise (4.9)</td><td><a href="tel:7078435192" class="btn btn-phone">📞</a><a href="#" class="btn btn-email" onclick="openVendorEmail('Right at Home','Senior Care Services','1221 Farmers Ln, Santa Rosa');return false;">📧</a></td></tr>
+</tbody></table></div>
+</div>
+
+<!-- Tab 9: Flooring -->
+<div class="tab-content" id="vtab9">
+<h3>Flooring <span class="badge badge-med">Priority #6</span></h3>
+<p style="color:#aaa;font-size:12px;margin:6px 0;">Best inviter(s): Ampelio Aguilar, Richard Lindsay, Chris Mills</p>
+<div style="background:#332211;border:1px solid #aa7700;border-radius:8px;padding:16px;margin:10px 0;">
+<p style="color:#ffaa00;font-weight:600;">⚠️ Note:</p>
+<p style="color:#ccc;font-size:13px;margin-top:4px;">Specific flooring vendor details were not returned in the internet search. <strong>Recommendation:</strong> Ask members Ampelio Aguilar (Tile), Richard Lindsay (Builder/GC), and Michael Eggers (Electrician) who their preferred flooring contractors are — they likely work with flooring professionals regularly and can make warm introductions.</p>
+</div>
+</div>
+
+</div><!-- end vendorContent -->
+</div>
+
+<!-- SECTION 7: INVITATIONS -->
+<div class="section" id="invitations">
+<h1>✉️ Personalized Invitation Templates</h1>
+<p class="subtitle">Click any invitation to expand. Use the copy button to grab the text for your outreach.</p>
+
+<div class="tab-btns" id="invTabs">
+  <div class="tab-btn active" onclick="showInvTab(0)">Barber Insurance</div>
+  <div class="tab-btn" onclick="showInvTab(1)">Integrated Design</div>
+  <div class="tab-btn" onclick="showInvTab(2)">Wooden Spoon IT</div>
+  <div class="tab-btn" onclick="showInvTab(3)">Flahavan Law</div>
+  <div class="tab-btn" onclick="showInvTab(4)">Senior Helpers</div>
+</div>
+
+<div id="invContent">
+<!-- Inv 0: Barber Insurance -->
+<div class="tab-content active" id="itab0">
+<div class="invitation-box"><h4>📧 Email Invitation — Barber Insurance Agency</h4>
+<pre id="inv0email">Subject: You're Invited: Join 29 Local Business Owners This Friday Morning in Santa Rosa
+
+Dear Barber Insurance Agency Team,
+
+My name is [Member Name], and I'm a member of BNI Alliance Builders, a structured professional referral group that meets every Friday morning right here in Santa Rosa — just down College Ave from your office.
+
+I'm reaching out because I believe Barber Insurance Agency would be an outstanding fit for our chapter. Here's why:
+
+1. Immediate Referral Pipeline: Our chapter includes 29 local professionals — including a residential mortgage specialist, real estate agents, a builder/general contractor, an electrician, a roofer, and more. These are professionals whose clients regularly need Property & Casualty Insurance.
+
+2. Trusted Partnerships: BNI is built on the philosophy of Givers Gain® — the idea that by helping others succeed, we all grow. Our members actively look for opportunities to refer trusted partners. Imagine having 28 people on the lookout for your next client every single week.
+
+3. Community Visibility: Being part of BNI Alliance Builders positions Barber Insurance Agency as the go-to P&C insurance provider for a network of connected Santa Rosa business owners and their clients.
+
+We meet every Friday at 7:00 AM at Druids Hall, 1011 College Ave, Santa Rosa, CA 95404.
+
+To visit a chapter just complete this (***Visitor Invite***) simple form to reserve your seat and begin accelerating your business.
+
+I'd love to welcome you as our guest — no obligation, just a chance to experience the power of structured referral networking firsthand.
+
+Warm regards,
+[Member Name]
+[Company Name]
+[Phone Number]
+[Email Address]</pre>
+<button class="copy-btn" onclick="copyText('inv0email')">📋 Copy Email</button>
+</div>
+<div class="invitation-box"><h4>💬 SMS Invitation</h4>
+<pre id="inv0sms">Hi! I'm [Name] from BNI Alliance Builders in Santa Rosa. We have 29 members who regularly refer insurance needs. We'd love to host Barber Insurance as our guest this Fri 7AM at Druids Hall, 1011 College Ave. RSVP: (***Visitor Invite***) 🤝</pre>
+<button class="copy-btn" onclick="copyText('inv0sms')">📋 Copy SMS</button>
+</div>
+<div class="invitation-box"><h4>📞 Phone Script (20-30 sec)</h4>
+<pre id="inv0phone">"Hi, my name is [Name] and I'm calling from BNI Alliance Builders, a professional referral networking group here in Santa Rosa. We have 29 local business owners who meet every Friday morning to exchange referrals, and we're looking for a trusted Property & Casualty insurance professional to join our team. I'd love to invite someone from Barber Insurance Agency to attend as our guest this Friday. Could I get the best email to send over the details? And who would be the best person to speak with about community partnerships?"</pre>
+<button class="copy-btn" onclick="copyText('inv0phone')">📋 Copy Script</button>
+</div>
+<div class="invitation-box"><h4>🔄 48-Hour Follow-Up</h4>
+<pre id="inv0followup">Subject: Quick Follow-Up — Your Invite to BNI Alliance Builders This Friday
+
+Hi there,
+
+Just checking in to make sure you received my invitation to visit BNI Alliance Builders! We'd love to have Barber Insurance Agency as our guest.
+
+We have upcoming meetings this Friday and the following Friday — both at 7:00 AM at Druids Hall, 1011 College Ave, Santa Rosa. Would either date work for you?
+
+Reserve your seat here: (***Visitor Invite***)
+
+Looking forward to hearing from you!
+[Member Name]
+[Phone Number]</pre>
+<button class="copy-btn" onclick="copyText('inv0followup')">📋 Copy Follow-Up</button>
+</div>
+</div>
+
+<!-- Inv 1: Integrated Design -->
+<div class="tab-content" id="itab1">
+<div class="invitation-box"><h4>📧 Email Invitation — Integrated Design</h4>
+<pre id="inv1email">Subject: Integrated Design + BNI Alliance Builders = A Referral Partnership Made in Santa Rosa
+
+Dear Integrated Design Team,
+
+I'm [Member Name], a member of BNI Alliance Builders here in Santa Rosa. Our chapter meets every Friday morning at Druids Hall — right around the corner from your studio on College Ave — and I wanted to personally invite you to attend as our guest.
+
+Here's why I think Integrated Design would thrive with us:
+
+1. A Built-In Client Pipeline: Our chapter includes a builder/general contractor, a tile specialist, a roofer, an electrician, HVAC professional, a plumber, and two real estate professionals. Every one of these members works with homeowners who need interior design services.
+
+2. Collaborative Growth: Imagine being the interior designer that 29 trusted professionals recommend by name. BNI's Givers Gain® philosophy means our members actively seek out referral opportunities for each other — every single week.
+
+3. Local Market Dominance: Positioning Integrated Design as the chapter's go-to interior design resource means increased visibility among Santa Rosa's most connected business owners.
+
+We meet every Friday at 7:00 AM at Druids Hall, 1011 College Ave, Santa Rosa, CA 95404.
+
+To visit a chapter just complete this (***Visitor Invite***) simple form to reserve your seat and begin accelerating your business.
+
+Best regards,
+[Member Name]
+[Company Name]
+[Phone Number]
+[Email Address]</pre>
+<button class="copy-btn" onclick="copyText('inv1email')">📋 Copy Email</button>
+</div>
+<div class="invitation-box"><h4>💬 SMS</h4><pre id="inv1sms">Hi! I'm [Name] from BNI Alliance Builders. Our chapter has builders, realtors & contractors who need an interior designer to refer to. We'd love to host Integrated Design this Fri 7AM at Druids Hall, 1011 College Ave. RSVP: (***Visitor Invite***) ✨</pre><button class="copy-btn" onclick="copyText('inv1sms')">📋 Copy SMS</button></div>
+<div class="invitation-box"><h4>📞 Phone Script</h4><pre id="inv1phone">"Hi, I'm [Name] from BNI Alliance Builders, a professional referral group in Santa Rosa. Our chapter has builders, realtors, and tradespeople whose clients regularly need interior design work, and we're looking for a talented interior designer to partner with. I'd love to invite someone from Integrated Design to join us as a guest this Friday at 7 AM. What's the best email to send the details?"</pre><button class="copy-btn" onclick="copyText('inv1phone')">📋 Copy Script</button></div>
+<div class="invitation-box"><h4>🔄 48-Hour Follow-Up</h4><pre id="inv1followup">Subject: Still Have a Seat Saved for Integrated Design!
+
+Hi there, just following up on my invitation to visit BNI Alliance Builders this Friday morning! Our builder, real estate agents, and trade professionals are eager to meet a local interior designer they can confidently refer.
+
+We meet this Friday and the following Friday — both at 7:00 AM at Druids Hall, 1011 College Ave. RSVP here: (***Visitor Invite***)
+
+[Member Name] | [Phone]</pre><button class="copy-btn" onclick="copyText('inv1followup')">📋 Copy Follow-Up</button></div>
+</div>
+
+<!-- Inv 2: Wooden Spoon IT -->
+<div class="tab-content" id="itab2">
+<div class="invitation-box"><h4>📧 Email Invitation — Wooden Spoon Managed IT</h4>
+<pre id="inv2email">Subject: 29 Business Owners Need IT Help — Can Wooden Spoon Be Their Go-To?
+
+Dear Wooden Spoon Managed IT Services Team,
+
+I'm [Member Name] with BNI Alliance Builders in Santa Rosa. As a chapter of 29 local business professionals, we're always looking for trusted experts to add to our referral network — and IT consulting is at the top of our list.
+
+Here's why Wooden Spoon would be a perfect fit:
+
+1. Every Member Is a Potential Referral Source: From contractors and real estate agents to financial advisors and attorneys — every one of our 29 members either needs IT support themselves or serves clients who do.
+
+2. Recurring Revenue Potential: BNI referrals aren't one-and-done. When our members refer Wooden Spoon, they're introducing you to business owners who need ongoing IT management — managed services contracts that produce monthly recurring revenue.
+
+3. Trusted Expert Status: Being the IT seat in BNI Alliance Builders means you become the first name that comes to mind when any of our members — or their clients — say, "Do you know a good IT company?"
+
+We meet every Friday at 7:00 AM at Druids Hall, 1011 College Ave, Santa Rosa, CA 95404 — right next door to your office on College Ave!
+
+To visit a chapter just complete this (***Visitor Invite***) simple form to reserve your seat and begin accelerating your business.
+
+[Member Name]
+[Company Name]
+[Phone Number]</pre>
+<button class="copy-btn" onclick="copyText('inv2email')">📋 Copy Email</button>
+</div>
+<div class="invitation-box"><h4>💬 SMS</h4><pre id="inv2sms">Hi! I'm [Name] from BNI Alliance Builders. We're 29 biz owners at Druids Hall (1011 College Ave) — right near your office! We need a trusted IT pro in our referral network. Visit us Fri at 7AM? RSVP: (***Visitor Invite***) 💻</pre><button class="copy-btn" onclick="copyText('inv2sms')">📋 Copy SMS</button></div>
+<div class="invitation-box"><h4>📞 Phone Script</h4><pre id="inv2phone">"Hi, I'm [Name] with BNI Alliance Builders — we're a professional referral group that meets Friday mornings right on College Ave, near your office. We have 29 business owners in our chapter, and every one of them either needs IT support or knows someone who does. We'd love to invite Wooden Spoon to be our guest this Friday. What's the best email to send the details?"</pre><button class="copy-btn" onclick="copyText('inv2phone')">📋 Copy Script</button></div>
+<div class="invitation-box"><h4>🔄 Follow-Up</h4><pre id="inv2followup">Subject: Still Looking for Our IT Expert — Is Wooden Spoon Available This Friday?
+
+Hi there, following up on my invitation! BNI Alliance Builders meets right in your neighborhood on College Ave and we'd love to have Wooden Spoon attend as our guest.
+
+We have openings this Friday and next — both at 7:00 AM. RSVP: (***Visitor Invite***)
+
+[Member Name] | [Phone]</pre><button class="copy-btn" onclick="copyText('inv2followup')">📋 Copy Follow-Up</button></div>
+</div>
+
+<!-- Inv 3: Flahavan Law -->
+<div class="tab-content" id="itab3">
+<div class="invitation-box"><h4>📧 Email — Flahavan Law Offices</h4>
+<pre id="inv3email">Subject: Chiropractors, Auto Shops & Attorneys — Your Referral Network Awaits
+
+Dear Flahavan Law Offices Team,
+
+I'm [Member Name] with BNI Alliance Builders, a professional referral chapter that meets every Friday morning right here on College Ave in Santa Rosa.
+
+Here's why Flahavan Law Offices would benefit:
+
+1. Direct Referral Pipeline: Our chapter includes a chiropractor, an auto repair specialist, a massage therapist, an acupuncturist, an estate planning attorney, and multiple construction professionals. When their clients say, "I was in an accident," your name will be the first one they mention.
+
+2. Weekly Visibility: Every Friday, you'd have 60 seconds to educate 29 professionals on exactly what kind of cases to refer — a car accident victim, a slip-and-fall, a workplace injury.
+
+3. Complementary Legal Presence: Our estate planning attorney already generates significant referrals. Adding a personal injury attorney creates a powerful legal duo.
+
+We meet every Friday at 7:00 AM at Druids Hall, 1011 College Ave, Santa Rosa, CA 95404.
+
+To visit a chapter just complete this (***Visitor Invite***) simple form to reserve your seat and begin accelerating your business.
+
+[Member Name]
+[Company Name]
+[Phone Number]</pre>
+<button class="copy-btn" onclick="copyText('inv3email')">📋 Copy Email</button></div>
+<div class="invitation-box"><h4>💬 SMS</h4><pre id="inv3sms">Hi! [Name] from BNI Alliance Builders. Our chapter has a chiropractor, auto repair & health pros whose clients need PI attorneys. We'd love Flahavan Law to visit Fri 7AM, Druids Hall 1011 College Ave. RSVP: (***Visitor Invite***) ⚖️</pre><button class="copy-btn" onclick="copyText('inv3sms')">📋 Copy SMS</button></div>
+<div class="invitation-box"><h4>📞 Phone Script</h4><pre id="inv3phone">"Hi, I'm [Name] from BNI Alliance Builders on College Ave in Santa Rosa. We're a professional referral group with a chiropractor, auto repair shop, and health professionals whose clients frequently need personal injury representation. We'd love to invite someone from Flahavan Law Offices to attend our Friday 7 AM meeting as a guest. Could I send over the details?"</pre><button class="copy-btn" onclick="copyText('inv3phone')">📋 Copy Script</button></div>
+<div class="invitation-box"><h4>🔄 Follow-Up</h4><pre id="inv3followup">Subject: Following Up — Our Chiropractor Wants to Meet You!
+
+Quick follow-up on my invitation to BNI Alliance Builders. Our chiropractor, auto repair specialist, and wellness professionals are actively looking for a personal injury attorney they can refer clients to.
+
+Available this Friday or next at 7:00 AM? RSVP: (***Visitor Invite***)
+
+[Member Name] | [Phone]</pre><button class="copy-btn" onclick="copyText('inv3followup')">📋 Copy Follow-Up</button></div>
+</div>
+
+<!-- Inv 4: Senior Helpers -->
+<div class="tab-content" id="itab4">
+<div class="invitation-box"><h4>📧 Email — Senior Helpers North Bay</h4>
+<pre id="inv4email">Subject: Senior Helpers + BNI Alliance Builders = A Referral Relationship That Serves Families
+
+Dear Senior Helpers North Bay Team,
+
+I'm [Member Name] from BNI Alliance Builders in Santa Rosa. Our chapter meets every Friday morning, and we're actively seeking a senior care professional.
+
+Here's why Senior Helpers North Bay would be ideal:
+
+1. Natural Referral Connections: Our chapter includes an estate planning attorney, a financial advisor, a life insurance specialist, real estate agents, and health & wellness professionals. They regularly work with aging clients and their families.
+
+2. High-Value, Ongoing Referrals: When our estate planning attorney refers a family that needs in-home care, that could become a long-term client relationship. BNI referrals are warm, trusted introductions.
+
+3. Community Impact: Sonoma County has a significant and growing senior population. Being the senior care seat positions Senior Helpers as the community's most-recommended provider.
+
+We meet every Friday at 7:00 AM at Druids Hall, 1011 College Ave, Santa Rosa, CA 95404.
+
+To visit a chapter just complete this (***Visitor Invite***) simple form to reserve your seat and begin accelerating your business.
+
+[Member Name]
+[Company Name]
+[Phone Number]</pre>
+<button class="copy-btn" onclick="copyText('inv4email')">📋 Copy Email</button></div>
+<div class="invitation-box"><h4>💬 SMS</h4><pre id="inv4sms">Hi! [Name] from BNI Alliance Builders. We have an estate planning attorney, financial advisor & wellness pros whose clients need senior care. We'd love to host Senior Helpers this Fri 7AM, 1011 College Ave. RSVP: (***Visitor Invite***) 💙</pre><button class="copy-btn" onclick="copyText('inv4sms')">📋 Copy SMS</button></div>
+<div class="invitation-box"><h4>📞 Phone Script</h4><pre id="inv4phone">"Hi, I'm [Name] with BNI Alliance Builders in Santa Rosa. We're a professional referral group that includes an estate planning attorney, financial advisor, and several health professionals — all of whom serve aging clients. We're looking for a trusted senior care provider, and Senior Helpers came highly recommended. Could I invite someone to join us as a guest this Friday at 7 AM?"</pre><button class="copy-btn" onclick="copyText('inv4phone')">📋 Copy Script</button></div>
+<div class="invitation-box"><h4>🔄 Follow-Up</h4><pre id="inv4followup">Subject: Our Estate Planning Attorney & Financial Advisor Want to Meet You
+
+Following up on my invitation to BNI Alliance Builders! Our estate planning attorney and financial advisor both work extensively with aging clients — and they're looking for a senior care provider they can refer to with confidence.
+
+We meet this Friday and next at 7:00 AM. RSVP: (***Visitor Invite***)
+
+[Member Name] | [Phone]</pre><button class="copy-btn" onclick="copyText('inv4followup')">📋 Copy Follow-Up</button></div>
+</div>
+
+</div>
+<p style="color:#aaa;font-size:13px;margin-top:15px;">📋 <strong>Instructions for BNI Members:</strong> Copy the invitation templates above, replace [Member Name], [Company Name], and [Phone Number] with your own information. If you have a specific visitor registration URL, replace (***Visitor Invite***) with that link. Then email, text, or call the vendor directly!</p>
+</div>
+
+<!-- SECTION 8: EXECUTION PLAN -->
+<div class="section" id="execution">
+<h1>📈 Recruitment Execution Plan</h1>
+
+<h2>A) Top 5 Missing Professions to Recruit FIRST</h2>
+<div class="tbl-wrap">
+<table><thead><tr><th>Priority</th><th>Profession</th><th>Rationale</th></tr></thead><tbody>
+<tr><td><span class="badge badge-high">1</span></td><td>Property & Casualty Insurance</td><td>Completes the homeowner referral loop with Commercial Insurance, Mortgages, and Real Estate.</td></tr>
+<tr><td><span class="badge badge-high">2</span></td><td>Interior Design</td><td>The "quarterback" connecting 10 construction/home services members during renovations.</td></tr>
+<tr><td><span class="badge badge-high">3</span></td><td>IT Consultants</td><td>Every business owner and their clients need technology support — universal referral seat.</td></tr>
+<tr><td><span class="badge badge-high">4</span></td><td>Personal Injury Law</td><td>High-value referrals with Chiropractor, Auto Repair, and Massage Therapist synergy.</td></tr>
+<tr><td><span class="badge badge-high">5</span></td><td>Senior Service Provider</td><td>Growing senior population + Estate Planning, Financial, and Health/Wellness connections.</td></tr>
+</tbody></table>
+</div>
+
+<h2>B) 2-Week Outreach Plan</h2>
+<div class="week-label">📅 WEEK 1: Initial Outreach</div>
+<div class="tbl-wrap">
+<table id="week1Table"><thead><tr><th>Day</th><th>Action</th><th>Who Invites</th><th>Vendors</th><th>Method</th></tr></thead><tbody>
+<tr><td>Monday</td><td>Email P&C Insurance vendors</td><td>Christopher Wilson</td><td>5</td><td>📧 Email</td></tr>
+<tr><td>Monday</td><td>Email Interior Design vendors</td><td>Richard Lindsay</td><td>5</td><td>📧 Email</td></tr>
+<tr><td>Tuesday</td><td>Email IT Consultant vendors</td><td>Rhett Graff</td><td>5</td><td>📧 Email</td></tr>
+<tr><td>Tuesday</td><td>Email Personal Injury Law vendors</td><td>Max Bernard</td><td>5</td><td>📧 Email</td></tr>
+<tr><td>Wednesday</td><td>Email Senior Service Provider vendors</td><td>James Eakin</td><td>5</td><td>📧 Email</td></tr>
+<tr><td>Wednesday</td><td>SMS follow-ups to all 25 vendors</td><td>Same members</td><td>25</td><td>💬 SMS</td></tr>
+<tr><td>Thursday</td><td>Phone calls to non-responders</td><td>Same members</td><td>As needed</td><td>📞 Phone</td></tr>
+<tr><td>Friday</td><td>Chapter meeting — announce recruitment push</td><td>All members</td><td>N/A</td><td>🏛️ Meeting</td></tr>
+</tbody></table>
+</div>
+
+<div class="week-label">📅 WEEK 2: Follow-Up & Expand</div>
+<div class="tbl-wrap">
+<table id="week2Table"><thead><tr><th>Day</th><th>Action</th><th>Who Invites</th><th>Vendors</th><th>Method</th></tr></thead><tbody>
+<tr><td>Monday</td><td>48-hour follow-up emails to non-responders</td><td>Same Week 1 members</td><td>As needed</td><td>📧 Email</td></tr>
+<tr><td>Monday</td><td>Begin outreach to Photographer, Graphic Designer, Banking</td><td>Laura Hall, Rhett Graff, David Crowhurst</td><td>15</td><td>📧 Email</td></tr>
+<tr><td>Tuesday</td><td>Phone calls to Week 1 non-responders</td><td>Same Week 1 members</td><td>As needed</td><td>📞 Phone</td></tr>
+<tr><td>Wednesday</td><td>SMS follow-ups to Week 2 vendors</td><td>Same Week 2 members</td><td>15</td><td>💬 SMS</td></tr>
+<tr><td>Thursday</td><td>Confirm all visitor RSVPs for Friday</td><td>Ryan Cassidy, Richard Lindsay</td><td>All confirmed</td><td>📞 Phone/SMS</td></tr>
+<tr><td>Friday</td><td>Welcome visitors, introductions, assign follow-up</td><td>All members + Visitor Hosts</td><td>N/A</td><td>🏛️ Meeting</td></tr>
+</tbody></table>
+</div>
+</div>
+
+<!-- SECTION 9: TRACKING -->
+<div class="section" id="tracking">
+<h1>📋 Recruitment Tracking</h1>
+<input class="search-bar" id="searchTracking" placeholder="🔍 Search tracking table..." oninput="filterTable('trackingTable','searchTracking')">
+<div class="tbl-wrap" style="max-height:600px;overflow-y:auto;">
+<table id="trackingTable">
+<thead><tr>
+<th onclick="sortTable('trackingTable',0)">Profession <span class="sort-arrow">⇅</span></th>
+<th onclick="sortTable('trackingTable',1)">Vendor Name <span class="sort-arrow">⇅</span></th>
+<th onclick="sortTable('trackingTable',2)">Invited By <span class="sort-arrow">⇅</span></th>
+<th>Date Invited</th>
+<th>RSVP</th>
+<th>Attended</th>
+<th>Follow-Up</th>
+<th>Outcome</th>
+</tr></thead>
+<tbody>
+<tr><td>P&C Insurance</td><td>Barber Insurance Agency</td><td>Christopher Wilson</td><td><input type="date" style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;"></td><td><select style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;"><option>—</option><option>Yes</option><option>No</option><option>Pending</option></select></td><td><select style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;"><option>—</option><option>Yes</option><option>No</option></select></td><td><input type="date" style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;"></td><td><input type="text" placeholder="Enter outcome" style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;width:120px;"></td></tr>
+<tr><td>P&C Insurance</td><td>Jeff Lecoeuche Insurance</td><td>Christopher Wilson</td><td><input type="date" style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;"></td><td><select style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;"><option>—</option><option>Yes</option><option>No</option><option>Pending</option></select></td><td><select style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;"><option>—</option><option>Yes</option><option>No</option></select></td><td><input type="date" style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;"></td><td><input type="text" placeholder="Enter outcome" style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;width:120px;"></td></tr>
+<tr><td>P&C Insurance</td><td>Valley West Insurance</td><td>Christopher Wilson</td><td><input type="date" style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;"></td><td><select style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;"><option>—</option><option>Yes</option><option>No</option><option>Pending</option></select></td><td><select style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;"><option>—</option><option>Yes</option><option>No</option></select></td><td><input type="date" style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;"></td><td><input type="text" placeholder="Enter outcome" style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;width:120px;"></td></tr>
+<tr><td>P&C Insurance</td><td>Loewen Insurance</td><td>Christopher Wilson</td><td><input type="date" style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;"></td><td><select style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;"><option>—</option><option>Yes</option><option>No</option><option>Pending</option></select></td><td><select style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;"><option>—</option><option>Yes</option><option>No</option></select></td><td><input type="date" style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;"></td><td><input type="text" placeholder="Enter outcome" style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;width:120px;"></td></tr>
+<tr><td>P&C Insurance</td><td>Eddie Sandoval – State Farm</td><td>Christopher Wilson</td><td><input type="date" style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;"></td><td><select style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;"><option>—</option><option>Yes</option><option>No</option><option>Pending</option></select></td><td><select style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;"><option>—</option><option>Yes</option><option>No</option></select></td><td><input type="date" style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;"></td><td><input type="text" placeholder="Enter outcome" style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;width:120px;"></td></tr>
+<tr><td>Interior Design</td><td>Humanity Design Works</td><td>Richard Lindsay</td><td><input type="date" style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;"></td><td><select style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;"><option>—</option><option>Yes</option><option>No</option><option>Pending</option></select></td><td><select style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;"><option>—</option><option>Yes</option><option>No</option></select></td><td><input type="date" style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;"></td><td><input type="text" placeholder="Enter outcome" style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;width:120px;"></td></tr>
+<tr><td>Interior Design</td><td>Rock House Design</td><td>Richard Lindsay</td><td><input type="date" style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;"></td><td><select style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;"><option>—</option><option>Yes</option><option>No</option><option>Pending</option></select></td><td><select style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;"><option>—</option><option>Yes</option><option>No</option></select></td><td><input type="date" style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;"></td><td><input type="text" placeholder="Enter outcome" style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;width:120px;"></td></tr>
+<tr><td>Interior Design</td><td>Integrated Design</td><td>Richard Lindsay</td><td><input type="date" style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;"></td><td><select style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;"><option>—</option><option>Yes</option><option>No</option><option>Pending</option></select></td><td><select style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;"><option>—</option><option>Yes</option><option>No</option></select></td><td><input type="date" style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;"></td><td><input type="text" placeholder="Enter outcome" style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;width:120px;"></td></tr>
+<tr><td>Interior Design</td><td>Tamera Embree Designs</td><td>Richard Lindsay</td><td><input type="date" style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;"></td><td><select style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;"><option>—</option><option>Yes</option><option>No</option><option>Pending</option></select></td><td><select style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;"><option>—</option><option>Yes</option><option>No</option></select></td><td><input type="date" style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;"></td><td><input type="text" placeholder="Enter outcome" style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;width:120px;"></td></tr>
+<tr><td>Interior Design</td><td>Zeitgeist Sonoma</td><td>Richard Lindsay</td><td><input type="date" style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;"></td><td><select style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;"><option>—</option><option>Yes</option><option>No</option><option>Pending</option></select></td><td><select style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;"><option>—</option><option>Yes</option><option>No</option></select></td><td><input type="date" style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;"></td><td><input type="text" placeholder="Enter outcome" style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;width:120px;"></td></tr>
+<tr><td>IT Consultants</td><td>Wooden Spoon IT</td><td>Rhett Graff</td><td><input type="date" style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;"></td><td><select style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;"><option>—</option><option>Yes</option><option>No</option><option>Pending</option></select></td><td><select style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;"><option>—</option><option>Yes</option><option>No</option></select></td><td><input type="date" style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;"></td><td><input type="text" placeholder="Enter outcome" style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;width:120px;"></td></tr>
+<tr><td>IT Consultants</td><td>SR Technologies</td><td>Rhett Graff</td><td><input type="date" style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;"></td><td><select style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;"><option>—</option><option>Yes</option><option>No</option><option>Pending</option></select></td><td><select style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;"><option>—</option><option>Yes</option><option>No</option></select></td><td><input type="date" style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;"></td><td><input type="text" placeholder="Enter outcome" style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;width:120px;"></td></tr>
+<tr><td>IT Consultants</td><td>TeamLogic IT</td><td>Rhett Graff</td><td><input type="date" style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;"></td><td><select style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;"><option>—</option><option>Yes</option><option>No</option><option>Pending</option></select></td><td><select style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;"><option>—</option><option>Yes</option><option>No</option></select></td><td><input type="date" style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;"></td><td><input type="text" placeholder="Enter outcome" style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;width:120px;"></td></tr>
+<tr><td>IT Consultants</td><td>dmi Networking</td><td>Rhett Graff</td><td><input type="date" style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;"></td><td><select style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;"><option>—</option><option>Yes</option><option>No</option><option>Pending</option></select></td><td><select style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;"><option>—</option><option>Yes</option><option>No</option></select></td><td><input type="date" style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;"></td><td><input type="text" placeholder="Enter outcome" style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;width:120px;"></td></tr>
+<tr><td>IT Consultants</td><td>True IT</td><td>Rhett Graff</td><td><input type="date" style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;"></td><td><select style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;"><option>—</option><option>Yes</option><option>No</option><option>Pending</option></select></td><td><select style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;"><option>—</option><option>Yes</option><option>No</option></select></td><td><input type="date" style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;"></td><td><input type="text" placeholder="Enter outcome" style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;width:120px;"></td></tr>
+<tr><td>PI Law</td><td>Flahavan Law Offices</td><td>Max Bernard</td><td><input type="date" style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;"></td><td><select style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;"><option>—</option><option>Yes</option><option>No</option><option>Pending</option></select></td><td><select style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;"><option>—</option><option>Yes</option><option>No</option></select></td><td><input type="date" style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;"></td><td><input type="text" placeholder="Enter outcome" style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;width:120px;"></td></tr>
+<tr><td>PI Law</td><td>Henderson Law</td><td>Max Bernard</td><td><input type="date" style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;"></td><td><select style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;"><option>—</option><option>Yes</option><option>No</option><option>Pending</option></select></td><td><select style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;"><option>—</option><option>Yes</option><option>No</option></select></td><td><input type="date" style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;"></td><td><input type="text" placeholder="Enter outcome" style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;width:120px;"></td></tr>
+<tr><td>PI Law</td><td>Max G. Arnold Law</td><td>Max Bernard</td><td><input type="date" style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;"></td><td><select style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;"><option>—</option><option>Yes</option><option>No</option><option>Pending</option></select></td><td><select style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;"><option>—</option><option>Yes</option><option>No</option></select></td><td><input type="date" style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;"></td><td><input type="text" placeholder="Enter outcome" style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;width:120px;"></td></tr>
+<tr><td>PI Law</td><td>Julia J. Parranto Law</td><td>Max Bernard</td><td><input type="date" style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;"></td><td><select style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;"><option>—</option><option>Yes</option><option>No</option><option>Pending</option></select></td><td><select style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;"><option>—</option><option>Yes</option><option>No</option></select></td><td><input type="date" style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;"></td><td><input type="text" placeholder="Enter outcome" style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;width:120px;"></td></tr>
+<tr><td>PI Law</td><td>North Bay Legal</td><td>Max Bernard</td><td><input type="date" style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;"></td><td><select style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;"><option>—</option><option>Yes</option><option>No</option><option>Pending</option></select></td><td><select style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;"><option>—</option><option>Yes</option><option>No</option></select></td><td><input type="date" style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;"></td><td><input type="text" placeholder="Enter outcome" style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;width:120px;"></td></tr>
+<tr><td>Senior Services</td><td>Senior Helpers North Bay</td><td>James Eakin</td><td><input type="date" style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;"></td><td><select style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;"><option>—</option><option>Yes</option><option>No</option><option>Pending</option></select></td><td><select style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;"><option>—</option><option>Yes</option><option>No</option></select></td><td><input type="date" style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;"></td><td><input type="text" placeholder="Enter outcome" style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;width:120px;"></td></tr>
+<tr><td>Senior Services</td><td>Amada Senior Care</td><td>James Eakin</td><td><input type="date" style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;"></td><td><select style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;"><option>—</option><option>Yes</option><option>No</option><option>Pending</option></select></td><td><select style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;"><option>—</option><option>Yes</option><option>No</option></select></td><td><input type="date" style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;"></td><td><input type="text" placeholder="Enter outcome" style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;width:120px;"></td></tr>
+<tr><td>Senior Services</td><td>At Home Caregivers</td><td>James Eakin</td><td><input type="date" style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;"></td><td><select style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;"><option>—</option><option>Yes</option><option>No</option><option>Pending</option></select></td><td><select style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;"><option>—</option><option>Yes</option><option>No</option></select></td><td><input type="date" style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;"></td><td><input type="text" placeholder="Enter outcome" style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;width:120px;"></td></tr>
+<tr><td>Senior Services</td><td>Hillendale Home Care</td><td>James Eakin</td><td><input type="date" style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;"></td><td><select style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;"><option>—</option><option>Yes</option><option>No</option><option>Pending</option></select></td><td><select style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;"><option>—</option><option>Yes</option><option>No</option></select></td><td><input type="date" style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;"></td><td><input type="text" placeholder="Enter outcome" style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;width:120px;"></td></tr>
+<tr><td>Senior Services</td><td>Right at Home</td><td>James Eakin</td><td><input type="date" style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;"></td><td><select style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;"><option>—</option><option>Yes</option><option>No</option><option>Pending</option></select></td><td><select style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;"><option>—</option><option>Yes</option><option>No</option></select></td><td><input type="date" style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;"></td><td><input type="text" placeholder="Enter outcome" style="background:#1a1a1a;border:1px solid #333;color:#fff;padding:4px;border-radius:4px;width:120px;"></td></tr>
+</tbody>
+</table>
+</div>
+</div>
+
+<!-- SECTION 10: SUMMARY -->
+<div class="section" id="summary">
+<h1>🎯 Final Summary & Recommendations</h1>
+
+<h2>✅ Chapter Strengths</h2>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:10px;margin:10px 0;">
+<div style="background:#113311;border:1px solid #44ff44;border-radius:8px;padding:14px;">✅ Strong Home Services/Construction Power Team (10 seats)</div>
+<div style="background:#113311;border:1px solid #44ff44;border-radius:8px;padding:14px;">✅ Active 1-2-1 culture (459 total — 15.8 avg per member)</div>
+<div style="background:#113311;border:1px solid #44ff44;border-radius:8px;padding:14px;">✅ Solid top performers (Wilson, Eggers, Larson, Bernard, Caston)</div>
+<div style="background:#113311;border:1px solid #44ff44;border-radius:8px;padding:14px;">✅ Engaged leadership team with most roles filled</div>
+</div>
+
+<h2>⚠️ Key Growth Opportunities</h2>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:10px;margin:10px 0;">
+<div style="background:#332211;border:1px solid #ffaa00;border-radius:8px;padding:14px;">⚠️ Visitor generation — 76% brought zero visitors</div>
+<div style="background:#332211;border:1px solid #ffaa00;border-radius:8px;padding:14px;">⚠️ Fill 4 vacant Membership Committee roles</div>
+<div style="background:#332211;border:1px solid #ffaa00;border-radius:8px;padding:14px;">⚠️ Activate low-engagement members — 6 gave 0 referrals</div>
+<div style="background:#332211;border:1px solid #ffaa00;border-radius:8px;padding:14px;">⚠️ Expand Marketing/Creative sphere — only 1 seat</div>
+</div>
+
+<h2>📊 Growth Target</h2>
+<div style="background:#1a1a1a;border-radius:10px;padding:20px;margin:10px 0;border:1px solid #CF2030;">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+<span style="font-size:16px;">Current: <strong style="color:#CF2030;">29 members</strong></span>
+<span style="font-size:16px;">Target: <strong style="color:#44ff44;">40+ members</strong> in 6 months</span>
+</div>
+<div class="progress-bar" style="height:30px;">
+<div class="progress-fill" style="width:72.5%;">29 / 40</div>
+</div>
+</div>
+
+<div style="background:#111;border:2px solid #CF2030;border-radius:10px;padding:20px;margin-top:25px;text-align:center;">
+<p style="color:#aaa;font-size:13px;">This report was generated by <strong style="color:#CF2030;">Higgins AI</strong> for BNI Alliance Builders (In-Person)</p>
+<p style="color:#888;font-size:12px;margin-top:8px;">📞 855-737-3386 | 📧 support@higgins.ai | 🌐 higgins.ai</p>
+<p style="color:#888;font-size:12px;margin-top:4px;">BNI San Francisco Bay | director@bnisfbay.com | (707) 899-7161</p>
+</div>
+</div>
+
+</div><!-- end container -->
+
+<!-- EMAIL MODAL -->
+<div class="modal-overlay" id="emailModal">
+<div class="modal">
+<h3>📧 Compose Email</h3>
+<p style="color:#aaa;font-size:12px;margin-bottom:10px;" id="emailTo"></p>
+<textarea id="emailBody"></textarea>
+<div style="text-align:right;">
+<button class="close-btn" onclick="closeModal()">Cancel</button>
+<button class="send-btn" onclick="copyEmailBody()">📋 Copy to Clipboard</button>
+</div>
+</div>
+</div>
+
+<footer>
+<img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports">
+<p style="margin-top:8px;">BNI Alliance Builders Chapter Master Assessment Report | March 2026</p>
+<p>Generated by <a href="https://higgins.ai">Higgins AI</a> | 📞 855-737-3386 | 📧 <a href="mailto:support@higgins.ai">support@higgins.ai</a></p>
+<p style="margin-top:4px;">BNI San Francisco Bay | <a href="mailto:director@bnisfbay.com">director@bnisfbay.com</a> | (707) 899-7161</p>
+</footer>
+
+<script>
+// Sort table
+function sortTable(tableId, colIdx) {
+  const table = document.getElementById(tableId);
+  const tbody = table.querySelector('tbody');
+  const rows = Array.from(tbody.querySelectorAll('tr'));
+  const th = table.querySelectorAll('th')[colIdx];
+  const asc = th.dataset.sort !== 'asc';
+  th.dataset.sort = asc ? 'asc' : 'desc';
+  rows.sort((a, b) => {
+    let aVal = a.cells[colIdx]?.textContent.trim() || '';
+    let bVal = b.cells[colIdx]?.textContent.trim() || '';
+    const aNum = parseFloat(aVal);
+    const bNum = parseFloat(bVal);
+    if (!isNaN(aNum) && !isNaN(bNum)) {
+      return asc ? aNum - bNum : bNum - aNum;
+    }
+    return asc ? aVal.localeCompare(bVal) : bVal.localeCompare(aVal);
+  });
+  rows.forEach(r => tbody.appendChild(r));
+}
+
+// Filter table
+function filterTable(tableId, searchId) {
+  const input = document.getElementById(searchId);
+  const filter = input.value.toLowerCase();
+  const table = document.getElementById(tableId);
+  const rows = table.querySelectorAll('tbody tr');
+  rows.forEach(row => {
+    const text = row.textContent.toLowerCase();
+    row.style.display = text.includes(filter) ? '' : 'none';
+  });
+}
+
+// Scroll to section
+function scrollToSection(id) {
+  document.getElementById(id).scrollIntoView({ behavior: 'smooth', block: 'start' });
+  document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
+  const link = document.querySelector(`nav a[href="#${id}"]`);
+  if (link) link.classList.add('active');
+}
+
+// Vendor tabs
+function showVendorTab(idx) {
+  document.querySelectorAll('#vendorContent .tab-content').forEach(t => t.classList.remove('active'));
+  document.getElementById('vtab' + idx).classList.add('active');
+  document.querySelectorAll('#vendorTabs .tab-btn').forEach((b, i) => {
+    b.classList.toggle('active', i === idx);
+  });
+}
+
+// Invitation tabs
+function showInvTab(idx) {
+  document.querySelectorAll('#invContent .tab-content').forEach(t => t.classList.remove('active'));
+  document.getElementById('itab' + idx).classList.add('active');
+  document.querySelectorAll('#invTabs .tab-btn').forEach((b, i) => {
+    b.classList.toggle('active', i === idx);
+  });
+}
+
+// Copy text
+function copyText(elementId) {
+  const el = document.getElementById(elementId);
+  const text = el.textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = el.parentElement.querySelector('.copy-btn');
+    const orig = btn.textContent;
+    btn.textContent = '✅ Copied!';
+    setTimeout(() => btn.textContent = orig, 2000);
+  });
+}
+
+// Email modal for leadership
+function openEmailModal(name, role, company, profession) {
+  document.getElementById('emailTo').textContent = `To: ${name} (${role}) — ${company}`;
+  document.getElementById('emailBody').value = `Dear ${name},\n\nI hope this message finds you well! I wanted to reach out regarding BNI Alliance Builders and the incredible value your chapter brings to the Santa Rosa business community.\n\nAs the ${role} of the chapter and holding the ${profession} seat with ${company}, your leadership is instrumental in driving the chapter's growth and success.\n\nWith 29 members generating 459 one-to-one meetings and 139 referrals in just the last 90 days, BNI Alliance Builders is on a strong trajectory. The chapter's Home Services & Construction Power Team of 10 seats is one of the strongest in the region.\n\nI'd love to discuss how we can continue to grow the chapter toward our 40+ member goal by filling key missing professions and boosting visitor generation.\n\nPlease don't hesitate to reach out if you have any questions.\n\nWarm regards,\n[Your Name]\n[Your Phone]`;
+  document.getElementById('emailModal').classList.add('show');
+}
+
+// Email modal for vendors
+function openVendorEmail(businessName, profession, address) {
+  document.getElementById('emailTo').textContent = `To: ${businessName} — ${profession}`;
+  document.getElementById('emailBody').value = `Dear ${businessName} Team,\n\nI'm a member of BNI Alliance Builders, a professional referral group of 29 local business owners that meets every Friday at 7:00 AM at Druids Hall, 1011 College Ave, Santa Rosa, CA 95404.\n\nI believe ${businessName} would be an outstanding addition to our referral network. Here's why:\n\n1. Immediate Referral Pipeline: Our chapter includes real estate agents, contractors, financial advisors, attorneys, and health & wellness professionals — all of whom regularly encounter clients who need ${profession} services. That means warm, qualified introductions coming your way from day one.\n\n2. Trusted Partnerships: BNI operates on the Givers Gain® philosophy. Our members actively look for referral opportunities for each other every single week. Imagine 28 professionals keeping an eye out for your ideal clients.\n\n3. Local Visibility: Joining BNI Alliance Builders positions ${businessName} as the go-to ${profession} provider among Santa Rosa's most connected business owners.\n\nWe'd love to invite you to visit our chapter meeting as our guest — no obligation, just a chance to experience structured referral networking firsthand.\n\nTo reserve your seat, just complete this simple form: (***Visitor Invite***)\n\nLooking forward to welcoming you!\n\nWarm regards,\n[Your Name]\n[Your Company]\n[Your Phone]\n[Your Email]`;
+  document.getElementById('emailModal').classList.add('show');
+}
+
+function closeModal() {
+  document.getElementById('emailModal').classList.remove('show');
+}
+
+function copyEmailBody() {
+  const textarea = document.getElementById('emailBody');
+  navigator.clipboard.writeText(textarea.value).then(() => {
+    const btn = document.querySelector('.send-btn');
+    btn.textContent = '✅ Copied!';
+    setTimeout(() => { btn.textContent = '📋 Copy to Clipboard'; closeModal(); }, 1500);
+  });
+}
+
+// Close modal on overlay click
+document.getElementById('emailModal').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+
+// Charts
+document.addEventListener('DOMContentLoaded', function() {
+  const red = '#CF2030';
+  const redAlpha = 'rgba(207,32,48,0.7)';
+  Chart.defaults.color = '#aaa';
+  Chart.defaults.borderColor = '#333';
+
+  // Top Given
+  new Chart(document.getElementById('chartGiven'), {
+    type: 'bar',
+    data: {
+      labels: ['Larson','Caston','Bernard','Eggers','Wilson','Gardner','Bowen','Aguilar','Lindsay','Crowhurst'],
+      datasets: [{label:'Referrals Given',data:[18,13,12,12,11,10,8,7,7,6],backgroundColor:redAlpha,borderColor:red,borderWidth:1}]
+    },
+    options:{indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{beginAtZero:true}}}
+  });
+
+  // Top Received
+  new Chart(document.getElementById('chartReceived'), {
+    type: 'bar',
+    data: {
+      labels: ['Wilson','Eggers','Graff','Lindsay','Bernard','Larson','Bowen','Stauber','McCoy Sr','Dominguez'],
+      datasets: [{label:'Referrals Received',data:[23,19,17,9,8,8,7,8,8,5],backgroundColor:'rgba(42,90,154,0.7)',borderColor:'#2a5a9a',borderWidth:1}]
+    },
+    options:{indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{beginAtZero:true}}}
+  });
+
+  // Top 1-2-1
+  new Chart(document.getElementById('chart121'), {
+    type: 'bar',
+    data: {
+      labels: ['Brausen','Larson','Bernard','Bowen','Eggers','Wilson','Preuss','Crowhurst','Eakin','Mordecai'],
+      datasets: [{label:'1-2-1 Meetings',data:[40,35,32,31,29,29,29,24,24,17],backgroundColor:'rgba(68,255,68,0.5)',borderColor:'#44ff44',borderWidth:1}]
+    },
+    options:{indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{beginAtZero:true}}}
+  });
+
+  // Category Distribution
+  new Chart(document.getElementById('chartCategory'), {
+    type: 'doughnut',
+    data: {
+      labels: ['Construction','Finance & Insurance','Health & Wellness','Legal & Accounting','Real Estate','Cleaning Services','Landscaping & Garden','Advertising & Marketing','Training & Coaching','Car & Motorcycle','Organizations','Sports & Leisure','Food & Beverage'],
+      datasets: [{data:[8,4,4,2,2,2,2,1,1,1,1,1,1],backgroundColor:['#CF2030','#2a5a9a','#44aa44','#aa7700','#aa44aa','#44aaaa','#7a9a2a','#cc7700','#5544aa','#aa2244','#448899','#998844','#cc5566']}]
+    },
+    options:{plugins:{legend:{position:'right',labels:{boxWidth:12,font:{size:11}}}}}
+  });
+
+  // Visitors
+  new Chart(document.getElementById('chartVisitors'), {
+    type: 'bar',
+    data: {
+      labels: ['Wilson','Preuss','Bernard','Bowen','Caston','Eggers','Gardner','Lindsay','Larson'],
+      datasets: [{label:'Visitors Brought',data:[3,2,1,1,1,1,1,1,1],backgroundColor:redAlpha,borderColor:red,borderWidth:1}]
+    },
+    options:{plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{stepSize:1}}}}
+  });
+
+  // Engagement radar
+  new Chart(document.getElementById('chartEngagement'), {
+    type: 'radar',
+    data: {
+      labels: ['Wilson','Eggers','Larson','Bernard','Caston','Bowen','Brausen','Preuss','Gardner','Lindsay'],
+      datasets: [
+        {label:'Given',data:[11,12,18,12,13,8,1,9,10,7],backgroundColor:'rgba(207,32,48,0.2)',borderColor:red,pointBackgroundColor:red},
+        {label:'Received',data:[23,19,8,8,5,7,1,3,7,9],backgroundColor:'rgba(42,90,154,0.2)',borderColor:'#2a5a9a',pointBackgroundColor:'#2a5a9a'},
+        {label:'1-2-1',data:[29,29,35,32,16,31,40,29,13,8],backgroundColor:'rgba(68,255,68,0.1)',borderColor:'#44ff44',pointBackgroundColor:'#44ff44'}
+      ]
+    },
+    options:{scales:{r:{grid:{color:'#333'},angleLines:{color:'#333'},ticks:{backdropColor:'transparent',color:'#888'}}}}
+  });
+
+  // Spheres bar chart
+  new Chart(document.getElementById('chartSpheres'), {
+    type: 'bar',
+    data: {
+      labels: ['Home Services & Construction','Financial & Professional','Health & Wellness','Real Estate & Property','Marketing & Creative','Other'],
+      datasets: [{label:'Current Seats',data:[10,6,4,2,1,6],backgroundColor:[redAlpha,'rgba(42,90,154,0.7)','rgba(68,170,68,0.7)','rgba(170,68,170,0.7)','rgba(204,119,0,0.7)','rgba(136,136,136,0.5)'],borderWidth:0}]
+    },
+    options:{plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{stepSize:2}}}}
+  });
+});
+</script>
+</body>
+</html>
