@@ -1,0 +1,611 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CF2030 Environmental Sustainability Scorecard</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:#000;color:#e0e0e0;font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;min-height:100vh;}
+  header{background:linear-gradient(135deg,#0a0a0a,#1a1a2e);padding:12px 30px;display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid #00e676;position:sticky;top:0;z-index:1000;}
+  header img{height:48px;}
+  nav{display:flex;gap:6px;flex-wrap:wrap;}
+  nav button{background:#111;color:#00e676;border:1px solid #00e676;padding:8px 14px;border-radius:6px;cursor:pointer;font-size:13px;font-weight:600;transition:all .3s;}
+  nav button:hover,nav button.active{background:#00e676;color:#000;}
+  .section{display:none;padding:24px;max-width:1400px;margin:0 auto;}
+  .section.active{display:block;}
+  h1{color:#00e676;font-size:28px;margin-bottom:8px;text-align:center;}
+  h2{color:#00e676;font-size:20px;margin:20px 0 10px;border-bottom:1px solid #333;padding-bottom:6px;}
+  h3{color:#76ff03;font-size:16px;margin:14px 0 8px;}
+  .subtitle{text-align:center;color:#aaa;font-size:13px;margin-bottom:20px;}
+  .kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin:16px 0;}
+  .kpi-card{background:linear-gradient(135deg,#1a1a2e,#16213e);border:1px solid #333;border-radius:10px;padding:16px;text-align:center;}
+  .kpi-card .label{font-size:11px;color:#aaa;text-transform:uppercase;letter-spacing:1px;}
+  .kpi-card .value{font-size:28px;font-weight:700;margin:6px 0;}
+  .kpi-card .unit{font-size:11px;color:#777;}
+  .green{color:#00e676;} .yellow{color:#ffeb3b;} .red{color:#ff5252;} .blue{color:#40c4ff;}
+  .chart-container{background:#111;border:1px solid #333;border-radius:10px;padding:16px;margin:16px 0;}
+  .chart-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0;}
+  @media(max-width:900px){.chart-row{grid-template-columns:1fr;}}
+  canvas{max-height:340px;}
+  .table-wrap{overflow-x:auto;margin:16px 0;}
+  table{width:100%;border-collapse:collapse;font-size:13px;background:#111;border-radius:8px;overflow:hidden;}
+  thead th{background:#1a1a2e;color:#00e676;padding:10px 12px;text-align:left;cursor:pointer;user-select:none;position:relative;white-space:nowrap;}
+  thead th:hover{background:#16213e;}
+  thead th .sort-arrow{margin-left:4px;font-size:10px;}
+  tbody td{padding:8px 12px;border-bottom:1px solid #222;}
+  tbody tr:hover{background:#1a1a2e;}
+  .search-box{background:#111;border:1px solid #333;color:#e0e0e0;padding:8px 14px;border-radius:6px;width:100%;max-width:400px;margin:10px 0;font-size:14px;}
+  .search-box::placeholder{color:#555;}
+  .badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:700;}
+  .badge-green{background:#00e67633;color:#00e676;border:1px solid #00e676;}
+  .badge-yellow{background:#ffeb3b33;color:#ffeb3b;border:1px solid #ffeb3b;}
+  .badge-red{background:#ff525233;color:#ff5252;border:1px solid #ff5252;}
+  .crkl-step{background:#111;border-left:4px solid #00e676;padding:14px 18px;margin:10px 0;border-radius:0 8px 8px 0;}
+  .crkl-step .step-letter{font-size:24px;font-weight:900;color:#00e676;display:inline-block;width:36px;}
+  .crkl-step .step-title{font-weight:700;color:#76ff03;font-size:15px;}
+  .gap-card{background:#111;border:1px solid #333;border-radius:8px;padding:14px;margin:8px 0;display:flex;align-items:flex-start;gap:12px;}
+  .gap-icon{font-size:22px;min-width:30px;text-align:center;}
+  .risk-high{color:#ff5252;} .risk-med{color:#ffeb3b;} .risk-low{color:#00e676;}
+  .progress-bar{background:#222;border-radius:6px;height:10px;overflow:hidden;margin:4px 0;}
+  .progress-fill{height:100%;border-radius:6px;transition:width .5s;}
+  footer{background:#0a0a0a;border-top:1px solid #333;padding:16px 30px;text-align:center;margin-top:40px;}
+  footer img{height:28px;margin-bottom:6px;}
+  footer p{color:#555;font-size:11px;}
+  .tab-content{display:none;} .tab-content.active{display:block;}
+  .pill-tabs{display:flex;gap:4px;margin:12px 0;flex-wrap:wrap;}
+  .pill-tab{background:#1a1a2e;color:#aaa;border:1px solid #333;padding:6px 14px;border-radius:20px;cursor:pointer;font-size:12px;transition:all .3s;}
+  .pill-tab:hover,.pill-tab.active{background:#00e676;color:#000;border-color:#00e676;}
+  .action-list{list-style:none;padding:0;}
+  .action-list li{padding:8px 14px;margin:4px 0;background:#0d0d1a;border-left:3px solid #00e676;border-radius:0 6px 6px 0;font-size:13px;}
+  .action-list li.high{border-left-color:#ff5252;} .action-list li.med{border-left-color:#ffeb3b;}
+</style>
+</head>
+<body>
+<header>
+  <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports" onerror="this.outerHTML='<span style=color:#00e676;font-size:20px;font-weight:700>HIGGINS REPORTS</span>'">
+  <nav>
+    <button class="active" onclick="showSection('overview',this)">CF2030 Overview</button>
+    <button onclick="showSection('water',this)">Water</button>
+    <button onclick="showSection('energy',this)">Energy</button>
+    <button onclick="showSection('ghg',this)">GHG Emissions</button>
+    <button onclick="showSection('waste',this)">Waste & Recycling</button>
+    <button onclick="showSection('tables',this)">Data Tables</button>
+    <button onclick="showSection('crkl',this)">C.R.K.L. Assessment</button>
+    <button onclick="showSection('gap',this)">Gap Assessment</button>
+  </nav>
+</header>
+
+<!-- OVERVIEW -->
+<div id="overview" class="section active">
+  <h1>🌍 CF2030 Environmental Sustainability Scorecard</h1>
+  <p class="subtitle">C.R.K.L. Environmental Scorecard Analyzer — Global Manufacturing Network Performance</p>
+  <div class="kpi-grid">
+    <div class="kpi-card"><div class="label">Sites Monitored</div><div class="value blue">7</div><div class="unit">Global Locations</div></div>
+    <div class="kpi-card"><div class="label">Best EPI Score</div><div class="value green">97</div><div class="unit">Puerto Rico Mfg</div></div>
+    <div class="kpi-card"><div class="label">Lowest EPI Score</div><div class="value red">66</div><div class="unit">India Mfg</div></div>
+    <div class="kpi-card"><div class="label">Avg EPI Score</div><div class="value yellow">81</div><div class="unit">Network Average</div></div>
+    <div class="kpi-card"><div class="label">Total GHG (Scope 1)</div><div class="value red">14,457</div><div class="unit">Tons CO₂</div></div>
+    <div class="kpi-card"><div class="label">Total Water Input</div><div class="value blue">1,885,067</div><div class="unit">Megaliters</div></div>
+    <div class="kpi-card"><div class="label">Total Energy Used</div><div class="value yellow">732,575</div><div class="unit">GJ</div></div>
+    <div class="kpi-card"><div class="label">Avg Renewable %</div><div class="value green">16.9%</div><div class="unit">Network Average</div></div>
+  </div>
+  <div class="chart-container">
+    <h3>📊 EPI Score by Manufacturing Site</h3>
+    <canvas id="epiChart"></canvas>
+  </div>
+  <div class="chart-row">
+    <div class="chart-container">
+      <h3>🏭 Site Performance Radar</h3>
+      <canvas id="radarChart"></canvas>
+    </div>
+    <div class="chart-container">
+      <h3>🌿 Environmental Category Breakdown</h3>
+      <canvas id="doughnutChart"></canvas>
+    </div>
+  </div>
+</div>
+
+<!-- WATER -->
+<div id="water" class="section">
+  <h1>💧 Water Usage Analysis</h1>
+  <p class="subtitle">Water balance, intensity, and recycling performance across all sites</p>
+  <div class="kpi-grid">
+    <div class="kpi-card"><div class="label">Total Water Input</div><div class="value blue">1,885,067</div><div class="unit">Megaliters</div></div>
+    <div class="kpi-card"><div class="label">Total Discharged</div><div class="value green">1,781,935</div><div class="unit">Megaliters via Treatment</div></div>
+    <div class="kpi-card"><div class="label">Total Water Lost</div><div class="value yellow">41,948</div><div class="unit">Megaliters</div></div>
+    <div class="kpi-card"><div class="label">Avg Recycled %</div><div class="value green">4.8%</div><div class="unit">Network Average</div></div>
+  </div>
+  <div class="chart-container">
+    <h3>Water Input vs Discharged vs Lost by Site</h3>
+    <canvas id="waterBarChart"></canvas>
+  </div>
+  <div class="chart-row">
+    <div class="chart-container">
+      <h3>Water Usage Intensity (ML/M Units)</h3>
+      <canvas id="waterIntensityChart"></canvas>
+    </div>
+    <div class="chart-container">
+      <h3>Water Recycling Rate (%)</h3>
+      <canvas id="waterRecycleChart"></canvas>
+    </div>
+  </div>
+</div>
+
+<!-- ENERGY -->
+<div id="energy" class="section">
+  <h1>⚡ Energy Usage Analysis</h1>
+  <p class="subtitle">Energy consumption, renewable mix, and intensity metrics</p>
+  <div class="kpi-grid">
+    <div class="kpi-card"><div class="label">Total Energy</div><div class="value yellow">732,575</div><div class="unit">GJ Consumed</div></div>
+    <div class="kpi-card"><div class="label">Total Renewable</div><div class="value green">193,888</div><div class="unit">GJ</div></div>
+    <div class="kpi-card"><div class="label">Total On-Site Gen</div><div class="value blue">268,722</div><div class="unit">GJ</div></div>
+    <div class="kpi-card"><div class="label">Top Renewable %</div><div class="value green">27.5%</div><div class="unit">Puerto Rico Mfg</div></div>
+  </div>
+  <div class="chart-container">
+    <h3>Energy Consumption: Renewable vs Fossil by Site</h3>
+    <canvas id="energyStackChart"></canvas>
+  </div>
+  <div class="chart-row">
+    <div class="chart-container">
+      <h3>Energy Intensity (GJ/M Units Produced)</h3>
+      <canvas id="energyIntensityChart"></canvas>
+    </div>
+    <div class="chart-container">
+      <h3>Renewable Energy Percentage</h3>
+      <canvas id="renewableChart"></canvas>
+    </div>
+  </div>
+</div>
+
+<!-- GHG -->
+<div id="ghg" class="section">
+  <h1>🏭 Greenhouse Gas Emissions</h1>
+  <p class="subtitle">Scope 1 GHG emissions and intensity analysis</p>
+  <div class="kpi-grid">
+    <div class="kpi-card"><div class="label">Total Scope 1</div><div class="value red">14,457</div><div class="unit">Tons CO₂</div></div>
+    <div class="kpi-card"><div class="label">Highest Emitter</div><div class="value red">35,865</div><div class="unit">Canada (Intensity)</div></div>
+    <div class="kpi-card"><div class="label">Lowest Emitter</div><div class="value green">5,559</div><div class="unit">India (Intensity)</div></div>
+    <div class="kpi-card"><div class="label">Avg Intensity</div><div class="value yellow">13,510</div><div class="unit">Tons CO₂/M Units</div></div>
+  </div>
+  <div class="chart-container">
+    <h3>GHG Emissions Intensity by Site (Tons CO₂)</h3>
+    <canvas id="ghgBarChart"></canvas>
+  </div>
+  <div class="chart-row">
+    <div class="chart-container">
+      <h3>Scope 1 Emissions Breakdown</h3>
+      <canvas id="scope1Chart"></canvas>
+    </div>
+    <div class="chart-container">
+      <h3>CO₂ from Fossil Fuel Combustion</h3>
+      <canvas id="fossilChart"></canvas>
+    </div>
+  </div>
+</div>
+
+<!-- WASTE -->
+<div id="waste" class="section">
+  <h1>♻️ Waste & Recycling Performance</h1>
+  <p class="subtitle">Hazardous and non-hazardous waste recycling rates</p>
+  <div class="kpi-grid">
+    <div class="kpi-card"><div class="label">Avg Haz Recycling</div><div class="value green">85%</div><div class="unit">Network Average</div></div>
+    <div class="kpi-card"><div class="label">Best Haz Recycling</div><div class="value green">99%</div><div class="unit">Puerto Rico</div></div>
+    <div class="kpi-card"><div class="label">Avg Non-Haz Recycling</div><div class="value green">86%</div><div class="unit">Network Average</div></div>
+    <div class="kpi-card"><div class="label">Best Non-Haz Recycling</div><div class="value green">98%</div><div class="unit">Europe</div></div>
+  </div>
+  <div class="chart-container">
+    <h3>Hazardous vs Non-Hazardous Waste Recycling (%)</h3>
+    <canvas id="wasteBarChart"></canvas>
+  </div>
+  <div class="chart-row">
+    <div class="chart-container">
+      <h3>Hazardous Waste Recycling by Site</h3>
+      <canvas id="hazChart"></canvas>
+    </div>
+    <div class="chart-container">
+      <h3>Non-Hazardous Waste Recycling by Site</h3>
+      <canvas id="nonhazChart"></canvas>
+    </div>
+  </div>
+</div>
+
+<!-- DATA TABLES -->
+<div id="tables" class="section">
+  <h1>📋 Data Tables</h1>
+  <p class="subtitle">Searchable and sortable environmental data across all sites</p>
+  <div class="pill-tabs">
+    <div class="pill-tab active" onclick="showTab('tab-main',this)">Key Metrics</div>
+    <div class="pill-tab" onclick="showTab('tab-water',this)">Water Data</div>
+    <div class="pill-tab" onclick="showTab('tab-energy',this)">Energy Data</div>
+    <div class="pill-tab" onclick="showTab('tab-ghg',this)">GHG Data</div>
+  </div>
+  <input class="search-box" id="tableSearch" placeholder="🔍 Search all tables..." oninput="filterTables()">
+
+  <div id="tab-main" class="tab-content active">
+    <h3>Key Environmental Metrics</h3>
+    <div class="table-wrap">
+      <table id="mainTable">
+        <thead><tr>
+          <th onclick="sortTable('mainTable',0)">Site <span class="sort-arrow">⇅</span></th>
+          <th onclick="sortTable('mainTable',1)">Platform <span class="sort-arrow">⇅</span></th>
+          <th onclick="sortTable('mainTable',2)">Product <span class="sort-arrow">⇅</span></th>
+          <th onclick="sortTable('mainTable',3)">EPI Score <span class="sort-arrow">⇅</span></th>
+          <th onclick="sortTable('mainTable',4)">Water Intensity <span class="sort-arrow">⇅</span></th>
+          <th onclick="sortTable('mainTable',5)">Energy Intensity <span class="sort-arrow">⇅</span></th>
+          <th onclick="sortTable('mainTable',6)">GHG Intensity <span class="sort-arrow">⇅</span></th>
+          <th onclick="sortTable('mainTable',7)">Haz Recycling % <span class="sort-arrow">⇅</span></th>
+          <th onclick="sortTable('mainTable',8)">Non-Haz Recycling % <span class="sort-arrow">⇅</span></th>
+        </tr></thead>
+        <tbody>
+          <tr><td>US Manufacturing</td><td>Platform 1</td><td>Product X</td><td><span class="badge badge-yellow">69</span></td><td>66</td><td>25</td><td>11,955</td><td>79%</td><td>65%</td></tr>
+          <tr><td>Canada Manufacturing</td><td>Platform 2</td><td>Product Y</td><td><span class="badge badge-green">91</span></td><td>132</td><td>74</td><td>35,865</td><td>83%</td><td>94%</td></tr>
+          <tr><td>Japan Manufacturing</td><td>Platform 3</td><td>Product Z</td><td><span class="badge badge-green">84</span></td><td>144</td><td>60</td><td>14,824</td><td>97%</td><td>84%</td></tr>
+          <tr><td>Europe Manufacturing</td><td>Platform 3</td><td>Product R</td><td><span class="badge badge-green">82</span></td><td>212</td><td>84</td><td>8,789</td><td>81%</td><td>98%</td></tr>
+          <tr><td>Asia Manufacturing</td><td>Platform 3</td><td>Product J</td><td><span class="badge badge-yellow">76</span></td><td>191</td><td>75</td><td>7,910</td><td>63%</td><td>85%</td></tr>
+          <tr><td>Puerto Rico Manufacturing</td><td>Platform 2</td><td>Product M</td><td><span class="badge badge-green">97</span></td><td>233</td><td>92</td><td>9,668</td><td>99%</td><td>93%</td></tr>
+          <tr><td>India Manufacturing</td><td>Platform 1</td><td>Product S</td><td><span class="badge badge-yellow">66</span></td><td>86</td><td>36</td><td>5,559</td><td>93%</td><td>83%</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div id="tab-water" class="tab-content">
+    <h3>Water Balance Data (Megaliters)</h3>
+    <div class="table-wrap">
+      <table id="waterTable">
+        <thead><tr>
+          <th onclick="sortTable('waterTable',0)">Site <span class="sort-arrow">⇅</span></th>
+          <th onclick="sortTable('waterTable',1)">Water Input <span class="sort-arrow">⇅</span></th>
+          <th onclick="sortTable('waterTable',2)">Consumption <span class="sort-arrow">⇅</span></th>
+          <th onclick="sortTable('waterTable',3)">Discharged <span class="sort-arrow">⇅</span></th>
+          <th onclick="sortTable('waterTable',4)">Lost <span class="sort-arrow">⇅</span></th>
+          <th onclick="sortTable('waterTable',5)">Recycled % <span class="sort-arrow">⇅</span></th>
+          <th onclick="sortTable('waterTable',6)">Intensity (Prod) <span class="sort-arrow">⇅</span></th>
+        </tr></thead>
+        <tbody>
+          <tr><td>US Manufacturing</td><td>240,954</td><td>226,559</td><td>226,284</td><td>274</td><td>3.28%</td><td>66.0</td></tr>
+          <tr><td>Canada Manufacturing</td><td>722,863</td><td>679,676</td><td>678,853</td><td>822</td><td>9.83%</td><td>198.0</td></tr>
+          <tr><td>Japan Manufacturing</td><td>260,187</td><td>257,936</td><td>246,292</td><td>11,644</td><td>4.89%</td><td>143.6</td></tr>
+          <tr><td>Europe Manufacturing</td><td>168,317</td><td>168,317</td><td>160,910</td><td>7,407</td><td>4.07%</td><td>212.2</td></tr>
+          <tr><td>Asia Manufacturing</td><td>151,485</td><td>151,485</td><td>144,819</td><td>6,666</td><td>3.66%</td><td>191.0</td></tr>
+          <tr><td>Puerto Rico Manufacturing</td><td>185,149</td><td>185,149</td><td>177,001</td><td>8,148</td><td>4.47%</td><td>233.5</td></tr>
+          <tr><td>India Manufacturing</td><td>156,112</td><td>154,762</td><td>147,775</td><td>6,986</td><td>2.93%</td><td>86.1</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div id="tab-energy" class="tab-content">
+    <h3>Energy Data (GJ)</h3>
+    <div class="table-wrap">
+      <table id="energyTable">
+        <thead><tr>
+          <th onclick="sortTable('energyTable',0)">Site <span class="sort-arrow">⇅</span></th>
+          <th onclick="sortTable('energyTable',1)">Total Consumed <span class="sort-arrow">⇅</span></th>
+          <th onclick="sortTable('energyTable',2)">On-Site Generated <span class="sort-arrow">⇅</span></th>
+          <th onclick="sortTable('energyTable',3)">Renewable Input <span class="sort-arrow">⇅</span></th>
+          <th onclick="sortTable('energyTable',4)">Fossil Fuel <span class="sort-arrow">⇅</span></th>
+          <th onclick="sortTable('energyTable',5)">% Renewable <span class="sort-arrow">⇅</span></th>
+          <th onclick="sortTable('energyTable',6)">Intensity (Prod) <span class="sort-arrow">⇅</span></th>
+        </tr></thead>
+        <tbody>
+          <tr><td>US Manufacturing</td><td>89,927</td><td>22,273</td><td>0</td><td>22,273</td><td><span class="badge badge-red">0%</span></td><td>24.6</td></tr>
+          <tr><td>Canada Manufacturing</td><td>269,780</td><td>66,818</td><td>0</td><td>66,818</td><td><span class="badge badge-red">0%</span></td><td>73.9</td></tr>
+          <tr><td>Japan Manufacturing</td><td>108,454</td><td>49,863</td><td>58,828</td><td>49,745</td><td><span class="badge badge-yellow">27.1%</span></td><td>59.8</td></tr>
+          <tr><td>Europe Manufacturing</td><td>66,447</td><td>33,283</td><td>33,255</td><td>33,238</td><td><span class="badge badge-yellow">25.0%</span></td><td>83.8</td></tr>
+          <tr><td>Asia Manufacturing</td><td>59,802</td><td>29,955</td><td>29,929</td><td>29,914</td><td><span class="badge badge-yellow">22.5%</span></td><td>75.4</td></tr>
+          <tr><td>Puerto Rico Manufacturing</td><td>73,092</td><td>36,612</td><td>36,580</td><td>36,562</td><td><span class="badge badge-yellow">27.5%</span></td><td>92.2</td></tr>
+          <tr><td>India Manufacturing</td><td>65,072</td><td>29,918</td><td>35,297</td><td>29,847</td><td><span class="badge badge-yellow">16.3%</span></td><td>35.9</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div id="tab-ghg" class="tab-content">
+    <h3>GHG Emissions Data (Tons CO₂)</h3>
+    <div class="table-wrap">
+      <table id="ghgTable">
+        <thead><tr>
+          <th onclick="sortTable('ghgTable',0)">Site <span class="sort-arrow">⇅</span></th>
+          <th onclick="sortTable('ghgTable',1)">Scope 1 Emissions <span class="sort-arrow">⇅</span></th>
+          <th onclick="sortTable('ghgTable',2)">CO₂ Fossil Nature <span class="sort-arrow">⇅</span></th>
+          <th onclick="sortTable('ghgTable',3)">CO₂ from Gas Comb. <span class="sort-arrow">⇅</span></th>
+          <th onclick="sortTable('ghgTable',4)">GHG Intensity <span class="sort-arrow">⇅</span></th>
+          <th onclick="sortTable('ghgTable',5)">Intensity (Empl.) <span class="sort-arrow">⇅</span></th>
+        </tr></thead>
+        <tbody>
+          <tr><td>US Manufacturing</td><td>1,230</td><td>1,230</td><td>1,226</td><td>11,955</td><td>95.3</td></tr>
+          <tr><td>Canada Manufacturing</td><td>3,689</td><td>3,689</td><td>3,677</td><td>35,865</td><td>285.8</td></tr>
+          <tr><td>Japan Manufacturing</td><td>2,660</td><td>2,660</td><td>2,656</td><td>14,824</td><td>83.7</td></tr>
+          <tr><td>Europe Manufacturing</td><td>1,757</td><td>1,757</td><td>1,757</td><td>8,789</td><td>46.0</td></tr>
+          <tr><td>Asia Manufacturing</td><td>1,581</td><td>1,581</td><td>1,581</td><td>7,910</td><td>41.4</td></tr>
+          <tr><td>Puerto Rico Manufacturing</td><td>1,933</td><td>1,933</td><td>1,933</td><td>9,668</td><td>50.6</td></tr>
+          <tr><td>India Manufacturing</td><td>1,596</td><td>1,596</td><td>1,594</td><td>5,559</td><td>50.2</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- CRKL ASSESSMENT -->
+<div id="crkl" class="section">
+  <h1>🔄 C.R.K.L. Action Assessment</h1>
+  <p class="subtitle">Systematic environmental impact reduction using the C.R.K.L. methodology</p>
+
+  <div class="crkl-step">
+    <span class="step-letter">C</span>
+    <span class="step-title">Collecting Data — Challenge Your Process</span>
+    <p style="margin-top:8px;color:#ccc;font-size:13px;">Comprehensive environmental data has been collected across 7 global manufacturing sites covering water, energy, GHG emissions, and waste recycling. The ESS Database provides quantitative metrics with weighted factors for normalized scoring.</p>
+    <h3 style="margin-top:12px;">Key Findings:</h3>
+    <ul class="action-list">
+      <li>✅ All 7 sites reporting environmental data with consistent metrics across 5 KPI categories</li>
+      <li class="high">⚠️ US and Canada sites report 0% renewable energy — critical gap identified</li>
+      <li class="med">⚠️ Asia Manufacturing shows lowest hazardous waste recycling at 63%</li>
+      <li>✅ Water balance data complete with input, discharge, and loss tracking</li>
+      <li class="med">⚠️ Canada Manufacturing shows disproportionately high GHG intensity (35,865 tCO₂)</li>
+    </ul>
+  </div>
+
+  <div class="crkl-step">
+    <span class="step-letter">R</span>
+    <span class="step-title">Researching Gaps — Research Goals</span>
+    <p style="margin-top:8px;color:#ccc;font-size:13px;">Gap analysis against GRI Standards (GRI 303 Water, GRI 302 Energy, GRI 305 Emissions) and SASB Biotechnology & Pharmaceuticals standards reveals priority areas for improvement.</p>
+    <h3 style="margin-top:12px;">Priority Actions by Category:</h3>
+    <ul class="action-list">
+      <li class="high">🔴 <strong>Renewable Energy (US/Canada):</strong> Deploy solar/wind installations at Platform 1 & 2 facilities. Target: 20% renewable by 2026</li>
+      <li class="high">🔴 <strong>GHG Reduction (Canada):</strong> Implement carbon capture, switch to natural gas co-gen, reduce intensity by 40%</li>
+      <li class="med">🟡 <strong>Haz Waste (Asia):</strong> Upgrade waste segregation systems, implement closed-loop solvent recovery. Target: 85%</li>
+      <li class="med">🟡 <strong>Water Intensity (Europe/PR):</strong> Install water recirculation systems to reduce intensity below 200 ML/M units</li>
+      <li>🟢 <strong>Non-Haz Waste (US):</strong> Implement materials exchange program to increase recycling from 65% to 85%</li>
+    </ul>
+  </div>
+
+  <div class="crkl-step">
+    <span class="step-letter">K</span>
+    <span class="step-title">Knowing Your Scores — Know Your Results</span>
+    <p style="margin-top:8px;color:#ccc;font-size:13px;">KPI scoring uses the Simplified EPI Score methodology. Scores are calculated from weighted factors across all environmental categories to produce a balanced assessment aligned with GRI and SASB reporting frameworks.</p>
+    <h3 style="margin-top:12px;">Site Scorecard Summary:</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Site</th><th>EPI Score</th><th>Rating</th><th>Priority</th><th>Action Required</th></tr></thead>
+        <tbody>
+          <tr><td>Puerto Rico</td><td>97</td><td><span class="badge badge-green">Excellent</span></td><td>Low</td><td>Maintain & share best practices</td></tr>
+          <tr><td>Canada</td><td>91</td><td><span class="badge badge-green">Good</span></td><td>Medium</td><td>Address renewable energy & GHG</td></tr>
+          <tr><td>Japan</td><td>84</td><td><span class="badge badge-green">Good</span></td><td>Low</td><td>Optimize water recycling</td></tr>
+          <tr><td>Europe</td><td>82</td><td><span class="badge badge-green">Good</span></td><td>Medium</td><td>Reduce water intensity</td></tr>
+          <tr><td>Asia</td><td>76</td><td><span class="badge badge-yellow">Fair</span></td><td>High</td><td>Improve haz waste recycling</td></tr>
+          <tr><td>US</td><td>69</td><td><span class="badge badge-yellow">Fair</span></td><td>High</td><td>Deploy renewables, improve waste</td></tr>
+          <tr><td>India</td><td>66</td><td><span class="badge badge-yellow">Fair</span></td><td>High</td><td>Holistic improvement program</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="crkl-step">
+    <span class="step-letter">L</span>
+    <span class="step-title">Listening to Stakeholders — Learn from Your Customers</span>
+    <p style="margin-top:8px;color:#ccc;font-size:13px;">Stakeholder feedback integration is essential for meaningful ESG improvements. Per GRI 3 Material Topics 2021, qualitative input from communities, employees, regulators, and customers must be incorporated into action plans.</p>
+    <h3 style="margin-top:12px;">Stakeholder Engagement Recommendations:</h3>
+    <ul class="action-list">
+      <li>📢 Conduct quarterly community impact surveys near manufacturing sites (GRI 413)</li>
+      <li>📢 Establish employee green teams at each facility to drive bottom-up sustainability innovation</li>
+      <li>📢 Publish annual CDP-aligned water and climate disclosures</li>
+      <li>📢 Engage customers through product Environmental Product Declarations (EPDs)</li>
+      <li>📢 Create supplier sustainability scorecard aligned with SASB pharma/biomedical standards</li>
+      <li>📢 Report grievances and resolution rates per GRI 413-2 for local community impacts</li>
+    </ul>
+  </div>
+</div>
+
+<!-- GAP ASSESSMENT -->
+<div id="gap" class="section">
+  <h1>🔍 Gap Assessment — Environmental Risk Mitigation</h1>
+  <p class="subtitle">SASB Biotechnology & Pharmaceuticals standards gap analysis with GRI alignment</p>
+
+  <h2>Critical Environmental Risks for Biomedical Products</h2>
+
+  <div class="gap-card">
+    <div class="gap-icon risk-high">🔴</div>
+    <div>
+      <strong>Hazardous Waste Management (SASB HC-BP-150a.1)</strong>
+      <p style="color:#aaa;font-size:12px;margin:4px 0;">Asia site at 63% recycling rate — below 80% industry benchmark. Risk of regulatory non-compliance and environmental contamination from pharmaceutical/biomedical waste.</p>
+      <div class="progress-bar"><div class="progress-fill" style="width:63%;background:#ff5252;"></div></div>
+      <p style="font-size:11px;color:#777;">Asia: 63% | Target: ≥85% | Gap: 22 pts</p>
+      <p style="color:#ffeb3b;font-size:12px;margin-top:4px;"><strong>Mitigation:</strong> Install closed-loop solvent recovery, upgrade incineration systems, implement waste stream characterization per RCRA/EU Waste Framework Directive.</p>
+    </div>
+  </div>
+
+  <div class="gap-card">
+    <div class="gap-icon risk-high">🔴</div>
+    <div>
+      <strong>Zero Renewable Energy (GRI 302-1 / SASB HC-BP-130a.1)</strong>
+      <p style="color:#aaa;font-size:12px;margin:4px 0;">US and Canada manufacturing sites operate at 0% renewable energy input. Significant exposure to carbon pricing risk and ESG reporting gaps.</p>
+      <div class="progress-bar"><div class="progress-fill" style="width:0%;background:#ff5252;"></div></div>
+      <p style="font-size:11px;color:#777;">US/Canada: 0% | Target: ≥20% | Gap: 20 pts</p>
+      <p style="color:#ffeb3b;font-size:12px;margin-top:4px;"><strong>Mitigation:</strong> Procure renewable energy certificates (RECs), install on-site solar arrays, negotiate Power Purchase Agreements (PPAs) for wind/solar.</p>
+    </div>
+  </div>
+
+  <div class="gap-card">
+    <div class="gap-icon risk-high">🔴</div>
+    <div>
+      <strong>GHG Emissions Intensity — Canada (GRI 305-4)</strong>
+      <p style="color:#aaa;font-size:12px;margin:4px 0;">Canada site at 35,865 tCO₂/M units — 2.7x network average. Major contributor to Scope 1 with 3,689 tons CO₂ direct emissions.</p>
+      <div class="progress-bar"><div class="progress-fill" style="width:90%;background:#ff5252;"></div></div>
+      <p style="font-size:11px;color:#777;">Canada: 35,865 | Target: ≤15,000 | Gap: 20,865 tCO₂</p>
+      <p style="color:#ffeb3b;font-size:12px;margin-top:4px;"><strong>Mitigation:</strong> Transition to natural gas co-generation, electrify heating systems, implement process optimization for Platform 2 operations.</p>
+    </div>
+  </div>
+
+  <div class="gap-card">
+    <div class="gap-icon risk-med">🟡</div>
+    <div>
+      <strong>Water Stress & High Intensity (GRI 303-3 / 303-5)</strong>
+      <p style="color:#aaa;font-size:12px;margin:4px 0;">Europe (212), Asia (191), and Puerto Rico (233) exceed water intensity benchmarks. Water-stressed regions require enhanced conservation.</p>
+      <div class="progress-bar"><div class="progress-fill" style="width:70%;background:#ffeb3b;"></div></div>
+      <p style="font-size:11px;color:#777;">Highest: PR 233 ML/M Units | Target: ≤150 | Gap: 83 pts</p>
+      <p style="color:#ffeb3b;font-size:12px;margin-top:4px;"><strong>Mitigation:</strong> Install closed-loop cooling systems, implement water recycling for CIP/WFI systems, conduct water stress assessments per WRI Aqueduct.</p>
+    </div>
+  </div>
+
+  <div class="gap-card">
+    <div class="gap-icon risk-med">🟡</div>
+    <div>
+      <strong>Non-Hazardous Waste — US Site (GRI 306-4)</strong>
+      <p style="color:#aaa;font-size:12px;margin:4px 0;">US site at 65% non-hazardous recycling — lowest in network. Packaging, single-use materials, and general waste streams need optimization.</p>
+      <div class="progress-bar"><div class="progress-fill" style="width:65%;background:#ffeb3b;"></div></div>
+      <p style="font-size:11px;color:#777;">US: 65% | Target: ≥85% | Gap: 20 pts</p>
+      <p style="color:#ffeb3b;font-size:12px;margin-top:4px;"><strong>Mitigation:</strong> Implement source separation program, establish materials exchange partnerships, deploy waste-to-energy for non-recyclable streams.</p>
+    </div>
+  </div>
+
+  <div class="gap-card">
+    <div class="gap-icon risk-med">🟡</div>
+    <div>
+      <strong>Low EPI Scores — US & India (Composite Metric)</strong>
+      <p style="color:#aaa;font-size:12px;margin:4px 0;">US (69) and India (66) EPI scores below 70 threshold. Multi-category underperformance requiring holistic improvement programs.</p>
+      <div class="progress-bar"><div class="progress-fill" style="width:66%;background:#ffeb3b;"></div></div>
+      <p style="font-size:11px;color:#777;">India: 66 | US: 69 | Target: ≥80 | Gap: 11-14 pts</p>
+      <p style="color:#ffeb3b;font-size:12px;margin-top:4px;"><strong>Mitigation:</strong> Develop site-specific 3-year environmental improvement roadmaps with quarterly KPI checkpoints. Benchmark against Puerto Rico (97) best practices.</p>
+    </div>
+  </div>
+
+  <div class="gap-card">
+    <div class="gap-icon risk-low">🟢</div>
+    <div>
+      <strong>Environmental Disclosure Compliance (GRI 1 Foundation 2021)</strong>
+      <p style="color:#aaa;font-size:12px;margin:4px 0;">Data collection infrastructure in place. All sites reporting quantitative metrics. Opportunity to enhance with qualitative stakeholder context per GRI 3 Material Topics.</p>
+      <div class="progress-bar"><div class="progress-fill" style="width:85%;background:#00e676;"></div></div>
+      <p style="font-size:11px;color:#777;">Compliance: 85% | Target: 100% | Gap: 15 pts</p>
+      <p style="color:#76ff03;font-size:12px;margin-top:4px;"><strong>Enhancement:</strong> Add narrative context to quantitative disclosures, publish GRI Content Index, align with SASB HC-BP sector metrics.</p>
+    </div>
+  </div>
+
+  <h2 style="margin-top:30px;">Risk Mitigation Priority Matrix</h2>
+  <div class="chart-container">
+    <canvas id="riskMatrix"></canvas>
+  </div>
+</div>
+
+<footer>
+  <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports" onerror="this.outerHTML='<span style=color:#00e676;font-size:14px;font-weight:700>HIGGINS REPORTS</span>'">
+  <p>CF2030 Environmental Sustainability Scorecard | Powered by C.R.K.L. Environmental Scorecard Analyzer</p>
+  <p>© 2025 Higgins.AI Incorporated | 2550 Pacific Ave. Suite 700, Dallas, TX 75226 | support@higgins.ai | 855-737-3386</p>
+</footer>
+
+<script>
+const sites=['US Mfg','Canada Mfg','Japan Mfg','Europe Mfg','Asia Mfg','Puerto Rico Mfg','India Mfg'];
+const siteColors=['#40c4ff','#ff5252','#ffeb3b','#7c4dff','#ff6e40','#00e676','#e040fb'];
+const greenPalette=['#00e676','#76ff03','#00bcd4','#40c4ff','#7c4dff','#ffeb3b','#ff6e40'];
+
+function showSection(id,btn){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+function showTab(id,pill){
+  document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.pill-tab').forEach(p=>p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  pill.classList.add('active');
+}
+function filterTables(){
+  const q=document.getElementById('tableSearch').value.toLowerCase();
+  document.querySelectorAll('#tables table tbody tr').forEach(r=>{
+    r.style.display=r.textContent.toLowerCase().includes(q)?'':'none';
+  });
+}
+let sortDirs={};
+function sortTable(tid,col){
+  const t=document.getElementById(tid);
+  const rows=Array.from(t.tBodies[0].rows);
+  const key=tid+col;
+  sortDirs[key]=!sortDirs[key];
+  const dir=sortDirs[key]?1:-1;
+  rows.sort((a,b)=>{
+    let av=a.cells[col].textContent.replace(/[^0-9.\-]/g,'');
+    let bv=b.cells[col].textContent.replace(/[^0-9.\-]/g,'');
+    if(!isNaN(av)&&!isNaN(bv))return(parseFloat(av)-parseFloat(bv))*dir;
+    return a.cells[col].textContent.localeCompare(b.cells[col].textContent)*dir;
+  });
+  rows.forEach(r=>t.tBodies[0].appendChild(r));
+}
+
+const chartDefaults={responsive:true,plugins:{legend:{labels:{color:'#ccc',font:{size:11}}},tooltip:{backgroundColor:'#1a1a2e',titleColor:'#00e676',bodyColor:'#e0e0e0'}},scales:{x:{ticks:{color:'#aaa',font:{size:10}},grid:{color:'#222'}},y:{ticks:{color:'#aaa',font:{size:10}},grid:{color:'#222'}}}};
+
+// EPI Chart
+new Chart(document.getElementById('epiChart'),{type:'bar',data:{labels:sites,datasets:[{label:'EPI Score',data:[69,91,84,82,76,97,66],backgroundColor:greenPalette,borderRadius:6}]},options:{...chartDefaults,plugins:{...chartDefaults.plugins,annotation:{}},scales:{...chartDefaults.scales,y:{...chartDefaults.scales.y,max:100}}}});
+
+// Radar
+new Chart(document.getElementById('radarChart'),{type:'radar',data:{labels:['Water','Energy','GHG','Haz Waste','Non-Haz Waste'],datasets:[
+  {label:'US',data:[80,90,70,79,65],borderColor:'#40c4ff',backgroundColor:'#40c4ff22'},
+  {label:'Puerto Rico',data:[60,55,75,99,93],borderColor:'#00e676',backgroundColor:'#00e67622'},
+  {label:'India',data:[90,85,92,93,83],borderColor:'#e040fb',backgroundColor:'#e040fb22'}
+]},options:{responsive:true,plugins:{legend:{labels:{color:'#ccc'}}},scales:{r:{grid:{color:'#333'},angleLines:{color:'#333'},pointLabels:{color:'#aaa'},ticks:{color:'#777',backdropColor:'transparent'}}}}});
+
+// Doughnut
+new Chart(document.getElementById('doughnutChart'),{type:'doughnut',data:{labels:['Water','Energy','GHG Emissions','Haz Waste','Non-Haz Waste'],datasets:[{data:[25,25,25,12.5,12.5],backgroundColor:['#40c4ff','#ffeb3b','#ff5252','#00e676','#76ff03'],borderColor:'#000',borderWidth:2}]},options:{responsive:true,plugins:{legend:{labels:{color:'#ccc',font:{size:11}}}}}});
+
+// Water Bar
+new Chart(document.getElementById('waterBarChart'),{type:'bar',data:{labels:sites,datasets:[
+  {label:'Water Input',data:[240954,722863,260187,168317,151485,185149,156112],backgroundColor:'#40c4ff'},
+  {label:'Discharged',data:[226284,678853,246292,160910,144819,177001,147775],backgroundColor:'#00e676'},
+  {label:'Lost',data:[274,822,11644,7407,6666,8148,6986],backgroundColor:'#ff5252'}
+]},options:chartDefaults});
+
+// Water Intensity
+new Chart(document.getElementById('waterIntensityChart'),{type:'bar',data:{labels:sites,datasets:[{label:'ML/M Units',data:[66,132,144,212,191,233,86],backgroundColor:greenPalette,borderRadius:6}]},options:chartDefaults});
+
+// Water Recycle
+new Chart(document.getElementById('waterRecycleChart'),{type:'bar',data:{labels:sites,datasets:[{label:'Recycled %',data:[3.28,9.83,4.89,4.07,3.66,4.47,2.93],backgroundColor:greenPalette,borderRadius:6}]},options:{...chartDefaults,scales:{...chartDefaults.scales,y:{...chartDefaults.scales.y,max:12}}}});
+
+// Energy Stack
+new Chart(document.getElementById('energyStackChart'),{type:'bar',data:{labels:sites,datasets:[
+  {label:'Renewable',data:[0,0,58828,33255,29929,36580,35297],backgroundColor:'#00e676'},
+  {label:'Fossil Fuel',data:[89927,269780,49626,33192,29873,36512,29775],backgroundColor:'#ff5252'}
+]},options:{...chartDefaults,scales:{...chartDefaults.scales,x:{...chartDefaults.scales.x,stacked:true},y:{...chartDefaults.scales.y,stacked:true}}}});
+
+// Energy Intensity
+new Chart(document.getElementById('energyIntensityChart'),{type:'bar',data:{labels:sites,datasets:[{label:'GJ/M Units',data:[24.6,73.9,59.8,83.8,75.4,92.2,35.9],backgroundColor:greenPalette,borderRadius:6}]},options:chartDefaults});
+
+// Renewable %
+new Chart(document.getElementById('renewableChart'),{type:'bar',data:{labels:sites,datasets:[{label:'% Renewable',data:[0,0,27.1,25.0,22.5,27.5,16.3],backgroundColor:greenPalette,borderRadius:6}]},options:{...chartDefaults,scales:{...chartDefaults.scales,y:{...chartDefaults.scales.y,max:35}}}});
+
+// GHG Bar
+new Chart(document.getElementById('ghgBarChart'),{type:'bar',data:{labels:sites,datasets:[{label:'GHG Intensity (tCO₂/M Units)',data:[11955,35865,14824,8789,7910,9668,5559],backgroundColor:['#ffeb3b','#ff5252','#ff6e40','#00e676','#00e676','#ffeb3b','#00e676'],borderRadius:6}]},options:chartDefaults});
+
+// Scope 1
+new Chart(document.getElementById('scope1Chart'),{type:'doughnut',data:{labels:sites,datasets:[{data:[1230,3689,2660,1757,1581,1933,1596],backgroundColor:greenPalette,borderColor:'#000',borderWidth:2}]},options:{responsive:true,plugins:{legend:{labels:{color:'#ccc',font:{size:11}}}}}});
+
+// Fossil
+new Chart(document.getElementById('fossilChart'),{type:'bar',data:{labels:sites,datasets:[{label:'CO₂ from Gas Combustion (t)',data:[1226,3677,2656,1757,1581,1933,1594],backgroundColor:'#ff6e40',borderRadius:6}]},options:chartDefaults});
+
+// Waste Bar
+new Chart(document.getElementById('wasteBarChart'),{type:'bar',data:{labels:sites,datasets:[
+  {label:'Hazardous %',data:[79,83,97,81,63,99,93],backgroundColor:'#ff5252'},
+  {label:'Non-Hazardous %',data:[65,94,84,98,85,93,83],backgroundColor:'#00e676'}
+]},options:{...chartDefaults,scales:{...chartDefaults.scales,y:{...chartDefaults.scales.y,max:110}}}});
+
+// Haz
+new Chart(document.getElementById('hazChart'),{type:'polarArea',data:{labels:sites,datasets:[{data:[79,83,97,81,63,99,93],backgroundColor:greenPalette.map(c=>c+'88')}]},options:{responsive:true,plugins:{legend:{labels:{color:'#ccc',font:{size:10}}}},scales:{r:{grid:{color:'#333'},ticks:{color:'#777',backdropColor:'transparent'}}}}});
+
+// Non-Haz
+new Chart(document.getElementById('nonhazChart'),{type:'polarArea',data:{labels:sites,datasets:[{data:[65,94,84,98,85,93,83],backgroundColor:greenPalette.map(c=>c+'88')}]},options:{responsive:true,plugins:{legend:{labels:{color:'#ccc',font:{size:10}}}},scales:{r:{grid:{color:'#333'},ticks:{color:'#777',backdropColor:'transparent'}}}}});
+
+// Risk Matrix
+new Chart(document.getElementById('riskMatrix'),{type:'bubble',data:{datasets:[
+  {label:'Haz Waste-Asia',data:[{x:9,y:8,r:18}],backgroundColor:'#ff525288'},
+  {label:'Renewable-US/CA',data:[{x:10,y:9,r:22}],backgroundColor:'#ff525288'},
+  {label:'GHG-Canada',data:[{x:8,y:9,r:20}],backgroundColor:'#ff525288'},
+  {label:'Water-EU/PR',data:[{x:6,y:6,r:14}],backgroundColor:'#ffeb3b88'},
+  {label:'NonHaz-US',data:[{x:5,y:5,r:12}],backgroundColor:'#ffeb3b88'},
+  {label:'EPI-US/India',data:[{x:7,y:7,r:16}],backgroundColor:'#ffeb3b88'},
+  {label:'Disclosure',data:[{x:3,y:3,r:10}],backgroundColor:'#00e67688'}
+]},options:{...chartDefaults,scales:{x:{...chartDefaults.scales.x,title:{display:true,text:'Impact Severity →',color:'#aaa'},min:0,max:12},y:{...chartDefaults.scales.y,title:{display:true,text:'Likelihood →',color:'#aaa'},min:0,max:12}}}});
+</script>
+</body>
+</html>
