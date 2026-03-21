@@ -1,0 +1,1064 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BNI 1688 Online SGV - Applicant Assessment Report</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #000; color: #e0e0e0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+  
+  .header {
+    background: linear-gradient(135deg, #111 0%, #1a1a1a 100%);
+    padding: 15px 30px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 3px solid #CF2030;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  }
+  .header img { height: 50px; }
+  .header-title { color: #fff; font-size: 18px; font-weight: 600; }
+  .header-subtitle { color: #CF2030; font-size: 12px; }
+
+  .nav {
+    background: #CF2030;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    position: sticky;
+    top: 83px;
+    z-index: 999;
+  }
+  .nav a {
+    color: #fff;
+    text-decoration: none;
+    padding: 12px 18px;
+    font-size: 13px;
+    font-weight: 600;
+    transition: background 0.3s;
+    border-right: 1px solid rgba(255,255,255,0.2);
+  }
+  .nav a:hover { background: rgba(0,0,0,0.3); }
+  .nav a.active { background: rgba(0,0,0,0.4); }
+
+  .container { max-width: 1400px; margin: 0 auto; padding: 20px; }
+
+  .section {
+    background: #111;
+    border: 1px solid #222;
+    border-radius: 12px;
+    margin-bottom: 25px;
+    overflow: hidden;
+  }
+  .section-header {
+    background: linear-gradient(135deg, #CF2030 0%, #a01828 100%);
+    padding: 15px 25px;
+    font-size: 18px;
+    font-weight: 700;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section-body { padding: 20px 25px; }
+
+  .badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+  .badge-green { background: #1a5c2a; color: #4ade80; }
+  .badge-red { background: #5c1a1a; color: #f87171; }
+  .badge-yellow { background: #5c4a1a; color: #fbbf24; }
+  .badge-blue { background: #1a2a5c; color: #60a5fa; }
+
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
+  .grid-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 15px; }
+
+  .stat-card {
+    background: #1a1a1a;
+    border: 1px solid #333;
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+  }
+  .stat-number { font-size: 36px; font-weight: 800; color: #CF2030; }
+  .stat-label { font-size: 12px; color: #888; margin-top: 5px; text-transform: uppercase; letter-spacing: 1px; }
+
+  .info-grid {
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    gap: 8px 15px;
+    font-size: 14px;
+  }
+  .info-label { color: #888; font-weight: 600; }
+  .info-value { color: #e0e0e0; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  th {
+    background: #1a1a1a;
+    color: #CF2030;
+    padding: 12px 10px;
+    text-align: left;
+    font-weight: 700;
+    cursor: pointer;
+    user-select: none;
+    border-bottom: 2px solid #CF2030;
+    position: relative;
+    white-space: nowrap;
+  }
+  th:hover { background: #222; }
+  th .sort-icon { margin-left: 5px; font-size: 10px; }
+  td {
+    padding: 10px;
+    border-bottom: 1px solid #222;
+    color: #ccc;
+  }
+  tr:hover td { background: #1a1a1a; }
+  
+  .search-box {
+    width: 100%;
+    padding: 10px 15px;
+    background: #1a1a1a;
+    border: 1px solid #333;
+    border-radius: 8px;
+    color: #fff;
+    font-size: 14px;
+    margin-bottom: 15px;
+    outline: none;
+  }
+  .search-box:focus { border-color: #CF2030; }
+  .search-box::placeholder { color: #555; }
+
+  .chart-container {
+    background: #1a1a1a;
+    border-radius: 10px;
+    padding: 20px;
+    position: relative;
+    height: 350px;
+  }
+
+  .contact-btn {
+    background: #CF2030;
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 600;
+    transition: all 0.3s;
+    text-decoration: none;
+    display: inline-block;
+  }
+  .contact-btn:hover { background: #e02040; transform: translateY(-1px); }
+  .contact-btn-sm { padding: 5px 10px; font-size: 11px; }
+
+  .fit-score {
+    width: 100%;
+    height: 20px;
+    background: #222;
+    border-radius: 10px;
+    overflow: hidden;
+    margin: 8px 0;
+  }
+  .fit-score-bar {
+    height: 100%;
+    border-radius: 10px;
+    transition: width 1s ease;
+  }
+
+  .sphere-card {
+    background: #1a1a1a;
+    border: 1px solid #333;
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 10px;
+  }
+  .sphere-card h4 { color: #CF2030; margin-bottom: 5px; }
+
+  .testimonial {
+    background: #1a1a1a;
+    border-left: 4px solid #CF2030;
+    padding: 15px 20px;
+    margin: 10px 0;
+    border-radius: 0 8px 8px 0;
+    font-style: italic;
+    color: #aaa;
+  }
+  .testimonial .author { color: #CF2030; font-style: normal; font-weight: 700; margin-top: 8px; }
+
+  .verdict-box {
+    background: linear-gradient(135deg, #1a5c2a 0%, #0d3318 100%);
+    border: 2px solid #4ade80;
+    border-radius: 12px;
+    padding: 25px;
+    text-align: center;
+  }
+  .verdict-box h2 { color: #4ade80; font-size: 28px; margin-bottom: 10px; }
+  .verdict-box p { color: #a7f3d0; font-size: 16px; }
+
+  .tab-container { margin-bottom: 15px; }
+  .tab-btn {
+    background: #222;
+    color: #888;
+    border: 1px solid #333;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    transition: all 0.3s;
+  }
+  .tab-btn:first-child { border-radius: 8px 0 0 8px; }
+  .tab-btn:last-child { border-radius: 0 8px 8px 0; }
+  .tab-btn.active { background: #CF2030; color: #fff; border-color: #CF2030; }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  .footer {
+    background: #111;
+    border-top: 3px solid #CF2030;
+    padding: 20px 30px;
+    text-align: center;
+    margin-top: 30px;
+  }
+  .footer img { height: 30px; margin-bottom: 10px; }
+  .footer p { color: #555; font-size: 11px; }
+
+  .pulse { animation: pulse 2s infinite; }
+  @keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.6; }
+    100% { opacity: 1; }
+  }
+
+  .hidden { display: none; }
+
+  @media (max-width: 768px) {
+    .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+    .nav { flex-direction: column; }
+    .nav a { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.1); }
+    .header { flex-direction: column; gap: 10px; text-align: center; }
+  }
+
+  .modal-overlay {
+    display: none;
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.8);
+    z-index: 2000;
+    justify-content: center;
+    align-items: center;
+  }
+  .modal-overlay.show { display: flex; }
+  .modal {
+    background: #1a1a1a;
+    border: 1px solid #CF2030;
+    border-radius: 12px;
+    padding: 30px;
+    max-width: 600px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+  }
+  .modal h3 { color: #CF2030; margin-bottom: 15px; }
+  .modal textarea {
+    width: 100%;
+    background: #111;
+    border: 1px solid #333;
+    color: #e0e0e0;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 13px;
+    resize: vertical;
+    min-height: 200px;
+    font-family: inherit;
+  }
+  .modal-actions { display: flex; gap: 10px; margin-top: 15px; justify-content: flex-end; }
+  .btn-cancel { background: #333; color: #fff; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div style="display:flex;align-items:center;gap:15px;">
+    <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports" onerror="this.style.display='none'">
+  </div>
+  <div style="text-align:right;">
+    <div class="header-title">BNI 1688 Online SGV — Chapter Assessment Report</div>
+    <div class="header-subtitle">CA San Gabriel Valley & San Bernardino County • Generated 03/14/2026</div>
+  </div>
+</div>
+
+<div class="nav" id="mainNav">
+  <a href="#applicant" class="active" onclick="scrollToSection('applicant')">📋 Applicant</a>
+  <a href="#business" onclick="scrollToSection('business')">🏢 Business</a>
+  <a href="#contactsphere" onclick="scrollToSection('contactsphere')">🔗 Contact Sphere</a>
+  <a href="#roster" onclick="scrollToSection('roster')">👥 Roster</a>
+  <a href="#performance" onclick="scrollToSection('performance')">📊 Performance</a>
+  <a href="#missing" onclick="scrollToSection('missing')">🎯 Missing Seats</a>
+  <a href="#verdict" onclick="scrollToSection('verdict')">✅ Verdict</a>
+  <a href="#contacts" onclick="scrollToSection('contacts')">📨 Contacts</a>
+</div>
+
+<div class="container">
+
+  <!-- EXECUTIVE SUMMARY -->
+  <div class="section" id="applicant">
+    <div class="section-header">📋 Applicant Overview — Carey Hoffman</div>
+    <div class="section-body">
+      <div class="grid-4" style="margin-bottom:25px;">
+        <div class="stat-card">
+          <div class="stat-number">24</div>
+          <div class="stat-label">Current Members</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" style="color:#4ade80;">✓</div>
+          <div class="stat-label">Seat Available</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">2</div>
+          <div class="stat-label">References Submitted</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" style="font-size:24px;">03/11/26</div>
+          <div class="stat-label">Application Date</div>
+        </div>
+      </div>
+      <div class="grid-2">
+        <div>
+          <h3 style="color:#CF2030;margin-bottom:15px;">Applicant Information</h3>
+          <div class="info-grid">
+            <div class="info-label">Full Name</div><div class="info-value">Carey Hoffman</div>
+            <div class="info-label">Business Name</div><div class="info-value">Carey Connections</div>
+            <div class="info-label">Classification</div><div class="info-value">Website Design & Digital Marketing</div>
+            <div class="info-label">Phone</div><div class="info-value">(415) 948-5133</div>
+            <div class="info-label">Email</div><div class="info-value">carey@careyconnections.com</div>
+            <div class="info-label">Website</div><div class="info-value"><a href="https://www.careyconnections.com" style="color:#60a5fa;">careyconnections.com</a></div>
+            <div class="info-label">License Required</div><div class="info-value">No</div>
+            <div class="info-label">Chapter</div><div class="info-value">BNI 1688 Online SGV</div>
+            <div class="info-label">Application Type</div><div class="info-value">New Member</div>
+            <div class="info-label">Payment</div><div class="info-value">$1,048.00 (1-Year Debit)</div>
+            <div class="info-label">Status</div><div class="info-value"><span class="badge badge-yellow">Ready for Review</span></div>
+          </div>
+        </div>
+        <div>
+          <h3 style="color:#CF2030;margin-bottom:15px;">Reference Checks</h3>
+          <div class="sphere-card">
+            <h4>Reference 1</h4>
+            <div class="info-grid" style="grid-template-columns:100px 1fr;">
+              <div class="info-label">Name</div><div class="info-value">George Brumis</div>
+              <div class="info-label">Email</div><div class="info-value">george@taxincentiveshub.com</div>
+              <div class="info-label">Status</div><div class="info-value"><span class="badge badge-green">Completed</span></div>
+            </div>
+          </div>
+          <div class="sphere-card">
+            <h4>Reference 2</h4>
+            <div class="info-grid" style="grid-template-columns:100px 1fr;">
+              <div class="info-label">Name</div><div class="info-value">John McGrail</div>
+              <div class="info-label">Email</div><div class="info-value">drjohnmcgrail@gmail.com</div>
+              <div class="info-label">Status</div><div class="info-value"><span class="badge badge-blue">Submitted</span></div>
+            </div>
+          </div>
+          <div class="sphere-card" style="margin-top:15px;">
+            <h4>Application Pipeline</h4>
+            <div style="display:flex;gap:5px;margin-top:10px;">
+              <div style="flex:1;text-align:center;padding:8px;background:#1a5c2a;border-radius:6px;font-size:11px;color:#4ade80;">✓ Paid</div>
+              <div style="flex:1;text-align:center;padding:8px;background:#1a5c2a;border-radius:6px;font-size:11px;color:#4ade80;">✓ Applied</div>
+              <div style="flex:1;text-align:center;padding:8px;background:#1a5c2a;border-radius:6px;font-size:11px;color:#4ade80;">✓ Video</div>
+              <div style="flex:1;text-align:center;padding:8px;background:#1a5c2a;border-radius:6px;font-size:11px;color:#4ade80;">✓ Ref 1</div>
+              <div style="flex:1;text-align:center;padding:8px;background:#5c4a1a;border-radius:6px;font-size:11px;color:#fbbf24;">⏳ Review</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BUSINESS RESEARCH -->
+  <div class="section" id="business">
+    <div class="section-header">🏢 Business Research — Carey Connections</div>
+    <div class="section-body">
+      <div class="grid-2">
+        <div>
+          <h3 style="color:#CF2030;margin-bottom:15px;">Business Profile</h3>
+          <p style="color:#aaa;line-height:1.7;margin-bottom:15px;">
+            <strong style="color:#fff;">Carey Connections</strong> offers website design and digital marketing services to help small businesses grow online. They specialize in creating attractive, functional, mobile-friendly websites that are easy to use and simple to edit — ideal for small business owners.
+          </p>
+          <h4 style="color:#CF2030;margin:15px 0 10px;">Services Offered</h4>
+          <div style="display:flex;flex-wrap:wrap;gap:8px;">
+            <span class="badge badge-blue">Website Design</span>
+            <span class="badge badge-blue">Digital Marketing</span>
+            <span class="badge badge-blue">Social Media Marketing</span>
+            <span class="badge badge-blue">Online Advertising</span>
+            <span class="badge badge-blue">Email Marketing</span>
+          </div>
+          <h4 style="color:#CF2030;margin:15px 0 10px;">Website Benefits Highlighted</h4>
+          <ul style="color:#aaa;padding-left:20px;line-height:2;">
+            <li>Ideal for small businesses</li>
+            <li>Simple to make edits</li>
+            <li>Mobile friendly</li>
+            <li>Cost effective</li>
+            <li>No monthly maintenance fees</li>
+            <li>Secure and low maintenance</li>
+          </ul>
+        </div>
+        <div>
+          <h3 style="color:#CF2030;margin-bottom:15px;">Client Testimonials</h3>
+          <div class="testimonial">
+            "Carey built my website and I couldn't be happier with it. She is quick, creative, honest, precise and incredibly easy to work with. I wholeheartedly recommend Carey Connections."
+            <div class="author">— Alex C., Beverly Hills, CA</div>
+          </div>
+          <div class="testimonial">
+            "Carey redesigned my website and it looks fantastic. I've already gotten a lot more positive attention and other small business owners are asking if they can talk to her too."
+            <div class="author">— Thomas L.</div>
+          </div>
+          <div class="testimonial">
+            "Together, we created a plan that accomplished the goals of the project. Carey's expertise, polish, professionalism and attention to detail... delivered a website that exceeded expectations."
+            <div class="author">— John M.</div>
+          </div>
+          <h4 style="color:#CF2030;margin:15px 0 10px;">Business Assessment</h4>
+          <div class="sphere-card">
+            <div style="display:flex;justify-content:space-between;margin-bottom:5px;"><span>Client Focus (Small Business)</span><span style="color:#4ade80;">Excellent</span></div>
+            <div class="fit-score"><div class="fit-score-bar" style="width:95%;background:linear-gradient(90deg,#4ade80,#22c55e);"></div></div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:5px;"><span>BNI Synergy Potential</span><span style="color:#4ade80;">Very High</span></div>
+            <div class="fit-score"><div class="fit-score-bar" style="width:92%;background:linear-gradient(90deg,#4ade80,#22c55e);"></div></div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:5px;"><span>Referral Versatility</span><span style="color:#4ade80;">Excellent</span></div>
+            <div class="fit-score"><div class="fit-score-bar" style="width:96%;background:linear-gradient(90deg,#4ade80,#22c55e);"></div></div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:5px;"><span>Professionalism</span><span style="color:#4ade80;">Excellent</span></div>
+            <div class="fit-score"><div class="fit-score-bar" style="width:94%;background:linear-gradient(90deg,#4ade80,#22c55e);"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTACT SPHERE ANALYSIS -->
+  <div class="section" id="contactsphere">
+    <div class="section-header">🔗 Contact Sphere Analysis — Where Carey Fits</div>
+    <div class="section-body">
+      <div class="grid-2" style="margin-bottom:20px;">
+        <div>
+          <h3 style="color:#CF2030;margin-bottom:15px;">Classification Match</h3>
+          <div class="sphere-card" style="border:2px solid #4ade80;">
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <div>
+                <h4 style="color:#4ade80;">✅ Web Design — OPEN SEAT</h4>
+                <p style="color:#888;font-size:13px;margin-top:5px;">This classification is currently MISSING from the chapter roster. 1 other chapter in the region has this seat filled.</p>
+              </div>
+              <div class="stat-card" style="padding:10px 15px;min-width:80px;">
+                <div class="stat-number" style="font-size:24px;color:#4ade80;">0</div>
+                <div class="stat-label" style="font-size:10px;">Conflicts</div>
+              </div>
+            </div>
+          </div>
+          <div class="sphere-card" style="border:2px solid #4ade80;">
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <div>
+                <h4 style="color:#4ade80;">✅ Digital Marketing — OPEN SEAT</h4>
+                <p style="color:#888;font-size:13px;margin-top:5px;">Also listed as missing. 1 other chapter in the region has this seat. High demand classification.</p>
+              </div>
+              <div class="stat-card" style="padding:10px 15px;min-width:80px;">
+                <div class="stat-number" style="font-size:24px;color:#4ade80;">0</div>
+                <div class="stat-label" style="font-size:10px;">Conflicts</div>
+              </div>
+            </div>
+          </div>
+          <h3 style="color:#CF2030;margin:20px 0 15px;">BNI Category</h3>
+          <div class="sphere-card">
+            <h4>Advertising & Marketing</h4>
+            <p style="color:#888;font-size:13px;margin-top:5px;">Web Design and Digital Marketing fall under BNI's Advertising & Marketing category. Currently the chapter has <strong style="color:#fff;">1 member</strong> in this category (Gabriel Almendariz — Promotional Products). Adding Carey would strengthen this contact sphere significantly.</p>
+          </div>
+        </div>
+        <div>
+          <h3 style="color:#CF2030;margin-bottom:15px;">Top Referral Partners in Chapter</h3>
+          <div id="spherePartners"></div>
+        </div>
+      </div>
+      <h3 style="color:#CF2030;margin-bottom:15px;">Referral Flow Visualization</h3>
+      <div class="grid-2">
+        <div class="chart-container" style="height:380px;">
+          <canvas id="referralFlowChart"></canvas>
+        </div>
+        <div class="chart-container" style="height:380px;">
+          <canvas id="sphereStrengthChart"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHAPTER ROSTER -->
+  <div class="section" id="roster">
+    <div class="section-header">👥 Chapter Roster — BNI 1688 Online SGV (24 Members)</div>
+    <div class="section-body">
+      <input type="text" class="search-box" id="rosterSearch" placeholder="🔍 Search by name, company, classification, or phone...">
+      <div style="overflow-x:auto;">
+        <table id="rosterTable">
+          <thead>
+            <tr>
+              <th onclick="sortTable('rosterTable',0)">Member Name <span class="sort-icon">⇕</span></th>
+              <th onclick="sortTable('rosterTable',1)">Classification <span class="sort-icon">⇕</span></th>
+              <th onclick="sortTable('rosterTable',2)">Company <span class="sort-icon">⇕</span></th>
+              <th onclick="sortTable('rosterTable',3)">Phone <span class="sort-icon">⇕</span></th>
+              <th onclick="sortTable('rosterTable',4)">G <span class="sort-icon">⇕</span></th>
+              <th onclick="sortTable('rosterTable',5)">R <span class="sort-icon">⇕</span></th>
+              <th onclick="sortTable('rosterTable',6)">V <span class="sort-icon">⇕</span></th>
+              <th onclick="sortTable('rosterTable',7)">1-2-1 <span class="sort-icon">⇕</span></th>
+              <th onclick="sortTable('rosterTable',8)">L <span class="sort-icon">⇕</span></th>
+              <th onclick="sortTable('rosterTable',9)">Abs <span class="sort-icon">⇕</span></th>
+            </tr>
+          </thead>
+          <tbody id="rosterBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- PERFORMANCE CHARTS -->
+  <div class="section" id="performance">
+    <div class="section-header">📊 Chapter Performance Analytics (Last 90 Days)</div>
+    <div class="section-body">
+      <div class="grid-4" style="margin-bottom:25px;">
+        <div class="stat-card">
+          <div class="stat-number">142</div>
+          <div class="stat-label">Total Referrals Given</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">114</div>
+          <div class="stat-label">Referrals Received</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">30</div>
+          <div class="stat-label">Visitors Brought</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">354</div>
+          <div class="stat-label">1-2-1 Meetings</div>
+        </div>
+      </div>
+      <div class="tab-container">
+        <button class="tab-btn active" onclick="showTab('chartTab1',this)">Referrals Given</button>
+        <button class="tab-btn" onclick="showTab('chartTab2',this)">Referrals Received</button>
+        <button class="tab-btn" onclick="showTab('chartTab3',this)">1-2-1 Meetings</button>
+        <button class="tab-btn" onclick="showTab('chartTab4',this)">Visitors</button>
+      </div>
+      <div id="chartTab1" class="tab-content active">
+        <div class="chart-container" style="height:400px;"><canvas id="givenChart"></canvas></div>
+      </div>
+      <div id="chartTab2" class="tab-content">
+        <div class="chart-container" style="height:400px;"><canvas id="receivedChart"></canvas></div>
+      </div>
+      <div id="chartTab3" class="tab-content">
+        <div class="chart-container" style="height:400px;"><canvas id="meetingsChart"></canvas></div>
+      </div>
+      <div id="chartTab4" class="tab-content">
+        <div class="chart-container" style="height:400px;"><canvas id="visitorsChart"></canvas></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MISSING CLASSIFICATIONS -->
+  <div class="section" id="missing">
+    <div class="section-header">🎯 Missing Classifications — Top Recruitment Priorities</div>
+    <div class="section-body">
+      <input type="text" class="search-box" id="missingSearch" placeholder="🔍 Search missing classifications...">
+      <div class="tab-container">
+        <button class="tab-btn active" onclick="showTab('missPriority',this)">High Priority (2+ chapters)</button>
+        <button class="tab-btn" onclick="showTab('missAll',this)">All Missing</button>
+      </div>
+      <div id="missPriority" class="tab-content active">
+        <div style="overflow-x:auto;">
+          <table id="missingPriorityTable">
+            <thead>
+              <tr>
+                <th onclick="sortTable('missingPriorityTable',0)">Classification <span class="sort-icon">⇕</span></th>
+                <th onclick="sortTable('missingPriorityTable',1)"># Chapters w/ Seat <span class="sort-icon">⇕</span></th>
+                <th>Priority</th>
+              </tr>
+            </thead>
+            <tbody id="missingPriorityBody"></tbody>
+          </table>
+        </div>
+      </div>
+      <div id="missAll" class="tab-content">
+        <div style="overflow-x:auto;max-height:500px;overflow-y:auto;">
+          <table id="missingAllTable">
+            <thead>
+              <tr>
+                <th onclick="sortTable('missingAllTable',0)">Classification <span class="sort-icon">⇕</span></th>
+                <th onclick="sortTable('missingAllTable',1)"># Chapters w/ Seat <span class="sort-icon">⇕</span></th>
+              </tr>
+            </thead>
+            <tbody id="missingAllBody"></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="chart-container" style="height:400px;margin-top:20px;">
+        <canvas id="missingChart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- VERDICT -->
+  <div class="section" id="verdict">
+    <div class="section-header">✅ Membership Fit Assessment & Recommendation</div>
+    <div class="section-body">
+      <div class="verdict-box" style="margin-bottom:25px;">
+        <h2>🟢 STRONG RECOMMENDATION TO APPROVE</h2>
+        <p>Carey Hoffman / Carey Connections is an excellent fit for BNI 1688 Online SGV</p>
+      </div>
+      <div class="grid-2">
+        <div>
+          <h3 style="color:#4ade80;margin-bottom:15px;">✅ Reasons to Approve</h3>
+          <div class="sphere-card" style="border-left:4px solid #4ade80;">
+            <ol style="padding-left:18px;line-height:2.2;color:#aaa;">
+              <li><strong style="color:#fff;">Open Classification</strong> — Both "Web Design" and "Digital Marketing" are missing from the chapter with zero conflicts</li>
+              <li><strong style="color:#fff;">Universal Referral Potential</strong> — Every business in the chapter needs a website and digital marketing, creating instant referral pathways for all 24 members</li>
+              <li><strong style="color:#fff;">Small Business Focus</strong> — Carey's niche perfectly aligns with BNI's core demographic of small business owners</li>
+              <li><strong style="color:#fff;">Strong Contact Sphere Synergy</strong> — Natural referral partnerships with 10+ existing members across Real Estate, Financial Services, Insurance, CPA, and Bookkeeping</li>
+              <li><strong style="color:#fff;">Proven Business Excellence</strong> — Multiple positive client testimonials demonstrating professionalism, reliability, and quality work</li>
+              <li><strong style="color:#fff;">Complete Application</strong> — Payment submitted, application completed, video interview done, and at least one reference check completed</li>
+              <li><strong style="color:#fff;">Reciprocal Value</strong> — As a web designer/marketer, Carey will naturally encounter clients who need services from fellow chapter members (CPA, insurance, mortgage, etc.)</li>
+              <li><strong style="color:#fff;">Chapter Growth</strong> — Adding this classification strengthens the Advertising & Marketing contact sphere, currently underrepresented with only 1 member</li>
+            </ol>
+          </div>
+        </div>
+        <div>
+          <h3 style="color:#fbbf24;margin-bottom:15px;">⚠️ Items to Discuss</h3>
+          <div class="sphere-card" style="border-left:4px solid #fbbf24;">
+            <ol style="padding-left:18px;line-height:2.2;color:#aaa;">
+              <li><strong style="color:#fff;">Area Code</strong> — (415) is a San Francisco area code. Membership Committee should confirm Carey can consistently attend the Wednesday 11:30 AM online meetings</li>
+              <li><strong style="color:#fff;">Online Format Compatibility</strong> — Since this is a permanent online chapter, geographic location is less of a concern but engagement expectations should be clarified</li>
+              <li><strong style="color:#fff;">Classification Precision</strong> — Membership Committee should define whether the seat is "Web Design" or "Digital Marketing" or a combined classification to prevent future conflicts</li>
+            </ol>
+          </div>
+          <h3 style="color:#CF2030;margin:20px 0 15px;">Fit Score Summary</h3>
+          <div class="sphere-card">
+            <div style="display:flex;justify-content:space-between;"><span>Seat Availability</span><span style="color:#4ade80;">100%</span></div>
+            <div class="fit-score"><div class="fit-score-bar" style="width:100%;background:#4ade80;"></div></div>
+            <div style="display:flex;justify-content:space-between;"><span>Contact Sphere Fit</span><span style="color:#4ade80;">95%</span></div>
+            <div class="fit-score"><div class="fit-score-bar" style="width:95%;background:#4ade80;"></div></div>
+            <div style="display:flex;justify-content:space-between;"><span>Referral Potential</span><span style="color:#4ade80;">96%</span></div>
+            <div class="fit-score"><div class="fit-score-bar" style="width:96%;background:#4ade80;"></div></div>
+            <div style="display:flex;justify-content:space-between;"><span>Business Credibility</span><span style="color:#4ade80;">92%</span></div>
+            <div class="fit-score"><div class="fit-score-bar" style="width:92%;background:#4ade80;"></div></div>
+            <div style="display:flex;justify-content:space-between;"><span>Application Completeness</span><span style="color:#4ade80;">90%</span></div>
+            <div class="fit-score"><div class="fit-score-bar" style="width:90%;background:#4ade80;"></div></div>
+            <div style="display:flex;justify-content:space-between;margin-top:15px;padding-top:15px;border-top:1px solid #333;">
+              <strong style="color:#fff;font-size:16px;">Overall Fit Score</strong>
+              <strong style="color:#4ade80;font-size:20px;">94.6%</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTACT BUTTONS -->
+  <div class="section" id="contacts">
+    <div class="section-header">📨 Contact Chapter Leadership & Membership Committee</div>
+    <div class="section-body">
+      <p style="color:#888;margin-bottom:20px;">Click any button below to generate a pre-filled email with the applicant summary and fit recommendation for the designated contact.</p>
+      <div style="overflow-x:auto;">
+        <table>
+          <thead>
+            <tr>
+              <th>Role</th>
+              <th>Name</th>
+              <th>Company</th>
+              <th>Phone</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="badge badge-green">President</span></td>
+              <td>Erika Liu Wong</td>
+              <td>Love Liu Wong Time LLC</td>
+              <td>626-807-5192</td>
+              <td><button class="contact-btn" onclick="openContactModal('Erika Liu Wong','President')">📧 Contact</button></td>
+            </tr>
+            <tr>
+              <td><span class="badge badge-blue">Vice President</span></td>
+              <td>Wesley Salao</td>
+              <td>Precision Wealth Financial</td>
+              <td>626-898-3547</td>
+              <td><button class="contact-btn" onclick="openContactModal('Wesley Salao','Vice President')">📧 Contact</button></td>
+            </tr>
+            <tr>
+              <td><span class="badge badge-blue">Secretary/Treasurer</span></td>
+              <td>Analisa Castro</td>
+              <td>Castro Virtual Assistance</td>
+              <td>909-767-6404</td>
+              <td><button class="contact-btn" onclick="openContactModal('Analisa Castro','Secretary/Treasurer')">📧 Contact</button></td>
+            </tr>
+            <tr>
+              <td><span class="badge badge-yellow">Membership Committee</span></td>
+              <td>Geoff Kautzman</td>
+              <td>Ethos Lending</td>
+              <td>951-205-7618</td>
+              <td><button class="contact-btn" onclick="openContactModal('Geoff Kautzman','Membership Committee')">📧 Contact</button></td>
+            </tr>
+            <tr>
+              <td><span class="badge badge-yellow">Membership Committee</span></td>
+              <td>Rick Feldman</td>
+              <td>Rick Feldman Photography</td>
+              <td>909-234-2711</td>
+              <td><button class="contact-btn" onclick="openContactModal('Rick Feldman','Membership Committee')">📧 Contact</button></td>
+            </tr>
+            <tr>
+              <td><span class="badge badge-red">Director Consultant</span></td>
+              <td>Trevor Greene</td>
+              <td>Compass Property Mgmt</td>
+              <td>949-229-3071</td>
+              <td><button class="contact-btn" onclick="openContactModal('Trevor Greene','Director Consultant')">📧 Contact</button></td>
+            </tr>
+            <tr>
+              <td><span class="badge badge-red">Area Director</span></td>
+              <td>Mike Adray</td>
+              <td>BNI Founding Region</td>
+              <td>877-510-4900</td>
+              <td><button class="contact-btn" onclick="openContactModal('Mike Adray','Area Director Consultant')">📧 Contact</button></td>
+            </tr>
+            <tr>
+              <td><span class="badge" style="background:#3a1a5c;color:#c084fc;">Ambassador</span></td>
+              <td>Tammi Lynn Strasen</td>
+              <td>BNI Founding Region</td>
+              <td>657-438-5860</td>
+              <td><button class="contact-btn" onclick="openContactModal('Tammi Lynn Strasen','Chapter Ambassador')">📧 Contact</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div style="margin-top:20px;text-align:center;">
+        <button class="contact-btn" style="padding:12px 30px;font-size:14px;" onclick="contactAll()">📧 Send Summary to All Leadership</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports" onerror="this.style.display='none'">
+  <p>© 2026 Higgins AI — BNI Chapter Assessment Report | support@higgins.ai | 855-737-3386</p>
+  <p style="margin-top:5px;">BNI 1688 Online SGV • CA San Gabriel Valley & San Bernardino County • Report Generated 03/14/2026</p>
+</div>
+
+<!-- CONTACT MODAL -->
+<div class="modal-overlay" id="contactModal">
+  <div class="modal">
+    <h3 id="modalTitle">Contact Leadership</h3>
+    <p style="color:#888;margin-bottom:10px;font-size:13px;">Review and customize the message below, then click Send.</p>
+    <textarea id="modalBody"></textarea>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+      <button class="contact-btn" onclick="sendEmail()">📧 Send Email</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ===== DATA =====
+const rosterData = [
+  {name:"Art Alebian",classification:"Commercial Bank Services",company:"Enterprise Bank",phone:"818-482-8433",g:0,r:12,v:0,o:18,l:0,a:1},
+  {name:"Gabriel Almendariz",classification:"Promotional Products",company:"GML Prints",phone:"877-307-6733",g:3,r:11,v:0,o:5,l:0,a:2},
+  {name:"Analisa Castro",classification:"Virtual Assistant",company:"Castro Virtual Assistance",phone:"909-767-6404",g:18,r:3,v:1,o:37,l:0,a:0},
+  {name:"Christine Cheng",classification:"Residential Real Estate Agent - SGV",company:"Keller Williams Realty",phone:"213-458-1975",g:15,r:5,v:11,o:15,l:0,a:0},
+  {name:"Michele Farrell",classification:"Financial Advisor - Business Owners/401Ks",company:"Elevate Wealth Advisors",phone:"818-839-5697",g:2,r:0,v:0,o:6,l:0,a:0},
+  {name:"Rick Feldman",classification:"Photographer",company:"Rick Feldman Photography",phone:"909-234-2711",g:2,r:1,v:0,o:11,l:0,a:1},
+  {name:"Claudio Gil",classification:"Certified Public Accountant (CPA)",company:"Claudio Gil, CPA",phone:"714-867-7288",g:10,r:32,v:0,o:68,l:0,a:1},
+  {name:"Geoff Kautzman",classification:"Residential Mortgages",company:"Ethos Lending",phone:"951-205-7618",g:7,r:4,v:0,o:8,l:0,a:0},
+  {name:"David Kortright",classification:"Telecommunications Products/Services",company:"Mean IT Consulting",phone:"352-469-6326",g:1,r:2,v:0,o:11,l:1,a:0},
+  {name:"Benjamin Kubo",classification:"Bookkeeping",company:"Bonehead Bookkeeping",phone:"661-809-0428",g:19,r:9,v:3,o:50,l:0,a:0},
+  {name:"Erika Liu Wong",classification:"Event Planner",company:"Love Liu Wong Time LLC",phone:"626-807-5192",g:21,r:6,v:5,o:22,l:0,a:0},
+  {name:"Brandon McClain",classification:"Home Inspection",company:"Flat Rate Inspections",phone:"951-388-9519",g:7,r:3,v:2,o:2,l:2,a:0},
+  {name:"John Nguyen",classification:"Senior Service Provider",company:"Senior Helpers (West SGV)",phone:"626-628-0515",g:0,r:0,v:0,o:6,l:0,a:1},
+  {name:"John Olinarez",classification:"Solar",company:"Freedom Solar Pros",phone:"626-922-5662",g:0,r:0,v:1,o:5,l:0,a:1},
+  {name:"Ralph Rivera",classification:"Commercial Insurance",company:"Mainline Insurance Services",phone:"619-370-6448",g:0,r:0,v:0,o:0,l:1,a:0},
+  {name:"Ryan Rulloda",classification:"Buying Agent",company:"—",phone:"626-419-1889",g:0,r:0,v:0,o:0,l:0,a:0},
+  {name:"Wesley Salao",classification:"Financial Advisor",company:"Precision Wealth Financial",phone:"626-898-3547",g:11,r:0,v:1,o:26,l:0,a:0},
+  {name:"Edgar Sarmiento",classification:"Commercial Loans",company:"Clear Mortgage Capital, Inc.",phone:"949-278-1430",g:12,r:4,v:0,o:6,l:0,a:0},
+  {name:"Melina Shahbazian",classification:"Personal Injury Law",company:"Shahbazian Law, APC",phone:"818-926-2039",g:0,r:5,v:2,o:31,l:0,a:1},
+  {name:"Harrison Tran",classification:"Main Contractor",company:"West Coast Builders Group",phone:"626-244-9136",g:0,r:0,v:0,o:0,l:0,a:0},
+  {name:"LEO TRUONG",classification:"Life and Disability Insurance",company:"Truong Insurance Agency",phone:"714-210-9604",g:1,r:3,v:0,o:18,l:0,a:0},
+  {name:"Jason Van Noy",classification:"Property & Casualty Insurance",company:"Van Noy Insurance & Financial Svcs",phone:"909-374-3939",g:4,r:11,v:0,o:15,l:0,a:0},
+  {name:"Sonia Alina White",classification:"Insurance Claims Administrator",company:"LuvHouse Initiative Inc",phone:"424-307-0121",g:0,r:0,v:0,o:0,l:0,a:0},
+  {name:"Steve Wilkison",classification:"Mobile Bartending",company:"Booz Dude",phone:"714-791-1234",g:9,r:3,v:4,o:5,l:0,a:0}
+];
+
+const missingHigh = [
+  {c:"Residential Real Estate Agent",n:9},{c:"HVAC - Heating & Air",n:6},{c:"Restoration",n:5},{c:"Estate Planning Law",n:5},{c:"Commercial Real Estate",n:5},{c:"Plumbing",n:5},{c:"General Dentist",n:4},{c:"Builder/General Contractor",n:4},{c:"Chiropractor",n:4},{c:"Auto/Car Repair",n:3},{c:"IT Consultants",n:3},{c:"Caterer",n:2},{c:"Title Services",n:2},{c:"Health & Wellness Products",n:2},{c:"Videographer/Film Producer",n:2},{c:"Wills/Trusts",n:2},{c:"IT & Networks",n:2},{c:"Travel Agent",n:2},{c:"Payroll Service",n:2},{c:"Tax Advisor",n:2},{c:"Insurance Adjuster",n:2},{c:"Funeral Planning/Services",n:2},{c:"Consulting (Other)",n:2},{c:"Architect",n:2},{c:"Supplemental Insurance",n:2},{c:"Life Coach",n:2},{c:"Cleaning - Carpet and Upholstery",n:2}
+];
+
+const missingOne = [
+  "Property Management","Real Estate Appraisal","Social Media","Hypnotherapist","Auto/Car Body Shop","Waste Disposal","Marketing Consultant","Health & Wellness Services","Printer","Massage Therapist","Nutritionist","Personal Trainer - Fitness","Web Design","Pharmacist","Employment/Labor Law","Physical Therapist","Health & Wellness (Other)","Banking Services","Legal Service Plan","Golf","Investigative Services/Detective","Credit Card/Merchant Services","Appliance Repair","Legal & Accounting (Other)","Security Systems","Health Insurance","Fine Jewelry","Event Rentals","Insurance Broker","Cosmetics/Skin Care","Business Consultant","Hair Stylist","Electrician","Salon/Spa","Business Training/Coach","Medicare","Flooring","Glass","Civil/structural engineer","Reverse Mortgages","Handyman","Interior Design","Electrician - Commercial","Office Equipment/Machines","Landscape Services","Dog Trainer","Acupuncture","Digital Marketing","Power Washing","Counselor/Psychotherapist"
+];
+
+const spherePartners = [
+  {name:"Christine Cheng",role:"Residential Real Estate Agent",reason:"Real estate agents constantly need websites for listings, personal branding, and digital marketing campaigns. Carey can build/maintain Christine's web presence while Christine refers every new agent or home stager she meets.",score:98},
+  {name:"Claudio Gil",role:"CPA",reason:"CPAs serve hundreds of small business clients who need professional websites. Claudio can refer every new business client, while Carey's marketing clients need tax/accounting services.",score:96},
+  {name:"Benjamin Kubo",role:"Bookkeeping",reason:"Bookkeepers interact with small business owners daily — many without proper websites. Natural bi-directional referral relationship for small business services.",score:95},
+  {name:"Geoff Kautzman",role:"Residential Mortgages",reason:"Mortgage professionals need strong digital presence. Geoff's realtor network also needs websites and marketing. Cross-referral goldmine.",score:93},
+  {name:"Wesley Salao",role:"Financial Advisor",reason:"Financial advisors need compliant, professional websites and digital marketing. Wesley's business owner clients also need web/marketing services.",score:92},
+  {name:"Erika Liu Wong",role:"Event Planner",reason:"Event planners need portfolio websites and social media marketing. Carey's business clients often need event planning for launches and corporate events.",score:91},
+  {name:"Rick Feldman",role:"Photographer",reason:"Photographers and web designers are natural partners — websites need professional photos, and photographers need portfolio sites.",score:90},
+  {name:"Gabriel Almendariz",role:"Promotional Products",reason:"Both serve the marketing needs of small businesses. Promotional products + digital marketing = comprehensive marketing solutions for referrals.",score:88},
+  {name:"Edgar Sarmiento",role:"Commercial Loans",reason:"Commercial loan officers serve business owners who are growing — and growing businesses need websites and marketing.",score:87},
+  {name:"Analisa Castro",role:"Virtual Assistant",reason:"VAs often handle digital tasks and refer clients needing professional website work. Web designers refer clients needing ongoing admin support.",score:86}
+];
+
+// ===== RENDER FUNCTIONS =====
+function renderRoster() {
+  const body = document.getElementById('rosterBody');
+  body.innerHTML = rosterData.map(m => `<tr>
+    <td><strong style="color:#fff;">${m.name}</strong></td>
+    <td>${m.classification}</td>
+    <td>${m.company}</td>
+    <td>${m.phone}</td>
+    <td style="text-align:center;color:${m.g>5?'#4ade80':m.g>0?'#fbbf24':'#f87171'};font-weight:700;">${m.g}</td>
+    <td style="text-align:center;color:${m.r>5?'#4ade80':m.r>0?'#fbbf24':'#f87171'};font-weight:700;">${m.r}</td>
+    <td style="text-align:center;color:${m.v>0?'#4ade80':'#666'};font-weight:700;">${m.v}</td>
+    <td style="text-align:center;color:${m.o>10?'#4ade80':m.o>0?'#fbbf24':'#f87171'};font-weight:700;">${m.o}</td>
+    <td style="text-align:center;color:${m.l>0?'#fbbf24':'#666'};">${m.l}</td>
+    <td style="text-align:center;color:${m.a>0?'#f87171':'#666'};">${m.a}</td>
+  </tr>`).join('');
+}
+
+function renderSpherePartners() {
+  const el = document.getElementById('spherePartners');
+  el.innerHTML = spherePartners.map((p,i) => `<div class="sphere-card" style="display:flex;gap:15px;align-items:start;">
+    <div style="min-width:35px;height:35px;background:#CF2030;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;color:#fff;">${i+1}</div>
+    <div style="flex:1;">
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <h4 style="color:#fff;font-size:14px;">${p.name}</h4>
+        <span class="badge badge-green">${p.score}% match</span>
+      </div>
+      <div style="color:#CF2030;font-size:12px;margin:3px 0;">${p.role}</div>
+      <div style="color:#888;font-size:12px;line-height:1.5;">${p.reason}</div>
+    </div>
+  </div>`).join('');
+}
+
+function renderMissingTables() {
+  document.getElementById('missingPriorityBody').innerHTML = missingHigh.map(m => {
+    let pr = m.n >= 5 ? '<span class="badge badge-red">Critical</span>' : m.n >= 3 ? '<span class="badge badge-yellow">High</span>' : '<span class="badge badge-blue">Medium</span>';
+    return `<tr><td><strong style="color:#fff;">${m.c}</strong></td><td style="text-align:center;font-weight:700;color:#CF2030;">${m.n}</td><td>${pr}</td></tr>`;
+  }).join('');
+
+  const allMissing = [...missingHigh.map(m=>({c:m.c,n:m.n})), ...missingOne.map(c=>({c:c,n:1}))];
+  document.getElementById('missingAllBody').innerHTML = allMissing.map(m => 
+    `<tr><td>${m.c}</td><td style="text-align:center;">${m.n}</td></tr>`
+  ).join('');
+}
+
+// ===== CHARTS =====
+function createCharts() {
+  const names = rosterData.map(m => m.name.split(' ').slice(-1)[0]);
+  const colors = { red:'#CF2030', green:'#4ade80', blue:'#60a5fa', yellow:'#fbbf24', purple:'#c084fc' };
+
+  // Given
+  new Chart(document.getElementById('givenChart'), {
+    type:'bar',
+    data:{labels:names,datasets:[{label:'Referrals Given',data:rosterData.map(m=>m.g),backgroundColor:'#CF2030',borderRadius:4}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#888'}}},scales:{x:{ticks:{color:'#888',font:{size:10}},grid:{color:'#222'}},y:{ticks:{color:'#888'},grid:{color:'#222'}}}}
+  });
+
+  // Received
+  new Chart(document.getElementById('receivedChart'), {
+    type:'bar',
+    data:{labels:names,datasets:[{label:'Referrals Received',data:rosterData.map(m=>m.r),backgroundColor:'#4ade80',borderRadius:4}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#888'}}},scales:{x:{ticks:{color:'#888',font:{size:10}},grid:{color:'#222'}},y:{ticks:{color:'#888'},grid:{color:'#222'}}}}
+  });
+
+  // 1-2-1
+  new Chart(document.getElementById('meetingsChart'), {
+    type:'bar',
+    data:{labels:names,datasets:[{label:'1-2-1 Meetings',data:rosterData.map(m=>m.o),backgroundColor:'#60a5fa',borderRadius:4}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#888'}}},scales:{x:{ticks:{color:'#888',font:{size:10}},grid:{color:'#222'}},y:{ticks:{color:'#888'},grid:{color:'#222'}}}}
+  });
+
+  // Visitors
+  new Chart(document.getElementById('visitorsChart'), {
+    type:'bar',
+    data:{labels:names,datasets:[{label:'Visitors Brought',data:rosterData.map(m=>m.v),backgroundColor:'#fbbf24',borderRadius:4}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#888'}}},scales:{x:{ticks:{color:'#888',font:{size:10}},grid:{color:'#222'}},y:{ticks:{color:'#888'},grid:{color:'#222'}}}}
+  });
+
+  // Referral Flow
+  new Chart(document.getElementById('referralFlowChart'), {
+    type:'doughnut',
+    data:{
+      labels:['Carey → Members (Web/Marketing Referrals)','Members → Carey (Client Referrals)','Bi-Directional Potential'],
+      datasets:[{data:[40,35,25],backgroundColor:['#CF2030','#4ade80','#60a5fa'],borderWidth:0}]
+    },
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{color:'#888',padding:15}},title:{display:true,text:'Projected Referral Flow Distribution',color:'#fff'}}}
+  });
+
+  // Sphere Strength
+  const top5 = spherePartners.slice(0,5);
+  new Chart(document.getElementById('sphereStrengthChart'), {
+    type:'radar',
+    data:{
+      labels:top5.map(p=>p.name.split(' ')[0]),
+      datasets:[{label:'Referral Match Score',data:top5.map(p=>p.score),backgroundColor:'rgba(207,32,48,0.2)',borderColor:'#CF2030',pointBackgroundColor:'#CF2030'}]
+    },
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#888'}}},scales:{r:{ticks:{color:'#888',backdropColor:'transparent'},grid:{color:'#333'},pointLabels:{color:'#ccc'},suggestedMin:80,suggestedMax:100}}}
+  });
+
+  // Missing chart
+  const topMissing = missingHigh.slice(0,12);
+  new Chart(document.getElementById('missingChart'), {
+    type:'bar',
+    data:{labels:topMissing.map(m=>m.c),datasets:[{label:'# Chapters with Seat',data:topMissing.map(m=>m.n),backgroundColor:topMissing.map(m=>m.n>=5?'#CF2030':m.n>=3?'#fbbf24':'#60a5fa'),borderRadius:4}]},
+    options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#888'}},title:{display:true,text:'Top Missing Classifications by Regional Demand',color:'#fff'}},scales:{x:{ticks:{color:'#888'},grid:{color:'#222'}},y:{ticks:{color:'#ccc',font:{size:11}},grid:{color:'#222'}}}}
+  });
+}
+
+// ===== SEARCH =====
+document.getElementById('rosterSearch').addEventListener('input', function() {
+  const q = this.value.toLowerCase();
+  document.querySelectorAll('#rosterBody tr').forEach(row => {
+    row.style.display = row.textContent.toLowerCase().includes(q) ? '' : 'none';
+  });
+});
+
+document.getElementById('missingSearch').addEventListener('input', function() {
+  const q = this.value.toLowerCase();
+  ['missingPriorityBody','missingAllBody'].forEach(id => {
+    document.querySelectorAll(`#${id} tr`).forEach(row => {
+      row.style.display = row.textContent.toLowerCase().includes(q) ? '' : 'none';
+    });
+  });
+});
+
+// ===== SORT =====
+const sortState = {};
+function sortTable(tableId, colIdx) {
+  const key = tableId + colIdx;
+  sortState[key] = !sortState[key];
+  const asc = sortState[key];
+  const tbody = document.querySelector(`#${tableId} tbody`);
+  const rows = Array.from(tbody.rows);
+  rows.sort((a, b) => {
+    let av = a.cells[colIdx].textContent.trim();
+    let bv = b.cells[colIdx].textContent.trim();
+    let an = parseFloat(av), bn = parseFloat(bv);
+    if (!isNaN(an) && !isNaN(bn)) return asc ? an - bn : bn - an;
+    return asc ? av.localeCompare(bv) : bv.localeCompare(av);
+  });
+  rows.forEach(r => tbody.appendChild(r));
+}
+
+// ===== TABS =====
+function showTab(id, btn) {
+  const parent = btn.parentElement;
+  parent.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const section = parent.parentElement;
+  section.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+// ===== NAV =====
+function scrollToSection(id) {
+  document.getElementById(id).scrollIntoView({behavior:'smooth',block:'start'});
+  document.querySelectorAll('.nav a').forEach(a => a.classList.remove('active'));
+  document.querySelector(`.nav a[href="#${id}"]`).classList.add('active');
+}
+
+// ===== CONTACT MODAL =====
+let currentContactName = '';
+function openContactModal(name, role) {
+  currentContactName = name;
+  document.getElementById('modalTitle').textContent = `Contact ${name} (${role})`;
+  document.getElementById('modalBody').value = `Dear ${name},
+
+I am writing to share an applicant assessment summary for your review regarding a new membership application for BNI 1688 Online SGV.
+
+APPLICANT: Carey Hoffman
+BUSINESS: Carey Connections
+CLASSIFICATION: Website Design & Digital Marketing
+WEBSITE: careyconnections.com
+PHONE: (415) 948-5133
+EMAIL: carey@careyconnections.com
+
+APPLICATION STATUS: Payment received, application submitted, video interview completed, and at least one reference check completed (George Brumis). Ready for Membership Committee review.
+
+FIT ASSESSMENT: STRONG RECOMMENDATION TO APPROVE (94.6% Overall Score)
+
+KEY FINDINGS:
+✅ Both "Web Design" and "Digital Marketing" are OPEN seats — zero classification conflicts
+✅ Universal referral potential — every member in the chapter needs web/marketing services
+✅ Strong contact sphere synergy with 10+ existing members (Real Estate, CPA, Bookkeeping, Financial Advisors, Insurance, Photography, Event Planning)
+✅ Proven business with multiple positive client testimonials
+✅ Small business focus aligns perfectly with BNI member demographics
+✅ Strengthens the underrepresented Advertising & Marketing category
+
+ITEMS FOR DISCUSSION:
+⚠️ (415) area code — confirm online meeting attendance commitment
+⚠️ Define precise classification (Web Design vs. Digital Marketing vs. combined)
+
+The full interactive report with charts, roster analysis, and contact sphere mapping is available via Higgins Reports.
+
+Best regards,
+Higgins AI
+BNI Chapter Assessment Report
+support@higgins.ai | 855-737-3386`;
+  document.getElementById('contactModal').classList.add('show');
+}
+
+function closeModal() {
+  document.getElementById('contactModal').classList.remove('show');
+}
+
+function sendEmail() {
+  const body = document.getElementById('modalBody').value;
+  const subject = encodeURIComponent('BNI 1688 Online SGV - Applicant Assessment: Carey Hoffman / Carey Connections');
+  const bodyEnc = encodeURIComponent(body);
+  window.open(`mailto:?subject=${subject}&body=${bodyEnc}`, '_blank');
+  closeModal();
+}
+
+function contactAll() {
+  const subject = encodeURIComponent('BNI 1688 Online SGV - Applicant Assessment: Carey Hoffman / Carey Connections');
+  const body = encodeURIComponent(`Dear BNI 1688 Online SGV Leadership Team,
+
+Please find below the applicant assessment summary for Carey Hoffman of Carey Connections, applying for the Website Design & Digital Marketing seat.
+
+OVERALL FIT SCORE: 94.6% — STRONG RECOMMENDATION TO APPROVE
+
+The seat is open, the business is proven with excellent testimonials, and Carey has strong referral synergy with 10+ current members. Application is complete and ready for Membership Committee review.
+
+Full details available in the Higgins Reports interactive dashboard.
+
+Best regards,
+Higgins AI | support@higgins.ai | 855-737-3386`);
+  window.open(`mailto:?subject=${subject}&body=${body}`, '_blank');
+}
+
+// Click outside modal to close
+document.getElementById('contactModal').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+
+// ===== INIT =====
+renderRoster();
+renderSpherePartners();
+renderMissingTables();
+createCharts();
+</script>
+</body>
+</html>
