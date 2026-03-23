@@ -1,0 +1,619 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Higgins BOT Summary 2025</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:#fff;color:#333}
+.header{background:#CF2030;color:#fff;padding:18px 30px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.header img{height:48px;filter:brightness(0) invert(1)}
+.header h1{font-size:1.5rem;letter-spacing:1px}
+.header-right{display:flex;align-items:center;gap:16px}
+.nav{background:#b81c2a;display:flex;gap:0;position:sticky;top:84px;z-index:99;box-shadow:0 1px 4px rgba(0,0,0,.1)}
+.nav button{background:none;border:none;color:#fff;padding:14px 24px;font-size:.95rem;cursor:pointer;transition:background .2s;font-weight:500}
+.nav button:hover,.nav button.active{background:#CF2030;font-weight:700}
+.container{max-width:1600px;margin:0 auto;padding:20px 30px 60px}
+.tab-content{display:none}
+.tab-content.active{display:block}
+.kpi-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin:20px 0}
+.kpi{background:linear-gradient(135deg,#CF2030,#a01828);color:#fff;border-radius:12px;padding:20px;text-align:center;box-shadow:0 4px 12px rgba(207,32,48,.25)}
+.kpi h3{font-size:.85rem;opacity:.9;margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px}
+.kpi .val{font-size:2rem;font-weight:800}
+.kpi .sub{font-size:.75rem;opacity:.7;margin-top:4px}
+.search-bar{display:flex;align-items:center;gap:12px;margin:18px 0;flex-wrap:wrap}
+.search-bar input{padding:10px 16px;border:2px solid #ddd;border-radius:8px;font-size:.95rem;width:320px;transition:border-color .2s}
+.search-bar input:focus{border-color:#CF2030;outline:none}
+.search-bar select{padding:10px 12px;border:2px solid #ddd;border-radius:8px;font-size:.9rem}
+.search-bar label{font-weight:600;font-size:.9rem;color:#555}
+.table-wrap{overflow-x:auto;border-radius:10px;box-shadow:0 2px 10px rgba(0,0,0,.08);margin:16px 0;max-height:600px;overflow-y:auto}
+table{width:100%;border-collapse:collapse;font-size:.82rem}
+thead{position:sticky;top:0;z-index:2}
+th{background:#CF2030;color:#fff;padding:10px 8px;cursor:pointer;user-select:none;white-space:nowrap;text-align:left;font-weight:600}
+th:hover{background:#a01828}
+th .arrow{margin-left:4px;font-size:.7rem}
+td{padding:8px;border-bottom:1px solid #eee;white-space:nowrap}
+tr:hover td{background:#fff5f5}
+tr:nth-child(even) td{background:#fafafa}
+tr:nth-child(even):hover td{background:#fff5f5}
+.chart-container{background:#fff;border-radius:12px;padding:20px;box-shadow:0 2px 10px rgba(0,0,0,.08);margin:20px 0}
+.chart-container h3{margin-bottom:12px;color:#CF2030;font-size:1.1rem}
+.chart-row{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+@media(max-width:900px){.chart-row{grid-template-columns:1fr}}
+.btn-contact{background:#CF2030;color:#fff;border:none;padding:5px 12px;border-radius:6px;cursor:pointer;font-size:.78rem;transition:background .2s}
+.btn-contact:hover{background:#a01828}
+.footer{background:#CF2030;color:#fff;padding:20px 30px;text-align:center;margin-top:40px}
+.footer img{height:30px;filter:brightness(0) invert(1);margin-bottom:8px}
+.footer p{font-size:.8rem;opacity:.8}
+.section-title{font-size:1.3rem;font-weight:700;color:#CF2030;margin:24px 0 8px;border-bottom:3px solid #CF2030;padding-bottom:6px}
+.badge{display:inline-block;background:#CF2030;color:#fff;padding:2px 8px;border-radius:10px;font-size:.72rem;font-weight:700}
+.trend-up{color:#16a34a}
+.trend-down{color:#CF2030}
+.hidden{display:none}
+.toggle-btn{background:#fff;color:#CF2030;border:2px solid #CF2030;padding:8px 16px;border-radius:8px;cursor:pointer;font-size:.85rem;font-weight:600;transition:all .2s}
+.toggle-btn:hover,.toggle-btn.active{background:#CF2030;color:#fff}
+.modal-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.5);z-index:200;justify-content:center;align-items:center}
+.modal-overlay.show{display:flex}
+.modal{background:#fff;border-radius:12px;padding:30px;max-width:600px;width:90%;max-height:80vh;overflow-y:auto;box-shadow:0 10px 40px rgba(0,0,0,.2)}
+.modal h3{color:#CF2030;margin-bottom:16px}
+.modal textarea{width:100%;min-height:150px;padding:12px;border:2px solid #ddd;border-radius:8px;font-family:inherit;font-size:.9rem;resize:vertical}
+.modal .btn-row{display:flex;gap:10px;margin-top:16px;justify-content:flex-end}
+.modal .btn-send{background:#CF2030;color:#fff;border:none;padding:10px 20px;border-radius:8px;cursor:pointer;font-weight:600}
+.modal .btn-cancel{background:#eee;color:#333;border:none;padding:10px 20px;border-radius:8px;cursor:pointer}
+.export-btn{background:#fff;color:#CF2030;border:2px solid #CF2030;padding:8px 16px;border-radius:8px;cursor:pointer;font-size:.85rem;font-weight:600}
+.export-btn:hover{background:#CF2030;color:#fff}
+</style>
+</head>
+<body>
+
+<div class="header">
+<div style="display:flex;align-items:center;gap:16px">
+<img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports" onerror="this.style.display='none'">
+<h1>Higgins BOT Summary 2025</h1>
+</div>
+<div class="header-right">
+<span style="font-size:.8rem;opacity:.8">Data as of Nov 17, 2025</span>
+</div>
+</div>
+
+<div class="nav">
+<button class="active" onclick="showTab('overview',this)">📊 Overview</button>
+<button onclick="showTab('buttons',this)">🔘 Button Clicks</button>
+<button onclick="showTab('messages',this)">💬 Messages</button>
+<button onclick="showTab('chats',this)">🗨️ New Chats</button>
+<button onclick="showTab('trends',this)">📈 Trends</button>
+</div>
+
+<div class="container">
+
+<!-- OVERVIEW TAB -->
+<div id="overview" class="tab-content active">
+<h2 class="section-title">Executive Summary</h2>
+<div class="kpi-row" id="kpiRow"></div>
+<div class="chart-row">
+<div class="chart-container"><h3>Monthly Total Messages (All Orgs)</h3><canvas id="overviewMsgChart"></canvas></div>
+<div class="chart-container"><h3>Monthly New Chats (Top BNI Orgs)</h3><canvas id="overviewChatChart"></canvas></div>
+</div>
+<div class="chart-row">
+<div class="chart-container"><h3>Top 15 Button Clicks (All Time)</h3><canvas id="overviewBtnChart"></canvas></div>
+<div class="chart-container"><h3>Top 15 Organizations by Messages</h3><canvas id="overviewOrgChart"></canvas></div>
+</div>
+</div>
+
+<!-- BUTTONS TAB -->
+<div id="buttons" class="tab-content">
+<h2 class="section-title">Button Click Analytics</h2>
+<div class="search-bar">
+<input id="btnSearch" placeholder="🔍 Search buttons..." oninput="filterTable('btnTable','btnSearch')">
+<select id="btnMonthFilter" onchange="filterBtnMonth()"><option value="all">All Months</option></select>
+<button class="export-btn" onclick="exportCSV('btnTable','button_clicks')">⬇ Export CSV</button>
+</div>
+<div class="chart-container"><h3>Button Click Trends (Top 10)</h3><canvas id="btnTrendChart"></canvas></div>
+<div class="table-wrap"><table id="btnTable"></table></div>
+</div>
+
+<!-- MESSAGES TAB -->
+<div id="messages" class="tab-content">
+<h2 class="section-title">Messages Per Organization</h2>
+<div class="search-bar">
+<input id="msgSearch" placeholder="🔍 Search organizations..." oninput="filterTable('msgTable','msgSearch')">
+<button class="export-btn" onclick="exportCSV('msgTable','messages_per_org')">⬇ Export CSV</button>
+</div>
+<div class="chart-container"><h3>Message Volume Trends (Top 10 Orgs)</h3><canvas id="msgTrendChart"></canvas></div>
+<div class="table-wrap"><table id="msgTable"></table></div>
+</div>
+
+<!-- CHATS TAB -->
+<div id="chats" class="tab-content">
+<h2 class="section-title">New Chats Per Organization</h2>
+<div class="search-bar">
+<input id="chatSearch" placeholder="🔍 Search organizations..." oninput="filterTable('chatTable','chatSearch')">
+<button class="export-btn" onclick="exportCSV('chatTable','new_chats_per_org')">⬇ Export CSV</button>
+</div>
+<div class="chart-container"><h3>New Chat Trends (Top 10 Orgs)</h3><canvas id="chatTrendChart"></canvas></div>
+<div class="table-wrap"><table id="chatTable"></table></div>
+</div>
+
+<!-- TRENDS TAB -->
+<div id="trends" class="tab-content">
+<h2 class="section-title">Growth & Trend Analysis</h2>
+<div class="chart-row">
+<div class="chart-container"><h3>Month-over-Month Growth Rate (Messages)</h3><canvas id="growthChart"></canvas></div>
+<div class="chart-container"><h3>Platform Adoption (Cumulative Orgs Active)</h3><canvas id="adoptionChart"></canvas></div>
+</div>
+<div class="chart-container"><h3>Feature Adoption: Key Button Categories Over Time</h3><canvas id="featureCatChart"></canvas></div>
+</div>
+
+</div>
+
+<!-- Email Modal -->
+<div class="modal-overlay" id="emailModal">
+<div class="modal">
+<h3>📧 Contact via Email</h3>
+<p style="margin-bottom:8px;font-size:.9rem"><strong>To:</strong> <span id="modalTo"></span></p>
+<p style="margin-bottom:12px;font-size:.9rem"><strong>Subject:</strong> <span id="modalSubject"></span></p>
+<textarea id="modalBody"></textarea>
+<div class="btn-row">
+<button class="btn-cancel" onclick="closeModal()">Cancel</button>
+<button class="btn-send" onclick="sendEmail()">Send Email</button>
+</div>
+</div>
+</div>
+
+<div class="footer">
+<img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports" onerror="this.style.display='none'">
+<p>Higgins BOT Summary 2025 | Powered by Higgins AI | support@higgins.ai | 855-737-3386</p>
+<p>© 2025 Higgins.ai Incorporated. All rights reserved.</p>
+</div>
+
+<script>
+// ========== DATA ==========
+const btnMonths=["2024-03","2024-04","2024-05","2024-06","2024-07","2024-08","2024-09","2024-10","2024-11","2024-12","2025-01","2025-02","2025-03","2025-04","2025-05","2025-06","2025-07","2025-08","2025-09","2025-10","2025-11"];
+
+const btnData=[
+["6y[tp",[0,0,0,0,0,0,0,0,0,0,0,310,0,0,0,0,0,0,0,0,0]],
+["6yt",[0,0,0,0,0,0,0,0,0,0,0,283,0,0,0,0,0,0,0,0,0]],
+["AI",[0,0,0,0,0,17,108,34,41,23,51,12,41,22,22,21,11,8,3,6,0]],
+["Alameda",[0,0,0,0,0,0,0,0,0,19,14,15,11,0,0,1,3,4,6,5,2]],
+["All Regions",[0,0,0,0,0,0,0,0,0,0,4,12,24,14,10,6,21,14,23,8,7]],
+["Allegheny County",[0,0,0,0,0,0,0,0,0,7,17,12,9,10,9,5,11,7,10,10,6]],
+["Apply for Membership or Renewal",[0,0,0,0,0,0,0,0,0,0,0,0,26,53,62,49,48,51,37,36,19]],
+["Apply to BNI Chapter",[0,0,0,2,16,9,13,35,34,22,12,9,8,6,11,15,8,7,7,6,3]],
+["Apply to Chapter",[0,39,50,1,0,0,3,0,0,0,0,0,0,0,0,0,1,0,0,0,0]],
+["Atlanta",[0,0,1,2,14,34,36,33,22,29,38,40,17,6,12,2,6,4,7,4,2]],
+["Attend or Start a Core Chapter",[0,0,0,0,0,0,0,0,0,0,10,25,38,17,23,12,24,14,13,15,9]],
+["BNI Feature Presentation",[0,0,0,0,0,0,2,0,4,1,2,2,5,5,3,3,16,26,18,13,4]],
+["Build Contact Sphere",[0,0,0,0,0,0,0,0,0,1,1,1,23,15,24,24,42,44,38,23,9]],
+["Build My Contact Sphere",[0,0,0,0,0,0,0,0,12,3,129,92,46,14,5,7,14,3,7,5,3]],
+["Contact BNI",[0,0,0,0,11,39,77,748,135,139,1247,3381,413,621,814,1372,987,4340,2973,2637,4637]],
+["Contact Higgins AI Team",[0,0,0,12,42,15,7,4,2,4,7,8,14,12,19,0,0,0,0,0,0]],
+["Contact Red Realty",[0,0,0,0,0,0,0,0,0,4,0,15,42,71,52,108,104,194,840,380,10]],
+["Contact Us",[0,0,0,0,0,0,0,3,0,1,2,0,1,1,8,1,100,22,51,48,20]],
+["Create BNI Feature Presentation",[0,0,0,0,0,0,0,0,1,5,11,17,40,34,36,39,59,23,31,19,11]],
+["Create BNI LCDs/Topics",[0,0,0,0,0,0,20,56,16,24,41,30,43,48,46,68,48,31,29,35,9]],
+["Create Weekly BNI Presentation",[0,0,0,0,0,0,1,3,0,39,82,62,134,125,119,155,209,82,81,138,65]],
+["Create a BNI feature presentation",[0,0,0,0,0,23,42,11,19,9,27,24,26,12,9,15,31,24,23,15,5]],
+["Create a Weekly BNI Presentation",[0,0,0,0,0,0,28,15,15,5,5,14,9,2,2,4,10,1,6,2,0]],
+["Create a Weekly BNI commercial",[0,0,0,0,0,28,91,62,62,59,69,87,47,33,46,55,84,67,65,102,27]],
+["Describe Higgins AI",[0,0,0,7,32,19,32,40,21,16,31,39,15,20,23,8,0,0,0,0,0]],
+["Discover Your Team",[0,0,0,0,0,0,0,0,0,0,0,0,17,12,28,13,25,17,51,19,5]],
+["Enter Full Name",[0,0,0,0,0,0,4,16,10,9,5,7,4,0,1,0,3,2,6,4,0]],
+["Featured Red Listings",[0,0,0,0,0,0,0,0,0,6,4,5,52,23,20,7,2,0,2,3,0]],
+["Find BNI Podcasts",[0,0,0,5,61,28,60,49,54,30,45,50,74,60,92,88,97,63,89,69,45]],
+["Find Restaurants",[0,0,0,15,17,18,10,25,3,4,9,11,9,5,4,4,0,0,0,0,0]],
+["Find Retail Stores",[0,0,0,11,11,21,8,12,0,2,6,6,2,5,2,0,0,0,0,0,0]],
+["Find a BNI Chapter",[0,0,0,2,27,70,118,146,359,577,718,782,1111,1106,1322,1104,1400,1265,1227,1076,645]],
+["Find a Chapter",[0,34,67,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1]],
+["Find or Apply to a BNI Chapter",[0,0,0,0,0,0,0,0,0,0,0,0,0,2,10,8,9,13,14,9,10]],
+["Founder",[0,0,0,0,0,0,49,17,4,0,3,1,3,2,1,0,1,0,1,2,0]],
+["Full Name",[0,0,0,0,0,2,21,30,30,25,51,47,20,7,14,13,54,42,46,61,11]],
+["Generate 1-2-1 Discussion",[0,0,0,0,0,0,0,0,0,0,0,0,7,23,24,35,27,11,37,29,4]],
+["Generate 1-2-1 Discussion Points",[0,0,0,0,0,0,0,0,0,0,0,0,28,1,4,10,20,14,18,16,8]],
+["Get Higgins Golden Ticket",[0,0,0,16,16,10,10,8,3,3,6,3,0,4,4,0,0,0,0,0,0]],
+["Get Invited to a Chapter",[0,0,0,0,0,12,72,32,60,92,90,113,165,182,227,158,179,178,174,181,90]],
+["HVAC",[0,0,0,0,0,1,2,1,0,1,1,2,16,7,17,8,1,7,7,1,2]],
+["Hamilton",[0,0,0,0,0,0,0,0,0,9,11,10,7,7,9,5,10,7,5,8,3]],
+["Higgins",[0,0,0,0,0,9,62,14,11,3,17,7,16,10,10,4,4,7,3,2,0]],
+["Insurance",[0,0,0,0,0,1,0,0,2,3,7,6,16,11,11,8,4,2,5,1,2]],
+["Invite BNI Visitor",[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,12,35,52,35,11]],
+["Invite Visitor",[0,0,0,0,0,0,5,2,23,86,143,54,94,56,68,86,86,43,57,100,9]],
+["Jefferson County",[0,0,0,0,0,0,0,0,40,14,1,1,0,1,0,0,14,7,7,8,8]],
+["Kentucky",[0,0,0,0,0,1,0,0,2,10,17,11,25,7,19,6,14,17,10,7,3]],
+["Lawyer",[0,0,0,0,0,24,30,5,3,1,1,0,1,3,3,4,6,6,0,0,0]],
+["Leadership",[0,0,0,0,10,12,11,8,6,0,2,2,1,1,5,4,5,7,8,3,2]],
+["Legal",[0,0,0,0,0,0,13,25,28,13,20,8,22,16,14,13,10,3,0,1,0]],
+["List Red Rentals",[0,0,0,0,0,0,0,0,0,6,0,10,68,44,24,11,1,2,2,0,0]],
+["Madison County",[0,0,0,0,0,0,0,0,17,2,1,1,1,0,0,2,18,16,13,12,7]],
+["Malik",[0,0,0,0,0,0,66,17,4,1,2,1,1,2,0,0,0,0,0,1,0]],
+["Marion",[0,0,0,0,0,0,0,0,0,17,13,18,7,8,3,3,8,6,4,7,1]],
+["Marketing",[0,0,0,0,0,3,2,7,8,6,9,1,1,4,4,4,7,10,1,6,1]],
+["Middle Tennessee",[0,0,0,0,0,0,0,0,7,22,31,41,53,36,42,36,37,40,22,31,20]],
+["Mike",[0,0,0,0,0,0,10,0,1,1,13,8,22,12,19,22,6,8,1,3,0]],
+["Networking",[0,0,0,0,7,4,27,7,14,6,7,6,16,11,11,13,19,8,12,9,6]],
+["New Weekly Presentation Tool",[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,62,113,85,67,21]],
+["No",[0,0,0,0,0,0,2,1,1,1,0,0,2,1,0,7,24,15,14,12,4]],
+["North Bay",[0,0,0,0,0,0,0,0,0,21,37,22,14,7,4,9,5,4,19,1,0]],
+["One-to-Ones",[0,0,0,0,0,0,4,6,9,4,5,4,13,4,10,8,13,7,12,11,5]],
+["Orange County",[0,0,0,0,0,0,0,0,0,0,0,6,6,6,6,3,10,9,13,8,3]],
+["Outline BNI resources",[0,0,0,0,0,0,0,13,2,2,0,0,0,0,0,0,0,0,12,32,8]],
+["Owner",[0,0,0,0,0,0,6,3,5,10,5,8,7,13,12,12,16,9,6,5,0]],
+["Real Estate",[0,0,0,0,0,6,31,29,12,10,10,8,8,3,4,8,19,8,4,9,1]],
+["Red Realty Agents",[0,0,0,0,0,0,0,0,0,0,1,18,39,8,8,6,0,0,2,1,0]],
+["Referrals",[0,0,0,0,0,0,6,3,10,2,3,3,9,7,13,11,14,11,12,16,9]],
+["Richmond",[0,0,0,0,0,0,6,4,13,14,25,9,9,0,3,3,0,0,0,0,0]],
+["Sacramento",[0,0,0,0,0,0,0,4,7,11,9,5,10,9,5,9,9,8,6,13,1]],
+["Select BNI Presentation to Create",[0,0,0,0,0,0,120,188,162,192,315,322,390,338,364,440,689,487,451,650,226]],
+["Select Language of Response",[0,0,0,0,0,0,0,0,0,0,0,0,71,64,67,105,60,29,53,47,32]],
+["Summarise member requirements",[0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,12,17,13,21,12,5]],
+["Summarize BNI-ATL Expectations",[0,0,0,0,0,0,0,1,52,39,32,39,32,25,23,25,21,22,16,22,5]],
+["Summarize BNI Expectations",[0,0,0,0,0,0,0,7,2,7,17,10,9,20,23,20,35,8,11,24,5]],
+["Summarize BNI Member Expectations",[0,0,0,0,0,0,0,0,13,10,18,17,10,16,46,12,33,29,41,29,15]],
+["Summarize what BNI Acronyms mean",[0,0,0,0,0,6,25,61,38,14,41,32,48,40,38,49,27,27,24,27,19]],
+["Tallahassee",[0,0,0,0,0,0,0,0,9,10,6,4,5,5,1,7,8,5,3,8,0]],
+["Utilise BNI Chapter Tools",[0,0,0,0,0,0,0,0,0,0,0,0,0,0,8,4,60,10,3,8,31]],
+["Utilise Visitor Tools",[0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,7,32,11,9,8,2]],
+["Utilize 1-2-1 Tools",[0,0,0,0,0,0,0,0,0,0,0,1,128,114,144,155,163,121,207,176,57]],
+["Utilize BNI Chapter Tools",[0,0,0,0,0,0,0,0,0,0,0,0,0,21,44,36,33,74,86,55,16]],
+["Utilize BNI Visitor Tools",[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,28,63,92,97,20]],
+["Utilize Visitor Tools",[0,0,0,0,0,0,41,15,63,190,275,148,243,191,218,236,183,136,190,251,57]],
+["Vancouver",[0,0,0,1,0,0,0,0,0,0,0,0,0,5,20,12,13,14,14,10,14]],
+["Visit Chapter",[0,37,49,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]],
+["Visitor Follow-up",[0,0,0,0,0,0,2,0,6,12,8,14,23,10,21,12,13,5,12,15,3]],
+["Visitor Introduction",[0,0,0,0,0,0,4,1,11,36,26,28,30,25,41,53,33,20,28,21,13]],
+["Weekly BNI Presentation",[0,0,0,0,0,0,7,15,17,9,13,10,15,8,15,14,15,10,9,9,7]],
+["What Are My BNI Benefits",[0,0,0,0,0,0,32,56,50,46,8,0,12,0,14,17,29,48,19,24,7]],
+["What Are the BNI Policies",[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,49,43,27,28,8]],
+["What is BNI?",[0,13,48,2,10,31,104,117,157,288,334,403,416,558,594,490,531,554,532,551,218]],
+["What is Higgins AI?",[0,0,0,0,0,0,0,7,0,1,0,0,2,1,0,16,71,40,23,46,8]],
+["What is Higgins Training",[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,33,8,9,18,3]],
+["What is Higgins-BNI Training",[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,16,46,10,25,24,2]],
+["Yes",[0,0,0,0,0,2,16,1,7,1,0,1,5,8,6,4,4,4,5,4,2]],
+["higgins.ai",[0,0,0,0,0,1,4,1,23,12,15,6,23,16,30,15,5,5,2,0,0]],
+["no",[1,0,0,0,0,0,1,1,1,3,7,2,2,5,5,4,4,11,10,11,5]],
+["yes",[0,0,0,0,1,0,2,2,2,3,8,10,9,4,4,8,9,10,6,2,3]]
+];
+
+const msgMonths=["2024-05","2024-06","2024-07","2024-08","2024-09","2024-10","2024-11","2024-12","2025-01","2025-02","2025-03","2025-04","2025-05","2025-06","2025-07","2025-08","2025-09","2025-10","2025-11"];
+
+const msgData=[
+["bni-alabama-public",[0,0,0,0,0,126,429,92,96,246,56,103,248,392,614,1366,332,379,192]],
+["bni-alaska-public",[0,0,0,0,0,0,0,0,51,48,276,72,62,22,87,344,14,41,50]],
+["bni-atl-private",[0,0,50,0,523,0,391,0,4,38,138,0,18,166,18,0,0,20,0]],
+["bni-atl-public",[0,0,307,1622,1900,1574,1157,1556,2058,3434,2042,1774,2898,2175,1763,4633,2141,3298,1298]],
+["bni-bc-public",[0,0,0,0,0,0,0,0,0,0,0,566,602,574,959,891,1154,2118,322]],
+["bni-caflorida-public",[0,0,0,0,0,0,0,0,28,488,693,857,796,778,1100,1987,778,828,336]],
+["bni-calswga-public",[0,0,0,0,0,0,0,138,109,162,224,206,258,177,272,311,184,312,52]],
+["bni-ccr-public",[0,0,0,0,0,174,217,138,190,200,200,153,118,138,403,882,210,218,96]],
+["bni-centralmaryland-public",[0,0,0,0,0,0,0,0,0,0,0,82,668,258,286,288,198,262,147]],
+["bni-centralpa-public",[0,0,0,0,0,0,221,485,428,176,281,370,98,188,180,92,122,201,70]],
+["bni-elpaso-public",[0,0,0,0,0,0,0,0,0,0,0,0,0,344,186,62,195,87,64]],
+["bni-franchise-private",[0,0,0,0,0,0,0,0,0,0,0,0,0,0,1944,3133,3223,2785,1108]],
+["bni-hvnc-au-public",[0,0,0,0,0,0,0,0,0,0,0,0,170,176,174,114,124,133,30]],
+["bni-indiana-public",[0,0,0,0,0,326,314,298,438,2402,769,665,364,340,334,316,308,398,2602]],
+["bni-lasvegas-public",[0,0,0,0,0,0,0,0,0,0,381,206,236,318,424,176,128,98,120]],
+["bni-lousiana-public",[0,0,0,0,0,0,0,0,0,0,608,498,365,297,334,292,266,796,120]],
+["bni-maine-public",[0,0,0,0,0,0,0,215,595,924,343,155,148,152,242,120,130,147,78]],
+["bni-melbournecentral-public",[0,0,0,0,0,0,0,0,0,0,0,234,590,432,730,1353,988,689,306]],
+["bni-mississippi-public",[0,0,0,0,0,0,0,0,0,0,144,96,70,76,62,88,76,93,28]],
+["bni-nca-public",[0,0,0,0,0,182,66,160,2096,272,156,140,126,94,248,98,138,138,68]],
+["bni-neflorida-public",[0,0,0,0,0,0,0,0,30,296,722,395,548,915,717,545,1126,501,218]],
+["bni-nevada-public",[0,0,0,0,0,0,0,0,0,0,570,526,597,189,247,152,216,189,158]],
+["bni-newhampshire-public",[0,0,0,0,0,0,0,0,12,270,352,338,476,424,548,364,1103,200,204]],
+["bni-newjersey-public",[0,0,0,0,0,0,0,0,0,0,0,218,1347,516,970,433,314,258,1030]],
+["bni-njpaorg-public",[0,0,0,0,0,0,160,84,196,129,204,292,400,363,373,354,609,429,265]],
+["bni-nwflorida-public",[0,0,0,0,0,0,253,224,178,124,178,122,139,401,522,164,156,258,84]],
+["bni-rsb-public",[0,0,0,0,0,0,0,0,0,0,0,88,558,148,384,566,158,130,38]],
+["bni-sanfrancisco-public",[0,0,0,0,0,0,0,0,0,0,0,122,351,309,136,150,244,94,800]],
+["bni-sclowcountry-public",[0,0,0,0,0,0,0,0,0,0,924,155,182,194,220,156,222,236,104]],
+["bni-sd-public",[0,0,0,0,0,0,0,0,0,594,708,546,442,431,374,1174,2072,915,4294]],
+["bni-sfbay-public",[0,0,0,110,310,1123,1166,1553,3684,2617,3090,1549,1411,846,1314,1142,1277,3018,434]],
+["bni-sgv-public",[0,0,0,0,337,358,604,452,786,384,411,462,406,332,468,378,402,334,224]],
+["bni-southflorida-public",[0,0,0,0,0,0,0,0,0,0,0,344,540,2295,596,329,344,232,130]],
+["bni-sozona-public",[0,0,0,0,0,0,0,183,200,140,190,966,716,289,569,434,589,425,207]],
+["bni-tampa-public",[0,0,0,92,1108,428,282,130,139,232,198,372,130,442,769,222,607,282,246]],
+["bni-tennessee-public",[0,0,0,165,369,8,130,412,883,1977,1082,594,574,560,1394,794,954,1049,950]],
+["bni-va-public",[0,0,0,0,296,1602,354,238,654,2075,287,272,367,561,548,447,387,340,230]],
+["bni-wapacificnw-public",[0,0,0,0,0,0,0,378,298,117,122,210,96,71,132,122,68,120,74]],
+["bni-westernpa-public",[0,0,0,0,0,0,418,963,609,518,350,529,445,343,602,400,1127,461,134]],
+["higgins",[22,345,576,455,420,962,834,703,670,434,460,796,452,355,1422,1325,526,593,174]],
+["higginssales-redrealty-public",[0,0,0,0,0,0,0,108,26,136,620,350,290,358,242,406,1724,704,26]],
+["bni-franchise-canada-private",[0,0,0,0,0,0,0,0,0,0,0,0,0,0,306,72,157,169,54]],
+["bni-southcentralindiana-public",[0,0,0,0,0,0,0,0,0,0,0,0,0,136,356,180,53,100,34]],
+["bni-upstateny-public",[0,0,0,0,0,0,0,0,0,0,0,26,182,165,68,90,94,126,24]]
+];
+
+const chatMonths=["2024-05","2024-06","2024-07","2024-08","2024-09","2024-10","2024-11","2024-12","2025-01","2025-02","2025-03","2025-04","2025-05","2025-06","2025-07","2025-08","2025-09","2025-10","2025-11"];
+
+const chatData=[
+["bni-alabama-public",[0,0,0,0,0,19,2510,5627,10056,10720,14595,15253,10043,9674,11449,10268,11086,10559,5208]],
+["bni-alaska-public",[0,0,0,0,0,0,0,0,289,1435,1837,2551,1400,1066,1310,1030,1194,1588,661]],
+["bni-atl-public",[0,0,94,20997,22095,24295,15629,13131,23145,23110,26980,28369,26215,26816,43802,30911,36753,28205,12262]],
+["bni-bc-public",[0,0,0,0,0,0,0,0,0,0,0,9123,10149,10850,11417,9738,11512,11449,6249]],
+["bni-caflorida-public",[0,0,0,0,0,0,0,0,4,10664,17857,20647,20143,16924,20861,17171,18185,19180,9217]],
+["bni-calswga-public",[0,0,0,0,0,0,0,558,1075,1237,1625,2492,1497,1178,1847,1076,1704,1404,833]],
+["bni-ccr-public",[0,0,0,0,0,3557,4460,4281,6351,5776,5723,7406,5631,5953,6191,5795,5979,5692,3076]],
+["bni-centralmaryland-public",[0,0,0,0,0,0,0,0,0,0,0,3770,12466,12684,12323,11291,15361,15254,4939]],
+["bni-centralpa-public",[0,0,0,0,0,0,806,2286,2842,2866,3325,3926,4481,4304,4223,3302,4211,4799,3011]],
+["bni-elpaso-public",[0,0,0,0,0,0,0,0,0,0,0,0,0,1404,1919,2473,2443,2615,1050]],
+["bni-franchise-private",[0,0,0,0,0,0,0,0,0,0,0,0,0,0,839,1318,1235,1565,544]],
+["bni-indiana-public",[0,0,0,0,0,4055,4671,5086,6594,6422,5846,7890,3564,3696,4824,5624,4210,4605,2489]],
+["bni-lasvegas-public",[0,0,0,0,0,0,0,0,0,0,4703,6502,5560,4910,5036,5361,4917,5289,2511]],
+["bni-lousiana-public",[0,0,0,0,0,0,0,0,0,0,5326,8210,6392,5736,6849,6183,7225,7255,2888]],
+["bni-maine-public",[0,0,0,0,0,0,0,3273,8206,6812,8149,10090,7550,6206,11576,8194,7369,7925,4047]],
+["bni-melbournecentral-public",[0,0,0,0,0,0,0,0,0,0,0,2073,14924,15212,14577,13501,18851,14004,4299]],
+["bni-mississippi-public",[0,0,0,0,0,0,0,0,0,0,1628,2566,1429,1552,1985,1349,1825,2118,868]],
+["bni-nca-public",[0,0,0,0,0,705,2307,2154,4144,3703,4602,5605,7029,7036,7211,5654,6892,8669,4730]],
+["bni-neflorida-public",[0,0,0,0,0,0,0,0,2,9564,12896,15350,14525,14016,13289,12348,13398,12646,6393]],
+["bni-nevada-public",[0,0,0,0,0,0,0,0,0,0,4435,7868,5865,5853,5170,6191,5694,6040,3341]],
+["bni-newhampshire-public",[0,0,0,0,0,0,0,0,4,4864,8892,11362,8582,7648,7038,6861,7727,7651,4024]],
+["bni-newjersey-public",[0,0,0,0,0,0,0,0,0,0,0,3443,6654,6312,6606,6079,7779,7765,3488]],
+["bni-njpaorg-public",[0,0,0,0,0,0,7262,6811,9910,8574,10298,12724,15542,16154,18542,13821,15997,13939,4870]],
+["bni-nwflorida-public",[0,0,0,0,0,0,2473,2600,3673,2795,3700,5825,4579,4946,5919,3706,4071,4637,1955]],
+["bni-rsb-public",[0,0,0,0,0,0,0,0,0,0,6,2174,3412,3114,3604,3304,3298,3814,1920]],
+["bni-sanfrancisco-public",[0,0,0,0,0,0,0,0,0,0,0,2454,4142,3784,3548,3566,3900,2921,1732]],
+["bni-sclowcountry-public",[0,0,0,0,0,0,0,0,0,0,10068,14627,17818,20038,20039,17813,20215,14884,4095]],
+["bni-sd-public",[0,0,0,0,0,0,0,0,0,7838,11338,12580,11681,9759,10808,10841,11534,10832,5884]],
+["bni-sfbay-public",[0,0,0,35,4240,16202,11708,10083,15740,14726,17057,16571,19067,14646,15772,15463,15502,16079,6878]],
+["bni-sgv-public",[0,0,0,0,1204,8970,6123,5220,7504,6996,7225,9468,8596,8165,9714,9805,9442,8861,4318]],
+["bni-southflorida-public",[0,0,0,0,0,0,0,0,0,0,0,3855,11466,8888,9802,8282,8502,7028,2556]],
+["bni-sozona-public",[0,0,0,0,0,0,0,4200,9899,8007,8404,11763,10550,9093,11292,12363,9762,10525,5691]],
+["bni-tampa-public",[0,0,0,69,8720,17821,19310,20746,26029,22575,25619,29998,25649,23931,29447,23926,26989,26675,14094]],
+["bni-tennessee-public",[0,0,0,36,106,13,38,77,5015,19385,19946,21634,21237,21998,20361,20638,27318,26486,9492]],
+["bni-upstateny-public",[0,0,0,0,0,0,0,0,0,0,0,81,2695,2381,2539,2455,2906,3082,1638]],
+["bni-va-public",[0,0,0,0,2841,8621,7628,6830,10263,8427,10917,11227,13830,13542,15555,11338,15220,14046,4223]],
+["bni-wapacificnw-public",[0,0,0,0,0,0,0,2177,3413,2420,2891,3776,2797,2516,2991,2737,3418,3321,1570]],
+["bni-westernpa-public",[0,0,0,0,0,0,4253,5054,7619,6985,5698,6278,8424,6516,5660,7021,8613,9069,5310]],
+["higgins",[282,2629,3121,1808,1758,1820,1196,1307,1732,1656,1455,2031,3250,2807,6456,3844,4817,5575,2333]],
+["higginssales-redrealty-public",[0,0,0,0,0,0,0,24,40,902,8032,15239,13862,84727,23133,27937,41321,34984,13052]]
+];
+
+const contactMap={
+"higgins":{email:"support@higgins.ai",name:"Higgins AI Team",desc:"Higgins AI is a singular AI platform using multiple specialized AI models for scheduling, task automation, data analysis, and reporting."},
+"bni-atl-public":{email:"support@higgins.ai",name:"BNI Atlanta Support",desc:"BNI Atlanta franchise providing structured referral marketing and professional networking for business growth."},
+"bni-tampa-public":{email:"support@higgins.ai",name:"BNI Tampa Support",desc:"BNI Tampa franchise helping members increase business through structured referral programs."},
+"bni-sfbay-public":{email:"support@higgins.ai",name:"BNI SF Bay Support",desc:"BNI San Francisco Bay Area franchise providing professional networking and referral marketing."},
+"bni-tennessee-public":{email:"support@higgins.ai",name:"BNI Tennessee Support",desc:"BNI Tennessee franchise enabling members to grow through structured referrals."},
+"bni-sd-public":{email:"support@higgins.ai",name:"BNI San Diego Support",desc:"BNI San Diego franchise delivering referral-based business growth."},
+"higginssales-redrealty-public":{email:"support@higgins.ai",name:"Red Realty via Higgins",desc:"Red Realty powered by Higgins AI for real estate lead generation and client engagement."}
+};
+
+// ========== UTILITY FUNCTIONS ==========
+function sum(arr){return arr.reduce((a,b)=>a+b,0)}
+function fmt(n){return n.toLocaleString()}
+
+// ========== TAB SWITCHING ==========
+function showTab(id,el){
+document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
+document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active'));
+document.getElementById(id).classList.add('active');
+el.classList.add('active');
+}
+
+// ========== SORT ==========
+let sortState={};
+function sortTable(tableId,col){
+const table=document.getElementById(tableId);
+const tbody=table.querySelector('tbody');
+const rows=Array.from(tbody.rows);
+const key=tableId+col;
+sortState[key]=sortState[key]==='asc'?'desc':'asc';
+const dir=sortState[key]==='asc'?1:-1;
+rows.sort((a,b)=>{
+let va=a.cells[col].getAttribute('data-val')||a.cells[col].textContent;
+let vb=b.cells[col].getAttribute('data-val')||b.cells[col].textContent;
+let na=parseFloat(va),nb=parseFloat(vb);
+if(!isNaN(na)&&!isNaN(nb))return(na-nb)*dir;
+return va.localeCompare(vb)*dir;
+});
+rows.forEach(r=>tbody.appendChild(r));
+// Update arrows
+table.querySelectorAll('th').forEach((th,i)=>{
+const arrow=th.querySelector('.arrow');
+if(arrow)arrow.textContent=i===col?(sortState[key]==='asc'?'▲':'▼'):'⇅';
+});
+}
+
+// ========== FILTER ==========
+function filterTable(tableId,inputId){
+const val=document.getElementById(inputId).value.toLowerCase();
+const rows=document.getElementById(tableId).querySelectorAll('tbody tr');
+rows.forEach(r=>{
+r.style.display=r.cells[0].textContent.toLowerCase().includes(val)?'':'none';
+});
+}
+
+// ========== BUILD TABLE ==========
+function buildTable(tableId,headers,data,hasContact){
+const table=document.getElementById(tableId);
+let hhtml='<thead><tr>';
+headers.forEach((h,i)=>{
+hhtml+=`<th onclick="sortTable('${tableId}',${i})">${h} <span class="arrow">⇅</span></th>`;
+});
+if(hasContact)hhtml+='<th>Action</th>';
+hhtml+='<th>Total</th><th>Trend</th></tr></thead>';
+let bhtml='<tbody>';
+data.forEach(([name,vals])=>{
+const total=sum(vals);
+const last3=vals.slice(-3);
+const prev3=vals.slice(-6,-3);
+const l3s=sum(last3),p3s=sum(prev3);
+const trend=p3s>0?((l3s-p3s)/p3s*100).toFixed(1):l3s>0?'New':'—';
+const trendClass=typeof trend==='string'&&trend.includes('-')?'trend-down':trend==='—'||trend==='New'?'':'trend-up';
+bhtml+=`<tr><td data-val="${name}">${name}</td>`;
+vals.forEach(v=>{bhtml+=`<td data-val="${v}">${fmt(v)}</td>`});
+if(hasContact){
+const c=contactMap[name];
+bhtml+=`<td>${c?`<button class="btn-contact" onclick="openModal('${c.email}','${c.name}','${c.desc.replace(/'/g,"\\'")}')">📧 Contact</button>`:''}</td>`;
+}
+bhtml+=`<td data-val="${total}"><strong>${fmt(total)}</strong></td>`;
+bhtml+=`<td class="${trendClass}">${trend==='—'||trend==='New'?trend:trend+'%'}</td></tr>`;
+});
+bhtml+='</tbody>';
+table.innerHTML=hhtml+bhtml;
+}
+
+// ========== MODAL ==========
+function openModal(email,name,desc){
+document.getElementById('emailModal').classList.add('show');
+document.getElementById('modalTo').textContent=email;
+document.getElementById('modalSubject').textContent=`Invitation to Explore Higgins AI — Elevate Your BNI Experience`;
+document.getElementById('modalBody').value=`Dear ${name},\n\nI hope this message finds you well! I wanted to reach out because I believe Higgins AI can significantly enhance your business operations and BNI experience.\n\n${desc}\n\nWith Higgins AI, you can:\n• Automate tedious yet important tasks so you can focus on creating value\n• Generate BNI presentations, visitor invitations, and chapter assessments in seconds\n• Track and improve your referral partnerships with AI-powered insights\n• Access a personal AI assistant tailored to your professional needs\n\nI'd love to schedule a brief call to discuss how Higgins can help accelerate your business growth.\n\nBest regards,\nHiggins AI Team\nsupport@higgins.ai\n855-737-3386\nhiggins.ai`;
+}
+function closeModal(){document.getElementById('emailModal').classList.remove('show')}
+function sendEmail(){
+const to=document.getElementById('modalTo').textContent;
+const subject=document.getElementById('modalSubject').textContent;
+const body=document.getElementById('modalBody').value;
+window.location.href=`mailto:${to}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+closeModal();
+}
+
+// ========== EXPORT CSV ==========
+function exportCSV(tableId,filename){
+const table=document.getElementById(tableId);
+let csv=[];
+const rows=table.querySelectorAll('tr');
+rows.forEach(r=>{
+let row=[];
+r.querySelectorAll('th,td').forEach(c=>row.push('"'+c.textContent.replace(/"/g,'""')+'"'));
+csv.push(row.join(','));
+});
+const blob=new Blob([csv.join('\n')],{type:'text/csv'});
+const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=filename+'.csv';a.click();
+}
+
+// ========== CHARTS ==========
+const colors=['#CF2030','#2563eb','#16a34a','#f59e0b','#8b5cf6','#ec4899','#14b8a6','#f97316','#6366f1','#84cc16','#ef4444','#06b6d4','#a855f7','#eab308','#10b981'];
+
+function makeLineChart(canvasId,labels,datasets,stacked){
+const ctx=document.getElementById(canvasId).getContext('2d');
+new Chart(ctx,{
+type:'line',
+data:{labels,datasets:datasets.map((d,i)=>({label:d.label,data:d.data,borderColor:colors[i%colors.length],backgroundColor:colors[i%colors.length]+'22',fill:stacked||false,tension:.3,pointRadius:2,borderWidth:2}))},
+options:{responsive:true,interaction:{intersect:false,mode:'index'},plugins:{legend:{position:'bottom',labels:{boxWidth:12,font:{size:11}}}},scales:{y:{beginAtZero:true,ticks:{callback:v=>v>=1000?(v/1000)+'k':v}}}}
+});
+}
+
+function makeBarChart(canvasId,labels,data,horizontal){
+const ctx=document.getElementById(canvasId).getContext('2d');
+new Chart(ctx,{
+type:'bar',
+data:{labels,datasets:[{data,backgroundColor:colors.slice(0,data.length).map(c=>c+'cc'),borderColor:colors.slice(0,data.length),borderWidth:1}]},
+options:{indexAxis:horizontal?'y':'x',responsive:true,plugins:{legend:{display:false}},scales:{[horizontal?'x':'y']:{beginAtZero:true,ticks:{callback:v=>v>=1000?(v/1000)+'k':v}}}}
+});
+}
+
+// ========== INIT ==========
+function init(){
+// KPIs
+const totalBtnClicks=btnData.reduce((s,d)=>s+sum(d[1]),0);
+const totalMessages=msgData.reduce((s,d)=>s+sum(d[1]),0);
+const totalChats=chatData.reduce((s,d)=>s+sum(d[1]),0);
+const activeOrgs=msgData.filter(d=>d[1][d[1].length-1]>0).length;
+const activeBtns=btnData.filter(d=>d[1][d[1].length-1]>0).length;
+
+// Recent month totals for growth
+const msgLastMonth=msgData.reduce((s,d)=>s+d[1][d[1].length-1],0);
+const msgPrevMonth=msgData.reduce((s,d)=>s+d[1][d[1].length-2],0);
+const msgGrowth=msgPrevMonth>0?((msgLastMonth-msgPrevMonth)/msgPrevMonth*100).toFixed(1):'N/A';
+
+document.getElementById('kpiRow').innerHTML=`
+<div class="kpi"><h3>Total Button Clicks</h3><div class="val">${fmt(totalBtnClicks)}</div><sub class="sub">All time across all buttons</sub></div>
+<div class="kpi"><h3>Total Messages</h3><div class="val">${fmt(totalMessages)}</div><sub class="sub">All organizations combined</sub></div>
+<div class="kpi"><h3>Total New Chats</h3><div class="val">${fmt(totalChats)}</div><sub class="sub">All organizations combined</sub></div>
+<div class="kpi"><h3>Active Orgs (Nov '25)</h3><div class="val">${activeOrgs}</div><sub class="sub">Orgs with messages this month</sub></div>
+<div class="kpi"><h3>Active Buttons (Nov '25)</h3><div class="val">${activeBtns}</div><sub class="sub">Buttons clicked this month</sub></div>
+<div class="kpi"><h3>Msg MoM Growth</h3><div class="val">${msgGrowth}%</div><sub class="sub">Oct → Nov 2025</sub></div>`;
+
+// Overview Charts
+const msgMonthTotals=msgMonths.map((_,i)=>msgData.reduce((s,d)=>s+d[1][i],0));
+makeLineChart('overviewMsgChart',msgMonths,[{label:'Total Messages',data:msgMonthTotals}]);
+
+const topChatOrgs=chatData.map(d=>[d[0],sum(d[1])]).sort((a,b)=>b[1]-a[1]).slice(0,8);
+makeLineChart('overviewChatChart',chatMonths,topChatOrgs.map(([name])=>{
+const d=chatData.find(x=>x[0]===name);
+return{label:name.replace('bni-','').replace('-public',''),data:d[1]};
+}));
+
+const topBtns=btnData.map(d=>[d[0],sum(d[1])]).sort((a,b)=>b[1]-a[1]).slice(0,15);
+makeBarChart('overviewBtnChart',topBtns.map(d=>d[0].substring(0,30)),topBtns.map(d=>d[1]),true);
+
+const topOrgs=msgData.map(d=>[d[0],sum(d[1])]).sort((a,b)=>b[1]-a[1]).slice(0,15);
+makeBarChart('overviewOrgChart',topOrgs.map(d=>d[0].replace('bni-','').replace('-public','').substring(0,25)),topOrgs.map(d=>d[1]),true);
+
+// Buttons Tab
+buildTable('btnTable',['Button',...btnMonths],btnData,false);
+const btnSelect=document.getElementById('btnMonthFilter');
+btnMonths.forEach(m=>{const o=document.createElement('option');o.value=m;o.textContent=m;btnSelect.appendChild(o)});
+
+const topBtnTrend=btnData.map(d=>[d[0],sum(d[1])]).sort((a,b)=>b[1]-a[1]).slice(0,10);
+makeLineChart('btnTrendChart',btnMonths,topBtnTrend.map(([name])=>{
+const d=btnData.find(x=>x[0]===name);
+return{label:name.substring(0,35),data:d[1]};
+}));
+
+// Messages Tab
+buildTable('msgTable',['Organization',...msgMonths],msgData,true);
+const topMsgTrend=msgData.map(d=>[d[0],sum(d[1])]).sort((a,b)=>b[1]-a[1]).slice(0,10);
+makeLineChart('msgTrendChart',msgMonths,topMsgTrend.map(([name])=>{
+const d=msgData.find(x=>x[0]===name);
+return{label:name.replace('bni-','').replace('-public',''),data:d[1]};
+}));
+
+// Chats Tab
+buildTable('chatTable',['Organization',...chatMonths],chatData,true);
+const topChatTrend=chatData.map(d=>[d[0],sum(d[1])]).sort((a,b)=>b[1]-a[1]).slice(0,10);
+makeLineChart('chatTrendChart',chatMonths,topChatTrend.map(([name])=>{
+const d=chatData.find(x=>x[0]===name);
+return{label:name.replace('bni-','').replace('-public',''),data:d[1]};
+}));
+
+// Trends Tab - Growth Chart
+const growthRates=msgMonths.slice(1).map((_,i)=>{
+const curr=msgData.reduce((s,d)=>s+d[1][i+1],0);
+const prev=msgData.reduce((s,d)=>s+d[1][i],0);
+return prev>0?((curr-prev)/prev*100).toFixed(1):0;
+});
+makeLineChart('growthChart',msgMonths.slice(1),[{label:'MoM Growth %',data:growthRates}]);
+
+// Adoption Chart
+const adoptionData=msgMonths.map((_,i)=>msgData.filter(d=>d[1].slice(0,i+1).some(v=>v>0)).length);
+makeLineChart('adoptionChart',msgMonths,[{label:'Cumulative Active Orgs',data:adoptionData}]);
+
+// Feature Category Chart
+const featureCategories={
+'Presentations':['Select BNI Presentation to Create','Create Weekly BNI Presentation','Create a Weekly BNI commercial','New Weekly Presentation Tool','Create BNI LCDs/Topics'],
+'Visitor Tools':['Utilize Visitor Tools','Invite Visitor','Visitor Introduction','Visitor Follow-up','Invite BNI Visitor','Utilize BNI Visitor Tools'],
+'Chapter Tools':['Build Contact Sphere','Build My Contact Sphere','Discover Your Team','Utilize BNI Chapter Tools'],
+'1-2-1 Tools':['Utilize 1-2-1 Tools','Generate 1-2-1 Discussion','Generate 1-2-1 Discussion Points'],
+'Info & Education':['What is BNI?','Find BNI Podcasts','Summarize what BNI Acronyms mean','What Are My BNI Benefits']
+};
+const catDatasets=Object.entries(featureCategories).map(([cat,btns])=>({
+label:cat,
+data:btnMonths.map((_,mi)=>btns.reduce((s,btn)=>{const f=btnData.find(b=>b[0]===btn);return s+(f?f[1][mi]:0)},0))
+}));
+makeLineChart('featureCatChart',btnMonths,catDatasets);
+}
+
+function filterBtnMonth(){
+const val=document.getElementById('btnMonthFilter').value;
+if(val==='all'){
+document.querySelectorAll('#btnTable th, #btnTable td').forEach(c=>c.style.display='');
+return;
+}
+const idx=btnMonths.indexOf(val);
+document.querySelectorAll('#btnTable tr').forEach(r=>{
+Array.from(r.cells).forEach((c,ci)=>{
+if(ci===0||ci===r.cells.length-1||ci===r.cells.length-2)c.style.display='';
+else c.style.display=(ci-1===idx)?'':'none';
+});
+});
+}
+
+init();
+</script>
+</body>
+</html>
