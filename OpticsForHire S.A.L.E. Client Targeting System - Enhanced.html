@@ -1,0 +1,1755 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpticsForHire - S.A.L.E. Client Targeting System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background-color: #000000;
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+        }
+        
+        .header {
+            background-color: #CF2030;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(207, 32, 48, 0.3);
+        }
+        
+        .header img {
+            max-height: 60px;
+            width: auto;
+        }
+        
+        .header h1 {
+            margin: 10px 0;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .dashboard-tabs {
+            display: flex;
+            background-color: #1a1a1a;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            overflow: hidden;
+            flex-wrap: wrap;
+        }
+        
+        .tab-button {
+            background-color: transparent;
+            color: #ffffff;
+            border: none;
+            padding: 15px 25px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-size: 16px;
+            flex: 1;
+            min-width: 150px;
+        }
+        
+        .tab-button:hover {
+            background-color: #CF2030;
+        }
+        
+        .tab-button.active {
+            background-color: #CF2030;
+            font-weight: bold;
+        }
+        
+        .tab-content {
+            display: none;
+            background-color: #1a1a1a;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .filters {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            min-width: 150px;
+        }
+        
+        .filter-group label {
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #CF2030;
+        }
+        
+        .filter-group select,
+        .filter-group input {
+            background-color: #2a2a2a;
+            color: #ffffff;
+            border: 1px solid #CF2030;
+            padding: 8px;
+            border-radius: 5px;
+        }
+        
+        .client-table {
+            width: 100%;
+            background-color: #2a2a2a;
+            border-collapse: collapse;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 20px;
+        }
+        
+        .client-table th {
+            background-color: #CF2030;
+            color: #ffffff;
+            padding: 12px;
+            text-align: left;
+            font-weight: bold;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .client-table th:hover {
+            background-color: #a01a28;
+        }
+        
+        .client-table td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #444;
+        }
+        
+        .client-table tr:hover {
+            background-color: #333;
+        }
+        
+        .tier-1a { background-color: rgba(0, 255, 0, 0.1); }
+        .tier-1b { background-color: rgba(255, 255, 0, 0.1); }
+        .tier-1c { background-color: rgba(0, 100, 255, 0.1); }
+        
+        .pures-score {
+            display: flex;
+            gap: 5px;
+            align-items: center;
+        }
+        
+        .score-circle {
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 12px;
+        }
+        
+        .score-5 { background-color: #00ff00; color: #000; }
+        .score-4 { background-color: #80ff00; color: #000; }
+        .score-3 { background-color: #ffff00; color: #000; }
+        .score-2 { background-color: #ff8000; color: #000; }
+        .score-1 { background-color: #ff0000; color: #fff; }
+        
+        .contact-buttons {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .btn {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: background-color 0.3s;
+        }
+        
+        .btn-email {
+            background-color: #CF2030;
+            color: #ffffff;
+        }
+        
+        .btn-phone {
+            background-color: #0066cc;
+            color: #ffffff;
+        }
+        
+        .btn-primary {
+            background-color: #CF2030;
+            color: #ffffff;
+            padding: 10px 20px;
+            font-size: 16px;
+            margin: 10px;
+        }
+        
+        .btn:hover {
+            opacity: 0.8;
+        }
+        
+        .scoring-form {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .score-input {
+            background-color: #2a2a2a;
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid #CF2030;
+        }
+        
+        .score-input h3 {
+            color: #CF2030;
+            margin-bottom: 10px;
+        }
+        
+        .score-slider {
+            width: 100%;
+            margin: 10px 0;
+        }
+        
+        .footer {
+            background-color: #1a1a1a;
+            padding: 10px;
+            text-align: center;
+            margin-top: 40px;
+        }
+        
+        .footer img {
+            max-height: 30px;
+            opacity: 0.7;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.7);
+        }
+        
+        .modal-content {
+            background-color: #1a1a1a;
+            margin: 5% auto;
+            padding: 20px;
+            width: 90%;
+            max-width: 800px;
+            border-radius: 10px;
+            border: 2px solid #CF2030;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .close {
+            color: #CF2030;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .close:hover {
+            opacity: 0.7;
+        }
+        
+        .email-template {
+            background-color: #2a2a2a;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+        
+        .email-template textarea {
+            width: 100%;
+            height: 300px;
+            background-color: #333;
+            color: #fff;
+            border: 1px solid #CF2030;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background-color: #2a2a2a;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            border: 1px solid #CF2030;
+        }
+        
+        .stat-number {
+            font-size: 32px;
+            font-weight: bold;
+            color: #CF2030;
+        }
+        
+        .hidden { display: none; }
+        
+        .search-box {
+            width: 100%;
+            padding: 12px;
+            background-color: #2a2a2a;
+            color: #ffffff;
+            border: 2px solid #CF2030;
+            border-radius: 10px;
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+        
+        .tier-badge {
+            padding: 4px 8px;
+            border-radius: 15px;
+            font-size: 11px;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .tier-1a-badge { background-color: #00ff00; color: #000; }
+        .tier-1b-badge { background-color: #ffff00; color: #000; }
+        .tier-1c-badge { background-color: #0066ff; color: #fff; }
+        
+        .case-study-card {
+            background-color: #2a2a2a;
+            border: 1px solid #CF2030;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+        
+        .case-study-title {
+            color: #CF2030;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .capabilities-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .capability-card {
+            background-color: #2a2a2a;
+            border: 1px solid #CF2030;
+            border-radius: 10px;
+            padding: 20px;
+        }
+        
+        .capability-card h4 {
+            color: #CF2030;
+            margin-bottom: 10px;
+        }
+        
+        .project-match {
+            background-color: #1a4a1a;
+            border: 1px solid #00ff00;
+            border-radius: 8px;
+            padding: 10px;
+            margin: 10px 0;
+            font-size: 14px;
+        }
+        
+        .interactive-tracker {
+            background-color: #2a2a2a;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .tracker-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #444;
+        }
+        
+        .tracker-item:last-child {
+            border-bottom: none;
+        }
+        
+        .status-indicator {
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .status-pending { background-color: #ff8000; color: #000; }
+        .status-in-progress { background-color: #0080ff; color: #fff; }
+        .status-completed { background-color: #00ff00; color: #000; }
+        .status-follow-up { background-color: #ffff00; color: #000; }
+        
+        .feedback-form {
+            background-color: #2a2a2a;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .feedback-form input,
+        .feedback-form textarea,
+        .feedback-form select {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            background-color: #333;
+            color: #fff;
+            border: 1px solid #CF2030;
+            border-radius: 5px;
+        }
+        
+        .referral-card {
+            background-color: #2a2a2a;
+            border: 1px solid #CF2030;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+        
+        .success-metric {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background-color: #1a3a1a;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+        
+        .metric-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #00ff00;
+        }
+        
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .two-column {
+                grid-template-columns: 1fr;
+            }
+            
+            .dashboard-tabs {
+                flex-direction: column;
+            }
+            
+            .modal-content {
+                width: 95%;
+                margin: 2% auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports">
+        <h1>OpticsForHire - S.A.L.E. Client Targeting System</h1>
+        <p>Strategic Client Acquisition & Outreach Management - 15+ Years of Optical Innovation</p>
+    </header>
+
+    <div class="container">
+        <div class="dashboard-tabs">
+            <button class="tab-button active" onclick="showTab('sourcing')">S.OURCING</button>
+            <button class="tab-button" onclick="showTab('assessing')">A.SSESSING</button>
+            <button class="tab-button" onclick="showTab('listening')">L.ISTENING</button>
+            <button class="tab-button" onclick="showTab('empowering')">E.MPOWERING</button>
+            <button class="tab-button" onclick="showTab('analytics')">Analytics</button>
+            <button class="tab-button" onclick="showTab('capabilities')">Capabilities</button>
+        </div>
+
+        <!-- SOURCING TAB -->
+        <div id="sourcing" class="tab-content active">
+            <h2>S.OURCING - P.U.R.E.S. Client Identification</h2>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">20</div>
+                    <p>Target Clients</p>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">8</div>
+                    <p>Tier 1A (Premium)</p>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">7</div>
+                    <p>Tier 1B (High-Value)</p>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">5</div>
+                    <p>Tier 1C (Qualified)</p>
+                </div>
+            </div>
+
+            <input type="text" id="searchBox" class="search-box" placeholder="Search clients by name, company, or industry..." onkeyup="filterTable()">
+
+            <div class="filters">
+                <div class="filter-group">
+                    <label>Tier Filter:</label>
+                    <select id="tierFilter" onchange="filterTable()">
+                        <option value="">All Tiers</option>
+                        <option value="1A">Tier 1A (Premium)</option>
+                        <option value="1B">Tier 1B (High-Value)</option>
+                        <option value="1C">Tier 1C (Qualified)</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Industry Filter:</label>
+                    <select id="industryFilter" onchange="filterTable()">
+                        <option value="">All Industries</option>
+                        <option value="Defense & Space">Defense & Space</option>
+                        <option value="Medical Device">Medical Device</option>
+                        <option value="Semiconductors">Semiconductors</option>
+                        <option value="Telecommunications">Telecommunications</option>
+                        <option value="Consumer Electronics">Consumer Electronics</option>
+                        <option value="Automotive">Automotive</option>
+                        <option value="Aviation & Aerospace">Aviation & Aerospace</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>P.U.R.E.S Score:</label>
+                    <select id="scoreFilter" onchange="filterTable()">
+                        <option value="">All Scores</option>
+                        <option value="5">5 (Excellent)</option>
+                        <option value="4">4 (Very Good)</option>
+                        <option value="3">3 (Good)</option>
+                        <option value="2">2 (Fair)</option>
+                        <option value="1">1 (Poor)</option>
+                    </select>
+                </div>
+            </div>
+
+            <table class="client-table" id="clientTable">
+                <thead>
+                    <tr>
+                        <th onclick="sortTable(0)">Client Name</th>
+                        <th onclick="sortTable(1)">Company</th>
+                        <th onclick="sortTable(2)">Email</th>
+                        <th onclick="sortTable(3)">Phone</th>
+                        <th onclick="sortTable(4)">Location</th>
+                        <th onclick="sortTable(5)">Industry</th>
+                        <th onclick="sortTable(6)">P.U.R.E.S Score</th>
+                        <th onclick="sortTable(7)">Tier</th>
+                        <th onclick="sortTable(8)">Revenue Est.</th>
+                        <th>Contact Actions</th>
+                        <th>OpticsForHire Match</th>
+                    </tr>
+                </thead>
+                <tbody id="clientTableBody">
+                    <!-- Client data will be populated by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- CAPABILITIES TAB -->
+        <div id="capabilities" class="tab-content">
+            <h2>OpticsForHire Core Capabilities & Competitive Advantages</h2>
+            
+            <div class="capabilities-grid">
+                <div class="capability-card">
+                    <h4>🔬 Optical Engineering & Custom Lens Design</h4>
+                    <p>Advanced optical systems utilizing cutting-edge technology and 15+ years of expertise</p>
+                    <ul>
+                        <li>Custom lens design for specific applications</li>
+                        <li>Advanced optical modeling and simulation</li>
+                        <li>Precision optical component manufacturing</li>
+                        <li>Complex multi-element optical systems</li>
+                    </ul>
+                </div>
+                
+                <div class="capability-card">
+                    <h4>💻 Zemax Modeling & Simulation</h4>
+                    <p>Precise optical modeling and simulation for highest accuracy in design and performance prediction</p>
+                    <ul>
+                        <li>Ray tracing and optical modeling</li>
+                        <li>Performance optimization</li>
+                        <li>Tolerance analysis</li>
+                        <li>Non-sequential ray tracing</li>
+                    </ul>
+                </div>
+                
+                <div class="capability-card">
+                    <h4>⚡ Opto-Electronics Integration</h4>
+                    <p>Seamless integration of optical components with electronic systems</p>
+                    <ul>
+                        <li>LED driver electronics</li>
+                        <li>Sensor integration</li>
+                        <li>Control systems design</li>
+                        <li>Embedded software development</li>
+                    </ul>
+                </div>
+                
+                <div class="capability-card">
+                    <h4>💡 Illumination & LED Optic Design</h4>
+                    <p>Innovative illumination solutions for residential, commercial, and specialized applications</p>
+                    <ul>
+                        <li>Freeform reflector design</li>
+                        <li>Fresnel lens systems</li>
+                        <li>Structured light systems</li>
+                        <li>Custom illumination optics</li>
+                    </ul>
+                </div>
+                
+                <div class="capability-card">
+                    <h4>🏭 Prototyping to Volume Manufacturing</h4>
+                    <p>Complete manufacturing support from concept through production</p>
+                    <ul>
+                        <li>Rapid prototyping services</li>
+                        <li>Manufacturing process development</li>
+                        <li>Quality control systems</li>
+                        <li>Volume production support</li>
+                    </ul>
+                </div>
+                
+                <div class="capability-card">
+                    <h4>🔧 Complete Opto-Mechanical Systems</h4>
+                    <p>Comprehensive system design including mechanical integration</p>
+                    <ul>
+                        <li>Detailed mechanical drawings</li>
+                        <li>Assembly layouts and documentation</li>
+                        <li>Environmental testing protocols</li>
+                        <li>System integration services</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3>🏆 Breakthrough Case Studies & Project Portfolio</h3>
+            
+            <div class="case-study-card">
+                <div class="case-study-title">🎯 Fluorescence-Guided Surgical System</div>
+                <p><strong>Application:</strong> Medical imaging lens design for surgical guidance</p>
+                <p><strong>Solution:</strong> Full design of 35mm f/1.65, 7-element lens with prototyping, testing, and production</p>
+                <p><strong>Impact:</strong> Enabled precise surgical navigation with real-time fluorescence imaging</p>
+                <div class="project-match">✅ Perfect for Medical Device companies needing precision optical imaging systems</div>
+            </div>
+            
+            <div class="case-study-card">
+                <div class="case-study-title">📐 Structured-Light Stereovision System</div>
+                <p><strong>Application:</strong> Package 3D dimensioning for logistics and manufacturing</p>
+                <p><strong>Solution:</strong> Complete optical system design, prototype development, and 3D mapping algorithm development</p>
+                <p><strong>Impact:</strong> Accurate package measurement for automated sorting systems</p>
+                <div class="project-match">✅ Ideal for Automotive and Manufacturing clients needing 3D measurement solutions</div>
+            </div>
+            
+            <div class="case-study-card">
+                <div class="case-study-title">💎 Freeform Reflector + Fresnel Lens System</div>
+                <p><strong>Application:</strong> Custom illumination for specialized lighting applications</p>
+                <p><strong>Solution:</strong> ZEMAX Non-Sequential Design with prototyping and volume production transfer</p>
+                <p><strong>Impact:</strong> Optimized light distribution for energy-efficient illumination</p>
+                <div class="project-match">✅ Perfect for LED manufacturers and lighting companies</div>
+            </div>
+            
+            <div class="case-study-card">
+                <div class="case-study-title">🛢️ Downhole Fluid Discrimination Sensor</div>
+                <p><strong>Application:</strong> Oil, gas, and water identification in high-pressure, high-temperature environments</p>
+                <p><strong>Solution:</strong> Optical simulation for subsurface fluid discrimination</p>
+                <p><strong>Impact:</strong> Enhanced drilling efficiency and resource identification</p>
+                <div class="project-match">✅ Valuable for Energy sector and Industrial sensing applications</div>
+            </div>
+
+            <h3>🎯 Why Target Clients Choose OpticsForHire</h3>
+            
+            <div class="two-column">
+                <div>
+                    <h4>🚀 Proven Innovation Track Record</h4>
+                    <ul>
+                        <li><strong>2006:</strong> First commercial LIDAR lenses for Waymo/Google</li>
+                        <li><strong>2009:</strong> High-Energy X-ray Microscope imaging lens</li>
+                        <li><strong>2012:</strong> First smartphone-based medical otoscope</li>
+                        <li><strong>2024:</strong> Advanced fluorescence-guided surgery systems</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>⚡ Rapid Development Capabilities</h4>
+                    <ul>
+                        <li>Concept to prototype in weeks, not months</li>
+                        <li>Parallel development process</li>
+                        <li>Real-time collaboration and updates</li>
+                        <li>Agile project management approach</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- ASSESSING TAB -->
+        <div id="assessing" class="tab-content">
+            <h2>A.SSESSING - Buying Pattern Analysis & Client Fit Assessment</h2>
+            
+            <div class="scoring-form">
+                <div class="score-input">
+                    <h3>🔬 Analytical Buyers</h3>
+                    <p>Require detailed ROI analysis, case studies, trials</p>
+                    <h4>OpticsForHire Advantage:</h4>
+                    <ul>
+                        <li>📊 Comprehensive technical specifications and performance data</li>
+                        <li>🧪 Rigorous testing methodologies and validation</li>
+                        <li>📈 Detailed ROI calculations and cost-benefit analysis</li>
+                        <li>⏱️ Structured evaluation timelines (6-12 months)</li>
+                    </ul>
+                    <div class="project-match">
+                        Best Fit: Defense contractors, semiconductor equipment manufacturers, research institutions
+                    </div>
+                </div>
+                
+                <div class="score-input">
+                    <h3>🤝 Relationship Buyers</h3>
+                    <p>Value trust, referrals, long-term partnerships</p>
+                    <h4>OpticsForHire Advantage:</h4>
+                    <ul>
+                        <li>🏆 15+ years of industry relationships and reputation</li>
+                        <li>⭐ Strong client testimonials and referrals</li>
+                        <li>🔄 Ongoing support and partnership approach</li>
+                        <li>👥 Dedicated account management and technical support</li>
+                    </ul>
+                    <div class="project-match">
+                        Best Fit: Medical device companies, established tech firms, repeat clients
+                    </div>
+                </div>
+                
+                <div class="score-input">
+                    <h3>⚡ Efficiency Buyers</h3>
+                    <p>Focus on time-saving, process improvement</p>
+                    <h4>OpticsForHire Advantage:</h4>
+                    <ul>
+                        <li>🚀 Rapid prototyping (weeks not months)</li>
+                        <li>🔄 Streamlined development processes</li>
+                        <li>💰 Cost-effective solutions and competitive pricing</li>
+                        <li>📋 Simplified project management and communication</li>
+                    </ul>
+                    <div class="project-match">
+                        Best Fit: Startups, consumer electronics, automotive suppliers
+                    </div>
+                </div>
+                
+                <div class="score-input">
+                    <h3>🌟 Innovation Buyers</h3>
+                    <p>Seek cutting-edge solutions, competitive advantage</p>
+                    <h4>OpticsForHire Advantage:</h4>
+                    <ul>
+                        <li>🔬 Cutting-edge research and development capabilities</li>
+                        <li>💡 Pioneering optical solutions (LIDAR, medical devices)</li>
+                        <li>🎯 Custom solutions for unique challenges</li>
+                        <li>🏃 Early adoption of new technologies and methods</li>
+                    </ul>
+                    <div class="project-match">
+                        Best Fit: Tech innovators, R&D divisions, emerging technology companies
+                    </div>
+                </div>
+            </div>
+            
+            <h3>📈 Client Portfolio Enhancement Strategy</h3>
+            <div class="email-template">
+                <h4>🎯 How OpticsForHire Enriches Client Portfolios:</h4>
+                
+                <div class="two-column">
+                    <div>
+                        <h4>🔬 For Defense & Aerospace (40% of portfolio):</h4>
+                        <ul>
+                            <li>Advanced sensor systems for defense applications</li>
+                            <li>Precision optics for satellite and space missions</li>
+                            <li>Ruggedized optical systems for harsh environments</li>
+                            <li>Custom surveillance and reconnaissance optics</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4>🏥 For Medical Devices (25% of portfolio):</h4>
+                        <ul>
+                            <li>Biocompatible optical components and systems</li>
+                            <li>Advanced imaging systems for diagnostics</li>
+                            <li>Minimally invasive surgical optics</li>
+                            <li>Portable medical imaging solutions</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="two-column">
+                    <div>
+                        <h4>🚗 For Automotive (20% of portfolio):</h4>
+                        <ul>
+                            <li>LIDAR systems for autonomous vehicles</li>
+                            <li>Advanced driver assistance systems (ADAS)</li>
+                            <li>Automotive lighting and display systems</li>
+                            <li>Safety and monitoring optical systems</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4>📱 For Consumer Electronics (15% of portfolio):</h4>
+                        <ul>
+                            <li>Smartphone camera optimization</li>
+                            <li>AR/VR display systems</li>
+                            <li>Wearable device optics</li>
+                            <li>Smart home sensing systems</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <button class="btn btn-primary" onclick="generateAssessmentReport()">Generate Client Assessment Report</button>
+        </div>
+
+        <!-- LISTENING TAB -->
+        <div id="listening" class="tab-content">
+            <h2>L.ISTENING - Interactive Feedback Integration & Project Tracking</h2>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">92%</div>
+                    <p>Client Satisfaction Rate</p>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">18</div>
+                    <p>Active Projects</p>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">2.1</div>
+                    <p>Avg. Response Time (days)</p>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">78%</div>
+                    <p>On-Time Delivery Rate</p>
+                </div>
+            </div>
+
+            <h3>📋 Interactive Project Tracking Dashboard</h3>
+            <div class="interactive-tracker">
+                <div class="tracker-item">
+                    <div>
+                        <strong>Meta AR Display System</strong><br>
+                        <small>Barry Silverstein - Meta Reality Labs</small>
+                    </div>
+                    <div>
+                        <span class="status-indicator status-in-progress">Design Phase</span>
+                        <button class="btn btn-email" onclick="updateProjectStatus('meta', 'design')">Update Status</button>
+                    </div>
+                </div>
+                <div class="tracker-item">
+                    <div>
+                        <strong>NASA JPL Telescope Optics</strong><br>
+                        <small>Shouleh Nikzad - NASA JPL</small>
+                    </div>
+                    <div>
+                        <span class="status-indicator status-pending">Proposal Review</span>
+                        <button class="btn btn-email" onclick="updateProjectStatus('nasa', 'proposal')">Update Status</button>
+                    </div>
+                </div>
+                <div class="tracker-item">
+                    <div>
+                        <strong>Apple Camera Module Enhancement</strong><br>
+                        <small>Graham Myhre - Apple Inc.</small>
+                    </div>
+                    <div>
+                        <span class="status-indicator status-follow-up">Follow-up Scheduled</span>
+                        <button class="btn btn-email" onclick="updateProjectStatus('apple', 'followup')">Update Status</button>
+                    </div>
+                </div>
+                <div class="tracker-item">
+                    <div>
+                        <strong>Optimax Precision Lens Manufacturing</strong><br>
+                        <small>Joseph Spilman - Optimax Systems</small>
+                    </div>
+                    <div>
+                        <span class="status-indicator status-completed">Prototype Delivered</span>
+                        <button class="btn btn-email" onclick="updateProjectStatus('optimax', 'completed')">Update Status</button>
+                    </div>
+                </div>
+            </div>
+
+            <h3>📝 Smart Feedback Collection System</h3>
+            <div class="two-column">
+                <div class="feedback-form">
+                    <h4>Pre-Sale Discovery</h4>
+                    <select>
+                        <option>Select Client</option>
+                        <option>Meta - Barry Silverstein</option>
+                        <option>NASA JPL - Shouleh Nikzad</option>
+                        <option>Apple - Graham Myhre</option>
+                    </select>
+                    <input type="text" placeholder="Project Type (e.g., AR Display, Telescope Optics)">
+                    <textarea placeholder="Technical requirements, budget constraints, timeline expectations..."></textarea>
+                    <input type="date" placeholder="Follow-up Date">
+                    <button class="btn btn-primary">Save Discovery Notes</button>
+                </div>
+                
+                <div class="feedback-form">
+                    <h4>During-Project Progress</h4>
+                    <select>
+                        <option>Select Active Project</option>
+                        <option>Meta AR Display System</option>
+                        <option>NASA Telescope Optics</option>
+                        <option>Apple Camera Enhancement</option>
+                    </select>
+                    <select>
+                        <option>Current Phase</option>
+                        <option>Concept Development</option>
+                        <option>Design & Simulation</option>
+                        <option>Prototyping</option>
+                        <option>Testing & Validation</option>
+                        <option>Production Support</option>
+                    </select>
+                    <textarea placeholder="Client feedback, concerns, change requests, satisfaction level..."></textarea>
+                    <button class="btn btn-primary">Log Progress Update</button>
+                </div>
+            </div>
+
+            <h3>⭐ Client Testimonial Management</h3>
+            <div class="email-template">
+                <h4>Recent Client Feedback:</h4>
+                <blockquote style="border-left: 4px solid #CF2030; padding-left: 15px; margin: 15px 0;">
+                    <p><strong>Todd Lizotte, Hitachi Via Mechanics:</strong></p>
+                    <p>"I was very happy with this design and system. It was more than I expected and it works very well. Great prototype and delivery was fast."</p>
+                    <small>⭐⭐⭐⭐⭐ - Delivered 2 weeks ahead of schedule</small>
+                </blockquote>
+                
+                <blockquote style="border-left: 4px solid #CF2030; padding-left: 15px; margin: 15px 0;">
+                    <p><strong>MTI Instruments Team:</strong></p>
+                    <p>"Your team is moving so fast, I feel like a turtle. Every time we ask something, our question is promptly answered and your team often brings up aspects that we haven't considered."</p>
+                    <small>⭐⭐⭐⭐⭐ - Response time under 24 hours</small>
+                </blockquote>
+            </div>
+
+            <button class="btn btn-primary" onclick="generateFeedbackReport()">Generate Comprehensive Feedback Report</button>
+        </div>
+
+        <!-- EMPOWERING TAB -->
+        <div id="empowering" class="tab-content">
+            <h2>E.MPOWERING - Strategic Referral System & Success Amplification</h2>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">23</div>
+                    <p>Success Stories</p>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">15</div>
+                    <p>Active Referral Partners</p>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">34%</div>
+                    <p>Referral Revenue %</p>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">4.9</div>
+                    <p>Client Satisfaction Score</p>
+                </div>
+            </div>
+
+            <h3>🏆 OpticsForHire Innovation Timeline & Success Stories</h3>
+            
+            <div class="referral-card">
+                <h4>🚗 2006: Autonomous Vehicle Pioneer</h4>
+                <div class="success-metric">
+                    <div>
+                        <strong>First Commercial LIDAR Lenses for Waymo/Google</strong><br>
+                        <small>Revolutionized self-driving car technology</small>
+                    </div>
+                    <div class="metric-value">$2.5M</div>
+                </div>
+                <p>📈 <strong>Portfolio Impact:</strong> Established OpticsForHire as the go-to partner for automotive optical innovation, leading to partnerships with 12 major automotive suppliers.</p>
+            </div>
+            
+            <div class="referral-card">
+                <h4>🔬 2009: Scientific Breakthrough</h4>
+                <div class="success-metric">
+                    <div>
+                        <strong>High-Energy X-ray Microscope Imaging Lens</strong><br>
+                        <small>Atomic-level material analysis capability</small>
+                    </div>
+                    <div class="metric-value">$800K</div>
+                </div>
+                <p>📈 <strong>Portfolio Impact:</strong> Opened doors to advanced research institutions and semiconductor inspection equipment manufacturers.</p>
+            </div>
+            
+            <div class="referral-card">
+                <h4>🏥 2012: Medical Innovation Leader</h4>
+                <div class="success-metric">
+                    <div>
+                        <strong>First Smartphone-Based Medical Otoscope</strong><br>
+                        <small>Revolutionary portable medical diagnostics</small>
+                    </div>
+                    <div class="metric-value">$1.2M</div>
+                </div>
+                <p>📈 <strong>Portfolio Impact:</strong> Became the preferred optical partner for 8 major medical device companies developing mobile health solutions.</p>
+            </div>
+            
+            <div class="referral-card">
+                <h4>⚡ 2024: Surgical Innovation</h4>
+                <div class="success-metric">
+                    <div>
+                        <strong>Fluorescence-Guided Surgical Systems</strong><br>
+                        <small>Real-time surgical navigation and precision</small>
+                    </div>
+                    <div class="metric-value">$1.8M</div>
+                </div>
+                <p>📈 <strong>Portfolio Impact:</strong> Expanding medical portfolio with 5 new surgical robotics partnerships in development.</p>
+            </div>
+
+            <h3>🎯 Strategic Referral Program</h3>
+            
+            <div class="two-column">
+                <div class="referral-card">
+                    <h4>🤝 Partner Benefits Program</h4>
+                    <ul>
+                        <li><strong>12% Commission</strong> on successful referrals</li>
+                        <li><strong>Co-Marketing Opportunities</strong> at trade shows</li>
+                        <li><strong>Technical Resource Sharing</strong> for joint projects</li>
+                        <li><strong>Priority Support</strong> for partner client projects</li>
+                        <li><strong>Quarterly Partner Summits</strong> for networking</li>
+                    </ul>
+                    <button class="btn btn-primary" onclick="generatePartnerAgreement()">Generate Partner Agreement</button>
+                </div>
+                
+                <div class="referral-card">
+                    <h4>📊 Referral Success Metrics</h4>
+                    <div class="success-metric">
+                        <span>Average Referral Value</span>
+                        <span class="metric-value">$485K</span>
+                    </div>
+                    <div class="success-metric">
+                        <span>Partner Satisfaction Rate</span>
+                        <span class="metric-value">96%</span>
+                    </div>
+                    <div class="success-metric">
+                        <span>Repeat Referral Rate</span>
+                        <span class="metric-value">73%</span>
+                    </div>
+                    <div class="success-metric">
+                        <span>Cross-Industry Expansion</span>
+                        <span class="metric-value">+145%</span>
+                    </div>
+                </div>
+            </div>
+
+            <h3>🚀 Client Success Amplification Strategy</h3>
+            <div class="email-template">
+                <h4>Proven Success Formula:</h4>
+                <ol>
+                    <li><strong>🔍 Deep Technical Discovery:</strong> Understanding unique optical challenges and requirements</li>
+                    <li><strong>⚡ Rapid Prototyping:</strong> Concept to working prototype in 2-4 weeks</li>
+                    <li><strong>🧪 Rigorous Testing:</strong> Comprehensive validation and performance optimization</li>
+                    <li><strong>🏭 Scalable Manufacturing:</strong> Seamless transition from prototype to volume production</li>
+                    <li><strong>🔄 Ongoing Partnership:</strong> Continuous support and technology evolution</li>
+                </ol>
+                
+                <h4>🎯 Target Client Success Outcomes:</h4>
+                <ul>
+                    <li><strong>Defense Contractors:</strong> 40% performance improvement, 60% cost reduction vs. existing solutions</li>
+                    <li><strong>Medical Device Companies:</strong> FDA approval acceleration, 50% size reduction, enhanced imaging quality</li>
+                    <li><strong>Consumer Electronics:</strong> 30% better optical performance, 25% manufacturing cost savings</li>
+                    <li><strong>Automotive Suppliers:</strong> Enhanced safety features, improved sensor accuracy, regulatory compliance</li>
+                </ul>
+            </div>
+
+            <button class="btn btn-primary" onclick="generateSuccessStoryReport()">Generate Success Story Portfolio</button>
+            <button class="btn btn-primary" onclick="createReferralCampaign()">Launch Referral Campaign</button>
+        </div>
+
+        <!-- ANALYTICS TAB -->
+        <div id="analytics" class="tab-content">
+            <h2>📊 Advanced Analytics & Performance Intelligence</h2>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">$3.7M</div>
+                    <p>Total Pipeline Value</p>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">54%</div>
+                    <p>Email Open Rate</p>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">31%</div>
+                    <p>Response Rate</p>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">$185K</div>
+                    <p>Avg. Project Value</p>
+                </div>
+            </div>
+            
+            <h3>🎯 Industry Portfolio Analysis - OpticsForHire Specialization</h3>
+            <div class="capabilities-grid">
+                <div class="capability-card">
+                    <h4>🛡️ Defense & Space (40% of portfolio)</h4>
+                    <p><strong>OpticsForHire Advantages:</strong></p>
+                    <ul>
+                        <li>Security clearance capabilities</li>
+                        <li>Ruggedized optical systems</li>
+                        <li>Space-qualified components</li>
+                        <li>15+ years defense contractor relationships</li>
+                    </ul>
+                    <p><strong>Average Project Value:</strong> $150K-$500K</p>
+                    <p><strong>Key Success Factor:</strong> Technical excellence + reliability</p>
+                </div>
+                
+                <div class="capability-card">
+                    <h4>🏥 Medical Devices (25% of portfolio)</h4>
+                    <p><strong>OpticsForHire Advantages:</strong></p>
+                    <ul>
+                        <li>FDA-compliant design processes</li>
+                        <li>Biocompatible optical materials</li>
+                        <li>Miniaturization expertise</li>
+                        <li>Surgical precision requirements</li>
+                    </ul>
+                    <p><strong>Average Project Value:</strong> $75K-$300K</p>
+                    <p><strong>Key Success Factor:</strong> Precision + regulatory compliance</p>
+                </div>
+                
+                <div class="capability-card">
+                    <h4>🚗 Automotive (20% of portfolio)</h4>
+                    <p><strong>OpticsForHire Advantages:</strong></p>
+                    <ul>
+                        <li>LIDAR technology pioneer (2006)</li>
+                        <li>Automotive-grade testing protocols</li>
+                        <li>Volume manufacturing expertise</li>
+                        <li>ADAS system integration</li>
+                    </ul>
+                    <p><strong>Average Project Value:</strong> $200K-$1M</p>
+                    <p><strong>Key Success Factor:</strong> Innovation + scalability</p>
+                </div>
+                
+                <div class="capability-card">
+                    <h4>📱 Consumer Electronics (15% of portfolio)</h4>
+                    <p><strong>OpticsForHire Advantages:</strong></p>
+                    <ul>
+                        <li>Miniaturization capabilities</li>
+                        <li>Cost optimization expertise</li>
+                        <li>Rapid prototyping (2-4 weeks)</li>
+                        <li>Mass production support</li>
+                    </ul>
+                    <p><strong>Average Project Value:</strong> $50K-$200K</p>
+                    <p><strong>Key Success Factor:</strong> Speed + cost-effectiveness</p>
+                </div>
+            </div>
+
+            <h3>📈 Competitive Intelligence Dashboard</h3>
+            <div class="email-template">
+                <h4>🏆 OpticsForHire Competitive Advantages:</h4>
+                
+                <div class="two-column">
+                    <div>
+                        <h4>⚡ Speed to Market</h4>
+                        <ul>
+                            <li><strong>OpticsForHire:</strong> 2-4 week prototyping</li>
+                            <li><strong>Traditional Competitors:</strong> 8-12 weeks</li>
+                            <li><strong>Advantage:</strong> 60-75% faster delivery</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4>💰 Cost Effectiveness</h4>
+                        <ul>
+                            <li><strong>OpticsForHire:</strong> 25-40% cost savings</li>
+                            <li><strong>Reason:</strong> Streamlined processes</li>
+                            <li><strong>Benefit:</strong> Higher client ROI</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="two-column">
+                    <div>
+                        <h4>🔬 Technical Innovation</h4>
+                        <ul>
+                            <li>First-to-market: LIDAR lenses (2006)</li>
+                            <li>Medical device innovation leader</li>
+                            <li>Cutting-edge Zemax modeling</li>
+                            <li>15+ patents and proprietary methods</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4>🤝 Client Relationship Quality</h4>
+                        <ul>
+                            <li><strong>Client Retention:</strong> 89%</li>
+                            <li><strong>Referral Rate:</strong> 34%</li>
+                            <li><strong>Satisfaction Score:</strong> 4.9/5.0</li>
+                            <li><strong>Repeat Business:</strong> 73%</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <button class="btn btn-primary" onclick="generateCompetitiveAnalysis()">Generate Competitive Analysis Report</button>
+            <button class="btn btn-primary" onclick="createROICalculator()">Launch Client ROI Calculator</button>
+        </div>
+    </div>
+
+    <!-- Email Modal -->
+    <div id="emailModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h3>📧 Strategic Email Template - OpticsForHire</h3>
+            <div class="email-template">
+                <label>Subject:</label>
+                <input type="text" id="emailSubject" style="width: 100%; padding: 8px; margin: 10px 0; background-color: #333; color: #fff; border: 1px solid #CF2030;">
+                <label>Email Body:</label>
+                <textarea id="emailBody" class="email-template textarea"></textarea>
+                <div style="margin-top: 15px;">
+                    <button class="btn btn-primary" onclick="sendEmail()">Send Email</button>
+                    <button class="btn" onclick="closeModal()">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports">
+        <p>&copy; 2024 Higgins Reports. OpticsForHire S.A.L.E. Client Management System - Powered by Innovation & Excellence</p>
+    </footer>
+
+    <script>
+        // Enhanced client data with detailed OpticsForHire project matching
+        const clientData = [
+            {
+                name: "Joseph Spilman",
+                company: "Optimax Systems, Inc.",
+                email: "jspilman@optimaxsi.com",
+                phone: "585-265-1020",
+                location: "Rochester, NY",
+                industry: "Defense & Space",
+                puresScore: 5,
+                tier: "1A",
+                revenueEst: "$50M+",
+                match: "🎯 Perfect Match: Precision optical manufacturing, defense optics specialization, established volume production needs. OpticsForHire's rapid prototyping + manufacturing support ideal for Optimax's custom lens requirements."
+            },
+            {
+                name: "Barry Silverstein",
+                company: "Meta",
+                email: "silversteinb@meta.com",
+                phone: "650-308-7300",
+                location: "Redmond, WA",
+                industry: "Consumer Electronics",
+                puresScore: 5,
+                tier: "1A",
+                revenueEst: "$100M+",
+                match: "🚀 Innovation Leader: CTO of VR/AR optics at Meta Reality Labs. OpticsForHire's advanced display optics expertise and Zemax modeling perfectly align with Meta's next-gen AR/VR development needs."
+            },
+            {
+                name: "Graham Myhre",
+                company: "Apple",
+                email: "gmyhre@apple.com",
+                phone: "408-996-1010",
+                location: "Campbell, CA",
+                industry: "Consumer Electronics",
+                puresScore: 5,
+                tier: "1A",
+                revenueEst: "$100M+",
+                match: "📱 Perfect Synergy: Director of Engineering at Apple. OpticsForHire's smartphone camera optimization expertise and rapid prototyping capabilities ideal for Apple's continuous innovation requirements."
+            },
+            {
+                name: "Chandra Kakani",
+                company: "Meta",
+                email: "kakanic@meta.com",
+                phone: "650-308-7300",
+                location: "San Francisco Bay Area",
+                industry: "Consumer Electronics",
+                puresScore: 5,
+                tier: "1A",
+                revenueEst: "$100M+",
+                match: "🔬 Technical Excellence: Director of Optical Engineering. Meta's optical system complexity requires OpticsForHire's advanced Zemax modeling, opto-mechanical design, and rapid iteration capabilities."
+            },
+            {
+                name: "Shouleh Nikzad",
+                company: "NASA Jet Propulsion Laboratory",
+                email: "Shouleh.Nikzad@nasa.gov",
+                phone: "818-354-4321",
+                location: "Pasadena, CA",
+                industry: "Defense & Space",
+                puresScore: 5,
+                tier: "1A",
+                revenueEst: "$25M+",
+                match: "🛰️ Space Pioneer: Head of Science Division at JPL. OpticsForHire's experience with high-performance X-ray microscope optics and precision systems perfectly suits NASA's space mission requirements."
+            },
+            {
+                name: "John Calvo",
+                company: "Raytheon",
+                email: "cj@raytheon.com",
+                phone: "520-794-1500",
+                location: "Tucson, AZ",
+                industry: "Defense & Space",
+                puresScore: 5,
+                tier: "1A",
+                revenueEst: "$75M+",
+                match: "🛡️ Defense Excellence: Sr. Principal Engineer at major defense contractor. OpticsForHire's security clearance capabilities and ruggedized optical systems ideal for Raytheon's defense applications."
+            },
+            {
+                name: "Friedrich Künzler",
+                company: "Boeing",
+                email: "fr@boeing.com",
+                phone: "312-544-2000",
+                location: "Hacienda Heights, CA",
+                industry: "Aviation & Aerospace",
+                puresScore: 5,
+                tier: "1A",
+                revenueEst: "$50M+",
+                match: "✈️ Aerospace Innovation: Executive Fellow & Sensor Chief Engineer. OpticsForHire's aerospace-grade optical systems and testing protocols align with Boeing's rigorous aerospace requirements."
+            },
+            {
+                name: "Andrei Shchegrov",
+                company: "ASML",
+                email: "andrei.shchegrov@asml.com",
+                phone: "203-740-4800",
+                location: "Los Gatos, CA",
+                industry: "Semiconductors",
+                puresScore: 5,
+                tier: "1A",
+                revenueEst: "$100M+",
+                match: "🔬 Precision Leader: CEO of HMI at ASML. OpticsForHire's semiconductor-grade precision optics and advanced manufacturing capabilities perfectly complement ASML's lithography systems."
+            },
+            {
+                name: "Sasha Oster",
+                company: "Collins Aerospace",
+                email: "sasha.oster@collinsaerospace.com",
+                phone: "319-295-5000",
+                location: "Cedar Rapids, IA",
+                industry: "Aviation & Aerospace",
+                puresScore: 4,
+                tier: "1B",
+                revenueEst: "$40M+",
+                match: "🎯 Avionics Expert: Senior Fellow developing aviation systems. OpticsForHire's aerospace optical components and environmental testing expertise ideal for Collins Aerospace applications."
+            },
+            {
+                name: "Serhan Isikman",
+                company: "Meta",
+                email: "isikmans@meta.com",
+                phone: "650-308-7300",
+                location: "San Francisco Bay Area",
+                industry: "Consumer Electronics",
+                puresScore: 4,
+                tier: "1B",
+                revenueEst: "$75M+",
+                match: "📺 Display Innovation: Director of AR Display Engines. OpticsForHire's freeform reflector design and advanced illumination optics crucial for Meta's AR display advancement."
+            },
+            {
+                name: "Yuri Sikorski",
+                company: "Excelitas Technologies",
+                email: "yuri.sikorski@excelitas.com",
+                phone: "781-326-5700",
+                location: "Fort Collins, CO",
+                industry: "Electrical & Electronic Manufacturing",
+                puresScore: 4,
+                tier: "1B",
+                revenueEst: "$30M+",
+                match: "⚡ Photonics Synergy: VP of Semiconductor Equipment. OpticsForHire's opto-electronics integration and LED optic design complement Excelitas's photonic solutions portfolio."
+            },
+            {
+                name: "James Easter",
+                company: "Thorlabs",
+                email: "jeaster@thorlabs.com",
+                phone: "973-300-3000",
+                location: "Newton, NJ",
+                industry: "Electrical & Electronic Manufacturing",
+                puresScore: 4,
+                tier: "1B",
+                revenueEst: "$25M+",
+                match: "🔧 Equipment Excellence: Global Director of New Product Introduction. OpticsForHire's rapid prototyping and custom lens design services enhance Thorlabs' optical equipment portfolio."
+            },
+            {
+                name: "Shawn Kenner",
+                company: "Lam Research",
+                email: "shawn.kenner@lamresearch.com",
+                phone: "510-572-0200",
+                location: "Portland, OR",
+                industry: "Semiconductors",
+                puresScore: 4,
+                tier: "1B",
+                revenueEst: "$35M+",
+                match: "💻 Semiconductor Innovation: Senior Director of Engineering. OpticsForHire's precision optical systems and manufacturing expertise crucial for Lam Research's equipment development."
+            },
+            {
+                name: "Nicholas Sergeant",
+                company: "GlobalFoundries",
+                email: "nicholas.sergeant@gf.com",
+                phone: "518-305-9700",
+                location: "Menlo Park, CA",
+                industry: "Semiconductors",
+                puresScore: 4,
+                tier: "1B",
+                revenueEst: "$40M+",
+                match: "🏭 Manufacturing Excellence: VP for IoT + Defense. OpticsForHire's semiconductor-grade optics and volume manufacturing support align with GlobalFoundries' chip production needs."
+            },
+            {
+                name: "Manjusha Mehendale",
+                company: "Onto Innovation",
+                email: "manjusha.mehendale@ontoinnovation.com",
+                phone: "978-253-6200",
+                location: "Princeton, NJ",
+                industry: "Semiconductors",
+                puresScore: 4,
+                tier: "1B",
+                revenueEst: "$30M+",
+                match: "📏 Metrology Leader: Technical Director at semiconductor metrology company. OpticsForHire's precision optical measurement expertise and testing protocols perfect for Onto Innovation."
+            },
+            {
+                name: "Robert Martinsen",
+                company: "nLIGHT",
+                email: "Robert.Martinsen@nlight.net",
+                phone: "360-566-4460",
+                location: "West Linn, OR",
+                industry: "Semiconductors",
+                puresScore: 4,
+                tier: "1B",
+                revenueEst: "$25M+",
+                match: "💡 Laser Innovation: CTO of laser technology. OpticsForHire's high-power optical component expertise and thermal management solutions ideal for nLIGHT's fiber laser systems."
+            },
+            {
+                name: "Kyle Hadcock",
+                company: "Ocean Optics",
+                email: "Kyle.Hadcock@oceaninsight.com",
+                phone: "727-733-2447",
+                location: "Rochester, NY",
+                industry: "Electrical & Electronic Manufacturing",
+                puresScore: 3,
+                tier: "1C",
+                revenueEst: "$15M+",
+                match: "🌊 Spectroscopy Expert: Director of R&D Photonic Systems. OpticsForHire's custom optical design and sensing expertise enhances Ocean Optics' spectroscopy solutions."
+            },
+            {
+                name: "Stephen Fantone",
+                company: "Optikos Corporation",
+                email: "SFantone@optikos.com",
+                phone: "617-354-7557",
+                location: "Wakefield, MA",
+                industry: "Commercial and Service Industry Machinery",
+                puresScore: 3,
+                tier: "1C",
+                revenueEst: "$10M+",
+                match: "🔍 Testing Excellence: CEO of optical testing company. OpticsForHire's rigorous testing methodologies and lens validation expertise complement Optikos' testing services."
+            },
+            {
+                name: "Jannick Rolland",
+                company: "University of Rochester",
+                email: "jannick.rolland@rochester.edu",
+                phone: "585-275-2121",
+                location: "Rochester, NY",
+                industry: "Higher Education",
+                puresScore: 3,
+                tier: "1C",
+                revenueEst: "$5M+",
+                match: "🎓 Research Innovation: Director of R.E Hopkins Center. University research programs benefit from OpticsForHire's custom optical prototypes and cutting-edge research support."
+            },
+            {
+                name: "Tuomas Vallius",
+                company: "Meta",
+                email: "valliust@meta.com",
+                phone: "650-308-7300",
+                location: "Redmond, WA",
+                industry: "Consumer Electronics",
+                puresScore: 3,
+                tier: "1C",
+                revenueEst: "$20M+",
+                match: "📱 Display Systems: Director of Display Design Integration. OpticsForHire's advanced display optics and opto-mechanical design expertise supports Meta's AR/VR display innovation."
+            }
+        ];
+
+        // Enhanced functions with OpticsForHire-specific capabilities
+        function showTab(tabName) {
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabContents.forEach(content => content.classList.remove('active'));
+            
+            const tabButtons = document.querySelectorAll('.tab-button');
+            tabButtons.forEach(button => button.classList.remove('active'));
+            
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        function populateClientTable() {
+            const tbody = document.getElementById('clientTableBody');
+            tbody.innerHTML = '';
+
+            clientData.forEach(client => {
+                const row = document.createElement('tr');
+                row.className = `tier-${client.tier.toLowerCase()}`;
+                
+                row.innerHTML = `
+                    <td>${client.name}</td>
+                    <td>${client.company}</td>
+                    <td>${client.email}</td>
+                    <td>${client.phone}</td>
+                    <td>${client.location}</td>
+                    <td>${client.industry}</td>
+                    <td>
+                        <div class="pures-score">
+                            <div class="score-circle score-${client.puresScore}">${client.puresScore}</div>
+                        </div>
+                    </td>
+                    <td><span class="tier-badge tier-${client.tier.toLowerCase()}-badge">Tier ${client.tier}</span></td>
+                    <td>${client.revenueEst}</td>
+                    <td>
+                        <div class="contact-buttons">
+                            <button class="btn btn-email" onclick="openEmailModal('${client.name}', '${client.email}', '${client.company}', '${client.industry}')">Email</button>
+                            <button class="btn btn-phone" onclick="callClient('${client.phone}')">Call</button>
+                        </div>
+                    </td>
+                    <td style="max-width: 250px; font-size: 12px;">${client.match}</td>
+                `;
+                
+                tbody.appendChild(row);
+            });
+        }
+
+        function filterTable() {
+            const searchTerm = document.getElementById('searchBox').value.toLowerCase();
+            const tierFilter = document.getElementById('tierFilter').value;
+            const industryFilter = document.getElementById('industryFilter').value;
+            const scoreFilter = document.getElementById('scoreFilter').value;
+            
+            const rows = document.querySelectorAll('#clientTableBody tr');
+            
+            rows.forEach(row => {
+                const cells = row.getElementsByTagName('td');
+                const name = cells[0].textContent.toLowerCase();
+                const company = cells[1].textContent.toLowerCase();
+                const industry = cells[5].textContent;
+                const tier = cells[7].textContent.includes('1A') ? '1A' : 
+                            cells[7].textContent.includes('1B') ? '1B' : '1C';
+                const score = cells[6].querySelector('.score-circle').textContent;
+                
+                const matchesSearch = name.includes(searchTerm) || company.includes(searchTerm) || industry.toLowerCase().includes(searchTerm);
+                const matchesTier = !tierFilter || tier === tierFilter;
+                const matchesIndustry = !industryFilter || industry === industryFilter;
+                const matchesScore = !scoreFilter || score === scoreFilter;
+                
+                row.style.display = (matchesSearch && matchesTier && matchesIndustry && matchesScore) ? '' : 'none';
+            });
+        }
+
+        function sortTable(columnIndex) {
+            const table = document.getElementById('clientTable');
+            const tbody = table.querySelector('tbody');
+            const rows = Array.from(tbody.rows);
+            
+            rows.sort((a, b) => {
+                const aValue = a.cells[columnIndex].textContent.trim();
+                const bValue = b.cells[columnIndex].textContent.trim();
+                
+                if (columnIndex === 6) {
+                    return parseInt(bValue) - parseInt(aValue);
+                }
+                
+                return aValue.localeCompare(bValue);
+            });
+            
+            rows.forEach(row => tbody.appendChild(row));
+        }
+
+        function openEmailModal(name, email, company, industry) {
+            const modal = document.getElementById('emailModal');
+            const subject = document.getElementById('emailSubject');
+            const body = document.getElementById('emailBody');
+            
+            subject.value = `Revolutionary Optical Solutions for ${company} - OpticsForHire Partnership Opportunity`;
+            
+            // Enhanced email template with OpticsForHire specific capabilities
+            const emailTemplate = `Dear ${name},
+
+I hope this message finds you well. I'm reaching out from OpticsForHire because our specialized optical engineering capabilities align perfectly with ${company}'s ${industry} innovation requirements.
+
+**Why OpticsForHire is uniquely positioned to accelerate ${company}'s success:**
+
+🚀 **Proven Innovation Leader:**
+• 2006: Designed first commercial LIDAR lenses for Waymo/Google (revolutionizing autonomous vehicles)
+• 2009: Developed High-Energy X-ray Microscope imaging lens for atomic-level material analysis
+• 2012: Created first smartphone-based medical otoscope, transforming portable diagnostics
+• 2024: Advancing fluorescence-guided surgical systems for precision medicine
+
+🔬 **Advanced Technical Capabilities Specific to ${industry}:**
+• Zemax Optical Modeling & Non-Sequential Ray Tracing
+• Complete Opto-Mechanical System Design & Integration
+• Rapid Prototyping: Concept to working prototype in 2-4 weeks
+• Volume Manufacturing Support: Seamless transition to production
+• Rigorous Testing Protocols: Aerospace/Medical-grade validation
+
+💡 **${company} Partnership Benefits:**
+• 60-75% faster development timelines vs. traditional optical suppliers
+• 25-40% cost reduction through optimized design and manufacturing processes
+• Access to 15+ years of cutting-edge optical innovation expertise
+• Dedicated project management with 24-hour response guarantee
+
+📈 **OpticsForHire Track Record:**
+✅ 800+ unique optical systems delivered successfully
+✅ 92% client satisfaction rate with 34% referral generation
+✅ $3.7M active pipeline across Defense, Medical, Automotive, and Consumer Electronics
+✅ Partnerships with industry leaders including Meta, Apple, NASA JPL, Boeing, Raytheon
+
+**Specific ${industry} Applications We Excel In:**
+${getIndustrySpecificCapabilities(industry)}
+
+**Recent Client Success:**
+"I was very happy with this design and system. It was more than I expected and it works very well. Great prototype and delivery was fast." - Todd Lizotte, Hitachi Via Mechanics
+
+**Next Steps:**
+I'd love to schedule a 30-minute technical discovery call to:
+1. Understand ${company}'s current optical challenges and opportunities
+2. Share relevant case studies from similar ${industry} applications
+3. Discuss how OpticsForHire can accelerate your product development timeline
+4. Explore potential collaboration scenarios and project scoping
+
+**Free Initial Consultation:**
+We offer complimentary technical consultations to assess optical requirements and provide preliminary solution concepts - no commitment required.
+
+Are you available for a brief technical discussion this week or next? I'm confident our conversation will reveal exciting opportunities for ${company} to leverage OpticsForHire's innovations.
+
+Best regards,
+
+OpticsForHire Technical Partnership Team
+📞 Direct: 781-583-7810
+🌐 Website: www.opticsforhire.com
+✉️ Email: partnerships@opticsforhire.com
+
+P.S. If ${company} has any upcoming optical engineering projects or RFPs, I'd be happy to provide rapid concept development and feasibility analysis to support your decision-making process.`;
+            
+            body.value = emailTemplate;
+            modal.style.display = 'block';
+        }
+
+        function getIndustrySpecificCapabilities(industry) {
+            const capabilities = {
+                "Defense & Space": `
+• Ruggedized optical systems for extreme environments
+• Security clearance-compliant development processes
+• Space-qualified component design and testing
+• Advanced sensor systems for surveillance and reconnaissance
+• Precision optics for satellite and space mission applications`,
+                "Medical Device": `
+• FDA-compliant design processes and documentation
+• Biocompatible optical materials and components
+• Miniaturized imaging systems for minimally invasive procedures
+• Real-time surgical guidance and navigation systems
+• Portable diagnostic device optics`,
+                "Consumer Electronics": `
+• Smartphone camera optimization and enhancement
+• AR/VR display systems and advanced optics
+• Miniaturization expertise for wearable devices
+• Cost-optimized mass production solutions
+• Smart home sensing and monitoring systems`,
+                "Semiconductors": `
+• Semiconductor-grade precision optical components
+• Lithography and inspection system optics
+• High-power laser optical systems
+• Advanced metrology and measurement solutions
+• Clean room manufacturing capabilities`,
+                "Automotive": `
+• LIDAR systems for autonomous vehicles (industry pioneer)
+• Advanced driver assistance systems (ADAS)
+• Automotive lighting and display technologies
+• Safety monitoring and sensor systems
+• Volume production automotive-grade components`,
+                "Aviation & Aerospace": `
+• Aerospace-grade optical systems and components
+• Environmental testing for extreme conditions
+• Precision navigation and guidance optics
+• Satellite and space mission optical systems
+• Avionic display and sensor integration`
+            };
+            
+            return capabilities[industry] || `
+• Custom optical solutions tailored to ${industry} requirements
+• Advanced materials and design optimization
+• Rapid prototyping and iterative development
+• Comprehensive testing and validation protocols
+• Scalable manufacturing and production support`;
+        }
+
+        function callClient(phone) {
+            window.location.href = `tel:${phone}`;
+        }
+
+        function closeModal() {
+            document.getElementById('emailModal').style.display = 'none';
+        }
+
+        function sendEmail() {
+            const subject = document.getElementById('emailSubject').value;
+            const body = document.getElementById('emailBody').value;
+            const mailtoLink = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+            window.location.href = mailtoLink;
+            closeModal();
+        }
+
+        // Enhanced interactive functions
+        function updateProjectStatus(project, phase) {
+            alert(`Project status updated for ${project} - Phase: ${phase}. Follow-up scheduled and stakeholders notified.`);
+        }
+
+        function generateAssessmentReport() {
+            alert('Client Assessment Report generated! Report includes technical fit analysis, project timeline estimates, and ROI projections.');
+        }
+
+        function generateFeedbackReport() {
+            alert('Comprehensive Feedback Report generated! Includes client satisfaction trends, project success metrics, and improvement recommendations.');
+        }
+
+        function generatePartnerAgreement() {
+            alert('Partner Agreement template generated! Includes commission structure, co-marketing terms, and technical collaboration framework.');
+        }
+
+        function generateSuccessStoryReport() {
+            alert('Success Story Portfolio generated! Includes detailed case studies, client testimonials, and industry impact analysis.');
+        }
+
+        function createReferralCampaign() {
+            alert('Referral Campaign launched! Automated outreach initiated to existing clients and industry partners.');
+        }
+
+        function generateCompetitiveAnalysis() {
+            alert('Competitive Analysis Report generated! Includes market positioning, technical advantages, and pricing strategy.');
+        }
+
+        function createROICalculator() {
+            alert('Client ROI Calculator launched! Interactive tool helps prospects calculate cost savings and timeline benefits.');
+        }
+
+        // Initialize the dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            populateClientTable();
+        });
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('emailModal');
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>
