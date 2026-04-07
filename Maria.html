@@ -1,0 +1,817 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maria's Alterations - S.A.L.E. Client Targeting System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: white;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .header {
+            background-color: #CF2030;
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            height: 60px;
+        }
+        
+        .header h1 {
+            font-size: 2rem;
+            margin-left: 1rem;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .business-info {
+            background: linear-gradient(135deg, #CF2030, #e63946);
+            color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+        }
+        
+        .dashboard {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .sidebar {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 10px;
+            border: 2px solid #CF2030;
+        }
+        
+        .main-content {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .controls {
+            padding: 1.5rem;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .search-box, .filter-select {
+            padding: 0.5rem;
+            border: 2px solid #CF2030;
+            border-radius: 5px;
+            outline: none;
+        }
+        
+        .btn {
+            padding: 0.5rem 1rem;
+            background-color: #CF2030;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .btn:hover {
+            background-color: #b01d2a;
+        }
+        
+        .btn-secondary {
+            background-color: #6c757d;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #545b62;
+        }
+        
+        .client-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+        
+        .client-table th {
+            background-color: #CF2030;
+            color: white;
+            padding: 0.75rem 0.5rem;
+            text-align: left;
+            font-weight: bold;
+            cursor: pointer;
+            user-select: none;
+        }
+        
+        .client-table th:hover {
+            background-color: #b01d2a;
+        }
+        
+        .client-table td {
+            padding: 0.75rem 0.5rem;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .client-table tr:hover {
+            background-color: #f8f9fa;
+        }
+        
+        .tier-1a { background-color: #d4edda; }
+        .tier-1b { background-color: #fff3cd; }
+        .tier-1c { background-color: #e2e3e5; }
+        
+        .contact-btn {
+            padding: 0.25rem 0.5rem;
+            margin: 0.1rem;
+            font-size: 0.8rem;
+            border-radius: 3px;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+        
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 2rem;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .close:hover {
+            color: #CF2030;
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+        
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%;
+            padding: 0.5rem;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        
+        .form-group input:focus, .form-group textarea:focus {
+            border-color: #CF2030;
+            outline: none;
+        }
+        
+        .scoring-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+        
+        .score-item {
+            text-align: center;
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        
+        .marketing-schedule {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            margin-top: 2rem;
+        }
+        
+        .footer-logo {
+            height: 30px;
+            margin-bottom: 0.5rem;
+        }
+        
+        @media (max-width: 768px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+            
+            .controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .client-table {
+                font-size: 0.8rem;
+            }
+            
+            .client-table th, .client-table td {
+                padding: 0.5rem 0.25rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div style="display: flex; align-items: center;">
+            <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports" class="logo">
+            <h1>Maria's Alterations - S.A.L.E. System</h1>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="business-info">
+            <h2>Maria's Alterations Shop</h2>
+            <p><strong>Est. 1957</strong> | Traditional craftsmanship and outstanding workmanship, tailored to perfection</p>
+            <p><strong>Address:</strong> 230 Broadway, Millbrae, CA 94030 | <strong>Phone:</strong> (650) 697-2571</p>
+            <p><strong>Services:</strong> Wedding Gown Alterations, Tuxedos, Special Occasion Dresses, Jeans, Suits, Small Repairs</p>
+        </div>
+
+        <div class="dashboard">
+            <div class="sidebar">
+                <h3>S.A.L.E. Dashboard</h3>
+                
+                <div style="margin-bottom: 1.5rem;">
+                    <h4>Quick Stats</h4>
+                    <p>Total Prospects: <span id="totalProspects">50</span></p>
+                    <p>Tier 1A (Premium): <span id="tier1a">15</span></p>
+                    <p>Tier 1B (High-Value): <span id="tier1b">20</span></p>
+                    <p>Tier 1C (Qualified): <span id="tier1c">15</span></p>
+                </div>
+
+                <div style="margin-bottom: 1.5rem;">
+                    <h4>P.U.R.E.S. Scoring</h4>
+                    <button class="btn" onclick="openScoringModal()">Score New Client</button>
+                </div>
+
+                <div style="margin-bottom: 1.5rem;">
+                    <h4>Quick Actions</h4>
+                    <button class="btn" onclick="exportData()">Export Client List</button>
+                    <button class="btn btn-secondary" onclick="openMarketingPlan()">Marketing Plan</button>
+                </div>
+
+                <div>
+                    <h4>Target Services</h4>
+                    <ul style="list-style-type: none; padding-left: 0;">
+                        <li>• Wedding Dress Alterations</li>
+                        <li>• Formal Wear Tailoring</li>
+                        <li>• Special Occasion Dresses</li>
+                        <li>• Everyday Alterations</li>
+                        <li>• Repairs & Hemming</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="main-content">
+                <div class="controls">
+                    <input type="text" class="search-box" id="searchBox" placeholder="Search clients..." onkeyup="filterTable()">
+                    
+                    <select class="filter-select" id="tierFilter" onchange="filterTable()">
+                        <option value="">All Tiers</option>
+                        <option value="1A">Tier 1A - Premium</option>
+                        <option value="1B">Tier 1B - High-Value</option>
+                        <option value="1C">Tier 1C - Qualified</option>
+                    </select>
+                    
+                    <select class="filter-select" id="serviceFilter" onchange="filterTable()">
+                        <option value="">All Services</option>
+                        <option value="Wedding">Wedding Alterations</option>
+                        <option value="Formal">Formal Wear</option>
+                        <option value="Casual">Casual Alterations</option>
+                        <option value="Repairs">Repairs</option>
+                    </select>
+                    
+                    <button class="btn" onclick="clearFilters()">Clear Filters</button>
+                </div>
+
+                <div style="overflow-x: auto;">
+                    <table class="client-table" id="clientTable">
+                        <thead>
+                            <tr>
+                                <th onclick="sortTable(0)">Client Name ↕</th>
+                                <th onclick="sortTable(1)">Email ↕</th>
+                                <th onclick="sortTable(2)">Phone ↕</th>
+                                <th onclick="sortTable(3)">Address ↕</th>
+                                <th onclick="sortTable(4)">P.U.R.E.S Score ↕</th>
+                                <th onclick="sortTable(5)">Tier ↕</th>
+                                <th onclick="sortTable(6)">Service Need ↕</th>
+                                <th onclick="sortTable(7)">Est. Value ↕</th>
+                                <th>Contact</th>
+                                <th onclick="sortTable(9)">Next Action ↕</th>
+                            </tr>
+                        </thead>
+                        <tbody id="clientTableBody">
+                            <!-- Client data will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="marketing-schedule">
+            <h3>Marketing Plan & Schedule</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem; margin-top: 1rem;">
+                <div style="background: #f8f9fa; padding: 1rem; border-radius: 5px; border-left: 4px solid #CF2030;">
+                    <h4>Week 1: Wedding Season Outreach</h4>
+                    <p>Target Tier 1A clients with wedding/formal needs</p>
+                    <ul>
+                        <li>Send personalized wedding consultation invites</li>
+                        <li>Offer free fitting consultations</li>
+                        <li>Share before/after wedding dress photos</li>
+                    </ul>
+                </div>
+                <div style="background: #f8f9fa; padding: 1rem; border-radius: 5px; border-left: 4px solid #28a745;">
+                    <h4>Week 2: Formal Wear Campaign</h4>
+                    <p>Focus on Tier 1B professional alterations</p>
+                    <ul>
+                        <li>Business suit tailoring promotions</li>
+                        <li>Corporate partnership outreach</li>
+                        <li>LinkedIn professional networking</li>
+                    </ul>
+                </div>
+                <div style="background: #f8f9fa; padding: 1rem; border-radius: 5px; border-left: 4px solid #ffc107;">
+                    <h4>Week 3: Community Engagement</h4>
+                    <p>Build relationships with Tier 1C prospects</p>
+                    <ul>
+                        <li>Local event participation</li>
+                        <li>Referral program launch</li>
+                        <li>Social media testimonials</li>
+                    </ul>
+                </div>
+                <div style="background: #f8f9fa; padding: 1rem; border-radius: 5px; border-left: 4px solid #17a2b8;">
+                    <h4>Week 4: Follow-up & Retention</h4>
+                    <p>Nurture existing relationships</p>
+                    <ul>
+                        <li>Previous client check-ins</li>
+                        <li>Seasonal alteration reminders</li>
+                        <li>Customer satisfaction surveys</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- P.U.R.E.S Scoring Modal -->
+    <div id="scoringModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeScoringModal()">&times;</span>
+            <h3>P.U.R.E.S. Client Scoring System</h3>
+            <form id="scoringForm">
+                <div class="form-group">
+                    <label>Client Name:</label>
+                    <input type="text" id="clientName" required>
+                </div>
+                <div class="form-group">
+                    <label>Client Email:</label>
+                    <input type="email" id="clientEmail" required>
+                </div>
+                <div class="form-group">
+                    <label>Client Phone:</label>
+                    <input type="tel" id="clientPhone" required>
+                </div>
+                <div class="form-group">
+                    <label>Client Address:</label>
+                    <input type="text" id="clientAddress" required>
+                </div>
+                
+                <h4>Score each criteria from 1-5:</h4>
+                <div class="scoring-grid">
+                    <div class="score-item">
+                        <label>Profitability</label>
+                        <input type="range" min="1" max="5" value="3" id="profitability" oninput="updateScore()">
+                        <span id="profitabilityValue">3</span>
+                    </div>
+                    <div class="score-item">
+                        <label>Urgency</label>
+                        <input type="range" min="1" max="5" value="3" id="urgency" oninput="updateScore()">
+                        <span id="urgencyValue">3</span>
+                    </div>
+                    <div class="score-item">
+                        <label>Reachability</label>
+                        <input type="range" min="1" max="5" value="3" id="reachability" oninput="updateScore()">
+                        <span id="reachabilityValue">3</span>
+                    </div>
+                    <div class="score-item">
+                        <label>Engagement</label>
+                        <input type="range" min="1" max="5" value="3" id="engagement" oninput="updateScore()">
+                        <span id="engagementValue">3</span>
+                    </div>
+                    <div class="score-item">
+                        <label>Sustainability</label>
+                        <input type="range" min="1" max="5" value="3" id="sustainability" oninput="updateScore()">
+                        <span id="sustainabilityValue">3</span>
+                    </div>
+                </div>
+                
+                <div style="margin: 1rem 0;">
+                    <strong>Total P.U.R.E.S Score: <span id="totalScore">15</span>/25</strong>
+                    <br>
+                    <strong>Tier Level: <span id="tierLevel">1C</span></strong>
+                </div>
+                
+                <div class="form-group">
+                    <label>Service Need:</label>
+                    <select id="serviceNeed">
+                        <option value="Wedding">Wedding Alterations</option>
+                        <option value="Formal">Formal Wear</option>
+                        <option value="Casual">Casual Alterations</option>
+                        <option value="Repairs">Repairs</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>Estimated Value:</label>
+                    <input type="text" id="estimatedValue" placeholder="$150">
+                </div>
+                
+                <button type="submit" class="btn">Add Client</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Email Modal -->
+    <div id="emailModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeEmailModal()">&times;</span>
+            <h3>Send Email</h3>
+            <form id="emailForm">
+                <div class="form-group">
+                    <label>To:</label>
+                    <input type="email" id="emailTo" readonly>
+                </div>
+                <div class="form-group">
+                    <label>Subject:</label>
+                    <input type="text" id="emailSubject" value="Expert Alterations Services at Maria's - Established 1957">
+                </div>
+                <div class="form-group">
+                    <label>Message:</label>
+                    <textarea id="emailMessage" rows="10"></textarea>
+                </div>
+                <button type="submit" class="btn">Send Email</button>
+            </form>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports" class="footer-logo">
+        <p>&copy; 2026 Maria's Alterations - Powered by Higgins Reports S.A.L.E. System</p>
+    </footer>
+
+    <script>
+        // Sample client data for Maria's Alterations within 10 miles of Millbrae, CA
+        let clientData = [
+            // Tier 1A - Premium clients (4-5 scores on all criteria)
+            {name: "Sarah Chen", email: "sarah.chen@gmail.com", phone: "(650) 555-0123", address: "123 Maple St, Burlingame, CA", pures: 23, tier: "1A", service: "Wedding", value: "$800", status: "New", action: "Schedule consultation"},
+            {name: "Michael Rodriguez", email: "m.rodriguez@techcorp.com", phone: "(415) 555-0234", address: "456 Oak Ave, San Mateo, CA", pures: 24, tier: "1A", service: "Formal", value: "$1200", status: "Contacted", action: "Follow-up call"},
+            {name: "Jennifer Park", email: "jpark@lawfirm.com", phone: "(650) 555-0345", address: "789 Pine St, Foster City, CA", pures: 22, tier: "1A", service: "Wedding", value: "$950", status: "Quoted", action: "Contract review"},
+            {name: "David Thompson", email: "dthompson@finance.com", phone: "(650) 555-0456", address: "321 Cedar Ln, Belmont, CA", pures: 25, tier: "1A", service: "Formal", value: "$1500", status: "New", action: "Initial outreach"},
+            {name: "Maria Santos", email: "maria.santos@tech.com", phone: "(415) 555-0567", address: "654 Elm Dr, South San Francisco, CA", pures: 23, tier: "1A", service: "Wedding", value: "$1100", status: "Interested", action: "Schedule fitting"},
+            {name: "Robert Kim", email: "robert.kim@startup.com", phone: "(650) 555-0678", address: "987 Birch Way, San Bruno, CA", pures: 24, tier: "1A", service: "Formal", value: "$900", status: "New", action: "Send portfolio"},
+            {name: "Amanda Foster", email: "afoster@marketing.com", phone: "(650) 555-0789", address: "147 Aspen Ct, Redwood City, CA", pures: 22, tier: "1A", service: "Wedding", value: "$1300", status: "Consulting", action: "Prepare estimate"},
+            {name: "James Wilson", email: "jwilson@consulting.com", phone: "(415) 555-0890", address: "258 Willow St, Millbrae, CA", pures: 25, tier: "1A", service: "Formal", value: "$1400", status: "Negotiating", action: "Finalize contract"},
+            {name: "Lisa Chang", email: "lisa.chang@design.com", phone: "(650) 555-0901", address: "369 Spruce Ave, Burlingame, CA", pures: 23, tier: "1A", service: "Wedding", value: "$1050", status: "New", action: "Initial consultation"},
+            {name: "Steven Martinez", email: "smartinez@realestate.com", phone: "(650) 555-0012", address: "741 Magnolia Dr, San Mateo, CA", pures: 24, tier: "1A", service: "Formal", value: "$1250", status: "Interested", action: "Schedule appointment"},
+            {name: "Nicole Johnson", email: "njohnson@healthcare.org", phone: "(415) 555-0123", address: "852 Poplar Ln, Foster City, CA", pures: 22, tier: "1A", service: "Wedding", value: "$975", status: "New", action: "Send brochure"},
+            {name: "Kevin Lee", email: "klee@investment.com", phone: "(650) 555-0234", address: "963 Sycamore St, Belmont, CA", pures: 25, tier: "1A", service: "Formal", value: "$1350", status: "Quoted", action: "Follow-up meeting"},
+            {name: "Rachel Brown", email: "rbrown@nonprofit.org", phone: "(650) 555-0345", address: "159 Hickory Ave, South San Francisco, CA", pures: 23, tier: "1A", service: "Wedding", value: "$900", status: "Considering", action: "Address concerns"},
+            {name: "Daniel Garcia", email: "dgarcia@architecture.com", phone: "(415) 555-0456", address: "357 Walnut Way, San Bruno, CA", pures: 24, tier: "1A", service: "Formal", value: "$1150", status: "New", action: "Initial outreach"},
+            {name: "Stephanie Davis", email: "sdavis@publishing.com", phone: "(650) 555-0567", address: "468 Cherry Ct, Redwood City, CA", pures: 22, tier: "1A", service: "Wedding", value: "$1200", status: "Interested", action: "Schedule consultation"},
+            
+            // Tier 1B - High-Value clients (3-4 scores on most criteria)
+            {name: "Thomas Anderson", email: "tanderson@local.com", phone: "(650) 555-0678", address: "579 Beech Dr, Millbrae, CA", pures: 18, tier: "1B", service: "Formal", value: "$650", status: "New", action: "Initial contact"},
+            {name: "Patricia White", email: "pwhite@education.org", phone: "(415) 555-0789", address: "680 Fir St, Burlingame, CA", pures: 19, tier: "1B", service: "Casual", value: "$200", status: "Contacted", action: "Schedule appointment"},
+            {name: "Christopher Moore", email: "cmoore@retail.com", phone: "(650) 555-0890", address: "791 Redwood Ave, San Mateo, CA", pures: 17, tier: "1B", service: "Repairs", value: "$150", status: "New", action: "Send information"},
+            {name: "Michelle Taylor", email: "mtaylor@media.com", phone: "(650) 555-0901", address: "802 Sequoia Ln, Foster City, CA", pures: 20, tier: "1B", service: "Formal", value: "$450", status: "Interested", action: "Provide quote"},
+            {name: "Brian Clark", email: "bclark@construction.com", phone: "(415) 555-0012", address: "913 Laurel Way, Belmont, CA", pures: 18, tier: "1B", service: "Casual", value: "$300", status: "New", action: "Initial outreach"},
+            {name: "Carol Lewis", email: "clewis@insurance.com", phone: "(650) 555-0123", address: "024 Myrtle St, South San Francisco, CA", pures: 19, tier: "1B", service: "Formal", value: "$550", status: "Consulting", action: "Follow-up call"},
+            {name: "Matthew Hall", email: "mhall@government.gov", phone: "(650) 555-0234", address: "135 Cypress Dr, San Bruno, CA", pures: 17, tier: "1B", service: "Repairs", value: "$180", status: "New", action: "Schedule visit"},
+            {name: "Diana Young", email: "dyoung@hospitality.com", phone: "(415) 555-0345", address: "246 Juniper Ave, Redwood City, CA", pures: 20, tier: "1B", service: "Casual", value: "$250", status: "Quoted", action: "Address questions"},
+            {name: "Gregory King", email: "gking@transportation.com", phone: "(650) 555-0456", address: "357 Dogwood Ct, Millbrae, CA", pures: 18, tier: "1B", service: "Formal", value: "$600", status: "New", action: "Send portfolio"},
+            {name: "Helen Wright", email: "hwright@library.org", phone: "(650) 555-0567", address: "468 Hawthorn Ln, Burlingame, CA", pures: 19, tier: "1B", service: "Casual", value: "$220", status: "Interested", action: "Schedule fitting"},
+            {name: "Paul Green", email: "pgreen@utilities.com", phone: "(415) 555-0678", address: "579 Sumac Way, San Mateo, CA", pures: 17, tier: "1B", service: "Repairs", value: "$160", status: "New", action: "Initial contact"},
+            {name: "Susan Adams", email: "sadams@banking.com", phone: "(650) 555-0789", address: "680 Yew St, Foster City, CA", pures: 20, tier: "1B", service: "Formal", value: "$700", status: "Considering", action: "Follow-up email"},
+            {name: "William Baker", email: "wbaker@manufacturing.com", phone: "(650) 555-0890", address: "791 Boxwood Dr, Belmont, CA", pures: 18, tier: "1B", service: "Casual", value: "$280", status: "New", action: "Send brochure"},
+            {name: "Donna Campbell", email: "dcampbell@wellness.com", phone: "(415) 555-0901", address: "802 Linden Ave, South San Francisco, CA", pures: 19, tier: "1B", service: "Formal", value: "$520", status: "Quoted", action: "Schedule meeting"},
+            {name: "Edward Turner", email: "eturner@logistics.com", phone: "(650) 555-0012", address: "913 Mulberry Ln, San Bruno, CA", pures: 17, tier: "1B", service: "Repairs", value: "$140", status: "New", action: "Initial outreach"},
+            {name: "Karen Phillips", email: "kphillips@dental.com", phone: "(650) 555-0123", address: "024 Basswood Way, Redwood City, CA", pures: 20, tier: "1B", service: "Casual", value: "$240", status: "Interested", action: "Provide information"},
+            {name: "Ryan Collins", email: "rcollins@fitness.com", phone: "(415) 555-0234", address: "135 Pecan Ct, Millbrae, CA", pures: 18, tier: "1B", service: "Formal", value: "$480", status: "New", action: "Schedule consultation"},
+            {name: "Laura Stewart", email: "lstewart@veterinary.com", phone: "(650) 555-0345", address: "246 Chestnut Dr, Burlingame, CA", pures: 19, tier: "1B", service: "Casual", value: "$260", status: "Contacted", action: "Follow-up call"},
+            {name: "Frank Morris", email: "fmorris@printing.com", phone: "(650) 555-0456", address: "357 Buckeye St, San Mateo, CA", pures: 17, tier: "1B", service: "Repairs", value: "$170", status: "New", action: "Send estimate"},
+            {name: "Christine Rogers", email: "crogers@catering.com", phone: "(415) 555-0567", address: "468 Ironwood Ave, Foster City, CA", pures: 20, tier: "1B", service: "Formal", value: "$580", status: "Negotiating", action: "Finalize details"},
+            
+            // Tier 1C - Qualified clients (3+ scores on criteria)
+            {name: "Anthony Reed", email: "areed@local.net", phone: "(650) 555-0678", address: "579 Cottonwood Ln, Belmont, CA", pures: 15, tier: "1C", service: "Casual", value: "$120", status: "New", action: "Initial contact"},
+            {name: "Deborah Cook", email: "dcook@community.org", phone: "(650) 555-0789", address: "680 Ginkgo Way, South San Francisco, CA", pures: 16, tier: "1C", service: "Repairs", value: "$90", status: "Interested", action: "Schedule visit"},
+            {name: "Mark Bell", email: "mbell@smallbiz.com", phone: "(415) 555-0890", address: "791 Catalpa St, San Bruno, CA", pures: 14, tier: "1C", service: "Casual", value: "$150", status: "New", action: "Send information"},
+            {name: "Barbara Murphy", email: "bmurphy@senior.org", phone: "(650) 555-0901", address: "802 Locust Dr, Redwood City, CA", pures: 15, tier: "1C", service: "Repairs", value: "$110", status: "Quoted", action: "Follow-up call"},
+            {name: "Andrew Bailey", email: "abailey@freelance.com", phone: "(650) 555-0012", address: "913 Tulip Ave, Millbrae, CA", pures: 16, tier: "1C", service: "Casual", value: "$130", status: "New", action: "Initial outreach"},
+            {name: "Sandra Rivera", email: "srivera@local.com", phone: "(415) 555-0123", address: "024 Holly Ct, Burlingame, CA", pures: 14, tier: "1C", service: "Repairs", value: "$95", status: "Considering", action: "Address concerns"},
+            {name: "Joseph Cooper", email: "jcooper@handyman.com", phone: "(650) 555-0234", address: "135 Maple Ln, San Mateo, CA", pures: 15, tier: "1C", service: "Casual", value: "$140", status: "New", action: "Send brochure"},
+            {name: "Margaret Richardson", email: "mrichardson@crafts.com", phone: "(650) 555-0345", address: "246 Violet Way, Foster City, CA", pures: 16, tier: "1C", service: "Repairs", value: "$105", status: "Interested", action: "Provide quote"},
+            {name: "Charles Cox", email: "ccox@garden.com", phone: "(415) 555-0456", address: "357 Rose St, Belmont, CA", pures: 14, tier: "1C", service: "Casual", value: "$160", status: "New", action: "Schedule appointment"},
+            {name: "Dorothy Ward", email: "dward@book.club", phone: "(650) 555-0567", address: "468 Daisy Dr, South San Francisco, CA", pures: 15, tier: "1C", service: "Repairs", value: "$115", status: "Contacted", action: "Follow-up email"},
+            {name: "Richard Torres", email: "rtorres@music.com", phone: "(650) 555-0678", address: "579 Lily Ave, San Bruno, CA", pures: 16, tier: "1C", service: "Casual", value: "$125", status: "New", action: "Initial contact"},
+            {name: "Linda Peterson", email: "lpeterson@art.org", phone: "(415) 555-0789", address: "680 Iris Ct, Redwood City, CA", pures: 14, tier: "1C", service: "Repairs", value: "$100", status: "Quoted", action: "Schedule visit"},
+            {name: "Kenneth Gray", email: "kgray@hobby.com", phone: "(650) 555-0890", address: "791 Peony Ln, Millbrae, CA", pures: 15, tier: "1C", service: "Casual", value: "$145", status: "New", action: "Send information"},
+            {name: "Nancy Ramirez", email: "nramirez@volunteer.org", phone: "(650) 555-0901", address: "802 Sunflower Way, Burlingame, CA", pures: 16, tier: "1C", service: "Repairs", value: "$120", status: "Interested", action: "Provide estimate"},
+            {name: "Ronald James", email: "rjames@retired.net", phone: "(415) 555-0012", address: "913 Carnation St, San Mateo, CA", pures: 14, tier: "1C", service: "Casual", value: "$135", status: "New", action: "Initial outreach"}
+        ];
+
+        let filteredData = [...clientData];
+
+        function populateTable() {
+            const tbody = document.getElementById('clientTableBody');
+            tbody.innerHTML = '';
+            
+            filteredData.forEach((client, index) => {
+                const row = document.createElement('tr');
+                row.className = `tier-${client.tier.toLowerCase()}`;
+                
+                row.innerHTML = `
+                    <td>${client.name}</td>
+                    <td>${client.email}</td>
+                    <td>${client.phone}</td>
+                    <td>${client.address}</td>
+                    <td>${client.pures}/25</td>
+                    <td>${client.tier}</td>
+                    <td>${client.service}</td>
+                    <td>${client.value}</td>
+                    <td>
+                        <button class="btn contact-btn" onclick="sendEmail('${client.email}', '${client.name}', '${client.service}')">Email</button>
+                        <button class="btn contact-btn" onclick="makeCall('${client.phone}')">Call</button>
+                    </td>
+                    <td>${client.action}</td>
+                `;
+                
+                tbody.appendChild(row);
+            });
+            
+            updateStats();
+        }
+
+        function updateStats() {
+            const tier1a = filteredData.filter(c => c.tier === '1A').length;
+            const tier1b = filteredData.filter(c => c.tier === '1B').length;
+            const tier1c = filteredData.filter(c => c.tier === '1C').length;
+            
+            document.getElementById('totalProspects').textContent = filteredData.length;
+            document.getElementById('tier1a').textContent = tier1a;
+            document.getElementById('tier1b').textContent = tier1b;
+            document.getElementById('tier1c').textContent = tier1c;
+        }
+
+        function filterTable() {
+            const searchTerm = document.getElementById('searchBox').value.toLowerCase();
+            const tierFilter = document.getElementById('tierFilter').value;
+            const serviceFilter = document.getElementById('serviceFilter').value;
+            
+            filteredData = clientData.filter(client => {
+                const matchesSearch = client.name.toLowerCase().includes(searchTerm) ||
+                                    client.email.toLowerCase().includes(searchTerm) ||
+                                    client.address.toLowerCase().includes(searchTerm);
+                const matchesTier = !tierFilter || client.tier === tierFilter;
+                const matchesService = !serviceFilter || client.service === serviceFilter;
+                
+                return matchesSearch && matchesTier && matchesService;
+            });
+            
+            populateTable();
+        }
+
+        function clearFilters() {
+            document.getElementById('searchBox').value = '';
+            document.getElementById('tierFilter').value = '';
+            document.getElementById('serviceFilter').value = '';
+            filteredData = [...clientData];
+            populateTable();
+        }
+
+        function sortTable(column) {
+            const table = document.getElementById('clientTable');
+            const rows = Array.from(table.querySelectorAll('tbody tr'));
+            
+            const sortedRows = rows.sort((a, b) => {
+                const aVal = a.children[column].textContent.trim();
+                const bVal = b.children[column].textContent.trim();
+                
+                if (column === 4 || column === 7) { // Numeric columns
+                    return parseFloat(aVal) - parseFloat(bVal);
+                }
+                
+                return aVal.localeCompare(bVal);
+            });
+            
+            const tbody = table.querySelector('tbody');
+            tbody.innerHTML = '';
+            sortedRows.forEach(row => tbody.appendChild(row));
+        }
+
+        function sendEmail(email, name, service) {
+            document.getElementById('emailTo').value = email;
+            
+            let message = `Dear ${name},
+
+I hope this message finds you well. My name is Maria, and I'm reaching out from Maria's Alterations Shop, a trusted tailoring business serving the Bay Area since 1957.
+
+I noticed you might be interested in ${service.toLowerCase()} services, and I wanted to personally invite you to experience our traditional craftsmanship and outstanding workmanship.
+
+At Maria's Alterations, we specialize in:
+• Wedding Gown Alterations - Making your special day perfect with precise, beautiful alterations
+• Tuxedo and Formal Wear - Professional tailoring for business and special occasions  
+• Special Occasion Dresses - Expert alterations for all your important events
+• Everyday Alterations - Jeans, pants, skirts, and suit modifications
+• Expert Repairs - Buttons, zips, rips, and garment restoration
+
+What sets us apart:
+✓ Nearly 70 years of experience and reputation
+✓ Traditional craftsmanship techniques passed down through generations
+✓ Personalized attention to every detail
+✓ Convenient location at 230 Broadway, Millbrae
+✓ Competitive pricing with quality guarantee
+
+I would love to schedule a consultation to discuss how we can help with your alteration needs. Please call us at (650) 697-2571 or reply to this email to set up an appointment.
+
+We look forward to serving you with the same dedication and quality that has made us a trusted name in alterations for generations.
+
+Warm regards,
+
+Maria Fernandez
+Owner, Maria's Alterations Shop
+Est. 1957 - Traditional Craftsmanship, Tailored to Perfection
+
+230 Broadway, Millbrae, CA 94030
+Phone: (650) 697-2571
+Email: mariaalterations@gmail.com
+
+P.S. Mention this email and receive 10% off your first alteration service!`;
+
+            document.getElementById('emailMessage').value = message;
+            document.getElementById('emailModal').style.display = 'block';
+        }
+
+        function makeCall(phone) {
+            window.location.href = `tel:${phone}`;
+        }
+
+        function openScoringModal() {
+            document.getElementById('scoringModal').style.display = 'block';
+        }
+
+        function closeScoringModal() {
+            document.getElementById('scoringModal').style.display = 'none';
+        }
+
+        function closeEmailModal() {
+            document.getElementById('emailModal').style.display = 'none';
+        }
+
+        function updateScore() {
+            const scores = ['profitability', 'urgency', 'reachability', 'engagement', 'sustainability'];
+            let total = 0;
+            
+            scores.forEach(score => {
+                const value = document.getElementById(score).value;
+                document.getElementById(score + 'Value').textContent = value;
+                total += parseInt(value);
+            });
+            
+            document.getElementById('totalScore').textContent = total;
+            
+            let tier = '1C';
+            if (total >= 20) tier = '1A';
+            else if (total >= 17) tier = '1B';
+            
+            document.getElementById('tierLevel').textContent = tier;
+        }
+
+        function exportData() {
+            const csv = [
+                ['Name', 'Email', 'Phone', 'Address', 'PURES Score', 'Tier', 'Service', 'Value', 'Status', 'Next Action'],
+                ...filteredData.map(client => [
+                    client.name, client.email, client.phone, client.address,
+                    client.pures, client.tier, client.service, client.value,
+                    client.status, client.action
+                ])
+            ].map(row => row.join(',')).join('\n');
+            
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'marias-alterations-clients.csv';
+            a.click();
+        }
+
+        function openMarketingPlan() {
+            alert('Marketing Plan:\n\n1. Wedding Season Campaign (Week 1)\n2. Formal Wear Outreach (Week 2)\n3. Community Engagement (Week 3)\n4. Follow-up & Retention (Week 4)\n\nFull details visible in the Marketing Schedule section below.');
+        }
+
+        // Event listeners
+        document.getElementById('scoringForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const newClient = {
+                name: document.getElementById('clientName').value,
+                email: document.getElementById('clientEmail').value,
+                phone: document.getElementById('clientPhone').value,
+                address: document.getElementById('clientAddress').value,
+                pures: parseInt(document.getElementById('totalScore').textContent),
+                tier: document.getElementById('tierLevel').textContent,
+                service: document.getElementById('serviceNeed').value,
+                value: document.getElementById('estimatedValue').value,
+                status: 'New',
+                action: 'Initial outreach'
+            };
+            
+            clientData.push(newClient);
+            filteredData = [...clientData];
+            populateTable();
+            closeScoringModal();
+            
+            // Reset form
+            document.getElementById('scoringForm').reset();
+            updateScore();
+        });
+
+        document.getElementById('emailForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('emailTo').value;
+            const subject = document.getElementById('emailSubject').value;
+            const message = document.getElementById('emailMessage').value;
+            
+            // Create mailto link
+            const mailtoLink = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(message)}`;
+            window.location.href = mailtoLink;
+            
+            closeEmailModal();
+        });
+
+        // Initialize the table
+        populateTable();
+        
+        // Close modals when clicking outside
+        window.onclick = function(event) {
+            const scoringModal = document.getElementById('scoringModal');
+            const emailModal = document.getElementById('emailModal');
+            
+            if (event.target === scoringModal) {
+                scoringModal.style.display = 'none';
+            }
+            if (event.target === emailModal) {
+                emailModal.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>

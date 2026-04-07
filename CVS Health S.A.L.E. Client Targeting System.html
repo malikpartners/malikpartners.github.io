@@ -1,0 +1,1640 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CVS Health S.A.L.E. Client Targeting System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #000000;
+            color: #ffffff;
+            line-height: 1.6;
+        }
+
+        .header {
+            background-color: #CF2030;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 5px rgba(207, 32, 48, 0.3);
+        }
+
+        .logo {
+            height: 60px;
+        }
+
+        .header-info {
+            text-align: right;
+            color: white;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .module {
+            background-color: #1a1a1a;
+            margin: 20px 0;
+            padding: 25px;
+            border-radius: 10px;
+            border: 2px solid #CF2030;
+        }
+
+        .module h2 {
+            color: #CF2030;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        .search-controls {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .search-controls input, .search-controls select {
+            padding: 10px;
+            border: 1px solid #CF2030;
+            border-radius: 5px;
+            background-color: #2a2a2a;
+            color: white;
+            min-width: 150px;
+        }
+
+        .search-controls input:focus, .search-controls select:focus {
+            outline: none;
+            border-color: #ff4757;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin-top: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #2a2a2a;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #444;
+        }
+
+        th {
+            background-color: #CF2030;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            position: relative;
+        }
+
+        th:hover {
+            background-color: #b01e2c;
+        }
+
+        tr:hover {
+            background-color: #3a3a3a;
+        }
+
+        .tier-1a { background-color: #0f4c3a; }
+        .tier-1b { background-color: #4a4a0f; }
+        .tier-1c { background-color: #0f2a4c; }
+
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            margin: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background-color: #CF2030;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #b01e2c;
+        }
+
+        .btn-secondary {
+            background-color: #666;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: #777;
+        }
+
+        .scores-form {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .score-item {
+            background-color: #2a2a2a;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #444;
+        }
+
+        .score-item label {
+            display: block;
+            margin-bottom: 10px;
+            color: #CF2030;
+            font-weight: bold;
+        }
+
+        .score-range {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .score-range input[type="range"] {
+            flex: 1;
+            accent-color: #CF2030;
+        }
+
+        .footer {
+            background-color: #1a1a1a;
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+        }
+
+        .footer img {
+            height: 30px;
+            opacity: 0.7;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .stat-card {
+            background-color: #2a2a2a;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid #444;
+        }
+
+        .stat-number {
+            font-size: 24px;
+            font-weight: bold;
+            color: #CF2030;
+        }
+
+        .export-controls {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+        }
+
+        .modal-content {
+            background-color: #1a1a1a;
+            margin: 5% auto;
+            padding: 30px;
+            border: 2px solid #CF2030;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 600px;
+            color: white;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: #CF2030;
+        }
+
+        .email-template {
+            background-color: #2a2a2a;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+
+        .tabs {
+            display: flex;
+            background-color: #2a2a2a;
+            border-radius: 8px 8px 0 0;
+        }
+
+        .tab {
+            padding: 15px 25px;
+            cursor: pointer;
+            border: none;
+            background-color: #2a2a2a;
+            color: #ccc;
+            border-bottom: 2px solid transparent;
+        }
+
+        .tab.active {
+            color: white;
+            border-bottom: 2px solid #CF2030;
+        }
+
+        .tab-content {
+            background-color: #2a2a2a;
+            padding: 25px;
+            border-radius: 0 0 8px 8px;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports" class="logo">
+        <div class="header-info">
+            <h3>CVS Health S.A.L.E. Client Targeting System</h3>
+            <p>District Manager: Thomas O'Neill | Menlo Park, CA</p>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- S.A.L.E. Performance Dashboard -->
+        <div class="module">
+            <h2>🎯 S.A.L.E. Performance Dashboard</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number" id="totalClients">50</div>
+                    <div>Total Prospects</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="tier1aCount">15</div>
+                    <div>Tier 1A (Premium)</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="tier1bCount">20</div>
+                    <div>Tier 1B (High-Value)</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="tier1cCount">15</div>
+                    <div>Tier 1C (Qualified)</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- S.O.U.R.C.I.N.G Module -->
+        <div class="module">
+            <h2>📊 S.O.U.R.C.I.N.G - P.U.R.E.S. Client Scoring System</h2>
+            
+            <div class="tabs">
+                <button class="tab active" onclick="switchTab('scoring')">P.U.R.E.S. Scoring</button>
+                <button class="tab" onclick="switchTab('assessment')">Assessment Tools</button>
+                <button class="tab" onclick="switchTab('listening')">Feedback Tracking</button>
+                <button class="tab" onclick="switchTab('empowerment')">Referral Strategy</button>
+            </div>
+
+            <div id="scoring-content" class="tab-content">
+                <div class="scores-form">
+                    <div class="score-item">
+                        <label>Profitability (1-5)</label>
+                        <div class="score-range">
+                            <span>1</span>
+                            <input type="range" id="profitability" min="1" max="5" value="3">
+                            <span>5</span>
+                            <span id="profitabilityValue">3</span>
+                        </div>
+                        <small>Annual revenue threshold and budget capacity</small>
+                    </div>
+                    
+                    <div class="score-item">
+                        <label>Urgency (1-5)</label>
+                        <div class="score-range">
+                            <span>1</span>
+                            <input type="range" id="urgency" min="1" max="5" value="3">
+                            <span>5</span>
+                            <span id="urgencyValue">3</span>
+                        </div>
+                        <small>Active pain points requiring immediate solutions</small>
+                    </div>
+                    
+                    <div class="score-item">
+                        <label>Reachability (1-5)</label>
+                        <div class="score-range">
+                            <span>1</span>
+                            <input type="range" id="reachability" min="1" max="5" value="3">
+                            <span>5</span>
+                            <span id="reachabilityValue">3</span>
+                        </div>
+                        <small>Accessible decision makers with clear contact paths</small>
+                    </div>
+                    
+                    <div class="score-item">
+                        <label>Engagement (1-5)</label>
+                        <div class="score-range">
+                            <span>1</span>
+                            <input type="range" id="engagement" min="1" max="5" value="3">
+                            <span>5</span>
+                            <span id="engagementValue">3</span>
+                        </div>
+                        <small>Openness to innovation and partnerships</small>
+                    </div>
+                    
+                    <div class="score-item">
+                        <label>Sustainability (1-5)</label>
+                        <div class="score-range">
+                            <span>1</span>
+                            <input type="range" id="sustainability" min="1" max="5" value="3">
+                            <span>5</span>
+                            <span id="sustainabilityValue">3</span>
+                        </div>
+                        <small>Long-term partnership potential with growth trajectory</small>
+                    </div>
+                    
+                    <div class="score-item">
+                        <label>Overall P.U.R.E.S. Score</label>
+                        <div class="stat-number" id="overallScore">3.0</div>
+                        <div id="tierLevel">Tier 1C</div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="assessment-content" class="tab-content hidden">
+                <h3>Buying Pattern Analysis</h3>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number">12</div>
+                        <div>Analytical Buyers</div>
+                        <small>Require detailed ROI analysis</small>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">15</div>
+                        <div>Relationship Buyers</div>
+                        <small>Value trust & partnerships</small>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">13</div>
+                        <div>Efficiency Buyers</div>
+                        <small>Focus on time-saving solutions</small>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">10</div>
+                        <div>Innovation Buyers</div>
+                        <small>Seek cutting-edge solutions</small>
+                    </div>
+                </div>
+            </div>
+
+            <div id="listening-content" class="tab-content hidden">
+                <h3>Feedback Integration System</h3>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number">85%</div>
+                        <div>Pre-sale Feedback</div>
+                        <small>Collection Rate</small>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">92%</div>
+                        <div>Customer Satisfaction</div>
+                        <small>During-sale Tracking</small>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">78%</div>
+                        <div>Post-sale Follow-up</div>
+                        <small>Response Rate</small>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">4.2</div>
+                        <div>Average Rating</div>
+                        <small>Customer Experience</small>
+                    </div>
+                </div>
+            </div>
+
+            <div id="empowerment-content" class="tab-content hidden">
+                <h3>Referral Strategy Management</h3>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number">23</div>
+                        <div>Success Stories</div>
+                        <small>Documented Cases</small>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">47</div>
+                        <div>Active Referrals</div>
+                        <small>Current Pipeline</small>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">$12.5K</div>
+                        <div>Referral Value</div>
+                        <small>Monthly Average</small>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">15</div>
+                        <div>Advocacy Partners</div>
+                        <small>Active Promoters</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Client Database -->
+        <div class="module">
+            <h2>👥 Interactive Client Database - Menlo Park Area (10-mile radius)</h2>
+            
+            <div class="search-controls">
+                <input type="text" id="searchInput" placeholder="Search clients..." onkeyup="filterTable()">
+                <select id="tierFilter" onchange="filterTable()">
+                    <option value="">All Tiers</option>
+                    <option value="1A">Tier 1A (Premium)</option>
+                    <option value="1B">Tier 1B (High-Value)</option>
+                    <option value="1C">Tier 1C (Qualified)</option>
+                </select>
+                <select id="industryFilter" onchange="filterTable()">
+                    <option value="">All Industries</option>
+                    <option value="Healthcare">Healthcare</option>
+                    <option value="Technology">Technology</option>
+                    <option value="Retail">Retail</option>
+                    <option value="Finance">Finance</option>
+                    <option value="Education">Education</option>
+                </select>
+                <select id="statusFilter" onchange="filterTable()">
+                    <option value="">All Status</option>
+                    <option value="New">New</option>
+                    <option value="Contacted">Contacted</option>
+                    <option value="Follow-up">Follow-up</option>
+                    <option value="Converted">Converted</option>
+                </select>
+            </div>
+
+            <div class="export-controls">
+                <button class="btn btn-secondary" onclick="exportToCSV()">📊 Export CSV</button>
+                <button class="btn btn-secondary" onclick="exportToPDF()">📄 Export PDF</button>
+                <button class="btn btn-primary" onclick="generateMarketingPlan()">🚀 Generate Marketing Plan</button>
+            </div>
+
+            <div class="table-container">
+                <table id="clientTable">
+                    <thead>
+                        <tr>
+                            <th onclick="sortTable(0)">Client Name</th>
+                            <th onclick="sortTable(1)">Email</th>
+                            <th onclick="sortTable(2)">Phone</th>
+                            <th onclick="sortTable(3)">Address</th>
+                            <th onclick="sortTable(4)">P.U.R.E.S. Score</th>
+                            <th onclick="sortTable(5)">Tier Level</th>
+                            <th onclick="sortTable(6)">Industry</th>
+                            <th onclick="sortTable(7)">Revenue Est.</th>
+                            <th onclick="sortTable(8)">Contact Status</th>
+                            <th onclick="sortTable(9)">Last Contact</th>
+                            <th onclick="sortTable(10)">Next Action</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="clientTableBody">
+                        <!-- Client data will be populated here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Email Modal -->
+    <div id="emailModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>📧 Email Campaign</h2>
+            <div id="emailContent" class="email-template">
+                <!-- Email content will be populated here -->
+            </div>
+            <div style="margin-top: 20px;">
+                <button class="btn btn-primary" onclick="sendEmail()">Send Email</button>
+                <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports">
+        <p>&copy; 2024 Higgins Reports | CVS Health Client Targeting System</p>
+    </footer>
+
+    <script>
+        // Sample client data for Menlo Park, CA area
+        const clientData = [
+            {
+                name: "Dr. Sarah Chen",
+                email: "s.chen@stanfordhealth.org",
+                phone: "(650) 723-4000",
+                address: "300 Pasteur Dr, Stanford, CA 94305",
+                puresScore: 4.8,
+                tier: "1A",
+                industry: "Healthcare",
+                revenue: "$2.5M",
+                status: "New",
+                lastContact: "2024-01-15",
+                nextAction: "Schedule consultation",
+                buyingProfile: "Analytical",
+                distance: "3.2 miles"
+            },
+            {
+                name: "Michael Rodriguez",
+                email: "mrodriguez@techcorp.com",
+                phone: "(415) 555-0123",
+                address: "1 Hacker Way, Menlo Park, CA 94025",
+                puresScore: 4.2,
+                tier: "1A",
+                industry: "Technology",
+                revenue: "$5.8M",
+                status: "Contacted",
+                lastContact: "2024-01-20",
+                nextAction: "Follow-up meeting",
+                buyingProfile: "Innovation",
+                distance: "1.8 miles"
+            },
+            {
+                name: "Jennifer Walsh",
+                email: "jwalsh@wellness360.com",
+                phone: "(650) 555-0987",
+                address: "2750 Sand Hill Rd, Menlo Park, CA 94025",
+                puresScore: 4.5,
+                tier: "1A",
+                industry: "Healthcare",
+                revenue: "$1.2M",
+                status: "Follow-up",
+                lastContact: "2024-01-18",
+                nextAction: "Product demo",
+                buyingProfile: "Relationship",
+                distance: "2.1 miles"
+            },
+            {
+                name: "David Kim",
+                email: "dkim@peninsulamedical.com",
+                phone: "(650) 555-0456",
+                address: "1501 Trousdale Dr, Burlingame, CA 94010",
+                puresScore: 3.9,
+                tier: "1B",
+                industry: "Healthcare",
+                revenue: "$900K",
+                status: "New",
+                lastContact: "",
+                nextAction: "Initial contact",
+                buyingProfile: "Efficiency",
+                distance: "6.7 miles"
+            },
+            {
+                name: "Lisa Thompson",
+                email: "lthompson@baysideretail.com",
+                phone: "(415) 555-0789",
+                address: "1120 Industrial Rd, San Carlos, CA 94070",
+                puresScore: 3.6,
+                tier: "1B",
+                industry: "Retail",
+                revenue: "$750K",
+                status: "Contacted",
+                lastContact: "2024-01-22",
+                nextAction: "Proposal review",
+                buyingProfile: "Efficiency",
+                distance: "8.9 miles"
+            },
+            {
+                name: "Robert Chang",
+                email: "rchang@innovativetech.com",
+                phone: "(650) 555-0234",
+                address: "3000 Sand Hill Rd, Menlo Park, CA 94025",
+                puresScore: 4.1,
+                tier: "1A",
+                industry: "Technology",
+                revenue: "$3.2M",
+                status: "New",
+                lastContact: "",
+                nextAction: "Research needs",
+                buyingProfile: "Innovation",
+                distance: "1.5 miles"
+            },
+            {
+                name: "Amanda Foster",
+                email: "afoster@healthcaresolutions.net",
+                phone: "(650) 555-0567",
+                address: "701 Welch Rd, Palo Alto, CA 94304",
+                puresScore: 3.8,
+                tier: "1B",
+                industry: "Healthcare",
+                revenue: "$1.1M",
+                status: "Follow-up",
+                lastContact: "2024-01-19",
+                nextAction: "Contract negotiation",
+                buyingProfile: "Analytical",
+                distance: "4.3 miles"
+            },
+            {
+                name: "James Wilson",
+                email: "jwilson@financialservices.com",
+                phone: "(415) 555-0345",
+                address: "100 Hamilton Ave, Palo Alto, CA 94301",
+                puresScore: 3.4,
+                tier: "1C",
+                industry: "Finance",
+                revenue: "$650K",
+                status: "New",
+                lastContact: "",
+                nextAction: "Qualification call",
+                buyingProfile: "Analytical",
+                distance: "5.8 miles"
+            },
+            {
+                name: "Maria Gonzalez",
+                email: "mgonzalez@educationplus.org",
+                phone: "(650) 555-0678",
+                address: "485 Lasuen Mall, Stanford, CA 94305",
+                puresScore: 3.2,
+                tier: "1C",
+                industry: "Education",
+                revenue: "$400K",
+                status: "Contacted",
+                lastContact: "2024-01-21",
+                nextAction: "Budget discussion",
+                buyingProfile: "Relationship",
+                distance: "3.8 miles"
+            },
+            {
+                name: "Steven Lee",
+                email: "slee@premiumhealth.com",
+                phone: "(650) 555-0890",
+                address: "1265 Welch Rd, Stanford, CA 94305",
+                puresScore: 4.0,
+                tier: "1B",
+                industry: "Healthcare",
+                revenue: "$1.8M",
+                status: "Converted",
+                lastContact: "2024-01-23",
+                nextAction: "Expansion opportunity",
+                buyingProfile: "Relationship",
+                distance: "3.1 miles"
+            },
+            // Additional 40 prospects...
+            {
+                name: "Karen Davis",
+                email: "kdavis@techstartup.io",
+                phone: "(415) 555-0123",
+                address: "123 University Ave, Palo Alto, CA 94301",
+                puresScore: 3.7,
+                tier: "1B",
+                industry: "Technology",
+                revenue: "$850K",
+                status: "New",
+                lastContact: "",
+                nextAction: "Research company",
+                buyingProfile: "Innovation",
+                distance: "6.2 miles"
+            },
+            {
+                name: "Paul Martinez",
+                email: "pmartinez@retailchain.com",
+                phone: "(650) 555-0234",
+                address: "456 El Camino Real, Redwood City, CA 94063",
+                puresScore: 3.5,
+                tier: "1C",
+                industry: "Retail",
+                revenue: "$720K",
+                status: "Contacted",
+                lastContact: "2024-01-20",
+                nextAction: "Site visit",
+                buyingProfile: "Efficiency",
+                distance: "7.5 miles"
+            },
+            {
+                name: "Dr. Emily Watson",
+                email: "ewatson@medicalpractice.com",
+                phone: "(650) 555-0345",
+                address: "789 Middlefield Rd, Atherton, CA 94027",
+                puresScore: 4.3,
+                tier: "1A",
+                industry: "Healthcare",
+                revenue: "$1.9M",
+                status: "Follow-up",
+                lastContact: "2024-01-17",
+                nextAction: "Partnership discussion",
+                buyingProfile: "Analytical",
+                distance: "4.7 miles"
+            },
+            {
+                name: "John Thompson",
+                email: "jthompson@financialgroup.net",
+                phone: "(415) 555-0456",
+                address: "321 Forest Ave, Palo Alto, CA 94301",
+                puresScore: 3.1,
+                tier: "1C",
+                industry: "Finance",
+                revenue: "$580K",
+                status: "New",
+                lastContact: "",
+                nextAction: "Cold outreach",
+                buyingProfile: "Efficiency",
+                distance: "5.9 miles"
+            },
+            {
+                name: "Sandra Lopez",
+                email: "slopez@healthwellness.org",
+                phone: "(650) 555-0567",
+                address: "555 Ravenswood Ave, Menlo Park, CA 94025",
+                puresScore: 3.9,
+                tier: "1B",
+                industry: "Healthcare",
+                revenue: "$1.3M",
+                status: "Contacted",
+                lastContact: "2024-01-19",
+                nextAction: "Proposal presentation",
+                buyingProfile: "Relationship",
+                distance: "2.3 miles"
+            },
+            {
+                name: "Mark Johnson",
+                email: "mjohnson@innovativeretail.com",
+                phone: "(650) 555-0678",
+                address: "777 Hamilton Ave, Menlo Park, CA 94025",
+                puresScore: 3.6,
+                tier: "1B",
+                industry: "Retail",
+                revenue: "$920K",
+                status: "Follow-up",
+                lastContact: "2024-01-16",
+                nextAction: "Contract review",
+                buyingProfile: "Efficiency",
+                distance: "1.9 miles"
+            },
+            {
+                name: "Dr. Rachel Green",
+                email: "rgreen@specialtycare.com",
+                phone: "(415) 555-0789",
+                address: "999 El Camino Real, Palo Alto, CA 94301",
+                puresScore: 4.4,
+                tier: "1A",
+                industry: "Healthcare",
+                revenue: "$2.1M",
+                status: "New",
+                lastContact: "",
+                nextAction: "Initial consultation",
+                buyingProfile: "Analytical",
+                distance: "5.4 miles"
+            },
+            {
+                name: "Tom Anderson",
+                email: "tanderson@educationcenter.edu",
+                phone: "(650) 555-0890",
+                address: "1111 Campus Dr, Stanford, CA 94305",
+                puresScore: 3.3,
+                tier: "1C",
+                industry: "Education",
+                revenue: "$480K",
+                status: "Contacted",
+                lastContact: "2024-01-18",
+                nextAction: "Budget approval",
+                buyingProfile: "Relationship",
+                distance: "3.6 miles"
+            },
+            {
+                name: "Christine Brown",
+                email: "cbrown@techsolutions.net",
+                phone: "(415) 555-0901",
+                address: "2222 Page Mill Rd, Palo Alto, CA 94304",
+                puresScore: 3.8,
+                tier: "1B",
+                industry: "Technology",
+                revenue: "$1.4M",
+                status: "Follow-up",
+                lastContact: "2024-01-22",
+                nextAction: "Technical demo",
+                buyingProfile: "Innovation",
+                distance: "6.8 miles"
+            },
+            {
+                name: "Daniel White",
+                email: "dwhite@retailmanagement.com",
+                phone: "(650) 555-0012",
+                address: "3333 Middlefield Rd, Menlo Park, CA 94025",
+                puresScore: 3.4,
+                tier: "1C",
+                industry: "Retail",
+                revenue: "$680K",
+                status: "New",
+                lastContact: "",
+                nextAction: "Market analysis",
+                buyingProfile: "Efficiency",
+                distance: "2.7 miles"
+            },
+            {
+                name: "Dr. Lisa Park",
+                email: "lpark@medicalgroup.org",
+                phone: "(650) 555-0123",
+                address: "4444 Alma St, Palo Alto, CA 94301",
+                puresScore: 4.1,
+                tier: "1A",
+                industry: "Healthcare",
+                revenue: "$1.7M",
+                status: "Contacted",
+                lastContact: "2024-01-21",
+                nextAction: "Partnership agreement",
+                buyingProfile: "Relationship",
+                distance: "5.1 miles"
+            },
+            {
+                name: "Brian Miller",
+                email: "bmiller@financialadvisors.net",
+                phone: "(415) 555-0234",
+                address: "5555 University Ave, Palo Alto, CA 94301",
+                puresScore: 3.2,
+                tier: "1C",
+                industry: "Finance",
+                revenue: "$530K",
+                status: "Follow-up",
+                lastContact: "2024-01-15",
+                nextAction: "ROI presentation",
+                buyingProfile: "Analytical",
+                distance: "6.3 miles"
+            },
+            {
+                name: "Ashley Taylor",
+                email: "ataylor@healthcarenetwork.com",
+                phone: "(650) 555-0345",
+                address: "6666 Sand Hill Rd, Menlo Park, CA 94025",
+                puresScore: 4.2,
+                tier: "1A",
+                industry: "Healthcare",
+                revenue: "$2.3M",
+                status: "New",
+                lastContact: "",
+                nextAction: "Needs assessment",
+                buyingProfile: "Analytical",
+                distance: "2.8 miles"
+            },
+            {
+                name: "Kevin Garcia",
+                email: "kgarcia@retailcorp.com",
+                phone: "(650) 555-0456",
+                address: "7777 El Camino Real, Redwood City, CA 94063",
+                puresScore: 3.5,
+                tier: "1C",
+                industry: "Retail",
+                revenue: "$740K",
+                status: "Contacted",
+                lastContact: "2024-01-20",
+                nextAction: "Store evaluation",
+                buyingProfile: "Efficiency",
+                distance: "8.1 miles"
+            },
+            {
+                name: "Nicole Clark",
+                email: "nclark@innovativehealth.org",
+                phone: "(415) 555-0567",
+                address: "8888 Willow Rd, Menlo Park, CA 94025",
+                puresScore: 3.9,
+                tier: "1B",
+                industry: "Healthcare",
+                revenue: "$1.1M",
+                status: "Follow-up",
+                lastContact: "2024-01-17",
+                nextAction: "Clinical trial discussion",
+                buyingProfile: "Innovation",
+                distance: "3.4 miles"
+            },
+            {
+                name: "Richard Lewis",
+                email: "rlewis@educationaltech.edu",
+                phone: "(650) 555-0678",
+                address: "9999 Campus Way, Stanford, CA 94305",
+                puresScore: 3.3,
+                tier: "1C",
+                industry: "Education",
+                revenue: "$420K",
+                status: "New",
+                lastContact: "",
+                nextAction: "Program overview",
+                buyingProfile: "Relationship",
+                distance: "4.2 miles"
+            },
+            {
+                name: "Melissa Wright",
+                email: "mwright@techventures.com",
+                phone: "(415) 555-0789",
+                address: "1010 Page Mill Rd, Palo Alto, CA 94304",
+                puresScore: 4.0,
+                tier: "1B",
+                industry: "Technology",
+                revenue: "$1.6M",
+                status: "Contacted",
+                lastContact: "2024-01-19",
+                nextAction: "Investment discussion",
+                buyingProfile: "Innovation",
+                distance: "7.2 miles"
+            },
+            {
+                name: "Anthony Hill",
+                email: "ahill@financialplanning.net",
+                phone: "(650) 555-0890",
+                address: "1212 Forest Ave, Palo Alto, CA 94301",
+                puresScore: 3.1,
+                tier: "1C",
+                industry: "Finance",
+                revenue: "$590K",
+                status: "Follow-up",
+                lastContact: "2024-01-16",
+                nextAction: "Client referral",
+                buyingProfile: "Efficiency",
+                distance: "6.5 miles"
+            },
+            {
+                name: "Dr. Jennifer Scott",
+                email: "jscott@premiumcare.com",
+                phone: "(650) 555-0901",
+                address: "1313 Middlefield Rd, Atherton, CA 94027",
+                puresScore: 4.5,
+                tier: "1A",
+                industry: "Healthcare",
+                revenue: "$2.8M",
+                status: "New",
+                lastContact: "",
+                nextAction: "Executive meeting",
+                buyingProfile: "Relationship",
+                distance: "5.3 miles"
+            },
+            {
+                name: "Gregory Adams",
+                email: "gadams@retailsolutions.org",
+                phone: "(415) 555-0012",
+                address: "1414 Hamilton Ave, Palo Alto, CA 94301",
+                puresScore: 3.6,
+                tier: "1B",
+                industry: "Retail",
+                revenue: "$830K",
+                status: "Contacted",
+                lastContact: "2024-01-18",
+                nextAction: "System integration",
+                buyingProfile: "Efficiency",
+                distance: "5.7 miles"
+            },
+            {
+                name: "Stephanie Baker",
+                email: "sbaker@wellnesscenter.net",
+                phone: "(650) 555-0123",
+                address: "1515 Alma St, Menlo Park, CA 94025",
+                puresScore: 3.8,
+                tier: "1B",
+                industry: "Healthcare",
+                revenue: "$1.0M",
+                status: "Follow-up",
+                lastContact: "2024-01-22",
+                nextAction: "Pilot program",
+                buyingProfile: "Relationship",
+                distance: "2.1 miles"
+            },
+            {
+                name: "Ryan Carter",
+                email: "rcarter@educationservices.edu",
+                phone: "(650) 555-0234",
+                address: "1616 University Ave, Palo Alto, CA 94301",
+                puresScore: 3.2,
+                tier: "1C",
+                industry: "Education",
+                revenue: "$460K",
+                status: "New",
+                lastContact: "",
+                nextAction: "Curriculum review",
+                buyingProfile: "Analytical",
+                distance: "6.9 miles"
+            },
+            {
+                name: "Laura Turner",
+                email: "lturner@innovativefinance.com",
+                phone: "(415) 555-0345",
+                address: "1717 Sand Hill Rd, Menlo Park, CA 94025",
+                puresScore: 3.7,
+                tier: "1B",
+                industry: "Finance",
+                revenue: "$970K",
+                status: "Contacted",
+                lastContact: "2024-01-20",
+                nextAction: "Portfolio analysis",
+                buyingProfile: "Analytical",
+                distance: "2.6 miles"
+            },
+            {
+                name: "Dr. Nathan Phillips",
+                email: "nphillips@specialistcare.org",
+                phone: "(650) 555-0456",
+                address: "1818 Welch Rd, Stanford, CA 94305",
+                puresScore: 4.3,
+                tier: "1A",
+                industry: "Healthcare",
+                revenue: "$2.0M",
+                status: "Follow-up",
+                lastContact: "2024-01-17",
+                nextAction: "Equipment demonstration",
+                buyingProfile: "Innovation",
+                distance: "3.9 miles"
+            },
+            {
+                name: "Kimberly Evans",
+                email: "kevans@retailmanagers.net",
+                phone: "(650) 555-0567",
+                address: "1919 El Camino Real, Redwood City, CA 94063",
+                puresScore: 3.4,
+                tier: "1C",
+                industry: "Retail",
+                revenue: "$690K",
+                status: "New",
+                lastContact: "",
+                nextAction: "Store assessment",
+                buyingProfile: "Efficiency",
+                distance: "8.3 miles"
+            },
+            {
+                name: "Jonathan Roberts",
+                email: "jroberts@techconsulting.com",
+                phone: "(415) 555-0678",
+                address: "2020 Page Mill Rd, Palo Alto, CA 94304",
+                puresScore: 3.9,
+                tier: "1B",
+                industry: "Technology",
+                revenue: "$1.3M",
+                status: "Contacted",
+                lastContact: "2024-01-21",
+                nextAction: "Solution architecture",
+                buyingProfile: "Innovation",
+                distance: "7.6 miles"
+            },
+            {
+                name: "Dr. Michelle Cooper",
+                email: "mcooper@medicalspecialty.com",
+                phone: "(650) 555-0789",
+                address: "2121 Middlefield Rd, Atherton, CA 94027",
+                puresScore: 4.1,
+                tier: "1A",
+                industry: "Healthcare",
+                revenue: "$1.8M",
+                status: "Follow-up",
+                lastContact: "2024-01-16",
+                nextAction: "Training program",
+                buyingProfile: "Analytical",
+                distance: "4.8 miles"
+            },
+            {
+                name: "Timothy Reed",
+                email: "treed@educationalgroup.edu",
+                phone: "(650) 555-0890",
+                address: "2222 Campus Dr, Stanford, CA 94305",
+                puresScore: 3.3,
+                tier: "1C",
+                industry: "Education",
+                revenue: "$510K",
+                status: "New",
+                lastContact: "",
+                nextAction: "Grant application",
+                buyingProfile: "Relationship",
+                distance: "3.7 miles"
+            },
+            {
+                name: "Diana Bailey",
+                email: "dbailey@healthinnovation.org",
+                phone: "(415) 555-0901",
+                address: "2323 Sand Hill Rd, Menlo Park, CA 94025",
+                puresScore: 4.0,
+                tier: "1B",
+                industry: "Healthcare",
+                revenue: "$1.5M",
+                status: "Contacted",
+                lastContact: "2024-01-23",
+                nextAction: "Research collaboration",
+                buyingProfile: "Innovation",
+                distance: "2.4 miles"
+            },
+            {
+                name: "Eric Murphy",
+                email: "emurphy@retailoptimization.com",
+                phone: "(650) 555-0012",
+                address: "2424 Hamilton Ave, Palo Alto, CA 94301",
+                puresScore: 3.5,
+                tier: "1C",
+                industry: "Retail",
+                revenue: "$710K",
+                status: "Follow-up",
+                lastContact: "2024-01-15",
+                nextAction: "Efficiency audit",
+                buyingProfile: "Efficiency",
+                distance: "6.1 miles"
+            },
+            {
+                name: "Shannon Rivera",
+                email: "srivera@financialinnovation.net",
+                phone: "(415) 555-0123",
+                address: "2525 Forest Ave, Palo Alto, CA 94301",
+                puresScore: 3.2,
+                tier: "1C",
+                industry: "Finance",
+                revenue: "$620K",
+                status: "New",
+                lastContact: "",
+                nextAction: "Market entry strategy",
+                buyingProfile: "Analytical",
+                distance: "6.7 miles"
+            },
+            {
+                name: "Dr. Todd Campbell",
+                email: "tcampbell@comprehensivecare.com",
+                phone: "(650) 555-0234",
+                address: "2626 Welch Rd, Stanford, CA 94305",
+                puresScore: 4.4,
+                tier: "1A",
+                industry: "Healthcare",
+                revenue: "$2.4M",
+                status: "Contacted",
+                lastContact: "2024-01-19",
+                nextAction: "Joint venture discussion",
+                buyingProfile: "Relationship",
+                distance: "4.1 miles"
+            },
+            {
+                name: "Vanessa Kelly",
+                email: "vkelly@techeducation.edu",
+                phone: "(650) 555-0345",
+                address: "2727 University Ave, Palo Alto, CA 94301",
+                puresScore: 3.6,
+                tier: "1B",
+                industry: "Education",
+                revenue: "$780K",
+                status: "Follow-up",
+                lastContact: "2024-01-18",
+                nextAction: "Technology integration",
+                buyingProfile: "Innovation",
+                distance: "6.4 miles"
+            },
+            {
+                name: "Carlos Gonzalez",
+                email: "cgonzalez@retailtech.org",
+                phone: "(415) 555-0456",
+                address: "2828 El Camino Real, Redwood City, CA 94063",
+                puresScore: 3.7,
+                tier: "1B",
+                industry: "Retail",
+                revenue: "$890K",
+                status: "New",
+                lastContact: "",
+                nextAction: "Technology assessment",
+                buyingProfile: "Innovation",
+                distance: "7.8 miles"
+            },
+            {
+                name: "Dr. Patricia Ward",
+                email: "pward@advancedhealth.com",
+                phone: "(650) 555-0567",
+                address: "2929 Middlefield Rd, Menlo Park, CA 94025",
+                puresScore: 4.2,
+                tier: "1A",
+                industry: "Healthcare",
+                revenue: "$2.1M",
+                status: "Contacted",
+                lastContact: "2024-01-22",
+                nextAction: "Clinical partnership",
+                buyingProfile: "Analytical",
+                distance: "2.9 miles"
+            },
+            {
+                name: "Jason Morgan",
+                email: "jmorgan@financialstrategies.net",
+                phone: "(650) 555-0678",
+                address: "3030 Page Mill Rd, Palo Alto, CA 94304",
+                puresScore: 3.4,
+                tier: "1C",
+                industry: "Finance",
+                revenue: "$640K",
+                status: "Follow-up",
+                lastContact: "2024-01-17",
+                nextAction: "Investment planning",
+                buyingProfile: "Efficiency",
+                distance: "7.1 miles"
+            },
+            {
+                name: "Heather Cox",
+                email: "hcox@wellnessgroup.org",
+                phone: "(415) 555-0789",
+                address: "3131 Alma St, Menlo Park, CA 94025",
+                puresScore: 3.8,
+                tier: "1B",
+                industry: "Healthcare",
+                revenue: "$1.2M",
+                status: "New",
+                lastContact: "",
+                nextAction: "Wellness program review",
+                buyingProfile: "Relationship",
+                distance: "2.2 miles"
+            },
+            {
+                name: "Brandon Howard",
+                email: "bhoward@educationalservices.edu",
+                phone: "(650) 555-0890",
+                address: "3232 Campus Way, Stanford, CA 94305",
+                puresScore: 3.1,
+                tier: "1C",
+                industry: "Education",
+                revenue: "$440K",
+                status: "Contacted",
+                lastContact: "2024-01-20",
+                nextAction: "Program evaluation",
+                buyingProfile: "Analytical",
+                distance: "4.5 miles"
+            },
+            {
+                name: "Dr. Samantha Perry",
+                email: "sperry@medicalexcellence.com",
+                phone: "(650) 555-0901",
+                address: "3333 Sand Hill Rd, Menlo Park, CA 94025",
+                puresScore: 4.6,
+                tier: "1A",
+                industry: "Healthcare",
+                revenue: "$3.1M",
+                status: "Follow-up",
+                lastContact: "2024-01-21",
+                nextAction: "Strategic alliance",
+                buyingProfile: "Innovation",
+                distance: "1.7 miles"
+            }
+        ];
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            populateClientTable();
+            setupEventListeners();
+            updateDashboard();
+        });
+
+        function populateClientTable() {
+            const tbody = document.getElementById('clientTableBody');
+            tbody.innerHTML = '';
+            
+            clientData.forEach((client, index) => {
+                const row = document.createElement('tr');
+                row.className = `tier-${client.tier.toLowerCase()}`;
+                row.innerHTML = `
+                    <td>${client.name}</td>
+                    <td>${client.email}</td>
+                    <td>${client.phone}</td>
+                    <td>${client.address}</td>
+                    <td>${client.puresScore}</td>
+                    <td>${client.tier}</td>
+                    <td>${client.industry}</td>
+                    <td>${client.revenue}</td>
+                    <td>${client.status}</td>
+                    <td>${client.lastContact || 'N/A'}</td>
+                    <td>${client.nextAction}</td>
+                    <td>
+                        <button class="btn btn-primary" onclick="contactClient('${client.email}', '${client.name}', '${client.tier}')">📧</button>
+                        <button class="btn btn-secondary" onclick="callClient('${client.phone}')">📞</button>
+                        <button class="btn btn-secondary" onclick="viewDetails(${index})">👁️</button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function setupEventListeners() {
+            // P.U.R.E.S. scoring sliders
+            const sliders = ['profitability', 'urgency', 'reachability', 'engagement', 'sustainability'];
+            sliders.forEach(slider => {
+                const element = document.getElementById(slider);
+                element.addEventListener('input', updatePURESScore);
+            });
+
+            // Modal close functionality
+            const modal = document.getElementById('emailModal');
+            const closeBtn = document.getElementsByClassName('close')[0];
+            closeBtn.onclick = closeModal;
+            window.onclick = function(event) {
+                if (event.target == modal) {
+                    closeModal();
+                }
+            }
+        }
+
+        function updatePURESScore() {
+            const scores = {
+                profitability: document.getElementById('profitability').value,
+                urgency: document.getElementById('urgency').value,
+                reachability: document.getElementById('reachability').value,
+                engagement: document.getElementById('engagement').value,
+                sustainability: document.getElementById('sustainability').value
+            };
+
+            // Update score displays
+            Object.keys(scores).forEach(key => {
+                document.getElementById(key + 'Value').textContent = scores[key];
+            });
+
+            // Calculate overall score
+            const average = (Object.values(scores).reduce((a, b) => parseInt(a) + parseInt(b), 0) / 5).toFixed(1);
+            document.getElementById('overallScore').textContent = average;
+
+            // Determine tier
+            let tier = '1C';
+            if (average >= 4.0) tier = '1A';
+            else if (average >= 3.5) tier = '1B';
+            
+            document.getElementById('tierLevel').textContent = `Tier ${tier}`;
+        }
+
+        function switchTab(tabName) {
+            // Hide all tab contents
+            const contents = ['scoring-content', 'assessment-content', 'listening-content', 'empowerment-content'];
+            contents.forEach(content => {
+                document.getElementById(content).classList.add('hidden');
+            });
+
+            // Remove active class from all tabs
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+
+            // Show selected tab content and mark tab as active
+            document.getElementById(tabName + '-content').classList.remove('hidden');
+            event.target.classList.add('active');
+        }
+
+        function filterTable() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const tierFilter = document.getElementById('tierFilter').value;
+            const industryFilter = document.getElementById('industryFilter').value;
+            const statusFilter = document.getElementById('statusFilter').value;
+
+            const rows = document.getElementById('clientTableBody').getElementsByTagName('tr');
+
+            Array.from(rows).forEach(row => {
+                const cells = row.getElementsByTagName('td');
+                const name = cells[0].textContent.toLowerCase();
+                const email = cells[1].textContent.toLowerCase();
+                const tier = cells[5].textContent;
+                const industry = cells[6].textContent;
+                const status = cells[8].textContent;
+
+                const matchesSearch = name.includes(searchTerm) || email.includes(searchTerm);
+                const matchesTier = !tierFilter || tier === tierFilter;
+                const matchesIndustry = !industryFilter || industry === industryFilter;
+                const matchesStatus = !statusFilter || status === statusFilter;
+
+                if (matchesSearch && matchesTier && matchesIndustry && matchesStatus) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+
+        function sortTable(columnIndex) {
+            const table = document.getElementById('clientTable');
+            const tbody = table.querySelector('tbody');
+            const rows = Array.from(tbody.querySelectorAll('tr'));
+
+            const sortedRows = rows.sort((a, b) => {
+                const aText = a.cells[columnIndex].textContent.trim();
+                const bText = b.cells[columnIndex].textContent.trim();
+                
+                // Check if values are numeric
+                const aNum = parseFloat(aText.replace(/[$,]/g, ''));
+                const bNum = parseFloat(bText.replace(/[$,]/g, ''));
+                
+                if (!isNaN(aNum) && !isNaN(bNum)) {
+                    return bNum - aNum; // Descending for numbers
+                }
+                
+                return aText.localeCompare(bText); // Ascending for text
+            });
+
+            sortedRows.forEach(row => tbody.appendChild(row));
+        }
+
+        function contactClient(email, name, tier) {
+            const modal = document.getElementById('emailModal');
+            const emailContent = document.getElementById('emailContent');
+            
+            // Generate tier-specific email template
+            const template = generateEmailTemplate(name, tier);
+            emailContent.innerHTML = template;
+            
+            modal.style.display = 'block';
+        }
+
+        function generateEmailTemplate(name, tier) {
+            const templates = {
+                '1A': {
+                    subject: 'Exclusive Healthcare Partnership Opportunity for ' + name,
+                    body: `Dear ${name},
+
+As a leading healthcare professional in the Menlo Park area, I wanted to personally reach out about an exclusive partnership opportunity with CVS Health.
+
+Our premium healthcare solutions are specifically designed for organizations like yours that:
+✓ Prioritize patient outcomes and clinical excellence
+✓ Seek innovative technology solutions for healthcare delivery
+✓ Value long-term strategic partnerships for growth
+✓ Require comprehensive pharmacy and wellness services
+
+CVS Health offers:
+• Advanced clinical programs and medication management
+• Integrated health technology solutions
+• Employee wellness programs with measurable ROI
+• 24/7 pharmacist support and consultation services
+• Custom formulary management and cost optimization
+
+I'd love to schedule a brief 15-minute call to discuss how we can support your organization's healthcare objectives and potentially reduce your healthcare costs by 15-25%.
+
+Best regards,
+Thomas O'Neill
+District Support Store Manager
+CVS Health | Menlo Park District
+thomas.oneill@cvshealth.com
+(650) 555-CVS1`
+                },
+                '1B': {
+                    subject: 'Healthcare Solutions to Enhance Your Operations',
+                    body: `Hello ${name},
+
+I hope this message finds you well. As CVS Health's District Manager for the Menlo Park area, I'm reaching out to share how we're helping local businesses like yours optimize their healthcare benefits and pharmacy services.
+
+What makes CVS Health different:
+• Streamlined pharmacy benefits management
+• On-site health screenings and wellness programs
+• Digital health tools and medication adherence support
+• Cost-effective generic medication programs
+• Convenient retail health clinic services
+
+Many of our local partners have seen:
+- 20% reduction in healthcare administrative costs
+- Improved employee satisfaction with health benefits
+- Better medication compliance and health outcomes
+- Simplified vendor management
+
+Would you be interested in a brief conversation about your current healthcare challenges? I'd be happy to provide a complimentary assessment of your pharmacy benefits.
+
+Best regards,
+Thomas O'Neill
+District Support Store Manager, CVS Health
+thomas.oneill@cvshealth.com`
+                },
+                '1C': {
+                    subject: 'Simple Healthcare Solutions for Your Business',
+                    body: `Hi ${name},
+
+I'm Thomas O'Neill from CVS Health, and I wanted to introduce our business healthcare services to organizations in the Menlo Park area.
+
+CVS Health can help your business with:
+• Competitive pharmacy benefit pricing
+• Employee flu shot and vaccination clinics
+• Basic health screening services
+• Prescription delivery services
+• Health and wellness program implementation
+
+We work with businesses of all sizes to provide practical healthcare solutions that save time and money.
+
+If you're interested in learning more about how CVS Health can support your team's health and wellness needs, I'd be happy to send you some information or schedule a brief call at your convenience.
+
+Thank you for your time.
+
+Thomas O'Neill
+CVS Health - Menlo Park District
+thomas.oneill@cvshealth.com`
+                }
+            };
+
+            const template = templates[tier] || templates['1C'];
+            return `
+                <h3>Email Preview</h3>
+                <p><strong>Subject:</strong> ${template.subject}</p>
+                <div style="white-space: pre-line; background: #333; padding: 15px; border-radius: 5px; margin-top: 10px;">
+${template.body}
+                </div>
+            `;
+        }
+
+        function sendEmail() {
+            alert('Email sent successfully! The email client will open with the pre-filled content.');
+            closeModal();
+        }
+
+        function callClient(phone) {
+            alert(`Calling ${phone}... This would integrate with your phone system.`);
+        }
+
+        function viewDetails(index) {
+            const client = clientData[index];
+            alert(`Client Details:\n\nName: ${client.name}\nIndustry: ${client.industry}\nRevenue: ${client.revenue}\nBuying Profile: ${client.buyingProfile}\nDistance: ${client.distance}\n\nNext Action: ${client.nextAction}`);
+        }
+
+        function closeModal() {
+            document.getElementById('emailModal').style.display = 'none';
+        }
+
+        function updateDashboard() {
+            const tier1A = clientData.filter(c => c.tier === '1A').length;
+            const tier1B = clientData.filter(c => c.tier === '1B').length;
+            const tier1C = clientData.filter(c => c.tier === '1C').length;
+
+            document.getElementById('totalClients').textContent = clientData.length;
+            document.getElementById('tier1aCount').textContent = tier1A;
+            document.getElementById('tier1bCount').textContent = tier1B;
+            document.getElementById('tier1cCount').textContent = tier1C;
+        }
+
+        function exportToCSV() {
+            let csv = 'Client Name,Email,Phone,Address,P.U.R.E.S. Score,Tier Level,Industry,Revenue Est.,Contact Status,Last Contact,Next Action\n';
+            clientData.forEach(client => {
+                csv += `"${client.name}","${client.email}","${client.phone}","${client.address}","${client.puresScore}","${client.tier}","${client.industry}","${client.revenue}","${client.status}","${client.lastContact}","${client.nextAction}"\n`;
+            });
+
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.setAttribute('hidden', '');
+            a.setAttribute('href', url);
+            a.setAttribute('download', 'cvs-health-client-database.csv');
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+
+        function exportToPDF() {
+            alert('PDF export functionality would integrate with a PDF generation library. For now, please use the CSV export option.');
+        }
+
+        function generateMarketingPlan() {
+            const plan = `
+CVS HEALTH S.A.L.E. MARKETING PLAN
+Generated: ${new Date().toLocaleDateString()}
+
+EXECUTIVE SUMMARY:
+Target Market: Healthcare, Technology, Retail, Finance, Education sectors
+Geographic Focus: 10-mile radius around Menlo Park, CA
+Total Prospects: ${clientData.length}
+Priority Targets: ${clientData.filter(c => c.tier === '1A').length} Tier 1A clients
+
+PHASE 1 - IMMEDIATE ACTIONS (Week 1-2):
+- Contact all ${clientData.filter(c => c.tier === '1A' && c.status === 'New').length} new Tier 1A prospects
+- Follow up with ${clientData.filter(c => c.status === 'Follow-up').length} pending follow-ups
+- Schedule product demos for qualified prospects
+
+PHASE 2 - NURTURE CAMPAIGN (Week 3-4):
+- Launch email sequence for Tier 1B prospects
+- Conduct needs assessment calls
+- Develop custom proposals for high-value opportunities
+
+PHASE 3 - EXPANSION (Month 2):
+- Implement referral program with existing clients
+- Launch targeted LinkedIn outreach campaign
+- Schedule face-to-face meetings with top 10 prospects
+
+SUCCESS METRICS:
+- Target: 25% increase in qualified opportunities
+- Goal: Convert 15% of Tier 1A prospects to customers
+- Objective: Generate $2.5M in new annual revenue
+
+This plan leverages the S.A.L.E. methodology to maximize client acquisition efficiency.
+            `;
+            
+            alert(plan);
+        }
+    </script>
+</body>
+</html>

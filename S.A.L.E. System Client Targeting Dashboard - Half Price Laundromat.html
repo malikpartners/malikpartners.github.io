@@ -1,0 +1,1256 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>S.A.L.E. System Dashboard - Half Price Laundromat</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #000000;
+            color: #ffffff;
+            line-height: 1.6;
+        }
+
+        .header {
+            background-color: #CF2030;
+            padding: 1rem;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(207, 32, 48, 0.3);
+        }
+
+        .header img {
+            max-width: 300px;
+            height: auto;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .dashboard-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .dashboard-header h1 {
+            color: #CF2030;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .business-info {
+            background-color: #1a1a1a;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            border: 2px solid #CF2030;
+        }
+
+        .tabs {
+            display: flex;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid #CF2030;
+        }
+
+        .tab {
+            padding: 1rem 2rem;
+            background-color: #1a1a1a;
+            border: none;
+            color: #ffffff;
+            cursor: pointer;
+            border-top: 2px solid #CF2030;
+            border-left: 1px solid #CF2030;
+            border-right: 1px solid #CF2030;
+            transition: all 0.3s ease;
+        }
+
+        .tab:first-child {
+            border-left: 2px solid #CF2030;
+        }
+
+        .tab:last-child {
+            border-right: 2px solid #CF2030;
+        }
+
+        .tab.active {
+            background-color: #CF2030;
+            color: #ffffff;
+        }
+
+        .tab-content {
+            display: none;
+            background-color: #1a1a1a;
+            padding: 2rem;
+            border-radius: 0 0 10px 10px;
+            border: 2px solid #CF2030;
+            border-top: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .search-controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .search-input, .filter-select {
+            padding: 0.75rem;
+            border: 2px solid #CF2030;
+            background-color: #000000;
+            color: #ffffff;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        .search-input {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            background-color: #CF2030;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #a91825;
+        }
+
+        .btn-secondary {
+            background-color: #333333;
+            border: 2px solid #CF2030;
+        }
+
+        .btn-secondary:hover {
+            background-color: #555555;
+        }
+
+        .client-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+            background-color: #000000;
+            border: 2px solid #CF2030;
+        }
+
+        .client-table th,
+        .client-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #CF2030;
+            border-right: 1px solid #CF2030;
+        }
+
+        .client-table th {
+            background-color: #CF2030;
+            color: #ffffff;
+            font-weight: bold;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .client-table th:hover {
+            background-color: #a91825;
+        }
+
+        .client-table tr:hover {
+            background-color: #1a1a1a;
+        }
+
+        .tier-1a { background-color: #1a4d1a; }
+        .tier-1b { background-color: #4d4d1a; }
+        .tier-1c { background-color: #1a1a4d; }
+
+        .scoring-form {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .score-section {
+            background-color: #000000;
+            padding: 1.5rem;
+            border-radius: 10px;
+            border: 2px solid #CF2030;
+        }
+
+        .score-section h3 {
+            color: #CF2030;
+            margin-bottom: 1rem;
+        }
+
+        .score-input {
+            width: 100%;
+            padding: 0.5rem;
+            margin: 0.5rem 0;
+            border: 2px solid #CF2030;
+            background-color: #1a1a1a;
+            color: #ffffff;
+            border-radius: 5px;
+        }
+
+        .score-slider {
+            width: 100%;
+            margin: 1rem 0;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+
+        .modal-content {
+            background-color: #1a1a1a;
+            margin: 5% auto;
+            padding: 2rem;
+            border: 2px solid #CF2030;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 600px;
+            color: #ffffff;
+        }
+
+        .close {
+            color: #CF2030;
+            float: right;
+            font-size: 2rem;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: #ffffff;
+        }
+
+        .email-template {
+            width: 100%;
+            height: 200px;
+            padding: 1rem;
+            border: 2px solid #CF2030;
+            background-color: #000000;
+            color: #ffffff;
+            border-radius: 5px;
+            margin: 1rem 0;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            background-color: #CF2030;
+            margin-top: 3rem;
+        }
+
+        .footer img {
+            max-width: 150px;
+            height: auto;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .metric-card {
+            background-color: #000000;
+            padding: 1.5rem;
+            border-radius: 10px;
+            border: 2px solid #CF2030;
+            text-align: center;
+        }
+
+        .metric-value {
+            font-size: 2rem;
+            color: #CF2030;
+            font-weight: bold;
+        }
+
+        .export-controls {
+            margin: 1rem 0;
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        @media (max-width: 768px) {
+            .search-controls {
+                flex-direction: column;
+            }
+            
+            .tabs {
+                flex-direction: column;
+            }
+            
+            .client-table {
+                font-size: 0.8rem;
+            }
+            
+            .client-table th,
+            .client-table td {
+                padding: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports" />
+    </header>
+
+    <div class="container">
+        <div class="dashboard-header">
+            <h1>S.A.L.E. System Client Targeting Dashboard</h1>
+            <div class="business-info">
+                <h2>Half Price Laundromat</h2>
+                <p><strong>Owner:</strong> Hank Nelken | <strong>Location:</strong> Panorama City, CA | <strong>Website:</strong> HalfPriceLaundry.com</p>
+                <p><strong>Industry:</strong> Retail Laundry Services | <strong>Service Radius:</strong> 10 miles | <strong>Target:</strong> Local Residents & Businesses</p>
+            </div>
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('sourcing')">S - Sourcing</button>
+            <button class="tab" onclick="showTab('assessing')">A - Assessing</button>
+            <button class="tab" onclick="showTab('listening')">L - Listening</button>
+            <button class="tab" onclick="showTab('empowering')">E - Empowering</button>
+            <button class="tab" onclick="showTab('dashboard')">Analytics Dashboard</button>
+        </div>
+
+        <!-- SOURCING MODULE -->
+        <div id="sourcing" class="tab-content active">
+            <h2>P.U.R.E.S. Client Scoring & Database</h2>
+            
+            <div class="search-controls">
+                <input type="text" id="searchInput" class="search-input" placeholder="Search clients by name, email, or address...">
+                <select id="tierFilter" class="filter-select">
+                    <option value="">All Tiers</option>
+                    <option value="1A">Tier 1A (Premium)</option>
+                    <option value="1B">Tier 1B (High-Value)</option>
+                    <option value="1C">Tier 1C (Qualified)</option>
+                </select>
+                <select id="statusFilter" class="filter-select">
+                    <option value="">All Status</option>
+                    <option value="New">New Lead</option>
+                    <option value="Contacted">Contacted</option>
+                    <option value="Interested">Interested</option>
+                    <option value="Customer">Customer</option>
+                </select>
+                <button class="btn" onclick="addNewClient()">Add New Client</button>
+            </div>
+
+            <div class="export-controls">
+                <button class="btn btn-secondary" onclick="exportToCSV()">Export to CSV</button>
+                <button class="btn btn-secondary" onclick="exportToPDF()">Export to PDF</button>
+                <button class="btn" onclick="generateEmailCampaign()">Generate Email Campaign</button>
+            </div>
+
+            <table class="client-table" id="clientTable">
+                <thead>
+                    <tr>
+                        <th onclick="sortTable(0)">Client Name</th>
+                        <th onclick="sortTable(1)">Email</th>
+                        <th onclick="sortTable(2)">Phone</th>
+                        <th onclick="sortTable(3)">Address</th>
+                        <th onclick="sortTable(4)">P.U.R.E.S. Score</th>
+                        <th onclick="sortTable(5)">Tier</th>
+                        <th onclick="sortTable(6)">Type</th>
+                        <th onclick="sortTable(7)">Value Est.</th>
+                        <th onclick="sortTable(8)">Status</th>
+                        <th onclick="sortTable(9)">Last Contact</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="clientTableBody">
+                    <!-- Client data will be populated here -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- ASSESSING MODULE -->
+        <div id="assessing" class="tab-content">
+            <h2>Client Assessment & Buying Pattern Analysis</h2>
+            
+            <div class="scoring-form">
+                <div class="score-section">
+                    <h3>P.U.R.E.S. Scoring System</h3>
+                    <label>Profitability (1-5):</label>
+                    <input type="range" min="1" max="5" value="3" class="score-slider" id="profitability">
+                    <span id="profitabilityValue">3</span>
+                    
+                    <label>Urgency (1-5):</label>
+                    <input type="range" min="1" max="5" value="3" class="score-slider" id="urgency">
+                    <span id="urgencyValue">3</span>
+                    
+                    <label>Reachability (1-5):</label>
+                    <input type="range" min="1" max="5" value="3" class="score-slider" id="reachability">
+                    <span id="reachabilityValue">3</span>
+                    
+                    <label>Engagement (1-5):</label>
+                    <input type="range" min="1" max="5" value="3" class="score-slider" id="engagement">
+                    <span id="engagementValue">3</span>
+                    
+                    <label>Sustainability (1-5):</label>
+                    <input type="range" min="1" max="5" value="3" class="score-slider" id="sustainability">
+                    <span id="sustainabilityValue">3</span>
+                    
+                    <div style="margin-top: 1rem;">
+                        <strong>Total Score: <span id="totalScore">15</span>/25</strong>
+                        <br><strong>Tier: <span id="calculatedTier">1C</span></strong>
+                    </div>
+                </div>
+
+                <div class="score-section">
+                    <h3>Buying Pattern Analysis</h3>
+                    <select class="score-input" id="buyingPattern">
+                        <option value="Analytical">Analytical Buyer (Price-conscious, comparison shoppers)</option>
+                        <option value="Relationship">Relationship Buyer (Loyalty-focused, referral-driven)</option>
+                        <option value="Efficiency">Efficiency Buyer (Convenience-focused, time-savers)</option>
+                        <option value="Innovation">Innovation Buyer (Early adopters, premium services)</option>
+                    </select>
+                    
+                    <label>Decision Timeline:</label>
+                    <select class="score-input" id="decisionTimeline">
+                        <option value="Immediate">Immediate (Same day)</option>
+                        <option value="Short">Short (1-7 days)</option>
+                        <option value="Medium">Medium (1-4 weeks)</option>
+                        <option value="Long">Long (1-3 months)</option>
+                    </select>
+                    
+                    <label>Value Proposition Focus:</label>
+                    <select class="score-input" id="valueProp">
+                        <option value="Price">Half-price savings</option>
+                        <option value="Convenience">24/7 availability</option>
+                        <option value="Quality">Professional cleaning</option>
+                        <option value="Speed">Quick turnaround</option>
+                    </select>
+                </div>
+            </div>
+            
+            <button class="btn" onclick="saveAssessment()">Save Assessment</button>
+        </div>
+
+        <!-- LISTENING MODULE -->
+        <div id="listening" class="tab-content">
+            <h2>Feedback & Communication Tracking</h2>
+            
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-value" id="feedbackRate">72%</div>
+                    <div>Feedback Collection Rate</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value" id="satisfactionScore">4.3</div>
+                    <div>Average Satisfaction</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value" id="responseTime">2.4</div>
+                    <div>Avg Response Time (hours)</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value" id="complaintResolution">95%</div>
+                    <div>Complaint Resolution Rate</div>
+                </div>
+            </div>
+            
+            <div class="score-section">
+                <h3>Feedback Collection Form</h3>
+                <input type="text" class="score-input" placeholder="Client Name" id="feedbackClient">
+                <select class="score-input" id="feedbackType">
+                    <option value="Pre-sale">Pre-sale Inquiry</option>
+                    <option value="Service">During Service</option>
+                    <option value="Post-sale">Post-service</option>
+                    <option value="Complaint">Complaint</option>
+                </select>
+                <textarea class="score-input" rows="4" placeholder="Feedback details..." id="feedbackDetails"></textarea>
+                <input type="range" min="1" max="5" value="5" class="score-slider" id="satisfactionRating">
+                <label>Satisfaction Rating: <span id="satisfactionValue">5</span>/5</label>
+                <button class="btn" onclick="saveFeedback()">Save Feedback</button>
+            </div>
+        </div>
+
+        <!-- EMPOWERING MODULE -->
+        <div id="empowering" class="tab-content">
+            <h2>Referral Strategy & Success Tracking</h2>
+            
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-value" id="totalReferrals">28</div>
+                    <div>Total Referrals This Month</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value" id="conversionRate">65%</div>
+                    <div>Referral Conversion Rate</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value" id="referralRevenue">$1,340</div>
+                    <div>Referral Revenue</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value" id="advocateCount">12</div>
+                    <div>Active Client Advocates</div>
+                </div>
+            </div>
+            
+            <div class="score-section">
+                <h3>Referral Program Management</h3>
+                <input type="text" class="score-input" placeholder="Referring Client" id="referringClient">
+                <input type="text" class="score-input" placeholder="Referred Client Name" id="referredClient">
+                <input type="email" class="score-input" placeholder="Referred Client Email" id="referredEmail">
+                <select class="score-input" id="referralReward">
+                    <option value="Free Wash">Free Wash Cycle</option>
+                    <option value="10% Discount">10% Off Next Visit</option>
+                    <option value="$5 Credit">$5 Account Credit</option>
+                    <option value="Free Dry">Free Dryer Cycle</option>
+                </select>
+                <button class="btn" onclick="trackReferral()">Track Referral</button>
+            </div>
+            
+            <div class="score-section">
+                <h3>Success Story Template Generator</h3>
+                <textarea class="score-input" rows="6" placeholder="Enter customer success story details..." id="successStory"></textarea>
+                <button class="btn" onclick="generateSuccessStory()">Generate Marketing Copy</button>
+            </div>
+        </div>
+
+        <!-- ANALYTICS DASHBOARD -->
+        <div id="dashboard" class="tab-content">
+            <h2>S.A.L.E. Performance Analytics</h2>
+            
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-value" id="sourcingAccuracy">84%</div>
+                    <div>P.U.R.E.S. Score Accuracy</div>
+                    <small>Target: >80%</small>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value" id="assessmentAccuracy">91%</div>
+                    <div>Needs Assessment Accuracy</div>
+                    <small>Target: >90%</small>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value" id="listeningMetric">73%</div>
+                    <div>Feedback Collection Rate</div>
+                    <small>Target: >70%</small>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value" id="empowermentMetric">2.3</div>
+                    <div>Avg Referrals Per Client</div>
+                    <small>Target: 2+</small>
+                </div>
+            </div>
+            
+            <div class="score-section">
+                <h3>Monthly Performance Summary</h3>
+                <p><strong>New Clients Acquired:</strong> <span id="newClients">15</span></p>
+                <p><strong>Revenue Growth:</strong> <span id="revenueGrowth">+12%</span></p>
+                <p><strong>Customer Retention:</strong> <span id="retention">89%</span></p>
+                <p><strong>Average Customer Value:</strong> <span id="avgValue">$47</span></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Email Modal -->
+    <div id="emailModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeEmailModal()">&times;</span>
+            <h2>Send Email to Client</h2>
+            <input type="email" class="score-input" id="emailTo" placeholder="To:" readonly>
+            <input type="text" class="score-input" id="emailSubject" placeholder="Subject:">
+            <textarea class="email-template" id="emailBody" placeholder="Email content will be generated here..."></textarea>
+            <button class="btn" onclick="sendEmail()">Send Email</button>
+            <button class="btn btn-secondary" onclick="closeEmailModal()">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Client Modal -->
+    <div id="clientModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeClientModal()">&times;</span>
+            <h2 id="clientModalTitle">Add New Client</h2>
+            <input type="text" class="score-input" id="newClientName" placeholder="Client Name">
+            <input type="email" class="score-input" id="newClientEmail" placeholder="Email">
+            <input type="tel" class="score-input" id="newClientPhone" placeholder="Phone">
+            <input type="text" class="score-input" id="newClientAddress" placeholder="Address">
+            <select class="score-input" id="newClientType">
+                <option value="Residential">Residential</option>
+                <option value="Business">Small Business</option>
+                <option value="Apartment">Apartment Complex</option>
+                <option value="Student">Student</option>
+            </select>
+            <button class="btn" onclick="saveClient()">Save Client</button>
+            <button class="btn btn-secondary" onclick="closeClientModal()">Cancel</button>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports" />
+        <p>© 2024 Higgins Reports. Advanced AI-Powered Business Solutions.</p>
+    </footer>
+
+    <script>
+        // Sample client data for Half Price Laundromat (Panorama City, CA area)
+        let clientData = [
+            {
+                name: "Maria Rodriguez", email: "maria.r@email.com", phone: "(818) 555-0123", 
+                address: "14523 Roscoe Blvd, Panorama City, CA", pures: 4.2, tier: "1A", 
+                type: "Residential", value: "$85", status: "Customer", lastContact: "2024-01-15"
+            },
+            {
+                name: "David Kim", email: "david.kim@email.com", phone: "(818) 555-0124", 
+                address: "8756 Van Nuys Blvd, Panorama City, CA", pures: 3.8, tier: "1B", 
+                type: "Business", value: "$120", status: "Interested", lastContact: "2024-01-10"
+            },
+            {
+                name: "Jennifer Lopez", email: "j.lopez@email.com", phone: "(818) 555-0125", 
+                address: "15234 Sherman Way, Van Nuys, CA", pures: 4.0, tier: "1A", 
+                type: "Residential", value: "$65", status: "Customer", lastContact: "2024-01-12"
+            },
+            {
+                name: "Robert Chen", email: "rchen@email.com", phone: "(818) 555-0126", 
+                address: "9845 Sepulveda Blvd, North Hills, CA", pures: 3.6, tier: "1B", 
+                type: "Apartment", value: "$200", status: "New", lastContact: "2024-01-08"
+            },
+            {
+                name: "Lisa Williams", email: "lisa.w@email.com", phone: "(818) 555-0127", 
+                address: "12567 Saticoy St, North Hollywood, CA", pures: 3.4, tier: "1C", 
+                type: "Residential", value: "$45", status: "Contacted", lastContact: "2024-01-14"
+            },
+            {
+                name: "Carlos Hernandez", email: "carlos.h@email.com", phone: "(818) 555-0128", 
+                address: "7890 Reseda Blvd, Reseda, CA", pures: 4.4, tier: "1A", 
+                type: "Business", value: "$150", status: "Customer", lastContact: "2024-01-13"
+            },
+            {
+                name: "Amanda Johnson", email: "amanda.j@email.com", phone: "(818) 555-0129", 
+                address: "11234 Balboa Blvd, Granada Hills, CA", pures: 3.2, tier: "1C", 
+                type: "Student", value: "$25", status: "New", lastContact: "2024-01-09"
+            },
+            {
+                name: "Michael Brown", email: "m.brown@email.com", phone: "(818) 555-0130", 
+                address: "13456 Devonshire St, Mission Hills, CA", pures: 3.9, tier: "1B", 
+                type: "Residential", value: "$75", status: "Customer", lastContact: "2024-01-11"
+            },
+            {
+                name: "Susan Davis", email: "susan.d@email.com", phone: "(818) 555-0131", 
+                address: "10987 Laurel Canyon Blvd, Pacoima, CA", pures: 4.1, tier: "1A", 
+                type: "Apartment", value: "$180", status: "Interested", lastContact: "2024-01-16"
+            },
+            {
+                name: "Tony Garcia", email: "tony.g@email.com", phone: "(818) 555-0132", 
+                address: "16789 San Fernando Rd, San Fernando, CA", pures: 3.7, tier: "1B", 
+                type: "Business", value: "$95", status: "Customer", lastContact: "2024-01-07"
+            },
+            {
+                name: "Emily Martinez", email: "emily.m@email.com", phone: "(818) 555-0133", 
+                address: "8765 Woodman Ave, Panorama City, CA", pures: 3.3, tier: "1C", 
+                type: "Residential", value: "$55", status: "Contacted", lastContact: "2024-01-06"
+            },
+            {
+                name: "James Wilson", email: "j.wilson@email.com", phone: "(818) 555-0134", 
+                address: "14321 Victory Blvd, Van Nuys, CA", pures: 4.3, tier: "1A", 
+                type: "Business", value: "$140", status: "Customer", lastContact: "2024-01-17"
+            },
+            {
+                name: "Patricia Taylor", email: "patricia.t@email.com", phone: "(818) 555-0135", 
+                address: "9012 Canoga Ave, Canoga Park, CA", pures: 3.5, tier: "1C", 
+                type: "Residential", value: "$40", status: "New", lastContact: "2024-01-05"
+            },
+            {
+                name: "Daniel Anderson", email: "daniel.a@email.com", phone: "(818) 555-0136", 
+                address: "12345 Glenoaks Blvd, Sylmar, CA", pures: 3.8, tier: "1B", 
+                type: "Apartment", value: "$160", status: "Interested", lastContact: "2024-01-18"
+            },
+            {
+                name: "Michelle Thomas", email: "michelle.t@email.com", phone: "(818) 555-0137", 
+                address: "11567 Topanga Canyon Blvd, Chatsworth, CA", pures: 4.0, tier: "1A", 
+                type: "Residential", value: "$70", status: "Customer", lastContact: "2024-01-19"
+            },
+            {
+                name: "Kevin Jackson", email: "kevin.j@email.com", phone: "(818) 555-0138", 
+                address: "15678 Vanowen St, Van Nuys, CA", pures: 3.1, tier: "1C", 
+                type: "Student", value: "$30", status: "New", lastContact: "2024-01-04"
+            },
+            {
+                name: "Rachel White", email: "rachel.w@email.com", phone: "(818) 555-0139", 
+                address: "8234 Lankershim Blvd, North Hollywood, CA", pures: 3.9, tier: "1B", 
+                type: "Business", value: "$110", status: "Customer", lastContact: "2024-01-20"
+            },
+            {
+                name: "Steven Harris", email: "steven.h@email.com", phone: "(818) 555-0140", 
+                address: "13789 Nordhoff St, Arleta, CA", pures: 4.2, tier: "1A", 
+                type: "Apartment", value: "$190", status: "Interested", lastContact: "2024-01-03"
+            },
+            {
+                name: "Nancy Clark", email: "nancy.c@email.com", phone: "(818) 555-0141", 
+                address: "10456 Maclay St, Pacoima, CA", pures: 3.6, tier: "1B", 
+                type: "Residential", value: "$60", status: "Customer", lastContact: "2024-01-21"
+            },
+            {
+                name: "Christopher Lewis", email: "chris.l@email.com", phone: "(818) 555-0142", 
+                address: "14890 Brand Blvd, Mission Hills, CA", pures: 3.4, tier: "1C", 
+                type: "Business", value: "$80", status: "Contacted", lastContact: "2024-01-02"
+            },
+            {
+                name: "Sandra Lee", email: "sandra.l@email.com", phone: "(818) 555-0143", 
+                address: "7123 Coldwater Canyon Ave, North Hollywood, CA", pures: 4.1, tier: "1A", 
+                type: "Residential", value: "$85", status: "Customer", lastContact: "2024-01-22"
+            },
+            {
+                name: "Matthew Walker", email: "matthew.w@email.com", phone: "(818) 555-0144", 
+                address: "16234 Plummer St, Northridge, CA", pures: 3.7, tier: "1B", 
+                type: "Apartment", value: "$175", status: "Interested", lastContact: "2024-01-01"
+            },
+            {
+                name: "Barbara Hall", email: "barbara.h@email.com", phone: "(818) 555-0145", 
+                address: "9567 Tampa Ave, Northridge, CA", pures: 3.3, tier: "1C", 
+                type: "Student", value: "$35", status: "New", lastContact: "2024-01-23"
+            },
+            {
+                name: "Joshua Allen", email: "joshua.a@email.com", phone: "(818) 555-0146", 
+                address: "12890 Foothill Blvd, Sylmar, CA", pures: 4.4, tier: "1A", 
+                type: "Business", value: "$165", status: "Customer", lastContact: "2023-12-31"
+            },
+            {
+                name: "Deborah Young", email: "deborah.y@email.com", phone: "(818) 555-0147", 
+                address: "8901 Parthenia St, Northridge, CA", pures: 3.8, tier: "1B", 
+                type: "Residential", value: "$65", status: "Customer", lastContact: "2024-01-24"
+            },
+            {
+                name: "Ryan King", email: "ryan.k@email.com", phone: "(818) 555-0148", 
+                address: "11345 Hayvenhurst Ave, Granada Hills, CA", pures: 3.2, tier: "1C", 
+                type: "Apartment", value: "$125", status: "Contacted", lastContact: "2023-12-30"
+            },
+            {
+                name: "Helen Wright", email: "helen.w@email.com", phone: "(818) 555-0149", 
+                address: "15456 Chatsworth St, Mission Hills, CA", pures: 4.0, tier: "1A", 
+                type: "Business", value: "$130", status: "Interested", lastContact: "2024-01-25"
+            },
+            {
+                name: "Paul Lopez", email: "paul.l@email.com", phone: "(818) 555-0150", 
+                address: "7456 Mason Ave, Winnetka, CA", pures: 3.6, tier: "1B", 
+                type: "Residential", value: "$50", status: "Customer", lastContact: "2023-12-29"
+            },
+            {
+                name: "Dorothy Hill", email: "dorothy.h@email.com", phone: "(818) 555-0151", 
+                address: "13567 Magnolia Blvd, Sherman Oaks, CA", pures: 3.9, tier: "1B", 
+                type: "Apartment", value: "$155", status: "Customer", lastContact: "2024-01-26"
+            },
+            {
+                name: "Mark Scott", email: "mark.s@email.com", phone: "(818) 555-0152", 
+                address: "10234 Zelzah Ave, Northridge, CA", pures: 4.3, tier: "1A", 
+                type: "Business", value: "$145", status: "Interested", lastContact: "2023-12-28"
+            }
+        ];
+
+        let filteredData = [...clientData];
+
+        function showTab(tabName) {
+            // Hide all tab contents
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabContents.forEach(content => content.classList.remove('active'));
+
+            // Remove active class from all tabs
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+
+            // Show selected tab content
+            document.getElementById(tabName).classList.add('active');
+
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+        }
+
+        function populateTable(data = filteredData) {
+            const tbody = document.getElementById('clientTableBody');
+            tbody.innerHTML = '';
+
+            data.forEach((client, index) => {
+                const row = tbody.insertRow();
+                const tierClass = `tier-${client.tier.toLowerCase()}`;
+                row.className = tierClass;
+
+                row.innerHTML = `
+                    <td>${client.name}</td>
+                    <td>${client.email}</td>
+                    <td>${client.phone}</td>
+                    <td>${client.address}</td>
+                    <td>${client.pures}</td>
+                    <td>${client.tier}</td>
+                    <td>${client.type}</td>
+                    <td>${client.value}</td>
+                    <td>${client.status}</td>
+                    <td>${client.lastContact}</td>
+                    <td>
+                        <button class="btn" onclick="contactClient(${index}, 'email')" style="margin: 2px; padding: 0.5rem;">📧</button>
+                        <button class="btn" onclick="contactClient(${index}, 'phone')" style="margin: 2px; padding: 0.5rem;">📞</button>
+                        <button class="btn btn-secondary" onclick="editClient(${index})" style="margin: 2px; padding: 0.5rem;">✏️</button>
+                    </td>
+                `;
+            });
+        }
+
+        function contactClient(index, method) {
+            const client = filteredData[index];
+            
+            if (method === 'email') {
+                openEmailModal(client);
+            } else if (method === 'phone') {
+                window.open(`tel:${client.phone}`);
+            }
+        }
+
+        function openEmailModal(client) {
+            const modal = document.getElementById('emailModal');
+            const emailTo = document.getElementById('emailTo');
+            const emailSubject = document.getElementById('emailSubject');
+            const emailBody = document.getElementById('emailBody');
+
+            emailTo.value = client.email;
+            emailSubject.value = `Special Offer for ${client.name} - Half Price Laundromat`;
+
+            // Generate personalized email based on client type and buying pattern
+            let emailContent = `Dear ${client.name},
+
+I hope this email finds you well! I'm reaching out from Half Price Laundromat in Panorama City because I believe we can provide exceptional value for your laundry needs.
+
+Based on your location at ${client.address}, you're perfectly positioned to take advantage of our convenient services:
+
+🏷️ **HALF-PRICE SAVINGS** - We offer the most competitive rates in the area
+⏰ **24/7 AVAILABILITY** - Wash and dry on your schedule, not ours
+🚗 **CONVENIENT LOCATION** - Easy access with plenty of parking
+🧽 **PROFESSIONAL QUALITY** - State-of-the-art machines for superior cleaning
+
+`;
+
+            // Customize based on client type
+            switch(client.type) {
+                case 'Residential':
+                    emailContent += `As a local resident, you'll love our family-friendly environment and the time you'll save with our quick-turnaround service. Many of your neighbors already trust us with their weekly laundry needs.
+
+**Special Residential Offer**: Bring this email for 20% off your first visit + a FREE fabric softener upgrade!`;
+                    break;
+                case 'Business':
+                    emailContent += `For your business laundry needs, we offer bulk pricing and scheduled pickup/delivery services. Our commercial-grade machines handle large loads efficiently, saving you time and money.
+
+**Business Special**: First month of commercial service at 30% off + complimentary pickup and delivery for loads over 50lbs!`;
+                    break;
+                case 'Apartment':
+                    emailContent += `Managing laundry for apartment residents? We offer special apartment complex partnerships with on-site pickup services and bulk resident discounts.
+
+**Apartment Complex Special**: Contact us about our property management partnership program - residents get ongoing discounts!`;
+                    break;
+                case 'Student':
+                    emailContent += `As a student, every dollar counts! Our affordable pricing and convenient location make us the smart choice for your laundry needs. Study while your clothes wash!
+
+**Student Special**: Show your student ID for an additional 15% off our already low prices + free WiFi while you wait!`;
+                    break;
+            }
+
+            emailContent += `
+
+Visit us at: [Your Address in Panorama City]
+Call us: (818) 555-WASH
+Website: HalfPriceLaundry.com
+
+We're committed to providing the best value and service in the San Fernando Valley. Let us prove why your neighbors choose Half Price Laundromat!
+
+Best regards,
+Hank Nelken
+Owner, Half Price Laundromat
+
+P.S. Follow us on social media for weekly specials and laundry tips!`;
+
+            emailBody.value = emailContent;
+            modal.style.display = 'block';
+        }
+
+        function closeEmailModal() {
+            document.getElementById('emailModal').style.display = 'none';
+        }
+
+        function sendEmail() {
+            const emailTo = document.getElementById('emailTo').value;
+            const subject = document.getElementById('emailSubject').value;
+            const body = document.getElementById('emailBody').value;
+            
+            // Create mailto link
+            const mailtoLink = `mailto:${emailTo}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+            window.open(mailtoLink);
+            
+            closeEmailModal();
+            alert('Email client opened with pre-filled message!');
+        }
+
+        function addNewClient() {
+            document.getElementById('clientModalTitle').textContent = 'Add New Client';
+            document.getElementById('clientModal').style.display = 'block';
+        }
+
+        function editClient(index) {
+            const client = filteredData[index];
+            document.getElementById('clientModalTitle').textContent = 'Edit Client';
+            document.getElementById('newClientName').value = client.name;
+            document.getElementById('newClientEmail').value = client.email;
+            document.getElementById('newClientPhone').value = client.phone;
+            document.getElementById('newClientAddress').value = client.address;
+            document.getElementById('newClientType').value = client.type;
+            document.getElementById('clientModal').style.display = 'block';
+        }
+
+        function closeClientModal() {
+            document.getElementById('clientModal').style.display = 'none';
+            // Clear form
+            document.getElementById('newClientName').value = '';
+            document.getElementById('newClientEmail').value = '';
+            document.getElementById('newClientPhone').value = '';
+            document.getElementById('newClientAddress').value = '';
+        }
+
+        function saveClient() {
+            const name = document.getElementById('newClientName').value;
+            const email = document.getElementById('newClientEmail').value;
+            const phone = document.getElementById('newClientPhone').value;
+            const address = document.getElementById('newClientAddress').value;
+            const type = document.getElementById('newClientType').value;
+
+            if (name && email && phone && address) {
+                const newClient = {
+                    name: name,
+                    email: email,
+                    phone: phone,
+                    address: address,
+                    pures: 3.0,
+                    tier: "1C",
+                    type: type,
+                    value: "$50",
+                    status: "New",
+                    lastContact: new Date().toISOString().split('T')[0]
+                };
+
+                clientData.push(newClient);
+                filteredData = [...clientData];
+                populateTable();
+                closeClientModal();
+                alert('Client added successfully!');
+            } else {
+                alert('Please fill in all required fields.');
+            }
+        }
+
+        function sortTable(columnIndex) {
+            const table = document.getElementById('clientTable');
+            const tbody = table.tBodies[0];
+            const rows = Array.from(tbody.querySelectorAll('tr'));
+
+            const sortedRows = rows.sort((a, b) => {
+                const aText = a.cells[columnIndex].textContent.trim();
+                const bText = b.cells[columnIndex].textContent.trim();
+                
+                // Check if numeric
+                if (!isNaN(aText) && !isNaN(bText)) {
+                    return parseFloat(aText) - parseFloat(bText);
+                }
+                
+                return aText.localeCompare(bText);
+            });
+
+            // Clear tbody and append sorted rows
+            tbody.innerHTML = '';
+            sortedRows.forEach(row => tbody.appendChild(row));
+        }
+
+        function filterTable() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const tierFilter = document.getElementById('tierFilter').value;
+            const statusFilter = document.getElementById('statusFilter').value;
+
+            filteredData = clientData.filter(client => {
+                const matchesSearch = client.name.toLowerCase().includes(searchTerm) ||
+                                    client.email.toLowerCase().includes(searchTerm) ||
+                                    client.address.toLowerCase().includes(searchTerm);
+                const matchesTier = !tierFilter || client.tier === tierFilter;
+                const matchesStatus = !statusFilter || client.status === statusFilter;
+
+                return matchesSearch && matchesTier && matchesStatus;
+            });
+
+            populateTable(filteredData);
+        }
+
+        function exportToCSV() {
+            const headers = ['Name', 'Email', 'Phone', 'Address', 'P.U.R.E.S. Score', 'Tier', 'Type', 'Value', 'Status', 'Last Contact'];
+            const csvContent = [
+                headers.join(','),
+                ...filteredData.map(client => [
+                    client.name, client.email, client.phone, client.address,
+                    client.pures, client.tier, client.type, client.value,
+                    client.status, client.lastContact
+                ].join(','))
+            ].join('\n');
+
+            const blob = new Blob([csvContent], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'half_price_laundromat_clients.csv';
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+
+        function exportToPDF() {
+            alert('PDF export functionality would integrate with a PDF library like jsPDF. Implementation depends on specific requirements.');
+        }
+
+        function generateEmailCampaign() {
+            const tierCounts = {
+                '1A': filteredData.filter(c => c.tier === '1A').length,
+                '1B': filteredData.filter(c => c.tier === '1B').length,
+                '1C': filteredData.filter(c => c.tier === '1C').length
+            };
+
+            alert(`Email Campaign Generated!\n\nTarget Audience:\n- Tier 1A (Premium): ${tierCounts['1A']} clients\n- Tier 1B (High-Value): ${tierCounts['1B']} clients\n- Tier 1C (Qualified): ${tierCounts['1C']} clients\n\nPersonalized emails will be created based on client type and buying patterns.`);
+        }
+
+        // P.U.R.E.S. Scoring System
+        function updateScoring() {
+            const profitability = parseInt(document.getElementById('profitability').value);
+            const urgency = parseInt(document.getElementById('urgency').value);
+            const reachability = parseInt(document.getElementById('reachability').value);
+            const engagement = parseInt(document.getElementById('engagement').value);
+            const sustainability = parseInt(document.getElementById('sustainability').value);
+
+            // Update display values
+            document.getElementById('profitabilityValue').textContent = profitability;
+            document.getElementById('urgencyValue').textContent = urgency;
+            document.getElementById('reachabilityValue').textContent = reachability;
+            document.getElementById('engagementValue').textContent = engagement;
+            document.getElementById('sustainabilityValue').textContent = sustainability;
+
+            // Calculate total score
+            const total = profitability + urgency + reachability + engagement + sustainability;
+            document.getElementById('totalScore').textContent = total;
+
+            // Determine tier
+            let tier;
+            if (total >= 20) tier = '1A';
+            else if (total >= 15) tier = '1B';
+            else tier = '1C';
+
+            document.getElementById('calculatedTier').textContent = tier;
+        }
+
+        function saveAssessment() {
+            alert('Assessment saved successfully! This would integrate with your CRM system.');
+        }
+
+        function saveFeedback() {
+            const client = document.getElementById('feedbackClient').value;
+            const type = document.getElementById('feedbackType').value;
+            const details = document.getElementById('feedbackDetails').value;
+            const rating = document.getElementById('satisfactionRating').value;
+
+            if (client && details) {
+                alert(`Feedback saved for ${client}!\nType: ${type}\nRating: ${rating}/5\nDetails: ${details}`);
+                // Clear form
+                document.getElementById('feedbackClient').value = '';
+                document.getElementById('feedbackDetails').value = '';
+            }
+        }
+
+        function trackReferral() {
+            const referring = document.getElementById('referringClient').value;
+            const referred = document.getElementById('referredClient').value;
+            const email = document.getElementById('referredEmail').value;
+            const reward = document.getElementById('referralReward').value;
+
+            if (referring && referred && email) {
+                alert(`Referral tracked!\nReferring Client: ${referring}\nNew Client: ${referred}\nEmail: ${email}\nReward: ${reward}`);
+                // Clear form
+                document.getElementById('referringClient').value = '';
+                document.getElementById('referredClient').value = '';
+                document.getElementById('referredEmail').value = '';
+            }
+        }
+
+        function generateSuccessStory() {
+            const story = document.getElementById('successStory').value;
+            if (story) {
+                const marketing = `🌟 CUSTOMER SUCCESS STORY 🌟\n\n${story}\n\n"Half Price Laundromat delivers exceptional value and service. Highly recommended!" \n\n📍 Visit us in Panorama City\n💰 Half the price, double the quality!\n#HalfPriceLaundromat #CustomerSuccess #PanoramaCity`;
+                
+                alert('Marketing copy generated! Ready for social media posting:\n\n' + marketing);
+            }
+        }
+
+        // Event listeners
+        document.getElementById('searchInput').addEventListener('input', filterTable);
+        document.getElementById('tierFilter').addEventListener('change', filterTable);
+        document.getElementById('statusFilter').addEventListener('change', filterTable);
+
+        // P.U.R.E.S. scoring sliders
+        ['profitability', 'urgency', 'reachability', 'engagement', 'sustainability'].forEach(id => {
+            document.getElementById(id).addEventListener('input', updateScoring);
+        });
+
+        // Satisfaction rating slider
+        document.getElementById('satisfactionRating').addEventListener('input', function() {
+            document.getElementById('satisfactionValue').textContent = this.value;
+        });
+
+        // Initialize table
+        populateTable();
+
+        // Close modals when clicking outside
+        window.onclick = function(event) {
+            const emailModal = document.getElementById('emailModal');
+            const clientModal = document.getElementById('clientModal');
+            
+            if (event.target === emailModal) {
+                emailModal.style.display = 'none';
+            }
+            if (event.target === clientModal) {
+                clientModal.style.display = 'none';
+            }
+        }
+
+        // Generate additional clients to reach 50
+        function generateMoreClients() {
+            const additionalClients = [
+                {
+                    name: "Rosa Gonzalez", email: "rosa.g@email.com", phone: "(818) 555-0153", 
+                    address: "9876 Laurel Canyon Blvd, Pacoima, CA", pures: 3.5, tier: "1C", 
+                    type: "Residential", value: "$45", status: "New", lastContact: "2023-12-27"
+                },
+                {
+                    name: "Brian Moore", email: "brian.m@email.com", phone: "(818) 555-0154", 
+                    address: "12543 Osborne St, Pacoima, CA", pures: 4.1, tier: "1A", 
+                    type: "Business", value: "$125", status: "Interested", lastContact: "2024-01-27"
+                },
+                {
+                    name: "Jennifer Martinez", email: "jen.martinez@email.com", phone: "(818) 555-0155", 
+                    address: "8765 Arleta Ave, Arleta, CA", pures: 3.8, tier: "1B", 
+                    type: "Apartment", value: "$170", status: "Customer", lastContact: "2023-12-26"
+                },
+                {
+                    name: "Frank Thompson", email: "frank.t@email.com", phone: "(818) 555-0156", 
+                    address: "15432 Branford St, Arleta, CA", pures: 3.3, tier: "1C", 
+                    type: "Student", value: "$25", status: "Contacted", lastContact: "2024-01-28"
+                },
+                {
+                    name: "Angela Rodriguez", email: "angela.r@email.com", phone: "(818) 555-0157", 
+                    address: "11098 Glenoaks Blvd, Pacoima, CA", pures: 4.2, tier: "1A", 
+                    type: "Residential", value: "$80", status: "Customer", lastContact: "2023-12-25"
+                },
+                {
+                    name: "Victor Herrera", email: "victor.h@email.com", phone: "(818) 555-0158", 
+                    address: "13765 Van Nuys Blvd, Arleta, CA", pures: 3.6, tier: "1B", 
+                    type: "Business", value: "$105", status: "Interested", lastContact: "2024-01-29"
+                },
+                {
+                    name: "Carmen Silva", email: "carmen.s@email.com", phone: "(818) 555-0159", 
+                    address: "7890 Tujunga Ave, North Hollywood, CA", pures: 3.9, tier: "1B", 
+                    type: "Apartment", value: "$185", status: "Customer", lastContact: "2023-12-24"
+                },
+                {
+                    name: "Roberto Mendez", email: "roberto.m@email.com", phone: "(818) 555-0160", 
+                    address: "14567 Foothill Blvd, Pacoima, CA", pures: 4.4, tier: "1A", 
+                    type: "Business", value: "$155", status: "Customer", lastContact: "2024-01-30"
+                },
+                {
+                    name: "Sophia Nguyen", email: "sophia.n@email.com", phone: "(818) 555-0161", 
+                    address: "10234 Rinaldi St, Granada Hills, CA", pures: 3.7, tier: "1B", 
+                    type: "Residential", value: "$65", status: "Interested", lastContact: "2023-12-23"
+                },
+                {
+                    name: "Manuel Flores", email: "manuel.f@email.com", phone: "(818) 555-0162", 
+                    address: "16789 Chatsworth St, Granada Hills, CA", pures: 3.4, tier: "1C", 
+                    type: "Student", value: "$35", status: "New", lastContact: "2024-01-31"
+                },
+                {
+                    name: "Diana Castillo", email: "diana.c@email.com", phone: "(818) 555-0163", 
+                    address: "8901 Porter Ranch Dr, Northridge, CA", pures: 4.0, tier: "1A", 
+                    type: "Apartment", value: "$175", status: "Customer", lastContact: "2023-12-22"
+                },
+                {
+                    name: "Jorge Ramirez", email: "jorge.r@email.com", phone: "(818) 555-0164", 
+                    address: "12345 Devonshire St, Northridge, CA", pures: 3.8, tier: "1B", 
+                    type: "Business", value: "$115", status: "Contacted", lastContact: "2024-02-01"
+                },
+                {
+                    name: "Teresa Morales", email: "teresa.m@email.com", phone: "(818) 555-0165", 
+                    address: "9567 Balboa Blvd, Northridge, CA", pures: 3.2, tier: "1C", 
+                    type: "Residential", value: "$40", status: "New", lastContact: "2023-12-21"
+                },
+                {
+                    name: "Eduardo Vargas", email: "eduardo.v@email.com", phone: "(818) 555-0166", 
+                    address: "15678 Plummer St, Northridge, CA", pures: 4.3, tier: "1A", 
+                    type: "Business", value: "$140", status: "Interested", lastContact: "2024-02-02"
+                },
+                {
+                    name: "Isabella Cruz", email: "isabella.c@email.com", phone: "(818) 555-0167", 
+                    address: "11234 Reseda Blvd, Northridge, CA", pures: 3.6, tier: "1B", 
+                    type: "Apartment", value: "$165", status: "Customer", lastContact: "2023-12-20"
+                },
+                {
+                    name: "Carlos Jimenez", email: "carlos.jim@email.com", phone: "(818) 555-0168", 
+                    address: "13456 Tampa Ave, Reseda, CA", pures: 3.9, tier: "1B", 
+                    type: "Residential", value: "$70", status: "Customer", lastContact: "2024-02-03"
+                },
+                {
+                    name: "Lucia Santos", email: "lucia.s@email.com", phone: "(818) 555-0169", 
+                    address: "7123 Winnetka Ave, Winnetka, CA", pures: 3.5, tier: "1C", 
+                    type: "Student", value: "$30", status: "Contacted", lastContact: "2023-12-19"
+                },
+                {
+                    name: "Miguel Torres", email: "miguel.t@email.com", phone: "(818) 555-0170", 
+                    address: "14890 Sherman Way, Van Nuys, CA", pures: 4.1, tier: "1A", 
+                    type: "Business", value: "$135", status: "Interested", lastContact: "2024-02-04"
+                },
+                {
+                    name: "Adriana Gutierrez", email: "adriana.g@email.com", phone: "(818) 555-0171", 
+                    address: "10567 Vanowen St, North Hollywood, CA", pures: 3.7, tier: "1B", 
+                    type: "Residential", value: "$55", status: "Customer", lastContact: "2023-12-18"
+                },
+                {
+                    name: "Fernando Ruiz", email: "fernando.r@email.com", phone: "(818) 555-0172", 
+                    address: "16234 Victory Blvd, Van Nuys, CA", pures: 4.2, tier: "1A", 
+                    type: "Apartment", value: "$190", status: "Customer", lastContact: "2024-02-05"
+                }
+            ];
+
+            clientData = [...clientData, ...additionalClients];
+            filteredData = [...clientData];
+            populateTable();
+        }
+
+        // Generate the additional clients
+        generateMoreClients();
+    </script>
+</body>
+</html>

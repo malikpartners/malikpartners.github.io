@@ -1,0 +1,1360 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>S.A.L.E. System - GrowthX AI Client Targeting Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #000000;
+            color: #ffffff;
+            line-height: 1.6;
+        }
+
+        .header {
+            background-color: #000000;
+            padding: 20px;
+            border-bottom: 2px solid #CF2030;
+            text-align: center;
+        }
+
+        .header img {
+            height: 80px;
+            margin-bottom: 10px;
+        }
+
+        .header h1 {
+            color: #CF2030;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+
+        .header p {
+            color: #cccccc;
+            font-size: 1.1em;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .dashboard-nav {
+            background-color: #1a1a1a;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            background-color: #CF2030;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        .nav-btn:hover {
+            background-color: #a91826;
+        }
+
+        .nav-btn.active {
+            background-color: #ffffff;
+            color: #CF2030;
+        }
+
+        .module {
+            background-color: #1a1a1a;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid #333;
+        }
+
+        .module h2 {
+            color: #CF2030;
+            margin-bottom: 15px;
+            font-size: 1.8em;
+        }
+
+        .controls {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .search-box, .filter-select {
+            padding: 10px;
+            border: 1px solid #CF2030;
+            border-radius: 5px;
+            background-color: #2a2a2a;
+            color: white;
+            font-size: 16px;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .filter-select {
+            min-width: 150px;
+        }
+
+        .pures-form {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .pures-item {
+            background-color: #2a2a2a;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #444;
+        }
+
+        .pures-item label {
+            display: block;
+            color: #CF2030;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .pures-item input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #666;
+            border-radius: 4px;
+            background-color: #3a3a3a;
+            color: white;
+        }
+
+        .tier-badge {
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .tier-1a { background-color: #28a745; color: white; }
+        .tier-1b { background-color: #ffc107; color: black; }
+        .tier-1c { background-color: #17a2b8; color: white; }
+
+        .client-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: #2a2a2a;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .client-table th {
+            background-color: #CF2030;
+            color: white;
+            padding: 12px;
+            text-align: left;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .client-table th:hover {
+            background-color: #a91826;
+        }
+
+        .client-table td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #444;
+        }
+
+        .client-table tr:hover {
+            background-color: #3a3a3a;
+        }
+
+        .contact-btn {
+            background-color: #28a745;
+            color: white;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            margin-right: 5px;
+        }
+
+        .contact-btn:hover {
+            background-color: #218838;
+        }
+
+        .email-btn {
+            background-color: #007bff;
+            color: white;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .email-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background-color: #2a2a2a;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #444;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #CF2030;
+        }
+
+        .stat-label {
+            color: #cccccc;
+            margin-top: 5px;
+        }
+
+        .footer {
+            background-color: #1a1a1a;
+            padding: 20px;
+            text-align: center;
+            border-top: 1px solid #CF2030;
+            margin-top: 40px;
+        }
+
+        .footer img {
+            height: 40px;
+            margin-bottom: 10px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .marketing-calendar {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .calendar-day {
+            background-color: #2a2a2a;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+            min-height: 80px;
+        }
+
+        .calendar-day.has-event {
+            background-color: #CF2030;
+        }
+
+        .export-btn {
+            background-color: #6c757d;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+
+        .export-btn:hover {
+            background-color: #545b62;
+        }
+
+        @media (max-width: 768px) {
+            .controls {
+                flex-direction: column;
+            }
+
+            .search-box {
+                min-width: 100%;
+            }
+
+            .pures-form {
+                grid-template-columns: 1fr;
+            }
+
+            .client-table {
+                font-size: 14px;
+            }
+
+            .client-table th, .client-table td {
+                padding: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="HigginsReports Logo">
+        <h1>S.A.L.E. System Client Targeting Dashboard</h1>
+        <p>GrowthX AI - AI Video Solutions & Internet Services</p>
+    </div>
+
+    <div class="container">
+        <div class="dashboard-nav">
+            <button class="nav-btn active" onclick="showModule('sourcing')">S - SOURCING</button>
+            <button class="nav-btn" onclick="showModule('assessing')">A - ASSESSING</button>
+            <button class="nav-btn" onclick="showModule('listening')">L - LISTENING</button>
+            <button class="nav-btn" onclick="showModule('empowering')">E - EMPOWERING</button>
+            <button class="nav-btn" onclick="showModule('marketing')">Marketing Plan</button>
+        </div>
+
+        <!-- SOURCING Module -->
+        <div id="sourcing" class="module">
+            <h2>S.A.L.E. SOURCING - P.U.R.E.S. Client Scoring System</h2>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">50</div>
+                    <div class="stat-label">Total Prospects</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">12</div>
+                    <div class="stat-label">Tier 1A (Premium)</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">23</div>
+                    <div class="stat-label">Tier 1B (High-Value)</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">15</div>
+                    <div class="stat-label">Tier 1C (Qualified)</div>
+                </div>
+            </div>
+
+            <div class="pures-form">
+                <div class="pures-item">
+                    <label>Profitability (1-5)</label>
+                    <input type="range" min="1" max="5" value="3" id="profitability">
+                    <span id="prof-value">3</span>
+                </div>
+                <div class="pures-item">
+                    <label>Urgency (1-5)</label>
+                    <input type="range" min="1" max="5" value="3" id="urgency">
+                    <span id="urg-value">3</span>
+                </div>
+                <div class="pures-item">
+                    <label>Reachability (1-5)</label>
+                    <input type="range" min="1" max="5" value="3" id="reachability">
+                    <span id="reach-value">3</span>
+                </div>
+                <div class="pures-item">
+                    <label>Engagement (1-5)</label>
+                    <input type="range" min="1" max="5" value="3" id="engagement">
+                    <span id="eng-value">3</span>
+                </div>
+                <div class="pures-item">
+                    <label>Sustainability (1-5)</label>
+                    <input type="range" min="1" max="5" value="3" id="sustainability">
+                    <span id="sus-value">3</span>
+                </div>
+            </div>
+
+            <div class="controls">
+                <input type="text" class="search-box" id="searchInput" placeholder="Search clients by name, company, industry...">
+                <select class="filter-select" id="tierFilter">
+                    <option value="">All Tiers</option>
+                    <option value="Tier 1A">Tier 1A (Premium)</option>
+                    <option value="Tier 1B">Tier 1B (High-Value)</option>
+                    <option value="Tier 1C">Tier 1C (Qualified)</option>
+                </select>
+                <select class="filter-select" id="industryFilter">
+                    <option value="">All Industries</option>
+                    <option value="Technology">Technology</option>
+                    <option value="Finance">Finance</option>
+                    <option value="Healthcare">Healthcare</option>
+                    <option value="Media">Media</option>
+                    <option value="Retail">Retail</option>
+                    <option value="Education">Education</option>
+                </select>
+                <button class="export-btn" onclick="exportData()">Export CSV</button>
+            </div>
+
+            <table class="client-table" id="clientTable">
+                <thead>
+                    <tr>
+                        <th onclick="sortTable(0)">Client Name ↕</th>
+                        <th onclick="sortTable(1)">Company</th>
+                        <th onclick="sortTable(2)">Email ↕</th>
+                        <th onclick="sortTable(3)">Phone ↕</th>
+                        <th onclick="sortTable(4)">Industry ↕</th>
+                        <th onclick="sortTable(5)">P.U.R.E.S. Score ↕</th>
+                        <th onclick="sortTable(6)">Tier Level ↕</th>
+                        <th onclick="sortTable(7)">Revenue Est. ↕</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="clientTableBody">
+                    <!-- Client data will be populated by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- ASSESSING Module -->
+        <div id="assessing" class="module hidden">
+            <h2>A.SSESSING - Buying Pattern Analysis</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">35%</div>
+                    <div class="stat-label">Analytical Buyers</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">25%</div>
+                    <div class="stat-label">Relationship Buyers</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">25%</div>
+                    <div class="stat-label">Efficiency Buyers</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">15%</div>
+                    <div class="stat-label">Innovation Buyers</div>
+                </div>
+            </div>
+            <p style="color: #cccccc; margin-top: 20px;">
+                <strong>Analytical Buyers:</strong> Require detailed ROI analysis, case studies, and trials.<br>
+                <strong>Relationship Buyers:</strong> Value trust, referrals, and long-term partnerships.<br>
+                <strong>Efficiency Buyers:</strong> Focus on time-saving and process improvement.<br>
+                <strong>Innovation Buyers:</strong> Seek cutting-edge solutions and competitive advantage.
+            </p>
+        </div>
+
+        <!-- LISTENING Module -->
+        <div id="listening" class="module hidden">
+            <h2>L.ISTENING - Feedback Integration System</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">4.7</div>
+                    <div class="stat-label">Avg. Satisfaction</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">92%</div>
+                    <div class="stat-label">Response Rate</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">3</div>
+                    <div class="stat-label">Active Issues</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">18</div>
+                    <div class="stat-label">Success Stories</div>
+                </div>
+            </div>
+            <div style="margin-top: 20px; color: #cccccc;">
+                <h3 style="color: #CF2030;">Feedback Tracking Components:</h3>
+                <ul style="margin-top: 10px; padding-left: 20px;">
+                    <li>Pre-sale feedback collection forms</li>
+                    <li>During-sale progress tracking</li>
+                    <li>Post-sale satisfaction monitoring</li>
+                    <li>Real-time complaint resolution protocols</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- EMPOWERING Module -->
+        <div id="empowering" class="module hidden">
+            <h2>E.MPOWERING - Referral Strategy Dashboard</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">67</div>
+                    <div class="stat-label">Total Referrals</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">43%</div>
+                    <div class="stat-label">Conversion Rate</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">12</div>
+                    <div class="stat-label">Active Advocates</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">$2.1M</div>
+                    <div class="stat-label">Referral Revenue</div>
+                </div>
+            </div>
+            <div style="margin-top: 20px; color: #cccccc;">
+                <h3 style="color: #CF2030;">Referral Management Features:</h3>
+                <ul style="margin-top: 10px; padding-left: 20px;">
+                    <li>Success story documentation system</li>
+                    <li>Referral reward tracking</li>
+                    <li>Client advocacy program management</li>
+                    <li>Co-marketing opportunity planner</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Marketing Plan Module -->
+        <div id="marketing" class="module hidden">
+            <h2>Marketing Plan & Schedule</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">15</div>
+                    <div class="stat-label">Active Campaigns</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">38%</div>
+                    <div class="stat-label">Open Rate</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">12%</div>
+                    <div class="stat-label">Click Rate</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">$450K</div>
+                    <div class="stat-label">Pipeline Value</div>
+                </div>
+            </div>
+            
+            <h3 style="color: #CF2030; margin-top: 30px;">Upcoming Marketing Activities</h3>
+            <div class="marketing-calendar">
+                <div class="calendar-day">
+                    <strong>Mon</strong><br>
+                    Email Campaign A
+                </div>
+                <div class="calendar-day">
+                    <strong>Tue</strong><br>
+                    Follow-up Calls
+                </div>
+                <div class="calendar-day has-event">
+                    <strong>Wed</strong><br>
+                    Webinar Launch
+                </div>
+                <div class="calendar-day">
+                    <strong>Thu</strong><br>
+                    Social Media
+                </div>
+                <div class="calendar-day has-event">
+                    <strong>Fri</strong><br>
+                    Client Reviews
+                </div>
+                <div class="calendar-day">
+                    <strong>Sat</strong><br>
+                    Content Prep
+                </div>
+                <div class="calendar-day">
+                    <strong>Sun</strong><br>
+                    Planning
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="HigginsReports Logo">
+        <p style="color: #cccccc;">© 2024 HigginsReports - Powered by AI Intelligence</p>
+    </div>
+
+    <script>
+        // Sample client data for San Francisco Bay Area AI/Tech companies
+        const clientData = [
+            {
+                name: "Sarah Chen",
+                company: "TechFlow Inc",
+                email: "sarah.chen@techflow.com",
+                phone: "(415) 555-0123",
+                address: "123 Market St, San Francisco, CA",
+                industry: "Technology",
+                puresScore: 4.8,
+                tier: "Tier 1A",
+                revenue: "$5.2M",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Michael Rodriguez",
+                company: "FinTech Solutions",
+                email: "m.rodriguez@fintech.com",
+                phone: "(415) 555-0124",
+                address: "456 Montgomery St, San Francisco, CA",
+                industry: "Finance",
+                puresScore: 4.5,
+                tier: "Tier 1A",
+                revenue: "$8.1M",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Jennifer Walsh",
+                company: "HealthTech Innovations",
+                email: "j.walsh@healthtech.com",
+                phone: "(415) 555-0125",
+                address: "789 Mission St, San Francisco, CA",
+                industry: "Healthcare",
+                puresScore: 4.2,
+                tier: "Tier 1B",
+                revenue: "$3.8M",
+                buyerType: "Efficiency"
+            },
+            {
+                name: "David Kim",
+                company: "MediaStream Pro",
+                email: "david.kim@mediastream.com",
+                phone: "(415) 555-0126",
+                address: "321 Folsom St, San Francisco, CA",
+                industry: "Media",
+                puresScore: 4.7,
+                tier: "Tier 1A",
+                revenue: "$6.5M",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Lisa Thompson",
+                company: "RetailConnect",
+                email: "lisa.t@retailconnect.com",
+                phone: "(415) 555-0127",
+                address: "654 Howard St, San Francisco, CA",
+                industry: "Retail",
+                puresScore: 3.9,
+                tier: "Tier 1B",
+                revenue: "$2.3M",
+                buyerType: "Efficiency"
+            },
+            {
+                name: "Robert Johnson",
+                company: "EduTech Systems",
+                email: "r.johnson@edutech.com",
+                phone: "(415) 555-0128",
+                address: "987 Pine St, San Francisco, CA",
+                industry: "Education",
+                puresScore: 3.6,
+                tier: "Tier 1C",
+                revenue: "$1.8M",
+                buyerType: "Relationship"
+            },
+            {
+                name: "Amanda Foster",
+                company: "CloudVision Corp",
+                email: "a.foster@cloudvision.com",
+                phone: "(415) 555-0129",
+                address: "147 California St, San Francisco, CA",
+                industry: "Technology",
+                puresScore: 4.4,
+                tier: "Tier 1A",
+                revenue: "$7.2M",
+                buyerType: "Analytical"
+            },
+            {
+                name: "James Wilson",
+                company: "Digital Marketing Hub",
+                email: "j.wilson@dmhub.com",
+                phone: "(415) 555-0130",
+                address: "258 Geary St, San Francisco, CA",
+                industry: "Media",
+                puresScore: 3.8,
+                tier: "Tier 1B",
+                revenue: "$2.9M",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Maria Santos",
+                company: "BioMed Analytics",
+                email: "m.santos@biomedanalytics.com",
+                phone: "(415) 555-0131",
+                address: "369 Bush St, San Francisco, CA",
+                industry: "Healthcare",
+                puresScore: 4.1,
+                tier: "Tier 1B",
+                revenue: "$4.1M",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Kevin Chang",
+                company: "StartupAccelerator",
+                email: "k.chang@startupaccel.com",
+                phone: "(415) 555-0132",
+                address: "741 Bryant St, San Francisco, CA",
+                industry: "Finance",
+                puresScore: 4.6,
+                tier: "Tier 1A",
+                revenue: "$9.3M",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Rachel Green",
+                company: "E-Commerce Plus",
+                email: "r.green@ecommerceplus.com",
+                phone: "(415) 555-0133",
+                address: "852 Van Ness Ave, San Francisco, CA",
+                industry: "Retail",
+                puresScore: 3.7,
+                tier: "Tier 1C",
+                revenue: "$1.9M",
+                buyerType: "Efficiency"
+            },
+            {
+                name: "Thomas Brown",
+                company: "AI Robotics Inc",
+                email: "t.brown@airobotics.com",
+                phone: "(415) 555-0134",
+                address: "963 Sutter St, San Francisco, CA",
+                industry: "Technology",
+                puresScore: 4.9,
+                tier: "Tier 1A",
+                revenue: "$12.5M",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Nicole Davis",
+                company: "Learning Systems Pro",
+                email: "n.davis@learningsys.com",
+                phone: "(415) 555-0135",
+                address: "174 Post St, San Francisco, CA",
+                industry: "Education",
+                puresScore: 3.5,
+                tier: "Tier 1C",
+                revenue: "$1.6M",
+                buyerType: "Relationship"
+            },
+            {
+                name: "Brian Miller",
+                company: "Fintech Innovations",
+                email: "b.miller@fintechinnov.com",
+                phone: "(415) 555-0136",
+                address: "285 Grant Ave, San Francisco, CA",
+                industry: "Finance",
+                puresScore: 4.3,
+                tier: "Tier 1A",
+                revenue: "$6.8M",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Stephanie Lee",
+                company: "HealthStream Solutions",
+                email: "s.lee@healthstream.com",
+                phone: "(415) 555-0137",
+                address: "396 Stockton St, San Francisco, CA",
+                industry: "Healthcare",
+                puresScore: 4.0,
+                tier: "Tier 1B",
+                revenue: "$3.2M",
+                buyerType: "Efficiency"
+            },
+            {
+                name: "Anthony Taylor",
+                company: "Content Creation Co",
+                email: "a.taylor@contentcreation.com",
+                phone: "(415) 555-0138",
+                address: "507 Union St, San Francisco, CA",
+                industry: "Media",
+                puresScore: 3.9,
+                tier: "Tier 1B",
+                revenue: "$2.7M",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Laura Anderson",
+                company: "Retail Analytics Pro",
+                email: "l.anderson@retailanalytics.com",
+                phone: "(415) 555-0139",
+                address: "618 Powell St, San Francisco, CA",
+                industry: "Retail",
+                puresScore: 3.6,
+                tier: "Tier 1C",
+                revenue: "$2.1M",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Daniel Garcia",
+                company: "TechEducate",
+                email: "d.garcia@techeducate.com",
+                phone: "(415) 555-0140",
+                address: "729 Mason St, San Francisco, CA",
+                industry: "Education",
+                puresScore: 3.8,
+                tier: "Tier 1B",
+                revenue: "$2.4M",
+                buyerType: "Relationship"
+            },
+            {
+                name: "Ashley Martin",
+                company: "CloudSecurity Inc",
+                email: "a.martin@cloudsecurity.com",
+                phone: "(415) 555-0141",
+                address: "840 Taylor St, San Francisco, CA",
+                industry: "Technology",
+                puresScore: 4.4,
+                tier: "Tier 1A",
+                revenue: "$8.9M",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Christopher White",
+                company: "Digital Finance Group",
+                email: "c.white@digitalfinance.com",
+                phone: "(415) 555-0142",
+                address: "951 Jones St, San Francisco, CA",
+                industry: "Finance",
+                puresScore: 4.2,
+                tier: "Tier 1B",
+                revenue: "$5.5M",
+                buyerType: "Efficiency"
+            },
+            {
+                name: "Melissa Thompson",
+                company: "MedTech Ventures",
+                email: "m.thompson@medtechventures.com",
+                phone: "(415) 555-0143",
+                address: "162 Leavenworth St, San Francisco, CA",
+                industry: "Healthcare",
+                puresScore: 4.1,
+                tier: "Tier 1B",
+                revenue: "$4.3M",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Ryan Clark",
+                company: "Streaming Solutions",
+                email: "r.clark@streamingsolutions.com",
+                phone: "(415) 555-0144",
+                address: "273 Hyde St, San Francisco, CA",
+                industry: "Media",
+                puresScore: 4.0,
+                tier: "Tier 1B",
+                revenue: "$3.6M",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Karen Rodriguez",
+                company: "Smart Retail Systems",
+                email: "k.rodriguez@smartretail.com",
+                phone: "(415) 555-0145",
+                address: "384 Larkin St, San Francisco, CA",
+                industry: "Retail",
+                puresScore: 3.7,
+                tier: "Tier 1C",
+                revenue: "$2.0M",
+                buyerType: "Efficiency"
+            },
+            {
+                name: "Steven Lewis",
+                company: "EdTech Innovations",
+                email: "s.lewis@edtechinnov.com",
+                phone: "(415) 555-0146",
+                address: "495 Polk St, San Francisco, CA",
+                industry: "Education",
+                puresScore: 3.9,
+                tier: "Tier 1B",
+                revenue: "$2.8M",
+                buyerType: "Relationship"
+            },
+            {
+                name: "Jennifer Hall",
+                company: "AI Solutions Corp",
+                email: "j.hall@aisolutions.com",
+                phone: "(415) 555-0147",
+                address: "606 Franklin St, San Francisco, CA",
+                industry: "Technology",
+                puresScore: 4.6,
+                tier: "Tier 1A",
+                revenue: "$10.2M",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Mark Allen",
+                company: "Investment Tech",
+                email: "m.allen@investmenttech.com",
+                phone: "(415) 555-0148",
+                address: "717 Gough St, San Francisco, CA",
+                industry: "Finance",
+                puresScore: 4.3,
+                tier: "Tier 1A",
+                revenue: "$7.8M",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Patricia Young",
+                company: "Healthcare AI",
+                email: "p.young@healthcareai.com",
+                phone: "(415) 555-0149",
+                address: "828 Octavia St, San Francisco, CA",
+                industry: "Healthcare",
+                puresScore: 4.5,
+                tier: "Tier 1A",
+                revenue: "$6.1M",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Joseph King",
+                company: "Media Production Hub",
+                email: "j.king@mediaproduction.com",
+                phone: "(415) 555-0150",
+                address: "939 Laguna St, San Francisco, CA",
+                industry: "Media",
+                puresScore: 3.8,
+                tier: "Tier 1B",
+                revenue: "$3.1M",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Elizabeth Wright",
+                company: "Retail Intelligence",
+                email: "e.wright@retailintelligence.com",
+                phone: "(415) 555-0151",
+                address: "140 Buchanan St, San Francisco, CA",
+                industry: "Retail",
+                puresScore: 3.6,
+                tier: "Tier 1C",
+                revenue: "$1.7M",
+                buyerType: "Analytical"
+            },
+            {
+                name: "William Lopez",
+                company: "Learning Analytics",
+                email: "w.lopez@learninganalytics.com",
+                phone: "(415) 555-0152",
+                address: "251 Webster St, San Francisco, CA",
+                industry: "Education",
+                puresScore: 3.7,
+                tier: "Tier 1C",
+                revenue: "$2.2M",
+                buyerType: "Relationship"
+            },
+            {
+                name: "Susan Hill",
+                company: "Tech Ventures Inc",
+                email: "s.hill@techventures.com",
+                phone: "(415) 555-0153",
+                address: "362 Fillmore St, San Francisco, CA",
+                industry: "Technology",
+                puresScore: 4.2,
+                tier: "Tier 1B",
+                revenue: "$5.9M",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Charles Scott",
+                company: "Financial Analytics",
+                email: "c.scott@financialanalytics.com",
+                phone: "(415) 555-0154",
+                address: "473 Steiner St, San Francisco, CA",
+                industry: "Finance",
+                puresScore: 4.0,
+                tier: "Tier 1B",
+                revenue: "$4.7M",
+                buyerType: "Efficiency"
+            },
+            {
+                name: "Linda Green",
+                company: "HealthTech Solutions",
+                email: "l.green@healthtechsol.com",
+                phone: "(415) 555-0155",
+                address: "584 Pierce St, San Francisco, CA",
+                industry: "Healthcare",
+                puresScore: 3.9,
+                tier: "Tier 1B",
+                revenue: "$3.4M",
+                buyerType: "Efficiency"
+            },
+            {
+                name: "Paul Adams",
+                company: "Digital Media Corp",
+                email: "p.adams@digitalmedia.com",
+                phone: "(415) 555-0156",
+                address: "695 Scott St, San Francisco, CA",
+                industry: "Media",
+                puresScore: 3.7,
+                tier: "Tier 1C",
+                revenue: "$2.5M",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Nancy Baker",
+                company: "Retail Solutions Pro",
+                email: "n.baker@retailsolutions.com",
+                phone: "(415) 555-0157",
+                address: "706 Divisadero St, San Francisco, CA",
+                industry: "Retail",
+                puresScore: 3.5,
+                tier: "Tier 1C",
+                revenue: "$1.8M",
+                buyerType: "Efficiency"
+            },
+            {
+                name: "Kenneth Gonzalez",
+                company: "Education Systems",
+                email: "k.gonzalez@edusystems.com",
+                phone: "(415) 555-0158",
+                address: "817 Broderick St, San Francisco, CA",
+                industry: "Education",
+                puresScore: 3.6,
+                tier: "Tier 1C",
+                revenue: "$1.9M",
+                buyerType: "Relationship"
+            },
+            {
+                name: "Betty Nelson",
+                company: "AI Consulting Group",
+                email: "b.nelson@aiconsulting.com",
+                phone: "(415) 555-0159",
+                address: "928 Lyon St, San Francisco, CA",
+                industry: "Technology",
+                puresScore: 4.1,
+                tier: "Tier 1B",
+                revenue: "$4.8M",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Jason Carter",
+                company: "Fintech Dynamics",
+                email: "j.carter@fintechdynamics.com",
+                phone: "(415) 555-0160",
+                address: "139 Central Ave, San Francisco, CA",
+                industry: "Finance",
+                puresScore: 4.4,
+                tier: "Tier 1A",
+                revenue: "$8.3M",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Helen Mitchell",
+                company: "Medical Systems Inc",
+                email: "h.mitchell@medicalsystems.com",
+                phone: "(415) 555-0161",
+                address: "240 Masonic Ave, San Francisco, CA",
+                industry: "Healthcare",
+                puresScore: 3.8,
+                tier: "Tier 1B",
+                revenue: "$3.3M",
+                buyerType: "Efficiency"
+            },
+            {
+                name: "Edward Perez",
+                company: "Content Innovations",
+                email: "e.perez@contentinnov.com",
+                phone: "(415) 555-0162",
+                address: "351 Ashbury St, San Francisco, CA",
+                industry: "Media",
+                puresScore: 3.9,
+                tier: "Tier 1B",
+                revenue: "$2.9M",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Donna Roberts",
+                company: "Smart Commerce",
+                email: "d.roberts@smartcommerce.com",
+                phone: "(415) 555-0163",
+                address: "462 Clayton St, San Francisco, CA",
+                industry: "Retail",
+                puresScore: 3.6,
+                tier: "Tier 1C",
+                revenue: "$2.0M",
+                buyerType: "Efficiency"
+            },
+            {
+                name: "Matthew Turner",
+                company: "EduInnovate",
+                email: "m.turner@eduinnovate.com",
+                phone: "(415) 555-0164",
+                address: "573 Cole St, San Francisco, CA",
+                industry: "Education",
+                puresScore: 3.8,
+                tier: "Tier 1B",
+                revenue: "$2.6M",
+                buyerType: "Relationship"
+            },
+            {
+                name: "Ruth Phillips",
+                company: "Technology Partners",
+                email: "r.phillips@techpartners.com",
+                phone: "(415) 555-0165",
+                address: "684 Shrader St, San Francisco, CA",
+                industry: "Technology",
+                puresScore: 4.0,
+                tier: "Tier 1B",
+                revenue: "$4.5M",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Gary Campbell",
+                company: "Investment Solutions",
+                email: "g.campbell@investmentsol.com",
+                phone: "(415) 555-0166",
+                address: "795 Stanyan St, San Francisco, CA",
+                industry: "Finance",
+                puresScore: 4.2,
+                tier: "Tier 1B",
+                revenue: "$5.3M",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Sharon Parker",
+                company: "HealthInnovate",
+                email: "s.parker@healthinnovate.com",
+                phone: "(415) 555-0167",
+                address: "106 Arguello Blvd, San Francisco, CA",
+                industry: "Healthcare",
+                puresScore: 4.3,
+                tier: "Tier 1A",
+                revenue: "$5.8M",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Frank Evans",
+                company: "Media Tech Solutions",
+                email: "f.evans@mediatechsol.com",
+                phone: "(415) 555-0168",
+                address: "217 2nd Ave, San Francisco, CA",
+                industry: "Media",
+                puresScore: 4.1,
+                tier: "Tier 1B",
+                revenue: "$3.8M",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Carolyn Edwards",
+                company: "Retail Dynamics",
+                email: "c.edwards@retaildynamics.com",
+                phone: "(415) 555-0169",
+                address: "328 3rd Ave, San Francisco, CA",
+                industry: "Retail",
+                puresScore: 3.7,
+                tier: "Tier 1C",
+                revenue: "$2.1M",
+                buyerType: "Efficiency"
+            },
+            {
+                name: "Raymond Collins",
+                company: "Learning Technologies",
+                email: "r.collins@learningtech.com",
+                phone: "(415) 555-0170",
+                address: "439 4th Ave, San Francisco, CA",
+                industry: "Education",
+                puresScore: 3.9,
+                tier: "Tier 1B",
+                revenue: "$2.7M",
+                buyerType: "Relationship"
+            },
+            {
+                name: "Maria Stewart",
+                company: "AI Enterprises",
+                email: "m.stewart@aienterprises.com",
+                phone: "(415) 555-0171",
+                address: "540 5th Ave, San Francisco, CA",
+                industry: "Technology",
+                puresScore: 4.5,
+                tier: "Tier 1A",
+                revenue: "$9.1M",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Albert Morris",
+                company: "Finance Innovations",
+                email: "a.morris@financeinnov.com",
+                phone: "(415) 555-0172",
+                address: "651 6th Ave, San Francisco, CA",
+                industry: "Finance",
+                puresScore: 4.1,
+                tier: "Tier 1B",
+                revenue: "$4.9M",
+                buyerType: "Analytical"
+            }
+        ];
+
+        let filteredData = [...clientData];
+        let sortDirection = 1;
+
+        function initializeTable() {
+            populateTable(clientData);
+            updatePURESSliders();
+        }
+
+        function populateTable(data) {
+            const tbody = document.getElementById('clientTableBody');
+            tbody.innerHTML = '';
+
+            data.forEach(client => {
+                const row = tbody.insertRow();
+                row.innerHTML = `
+                    <td>${client.name}</td>
+                    <td>${client.company}</td>
+                    <td>${client.email}</td>
+                    <td>${client.phone}</td>
+                    <td>${client.industry}</td>
+                    <td>${client.puresScore}</td>
+                    <td><span class="tier-badge tier-${client.tier.toLowerCase().replace(' ', '')}">${client.tier}</span></td>
+                    <td>${client.revenue}</td>
+                    <td>
+                        <button class="contact-btn" onclick="contactClient('${client.phone}')">Call</button>
+                        <button class="email-btn" onclick="emailClient('${client.email}', '${client.name}', '${client.company}')">Email</button>
+                    </td>
+                `;
+            });
+        }
+
+        function updatePURESSliders() {
+            const sliders = ['profitability', 'urgency', 'reachability', 'engagement', 'sustainability'];
+            sliders.forEach(slider => {
+                const element = document.getElementById(slider);
+                const valueSpan = document.getElementById(slider.substring(0, 4) === 'prof' ? 'prof-value' : 
+                                                        slider.substring(0, 3) === 'urg' ? 'urg-value' :
+                                                        slider.substring(0, 5) === 'reach' ? 'reach-value' :
+                                                        slider.substring(0, 3) === 'eng' ? 'eng-value' : 'sus-value');
+                element.addEventListener('input', function() {
+                    valueSpan.textContent = this.value;
+                });
+            });
+        }
+
+        function filterTable() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const tierFilter = document.getElementById('tierFilter').value;
+            const industryFilter = document.getElementById('industryFilter').value;
+
+            filteredData = clientData.filter(client => {
+                const matchesSearch = !searchTerm || 
+                    client.name.toLowerCase().includes(searchTerm) ||
+                    client.company.toLowerCase().includes(searchTerm) ||
+                    client.industry.toLowerCase().includes(searchTerm) ||
+                    client.email.toLowerCase().includes(searchTerm);
+                
+                const matchesTier = !tierFilter || client.tier === tierFilter;
+                const matchesIndustry = !industryFilter || client.industry === industryFilter;
+
+                return matchesSearch && matchesTier && matchesIndustry;
+            });
+
+            populateTable(filteredData);
+        }
+
+        function sortTable(columnIndex) {
+            const columns = ['name', 'company', 'email', 'phone', 'industry', 'puresScore', 'tier', 'revenue'];
+            const column = columns[columnIndex];
+
+            filteredData.sort((a, b) => {
+                let aVal = a[column];
+                let bVal = b[column];
+
+                if (column === 'puresScore') {
+                    aVal = parseFloat(aVal);
+                    bVal = parseFloat(bVal);
+                } else if (column === 'revenue') {
+                    aVal = parseFloat(aVal.replace(/[$M,]/g, ''));
+                    bVal = parseFloat(bVal.replace(/[$M,]/g, ''));
+                } else {
+                    aVal = aVal.toLowerCase();
+                    bVal = bVal.toLowerCase();
+                }
+
+                if (aVal < bVal) return -1 * sortDirection;
+                if (aVal > bVal) return 1 * sortDirection;
+                return 0;
+            });
+
+            sortDirection *= -1;
+            populateTable(filteredData);
+        }
+
+        function contactClient(phone) {
+            window.open(`tel:${phone}`, '_self');
+        }
+
+        function emailClient(email, name, company) {
+            const subject = "Transform Your Business with AI Video Solutions";
+            const body = `Dear ${name},
+
+I hope this message finds you well! I'm reaching out from GrowthX AI because I believe our AI video solutions could significantly impact ${company}'s growth and engagement strategies.
+
+Our AI-powered video creation and automation platform helps companies like yours:
+
+✓ Reduce video production costs by up to 80%
+✓ Create personalized video content at scale
+✓ Increase audience engagement by 250%
+✓ Streamline content workflows and save valuable time
+
+Given ${company}'s position in the market, I'd love to show you how our technology could give you a competitive edge and help you reach your growth objectives more efficiently.
+
+Would you be available for a brief 15-minute demo this week? I can show you exactly how our platform works and how it could benefit ${company} specifically.
+
+I'm confident that our AI video solutions could be a game-changer for your business.
+
+Best regards,
+Will Proctor
+Executive Producer, AI Video
+GrowthX AI
+will@growthx.ai
+(415) 555-GROW
+
+P.S. - We're currently offering a special pilot program for select Bay Area companies. I'd be happy to discuss how ${company} could qualify for preferred pricing.`;
+
+            window.open(`mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`, '_self');
+        }
+
+        function exportData() {
+            const csvContent = "data:text/csv;charset=utf-8," 
+                + "Name,Company,Email,Phone,Industry,PURES Score,Tier,Revenue\n"
+                + filteredData.map(row => 
+                    `"${row.name}","${row.company}","${row.email}","${row.phone}","${row.industry}","${row.puresScore}","${row.tier}","${row.revenue}"`
+                ).join("\n");
+            
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "client_prospects.csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        function showModule(moduleId) {
+            // Hide all modules
+            const modules = ['sourcing', 'assessing', 'listening', 'empowering', 'marketing'];
+            modules.forEach(id => {
+                document.getElementById(id).classList.add('hidden');
+            });
+
+            // Show selected module
+            document.getElementById(moduleId).classList.remove('hidden');
+
+            // Update navigation buttons
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+        }
+
+        // Event listeners
+        document.getElementById('searchInput').addEventListener('input', filterTable);
+        document.getElementById('tierFilter').addEventListener('change', filterTable);
+        document.getElementById('industryFilter').addEventListener('change', filterTable);
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeTable();
+        });
+    </script>
+</body>
+</html>

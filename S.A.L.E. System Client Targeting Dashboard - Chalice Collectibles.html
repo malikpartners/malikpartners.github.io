@@ -1,0 +1,662 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>S.A.L.E. System Dashboard - Chalice Collectibles</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #000000;
+            color: #CF2030;
+            line-height: 1.6;
+        }
+        
+        .header {
+            background-color: #000000;
+            padding: 20px 0;
+            border-bottom: 3px solid #CF2030;
+            text-align: center;
+        }
+        
+        .header img {
+            max-height: 80px;
+            width: auto;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .business-info {
+            background-color: #1a1a1a;
+            border: 2px solid #CF2030;
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 10px;
+        }
+        
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            background-color: #1a1a1a;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .tab {
+            flex: 1;
+            padding: 15px;
+            background-color: #333;
+            color: #CF2030;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            border-right: 1px solid #CF2030;
+        }
+        
+        .tab:last-child {
+            border-right: none;
+        }
+        
+        .tab.active,
+        .tab:hover {
+            background-color: #CF2030;
+            color: #000;
+        }
+        
+        .tab-content {
+            display: none;
+            background-color: #1a1a1a;
+            border: 2px solid #CF2030;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .search-filter {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .search-filter input,
+        .search-filter select {
+            padding: 10px;
+            border: 2px solid #CF2030;
+            background-color: #000;
+            color: #CF2030;
+            border-radius: 5px;
+            min-width: 150px;
+        }
+        
+        .search-filter input::placeholder {
+            color: #888;
+        }
+        
+        .clients-table {
+            overflow-x: auto;
+            margin-bottom: 20px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #1a1a1a;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #333;
+            color: #CF2030;
+        }
+        
+        th {
+            background-color: #CF2030;
+            color: #000;
+            font-weight: bold;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        th:hover {
+            background-color: #a01820;
+        }
+        
+        .tier-1a {
+            background-color: rgba(46, 125, 50, 0.3);
+        }
+        
+        .tier-1b {
+            background-color: rgba(255, 193, 7, 0.3);
+        }
+        
+        .tier-1c {
+            background-color: rgba(33, 150, 243, 0.3);
+        }
+        
+        .contact-btn,
+        .email-btn {
+            padding: 8px 12px;
+            margin: 2px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s;
+        }
+        
+        .contact-btn {
+            background-color: #CF2030;
+            color: #fff;
+        }
+        
+        .email-btn {
+            background-color: #333;
+            color: #CF2030;
+            border: 1px solid #CF2030;
+        }
+        
+        .contact-btn:hover,
+        .email-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 2px 5px rgba(207, 32, 48, 0.3);
+        }
+        
+        .pures-form {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .pures-item {
+            background-color: #333;
+            padding: 15px;
+            border-radius: 10px;
+            border: 2px solid #CF2030;
+        }
+        
+        .pures-item h4 {
+            color: #CF2030;
+            margin-bottom: 10px;
+        }
+        
+        .score-range {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .score-btn {
+            width: 40px;
+            height: 40px;
+            border: 2px solid #CF2030;
+            background-color: #000;
+            color: #CF2030;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .score-btn.selected {
+            background-color: #CF2030;
+            color: #000;
+        }
+        
+        .marketing-calendar {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+        }
+        
+        .calendar-item {
+            background-color: #333;
+            padding: 15px;
+            border-radius: 10px;
+            border: 2px solid #CF2030;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 20px;
+            border-top: 2px solid #CF2030;
+            margin-top: 40px;
+        }
+        
+        .footer img {
+            max-height: 40px;
+            opacity: 0.7;
+        }
+        
+        .export-btn {
+            background-color: #CF2030;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px;
+            transition: all 0.3s;
+        }
+        
+        .export-btn:hover {
+            background-color: #a01820;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports">
+    </header>
+
+    <div class="container">
+        <div class="business-info">
+            <h1>S.A.L.E. System Dashboard - Chalice Collectibles</h1>
+            <p><strong>Business:</strong> Chalice Collectibles | <strong>Owner:</strong> Shane Scurry | <strong>Location:</strong> Arcadia, California | <strong>Industry:</strong> Retail Collectibles</p>
+            <p><strong>Website:</strong> chalicecollectibles.com | <strong>Email:</strong> shane@chalicecollectibles.com</p>
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('sourcing')">S - SOURCING</button>
+            <button class="tab" onclick="showTab('assessing')">A - ASSESSING</button>
+            <button class="tab" onclick="showTab('listening')">L - LISTENING</button>
+            <button class="tab" onclick="showTab('empowering')">E - EMPOWERING</button>
+            <button class="tab" onclick="showTab('analytics')">ANALYTICS</button>
+        </div>
+
+        <!-- SOURCING TAB -->
+        <div id="sourcing" class="tab-content active">
+            <h2>P.U.R.E.S. Client Scoring & Database</h2>
+            
+            <div class="search-filter">
+                <input type="text" id="searchClients" placeholder="Search clients..." onkeyup="filterClients()">
+                <select id="tierFilter" onchange="filterClients()">
+                    <option value="">All Tiers</option>
+                    <option value="1A">Tier 1A (Premium)</option>
+                    <option value="1B">Tier 1B (High-Value)</option>
+                    <option value="1C">Tier 1C (Qualified)</option>
+                </select>
+                <select id="industryFilter" onchange="filterClients()">
+                    <option value="">All Industries</option>
+                    <option value="Entertainment">Entertainment</option>
+                    <option value="Gaming">Gaming</option>
+                    <option value="Sports">Sports</option>
+                    <option value="Art">Art</option>
+                    <option value="Comics">Comics</option>
+                </select>
+                <button class="export-btn" onclick="exportClients()">Export CSV</button>
+                <button class="export-btn" onclick="addNewClient()">Add New Client</button>
+            </div>
+
+            <div class="clients-table">
+                <table id="clientsTable">
+                    <thead>
+                        <tr>
+                            <th onclick="sortTable(0)">Client Name</th>
+                            <th onclick="sortTable(1)">Email</th>
+                            <th onclick="sortTable(2)">Phone</th>
+                            <th onclick="sortTable(3)">Address</th>
+                            <th onclick="sortTable(4)">P.U.R.E.S Score</th>
+                            <th onclick="sortTable(5)">Tier</th>
+                            <th onclick="sortTable(6)">Interest</th>
+                            <th onclick="sortTable(7)">Revenue Est.</th>
+                            <th onclick="sortTable(8)">Last Contact</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="clientsBody">
+                        <!-- Client data will be populated here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- ASSESSING TAB -->
+        <div id="assessing" class="tab-content">
+            <h2>Buying Pattern Analysis</h2>
+            <div class="pures-form">
+                <div class="pures-item">
+                    <h4>Analytical Buyers (35%)</h4>
+                    <p>Require detailed ROI analysis, case studies, investment potential data</p>
+                    <p><strong>Strategy:</strong> Provide authentication certificates, investment growth charts, market analysis</p>
+                </div>
+                <div class="pures-item">
+                    <h4>Relationship Buyers (25%)</h4>
+                    <p>Value trust, referrals, long-term collecting relationships</p>
+                    <p><strong>Strategy:</strong> Personal consultations, collector community events, loyalty programs</p>
+                </div>
+                <div class="pures-item">
+                    <h4>Efficiency Buyers (20%)</h4>
+                    <p>Focus on convenient purchasing, fast authentication, streamlined process</p>
+                    <p><strong>Strategy:</strong> Online catalog, express authentication, home delivery</p>
+                </div>
+                <div class="pures-item">
+                    <h4>Innovation Buyers (20%)</h4>
+                    <p>Seek cutting-edge collectibles, limited editions, exclusive items</p>
+                    <p><strong>Strategy:</strong> First access to new releases, exclusive previews, custom acquisitions</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- LISTENING TAB -->
+        <div id="listening" class="tab-content">
+            <h2>Feedback Integration System</h2>
+            <div class="pures-form">
+                <div class="pures-item">
+                    <h4>Pre-Sale Feedback</h4>
+                    <p>Collection preferences, budget range, authentication requirements</p>
+                    <button class="export-btn" onclick="createFeedbackForm('pre-sale')">Create Form</button>
+                </div>
+                <div class="pures-item">
+                    <h4>During-Sale Progress</h4>
+                    <p>Purchase experience, item condition satisfaction, service quality</p>
+                    <button class="export-btn" onclick="createFeedbackForm('during-sale')">Track Progress</button>
+                </div>
+                <div class="pures-item">
+                    <h4>Post-Sale Satisfaction</h4>
+                    <p>Overall experience, likelihood to recommend, future needs</p>
+                    <button class="export-btn" onclick="createFeedbackForm('post-sale')">Send Survey</button>
+                </div>
+                <div class="pures-item">
+                    <h4>Complaint Resolution</h4>
+                    <p>Issue tracking, resolution timeline, customer satisfaction restoration</p>
+                    <button class="export-btn" onclick="createFeedbackForm('complaint')">Resolve Issues</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- EMPOWERING TAB -->
+        <div id="empowering" class="tab-content">
+            <h2>Referral Strategy Dashboard</h2>
+            <div class="marketing-calendar">
+                <div class="calendar-item">
+                    <h4>Success Stories</h4>
+                    <p>Document rare find acquisitions, investment success stories, collection completions</p>
+                    <button class="export-btn">Add Success Story</button>
+                </div>
+                <div class="calendar-item">
+                    <h4>Referral Rewards</h4>
+                    <p>Track referral bonuses, collector credits, exclusive access rewards</p>
+                    <button class="export-btn">Manage Rewards</button>
+                </div>
+                <div class="calendar-item">
+                    <h4>Client Advocacy</h4>
+                    <p>Collector testimonials, social media mentions, community endorsements</p>
+                    <button class="export-btn">View Testimonials</button>
+                </div>
+                <div class="calendar-item">
+                    <h4>Co-Marketing</h4>
+                    <p>Partnership opportunities with other collectors, convention collaborations</p>
+                    <button class="export-btn">Plan Partnerships</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ANALYTICS TAB -->
+        <div id="analytics" class="tab-content">
+            <h2>Performance Analytics</h2>
+            <div class="marketing-calendar">
+                <div class="calendar-item">
+                    <h4>Sourcing Metrics</h4>
+                    <p>P.U.R.E.S. accuracy: 85% | Target clients identified: 42 | Conversion rate: 68%</p>
+                </div>
+                <div class="calendar-item">
+                    <h4>Assessment Metrics</h4>
+                    <p>Needs assessment accuracy: 92% | Buying pattern prediction: 89% | Revenue forecast: $340K</p>
+                </div>
+                <div class="calendar-item">
+                    <h4>Listening Metrics</h4>
+                    <p>Feedback collection rate: 73% | Response time: 2.3 hours | Satisfaction: 4.6/5</p>
+                </div>
+                <div class="calendar-item">
+                    <h4>Empowerment Metrics</h4>
+                    <p>Referrals generated: 3.2 per client | Success story completion: 95% | Advocacy rate: 81%</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports">
+        <p>&copy; 2024 Higgins Reports - S.A.L.E. System Dashboard</p>
+    </footer>
+
+    <script>
+        // Sample client data for Chalice Collectibles
+        const clientsData = [
+            {name: "Alex Rodriguez", email: "alex.rodriguez@email.com", phone: "(626) 555-0123", address: "123 Huntington Dr, Arcadia, CA 91007", pures: 4.8, tier: "1A", interest: "Sports Cards", revenue: "$25,000", lastContact: "2024-01-15", notes: "Premium sports card collector, focuses on vintage baseball"},
+            {name: "Maria Chen", email: "maria.chen@email.com", phone: "(626) 555-0124", address: "456 Santa Anita Ave, Arcadia, CA 91006", pures: 4.5, tier: "1A", interest: "Comic Books", revenue: "$18,000", lastContact: "2024-01-12", notes: "Marvel collector, interested in first editions"},
+            {name: "David Thompson", email: "david.thompson@email.com", phone: "(626) 555-0125", address: "789 Colorado Blvd, Pasadena, CA 91105", pures: 4.2, tier: "1B", interest: "Gaming Cards", revenue: "$12,000", lastContact: "2024-01-10", notes: "Pokemon TCG enthusiast"},
+            {name: "Sarah Williams", email: "sarah.williams@email.com", phone: "(626) 555-0126", address: "321 Los Robles Ave, Pasadena, CA 91101", pures: 4.0, tier: "1B", interest: "Art Collectibles", revenue: "$15,000", lastContact: "2024-01-08", notes: "Contemporary art collector"},
+            {name: "Michael Davis", email: "michael.davis@email.com", phone: "(626) 555-0127", address: "654 Fair Oaks Ave, South Pasadena, CA 91030", pures: 3.8, tier: "1B", interest: "Sports Memorabilia", revenue: "$8,000", lastContact: "2024-01-05", notes: "Lakers memorabilia collector"},
+            {name: "Jennifer Lee", email: "jennifer.lee@email.com", phone: "(626) 555-0128", address: "987 Mission St, San Marino, CA 91108", pures: 3.5, tier: "1C", interest: "Comics", revenue: "$6,000", lastContact: "2024-01-03", notes: "DC Comics fan"},
+            {name: "Robert Martinez", email: "robert.martinez@email.com", phone: "(626) 555-0129", address: "147 Atlantic Blvd, Monterey Park, CA 91754", pures: 3.7, tier: "1C", interest: "Gaming", revenue: "$7,500", lastContact: "2024-01-01", notes: "Magic: The Gathering player"},
+            {name: "Lisa Anderson", email: "lisa.anderson@email.com", phone: "(626) 555-0130", address: "258 Baldwin Ave, Sierra Madre, CA 91024", pures: 4.3, tier: "1A", interest: "Entertainment", revenue: "$20,000", lastContact: "2024-01-20", notes: "Movie memorabilia collector"},
+            {name: "James Wilson", email: "james.wilson@email.com", phone: "(626) 555-0131", address: "369 Foothill Blvd, Arcadia, CA 91006", pures: 3.9, tier: "1B", interest: "Sports Cards", revenue: "$9,500", lastContact: "2023-12-28", notes: "Football card collector"},
+            {name: "Amanda Garcia", email: "amanda.garcia@email.com", phone: "(626) 555-0132", address: "741 Rosemead Blvd, Temple City, CA 91780", pures: 3.6, tier: "1C", interest: "Art", revenue: "$5,500", lastContact: "2023-12-25", notes: "Pop art enthusiast"},
+            {name: "Christopher Brown", email: "christopher.brown@email.com", phone: "(626) 555-0133", address: "852 Live Oak Ave, Arcadia, CA 91006", pures: 4.1, tier: "1B", interest: "Comics", revenue: "$11,000", lastContact: "2024-01-18", notes: "Independent comic collector"},
+            {name: "Michelle Taylor", email: "michelle.taylor@email.com", phone: "(626) 555-0134", address: "963 Duarte Rd, Arcadia, CA 91007", pures: 4.6, tier: "1A", interest: "Gaming Cards", revenue: "$22,000", lastContact: "2024-01-22", notes: "Yu-Gi-Oh! tournament player"},
+            {name: "Daniel Johnson", email: "daniel.johnson@email.com", phone: "(626) 555-0135", address: "159 Las Tunas Dr, Arcadia, CA 91007", pures: 3.4, tier: "1C", interest: "Sports", revenue: "$4,800", lastContact: "2023-12-20", notes: "Soccer memorabilia collector"},
+            {name: "Nicole White", email: "nicole.white@email.com", phone: "(626) 555-0136", address: "267 Huntington Dr, San Marino, CA 91108", pures: 4.4, tier: "1A", interest: "Entertainment", revenue: "$19,500", lastContact: "2024-01-16", notes: "Star Wars collector"},
+            {name: "Kevin Miller", email: "kevin.miller@email.com", phone: "(626) 555-0137", address: "378 Sierra Madre Villa Ave, Pasadena, CA 91107", pures: 3.8, tier: "1B", interest: "Gaming", revenue: "$8,800", lastContact: "2024-01-06", notes: "Board game collector"},
+            {name: "Rachel Harris", email: "rachel.harris@email.com", phone: "(626) 555-0138", address: "489 Colorado Blvd, Arcadia, CA 91007", pures: 3.7, tier: "1C", interest: "Art", revenue: "$7,200", lastContact: "2023-12-30", notes: "Digital art collector"},
+            {name: "Brian Clark", email: "brian.clark@email.com", phone: "(626) 555-0139", address: "591 Baldwin Ave, Arcadia, CA 91007", pures: 4.2, tier: "1B", interest: "Sports Cards", revenue: "$13,500", lastContact: "2024-01-14", notes: "Hockey card specialist"},
+            {name: "Stephanie Lewis", email: "stephanie.lewis@email.com", phone: "(626) 555-0140", address: "692 First Ave, Arcadia, CA 91006", pures: 4.7, tier: "1A", interest: "Comics", revenue: "$24,500", lastContact: "2024-01-24", notes: "Golden Age comics collector"},
+            {name: "Gregory Walker", email: "gregory.walker@email.com", phone: "(626) 555-0141", address: "703 Second Ave, Arcadia, CA 91006", pures: 3.9, tier: "1B", interest: "Gaming Cards", revenue: "$10,200", lastContact: "2024-01-04", notes: "Digimon card collector"},
+            {name: "Kimberly Hall", email: "kimberly.hall@email.com", phone: "(626) 555-0142", address: "814 Third Ave, Arcadia, CA 91006", pures: 3.3, tier: "1C", interest: "Entertainment", revenue: "$4,500", lastContact: "2023-12-18", notes: "Anime memorabilia fan"},
+            {name: "Anthony Allen", email: "anthony.allen@email.com", phone: "(626) 555-0143", address: "925 Camino Real Ave, Arcadia, CA 91007", pures: 4.0, tier: "1B", interest: "Sports", revenue: "$11,800", lastContact: "2024-01-11", notes: "Basketball memorabilia collector"},
+            {name: "Lauren Young", email: "lauren.young@email.com", phone: "(626) 555-0144", address: "136 Holly Ave, Arcadia, CA 91007", pures: 3.6, tier: "1C", interest: "Art", revenue: "$6,300", lastContact: "2023-12-27", notes: "Sculpture collector"},
+            {name: "Jonathan King", email: "jonathan.king@email.com", phone: "(626) 555-0145", address: "247 Olive Ave, Monrovia, CA 91016", pures: 4.5, tier: "1A", interest: "Gaming", revenue: "$21,000", lastContact: "2024-01-19", notes: "Vintage video game collector"},
+            {name: "Melissa Wright", email: "melissa.wright@email.com", phone: "(626) 555-0146", address: "358 Myrtle Ave, Monrovia, CA 91016", pures: 3.5, tier: "1C", interest: "Comics", revenue: "$5,800", lastContact: "2023-12-22", notes: "Indie comic enthusiast"},
+            {name: "Ryan Lopez", email: "ryan.lopez@email.com", phone: "(626) 555-0147", address: "469 Lime Ave, Monrovia, CA 91016", pures: 4.3, tier: "1A", interest: "Sports Cards", revenue: "$18,500", lastContact: "2024-01-17", notes: "Baseball card investor"},
+            {name: "Heather Hill", email: "heather.hill@email.com", phone: "(626) 555-0148", address: "570 Magnolia Ave, Arcadia, CA 91006", pures: 3.8, tier: "1B", interest: "Entertainment", revenue: "$9,000", lastContact: "2024-01-02", notes: "Disney collectibles fan"},
+            {name: "Scott Green", email: "scott.green@email.com", phone: "(626) 555-0149", address: "681 Sunset Blvd, Arcadia, CA 91007", pures: 4.1, tier: "1B", interest: "Gaming Cards", revenue: "$12,500", lastContact: "2024-01-13", notes: "One Piece TCG player"},
+            {name: "Crystal Adams", email: "crystal.adams@email.com", phone: "(626) 555-0150", address: "792 Sunrise Ave, Arcadia, CA 91007", pures: 3.4, tier: "1C", interest: "Art", revenue: "$4,200", lastContact: "2023-12-19", notes: "Photography collector"},
+            {name: "Tyler Baker", email: "tyler.baker@email.com", phone: "(626) 555-0151", address: "893 Valley Blvd, Alhambra, CA 91801", pures: 4.4, tier: "1A", interest: "Sports", revenue: "$20,500", lastContact: "2024-01-21", notes: "Olympic memorabilia specialist"},
+            {name: "Vanessa Gonzalez", email: "vanessa.gonzalez@email.com", phone: "(626) 555-0152", address: "904 Garfield Ave, Alhambra, CA 91801", pures: 3.7, tier: "1C", interest: "Comics", revenue: "$6,800", lastContact: "2023-12-26", notes: "Manga collector"},
+            {name: "Benjamin Nelson", email: "benjamin.nelson@email.com", phone: "(626) 555-0153", address: "115 Main St, Alhambra, CA 91801", pures: 4.0, tier: "1B", interest: "Gaming", revenue: "$10,800", lastContact: "2024-01-07", notes: "Tabletop RPG collector"},
+            {name: "Samantha Carter", email: "samantha.carter@email.com", phone: "(626) 555-0154", address: "226 First St, Alhambra, CA 91801", pures: 4.6, tier: "1A", interest: "Entertainment", revenue: "$23,000", lastContact: "2024-01-23", notes: "Horror movie memorabilia"},
+            {name: "Jason Mitchell", email: "jason.mitchell@email.com", phone: "(626) 555-0155", address: "337 Second St, Alhambra, CA 91801", pures: 3.9, tier: "1B", interest: "Sports Cards", revenue: "$9,800", lastContact: "2024-01-09", notes: "Tennis card collector"},
+            {name: "Ashley Perez", email: "ashley.perez@email.com", phone: "(626) 555-0156", address: "448 Third St, San Gabriel, CA 91776", pures: 3.2, tier: "1C", interest: "Art", revenue: "$3,900", lastContact: "2023-12-15", notes: "Ceramic art collector"},
+            {name: "Matthew Roberts", email: "matthew.roberts@email.com", phone: "(626) 555-0157", address: "559 Las Flores Dr, San Gabriel, CA 91775", pures: 4.2, tier: "1B", interest: "Gaming Cards", revenue: "$14,000", lastContact: "2024-01-12", notes: "Dragon Ball Super TCG"},
+            {name: "Brittany Turner", email: "brittany.turner@email.com", phone: "(626) 555-0158", address: "660 Del Mar Ave, San Gabriel, CA 91776", pures: 4.5, tier: "1A", interest: "Comics", revenue: "$21,500", lastContact: "2024-01-20", notes: "Image Comics specialist"},
+            {name: "Eric Phillips", email: "eric.phillips@email.com", phone: "(626) 555-0159", address: "771 Mission Dr, San Gabriel, CA 91776", pures: 3.6, tier: "1C", interest: "Sports", revenue: "$5,600", lastContact: "2023-12-24", notes: "Golf memorabilia"},
+            {name: "Megan Campbell", email: "megan.campbell@email.com", phone: "(626) 555-0160", address: "882 Rosemead Blvd, San Gabriel, CA 91775", pures: 4.1, tier: "1B", interest: "Entertainment", revenue: "$11,500", lastContact: "2024-01-08", notes: "Superhero memorabilia"},
+            {name: "Patrick Parker", email: "patrick.parker@email.com", phone: "(626) 555-0161", address: "993 Broadway, San Gabriel, CA 91776", pures: 3.8, tier: "1B", interest: "Gaming", revenue: "$8,500", lastContact: "2023-12-31", notes: "Retro gaming collector"},
+            {name: "Courtney Evans", email: "courtney.evans@email.com", phone: "(626) 555-0162", address: "104 Valley Blvd, San Gabriel, CA 91776", pures: 4.4, tier: "1A", interest: "Art", revenue: "$19,000", lastContact: "2024-01-18", notes: "Modern art enthusiast"},
+            {name: "Trevor Edwards", email: "trevor.edwards@email.com", phone: "(626) 555-0163", address: "215 Garvey Ave, San Gabriel, CA 91775", pures: 3.3, tier: "1C", interest: "Sports Cards", revenue: "$4,600", lastContact: "2023-12-21", notes: "Minor league cards"},
+            {name: "Natalie Collins", email: "natalie.collins@email.com", phone: "(626) 555-0164", address: "326 Live Oak St, San Gabriel, CA 91775", pures: 4.7, tier: "1A", interest: "Gaming Cards", revenue: "$25,500", lastContact: "2024-01-25", notes: "Competitive TCG player"},
+            {name: "Sean Stewart", email: "sean.stewart@email.com", phone: "(626) 555-0165", address: "437 Ramona St, San Gabriel, CA 91775", pures: 3.5, tier: "1C", interest: "Comics", revenue: "$5,200", lastContact: "2023-12-23", notes: "Webcomic fan"},
+            {name: "Victoria Sanchez", email: "victoria.sanchez@email.com", phone: "(626) 555-0166", address: "548 California St, San Gabriel, CA 91775", pures: 4.0, tier: "1B", interest: "Entertainment", revenue: "$10,500", lastContact: "2024-01-05", notes: "Sci-fi memorabilia"},
+            {name: "Marcus Morris", email: "marcus.morris@email.com", phone: "(626) 555-0167", address: "659 Alhambra Rd, San Gabriel, CA 91775", pures: 4.3, tier: "1A", interest: "Sports", revenue: "$17,500", lastContact: "2024-01-16", notes: "Autographed sports items"},
+            {name: "Andrea Rogers", email: "andrea.rogers@email.com", phone: "(626) 555-0168", address: "760 San Gabriel Blvd, San Gabriel, CA 91775", pures: 3.7, tier: "1C", interest: "Art", revenue: "$6,500", lastContact: "2023-12-29", notes: "Street art collector"},
+            {name: "Justin Reed", email: "justin.reed@email.com", phone: "(626) 555-0169", address: "871 Temple City Blvd, Temple City, CA 91780", pures: 4.2, tier: "1B", interest: "Gaming", revenue: "$13,200", lastContact: "2024-01-14", notes: "Fighting game collector"},
+            {name: "Alexis Cook", email: "alexis.cook@email.com", phone: "(626) 555-0170", address: "982 Las Tunas Dr, Temple City, CA 91780", pures: 4.6, tier: "1A", interest: "Comics", revenue: "$22,500", lastContact: "2024-01-22", notes: "First edition collector"},
+            {name: "Jordan Bailey", email: "jordan.bailey@email.com", phone: "(626) 555-0171", address: "193 Kauffman Ave, Temple City, CA 91780", pures: 3.4, tier: "1C", interest: "Sports Cards", revenue: "$4,400", lastContact: "2023-12-17", notes: "Rookie card collector"},
+            {name: "Kayla Rivera", email: "kayla.rivera@email.com", phone: "(626) 555-0172", address: "294 Baldwin Ave, Temple City, CA 91780", pures: 4.1, tier: "1B", interest: "Entertainment", revenue: "$12,000", lastContact: "2024-01-10", notes: "Music memorabilia fan"}
+        ];
+
+        let filteredClients = [...clientsData];
+
+        function showTab(tabName) {
+            // Hide all tab contents
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabContents.forEach(content => content.classList.remove('active'));
+            
+            // Remove active class from all tabs
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Show selected tab content
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        function populateClientsTable() {
+            const tbody = document.getElementById('clientsBody');
+            tbody.innerHTML = '';
+            
+            filteredClients.forEach(client => {
+                const row = document.createElement('tr');
+                row.className = `tier-${client.tier.toLowerCase()}`;
+                row.innerHTML = `
+                    <td>${client.name}</td>
+                    <td>${client.email}</td>
+                    <td>${client.phone}</td>
+                    <td>${client.address}</td>
+                    <td>${client.pures}</td>
+                    <td>${client.tier}</td>
+                    <td>${client.interest}</td>
+                    <td>${client.revenue}</td>
+                    <td>${client.lastContact}</td>
+                    <td>
+                        <button class="contact-btn" onclick="contactClient('${client.phone}')">Call</button>
+                        <button class="email-btn" onclick="emailClient('${client.email}', '${client.name}', '${client.interest}')">Email</button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function filterClients() {
+            const searchTerm = document.getElementById('searchClients').value.toLowerCase();
+            const tierFilter = document.getElementById('tierFilter').value;
+            const industryFilter = document.getElementById('industryFilter').value;
+            
+            filteredClients = clientsData.filter(client => {
+                const matchesSearch = client.name.toLowerCase().includes(searchTerm) || 
+                                    client.email.toLowerCase().includes(searchTerm) ||
+                                    client.interest.toLowerCase().includes(searchTerm);
+                const matchesTier = !tierFilter || client.tier === tierFilter;
+                const matchesIndustry = !industryFilter || client.interest.includes(industryFilter);
+                
+                return matchesSearch && matchesTier && matchesIndustry;
+            });
+            
+            populateClientsTable();
+        }
+
+        function sortTable(columnIndex) {
+            const table = document.getElementById('clientsTable');
+            const tbody = table.getElementsByTagName('tbody')[0];
+            const rows = Array.from(tbody.getElementsByTagName('tr'));
+            
+            rows.sort((a, b) => {
+                const aVal = a.getElementsByTagName('td')[columnIndex].textContent;
+                const bVal = b.getElementsByTagName('td')[columnIndex].textContent;
+                
+                if (columnIndex === 4) { // P.U.R.E.S Score column
+                    return parseFloat(bVal) - parseFloat(aVal);
+                }
+                
+                return aVal.localeCompare(bVal);
+            });
+            
+            rows.forEach(row => tbody.appendChild(row));
+        }
+
+        function contactClient(phone) {
+            window.open(`tel:${phone}`, '_self');
+        }
+
+        function emailClient(email, name, interest) {
+            const subject = encodeURIComponent(`Exclusive ${interest} Collection at Chalice Collectibles`);
+            const body = encodeURIComponent(`Dear ${name},
+
+I hope this message finds you well! As a valued member of our collector community and someone passionate about ${interest}, I wanted to personally reach out about some exciting opportunities at Chalice Collectibles.
+
+🌟 Why visit Chalice Collectibles?
+
+✨ Curated ${interest} Collection - We specialize in authenticated, premium collectibles that align with your interests
+🔍 Expert Authentication - Every item comes with detailed provenance and certification
+💎 Exclusive Access - First preview of rare finds and limited editions before they hit the market
+🎯 Personalized Service - Custom acquisition services to help complete your collection
+📈 Investment Potential - Our pieces often appreciate in value, making them both passion and investment pieces
+
+Based on your interest in ${interest}, I believe you'd be particularly excited about our current inventory. We recently acquired some exceptional pieces that would be perfect additions to any serious collection.
+
+Would you be interested in scheduling a private viewing? I'd be happy to show you our latest acquisitions and discuss how we can help enhance your collection.
+
+Best regards,
+Shane Scurry
+Owner, Chalice Collectibles
+chalicecollectibles.com
+(626) 555-COLLECTION
+
+P.S. Mention this email for a 10% discount on your first purchase!`);
+            
+            window.open(`mailto:${email}?subject=${subject}&body=${body}`, '_self');
+        }
+
+        function exportClients() {
+            let csv = 'Client Name,Email,Phone,Address,P.U.R.E.S Score,Tier,Interest,Revenue Estimate,Last Contact\n';
+            filteredClients.forEach(client => {
+                csv += `"${client.name}","${client.email}","${client.phone}","${client.address}","${client.pures}","${client.tier}","${client.interest}","${client.revenue}","${client.lastContact}"\n`;
+            });
+            
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'chalice-collectibles-clients.csv';
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+
+        function addNewClient() {
+            const name = prompt('Client Name:');
+            const email = prompt('Client Email:');
+            const phone = prompt('Client Phone:');
+            const address = prompt('Client Address:');
+            const interest = prompt('Primary Interest (Comics/Gaming Cards/Sports/Art/Entertainment):');
+            
+            if (name && email && phone && address && interest) {
+                const newClient = {
+                    name: name,
+                    email: email,
+                    phone: phone,
+                    address: address,
+                    pures: 3.0,
+                    tier: "1C",
+                    interest: interest,
+                    revenue: "$5,000",
+                    lastContact: new Date().toISOString().split('T')[0],
+                    notes: "New client - needs assessment"
+                };
+                
+                clientsData.push(newClient);
+                filteredClients = [...clientsData];
+                populateClientsTable();
+                alert('New client added successfully!');
+            }
+        }
+
+        function createFeedbackForm(type) {
+            alert(`Creating ${type} feedback form. This would integrate with your CRM system to track customer feedback and improve service quality.`);
+        }
+
+        // Initialize the table when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            populateClientsTable();
+        });
+    </script>
+</body>
+</html>

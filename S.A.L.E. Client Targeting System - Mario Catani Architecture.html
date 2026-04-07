@@ -1,0 +1,989 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>S.A.L.E. Client Targeting System - Mario Catani</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #000000;
+            color: #ffffff;
+            line-height: 1.6;
+        }
+
+        .header {
+            background-color: #000000;
+            padding: 20px;
+            border-bottom: 2px solid #CF2030;
+            text-align: center;
+        }
+
+        .logo {
+            max-width: 300px;
+            height: auto;
+            margin-bottom: 10px;
+        }
+
+        .nav-menu {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 15px;
+        }
+
+        .nav-item {
+            background-color: #CF2030;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-weight: bold;
+        }
+
+        .nav-item:hover {
+            background-color: #B01929;
+        }
+
+        .nav-item.active {
+            background-color: #B01929;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .section {
+            background-color: #1a1a1a;
+            margin: 20px 0;
+            padding: 30px;
+            border-radius: 10px;
+            border: 1px solid #333;
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .section h2 {
+            color: #CF2030;
+            margin-bottom: 20px;
+            font-size: 24px;
+            border-bottom: 2px solid #CF2030;
+            padding-bottom: 10px;
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .search-box, .filter-select {
+            padding: 10px;
+            border: 1px solid #555;
+            border-radius: 5px;
+            background-color: #2a2a2a;
+            color: white;
+            font-size: 14px;
+        }
+
+        .search-box {
+            min-width: 300px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            background-color: #CF2030;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-weight: bold;
+        }
+
+        .btn:hover {
+            background-color: #B01929;
+        }
+
+        .btn-secondary {
+            background-color: #666;
+        }
+
+        .btn-secondary:hover {
+            background-color: #777;
+        }
+
+        .client-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: #2a2a2a;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .client-table th {
+            background-color: #CF2030;
+            color: white;
+            padding: 15px;
+            text-align: left;
+            cursor: pointer;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .client-table th:hover {
+            background-color: #B01929;
+        }
+
+        .client-table td {
+            padding: 12px;
+            border-bottom: 1px solid #444;
+        }
+
+        .client-table tr:hover {
+            background-color: #333;
+        }
+
+        .tier-1a { background-color: #006600; }
+        .tier-1b { background-color: #CCCC00; color: black; }
+        .tier-1c { background-color: #0066CC; }
+
+        .pure-score {
+            font-weight: bold;
+            padding: 5px 10px;
+            border-radius: 15px;
+            text-align: center;
+            min-width: 40px;
+        }
+
+        .score-5 { background-color: #00AA00; }
+        .score-4 { background-color: #66BB00; }
+        .score-3 { background-color: #CCCC00; color: black; }
+        .score-2 { background-color: #FF8800; }
+        .score-1 { background-color: #FF4444; }
+
+        .contact-btn {
+            padding: 8px 12px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            margin: 2px;
+        }
+
+        .contact-btn:hover {
+            background-color: #218838;
+        }
+
+        .email-btn {
+            background-color: #007bff;
+        }
+
+        .email-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .phone-btn {
+            background-color: #17a2b8;
+        }
+
+        .phone-btn:hover {
+            background-color: #138496;
+        }
+
+        .pure-form {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #CF2030;
+        }
+
+        .form-group input, .form-group select {
+            padding: 10px;
+            border: 1px solid #555;
+            border-radius: 5px;
+            background-color: #2a2a2a;
+            color: white;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .metric-card {
+            background-color: #2a2a2a;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #555;
+            text-align: center;
+        }
+
+        .metric-value {
+            font-size: 32px;
+            font-weight: bold;
+            color: #CF2030;
+            margin-bottom: 5px;
+        }
+
+        .metric-label {
+            font-size: 14px;
+            color: #ccc;
+        }
+
+        .footer {
+            background-color: #1a1a1a;
+            padding: 20px;
+            text-align: center;
+            border-top: 2px solid #CF2030;
+            margin-top: 40px;
+        }
+
+        .footer-logo {
+            max-width: 150px;
+            height: auto;
+            margin-bottom: 10px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+        }
+
+        .modal-content {
+            background-color: #2a2a2a;
+            margin: 5% auto;
+            padding: 30px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: #CF2030;
+        }
+
+        .email-preview {
+            background-color: #1a1a1a;
+            padding: 20px;
+            border-radius: 5px;
+            margin-top: 20px;
+            border: 1px solid #555;
+        }
+
+        @media (max-width: 768px) {
+            .nav-menu {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .controls {
+                flex-direction: column;
+            }
+
+            .search-box {
+                min-width: 100%;
+            }
+
+            .client-table {
+                font-size: 12px;
+            }
+
+            .client-table th, .client-table td {
+                padding: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports" class="logo">
+        <div class="nav-menu">
+            <div class="nav-item active" onclick="showSection('dashboard')">Dashboard</div>
+            <div class="nav-item" onclick="showSection('sourcing')">S - Sourcing</div>
+            <div class="nav-item" onclick="showSection('assessing')">A - Assessing</div>
+            <div class="nav-item" onclick="showSection('listening')">L - Listening</div>
+            <div class="nav-item" onclick="showSection('empowering')">E - Empowering</div>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Dashboard Section -->
+        <div id="dashboard" class="section active">
+            <h2>Client Targeting Dashboard - Mario Catani Architecture</h2>
+            
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-value" id="totalClients">50</div>
+                    <div class="metric-label">Total Prospects</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value" id="tier1aClients">12</div>
+                    <div class="metric-label">Tier 1A (Premium)</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value" id="tier1bClients">18</div>
+                    <div class="metric-label">Tier 1B (High-Value)</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value" id="tier1cClients">20</div>
+                    <div class="metric-label">Tier 1C (Qualified)</div>
+                </div>
+            </div>
+
+            <div class="controls">
+                <input type="text" id="searchBox" class="search-box" placeholder="Search clients by name, email, or address...">
+                <select id="tierFilter" class="filter-select">
+                    <option value="">All Tiers</option>
+                    <option value="1A">Tier 1A - Premium</option>
+                    <option value="1B">Tier 1B - High-Value</option>
+                    <option value="1C">Tier 1C - Qualified</option>
+                </select>
+                <select id="industryFilter" class="filter-select">
+                    <option value="">All Industries</option>
+                    <option value="Real Estate">Real Estate</option>
+                    <option value="Construction">Construction</option>
+                    <option value="Hospitality">Hospitality</option>
+                    <option value="Retail">Retail</option>
+                    <option value="Healthcare">Healthcare</option>
+                    <option value="Education">Education</option>
+                </select>
+                <button class="btn" onclick="exportData()">Export CSV</button>
+                <button class="btn btn-secondary" onclick="resetFilters()">Reset Filters</button>
+            </div>
+
+            <table class="client-table" id="clientTable">
+                <thead>
+                    <tr>
+                        <th onclick="sortTable(0)">Client Name</th>
+                        <th onclick="sortTable(1)">Email</th>
+                        <th onclick="sortTable(2)">Phone</th>
+                        <th onclick="sortTable(3)">Address</th>
+                        <th onclick="sortTable(4)">P.U.R.E.S. Score</th>
+                        <th onclick="sortTable(5)">Tier</th>
+                        <th onclick="sortTable(6)">Industry</th>
+                        <th onclick="sortTable(7)">Revenue Est.</th>
+                        <th onclick="sortTable(8)">Contact Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="clientTableBody">
+                    <!-- Client data will be populated here -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Sourcing Section -->
+        <div id="sourcing" class="section">
+            <h2>S.A.L.E. SOURCING - P.U.R.E.S. Client Evaluation</h2>
+            
+            <div class="pure-form">
+                <div class="form-group">
+                    <label>Client Name:</label>
+                    <input type="text" id="clientName" placeholder="Enter client name">
+                </div>
+                <div class="form-group">
+                    <label>Profitability (1-5):</label>
+                    <select id="profitability">
+                        <option value="">Select Score</option>
+                        <option value="5">5 - Excellent Budget (>$500K)</option>
+                        <option value="4">4 - Strong Budget ($200K-$500K)</option>
+                        <option value="3">3 - Good Budget ($100K-$200K)</option>
+                        <option value="2">2 - Limited Budget ($50K-$100K)</option>
+                        <option value="1">1 - Minimal Budget (<$50K)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Urgency (1-5):</label>
+                    <select id="urgency">
+                        <option value="">Select Score</option>
+                        <option value="5">5 - Immediate Need (Within 30 days)</option>
+                        <option value="4">4 - Near-term Need (1-3 months)</option>
+                        <option value="3">3 - Planning Stage (3-6 months)</option>
+                        <option value="2">2 - Future Consideration (6-12 months)</option>
+                        <option value="1">1 - No Immediate Plans</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Reachability (1-5):</label>
+                    <select id="reachability">
+                        <option value="">Select Score</option>
+                        <option value="5">5 - Direct Decision Maker Access</option>
+                        <option value="4">4 - Close to Decision Maker</option>
+                        <option value="3">3 - Some Influence on Decision</option>
+                        <option value="2">2 - Limited Influence</option>
+                        <option value="1">1 - No Decision-Making Power</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Engagement (1-5):</label>
+                    <select id="engagement">
+                        <option value="">Select Score</option>
+                        <option value="5">5 - Highly Engaged & Responsive</option>
+                        <option value="4">4 - Good Engagement Level</option>
+                        <option value="3">3 - Moderate Engagement</option>
+                        <option value="2">2 - Low Engagement</option>
+                        <option value="1">1 - Minimal Engagement</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Sustainability (1-5):</label>
+                    <select id="sustainability">
+                        <option value="">Select Score</option>
+                        <option value="5">5 - Multiple Project Potential</option>
+                        <option value="4">4 - Referral Potential</option>
+                        <option value="3">3 - One-time Large Project</option>
+                        <option value="2">2 - Limited Future Potential</option>
+                        <option value="1">1 - Single Small Project</option>
+                    </select>
+                </div>
+            </div>
+            
+            <button class="btn" onclick="calculatePureScore()">Calculate P.U.R.E.S. Score</button>
+            <button class="btn btn-secondary" onclick="resetPureForm()">Reset Form</button>
+            
+            <div id="pureResult" style="margin-top: 20px; display: none;">
+                <h3 style="color: #CF2030;">P.U.R.E.S. Assessment Result</h3>
+                <div id="pureScoreDisplay"></div>
+            </div>
+        </div>
+
+        <!-- Assessing Section -->
+        <div id="assessing" class="section">
+            <h2>A.SSESSING - Buying Pattern Analysis</h2>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+                <div class="metric-card">
+                    <h3 style="color: #CF2030;">Analytical Buyers</h3>
+                    <p>Require detailed ROI analysis, case studies, and architectural plans with precise specifications.</p>
+                    <div class="metric-value">18</div>
+                    <div class="metric-label">Prospects</div>
+                </div>
+                <div class="metric-card">
+                    <h3 style="color: #CF2030;">Relationship Buyers</h3>
+                    <p>Value trust, referrals, and long-term partnerships with proven architects.</p>
+                    <div class="metric-value">15</div>
+                    <div class="metric-label">Prospects</div>
+                </div>
+                <div class="metric-card">
+                    <h3 style="color: #CF2030;">Efficiency Buyers</h3>
+                    <p>Focus on time-saving solutions and streamlined project delivery.</p>
+                    <div class="metric-value">12</div>
+                    <div class="metric-label">Prospects</div>
+                </div>
+                <div class="metric-card">
+                    <h3 style="color: #CF2030;">Innovation Buyers</h3>
+                    <p>Seek cutting-edge design solutions and modern architectural approaches.</p>
+                    <div class="metric-value">5</div>
+                    <div class="metric-label">Prospects</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Listening Section -->
+        <div id="listening" class="section">
+            <h2>L.ISTENING - Feedback Integration</h2>
+            
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-value">85%</div>
+                    <div class="metric-label">Client Satisfaction Rate</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">42</div>
+                    <div class="metric-label">Active Feedback Forms</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">24hrs</div>
+                    <div class="metric-label">Avg Response Time</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">12</div>
+                    <div class="metric-label">Testimonials Collected</div>
+                </div>
+            </div>
+
+            <div style="margin-top: 30px;">
+                <h3 style="color: #CF2030;">Recent Client Feedback</h3>
+                <div style="background-color: #2a2a2a; padding: 20px; border-radius: 8px; margin-top: 15px;">
+                    <p><strong>Project:</strong> Villa Renovation - São Paulo</p>
+                    <p><strong>Feedback:</strong> "Mario's architectural vision transformed our space beyond expectations. The integration of modern design with traditional elements was exceptional."</p>
+                    <p><strong>Rating:</strong> ⭐⭐⭐⭐⭐ (5/5)</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Empowering Section -->
+        <div id="empowering" class="section">
+            <h2>E.MPOWERING - Referral Strategy</h2>
+            
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-value">28</div>
+                    <div class="metric-label">Referrals Generated</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">67%</div>
+                    <div class="metric-label">Referral Conversion Rate</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">8</div>
+                    <div class="metric-label">Client Advocates</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">$180K</div>
+                    <div class="metric-label">Referral Revenue</div>
+                </div>
+            </div>
+
+            <div style="margin-top: 30px;">
+                <h3 style="color: #CF2030;">Success Stories</h3>
+                <div style="background-color: #2a2a2a; padding: 20px; border-radius: 8px; margin-top: 15px;">
+                    <h4>Commercial Office Renovation - Paulista Avenue</h4>
+                    <p>Transformed a traditional office space into a modern, efficient workspace that increased employee productivity by 25%.</p>
+                    <p><strong>Result:</strong> Client referred 3 additional projects within 6 months.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Email Composition Modal -->
+    <div id="emailModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h3 style="color: #CF2030;">Compose Email</h3>
+            <div style="margin-top: 20px;">
+                <label><strong>To:</strong></label>
+                <input type="email" id="emailTo" style="width: 100%; padding: 10px; margin-top: 5px; background-color: #1a1a1a; color: white; border: 1px solid #555; border-radius: 5px;">
+            </div>
+            <div style="margin-top: 15px;">
+                <label><strong>Subject:</strong></label>
+                <input type="text" id="emailSubject" style="width: 100%; padding: 10px; margin-top: 5px; background-color: #1a1a1a; color: white; border: 1px solid #555; border-radius: 5px;">
+            </div>
+            <div style="margin-top: 15px;">
+                <label><strong>Message:</strong></label>
+                <textarea id="emailBody" rows="12" style="width: 100%; padding: 10px; margin-top: 5px; background-color: #1a1a1a; color: white; border: 1px solid #555; border-radius: 5px;"></textarea>
+            </div>
+            <div style="margin-top: 20px; text-align: right;">
+                <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+                <button class="btn" onclick="sendEmail()">Send Email</button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports" class="footer-logo">
+        <p>&copy; 2026 Mario Catani Architecture. Powered by Higgins Reports S.A.L.E. System</p>
+    </footer>
+
+    <script>
+        // Sample client data for São Paulo area (architecture prospects)
+        const clientData = [
+            { name: "Carlos Mendes", email: "carlos.mendes@inmobiliaria.com", phone: "+55 11 9876-5432", address: "Av. Paulista, 1578, São Paulo, SP", pureScore: 4.8, tier: "1A", industry: "Real Estate", revenue: "$2.5M", status: "New Lead", notes: "Luxury residential developer" },
+            { name: "Ana Silva", email: "ana.silva@construtora.com", phone: "+55 11 8765-4321", address: "Rua Augusta, 2500, São Paulo, SP", pureScore: 4.6, tier: "1A", industry: "Construction", revenue: "$1.8M", status: "In Discussion", notes: "Commercial construction focus" },
+            { name: "Roberto Santos", email: "roberto@hotelgroup.com.br", phone: "+55 11 7654-3210", address: "Av. Brigadeiro Faria Lima, 3144, São Paulo, SP", pureScore: 4.4, tier: "1A", industry: "Hospitality", revenue: "$3.2M", status: "Proposal Sent", notes: "Boutique hotel chain" },
+            { name: "Mariana Costa", email: "mariana.costa@retailbrasil.com", phone: "+55 11 6543-2109", address: "Rua Oscar Freire, 855, São Paulo, SP", pureScore: 4.2, tier: "1B", industry: "Retail", revenue: "$950K", status: "Follow-up", notes: "High-end retail spaces" },
+            { name: "Eduardo Lima", email: "eduardo.lima@medicentro.com", phone: "+55 11 5432-1098", address: "Av. Rebouças, 3970, São Paulo, SP", pureScore: 4.0, tier: "1B", industry: "Healthcare", revenue: "$1.2M", status: "Meeting Scheduled", notes: "Medical center expansion" },
+            { name: "Patricia Oliveira", email: "patricia@escolanova.edu.br", phone: "+55 11 4321-0987", address: "Rua da Consolação, 2842, São Paulo, SP", pureScore: 3.8, tier: "1B", industry: "Education", revenue: "$800K", status: "New Lead", notes: "Private school renovation" },
+            { name: "Fernando Rodrigues", email: "fernando@emprendimientos.com", phone: "+55 11 3210-9876", address: "Vila Madalena, Rua Harmonia, 1200, São Paulo, SP", pureScore: 4.7, tier: "1A", industry: "Real Estate", revenue: "$2.1M", status: "Contract Review", notes: "Mixed-use development" },
+            { name: "Luciana Pereira", email: "luciana@corporativo.com.br", phone: "+55 11 2109-8765", address: "Itaim Bibi, Av. Cidade Jardim, 803, São Paulo, SP", pureScore: 4.3, tier: "1A", industry: "Construction", revenue: "$1.7M", status: "Active Project", notes: "Corporate headquarters" },
+            { name: "Gabriel Almeida", email: "gabriel@residencial.com.br", phone: "+55 11 1098-7654", address: "Moema, Av. Ibirapuera, 2332, São Paulo, SP", pureScore: 3.9, tier: "1B", industry: "Real Estate", revenue: "$1.1M", status: "Proposal Review", notes: "Luxury apartments" },
+            { name: "Camila Ferreira", email: "camila@startupbrasil.com", phone: "+55 11 0987-6543", address: "Pinheiros, Rua dos Pinheiros, 1178, São Paulo, SP", pureScore: 3.5, tier: "1C", industry: "Technology", revenue: "$650K", status: "Initial Contact", notes: "Tech startup office" },
+            { name: "Ricardo Souza", email: "ricardo@fabrica.ind.br", phone: "+55 11 9876-5433", address: "São Bernardo do Campo, Av. Pereira Barreto, 1200", pureScore: 3.7, tier: "1C", industry: "Manufacturing", revenue: "$720K", status: "New Lead", notes: "Factory modernization" },
+            { name: "Juliana Martins", email: "juliana@wellness.com.br", phone: "+55 11 8765-4322", address: "Jardins, Rua Haddock Lobo, 595, São Paulo, SP", pureScore: 4.1, tier: "1B", industry: "Healthcare", revenue: "$890K", status: "In Discussion", notes: "Wellness center design" },
+            { name: "Diego Barbosa", email: "diego@gastronomia.com.br", phone: "+55 11 7654-3211", address: "Vila Olímpia, Rua Funchal, 418, São Paulo, SP", pureScore: 3.6, tier: "1C", industry: "Hospitality", revenue: "$580K", status: "Follow-up", notes: "Restaurant chain" },
+            { name: "Isabela Cardoso", email: "isabela@cultural.org.br", phone: "+55 11 6543-2100", address: "Centro, Praça da Sé, s/n, São Paulo, SP", pureScore: 3.3, tier: "1C", industry: "Non-profit", revenue: "$450K", status: "Meeting Requested", notes: "Cultural center renovation" },
+            { name: "Bruno Gomes", email: "bruno@logistica.com.br", phone: "+55 11 5432-1099", address: "Guarulhos, Av. Santos Dumont, 1350", pureScore: 3.8, tier: "1B", industry: "Logistics", revenue: "$1.0M", status: "Proposal Sent", notes: "Distribution center" },
+            { name: "Vanessa Castro", email: "vanessa@boutique.com.br", phone: "+55 11 4321-0988", address: "Higienópolis, Av. Angélica, 2530, São Paulo, SP", pureScore: 3.4, tier: "1C", industry: "Retail", revenue: "$520K", status: "New Lead", notes: "Boutique store design" },
+            { name: "André Santos", email: "andre@innovations.com.br", phone: "+55 11 3210-9877", address: "Alphaville, Al. Rio Negro, 560, Barueri, SP", pureScore: 4.5, tier: "1A", industry: "Technology", revenue: "$2.0M", status: "Contract Negotiation", notes: "Innovation hub" },
+            { name: "Fernanda Lima", email: "fernanda@residences.com.br", phone: "+55 11 2109-8766", address: "Morumbi, Av. Giovanni Gronchi, 5930, São Paulo, SP", pureScore: 4.2, tier: "1B", industry: "Real Estate", revenue: "$1.3M", status: "Site Visit Scheduled", notes: "High-end residences" },
+            { name: "Marcos Oliveira", email: "marcos@automotive.com.br", phone: "+55 11 1098-7655", address: "Santo André, Av. Industrial, 1780", pureScore: 3.9, tier: "1B", industry: "Automotive", revenue: "$1.1M", status: "Initial Presentation", notes: "Showroom renovation" },
+            { name: "Carla Rodrigues", email: "carla@financeira.com.br", phone: "+55 11 0987-6544", address: "Faria Lima, Av. Brigadeiro Faria Lima, 2232, São Paulo, SP", pureScore: 4.0, tier: "1B", industry: "Finance", revenue: "$1.2M", status: "Budget Review", notes: "Bank branch design" },
+            { name: "Thiago Costa", email: "thiago@eventos.com.br", phone: "+55 11 9876-5434", address: "Expo Center Norte, Rua José Bernardo Pinto, 333", pureScore: 3.5, tier: "1C", industry: "Events", revenue: "$680K", status: "Follow-up", notes: "Event venue upgrade" },
+            { name: "Renata Silva", email: "renata@clinica.med.br", phone: "+55 11 8765-4323", address: "Paraíso, Rua Vergueiro, 1855, São Paulo, SP", pureScore: 3.7, tier: "1C", industry: "Healthcare", revenue: "$750K", status: "Consultation Scheduled", notes: "Medical clinic renovation" },
+            { name: "Fábio Mendes", email: "fabio@sports.com.br", phone: "+55 11 7654-3212", address: "Campo Belo, Rua Vieira de Morais, 1862, São Paulo, SP", pureScore: 3.6, tier: "1C", industry: "Sports", revenue: "$620K", status: "Proposal Requested", notes: "Gym facility design" },
+            { name: "Priscila Santos", email: "priscila@beauty.com.br", phone: "+55 11 6543-2101", address: "Mooca, Rua da Mooca, 2918, São Paulo, SP", pureScore: 3.2, tier: "1C", industry: "Beauty", revenue: "$480K", status: "Initial Contact", notes: "Salon chain design" },
+            { name: "Rodrigo Almeida", email: "rodrigo@transportes.com.br", phone: "+55 11 5432-1000", address: "Cidade Tiradentes, Av. dos Metalúrgicos, 2255", pureScore: 3.4, tier: "1C", industry: "Transportation", revenue: "$560K", status: "Information Gathering", notes: "Transportation hub" },
+            { name: "Amanda Pereira", email: "amanda@publishing.com.br", phone: "+55 11 4321-0989", address: "Liberdade, Rua da Glória, 735, São Paulo, SP", pureScore: 3.1, tier: "1C", industry: "Publishing", revenue: "$420K", status: "Meeting Requested", notes: "Publishing house office" },
+            { name: "Leonardo Ferreira", email: "leonardo@energia.com.br", phone: "+55 11 3210-9878", address: "Brooklin, Av. Engenheiro Luís Carlos Berrini, 1681", pureScore: 4.4, tier: "1A", industry: "Energy", revenue: "$1.9M", status: "Technical Review", notes: "Energy company HQ" },
+            { name: "Tatiana Costa", email: "tatiana@fashion.com.br", phone: "+55 11 2109-8767", address: "Bela Vista, Rua Augusta, 1508, São Paulo, SP", pureScore: 3.8, tier: "1B", industry: "Fashion", revenue: "$840K", status: "Design Phase", notes: "Fashion atelier" },
+            { name: "Gustavo Lima", email: "gustavo@agronegocio.com.br", phone: "+55 11 1098-7656", address: "Campo Limpo, Estrada do Campo Limpo, 4.101", pureScore: 3.6, tier: "1C", industry: "Agriculture", revenue: "$710K", status: "Feasibility Study", notes: "Agribusiness office" },
+            { name: "Helena Oliveira", email: "helena@arte.com.br", phone: "+55 11 0987-6545", address: "Pinacoteca, Praça da Luz, 2, São Paulo, SP", pureScore: 3.3, tier: "1C", industry: "Arts", revenue: "$490K", status: "Creative Brief", notes: "Art gallery renovation" },
+            { name: "Rafael Rodrigues", email: "rafael@metalurgica.com.br", phone: "+55 11 9876-5435", address: "São Caetano do Sul, Av. Goiás, 1078", pureScore: 3.7, tier: "1C", industry: "Manufacturing", revenue: "$780K", status: "Site Analysis", notes: "Industrial facility" },
+            { name: "Larissa Santos", email: "larissa@consultoria.com.br", phone: "+55 11 8765-4324", address: "Vila Nova Conceição, Rua Iguatemi, 192, São Paulo, SP", pureScore: 4.1, tier: "1B", industry: "Consulting", revenue: "$970K", status: "Proposal Development", notes: "Consulting firm office" },
+            { name: "Márcio Costa", email: "marcio@pharma.com.br", phone: "+55 11 7654-3213", address: "Jabaquara, Av. Jabaquara, 2958, São Paulo, SP", pureScore: 3.9, tier: "1B", industry: "Pharmaceutical", revenue: "$1.05M", status: "Regulatory Review", notes: "Pharmaceutical lab" },
+            { name: "Cristina Almeida", email: "cristina@turismo.com.br", phone: "+55 11 6543-2102", address: "Perdizes, Rua Cardoso de Almeida, 1943, São Paulo, SP", pureScore: 3.5, tier: "1C", industry: "Tourism", revenue: "$630K", status: "Market Research", notes: "Travel agency office" },
+            { name: "Vinícius Lima", email: "vinicius@games.com.br", phone: "+55 11 5432-1001", address: "Vila Madalena, Rua Mourato Coelho, 1404, São Paulo, SP", pureScore: 3.4, tier: "1C", industry: "Gaming", revenue: "$580K", status: "Concept Development", notes: "Gaming studio" },
+            { name: "Natalia Ferreira", email: "natalia@wellness.spa.br", phone: "+55 11 4321-0990", address: "Campo Belo, Rua Coronel Lisboa, 1456, São Paulo, SP", pureScore: 3.6, tier: "1C", industry: "Wellness", revenue: "$660K", status: "Space Planning", notes: "Wellness spa" },
+            { name: "João Santos", email: "joao@coworking.com.br", phone: "+55 11 3210-9879", address: "República, Av. São João, 2020, São Paulo, SP", pureScore: 3.8, tier: "1B", industry: "Real Estate", revenue: "$890K", status: "Layout Review", notes: "Co-working spaces" },
+            { name: "Carolina Costa", email: "carolina@dental.clinic.br", phone: "+55 11 2109-8768", address: "Santana, Av. Cruzeiro do Sul, 1100, São Paulo, SP", pureScore: 3.7, tier: "1C", industry: "Healthcare", revenue: "$720K", status: "Equipment Planning", notes: "Dental clinic chain" },
+            { name: "Pedro Oliveira", email: "pedro@security.com.br", phone: "+55 11 1098-7657", address: "Tatuapé, Rua Tuiuti, 2434, São Paulo, SP", pureScore: 3.5, tier: "1C", industry: "Security", revenue: "$610K", status: "Security Assessment", notes: "Security systems office" },
+            { name: "Bianca Lima", email: "bianca@childcare.com.br", phone: "+55 11 0987-6546", address: "Moema, Av. Moema, 170, São Paulo, SP", pureScore: 3.3, tier: "1C", industry: "Education", revenue: "$520K", status: "Child Safety Review", notes: "Childcare center" },
+            { name: "Felipe Rodrigues", email: "felipe@delivery.com.br", phone: "+55 11 9876-5436", address: "Brás, Rua do Gasômetro, 1000, São Paulo, SP", pureScore: 3.4, tier: "1C", industry: "Logistics", revenue: "$570K", status: "Workflow Analysis", notes: "Delivery hub" },
+            { name: "Aline Santos", email: "aline@photography.com.br", phone: "+55 11 8765-4325", address: "Vila Olímpia, Rua Olimpíadas, 360, São Paulo, SP", pureScore: 3.2, tier: "1C", industry: "Creative", revenue: "$450K", status: "Studio Planning", notes: "Photography studio" },
+            { name: "Renato Costa", email: "renato@maintenance.com.br", phone: "+55 11 7654-3214", address: "Ipiranga, Av. Nazaré, 1555, São Paulo, SP", pureScore: 3.6, tier: "1C", industry: "Maintenance", revenue: "$680K", status: "Facility Assessment", notes: "Maintenance company" },
+            { name: "Silvia Almeida", email: "silvia@catering.com.br", phone: "+55 11 6543-2103", address: "Lapa, Rua Clélia, 1532, São Paulo, SP", pureScore: 3.5, tier: "1C", industry: "Food Service", revenue: "$640K", status: "Kitchen Design", notes: "Catering company" },
+            { name: "Daniel Lima", email: "daniel@legal.com.br", phone: "+55 11 5432-1002", address: "Centro, Largo São Bento, 51, São Paulo, SP", pureScore: 4.0, tier: "1B", industry: "Legal", revenue: "$1.15M", status: "Space Optimization", notes: "Law firm expansion" },
+            { name: "Monica Ferreira", email: "monica@interior.com.br", phone: "+55 11 4321-0991", address: "Jardins, Alameda França, 1163, São Paulo, SP", pureScore: 3.9, tier: "1B", industry: "Design", revenue: "$920K", status: "Collaboration Opportunity", notes: "Interior design firm" },
+            { name: "Sérgio Santos", email: "sergio@printing.com.br", phone: "+55 11 3210-9880", address: "Bom Retiro, Rua José Paulino, 1200, São Paulo, SP", pureScore: 3.3, tier: "1C", industry: "Printing", revenue: "$510K", status: "Production Review", notes: "Printing facility" },
+            { name: "Patrícia Costa", email: "patricia@veterinary.com.br", phone: "+55 11 2109-8769", address: "Vila Carrão, Av. Guilherme Cotching, 477, São Paulo, SP", pureScore: 3.4, tier: "1C", industry: "Veterinary", revenue: "$560K", status: "Animal Care Planning", notes: "Veterinary hospital" },
+            { name: "Marcos Lima", email: "marcos@electronics.com.br", phone: "+55 11 1098-7658", address: "Santa Efigênia, Rua Santa Ifigênia, 40, São Paulo, SP", pureScore: 3.7, tier: "1C", industry: "Electronics", revenue: "$740K", status: "Showroom Design", notes: "Electronics retailer" },
+            { name: "Luciane Oliveira", email: "luciane@fitness.com.br", phone: "+55 11 0987-6547", address: "Água Branca, Av. Francisco Matarazzo, 1350", pureScore: 3.6, tier: "1C", industry: "Fitness", revenue: "$690K", status: "Equipment Layout", notes: "Fitness center chain" }
+        ];
+
+        let filteredData = [...clientData];
+        let sortDirection = true;
+
+        function showSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Remove active class from nav items
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Show selected section
+            document.getElementById(sectionId).classList.add('active');
+            
+            // Add active class to clicked nav item
+            event.target.classList.add('active');
+            
+            if (sectionId === 'dashboard') {
+                populateTable();
+            }
+        }
+
+        function populateTable() {
+            const tbody = document.getElementById('clientTableBody');
+            tbody.innerHTML = '';
+            
+            filteredData.forEach((client, index) => {
+                const row = document.createElement('tr');
+                const tierClass = `tier-${client.tier.toLowerCase()}`;
+                const scoreClass = `score-${Math.floor(client.pureScore)}`;
+                
+                row.innerHTML = `
+                    <td>${client.name}</td>
+                    <td>${client.email}</td>
+                    <td>${client.phone}</td>
+                    <td>${client.address}</td>
+                    <td><span class="pure-score ${scoreClass}">${client.pureScore}</span></td>
+                    <td><span class="pure-score ${tierClass}">${client.tier}</span></td>
+                    <td>${client.industry}</td>
+                    <td>${client.revenue}</td>
+                    <td>${client.status}</td>
+                    <td>
+                        <button class="contact-btn email-btn" onclick="openEmailModal('${client.email}', '${client.name}', '${client.tier}')">📧 Email</button>
+                        <button class="contact-btn phone-btn" onclick="callClient('${client.phone}')">📞 Call</button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function filterTable() {
+            const searchTerm = document.getElementById('searchBox').value.toLowerCase();
+            const tierFilter = document.getElementById('tierFilter').value;
+            const industryFilter = document.getElementById('industryFilter').value;
+            
+            filteredData = clientData.filter(client => {
+                const matchesSearch = client.name.toLowerCase().includes(searchTerm) ||
+                                    client.email.toLowerCase().includes(searchTerm) ||
+                                    client.address.toLowerCase().includes(searchTerm);
+                const matchesTier = !tierFilter || client.tier === tierFilter;
+                const matchesIndustry = !industryFilter || client.industry === industryFilter;
+                
+                return matchesSearch && matchesTier && matchesIndustry;
+            });
+            
+            populateTable();
+        }
+
+        function sortTable(columnIndex) {
+            const columns = ['name', 'email', 'phone', 'address', 'pureScore', 'tier', 'industry', 'revenue', 'status'];
+            const column = columns[columnIndex];
+            
+            filteredData.sort((a, b) => {
+                let aValue = a[column];
+                let bValue = b[column];
+                
+                if (column === 'revenue') {
+                    aValue = parseFloat(aValue.replace(/[$MK,]/g, '')) * (aValue.includes('M') ? 1000000 : 1000);
+                    bValue = parseFloat(bValue.replace(/[$MK,]/g, '')) * (bValue.includes('M') ? 1000000 : 1000);
+                }
+                
+                if (typeof aValue === 'string') {
+                    aValue = aValue.toLowerCase();
+                    bValue = bValue.toLowerCase();
+                }
+                
+                if (sortDirection) {
+                    return aValue > bValue ? 1 : -1;
+                } else {
+                    return aValue < bValue ? 1 : -1;
+                }
+            });
+            
+            sortDirection = !sortDirection;
+            populateTable();
+        }
+
+        function resetFilters() {
+            document.getElementById('searchBox').value = '';
+            document.getElementById('tierFilter').value = '';
+            document.getElementById('industryFilter').value = '';
+            filteredData = [...clientData];
+            populateTable();
+        }
+
+        function openEmailModal(email, name, tier) {
+            document.getElementById('emailTo').value = email;
+            document.getElementById('emailSubject').value = `Transform Your Space with Mario Catani Architecture - Exclusive ${tier} Consultation`;
+            
+            const emailBody = generateEmailContent(name, tier);
+            document.getElementById('emailBody').value = emailBody;
+            
+            document.getElementById('emailModal').style.display = 'block';
+        }
+
+        function generateEmailContent(name, tier) {
+            const templates = {
+                '1A': `Dear ${name},
+
+I hope this message finds you well. As a premier architecture and interior design firm in São Paulo, Mario Catani Architecture specializes in creating exceptional spaces that elevate both form and function.
+
+Having reviewed your profile, I believe we can offer transformative architectural solutions that align perfectly with your vision and requirements. Our comprehensive services include:
+
+🏛️ **Architectural Design**: From conceptualization to completion, we handle every aspect of your project with meticulous attention to detail.
+
+🏠 **Interior Design**: Creating sophisticated spaces that reflect your unique style while optimizing functionality.
+
+🔧 **Project Coordination**: We manage all structural elements including plumbing, electrical, acoustics, and engineering.
+
+**Why Choose Mario Catani Architecture:**
+• Over a decade of experience in São Paulo's architectural landscape
+• Published projects in leading design magazines (Casa & Decoração, Pequenos Ambientes)
+• Comprehensive 3D visualization and project development
+• Full project oversight from concept to completion
+• Proven track record with luxury residential and commercial projects
+
+Whether you're looking to renovate, expand, or create something entirely new, we ensure every project exceeds expectations while staying within budget and timeline.
+
+I'd love to schedule a consultation to discuss how we can bring your architectural vision to life. Are you available for a meeting next week?
+
+Best regards,
+Mario Catani
+Principal Architect
+Mario Catani Architecture
++55 11 3280-1428
+contato@mariocatani.com
+www.mariocatani.com`,
+
+                '1B': `Dear ${name},
+
+Greetings from Mario Catani Architecture! We're a leading architectural and interior design firm based in São Paulo, specializing in innovative spaces that combine beauty with functionality.
+
+I'm reaching out because I believe our services could be valuable for your upcoming projects. Our expertise includes:
+
+• **Residential Design**: From apartments to luxury homes
+• **Commercial Spaces**: Offices, retail, and hospitality projects  
+• **Interior Design**: Complete space transformation
+• **Project Management**: Full coordination with all trades
+
+**Recent Success Stories:**
+• 100m² office renovation on Paulista Avenue
+• Luxury apartment projects in Alto de Pinheiros
+• Commercial spaces in Vila Madalena and Moema
+
+We handle everything from initial concept to final completion, ensuring your project is delivered on time and within budget. Our 3D visualization technology allows you to see your space before construction begins.
+
+Would you be interested in a complimentary consultation to discuss your architectural needs?
+
+Best regards,
+Mario Catani
+contato@mariocatani.com
++55 11 3280-1428`,
+
+                '1C': `Hello ${name},
+
+I'm Mario Catani, principal architect at Mario Catani Architecture in São Paulo. We create beautiful, functional spaces for both residential and commercial clients.
+
+Our services include:
+• Architectural design and planning
+• Interior design and decoration
+• Project coordination and management
+• 3D visualization and planning
+
+We've completed projects throughout São Paulo, from small apartment renovations to large commercial spaces. Every project receives our full attention regardless of size.
+
+If you're considering any architectural or design work, I'd be happy to discuss how we can help bring your vision to life.
+
+Feel free to reach out!
+
+Mario Catani
++55 11 3280-1428
+contato@mariocatani.com`
+            };
+            
+            return templates[tier] || templates['1C'];
+        }
+
+        function callClient(phone) {
+            window.open(`tel:${phone}`);
+        }
+
+        function closeModal() {
+            document.getElementById('emailModal').style.display = 'none';
+        }
+
+        function sendEmail() {
+            const to = document.getElementById('emailTo').value;
+            const subject = encodeURIComponent(document.getElementById('emailSubject').value);
+            const body = encodeURIComponent(document.getElementById('emailBody').value);
+            
+            window.open(`mailto:${to}?subject=${subject}&body=${body}`);
+            closeModal();
+        }
+
+        function calculatePureScore() {
+            const profitability = parseInt(document.getElementById('profitability').value) || 0;
+            const urgency = parseInt(document.getElementById('urgency').value) || 0;
+            const reachability = parseInt(document.getElementById('reachability').value) || 0;
+            const engagement = parseInt(document.getElementById('engagement').value) || 0;
+            const sustainability = parseInt(document.getElementById('sustainability').value) || 0;
+            
+            if (profitability === 0 || urgency === 0 || reachability === 0 || engagement === 0 || sustainability === 0) {
+                alert('Please fill in all P.U.R.E.S. criteria');
+                return;
+            }
+            
+            const average = (profitability + urgency + reachability + engagement + sustainability) / 5;
+            const tier = average >= 4.0 ? '1A' : average >= 3.5 ? '1B' : '1C';
+            
+            const resultDiv = document.getElementById('pureResult');
+            const scoreDisplay = document.getElementById('pureScoreDisplay');
+            
+            scoreDisplay.innerHTML = `
+                <div style="background-color: #2a2a2a; padding: 20px; border-radius: 8px; margin-top: 15px;">
+                    <h4>P.U.R.E.S. Breakdown:</h4>
+                    <p><strong>Profitability:</strong> ${profitability}/5</p>
+                    <p><strong>Urgency:</strong> ${urgency}/5</p>
+                    <p><strong>Reachability:</strong> ${reachability}/5</p>
+                    <p><strong>Engagement:</strong> ${engagement}/5</p>
+                    <p><strong>Sustainability:</strong> ${sustainability}/5</p>
+                    <hr style="border-color: #555; margin: 15px 0;">
+                    <p><strong>Overall Score:</strong> <span class="pure-score score-${Math.floor(average)}">${average.toFixed(1)}</span></p>
+                    <p><strong>Client Tier:</strong> <span class="pure-score tier-${tier.toLowerCase()}">${tier}</span></p>
+                    <p><strong>Recommendation:</strong> ${getRecommendation(tier)}</p>
+                </div>
+            `;
+            
+            resultDiv.style.display = 'block';
+        }
+
+        function getRecommendation(tier) {
+            const recommendations = {
+                '1A': 'High-priority prospect! Schedule immediate consultation and prepare premium proposal.',
+                '1B': 'Strong prospect. Schedule meeting within 1-2 weeks and prepare detailed presentation.',
+                '1C': 'Qualified prospect. Follow up within 2-3 weeks with standard information packet.'
+            };
+            return recommendations[tier];
+        }
+
+        function resetPureForm() {
+            document.getElementById('clientName').value = '';
+            document.getElementById('profitability').value = '';
+            document.getElementById('urgency').value = '';
+            document.getElementById('reachability').value = '';
+            document.getElementById('engagement').value = '';
+            document.getElementById('sustainability').value = '';
+            document.getElementById('pureResult').style.display = 'none';
+        }
+
+        function exportData() {
+            let csv = 'Name,Email,Phone,Address,PURES Score,Tier,Industry,Revenue,Status,Notes\n';
+            filteredData.forEach(client => {
+                csv += `"${client.name}","${client.email}","${client.phone}","${client.address}",${client.pureScore},"${client.tier}","${client.industry}","${client.revenue}","${client.status}","${client.notes}"\n`;
+            });
+            
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.setAttribute('hidden', '');
+            a.setAttribute('href', url);
+            a.setAttribute('download', 'mario_catani_client_prospects.csv');
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+
+        // Event listeners
+        document.getElementById('searchBox').addEventListener('input', filterTable);
+        document.getElementById('tierFilter').addEventListener('change', filterTable);
+        document.getElementById('industryFilter').addEventListener('change', filterTable);
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('emailModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+
+        // Initialize the dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            populateTable();
+        });
+    </script>
+</body>
+</html>

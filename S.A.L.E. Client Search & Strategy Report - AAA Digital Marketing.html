@@ -1,0 +1,975 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>S.A.L.E. Report - AAA Digital Marketing</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #000; color: #e0e0e0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+  
+  /* Header */
+  .header {
+    background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+    border-bottom: 3px solid #CF2030;
+    padding: 18px 30px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  }
+  .header img { height: 50px; }
+  .header-title { color: #fff; font-size: 1.1rem; font-weight: 600; text-align: right; }
+  .header-title span { color: #CF2030; }
+
+  /* Nav */
+  .nav {
+    background: #111;
+    border-bottom: 1px solid #222;
+    padding: 0 30px;
+    display: flex;
+    gap: 0;
+    overflow-x: auto;
+    position: sticky;
+    top: 86px;
+    z-index: 999;
+  }
+  .nav a {
+    color: #ccc;
+    text-decoration: none;
+    padding: 14px 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 3px solid transparent;
+    transition: all 0.3s;
+    white-space: nowrap;
+    cursor: pointer;
+  }
+  .nav a:hover, .nav a.active {
+    color: #CF2030;
+    border-bottom-color: #CF2030;
+    background: rgba(207,32,48,0.05);
+  }
+
+  /* Global Search */
+  .global-search {
+    background: #111;
+    padding: 16px 30px;
+    border-bottom: 1px solid #222;
+    position: sticky;
+    top: 133px;
+    z-index: 998;
+  }
+  .global-search input {
+    width: 100%;
+    max-width: 600px;
+    padding: 12px 18px;
+    border-radius: 8px;
+    border: 1px solid #333;
+    background: #1a1a1a;
+    color: #fff;
+    font-size: 0.95rem;
+    outline: none;
+    transition: border-color 0.3s;
+  }
+  .global-search input:focus { border-color: #CF2030; }
+  .global-search input::placeholder { color: #666; }
+
+  /* Sections */
+  .container { max-width: 1200px; margin: 0 auto; padding: 30px 20px 60px; }
+  .section {
+    background: #111;
+    border: 1px solid #222;
+    border-radius: 12px;
+    margin-bottom: 28px;
+    overflow: hidden;
+    transition: box-shadow 0.3s;
+  }
+  .section:hover { box-shadow: 0 0 20px rgba(207,32,48,0.1); }
+  .section-header {
+    background: linear-gradient(135deg, #1a1a1a, #151515);
+    padding: 18px 24px;
+    border-bottom: 1px solid #222;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .section-header:hover { background: #1e1e1e; }
+  .section-icon { font-size: 1.3rem; }
+  .section-title { font-size: 1.05rem; font-weight: 700; color: #fff; flex: 1; }
+  .section-toggle { color: #CF2030; font-size: 1.2rem; transition: transform 0.3s; }
+  .section-toggle.collapsed { transform: rotate(-90deg); }
+  .section-body { padding: 24px; }
+  .section-body.collapsed { display: none; }
+
+  /* Tables */
+  .table-wrapper { overflow-x: auto; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+  }
+  thead th {
+    background: #1a1a1a;
+    color: #CF2030;
+    padding: 12px 16px;
+    text-align: left;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.8px;
+    border-bottom: 2px solid #CF2030;
+    cursor: pointer;
+    position: relative;
+    white-space: nowrap;
+  }
+  thead th:hover { background: #222; }
+  thead th .sort-arrow { margin-left: 6px; font-size: 0.7rem; color: #666; }
+  thead th.sorted .sort-arrow { color: #CF2030; }
+  tbody td {
+    padding: 12px 16px;
+    border-bottom: 1px solid #1e1e1e;
+    vertical-align: top;
+  }
+  tbody tr:hover { background: rgba(207,32,48,0.05); }
+  tbody tr:nth-child(even) { background: #0d0d0d; }
+  tbody tr:nth-child(even):hover { background: rgba(207,32,48,0.08); }
+
+  /* Badges & Tags */
+  .badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+  }
+  .badge-red { background: rgba(207,32,48,0.2); color: #CF2030; }
+  .badge-green { background: rgba(40,167,69,0.2); color: #28a745; }
+  .badge-blue { background: rgba(0,123,255,0.15); color: #4a9eff; }
+  .badge-yellow { background: rgba(255,193,7,0.2); color: #ffc107; }
+
+  /* Buttons */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.3s;
+    border: none;
+  }
+  .btn-primary { background: #CF2030; color: #fff; }
+  .btn-primary:hover { background: #e02540; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(207,32,48,0.4); }
+  .btn-outline { background: transparent; border: 1px solid #CF2030; color: #CF2030; }
+  .btn-outline:hover { background: rgba(207,32,48,0.1); }
+  .btn-sm { padding: 5px 12px; font-size: 0.75rem; }
+  .btn-phone { background: #28a745; color: #fff; }
+  .btn-phone:hover { background: #2dbd4f; }
+  .btn-linkedin { background: #0077b5; color: #fff; }
+  .btn-linkedin:hover { background: #0088cc; }
+  .btn-web { background: #4a9eff; color: #fff; }
+  .btn-web:hover { background: #5aafff; }
+
+  /* Profile Card */
+  .profile-card {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  @media (max-width: 768px) { .profile-card { grid-template-columns: 1fr; } }
+  .profile-field { display: flex; flex-direction: column; gap: 4px; }
+  .profile-label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 1px; color: #888; font-weight: 700; }
+  .profile-value { font-size: 0.95rem; color: #fff; }
+  .profile-value a { color: #4a9eff; text-decoration: none; }
+  .profile-value a:hover { text-decoration: underline; }
+
+  /* Charts */
+  .chart-container { max-width: 500px; margin: 20px auto; }
+  .chart-row { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  @media (max-width: 768px) { .chart-row { grid-template-columns: 1fr; } }
+
+  /* Contact Actions Row */
+  .contact-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid #222;
+  }
+
+  /* Highlight */
+  .highlight { background: rgba(207,32,48,0.25); padding: 1px 4px; border-radius: 3px; }
+
+  /* Stats Cards */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .stat-card {
+    background: #1a1a1a;
+    border: 1px solid #222;
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+  }
+  .stat-number { font-size: 2rem; font-weight: 800; color: #CF2030; }
+  .stat-label { font-size: 0.75rem; color: #888; text-transform: uppercase; letter-spacing: 1px; margin-top: 4px; }
+
+  /* Trigger cards */
+  .trigger-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  @media (max-width: 768px) { .trigger-grid { grid-template-columns: 1fr; } }
+  .trigger-card {
+    background: #1a1a1a;
+    border: 1px solid #222;
+    border-radius: 8px;
+    padding: 16px;
+    transition: border-color 0.3s;
+  }
+  .trigger-card:hover { border-color: #CF2030; }
+  .trigger-quote { font-style: italic; color: #ffc107; margin-bottom: 8px; font-size: 0.9rem; }
+  .trigger-opp { color: #4a9eff; font-weight: 600; font-size: 0.85rem; }
+
+  /* Footer */
+  .footer {
+    background: #0a0a0a;
+    border-top: 2px solid #CF2030;
+    padding: 24px 30px;
+    text-align: center;
+  }
+  .footer img { height: 30px; margin-bottom: 10px; }
+  .footer p { color: #666; font-size: 0.78rem; }
+  .footer a { color: #CF2030; text-decoration: none; }
+
+  /* Team Grid */
+  .team-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+  }
+  .team-card {
+    background: #1a1a1a;
+    border: 1px solid #222;
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    transition: border-color 0.3s;
+  }
+  .team-card:hover { border-color: #CF2030; }
+  .team-avatar { width: 60px; height: 60px; border-radius: 50%; background: #CF2030; display: flex; align-items: center; justify-content: center; margin: 0 auto 12px; font-size: 1.4rem; color: #fff; font-weight: 700; }
+  .team-name { color: #fff; font-weight: 700; font-size: 0.95rem; }
+  .team-role { color: #888; font-size: 0.8rem; margin-top: 4px; }
+  .team-desc { color: #aaa; font-size: 0.78rem; margin-top: 8px; line-height: 1.4; }
+
+  /* Modal */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.8);
+    z-index: 2000;
+    align-items: center;
+    justify-content: center;
+  }
+  .modal-overlay.active { display: flex; }
+  .modal {
+    background: #1a1a1a;
+    border: 1px solid #333;
+    border-radius: 12px;
+    max-width: 620px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+    padding: 30px;
+  }
+  .modal h3 { color: #CF2030; margin-bottom: 16px; }
+  .modal textarea {
+    width: 100%;
+    min-height: 200px;
+    background: #111;
+    border: 1px solid #333;
+    color: #e0e0e0;
+    padding: 14px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    resize: vertical;
+    margin-bottom: 16px;
+  }
+  .modal-actions { display: flex; gap: 10px; justify-content: flex-end; }
+  .modal label { display: block; color: #aaa; font-size: 0.8rem; margin-bottom: 6px; }
+  .modal input[type="text"], .modal input[type="email"] {
+    width: 100%;
+    padding: 10px 14px;
+    background: #111;
+    border: 1px solid #333;
+    color: #fff;
+    border-radius: 6px;
+    margin-bottom: 12px;
+    font-size: 0.9rem;
+  }
+
+  /* Scroll smooth */
+  html { scroll-behavior: smooth; }
+
+  /* Search highlight animation */
+  @keyframes glow {
+    0% { box-shadow: 0 0 5px rgba(207,32,48,0.3); }
+    50% { box-shadow: 0 0 15px rgba(207,32,48,0.5); }
+    100% { box-shadow: 0 0 5px rgba(207,32,48,0.3); }
+  }
+  .search-match { animation: glow 1.5s ease-in-out infinite; }
+
+  .services-desc { color: #aaa; font-size: 0.82rem; line-height: 1.5; margin-top: 6px; }
+
+  /* Print */
+  @media print {
+    .header, .nav, .global-search, .footer { position: static; }
+    body { background: #fff; color: #000; }
+    .section { border-color: #ccc; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports" />
+  <div class="header-title"><span>S.A.L.E.</span> Client Search &amp; Strategy Report</div>
+</div>
+
+<!-- NAVIGATION -->
+<div class="nav" id="mainNav">
+  <a onclick="scrollTo_('sec-profile')" class="active">Profile</a>
+  <a onclick="scrollTo_('sec-company')">Company</a>
+  <a onclick="scrollTo_('sec-services')">Services</a>
+  <a onclick="scrollTo_('sec-team')">Team</a>
+  <a onclick="scrollTo_('sec-bni')">BNI Strategy</a>
+  <a onclick="scrollTo_('sec-triggers')">Referral Triggers</a>
+  <a onclick="scrollTo_('sec-sphere')">Contact Spheres</a>
+  <a onclick="scrollTo_('sec-charts')">Charts</a>
+</div>
+
+<!-- GLOBAL SEARCH -->
+<div class="global-search">
+  <input type="text" id="globalSearch" placeholder="🔍  Search across all tables and data..." oninput="globalSearchFn()" />
+</div>
+
+<!-- CONTENT -->
+<div class="container">
+
+  <!-- STATS OVERVIEW -->
+  <div class="stats-grid">
+    <div class="stat-card"><div class="stat-number">100+</div><div class="stat-label">Active Clients</div></div>
+    <div class="stat-card"><div class="stat-number">6</div><div class="stat-label">Core Services</div></div>
+    <div class="stat-card"><div class="stat-number">11–50</div><div class="stat-label">Employees</div></div>
+    <div class="stat-card"><div class="stat-number">5</div><div class="stat-label">Team Leaders</div></div>
+    <div class="stat-card"><div class="stat-number">5</div><div class="stat-label">Contact Spheres</div></div>
+    <div class="stat-card"><div class="stat-number">6</div><div class="stat-label">Referral Triggers</div></div>
+  </div>
+
+  <!-- PROSPECT PROFILE -->
+  <div class="section" id="sec-profile">
+    <div class="section-header" onclick="toggleSection(this)">
+      <span class="section-icon">👤</span>
+      <span class="section-title">Prospect Profile — Augustus Gatto</span>
+      <span class="section-toggle">▼</span>
+    </div>
+    <div class="section-body" data-searchable>
+      <div class="table-wrapper">
+        <table class="sortable-table">
+          <thead>
+            <tr>
+              <th onclick="sortTable(this, 0)">Field <span class="sort-arrow">⇅</span></th>
+              <th onclick="sortTable(this, 1)">Details <span class="sort-arrow">⇅</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>Full Name</strong></td><td>Augustus "Augie" Gatto</td></tr>
+            <tr><td><strong>Title</strong></td><td>Business Owner / Owner &amp; CEO</td></tr>
+            <tr><td><strong>Email</strong></td><td><a href="mailto:augustus.gatto@aaanimalcontrol.com" style="color:#4a9eff;">augustus.gatto@aaanimalcontrol.com</a></td></tr>
+            <tr><td><strong>LinkedIn</strong></td><td><a href="https://www.linkedin.com/in/gatto" target="_blank" style="color:#4a9eff;">linkedin.com/in/gatto</a></td></tr>
+            <tr><td><strong>Location</strong></td><td>San Diego / Encinitas, California, United States</td></tr>
+            <tr><td><strong>Industry</strong></td><td><span class="badge badge-red">Marketing Services</span> <span class="badge badge-blue">Marketing &amp; Advertising</span></td></tr>
+            <tr><td><strong>Education</strong></td><td>UCLA Anderson School of Management &amp; San Diego State University (SDSU)</td></tr>
+            <tr><td><strong>Leadership Style</strong></td><td>Hands-on, results-obsessed, growth-oriented</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="contact-actions">
+        <button class="btn btn-primary" onclick="openEmailModal('augustus.gatto@aaanimalcontrol.com', 'Augustus Gatto', 'prospect')">✉️ Email Augustus</button>
+        <a href="https://www.linkedin.com/in/gatto" target="_blank" class="btn btn-linkedin">🔗 LinkedIn Profile</a>
+        <a href="tel:8583603050" class="btn btn-phone">📞 (858) 360-3050</a>
+        <a href="tel:8583246995" class="btn btn-phone">📞 (858) 324-6995</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- COMPANY OVERVIEW -->
+  <div class="section" id="sec-company">
+    <div class="section-header" onclick="toggleSection(this)">
+      <span class="section-icon">🏢</span>
+      <span class="section-title">Company Overview — AAA Digital Marketing</span>
+      <span class="section-toggle">▼</span>
+    </div>
+    <div class="section-body" data-searchable>
+      <div class="table-wrapper">
+        <table class="sortable-table">
+          <thead>
+            <tr>
+              <th onclick="sortTable(this, 0)">Field <span class="sort-arrow">⇅</span></th>
+              <th onclick="sortTable(this, 1)">Details <span class="sort-arrow">⇅</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>Company Name</strong></td><td>AAA Digital Marketing</td></tr>
+            <tr><td><strong>Tagline</strong></td><td><em>"We Grow Your Company!"</em></td></tr>
+            <tr><td><strong>Website</strong></td><td><a href="http://aaadigitalmarketing.com" target="_blank" style="color:#4a9eff;">aaadigitalmarketing.com</a></td></tr>
+            <tr><td><strong>LinkedIn</strong></td><td><a href="https://www.linkedin.com/company/15683558" target="_blank" style="color:#4a9eff;">Company LinkedIn</a></td></tr>
+            <tr><td><strong>Headquarters</strong></td><td>669 2nd St, Encinitas, CA 92024</td></tr>
+            <tr><td><strong>Phone (Primary)</strong></td><td>(858) 360-3050</td></tr>
+            <tr><td><strong>Phone (Office)</strong></td><td>(858) 324-6995</td></tr>
+            <tr><td><strong>Email (General)</strong></td><td><a href="mailto:hello@aaadigitalmarketing.com" style="color:#4a9eff;">hello@aaadigitalmarketing.com</a></td></tr>
+            <tr><td><strong>Company Size</strong></td><td>11–50 employees</td></tr>
+            <tr><td><strong>Clients Served</strong></td><td>100+</td></tr>
+            <tr><td><strong>State</strong></td><td>California</td></tr>
+            <tr><td><strong>Data Retrieved</strong></td><td>March 26, 2026</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="contact-actions">
+        <button class="btn btn-primary" onclick="openEmailModal('hello@aaadigitalmarketing.com', 'AAA Digital Marketing', 'company')">✉️ Email Company</button>
+        <a href="http://aaadigitalmarketing.com" target="_blank" class="btn btn-web">🌐 Visit Website</a>
+        <a href="https://www.linkedin.com/company/15683558" target="_blank" class="btn btn-linkedin">🔗 Company LinkedIn</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- CORE SERVICES -->
+  <div class="section" id="sec-services">
+    <div class="section-header" onclick="toggleSection(this)">
+      <span class="section-icon">⚙️</span>
+      <span class="section-title">Core Services</span>
+      <span class="section-toggle">▼</span>
+    </div>
+    <div class="section-body" data-searchable>
+      <div class="table-wrapper">
+        <table class="sortable-table">
+          <thead>
+            <tr>
+              <th onclick="sortTable(this, 0)">Service <span class="sort-arrow">⇅</span></th>
+              <th onclick="sortTable(this, 1)">Key Value Proposition <span class="sort-arrow">⇅</span></th>
+              <th>Impact Score</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="badge badge-red">🔎 SEO for Small Businesses</span></td>
+              <td>Technical optimization, keyword targeting, and authority building to drive more traffic<div class="services-desc">Holistic SEO strategy: perfecting technical aspects, targeting keywords, building authority.</div></td>
+              <td><strong style="color:#CF2030;">95</strong></td>
+            </tr>
+            <tr>
+              <td><span class="badge badge-yellow">✍️ Content Marketing</span></td>
+              <td>Keyword-matched, high-quality content that engages viewers and fills content gaps<div class="services-desc">Matching keyword research with creatively written content; identify gaps and opportunities.</div></td>
+              <td><strong style="color:#CF2030;">90</strong></td>
+            </tr>
+            <tr>
+              <td><span class="badge badge-blue">🌐 Web Design</span></td>
+              <td>Responsive sites on WordPress, Shopify, WooCommerce, Squarespace with full-stack coding<div class="services-desc">PHP, Node, JavaScript, Python. Websites that convey products/services and convert visitors.</div></td>
+              <td><strong style="color:#CF2030;">88</strong></td>
+            </tr>
+            <tr>
+              <td><span class="badge badge-green">🔗 Link Building</span></td>
+              <td>Strategic backlinking integrated with content strategy to drive traffic and brand authority<div class="services-desc">Integrated link building + content strategy producing high quality, audience-relevant content.</div></td>
+              <td><strong style="color:#CF2030;">85</strong></td>
+            </tr>
+            <tr>
+              <td><span class="badge badge-red">📍 Local SEO & Google Maps</span></td>
+              <td>Geographic keyword optimization, local ranking, and reputation building<div class="services-desc">Geographic modifiers, city names, zip codes integration for local search dominance.</div></td>
+              <td><strong style="color:#CF2030;">92</strong></td>
+            </tr>
+            <tr>
+              <td><span class="badge badge-blue">📱 Social Media Marketing</span></td>
+              <td>Integrated social media strategy combined with SEO and content marketing<div class="services-desc">Modern word-of-mouth: social media integrated with SEO and content for maximum growth.</div></td>
+              <td><strong style="color:#CF2030;">82</strong></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- TEAM -->
+  <div class="section" id="sec-team">
+    <div class="section-header" onclick="toggleSection(this)">
+      <span class="section-icon">👥</span>
+      <span class="section-title">Meet the Team</span>
+      <span class="section-toggle">▼</span>
+    </div>
+    <div class="section-body" data-searchable>
+      <div class="team-grid">
+        <div class="team-card">
+          <div class="team-avatar">AG</div>
+          <div class="team-name">Augie Gatto</div>
+          <div class="team-role">Owner &amp; CEO</div>
+          <div class="team-desc">Passionate about client results — crafts complex and strategic marketing plans at all hours.</div>
+          <div style="margin-top:12px;">
+            <button class="btn btn-primary btn-sm" onclick="openEmailModal('augustus.gatto@aaanimalcontrol.com', 'Augustus Gatto', 'prospect')">✉️ Contact</button>
+          </div>
+        </div>
+        <div class="team-card">
+          <div class="team-avatar">DS</div>
+          <div class="team-name">David Seerveld</div>
+          <div class="team-role">Content Guru</div>
+          <div class="team-desc">Runs the human content team and AI LLMs. Content strategy and keyword targeting are his super powers.</div>
+          <div style="margin-top:12px;">
+            <button class="btn btn-primary btn-sm" onclick="openEmailModal('hello@aaadigitalmarketing.com', 'David Seerveld', 'team')">✉️ Contact</button>
+          </div>
+        </div>
+        <div class="team-card">
+          <div class="team-avatar">CB</div>
+          <div class="team-name">Chloe Billitteri</div>
+          <div class="team-role">SEO Specialist</div>
+          <div class="team-desc">Deep knowledge of SEO with the unique ability to tackle large projects and develop complex strategies.</div>
+          <div style="margin-top:12px;">
+            <button class="btn btn-primary btn-sm" onclick="openEmailModal('hello@aaadigitalmarketing.com', 'Chloe Billitteri', 'team')">✉️ Contact</button>
+          </div>
+        </div>
+        <div class="team-card">
+          <div class="team-avatar">CO</div>
+          <div class="team-name">Chris Owens</div>
+          <div class="team-role">Technical Director</div>
+          <div class="team-desc">Tech geek solving any web or engineering challenge. Full-stack problem solver extraordinaire.</div>
+          <div style="margin-top:12px;">
+            <button class="btn btn-primary btn-sm" onclick="openEmailModal('hello@aaadigitalmarketing.com', 'Chris Owens', 'team')">✉️ Contact</button>
+          </div>
+        </div>
+        <div class="team-card">
+          <div class="team-avatar">LF</div>
+          <div class="team-name">Luke Fregoso</div>
+          <div class="team-role">Digital Marketing Assistant</div>
+          <div class="team-desc">Expert in local marketing and Google My Business. Constantly researching and testing new strategies.</div>
+          <div style="margin-top:12px;">
+            <button class="btn btn-primary btn-sm" onclick="openEmailModal('hello@aaadigitalmarketing.com', 'Luke Fregoso', 'team')">✉️ Contact</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BNI STRATEGY -->
+  <div class="section" id="sec-bni">
+    <div class="section-header" onclick="toggleSection(this)">
+      <span class="section-icon">🤝</span>
+      <span class="section-title">BNI Strategic Referral Angles</span>
+      <span class="section-toggle">▼</span>
+    </div>
+    <div class="section-body" data-searchable>
+      <h3 style="color:#CF2030; margin-bottom:16px;">Why Augustus Would Be Valuable in BNI</h3>
+      <div class="table-wrapper">
+        <table class="sortable-table">
+          <thead>
+            <tr>
+              <th onclick="sortTable(this, 0)"># <span class="sort-arrow">⇅</span></th>
+              <th onclick="sortTable(this, 1)">Reason <span class="sort-arrow">⇅</span></th>
+              <th onclick="sortTable(this, 2)">Details <span class="sort-arrow">⇅</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>1</td><td><strong>Universal Demand</strong></td><td>Every business needs digital marketing — SEO, content, web design, local SEO, social media are universally needed by virtually every BNI member's clients.</td></tr>
+            <tr><td>2</td><td><strong>Local SEO Goldmine</strong></td><td>Local SEO expertise is perfect for referring local service businesses — contractors, attorneys, dentists, realtors, and more.</td></tr>
+            <tr><td>3</td><td><strong>Massive Referral Network</strong></td><td>100+ client base means Augustus has a wide referral network of his own to share with chapter members.</td></tr>
+            <tr><td>4</td><td><strong>Givers Gain® Mindset</strong></td><td>His agency model is built on partnerships and direct collaboration — he already lives the BNI philosophy.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- REFERRAL TRIGGERS -->
+  <div class="section" id="sec-triggers">
+    <div class="section-header" onclick="toggleSection(this)">
+      <span class="section-icon">🔴</span>
+      <span class="section-title">Ideal Referral Triggers — What to Listen For</span>
+      <span class="section-toggle">▼</span>
+    </div>
+    <div class="section-body" data-searchable>
+      <div class="table-wrapper">
+        <table class="sortable-table">
+          <thead>
+            <tr>
+              <th onclick="sortTable(this, 0)">Trigger Statement <span class="sort-arrow">⇅</span></th>
+              <th onclick="sortTable(this, 1)">Referral Opportunity <span class="sort-arrow">⇅</span></th>
+              <th onclick="sortTable(this, 2)">Priority <span class="sort-arrow">⇅</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><em>"My website isn't generating leads"</em></td><td><span class="badge badge-red">SEO + Web Design</span></td><td>🔴 High</td></tr>
+            <tr><td><em>"I'm not showing up on Google Maps"</em></td><td><span class="badge badge-red">Local SEO &amp; Google Maps</span></td><td>🔴 High</td></tr>
+            <tr><td><em>"I need more online visibility"</em></td><td><span class="badge badge-yellow">Content Marketing + Link Building</span></td><td>🟡 Medium-High</td></tr>
+            <tr><td><em>"My social media isn't working"</em></td><td><span class="badge badge-blue">Social Media Marketing</span></td><td>🟡 Medium</td></tr>
+            <tr><td><em>"I need a new website"</em></td><td><span class="badge badge-blue">Web Design Services</span></td><td>🔴 High</td></tr>
+            <tr><td><em>"My competitors rank higher than me"</em></td><td><span class="badge badge-red">SEO for Small Businesses</span></td><td>🔴 High</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div style="margin-top: 24px;">
+        <h4 style="color:#fff; margin-bottom:12px;">Quick Visual — Trigger Cards</h4>
+        <div class="trigger-grid">
+          <div class="trigger-card">
+            <div class="trigger-quote">"My website isn't generating leads"</div>
+            <div class="trigger-opp">→ SEO + Web Design</div>
+          </div>
+          <div class="trigger-card">
+            <div class="trigger-quote">"I'm not showing up on Google Maps"</div>
+            <div class="trigger-opp">→ Local SEO & Google Maps Optimization</div>
+          </div>
+          <div class="trigger-card">
+            <div class="trigger-quote">"I need more online visibility"</div>
+            <div class="trigger-opp">→ Content Marketing + Link Building</div>
+          </div>
+          <div class="trigger-card">
+            <div class="trigger-quote">"My social media isn't working"</div>
+            <div class="trigger-opp">→ Social Media Marketing Services</div>
+          </div>
+          <div class="trigger-card">
+            <div class="trigger-quote">"I need a new website"</div>
+            <div class="trigger-opp">→ Web Design Services</div>
+          </div>
+          <div class="trigger-card">
+            <div class="trigger-quote">"My competitors rank higher than me"</div>
+            <div class="trigger-opp">→ SEO for Small Businesses</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTACT SPHERE MATCHES -->
+  <div class="section" id="sec-sphere">
+    <div class="section-header" onclick="toggleSection(this)">
+      <span class="section-icon">🔵</span>
+      <span class="section-title">Top Contact Sphere Matches</span>
+      <span class="section-toggle">▼</span>
+    </div>
+    <div class="section-body" data-searchable>
+      <div class="table-wrapper">
+        <table class="sortable-table">
+          <thead>
+            <tr>
+              <th onclick="sortTable(this, 0)">Profession <span class="sort-arrow">⇅</span></th>
+              <th onclick="sortTable(this, 1)">Why It's a Match <span class="sort-arrow">⇅</span></th>
+              <th onclick="sortTable(this, 2)">Synergy Score <span class="sort-arrow">⇅</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>Web Developer</strong></td><td>Complementary — Augustus handles strategy, dev partner handles builds</td><td><strong style="color:#CF2030;">95</strong></td></tr>
+            <tr><td><strong>Business Consultant</strong></td><td>Clients needing growth strategies also need digital marketing</td><td><strong style="color:#CF2030;">90</strong></td></tr>
+            <tr><td><strong>Commercial Printer</strong></td><td>Print + digital marketing go hand-in-hand for full-spectrum brand presence</td><td><strong style="color:#CF2030;">82</strong></td></tr>
+            <tr><td><strong>Photographer / Videographer</strong></td><td>Visual content supports content marketing strategies</td><td><strong style="color:#CF2030;">88</strong></td></tr>
+            <tr><td><strong>Residential Realtor</strong></td><td>Realtors need local SEO and social media constantly</td><td><strong style="color:#CF2030;">92</strong></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHARTS -->
+  <div class="section" id="sec-charts">
+    <div class="section-header" onclick="toggleSection(this)">
+      <span class="section-icon">📊</span>
+      <span class="section-title">Data Visualizations</span>
+      <span class="section-toggle">▼</span>
+    </div>
+    <div class="section-body">
+      <div class="chart-row">
+        <div>
+          <h4 style="color:#fff; text-align:center; margin-bottom:12px;">Service Impact Scores</h4>
+          <div class="chart-container"><canvas id="serviceChart"></canvas></div>
+        </div>
+        <div>
+          <h4 style="color:#fff; text-align:center; margin-bottom:12px;">Contact Sphere Synergy</h4>
+          <div class="chart-container"><canvas id="sphereChart"></canvas></div>
+        </div>
+      </div>
+      <div class="chart-row" style="margin-top:24px;">
+        <div>
+          <h4 style="color:#fff; text-align:center; margin-bottom:12px;">Referral Trigger Priority</h4>
+          <div class="chart-container"><canvas id="triggerChart"></canvas></div>
+        </div>
+        <div>
+          <h4 style="color:#fff; text-align:center; margin-bottom:12px;">Service Distribution</h4>
+          <div class="chart-container"><canvas id="pieChart"></canvas></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- EMAIL MODAL -->
+<div class="modal-overlay" id="emailModal">
+  <div class="modal">
+    <h3>✉️ Compose BNI Visitor Invitation</h3>
+    <label>To:</label>
+    <input type="email" id="modalTo" readonly />
+    <label>Subject:</label>
+    <input type="text" id="modalSubject" />
+    <label>Message:</label>
+    <textarea id="modalBody"></textarea>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="copyEmail()">📋 Copy to Clipboard</button>
+      <button class="btn btn-primary" onclick="sendViaMailto()">📧 Open in Email Client</button>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=500w" alt="Higgins Reports" /><br>
+  <p>If you have any questions, please contact your regional office, refer to <a href="https://higginstraining.com">higginstraining.com</a> or call/text us 24/7 at <a href="tel:18883643924">1-888-364-3924</a> or email <a href="mailto:support@higgins.ai">support@higgins.ai</a></p>
+  <p style="margin-top:8px;">&copy; 2026 Higgins Reports | S.A.L.E. Client Simple Search &amp; Strategy Report — AAA Digital Marketing</p>
+</div>
+
+<script>
+// --- SECTION TOGGLE ---
+function toggleSection(header) {
+  const body = header.nextElementSibling;
+  const arrow = header.querySelector('.section-toggle');
+  body.classList.toggle('collapsed');
+  arrow.classList.toggle('collapsed');
+}
+
+// --- SCROLL NAV ---
+function scrollTo_(id) {
+  document.getElementById(id).scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// --- TABLE SORTING ---
+function sortTable(th, colIndex) {
+  const table = th.closest('table');
+  const tbody = table.querySelector('tbody');
+  const rows = Array.from(tbody.querySelectorAll('tr'));
+  const isAsc = th.dataset.sortDir !== 'asc';
+  th.dataset.sortDir = isAsc ? 'asc' : 'desc';
+  
+  // Clear other headers
+  table.querySelectorAll('thead th').forEach(h => { h.classList.remove('sorted'); });
+  th.classList.add('sorted');
+  th.querySelector('.sort-arrow').textContent = isAsc ? '▲' : '▼';
+  
+  rows.sort((a, b) => {
+    let aText = a.cells[colIndex] ? a.cells[colIndex].textContent.trim() : '';
+    let bText = b.cells[colIndex] ? b.cells[colIndex].textContent.trim() : '';
+    const aNum = parseFloat(aText);
+    const bNum = parseFloat(bText);
+    if (!isNaN(aNum) && !isNaN(bNum)) {
+      return isAsc ? aNum - bNum : bNum - aNum;
+    }
+    return isAsc ? aText.localeCompare(bText) : bText.localeCompare(aText);
+  });
+  rows.forEach(row => tbody.appendChild(row));
+}
+
+// --- GLOBAL SEARCH ---
+function globalSearchFn() {
+  const query = document.getElementById('globalSearch').value.toLowerCase();
+  document.querySelectorAll('tbody tr').forEach(row => {
+    const text = row.textContent.toLowerCase();
+    row.style.display = text.includes(query) || query === '' ? '' : 'none';
+  });
+  document.querySelectorAll('.team-card').forEach(card => {
+    const text = card.textContent.toLowerCase();
+    card.style.display = text.includes(query) || query === '' ? '' : 'none';
+  });
+  document.querySelectorAll('.trigger-card').forEach(card => {
+    const text = card.textContent.toLowerCase();
+    card.style.display = text.includes(query) || query === '' ? '' : 'none';
+  });
+}
+
+// --- EMAIL MODAL ---
+function openEmailModal(email, name, type) {
+  document.getElementById('emailModal').classList.add('active');
+  document.getElementById('modalTo').value = email;
+  
+  let subject = '';
+  let body = '';
+  
+  if (type === 'prospect') {
+    subject = `Exclusive Invitation: Visit Our BNI Chapter — Built for Growth-Driven Leaders Like You, ${name}`;
+    body = `Hi ${name},\n\nI hope this message finds you well! I'm reaching out because I've been incredibly impressed by AAA Digital Marketing's commitment to driving measurable results for over 100 clients — particularly the hands-on, no-cookie-cutter approach that sets the agency apart.\n\nI'd love to personally invite you to visit our BNI chapter as a guest. Here are three compelling reasons why this could be a game-changer for AAA Digital Marketing:\n\n1. UNIVERSAL REFERRAL FLOW — Every business in our chapter needs digital marketing services. From SEO and web design to local search optimization, the demand for what AAA Digital Marketing offers is constant among our members' clients and networks.\n\n2. 100+ CLIENTS = 100+ REFERRAL CONNECTIONS — With over 100 active clients across diverse industries, you already have a powerful network. BNI provides the structured framework to multiply those connections and generate warm, qualified introductions consistently.\n\n3. LOCAL SEO IS GOLD IN BNI — Our chapter includes contractors, attorneys, realtors, dentists, and other local service providers who desperately need local SEO expertise. You'd become one of the most referred members from day one.\n\nBNI is a structured, professional referral networking organization built on the philosophy of "Givers Gain®" — and from everything I've seen, that's exactly how you and your team already operate.\n\nTo visit our chapter, just complete this (***Visitor Invite***) simple form to reserve your seat and begin accelerating your business.\n\nI look forward to welcoming you!\n\nWarm regards`;
+  } else if (type === 'company') {
+    subject = 'BNI Chapter Visit Invitation — AAA Digital Marketing';
+    body = `Hello AAA Digital Marketing Team,\n\nI'm reaching out to invite your organization to experience a BNI chapter visit. With your impressive portfolio of 100+ clients and comprehensive digital marketing services spanning SEO, content marketing, web design, link building, local SEO, and social media — your agency would be an extraordinary asset in our referral network.\n\nOur chapter is full of local business owners who regularly need exactly the kind of services AAA Digital Marketing provides. From contractors needing local SEO to realtors seeking social media strategies, the referral opportunities are abundant.\n\nThree reasons to visit:\n\n1. Direct access to business owners actively seeking digital marketing partners\n2. Structured weekly referral exchanges with 20-50+ local professionals\n3. Build long-term strategic partnerships with complementary service providers\n\nTo visit our chapter, just complete this (***Visitor Invite***) simple form to reserve your seat and begin accelerating your business.\n\nWe look forward to hosting you!\n\nBest regards`;
+  } else {
+    subject = `BNI Networking Opportunity — Invitation for ${name} at AAA Digital Marketing`;
+    body = `Hi ${name},\n\nI'm a member of a local BNI chapter and I'd love to invite you to visit as a guest. AAA Digital Marketing's reputation for delivering results-driven digital marketing is exactly the kind of expertise our chapter members and their clients need.\n\nWhether it's SEO, content strategy, web design, or local search optimization — there are business owners in our chapter who regularly encounter clients needing these services and would love a trusted referral partner like you.\n\nTo visit our chapter, just complete this (***Visitor Invite***) simple form to reserve your seat and begin accelerating your business.\n\nLooking forward to connecting!\n\nBest regards`;
+  }
+  
+  document.getElementById('modalSubject').value = subject;
+  document.getElementById('modalBody').value = body;
+}
+
+function closeModal() {
+  document.getElementById('emailModal').classList.remove('active');
+}
+
+function copyEmail() {
+  const subject = document.getElementById('modalSubject').value;
+  const body = document.getElementById('modalBody').value;
+  const text = `Subject: ${subject}\n\n${body}`;
+  navigator.clipboard.writeText(text).then(() => {
+    alert('✅ Email content copied to clipboard!');
+  });
+}
+
+function sendViaMailto() {
+  const to = document.getElementById('modalTo').value;
+  const subject = encodeURIComponent(document.getElementById('modalSubject').value);
+  const body = encodeURIComponent(document.getElementById('modalBody').value);
+  window.open(`mailto:${to}?subject=${subject}&body=${body}`, '_blank');
+}
+
+// Close modal on overlay click
+document.getElementById('emailModal').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+
+// --- CHARTS ---
+const chartColors = {
+  red: '#CF2030', blue: '#4a9eff', green: '#28a745', yellow: '#ffc107', purple: '#9b59b6', cyan: '#17a2b8'
+};
+
+// Service Impact
+new Chart(document.getElementById('serviceChart'), {
+  type: 'bar',
+  data: {
+    labels: ['SEO', 'Content Mktg', 'Web Design', 'Link Building', 'Local SEO', 'Social Media'],
+    datasets: [{
+      label: 'Impact Score',
+      data: [95, 90, 88, 85, 92, 82],
+      backgroundColor: [chartColors.red, chartColors.yellow, chartColors.blue, chartColors.green, chartColors.red, chartColors.blue],
+      borderRadius: 6,
+      borderWidth: 0
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { display: false } },
+    scales: {
+      y: { beginAtZero: true, max: 100, ticks: { color: '#888' }, grid: { color: '#222' } },
+      x: { ticks: { color: '#aaa', font: { size: 10 } }, grid: { display: false } }
+    }
+  }
+});
+
+// Contact Sphere Synergy
+new Chart(document.getElementById('sphereChart'), {
+  type: 'radar',
+  data: {
+    labels: ['Web Developer', 'Biz Consultant', 'Commercial Printer', 'Photographer', 'Realtor'],
+    datasets: [{
+      label: 'Synergy Score',
+      data: [95, 90, 82, 88, 92],
+      backgroundColor: 'rgba(207,32,48,0.2)',
+      borderColor: '#CF2030',
+      borderWidth: 2,
+      pointBackgroundColor: '#CF2030',
+      pointRadius: 5
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { display: false } },
+    scales: {
+      r: {
+        beginAtZero: true, max: 100,
+        ticks: { display: false },
+        grid: { color: '#333' },
+        angleLines: { color: '#333' },
+        pointLabels: { color: '#aaa', font: { size: 10 } }
+      }
+    }
+  }
+});
+
+// Referral Trigger Priority
+new Chart(document.getElementById('triggerChart'), {
+  type: 'bar',
+  data: {
+    labels: ['No Leads', 'No Maps', 'Visibility', 'Social Fail', 'New Site', 'Competitors'],
+    datasets: [{
+      label: 'Priority',
+      data: [95, 93, 80, 70, 90, 92],
+      backgroundColor: ['#CF2030','#CF2030','#ffc107','#ffc107','#CF2030','#CF2030'],
+      borderRadius: 6
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true,
+    plugins: { legend: { display: false } },
+    scales: {
+      x: { beginAtZero: true, max: 100, ticks: { color: '#888' }, grid: { color: '#222' } },
+      y: { ticks: { color: '#aaa', font: { size: 10 } }, grid: { display: false } }
+    }
+  }
+});
+
+// Service Distribution Pie
+new Chart(document.getElementById('pieChart'), {
+  type: 'doughnut',
+  data: {
+    labels: ['SEO', 'Content', 'Web Design', 'Link Building', 'Local SEO', 'Social Media'],
+    datasets: [{
+      data: [95, 90, 88, 85, 92, 82],
+      backgroundColor: [chartColors.red, chartColors.yellow, chartColors.blue, chartColors.green, chartColors.purple, chartColors.cyan],
+      borderWidth: 2,
+      borderColor: '#111'
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: { position: 'bottom', labels: { color: '#aaa', font: { size: 10 }, padding: 12 } }
+    }
+  }
+});
+
+// --- NAV ACTIVE STATE ---
+window.addEventListener('scroll', () => {
+  const sections = ['sec-profile','sec-company','sec-services','sec-team','sec-bni','sec-triggers','sec-sphere','sec-charts'];
+  const navLinks = document.querySelectorAll('.nav a');
+  let current = '';
+  sections.forEach(id => {
+    const el = document.getElementById(id);
+    if (el && el.getBoundingClientRect().top <= 200) current = id;
+  });
+  navLinks.forEach((link, i) => {
+    link.classList.toggle('active', sections[i] === current);
+  });
+});
+</script>
+</body>
+</html>

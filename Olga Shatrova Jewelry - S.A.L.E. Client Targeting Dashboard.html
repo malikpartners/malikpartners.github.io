@@ -1,0 +1,696 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Olga Shatrova Jewelry - S.A.L.E. Client Targeting Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #000000, #1a1a1a);
+            color: #ffffff;
+            min-height: 100vh;
+        }
+        
+        .header {
+            background: #000000;
+            padding: 20px;
+            text-align: center;
+            border-bottom: 3px solid #CF2030;
+        }
+        
+        .logo {
+            max-width: 300px;
+            height: auto;
+        }
+        
+        .nav-menu {
+            background: #CF2030;
+            padding: 10px 0;
+            text-align: center;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .dashboard-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .dashboard-header h1 {
+            color: #CF2030;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .dashboard-header p {
+            color: #cccccc;
+            font-size: 1.2em;
+        }
+        
+        .controls {
+            background: rgba(207, 32, 48, 0.1);
+            border: 1px solid #CF2030;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .search-box, .filter-select {
+            padding: 10px;
+            border: 1px solid #CF2030;
+            border-radius: 5px;
+            background: #333;
+            color: white;
+            font-size: 16px;
+        }
+        
+        .search-box {
+            flex-grow: 1;
+            min-width: 300px;
+        }
+        
+        .filter-select {
+            min-width: 150px;
+        }
+        
+        .btn {
+            background: #CF2030;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s;
+        }
+        
+        .btn:hover {
+            background: #a01828;
+        }
+        
+        .btn-contact {
+            background: #CF2030;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 12px;
+            margin: 2px;
+        }
+        
+        .btn-contact:hover {
+            background: #a01828;
+        }
+        
+        .table-container {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th {
+            background: #CF2030;
+            color: white;
+            padding: 15px 10px;
+            text-align: left;
+            font-weight: bold;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        th:hover {
+            background: #a01828;
+        }
+        
+        th::after {
+            content: '↕️';
+            position: absolute;
+            right: 5px;
+            font-size: 12px;
+        }
+        
+        td {
+            padding: 12px 10px;
+            border-bottom: 1px solid rgba(207, 32, 48, 0.3);
+        }
+        
+        tr:nth-child(even) {
+            background: rgba(255, 255, 255, 0.02);
+        }
+        
+        tr:hover {
+            background: rgba(207, 32, 48, 0.1);
+        }
+        
+        .tier-1a {
+            background: rgba(0, 255, 0, 0.2);
+        }
+        
+        .tier-1b {
+            background: rgba(255, 255, 0, 0.2);
+        }
+        
+        .tier-1c {
+            background: rgba(0, 150, 255, 0.2);
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+        }
+        
+        .modal-content {
+            background: #1a1a1a;
+            border: 2px solid #CF2030;
+            border-radius: 10px;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            color: white;
+        }
+        
+        .modal-header {
+            color: #CF2030;
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .close {
+            color: #CF2030;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .close:hover {
+            color: #a01828;
+        }
+        
+        textarea {
+            width: 100%;
+            height: 200px;
+            background: #333;
+            color: white;
+            border: 1px solid #CF2030;
+            border-radius: 5px;
+            padding: 10px;
+            font-size: 14px;
+            resize: vertical;
+        }
+        
+        .footer {
+            background: #000000;
+            padding: 20px;
+            text-align: center;
+            border-top: 1px solid #CF2030;
+            margin-top: 50px;
+        }
+        
+        .footer-logo {
+            max-width: 150px;
+            height: auto;
+            opacity: 0.7;
+        }
+        
+        .sale-modules {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .module {
+            background: rgba(207, 32, 48, 0.1);
+            border: 1px solid #CF2030;
+            border-radius: 10px;
+            padding: 20px;
+        }
+        
+        .module h3 {
+            color: #CF2030;
+            margin-bottom: 10px;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: rgba(207, 32, 48, 0.1);
+            border: 1px solid #CF2030;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 2em;
+            color: #CF2030;
+            font-weight: bold;
+        }
+        
+        .stat-label {
+            color: #cccccc;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="HigginsReports Logo" class="logo">
+    </div>
+    
+    <div class="nav-menu">
+        S.A.L.E. Client Targeting Dashboard - Olga Shatrova Jewelry
+    </div>
+    
+    <div class="container">
+        <div class="dashboard-header">
+            <h1>Luxury Jewelry Client Intelligence Dashboard</h1>
+            <p>Strategic Client Acquisition System for Olga Shatrova Jewelry - Irvine, CA</p>
+        </div>
+        
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-value" id="totalClients">50</div>
+                <div class="stat-label">Total Prospects</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="tier1ACount">0</div>
+                <div class="stat-label">Tier 1A (Premium)</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="tier1BCount">0</div>
+                <div class="stat-label">Tier 1B (High-Value)</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="tier1CCount">0</div>
+                <div class="stat-label">Tier 1C (Qualified)</div>
+            </div>
+        </div>
+        
+        <div class="sale-modules">
+            <div class="module">
+                <h3>S - SOURCING (P.U.R.E.S.)</h3>
+                <p>Profitability, Urgency, Reachability, Engagement, Sustainability scoring system to identify premium jewelry clients.</p>
+            </div>
+            <div class="module">
+                <h3>A - ASSESSING</h3>
+                <p>Analyze buying patterns: Analytical, Relationship, Efficiency, and Innovation buyers for luxury jewelry purchases.</p>
+            </div>
+            <div class="module">
+                <h3>L - LISTENING</h3>
+                <p>Feedback tracking system for pre-sale, during-sale, and post-sale client interactions and satisfaction monitoring.</p>
+            </div>
+            <div class="module">
+                <h3>E - EMPOWERING</h3>
+                <p>Referral management and client advocacy programs to build a network of luxury jewelry enthusiasts.</p>
+            </div>
+        </div>
+        
+        <div class="controls">
+            <input type="text" class="search-box" id="searchInput" placeholder="Search clients by name, email, industry, or location...">
+            <select class="filter-select" id="tierFilter">
+                <option value="">All Tiers</option>
+                <option value="1A">Tier 1A (Premium)</option>
+                <option value="1B">Tier 1B (High-Value)</option>
+                <option value="1C">Tier 1C (Qualified)</option>
+            </select>
+            <select class="filter-select" id="industryFilter">
+                <option value="">All Industries</option>
+                <option value="Healthcare">Healthcare</option>
+                <option value="Technology">Technology</option>
+                <option value="Finance">Finance</option>
+                <option value="Real Estate">Real Estate</option>
+                <option value="Entertainment">Entertainment</option>
+                <option value="Fashion">Fashion</option>
+                <option value="Legal">Legal</option>
+                <option value="Education">Education</option>
+                <option value="Business Services">Business Services</option>
+                <option value="Hospitality">Hospitality</option>
+            </select>
+            <button class="btn" onclick="exportData()">Export CSV</button>
+            <button class="btn" onclick="resetFilters()">Reset Filters</button>
+        </div>
+        
+        <div class="table-container">
+            <table id="clientTable">
+                <thead>
+                    <tr>
+                        <th onclick="sortTable(0)">Client Name</th>
+                        <th onclick="sortTable(1)">Email</th>
+                        <th onclick="sortTable(2)">Phone</th>
+                        <th onclick="sortTable(3)">Address</th>
+                        <th onclick="sortTable(4)">P.U.R.E.S. Score</th>
+                        <th onclick="sortTable(5)">Tier</th>
+                        <th onclick="sortTable(6)">Industry</th>
+                        <th onclick="sortTable(7)">Est. Revenue</th>
+                        <th onclick="sortTable(8)">Contact Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="clientTableBody">
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <!-- Email Modal -->
+    <div id="emailModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="close" onclick="closeModal()">&times;</span>
+                <h2>Email Template - Luxury Jewelry Invitation</h2>
+            </div>
+            <div>
+                <p><strong>To:</strong> <span id="emailRecipient"></span></p>
+                <p><strong>Subject:</strong> Exclusive Luxury Jewelry Collection - Olga Shatrova Designs</p>
+                <br>
+                <textarea id="emailContent" readonly></textarea>
+                <br><br>
+                <button class="btn" onclick="sendEmail()">Send Email</button>
+                <button class="btn" onclick="closeModal()">Close</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="footer">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="HigginsReports Logo" class="footer-logo">
+        <p style="margin-top: 10px; color: #666;">Powered by HigginsReports - Strategic Business Intelligence</p>
+    </div>
+
+    <script>
+        // Client data for Olga Shatrova Jewelry
+        const clients = [
+            { name: "Dr. Sarah Chen", email: "s.chen@medcenter.com", phone: "(949) 555-0101", address: "1234 Fashion Island Dr, Newport Beach, CA 92660", pures: 4.8, tier: "1A", industry: "Healthcare", revenue: "$500K+", status: "New Lead", notes: "Orthopedic surgeon, frequent luxury buyer" },
+            { name: "Michael Rodriguez", email: "mrodriguez@techstart.com", phone: "(714) 555-0102", address: "5678 Tech Center Way, Irvine, CA 92614", pures: 4.6, tier: "1A", industry: "Technology", revenue: "$750K+", status: "Contacted", notes: "Tech executive, anniversary shopping" },
+            { name: "Jennifer Kim", email: "jkim@kimlaw.com", phone: "(949) 555-0103", address: "9012 Legal Plaza, Costa Mesa, CA 92626", pures: 4.7, tier: "1A", industry: "Legal", revenue: "$600K+", status: "Meeting Scheduled", notes: "Attorney, interest in custom pieces" },
+            { name: "Robert Thompson", email: "rthompson@luxuryrealty.com", phone: "(714) 555-0104", address: "3456 Coast Hwy, Laguna Beach, CA 92651", pures: 4.5, tier: "1A", industry: "Real Estate", revenue: "$800K+", status: "New Lead", notes: "Real estate mogul, gift for wife" },
+            { name: "Dr. Amanda Walsh", email: "awalsh@dentalcare.com", phone: "(949) 555-0105", address: "7890 Dental Ave, Tustin, CA 92780", pures: 4.4, tier: "1B", industry: "Healthcare", revenue: "$450K+", status: "Interested", notes: "Dental practice owner" },
+            { name: "David Park", email: "dpark@innovatetech.com", phone: "(714) 555-0106", address: "2468 Innovation Dr, Irvine, CA 92618", pures: 4.3, tier: "1B", industry: "Technology", revenue: "$550K+", status: "New Lead", notes: "Software company founder" },
+            { name: "Lisa Martinez", email: "lmartinez@fashionhouse.com", phone: "(949) 555-0107", address: "1357 Designer Row, Newport Beach, CA 92663", pures: 4.6, tier: "1A", industry: "Fashion", revenue: "$400K+", status: "Regular Client", notes: "Fashion designer, loyal customer" },
+            { name: "James Wilson", email: "jwilson@investmentfirm.com", phone: "(714) 555-0108", address: "8642 Financial Blvd, Irvine, CA 92612", pures: 4.8, tier: "1A", industry: "Finance", revenue: "$900K+", status: "VIP Client", notes: "Investment banker, high-end pieces" },
+            { name: "Dr. Rachel Green", email: "rgreen@vetwellness.com", phone: "(949) 555-0109", address: "9753 Pet Care Lane, Mission Viejo, CA 92691", pures: 4.2, tier: "1B", industry: "Healthcare", revenue: "$300K+", status: "Contacted", notes: "Veterinarian, animal-themed pieces" },
+            { name: "Kevin Lee", email: "klee@constructionco.com", phone: "(714) 555-0110", address: "4681 Builder St, Anaheim, CA 92805", pures: 4.1, tier: "1C", industry: "Construction", revenue: "$350K+", status: "New Lead", notes: "Construction company owner" },
+            { name: "Dr. Michelle Brown", email: "mbrown@plasticsurg.com", phone: "(949) 555-0111", address: "1122 Beauty Blvd, Beverly Hills, CA 90210", pures: 4.9, tier: "1A", industry: "Healthcare", revenue: "$1M+", status: "VIP Client", notes: "Plastic surgeon, celebrity clientele" },
+            { name: "Steven Chang", email: "schang@biotech.com", phone: "(714) 555-0112", address: "3344 Research Dr, Irvine, CA 92617", pures: 4.4, tier: "1B", industry: "Technology", revenue: "$650K+", status: "Meeting Scheduled", notes: "Biotech executive" },
+            { name: "Maria Gonzalez", email: "mgonzalez@hospitalgroup.com", phone: "(949) 555-0113", address: "5566 Medical Center Dr, Orange, CA 92868", pures: 4.3, tier: "1B", industry: "Healthcare", revenue: "$480K+", status: "Interested", notes: "Hospital administrator" },
+            { name: "Alex Johnson", email: "ajohnson@entertainment.com", phone: "(714) 555-0114", address: "7788 Studio Lot, Los Angeles, CA 90028", pures: 4.5, tier: "1A", industry: "Entertainment", revenue: "$700K+", status: "New Lead", notes: "Film producer" },
+            { name: "Dr. Karen Davis", email: "kdavis@eyecare.com", phone: "(949) 555-0115", address: "9900 Vision Ave, Irvine, CA 92620", pures: 4.2, tier: "1B", industry: "Healthcare", revenue: "$380K+", status: "Contacted", notes: "Ophthalmologist" },
+            { name: "Tony Soprano", email: "tsoprano@familybiz.com", phone: "(714) 555-0116", address: "1212 Family Way, Santa Ana, CA 92701", pures: 4.0, tier: "1C", industry: "Business Services", revenue: "$320K+", status: "New Lead", notes: "Family business owner" },
+            { name: "Dr. Patricia White", email: "pwhite@cardiocare.com", phone: "(949) 555-0117", address: "3434 Heart Dr, Laguna Hills, CA 92653", pures: 4.7, tier: "1A", industry: "Healthcare", revenue: "$850K+", status: "Regular Client", notes: "Cardiologist, elegant taste" },
+            { name: "Richard Kim", email: "rkim@lawpartners.com", phone: "(714) 555-0118", address: "5656 Justice Blvd, Irvine, CA 92614", pures: 4.4, tier: "1B", industry: "Legal", revenue: "$520K+", status: "Interested", notes: "Law firm partner" },
+            { name: "Dr. Elizabeth Taylor", email: "etaylor@skincare.com", phone: "(949) 555-0119", address: "7878 Dermatology Dr, Newport Beach, CA 92660", pures: 4.6, tier: "1A", industry: "Healthcare", revenue: "$680K+", status: "VIP Client", notes: "Dermatologist, beauty enthusiast" },
+            { name: "Chris Anderson", email: "canderson@techstartup.com", phone: "(714) 555-0120", address: "1010 Startup Ave, Irvine, CA 92618", pures: 4.1, tier: "1C", industry: "Technology", revenue: "$290K+", status: "New Lead", notes: "Startup founder" },
+            { name: "Susan Miller", email: "smiller@realtygroup.com", phone: "(949) 555-0121", address: "2020 Property Pl, Costa Mesa, CA 92626", pures: 4.3, tier: "1B", industry: "Real Estate", revenue: "$460K+", status: "Contacted", notes: "Real estate broker" },
+            { name: "Dr. Thomas Wilson", email: "twilson@orthopedics.com", phone: "(714) 555-0122", address: "3030 Bone Dr, Orange, CA 92869", pures: 4.5, tier: "1A", industry: "Healthcare", revenue: "$720K+", status: "Meeting Scheduled", notes: "Orthopedic surgeon" },
+            { name: "Nancy Rodriguez", email: "nrodriguez@fashionboutique.com", phone: "(949) 555-0123", address: "4040 Style St, Laguna Beach, CA 92651", pures: 4.2, tier: "1B", industry: "Fashion", revenue: "$340K+", status: "Regular Client", notes: "Boutique owner" },
+            { name: "Dr. John Smith", email: "jsmith@familymed.com", phone: "(714) 555-0124", address: "5050 Family Dr, Tustin, CA 92782", pures: 4.0, tier: "1C", industry: "Healthcare", revenue: "$280K+", status: "New Lead", notes: "Family physician" },
+            { name: "Michelle Chen", email: "mchen@investment.com", phone: "(949) 555-0125", address: "6060 Money Ave, Irvine, CA 92612", pures: 4.7, tier: "1A", industry: "Finance", revenue: "$820K+", status: "VIP Client", notes: "Investment advisor" },
+            { name: "Daniel Park", email: "dpark@architectfirm.com", phone: "(714) 555-0126", address: "7070 Design Dr, Newport Beach, CA 92663", pures: 4.1, tier: "1C", industry: "Business Services", revenue: "$380K+", status: "Interested", notes: "Architect" },
+            { name: "Dr. Linda Johnson", email: "ljohnson@pediatrics.com", phone: "(949) 555-0127", address: "8080 Kids Way, Mission Viejo, CA 92692", pures: 4.3, tier: "1B", industry: "Healthcare", revenue: "$420K+", status: "Contacted", notes: "Pediatrician" },
+            { name: "Mark Thompson", email: "mthompson@consultant.com", phone: "(714) 555-0128", address: "9090 Business Blvd, Irvine, CA 92614", pures: 4.2, tier: "1B", industry: "Business Services", revenue: "$450K+", status: "New Lead", notes: "Management consultant" },
+            { name: "Dr. Jennifer Walsh", email: "jwalsh@neurology.com", phone: "(949) 555-0129", address: "1111 Brain Dr, Orange, CA 92867", pures: 4.8, tier: "1A", industry: "Healthcare", revenue: "$950K+", status: "VIP Client", notes: "Neurologist, sophisticated taste" },
+            { name: "Paul Martinez", email: "pmartinez@hospitalgroup.com", phone: "(714) 555-0130", address: "2222 Hospital Ave, Santa Ana, CA 92705", pures: 4.4, tier: "1B", industry: "Healthcare", revenue: "$580K+", status: "Meeting Scheduled", notes: "Hospital CEO" },
+            { name: "Dr. Mary Brown", email: "mbrown@radiology.com", phone: "(949) 555-0131", address: "3333 Xray St, Costa Mesa, CA 92627", pures: 4.3, tier: "1B", industry: "Healthcare", revenue: "$490K+", status: "Interested", notes: "Radiologist" },
+            { name: "Andrew Kim", email: "akim@lawfirm.com", phone: "(714) 555-0132", address: "4444 Legal Ave, Irvine, CA 92614", pures: 4.6, tier: "1A", industry: "Legal", revenue: "$750K+", status: "Regular Client", notes: "Senior partner" },
+            { name: "Dr. Sandra Davis", email: "sdavis@gastro.com", phone: "(949) 555-0133", address: "5555 Digest Dr, Laguna Hills, CA 92654", pures: 4.2, tier: "1B", industry: "Healthcare", revenue: "$440K+", status: "Contacted", notes: "Gastroenterologist" },
+            { name: "Brian Wilson", email: "bwilson@techcorp.com", phone: "(714) 555-0134", address: "6666 Tech Park, Irvine, CA 92618", pures: 4.5, tier: "1A", industry: "Technology", revenue: "$690K+", status: "New Lead", notes: "Tech executive" },
+            { name: "Dr. Carol Green", email: "cgreen@oncology.com", phone: "(949) 555-0135", address: "7777 Cancer Center Dr, Newport Beach, CA 92663", pures: 4.7, tier: "1A", industry: "Healthcare", revenue: "$880K+", status: "VIP Client", notes: "Oncologist" },
+            { name: "Gary Lee", email: "glee@realtymax.com", phone: "(714) 555-0136", address: "8888 Property Way, Costa Mesa, CA 92628", pures: 4.1, tier: "1C", industry: "Real Estate", revenue: "$360K+", status: "Interested", notes: "Real estate agent" },
+            { name: "Dr. Helen Chang", email: "hchang@psychiatry.com", phone: "(949) 555-0137", address: "9999 Mental Health Ave, Orange, CA 92868", pures: 4.4, tier: "1B", industry: "Healthcare", revenue: "$510K+", status: "Meeting Scheduled", notes: "Psychiatrist" },
+            { name: "Frank Gonzalez", email: "fgonzalez@bizservices.com", phone: "(714) 555-0138", address: "1010 Service St, Tustin, CA 92780", pures: 4.0, tier: "1C", industry: "Business Services", revenue: "$310K+", status: "New Lead", notes: "Business services" },
+            { name: "Dr. Diana Johnson", email: "djohnson@fertility.com", phone: "(949) 555-0139", address: "1212 Family Planning Dr, Mission Viejo, CA 92691", pures: 4.6, tier: "1A", industry: "Healthcare", revenue: "$760K+", status: "Regular Client", notes: "Fertility specialist" },
+            { name: "Eric Anderson", email: "eanderson@financialgroup.com", phone: "(714) 555-0140", address: "1313 Investment Blvd, Irvine, CA 92612", pures: 4.3, tier: "1B", industry: "Finance", revenue: "$480K+", status: "Contacted", notes: "Financial planner" },
+            { name: "Dr. Lisa Rodriguez", email: "lrodriguez@allergist.com", phone: "(949) 555-0141", address: "1414 Allergy Ave, Laguna Beach, CA 92651", pures: 4.2, tier: "1B", industry: "Healthcare", revenue: "$410K+", status: "Interested", notes: "Allergist" },
+            { name: "Victor Kim", email: "vkim@hospitaladmin.com", phone: "(714) 555-0142", address: "1515 Admin Way, Santa Ana, CA 92701", pures: 4.4, tier: "1B", industry: "Healthcare", revenue: "$540K+", status: "New Lead", notes: "Hospital administrator" },
+            { name: "Dr. Janet White", email: "jwhite@urology.com", phone: "(949) 555-0143", address: "1616 Kidney Dr, Orange, CA 92869", pures: 4.5, tier: "1A", industry: "Healthcare", revenue: "$710K+", status: "VIP Client", notes: "Urologist" },
+            { name: "Robert Park", email: "rpark@lawoffice.com", phone: "(714) 555-0144", address: "1717 Legal Plaza, Irvine, CA 92614", pures: 4.1, tier: "1C", industry: "Legal", revenue: "$350K+", status: "Meeting Scheduled", notes: "Attorney" },
+            { name: "Dr. Angela Miller", email: "amiller@rheumatology.com", phone: "(949) 555-0145", address: "1818 Joint Dr, Costa Mesa, CA 92626", pures: 4.3, tier: "1B", industry: "Healthcare", revenue: "$470K+", status: "Contacted", notes: "Rheumatologist" },
+            { name: "Charles Thompson", email: "cthompson@hotelgroup.com", phone: "(714) 555-0146", address: "1919 Hotel Ave, Newport Beach, CA 92660", pures: 4.6, tier: "1A", industry: "Hospitality", revenue: "$780K+", status: "Regular Client", notes: "Hotel chain owner" },
+            { name: "Dr. Barbara Wilson", email: "bwilson@endocrine.com", phone: "(949) 555-0147", address: "2020 Hormone Dr, Laguna Hills, CA 92653", pures: 4.4, tier: "1B", industry: "Healthcare", revenue: "$530K+", status: "Interested", notes: "Endocrinologist" },
+            { name: "Peter Martinez", email: "pmartinez@educationgroup.com", phone: "(714) 555-0148", address: "2121 School Way, Mission Viejo, CA 92692", pures: 4.0, tier: "1C", industry: "Education", revenue: "$290K+", status: "New Lead", notes: "School administrator" },
+            { name: "Dr. Nancy Lee", email: "nlee@infectious.com", phone: "(949) 555-0149", address: "2222 Disease Control Ave, Tustin, CA 92782", pures: 4.2, tier: "1B", industry: "Healthcare", revenue: "$430K+", status: "Contacted", notes: "Infectious disease specialist" },
+            { name: "William Chen", email: "wchen@techventures.com", phone: "(714) 555-0150", address: "2323 Venture Blvd, Irvine, CA 92618", pures: 4.7, tier: "1A", industry: "Technology", revenue: "$850K+", status: "VIP Client", notes: "Venture capitalist" }
+        ];
+
+        let currentSortColumn = -1;
+        let sortDirection = 'asc';
+        let filteredClients = [...clients];
+
+        function calculateTierCounts() {
+            const tier1A = filteredClients.filter(client => client.tier === '1A').length;
+            const tier1B = filteredClients.filter(client => client.tier === '1B').length;
+            const tier1C = filteredClients.filter(client => client.tier === '1C').length;
+            
+            document.getElementById('tier1ACount').textContent = tier1A;
+            document.getElementById('tier1BCount').textContent = tier1B;
+            document.getElementById('tier1CCount').textContent = tier1C;
+            document.getElementById('totalClients').textContent = filteredClients.length;
+        }
+
+        function renderTable() {
+            const tbody = document.getElementById('clientTableBody');
+            tbody.innerHTML = '';
+
+            filteredClients.forEach(client => {
+                const row = document.createElement('tr');
+                row.className = `tier-${client.tier.toLowerCase()}`;
+                
+                row.innerHTML = `
+                    <td>${client.name}</td>
+                    <td>${client.email}</td>
+                    <td>${client.phone}</td>
+                    <td>${client.address}</td>
+                    <td>${client.pures}</td>
+                    <td>${client.tier}</td>
+                    <td>${client.industry}</td>
+                    <td>${client.revenue}</td>
+                    <td>${client.status}</td>
+                    <td>
+                        <button class="btn-contact" onclick="contactClient('email', '${client.name}', '${client.email}', '${client.industry}', '${client.tier}')">Email</button>
+                        <button class="btn-contact" onclick="contactClient('call', '${client.name}', '${client.phone}')">Call</button>
+                    </td>
+                `;
+                
+                tbody.appendChild(row);
+            });
+            
+            calculateTierCounts();
+        }
+
+        function contactClient(method, name, contact, industry = '', tier = '') {
+            if (method === 'email') {
+                showEmailModal(name, contact, industry, tier);
+            } else if (method === 'call') {
+                window.open(`tel:${contact}`);
+            }
+        }
+
+        function showEmailModal(name, email, industry, tier) {
+            document.getElementById('emailRecipient').textContent = `${name} (${email})`;
+            
+            const emailTemplate = generateEmailTemplate(name, industry, tier);
+            document.getElementById('emailContent').value = emailTemplate;
+            
+            document.getElementById('emailModal').style.display = 'block';
+        }
+
+        function generateEmailTemplate(name, industry, tier) {
+            const firstName = name.split(' ')[0];
+            let personalizedMessage = '';
+            
+            if (tier === '1A') {
+                personalizedMessage = `As a distinguished professional in ${industry}, I believe you would appreciate our exclusive, handcrafted pieces that reflect sophistication and elegance.`;
+            } else if (tier === '1B') {
+                personalizedMessage = `Given your success in ${industry}, you might be interested in our collection of unique jewelry pieces that make perfect statement accessories or special gifts.`;
+            } else {
+                personalizedMessage = `I thought you might be interested in learning about our beautiful jewelry collection, perfect for special occasions or as meaningful gifts.`;
+            }
+
+            return `Dear ${firstName},
+
+I hope this message finds you well. My name is Olga Shatrova, and I am the designer and owner of Olga Shatrova Jewelry, located in the heart of Irvine, California.
+
+${personalizedMessage}
+
+At Olga Shatrova Jewelry, we specialize in:
+• Exclusive, handcrafted luxury jewelry pieces
+• Custom engagement rings and wedding bands
+• Precious gemstone collections featuring diamonds, emeralds, and sapphires
+• Personalized jewelry design consultations
+• Expert jewelry repair and restoration services
+• Investment-grade timepieces and luxury accessories
+
+What sets us apart:
+✨ Each piece is individually crafted with meticulous attention to detail
+✨ We source only the finest materials and ethically-sourced gemstones
+✨ Personal design consultations to create truly unique pieces
+✨ Lifetime maintenance and care for all our creations
+✨ Exclusive client events and private showings
+
+I would love to invite you for a private consultation where you can explore our collection in a comfortable, no-pressure environment. Whether you're looking for the perfect piece to complement your professional wardrobe, a meaningful gift for someone special, or considering a custom design, we would be honored to help you find exactly what you're looking for.
+
+As a special invitation, I'm offering complimentary design consultation and 15% off your first purchase when you visit our showroom this month.
+
+Please feel free to visit us at our Irvine location or schedule a private appointment at your convenience. You can also view some of our featured pieces at https://linktr.ee/olga.shatrova_usa
+
+I look forward to meeting you and sharing the artistry behind each of our unique creations.
+
+Warm regards,
+
+Olga Shatrova
+Founder & Designer
+Olga Shatrova Jewelry
+📍 Irvine, California
+📱 Phone: Available upon request
+🌐 https://linktr.ee/olga.shatrova_usa
+💎 "Where elegance meets artistry"
+
+P.S. Follow us on LinkedIn for exclusive previews of new collections and behind-the-scenes looks at our design process.`;
+        }
+
+        function closeModal() {
+            document.getElementById('emailModal').style.display = 'none';
+        }
+
+        function sendEmail() {
+            const recipient = document.getElementById('emailRecipient').textContent.match(/\((.+)\)/)[1];
+            const content = document.getElementById('emailContent').value;
+            const subject = 'Exclusive Luxury Jewelry Collection - Olga Shatrova Designs';
+            
+            const mailtoLink = `mailto:${recipient}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(content)}`;
+            window.open(mailtoLink);
+            closeModal();
+        }
+
+        function sortTable(columnIndex) {
+            if (currentSortColumn === columnIndex) {
+                sortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
+            } else {
+                sortDirection = 'asc';
+                currentSortColumn = columnIndex;
+            }
+
+            const columns = ['name', 'email', 'phone', 'address', 'pures', 'tier', 'industry', 'revenue', 'status'];
+            const sortColumn = columns[columnIndex];
+
+            filteredClients.sort((a, b) => {
+                let aVal = a[sortColumn];
+                let bVal = b[sortColumn];
+
+                if (sortColumn === 'pures') {
+                    aVal = parseFloat(aVal);
+                    bVal = parseFloat(bVal);
+                }
+
+                if (aVal < bVal) return sortDirection === 'asc' ? -1 : 1;
+                if (aVal > bVal) return sortDirection === 'asc' ? 1 : -1;
+                return 0;
+            });
+
+            renderTable();
+        }
+
+        function filterTable() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const tierFilter = document.getElementById('tierFilter').value;
+            const industryFilter = document.getElementById('industryFilter').value;
+
+            filteredClients = clients.filter(client => {
+                const matchesSearch = searchTerm === '' || 
+                    client.name.toLowerCase().includes(searchTerm) ||
+                    client.email.toLowerCase().includes(searchTerm) ||
+                    client.industry.toLowerCase().includes(searchTerm) ||
+                    client.address.toLowerCase().includes(searchTerm);
+
+                const matchesTier = tierFilter === '' || client.tier === tierFilter;
+                const matchesIndustry = industryFilter === '' || client.industry === industryFilter;
+
+                return matchesSearch && matchesTier && matchesIndustry;
+            });
+
+            renderTable();
+        }
+
+        function resetFilters() {
+            document.getElementById('searchInput').value = '';
+            document.getElementById('tierFilter').value = '';
+            document.getElementById('industryFilter').value = '';
+            filteredClients = [...clients];
+            renderTable();
+        }
+
+        function exportData() {
+            let csv = 'Client Name,Email,Phone,Address,P.U.R.E.S. Score,Tier,Industry,Est. Revenue,Contact Status,Notes\n';
+            
+            filteredClients.forEach(client => {
+                csv += `"${client.name}","${client.email}","${client.phone}","${client.address}","${client.pures}","${client.tier}","${client.industry}","${client.revenue}","${client.status}","${client.notes}"\n`;
+            });
+
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.setAttribute('hidden', '');
+            a.setAttribute('href', url);
+            a.setAttribute('download', 'olga-jewelry-clients.csv');
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+
+        // Event listeners
+        document.getElementById('searchInput').addEventListener('input', filterTable);
+        document.getElementById('tierFilter').addEventListener('change', filterTable);
+        document.getElementById('industryFilter').addEventListener('change', filterTable);
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('emailModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+
+        // Initialize the table
+        renderTable();
+    </script>
+</body>
+</html>

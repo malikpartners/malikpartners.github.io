@@ -1,0 +1,1229 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JobHint - S.A.L.E. System Client Targeting Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #000000;
+            color: #FFFFFF;
+            line-height: 1.6;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #CF2030 0%, #8B0A14 100%);
+            padding: 20px 0;
+            box-shadow: 0 2px 10px rgba(207, 32, 48, 0.3);
+        }
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+        }
+        
+        .logo {
+            height: 60px;
+        }
+        
+        .header-info {
+            text-align: right;
+        }
+        
+        .header-info h1 {
+            color: #FFFFFF;
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+        
+        .header-info p {
+            color: #FFCCCC;
+            font-size: 14px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .card {
+            background: linear-gradient(145deg, #1a1a1a 0%, #2d2d2d 100%);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            border: 1px solid #333;
+        }
+        
+        .card h2 {
+            color: #CF2030;
+            margin-bottom: 15px;
+            font-size: 18px;
+            border-bottom: 2px solid #CF2030;
+            padding-bottom: 8px;
+        }
+        
+        .pures-form {
+            display: grid;
+            gap: 15px;
+        }
+        
+        .score-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #000;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #444;
+        }
+        
+        .score-item label {
+            font-weight: bold;
+            color: #FFFFFF;
+        }
+        
+        .score-slider {
+            display: flex;
+            gap: 5px;
+            align-items: center;
+        }
+        
+        .score-slider input[type="range"] {
+            background: #333;
+            outline: none;
+            height: 6px;
+            border-radius: 3px;
+        }
+        
+        .score-slider input[type="range"]::-webkit-slider-thumb {
+            background: #CF2030;
+            height: 18px;
+            width: 18px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        
+        .score-value {
+            background: #CF2030;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            min-width: 30px;
+            text-align: center;
+        }
+        
+        .search-controls {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .search-input, .filter-select {
+            background: #2d2d2d;
+            border: 1px solid #CF2030;
+            color: #FFFFFF;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+        
+        .search-input {
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        .btn {
+            background: linear-gradient(145deg, #CF2030 0%, #8B0A14 100%);
+            color: #FFFFFF;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+        
+        .btn:hover {
+            background: linear-gradient(145deg, #8B0A14 0%, #CF2030 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(207, 32, 48, 0.4);
+        }
+        
+        .btn-small {
+            padding: 6px 12px;
+            font-size: 12px;
+        }
+        
+        .btn-contact {
+            background: linear-gradient(145deg, #28a745 0%, #1e7e34 100%);
+        }
+        
+        .btn-contact:hover {
+            background: linear-gradient(145deg, #1e7e34 0%, #28a745 100%);
+        }
+        
+        .clients-table {
+            background: #1a1a1a;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #333;
+        }
+        
+        th {
+            background: linear-gradient(145deg, #CF2030 0%, #8B0A14 100%);
+            color: #FFFFFF;
+            font-weight: bold;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        th:hover {
+            background: linear-gradient(145deg, #8B0A14 0%, #CF2030 100%);
+        }
+        
+        tr:nth-child(even) {
+            background: #2d2d2d;
+        }
+        
+        tr:hover {
+            background: #3d3d3d;
+        }
+        
+        .tier-1a { color: #00ff00; font-weight: bold; }
+        .tier-1b { color: #ffff00; font-weight: bold; }
+        .tier-1c { color: #ff8c00; font-weight: bold; }
+        
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            background: #2d2d2d;
+            border-radius: 8px;
+            padding: 5px;
+        }
+        
+        .tab {
+            flex: 1;
+            text-align: center;
+            padding: 12px;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        
+        .tab.active {
+            background: #CF2030;
+            color: #FFFFFF;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .metric-card {
+            background: linear-gradient(145deg, #2d2d2d 0%, #1a1a1a 100%);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid #444;
+        }
+        
+        .metric-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #CF2030;
+        }
+        
+        .metric-label {
+            font-size: 12px;
+            color: #CCCCCC;
+            margin-top: 5px;
+        }
+        
+        .footer {
+            margin-top: 40px;
+            padding: 20px;
+            text-align: center;
+            border-top: 1px solid #333;
+        }
+        
+        .footer-logo {
+            height: 30px;
+            margin-bottom: 10px;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+        }
+        
+        .modal-content {
+            background: #2d2d2d;
+            margin: 5% auto;
+            padding: 30px;
+            border-radius: 12px;
+            width: 80%;
+            max-width: 600px;
+            border: 2px solid #CF2030;
+        }
+        
+        .close {
+            color: #CF2030;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .close:hover {
+            color: #FFFFFF;
+        }
+        
+        .email-template {
+            background: #1a1a1a;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #444;
+            margin-top: 15px;
+        }
+        
+        textarea {
+            width: 100%;
+            height: 200px;
+            background: #1a1a1a;
+            color: #FFFFFF;
+            border: 1px solid #CF2030;
+            border-radius: 8px;
+            padding: 15px;
+            font-family: inherit;
+            resize: vertical;
+        }
+        
+        .input-group {
+            margin-bottom: 15px;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #FFFFFF;
+            font-weight: bold;
+        }
+        
+        .input-group input {
+            width: 100%;
+            background: #1a1a1a;
+            color: #FFFFFF;
+            border: 1px solid #CF2030;
+            border-radius: 8px;
+            padding: 10px;
+        }
+        
+        @media (max-width: 768px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .search-controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .search-input {
+                min-width: auto;
+            }
+            
+            .modal-content {
+                width: 95%;
+                margin: 10% auto;
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="HigginsReports" class="logo">
+            <div class="header-info">
+                <h1>JobHint S.A.L.E. System</h1>
+                <p>Client Targeting & Outreach Dashboard</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- S.A.L.E. Performance Metrics -->
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-value" id="totalClients">50</div>
+                <div class="metric-label">Total Prospects</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value tier-1a" id="tier1aCount">15</div>
+                <div class="metric-label">Tier 1A (Premium)</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value tier-1b" id="tier1bCount">20</div>
+                <div class="metric-label">Tier 1B (High-Value)</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value tier-1c" id="tier1cCount">15</div>
+                <div class="metric-label">Tier 1C (Qualified)</div>
+            </div>
+        </div>
+
+        <!-- Main Dashboard -->
+        <div class="tabs">
+            <div class="tab active" onclick="showTab('sourcing')">S.OURCING</div>
+            <div class="tab" onclick="showTab('assessing')">A.SSESSING</div>
+            <div class="tab" onclick="showTab('listening')">L.ISTENING</div>
+            <div class="tab" onclick="showTab('empowering')">E.MPOWERING</div>
+        </div>
+
+        <!-- SOURCING Module -->
+        <div id="sourcing" class="tab-content active">
+            <div class="dashboard-grid">
+                <div class="card">
+                    <h2>P.U.R.E.S. Client Scoring System</h2>
+                    <div class="pures-form">
+                        <div class="score-item">
+                            <label>Profitability</label>
+                            <div class="score-slider">
+                                <input type="range" min="1" max="5" value="3" id="profitability" onchange="updateScore('profitability', this.value)">
+                                <span class="score-value" id="profitabilityValue">3</span>
+                            </div>
+                        </div>
+                        <div class="score-item">
+                            <label>Urgency</label>
+                            <div class="score-slider">
+                                <input type="range" min="1" max="5" value="3" id="urgency" onchange="updateScore('urgency', this.value)">
+                                <span class="score-value" id="urgencyValue">3</span>
+                            </div>
+                        </div>
+                        <div class="score-item">
+                            <label>Reachability</label>
+                            <div class="score-slider">
+                                <input type="range" min="1" max="5" value="3" id="reachability" onchange="updateScore('reachability', this.value)">
+                                <span class="score-value" id="reachabilityValue">3</span>
+                            </div>
+                        </div>
+                        <div class="score-item">
+                            <label>Engagement</label>
+                            <div class="score-slider">
+                                <input type="range" min="1" max="5" value="3" id="engagement" onchange="updateScore('engagement', this.value)">
+                                <span class="score-value" id="engagementValue">3</span>
+                            </div>
+                        </div>
+                        <div class="score-item">
+                            <label>Sustainability</label>
+                            <div class="score-slider">
+                                <input type="range" min="1" max="5" value="3" id="sustainability" onchange="updateScore('sustainability', this.value)">
+                                <span class="score-value" id="sustainabilityValue">3</span>
+                            </div>
+                        </div>
+                        <div class="score-item">
+                            <label><strong>Overall P.U.R.E.S. Score</strong></label>
+                            <span class="score-value" id="overallScore">15</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h2>Client Tier Classification</h2>
+                    <div style="background: #000; padding: 15px; border-radius: 8px; border: 1px solid #444;">
+                        <div style="margin-bottom: 10px;">
+                            <span class="tier-1a">● Tier 1A (Premium):</span> 4-5 scores on all P.U.R.E.S. criteria
+                        </div>
+                        <div style="margin-bottom: 10px;">
+                            <span class="tier-1b">● Tier 1B (High-Value):</span> 3-4 scores on most criteria
+                        </div>
+                        <div>
+                            <span class="tier-1c">● Tier 1C (Qualified):</span> 3+ scores on P.U.R.E.S. criteria
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ASSESSING Module -->
+        <div id="assessing" class="tab-content">
+            <div class="card">
+                <h2>Buying Pattern Analysis</h2>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px;">
+                    <div style="background: #000; padding: 15px; border-radius: 8px; border: 1px solid #444;">
+                        <h3 style="color: #CF2030; margin-bottom: 10px;">Analytical Buyers</h3>
+                        <p style="font-size: 14px;">Require detailed ROI analysis, case studies, trials</p>
+                    </div>
+                    <div style="background: #000; padding: 15px; border-radius: 8px; border: 1px solid #444;">
+                        <h3 style="color: #CF2030; margin-bottom: 10px;">Relationship Buyers</h3>
+                        <p style="font-size: 14px;">Value trust, referrals, long-term partnerships</p>
+                    </div>
+                    <div style="background: #000; padding: 15px; border-radius: 8px; border: 1px solid #444;">
+                        <h3 style="color: #CF2030; margin-bottom: 10px;">Efficiency Buyers</h3>
+                        <p style="font-size: 14px;">Focus on time-saving, process improvement</p>
+                    </div>
+                    <div style="background: #000; padding: 15px; border-radius: 8px; border: 1px solid #444;">
+                        <h3 style="color: #CF2030; margin-bottom: 10px;">Innovation Buyers</h3>
+                        <p style="font-size: 14px;">Seek cutting-edge solutions, competitive advantage</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- LISTENING Module -->
+        <div id="listening" class="tab-content">
+            <div class="card">
+                <h2>Feedback Integration System</h2>
+                <div style="display: grid; gap: 15px;">
+                    <div style="background: #000; padding: 15px; border-radius: 8px; border: 1px solid #444;">
+                        <h3 style="color: #CF2030; margin-bottom: 10px;">Pre-Sale Feedback</h3>
+                        <p>Collection forms and initial client interviews</p>
+                    </div>
+                    <div style="background: #000; padding: 15px; border-radius: 8px; border: 1px solid #444;">
+                        <h3 style="color: #CF2030; margin-bottom: 10px;">During-Sale Progress</h3>
+                        <p>Tracking engagement and milestone feedback</p>
+                    </div>
+                    <div style="background: #000; padding: 15px; border-radius: 8px; border: 1px solid #444;">
+                        <h3 style="color: #CF2030; margin-bottom: 10px;">Post-Sale Monitoring</h3>
+                        <p>Satisfaction surveys and retention analysis</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- EMPOWERING Module -->
+        <div id="empowering" class="tab-content">
+            <div class="card">
+                <h2>Referral Strategy Management</h2>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px;">
+                    <div style="background: #000; padding: 15px; border-radius: 8px; border: 1px solid #444;">
+                        <h3 style="color: #CF2030; margin-bottom: 10px;">Success Stories</h3>
+                        <p>Documentation and case study development</p>
+                    </div>
+                    <div style="background: #000; padding: 15px; border-radius: 8px; border: 1px solid #444;">
+                        <h3 style="color: #CF2030; margin-bottom: 10px;">Referral Rewards</h3>
+                        <p>Tracking and incentive management</p>
+                    </div>
+                    <div style="background: #000; padding: 15px; border-radius: 8px; border: 1px solid #444;">
+                        <h3 style="color: #CF2030; margin-bottom: 10px;">Client Advocacy</h3>
+                        <p>Program management and engagement</p>
+                    </div>
+                    <div style="background: #000; padding: 15px; border-radius: 8px; border: 1px solid #444;">
+                        <h3 style="color: #CF2030; margin-bottom: 10px;">Co-Marketing</h3>
+                        <p>Opportunity planning and execution</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Client Database -->
+        <div class="card" style="margin-top: 20px;">
+            <h2>Client Database - Palos Verdes Peninsula Area</h2>
+            
+            <div class="search-controls">
+                <input type="text" id="searchInput" class="search-input" placeholder="Search clients by name, email, company, or industry...">
+                <select id="tierFilter" class="filter-select">
+                    <option value="">All Tiers</option>
+                    <option value="1A">Tier 1A</option>
+                    <option value="1B">Tier 1B</option>
+                    <option value="1C">Tier 1C</option>
+                </select>
+                <select id="industryFilter" class="filter-select">
+                    <option value="">All Industries</option>
+                    <option value="Technology">Technology</option>
+                    <option value="Healthcare">Healthcare</option>
+                    <option value="Finance">Finance</option>
+                    <option value="Manufacturing">Manufacturing</option>
+                    <option value="Education">Education</option>
+                    <option value="Retail">Retail</option>
+                </select>
+                <button class="btn" onclick="exportData()">Export CSV</button>
+            </div>
+            
+            <div class="clients-table">
+                <table id="clientsTable">
+                    <thead>
+                        <tr>
+                            <th onclick="sortTable(0)">Client Name ↕</th>
+                            <th onclick="sortTable(1)">Email ↕</th>
+                            <th onclick="sortTable(2)">Phone ↕</th>
+                            <th onclick="sortTable(3)">Company ↕</th>
+                            <th onclick="sortTable(4)">P.U.R.E.S. ↕</th>
+                            <th onclick="sortTable(5)">Tier ↕</th>
+                            <th onclick="sortTable(6)">Industry ↕</th>
+                            <th onclick="sortTable(7)">Revenue Est. ↕</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="clientsTableBody">
+                        <!-- Client data will be populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Email Modal -->
+    <div id="emailModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2 style="color: #CF2030; margin-bottom: 20px;">Contact Client</h2>
+            
+            <div class="input-group">
+                <label>To:</label>
+                <input type="email" id="modalEmail" readonly>
+            </div>
+            
+            <div class="input-group">
+                <label>Subject:</label>
+                <input type="text" id="modalSubject" value="Transform Your Hiring Process with JobHint">
+            </div>
+            
+            <div class="input-group">
+                <label>Message:</label>
+                <textarea id="modalMessage"></textarea>
+            </div>
+            
+            <div style="display: flex; gap: 10px; justify-content: flex-end;">
+                <button class="btn" onclick="closeModal()">Cancel</button>
+                <button class="btn btn-contact" onclick="sendEmail()">Send Email</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="HigginsReports" class="footer-logo">
+        <p style="color: #CCCCCC; font-size: 12px;">© 2025 HigginsReports - S.A.L.E. System Implementation</p>
+    </div>
+
+    <script>
+        // Sample client data for Palos Verdes Peninsula area
+        const clientsData = [
+            {
+                name: "Sarah Martinez",
+                email: "sarah.martinez@techstartuphub.com",
+                phone: "(310) 555-0123",
+                company: "TechStartup Hub",
+                address: "1234 Tech Blvd, Redondo Beach, CA 90278",
+                pures: 23,
+                tier: "1A",
+                industry: "Technology",
+                revenue: "$2.5M",
+                buyerType: "Innovation",
+                lastContact: "2025-01-15",
+                nextAction: "Follow-up demo",
+                notes: "Interested in AI-powered recruitment solutions"
+            },
+            {
+                name: "Michael Chen",
+                email: "mchen@healthcaresolutions.com",
+                phone: "(424) 555-0234",
+                company: "HealthCare Solutions Inc",
+                address: "5678 Medical Ave, Torrance, CA 90505",
+                pures: 21,
+                tier: "1A",
+                industry: "Healthcare",
+                revenue: "$5.2M",
+                buyerType: "Analytical",
+                lastContact: "2025-01-20",
+                nextAction: "Send ROI analysis",
+                notes: "Large healthcare provider, 500+ employees"
+            },
+            {
+                name: "Jennifer Wong",
+                email: "jwong@globalfinance.com",
+                phone: "(310) 555-0345",
+                company: "Global Finance Corp",
+                address: "9012 Finance St, Manhattan Beach, CA 90266",
+                pures: 22,
+                tier: "1A",
+                industry: "Finance",
+                revenue: "$8.1M",
+                buyerType: "Efficiency",
+                lastContact: "2025-01-18",
+                nextAction: "Schedule executive meeting",
+                notes: "Expanding rapidly, hiring 200+ positions"
+            },
+            {
+                name: "David Rodriguez",
+                email: "drodriguez@manufacturingpro.com",
+                phone: "(424) 555-0456",
+                company: "Manufacturing Pro LLC",
+                address: "3456 Industrial Way, Carson, CA 90745",
+                pures: 20,
+                tier: "1A",
+                industry: "Manufacturing",
+                revenue: "$3.8M",
+                buyerType: "Relationship",
+                lastContact: "2025-01-22",
+                nextAction: "Client testimonial review",
+                notes: "Referral from existing client"
+            },
+            {
+                name: "Lisa Thompson",
+                email: "lthompson@educationplus.org",
+                phone: "(310) 555-0567",
+                company: "Education Plus Academy",
+                address: "7890 Learning Ln, Palos Verdes, CA 90274",
+                pures: 19,
+                tier: "1B",
+                industry: "Education",
+                revenue: "$1.2M",
+                buyerType: "Relationship",
+                lastContact: "2025-01-16",
+                nextAction: "Follow-up call",
+                notes: "Non-profit with unique hiring needs"
+            },
+            {
+                name: "Robert Kim",
+                email: "rkim@retailsystems.com",
+                phone: "(424) 555-0678",
+                company: "Retail Systems Co",
+                address: "2345 Retail Rd, Lomita, CA 90717",
+                pures: 18,
+                tier: "1B",
+                industry: "Retail",
+                revenue: "$4.6M",
+                buyerType: "Efficiency",
+                lastContact: "2025-01-14",
+                nextAction: "Product demonstration",
+                notes: "Seasonal hiring challenges"
+            },
+            {
+                name: "Amanda Johnson",
+                email: "ajohnson@innovatetech.com",
+                phone: "(310) 555-0789",
+                company: "Innovate Tech Solutions",
+                address: "6789 Innovation Dr, Rancho Palos Verdes, CA 90275",
+                pures: 17,
+                tier: "1B",
+                industry: "Technology",
+                revenue: "$2.1M",
+                buyerType: "Innovation",
+                lastContact: "2025-01-19",
+                nextAction: "Technical integration call",
+                notes: "Fast-growing startup"
+            },
+            {
+                name: "Carlos Hernandez",
+                email: "chernandez@medicalstaff.com",
+                phone: "(424) 555-0890",
+                company: "Medical Staff Solutions",
+                address: "4567 Health Plaza, Rolling Hills, CA 90274",
+                pures: 16,
+                tier: "1B",
+                industry: "Healthcare",
+                revenue: "$1.8M",
+                buyerType: "Analytical",
+                lastContact: "2025-01-21",
+                nextAction: "Compliance review",
+                notes: "Specialized in healthcare staffing"
+            },
+            {
+                name: "Nicole Davis",
+                email: "ndavis@financialgroup.com",
+                phone: "(310) 555-0901",
+                company: "Davis Financial Group",
+                address: "8901 Investment Ave, Rolling Hills Estates, CA 90274",
+                pures: 15,
+                tier: "1C",
+                industry: "Finance",
+                revenue: "$980K",
+                buyerType: "Relationship",
+                lastContact: "2025-01-17",
+                nextAction: "Partnership discussion",
+                notes: "Boutique investment firm"
+            },
+            {
+                name: "Kevin Park",
+                email: "kpark@autoparts.com",
+                phone: "(424) 555-1012",
+                company: "Auto Parts Manufacturing",
+                address: "1357 Auto Way, Harbor City, CA 90710",
+                pures: 14,
+                tier: "1C",
+                industry: "Manufacturing",
+                revenue: "$1.5M",
+                buyerType: "Efficiency",
+                lastContact: "2025-01-13",
+                nextAction: "Cost analysis review",
+                notes: "Automotive supply chain company"
+            }
+        ];
+
+        // Add more clients to reach 50
+        const additionalClients = [
+            {
+                name: "Susan Williams",
+                email: "swilliams@localschools.edu",
+                phone: "(310) 555-1123",
+                company: "Peninsula School District",
+                address: "2468 School St, Palos Verdes Peninsula, CA 90274",
+                pures: 16,
+                tier: "1B",
+                industry: "Education",
+                revenue: "$850K",
+                buyerType: "Relationship",
+                lastContact: "2025-01-12",
+                nextAction: "Budget approval meeting",
+                notes: "Public school district"
+            },
+            {
+                name: "James Miller",
+                email: "jmiller@retailchain.com",
+                phone: "(424) 555-1234",
+                company: "Peninsula Retail Chain",
+                address: "1111 Shopping Center, Redondo Beach, CA 90278",
+                pures: 17,
+                tier: "1B",
+                industry: "Retail",
+                revenue: "$3.2M",
+                buyerType: "Efficiency",
+                lastContact: "2025-01-11",
+                nextAction: "Pilot program proposal",
+                notes: "Multiple retail locations"
+            },
+            {
+                name: "Patricia Garcia",
+                email: "pgarcia@biotech.com",
+                phone: "(310) 555-1345",
+                company: "BioTech Innovations",
+                address: "3579 Biotech Blvd, Torrance, CA 90505",
+                pures: 19,
+                tier: "1B",
+                industry: "Technology",
+                revenue: "$4.1M",
+                buyerType: "Innovation",
+                lastContact: "2025-01-10",
+                nextAction: "Scientific hiring consultation",
+                notes: "Biotech research company"
+            },
+            {
+                name: "Daniel Lee",
+                email: "dlee@constructionco.com",
+                phone: "(424) 555-1456",
+                company: "Peninsula Construction",
+                address: "4680 Builder Ave, San Pedro, CA 90731",
+                pures: 15,
+                tier: "1C",
+                industry: "Manufacturing",
+                revenue: "$2.8M",
+                buyerType: "Relationship",
+                lastContact: "2025-01-09",
+                nextAction: "Skilled trades discussion",
+                notes: "Construction and development"
+            }
+        ];
+
+        // Combine all client data and extend to 50
+        let allClients = [...clientsData, ...additionalClients];
+
+        // Generate additional clients to reach 50
+        while (allClients.length < 50) {
+            const sampleClient = allClients[Math.floor(Math.random() * allClients.length)];
+            const newClient = {
+                ...sampleClient,
+                name: generateRandomName(),
+                email: generateRandomEmail(),
+                phone: generateRandomPhone(),
+                company: generateRandomCompany(),
+                address: generateRandomAddress()
+            };
+            allClients.push(newClient);
+        }
+
+        function generateRandomName() {
+            const firstNames = ["Alex", "Jordan", "Casey", "Taylor", "Morgan", "Riley", "Avery", "Quinn", "Sage", "Phoenix"];
+            const lastNames = ["Anderson", "Brown", "Clark", "Davis", "Evans", "Ford", "Green", "Hall", "Jones", "King"];
+            return `${firstNames[Math.floor(Math.random() * firstNames.length)]} ${lastNames[Math.floor(Math.random() * lastNames.length)]}`;
+        }
+
+        function generateRandomEmail() {
+            const domains = ["techcorp.com", "bizgroup.com", "enterprises.net", "solutions.org", "systems.co"];
+            const name = generateRandomName().toLowerCase().replace(" ", ".");
+            return `${name}@${domains[Math.floor(Math.random() * domains.length)]}`;
+        }
+
+        function generateRandomPhone() {
+            const areaCode = Math.random() < 0.5 ? "310" : "424";
+            const exchange = Math.floor(Math.random() * 900) + 100;
+            const number = Math.floor(Math.random() * 9000) + 1000;
+            return `(${areaCode}) 555-${number}`;
+        }
+
+        function generateRandomCompany() {
+            const prefixes = ["Advanced", "Global", "Premier", "Elite", "Dynamic", "Strategic", "Innovative"];
+            const suffixes = ["Solutions", "Systems", "Group", "Corp", "Enterprises", "Partners", "Tech"];
+            return `${prefixes[Math.floor(Math.random() * prefixes.length)]} ${suffixes[Math.floor(Math.random() * suffixes.length)]}`;
+        }
+
+        function generateRandomAddress() {
+            const streets = ["Business Blvd", "Corporate Ave", "Enterprise St", "Industry Way", "Commerce Dr"];
+            const cities = ["Redondo Beach", "Torrance", "Manhattan Beach", "Carson", "San Pedro", "Lomita"];
+            const number = Math.floor(Math.random() * 9999) + 1000;
+            const street = streets[Math.floor(Math.random() * streets.length)];
+            const city = cities[Math.floor(Math.random() * cities.length)];
+            return `${number} ${street}, ${city}, CA 90278`;
+        }
+
+        // Initialize the dashboard
+        let currentSort = { column: -1, direction: 'asc' };
+
+        function showTab(tabName) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // Remove active class from all tabs
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected tab content
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+        }
+
+        function updateScore(criterion, value) {
+            document.getElementById(criterion + 'Value').textContent = value;
+            
+            // Calculate overall P.U.R.E.S. score
+            const profitability = parseInt(document.getElementById('profitability').value);
+            const urgency = parseInt(document.getElementById('urgency').value);
+            const reachability = parseInt(document.getElementById('reachability').value);
+            const engagement = parseInt(document.getElementById('engagement').value);
+            const sustainability = parseInt(document.getElementById('sustainability').value);
+            
+            const overall = profitability + urgency + reachability + engagement + sustainability;
+            document.getElementById('overallScore').textContent = overall;
+        }
+
+        function populateClientsTable() {
+            const tbody = document.getElementById('clientsTableBody');
+            tbody.innerHTML = '';
+            
+            let filteredClients = allClients;
+            
+            // Apply filters
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const tierFilter = document.getElementById('tierFilter').value;
+            const industryFilter = document.getElementById('industryFilter').value;
+            
+            if (searchTerm) {
+                filteredClients = filteredClients.filter(client =>
+                    client.name.toLowerCase().includes(searchTerm) ||
+                    client.email.toLowerCase().includes(searchTerm) ||
+                    client.company.toLowerCase().includes(searchTerm) ||
+                    client.industry.toLowerCase().includes(searchTerm)
+                );
+            }
+            
+            if (tierFilter) {
+                filteredClients = filteredClients.filter(client => client.tier === tierFilter);
+            }
+            
+            if (industryFilter) {
+                filteredClients = filteredClients.filter(client => client.industry === industryFilter);
+            }
+            
+            filteredClients.forEach((client, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${client.name}</td>
+                    <td>${client.email}</td>
+                    <td>${client.phone}</td>
+                    <td>${client.company}</td>
+                    <td>${client.pures}</td>
+                    <td><span class="tier-${client.tier.toLowerCase()}">${client.tier}</span></td>
+                    <td>${client.industry}</td>
+                    <td>${client.revenue}</td>
+                    <td>
+                        <button class="btn btn-small btn-contact" onclick="openEmailModal('${client.email}', '${client.name}', '${client.company}', '${client.industry}')">
+                            Email
+                        </button>
+                        <button class="btn btn-small" onclick="window.open('tel:${client.phone}')">
+                            Call
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function openEmailModal(email, name, company, industry) {
+            document.getElementById('modalEmail').value = email;
+            
+            const emailTemplate = generateEmailTemplate(name, company, industry);
+            document.getElementById('modalMessage').value = emailTemplate;
+            
+            document.getElementById('emailModal').style.display = 'block';
+        }
+
+        function generateEmailTemplate(name, company, industry) {
+            const templates = {
+                Technology: `Dear ${name.split(' ')[0]},
+
+I hope this email finds you well. I'm reaching out because JobHint specializes in helping technology companies like ${company} streamline their recruitment processes with cutting-edge AI-powered solutions.
+
+Here's how JobHint can transform your hiring:
+
+🚀 AI-Powered Candidate Matching: Our advanced algorithms match candidates to your tech roles with 85% higher accuracy than traditional methods
+
+💡 Technical Skills Assessment: Automated coding challenges and technical evaluations save your team 40+ hours per hire
+
+📊 Analytics Dashboard: Real-time insights into your hiring funnel, candidate quality, and time-to-hire metrics
+
+🎯 Specialized Tech Talent Network: Access to verified software engineers, data scientists, and IT professionals
+
+Given the competitive tech talent market, companies like ${company} are leveraging JobHint to:
+- Reduce time-to-hire by 60%
+- Improve candidate quality scores by 75%
+- Lower recruitment costs by 45%
+
+Would you be available for a 15-minute call this week to discuss how JobHint can help ${company} build your dream tech team?
+
+Best regards,
+JobHint Team
+job.h@jobhint.com
+(424) 555-0100`,
+
+                Healthcare: `Dear ${name.split(' ')[0]},
+
+I hope you're having a great day. I'm contacting you because JobHint has helped numerous healthcare organizations like ${company} solve their unique staffing challenges with our specialized recruitment platform.
+
+Healthcare Recruitment Challenges We Solve:
+
+🏥 Compliance & Credentialing: Automated verification of medical licenses, certifications, and background checks
+
+👩‍⚕️ Specialized Role Matching: Advanced matching for nurses, physicians, technicians, and administrative staff
+
+📋 Regulatory Compliance: Built-in HIPAA compliance and healthcare industry standards
+
+⚡ Rapid Response Staffing: Fill critical positions 50% faster than traditional methods
+
+Healthcare organizations using JobHint report:
+- 65% faster credentialing process
+- 80% improvement in candidate quality
+- 40% reduction in staff turnover
+- Seamless integration with existing HR systems
+
+Given the current healthcare staffing crisis, ${company} could benefit from our proven solutions that have helped over 200+ healthcare facilities.
+
+Could we schedule a brief call to discuss how JobHint can help ${company} maintain optimal staffing levels?
+
+Best regards,
+JobHint Healthcare Solutions Team
+job.h@jobhint.com`,
+
+                Finance: `Dear ${name.split(' ')[0]},
+
+I trust this message finds you well. I'm reaching out because JobHint has developed specialized recruitment solutions for financial services firms like ${company}, addressing the unique compliance and skill requirements of your industry.
+
+Financial Services Recruitment Solutions:
+
+💰 Regulatory Compliance Screening: Automated FINRA, SEC, and banking regulation compliance checks
+
+📈 Quantitative Skills Assessment: Advanced testing for financial analysts, risk managers, and investment professionals
+
+🛡️ Security Clearance Management: Streamlined background checks and security clearance tracking
+
+🎯 Executive Search Capabilities: C-level and senior management recruitment with discretion and expertise
+
+Financial firms using JobHint achieve:
+- 70% faster compliance verification
+- 90% improvement in candidate screening accuracy
+- 55% reduction in regulatory hiring risks
+- Enhanced candidate experience and brand reputation
+
+In today's competitive financial landscape, ${company} can gain a significant advantage with our proven recruitment technology.
+
+Would you be interested in a brief conversation about how JobHint can help ${company} attract and retain top financial talent?
+
+Best regards,
+JobHint Financial Services Team
+job.h@jobhint.com`,
+
+                default: `Dear ${name.split(' ')[0]},
+
+I hope this email finds you well. I'm reaching out because JobHint specializes in helping companies like ${company} revolutionize their recruitment and hiring processes with our comprehensive talent acquisition platform.
+
+What Makes JobHint Different:
+
+🎯 Smart Candidate Matching: AI-powered algorithms that match candidates to your roles with unprecedented accuracy
+
+📊 Real-Time Analytics: Comprehensive dashboards showing hiring metrics, candidate pipeline, and ROI
+
+💼 Industry Expertise: Specialized solutions for ${industry} with deep understanding of your unique needs
+
+⚡ Faster Hiring: Reduce your time-to-hire by up to 60% with streamlined processes
+
+Companies using JobHint experience:
+- 75% improvement in candidate quality
+- 50% reduction in recruitment costs
+- 80% faster hiring process
+- Enhanced employer branding
+
+Given the current competitive talent market, ${company} could significantly benefit from our proven recruitment solutions.
+
+Would you be available for a 15-minute call this week to explore how JobHint can help ${company} build a stronger, more efficient hiring process?
+
+Looking forward to connecting with you.
+
+Best regards,
+JobHint Team
+job.h@jobhint.com
+www.jobhint.com`
+            };
+
+            return templates[industry] || templates.default;
+        }
+
+        function closeModal() {
+            document.getElementById('emailModal').style.display = 'none';
+        }
+
+        function sendEmail() {
+            const email = document.getElementById('modalEmail').value;
+            const subject = document.getElementById('modalSubject').value;
+            const message = document.getElementById('modalMessage').value;
+            
+            // Create mailto link
+            const mailtoLink = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(message)}`;
+            window.open(mailtoLink);
+            
+            closeModal();
+        }
+
+        function sortTable(columnIndex) {
+            const table = document.getElementById('clientsTable');
+            const tbody = table.querySelector('tbody');
+            const rows = Array.from(tbody.querySelectorAll('tr'));
+            
+            const isAscending = currentSort.column === columnIndex && currentSort.direction === 'asc';
+            currentSort = { column: columnIndex, direction: isAscending ? 'desc' : 'asc' };
+            
+            rows.sort((a, b) => {
+                const aValue = a.children[columnIndex].textContent.trim();
+                const bValue = b.children[columnIndex].textContent.trim();
+                
+                // Handle numeric sorting for P.U.R.E.S. score
+                if (columnIndex === 4) {
+                    return currentSort.direction === 'asc' ? 
+                           parseInt(aValue) - parseInt(bValue) : 
+                           parseInt(bValue) - parseInt(aValue);
+                }
+                
+                // Handle string sorting
+                const comparison = aValue.localeCompare(bValue);
+                return currentSort.direction === 'asc' ? comparison : -comparison;
+            });
+            
+            // Clear tbody and append sorted rows
+            tbody.innerHTML = '';
+            rows.forEach(row => tbody.appendChild(row));
+        }
+
+        function exportData() {
+            let csvContent = "Client Name,Email,Phone,Company,P.U.R.E.S Score,Tier,Industry,Revenue Estimate\n";
+            
+            allClients.forEach(client => {
+                csvContent += `"${client.name}","${client.email}","${client.phone}","${client.company}","${client.pures}","${client.tier}","${client.industry}","${client.revenue}"\n`;
+            });
+            
+            const blob = new Blob([csvContent], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'jobhint-clients.csv';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+        }
+
+        // Event listeners
+        document.getElementById('searchInput').addEventListener('input', populateClientsTable);
+        document.getElementById('tierFilter').addEventListener('change', populateClientsTable);
+        document.getElementById('industryFilter').addEventListener('change', populateClientsTable);
+
+        // Close modal when clicking outside
+        window.addEventListener('click', function(event) {
+            const modal = document.getElementById('emailModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        });
+
+        // Initialize the dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            populateClientsTable();
+            
+            // Update metrics based on actual data
+            const tier1a = allClients.filter(c => c.tier === '1A').length;
+            const tier1b = allClients.filter(c => c.tier === '1B').length;
+            const tier1c = allClients.filter(c => c.tier === '1C').length;
+            
+            document.getElementById('tier1aCount').textContent = tier1a;
+            document.getElementById('tier1bCount').textContent = tier1b;
+            document.getElementById('tier1cCount').textContent = tier1c;
+        });
+    </script>
+</body>
+</html>

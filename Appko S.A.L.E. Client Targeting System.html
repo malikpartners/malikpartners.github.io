@@ -1,0 +1,1657 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Appko S.A.L.E. Client Targeting System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #000000;
+            color: #ffffff;
+            line-height: 1.6;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #CF2030, #8B1520);
+            padding: 1rem;
+            box-shadow: 0 2px 10px rgba(207, 32, 48, 0.3);
+        }
+        
+        .header img {
+            height: 60px;
+            margin-bottom: 10px;
+        }
+        
+        .header h1 {
+            color: #ffffff;
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .header p {
+            color: #f0f0f0;
+            font-size: 1.1rem;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .business-info {
+            background: linear-gradient(135deg, #1a1a1a, #2a2a2a);
+            border-left: 4px solid #CF2030;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border-radius: 8px;
+        }
+        
+        .tabs {
+            display: flex;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid #CF2030;
+        }
+        
+        .tab {
+            background: #1a1a1a;
+            border: none;
+            padding: 1rem 2rem;
+            color: #ffffff;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 8px 8px 0 0;
+            margin-right: 0.25rem;
+        }
+        
+        .tab.active {
+            background: #CF2030;
+            color: #ffffff;
+        }
+        
+        .tab:hover {
+            background: #8B1520;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .search-box, .filter-select {
+            padding: 0.75rem;
+            border: 2px solid #CF2030;
+            border-radius: 5px;
+            background: #1a1a1a;
+            color: #ffffff;
+            font-size: 1rem;
+        }
+        
+        .search-box:focus, .filter-select:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(207, 32, 48, 0.3);
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #CF2030, #8B1520);
+            color: #ffffff;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(207, 32, 48, 0.4);
+        }
+        
+        .btn-contact {
+            background: linear-gradient(135deg, #28a745, #1e7e34);
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+        }
+        
+        .table-container {
+            background: #1a1a1a;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th {
+            background: linear-gradient(135deg, #CF2030, #8B1520);
+            color: #ffffff;
+            padding: 1rem;
+            text-align: left;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        
+        th:hover {
+            background: #8B1520;
+        }
+        
+        th::after {
+            content: ' ↕';
+            opacity: 0.5;
+        }
+        
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid #333;
+        }
+        
+        tr:hover {
+            background: rgba(207, 32, 48, 0.1);
+        }
+        
+        .tier-1a { color: #00ff00; font-weight: bold; }
+        .tier-1b { color: #ffff00; font-weight: bold; }
+        .tier-1c { color: #ffa500; font-weight: bold; }
+        
+        .score-cell {
+            text-align: center;
+            font-weight: bold;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+        
+        .modal-content {
+            background: linear-gradient(135deg, #1a1a1a, #2a2a2a);
+            margin: 5% auto;
+            padding: 2rem;
+            border: 2px solid #CF2030;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 600px;
+            color: #ffffff;
+        }
+        
+        .close {
+            color: #CF2030;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .close:hover {
+            color: #ffffff;
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            color: #CF2030;
+        }
+        
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #CF2030;
+            border-radius: 5px;
+            background: #0a0a0a;
+            color: #ffffff;
+            font-size: 1rem;
+        }
+        
+        .form-group textarea {
+            height: 150px;
+            resize: vertical;
+        }
+        
+        .pures-scoring {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .score-item {
+            background: #2a2a2a;
+            padding: 1rem;
+            border-radius: 5px;
+            border: 1px solid #CF2030;
+        }
+        
+        .score-range {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 0.5rem;
+        }
+        
+        input[type="range"] {
+            width: 100%;
+            margin: 0.5rem 0;
+        }
+        
+        .footer {
+            background: #1a1a1a;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+            border-top: 2px solid #CF2030;
+        }
+        
+        .footer img {
+            height: 30px;
+            margin-bottom: 1rem;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, #2a2a2a, #1a1a1a);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid #CF2030;
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #CF2030;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: #333;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 0.5rem 0;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #CF2030, #8B1520);
+            transition: width 0.5s ease;
+        }
+        
+        @media (max-width: 768px) {
+            .controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .tabs {
+                flex-direction: column;
+            }
+            
+            table {
+                font-size: 0.9rem;
+            }
+            
+            th, td {
+                padding: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports">
+        <h1>Appko S.A.L.E. Client Targeting System</h1>
+        <p>Strategic client acquisition and relationship management for Appko Inc.</p>
+    </div>
+    
+    <div class="container">
+        <div class="business-info">
+            <h2>Business Profile: Appko Inc.</h2>
+            <p><strong>Industry:</strong> Information Technology & Services (Cloud Development, Software Engineering)</p>
+            <p><strong>Location:</strong> San Jose, California, United States</p>
+            <p><strong>Services:</strong> Cloud Solutions, Software Development, DevOps, Enterprise IT Solutions</p>
+            <p><strong>Target Market:</strong> Fortune 500 companies, Silicon Valley startups, Enterprise organizations</p>
+            <p><strong>Geographic Service Area:</strong> Silicon Valley and surrounding areas (10-mile radius)</p>
+        </div>
+        
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('sourcing')">S.A.L.E. Sourcing</button>
+            <button class="tab" onclick="showTab('assessing')">Assessing</button>
+            <button class="tab" onclick="showTab('listening')">Listening</button>
+            <button class="tab" onclick="showTab('empowering')">Empowering</button>
+            <button class="tab" onclick="showTab('analytics')">Analytics</button>
+        </div>
+        
+        <div id="sourcing" class="tab-content active">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">50</div>
+                    <p>Total Prospects</p>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">15</div>
+                    <p>Tier 1A (Premium)</p>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">20</div>
+                    <p>Tier 1B (High-Value)</p>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">15</div>
+                    <p>Tier 1C (Qualified)</p>
+                </div>
+            </div>
+            
+            <div class="controls">
+                <input type="text" id="searchInput" class="search-box" placeholder="Search clients..." onkeyup="filterTable()">
+                <select id="tierFilter" class="filter-select" onchange="filterTable()">
+                    <option value="">All Tiers</option>
+                    <option value="1A">Tier 1A - Premium</option>
+                    <option value="1B">Tier 1B - High-Value</option>
+                    <option value="1C">Tier 1C - Qualified</option>
+                </select>
+                <select id="industryFilter" class="filter-select" onchange="filterTable()">
+                    <option value="">All Industries</option>
+                    <option value="Technology">Technology</option>
+                    <option value="Financial Services">Financial Services</option>
+                    <option value="Healthcare">Healthcare</option>
+                    <option value="Manufacturing">Manufacturing</option>
+                    <option value="Retail">Retail</option>
+                </select>
+                <button class="btn" onclick="exportData()">Export CSV</button>
+                <button class="btn" onclick="addNewClient()">Add New Client</button>
+            </div>
+            
+            <div class="table-container">
+                <table id="clientTable">
+                    <thead>
+                        <tr>
+                            <th onclick="sortTable(0)">Client Name</th>
+                            <th onclick="sortTable(1)">Email</th>
+                            <th onclick="sortTable(2)">Phone</th>
+                            <th onclick="sortTable(3)">Address</th>
+                            <th onclick="sortTable(4)">P.U.R.E.S. Score</th>
+                            <th onclick="sortTable(5)">Tier</th>
+                            <th onclick="sortTable(6)">Industry</th>
+                            <th onclick="sortTable(7)">Revenue Est.</th>
+                            <th onclick="sortTable(8)">Contact Status</th>
+                            <th onclick="sortTable(9)">Last Contact</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="clientTableBody">
+                        <!-- Client data will be populated here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <div id="assessing" class="tab-content">
+            <h2>Buying Pattern Analysis</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">35%</div>
+                    <p>Analytical Buyers</p>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 35%"></div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">25%</div>
+                    <p>Relationship Buyers</p>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 25%"></div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">20%</div>
+                    <p>Efficiency Buyers</p>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 20%"></div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">20%</div>
+                    <p>Innovation Buyers</p>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 20%"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="business-info">
+                <h3>Assessment Tools</h3>
+                <ul style="margin-left: 2rem; margin-top: 1rem;">
+                    <li><strong>Decision Timeline Analyzer:</strong> Track and predict decision-making cycles</li>
+                    <li><strong>Stakeholder Mapping:</strong> Identify key decision makers and influencers</li>
+                    <li><strong>Value Proposition Alignment:</strong> Match our services to client pain points</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div id="listening" class="tab-content">
+            <h2>Feedback Integration System</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">85%</div>
+                    <p>Customer Satisfaction</p>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 85%"></div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">12</div>
+                    <p>Active Feedback Loops</p>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">3.2</div>
+                    <p>Avg Response Time (hrs)</p>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">92%</div>
+                    <p>Issue Resolution Rate</p>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 92%"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="business-info">
+                <h3>Feedback Tracking Components</h3>
+                <ul style="margin-left: 2rem; margin-top: 1rem;">
+                    <li><strong>Pre-sale Feedback:</strong> Requirements gathering and expectation setting</li>
+                    <li><strong>During-sale Progress:</strong> Real-time project health monitoring</li>
+                    <li><strong>Post-sale Satisfaction:</strong> Continuous improvement and relationship building</li>
+                    <li><strong>Complaint Resolution:</strong> Rapid response and resolution protocols</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div id="empowering" class="tab-content">
+            <h2>Referral Strategy Dashboard</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">23</div>
+                    <p>Active Referral Partners</p>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">67%</div>
+                    <p>Referral Conversion Rate</p>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 67%"></div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">$2.3M</div>
+                    <p>Referral Revenue YTD</p>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">8.5</div>
+                    <p>Avg Referral Value (x)</p>
+                </div>
+            </div>
+            
+            <div class="business-info">
+                <h3>Empowerment Components</h3>
+                <ul style="margin-left: 2rem; margin-top: 1rem;">
+                    <li><strong>Success Stories:</strong> Document and share client transformation stories</li>
+                    <li><strong>Referral Rewards:</strong> Track and manage referral incentive programs</li>
+                    <li><strong>Client Advocacy:</strong> Develop champions and case study participants</li>
+                    <li><strong>Co-marketing:</strong> Joint marketing initiatives with satisfied clients</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div id="analytics" class="tab-content">
+            <h2>Performance Analytics</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">78%</div>
+                    <p>P.U.R.E.S. Accuracy</p>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 78%"></div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">89%</div>
+                    <p>Needs Assessment Accuracy</p>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 89%"></div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">73%</div>
+                    <p>Feedback Collection Rate</p>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 73%"></div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">2.4</div>
+                    <p>Avg Referrals per Client</p>
+                </div>
+            </div>
+            
+            <div class="business-info">
+                <h3>S.A.L.E. Performance Targets</h3>
+                <ul style="margin-left: 2rem; margin-top: 1rem;">
+                    <li><strong>Sourcing Target:</strong> >80% P.U.R.E.S. score accuracy</li>
+                    <li><strong>Assessment Target:</strong> >90% needs assessment accuracy</li>
+                    <li><strong>Listening Target:</strong> >70% feedback collection rate</li>
+                    <li><strong>Empowerment Target:</strong> 2+ referrals per satisfied client</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <!-- P.U.R.E.S. Scoring Modal -->
+    <div id="puresModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('puresModal')">&times;</span>
+            <h2>P.U.R.E.S. Client Evaluation</h2>
+            <div id="puresForm">
+                <div class="pures-scoring">
+                    <div class="score-item">
+                        <label for="profitability">Profitability (1-5)</label>
+                        <input type="range" id="profitability" min="1" max="5" value="3" oninput="updateScore('profitability')">
+                        <div class="score-range">
+                            <span>Low Budget</span>
+                            <span id="profitabilityValue">3</span>
+                            <span>High Revenue</span>
+                        </div>
+                    </div>
+                    <div class="score-item">
+                        <label for="urgency">Urgency (1-5)</label>
+                        <input type="range" id="urgency" min="1" max="5" value="3" oninput="updateScore('urgency')">
+                        <div class="score-range">
+                            <span>No Rush</span>
+                            <span id="urgencyValue">3</span>
+                            <span>Immediate Need</span>
+                        </div>
+                    </div>
+                    <div class="score-item">
+                        <label for="reachability">Reachability (1-5)</label>
+                        <input type="range" id="reachability" min="1" max="5" value="3" oninput="updateScore('reachability')">
+                        <div class="score-range">
+                            <span>Hard to Reach</span>
+                            <span id="reachabilityValue">3</span>
+                            <span>Direct Access</span>
+                        </div>
+                    </div>
+                    <div class="score-item">
+                        <label for="engagement">Engagement (1-5)</label>
+                        <input type="range" id="engagement" min="1" max="5" value="3" oninput="updateScore('engagement')">
+                        <div class="score-range">
+                            <span>Resistant</span>
+                            <span id="engagementValue">3</span>
+                            <span>Open to Innovation</span>
+                        </div>
+                    </div>
+                    <div class="score-item">
+                        <label for="sustainability">Sustainability (1-5)</label>
+                        <input type="range" id="sustainability" min="1" max="5" value="3" oninput="updateScore('sustainability')">
+                        <div class="score-range">
+                            <span>One-time Deal</span>
+                            <span id="sustainabilityValue">3</span>
+                            <span>Long-term Partner</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Total P.U.R.E.S. Score: <span id="totalScore">15</span>/25</label>
+                    <label>Tier Classification: <span id="tierClass">1B - High-Value</span></label>
+                </div>
+                <button class="btn" onclick="savePuresScore()">Save Evaluation</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Contact Modal -->
+    <div id="contactModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('contactModal')">&times;</span>
+            <h2>Contact Client</h2>
+            <div class="form-group">
+                <label for="contactMethod">Contact Method:</label>
+                <select id="contactMethod" onchange="handleContactMethod()">
+                    <option value="email">Email</option>
+                    <option value="phone">Phone Call</option>
+                    <option value="linkedin">LinkedIn Message</option>
+                </select>
+            </div>
+            <div id="emailContent" class="form-group">
+                <label for="emailSubject">Email Subject:</label>
+                <input type="text" id="emailSubject" placeholder="Subject line">
+                <label for="emailBody">Email Body:</label>
+                <textarea id="emailBody" placeholder="Email content will be auto-generated based on client profile"></textarea>
+            </div>
+            <div id="phoneContent" class="form-group" style="display: none;">
+                <label>Phone Script:</label>
+                <textarea id="phoneScript" readonly></textarea>
+            </div>
+            <button class="btn" onclick="initiateContact()">Send Contact</button>
+        </div>
+    </div>
+    
+    <div class="footer">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports">
+        <p>&copy; 2024 Higgins Reports - Advanced S.A.L.E. Client Management System</p>
+        <p>Powered by AI-driven client intelligence and relationship optimization</p>
+    </div>
+    
+    <script>
+        // Sample client data for San Jose, CA area
+        const clientData = [
+            {
+                name: "Jennifer Chen",
+                email: "j.chen@techstartup.com",
+                phone: "(408) 555-0101",
+                address: "1234 Technology Dr, San Jose, CA 95110",
+                puresScore: 23,
+                tier: "1A",
+                industry: "Technology",
+                revenue: "$50M",
+                status: "Qualified Lead",
+                lastContact: "2024-03-20",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Michael Rodriguez",
+                email: "mrodriguez@globalbank.com",
+                phone: "(408) 555-0102",
+                address: "5678 Financial Plaza, San Jose, CA 95113",
+                puresScore: 22,
+                tier: "1A",
+                industry: "Financial Services",
+                revenue: "$2.1B",
+                status: "Active Prospect",
+                lastContact: "2024-03-18",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Sarah Johnson",
+                email: "sarah.j@healthcorp.com",
+                phone: "(408) 555-0103",
+                address: "9012 Medical Center Way, San Jose, CA 95119",
+                puresScore: 21,
+                tier: "1A",
+                industry: "Healthcare",
+                revenue: "$850M",
+                status: "Initial Contact",
+                lastContact: "2024-03-15",
+                buyerType: "Efficiency"
+            },
+            {
+                name: "David Kim",
+                email: "dkim@manufacturer.com",
+                phone: "(408) 555-0104",
+                address: "3456 Industrial Blvd, San Jose, CA 95112",
+                puresScore: 20,
+                tier: "1A",
+                industry: "Manufacturing",
+                revenue: "$1.2B",
+                status: "Follow-up Required",
+                lastContact: "2024-03-12",
+                buyerType: "Relationship"
+            },
+            {
+                name: "Lisa Wang",
+                email: "lwang@retailgiant.com",
+                phone: "(408) 555-0105",
+                address: "7890 Commerce St, San Jose, CA 95116",
+                puresScore: 19,
+                tier: "1B",
+                industry: "Retail",
+                revenue: "$3.5B",
+                status: "Proposal Sent",
+                lastContact: "2024-03-10",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Robert Thompson",
+                email: "rthompson@energycorp.com",
+                phone: "(408) 555-0106",
+                address: "2345 Energy Way, San Jose, CA 95111",
+                puresScore: 18,
+                tier: "1B",
+                industry: "Energy",
+                revenue: "$4.2B",
+                status: "Demo Scheduled",
+                lastContact: "2024-03-08",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Amanda Foster",
+                email: "afoster@biotech.com",
+                phone: "(408) 555-0107",
+                address: "6789 Research Park Dr, San Jose, CA 95134",
+                puresScore: 17,
+                tier: "1B",
+                industry: "Biotechnology",
+                revenue: "$650M",
+                status: "Needs Analysis",
+                lastContact: "2024-03-05",
+                buyerType: "Efficiency"
+            },
+            {
+                name: "James Miller",
+                email: "jmiller@logistics.com",
+                phone: "(408) 555-0108",
+                address: "4567 Distribution Center, San Jose, CA 95131",
+                puresScore: 16,
+                tier: "1B",
+                industry: "Logistics",
+                revenue: "$890M",
+                status: "Research Phase",
+                lastContact: "2024-03-02",
+                buyerType: "Relationship"
+            },
+            {
+                name: "Maria Garcia",
+                email: "mgarcia@consulting.com",
+                phone: "(408) 555-0109",
+                address: "8901 Professional Plaza, San Jose, CA 95117",
+                puresScore: 15,
+                tier: "1C",
+                industry: "Consulting",
+                revenue: "$125M",
+                status: "Cold Lead",
+                lastContact: "2024-02-28",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Steven Lee",
+                email: "slee@aerospace.com",
+                phone: "(408) 555-0110",
+                address: "1357 Aviation Blvd, San Jose, CA 95110",
+                puresScore: 14,
+                tier: "1C",
+                industry: "Aerospace",
+                revenue: "$2.8B",
+                status: "Qualification",
+                lastContact: "2024-02-25",
+                buyerType: "Innovation"
+            },
+            // Continue with 40 more realistic prospects...
+            {
+                name: "Katherine Brown",
+                email: "kbrown@realestate.com",
+                phone: "(408) 555-0111",
+                address: "2468 Property Way, San Jose, CA 95113",
+                puresScore: 19,
+                tier: "1B",
+                industry: "Real Estate",
+                revenue: "$450M",
+                status: "Active Discussion",
+                lastContact: "2024-03-22",
+                buyerType: "Efficiency"
+            },
+            {
+                name: "Mark Davis",
+                email: "mdavis@entertainment.com",
+                phone: "(408) 555-0112",
+                address: "1122 Media Center, San Jose, CA 95119",
+                puresScore: 16,
+                tier: "1B",
+                industry: "Entertainment",
+                revenue: "$780M",
+                status: "Proposal Review",
+                lastContact: "2024-03-19",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Nicole Wilson",
+                email: "nwilson@education.edu",
+                phone: "(408) 555-0113",
+                address: "3344 University Ave, San Jose, CA 95112",
+                puresScore: 13,
+                tier: "1C",
+                industry: "Education",
+                revenue: "$95M",
+                status: "Information Gathering",
+                lastContact: "2024-03-16",
+                buyerType: "Relationship"
+            },
+            {
+                name: "Anthony Martinez",
+                email: "amartinez@government.gov",
+                phone: "(408) 555-0114",
+                address: "5566 Civic Center, San Jose, CA 95116",
+                puresScore: 18,
+                tier: "1B",
+                industry: "Government",
+                revenue: "$500M",
+                status: "RFP Response",
+                lastContact: "2024-03-14",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Rebecca Taylor",
+                email: "rtaylor@insurance.com",
+                phone: "(408) 555-0115",
+                address: "7788 Insurance Way, San Jose, CA 95111",
+                puresScore: 17,
+                tier: "1B",
+                industry: "Insurance",
+                revenue: "$1.1B",
+                status: "Contract Negotiation",
+                lastContact: "2024-03-11",
+                buyerType: "Efficiency"
+            },
+            {
+                name: "Christopher Anderson",
+                email: "canderson@telecom.com",
+                phone: "(408) 555-0116",
+                address: "9900 Communication Dr, San Jose, CA 95134",
+                puresScore: 20,
+                tier: "1A",
+                industry: "Telecommunications",
+                revenue: "$5.2B",
+                status: "Technical Review",
+                lastContact: "2024-03-09",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Samantha Clark",
+                email: "sclark@automotive.com",
+                phone: "(408) 555-0117",
+                address: "1111 Auto Plaza, San Jose, CA 95131",
+                puresScore: 15,
+                tier: "1C",
+                industry: "Automotive",
+                revenue: "$3.1B",
+                status: "Initial Meeting",
+                lastContact: "2024-03-07",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Daniel White",
+                email: "dwhite@pharma.com",
+                phone: "(408) 555-0118",
+                address: "2222 Pharmaceutical St, San Jose, CA 95117",
+                puresScore: 21,
+                tier: "1A",
+                industry: "Pharmaceutical",
+                revenue: "$8.7B",
+                status: "Compliance Review",
+                lastContact: "2024-03-04",
+                buyerType: "Relationship"
+            },
+            {
+                name: "Michelle Lewis",
+                email: "mlewis@agriculture.com",
+                phone: "(408) 555-0119",
+                address: "3333 Farm Technology Dr, San Jose, CA 95110",
+                puresScore: 12,
+                tier: "1C",
+                industry: "Agriculture",
+                revenue: "$210M",
+                status: "Lead Nurturing",
+                lastContact: "2024-03-01",
+                buyerType: "Efficiency"
+            },
+            {
+                name: "Kenneth Walker",
+                email: "kwalker@construction.com",
+                phone: "(408) 555-0120",
+                address: "4444 Builder's Way, San Jose, CA 95113",
+                puresScore: 14,
+                tier: "1C",
+                industry: "Construction",
+                revenue: "$340M",
+                status: "Budget Discussion",
+                lastContact: "2024-02-27",
+                buyerType: "Innovation"
+            },
+            // Adding more diverse prospects to reach 50
+            {
+                name: "Patricia Hall",
+                email: "phall@transport.com",
+                phone: "(408) 555-0121",
+                address: "5555 Transportation Hub, San Jose, CA 95119",
+                puresScore: 16,
+                tier: "1B",
+                industry: "Transportation",
+                revenue: "$670M",
+                status: "Solution Design",
+                lastContact: "2024-02-24",
+                buyerType: "Efficiency"
+            },
+            {
+                name: "Kevin Young",
+                email: "kyoung@mining.com",
+                phone: "(408) 555-0122",
+                address: "6666 Resource Dr, San Jose, CA 95112",
+                puresScore: 13,
+                tier: "1C",
+                industry: "Mining",
+                revenue: "$890M",
+                status: "Environmental Review",
+                lastContact: "2024-02-21",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Lisa Hernandez",
+                email: "lhernandez@hospitality.com",
+                phone: "(408) 555-0123",
+                address: "7777 Hotel Row, San Jose, CA 95116",
+                puresScore: 15,
+                tier: "1C",
+                industry: "Hospitality",
+                revenue: "$120M",
+                status: "Competitive Analysis",
+                lastContact: "2024-02-18",
+                buyerType: "Relationship"
+            },
+            {
+                name: "George King",
+                email: "gking@chemical.com",
+                phone: "(408) 555-0124",
+                address: "8888 Chemical Plant Rd, San Jose, CA 95111",
+                puresScore: 17,
+                tier: "1B",
+                industry: "Chemical",
+                revenue: "$1.8B",
+                status: "Safety Assessment",
+                lastContact: "2024-02-15",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Laura Wright",
+                email: "lwright@textiles.com",
+                phone: "(408) 555-0125",
+                address: "9999 Fabric Way, San Jose, CA 95134",
+                puresScore: 11,
+                tier: "1C",
+                industry: "Textiles",
+                revenue: "$85M",
+                status: "Market Research",
+                lastContact: "2024-02-12",
+                buyerType: "Efficiency"
+            },
+            {
+                name: "Brian Lopez",
+                email: "blopez@utilities.com",
+                phone: "(408) 555-0126",
+                address: "1010 Power Plant Ave, San Jose, CA 95131",
+                puresScore: 19,
+                tier: "1B",
+                industry: "Utilities",
+                revenue: "$2.3B",
+                status: "Infrastructure Review",
+                lastContact: "2024-02-09",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Jessica Scott",
+                email: "jscott@sports.com",
+                phone: "(408) 555-0127",
+                address: "1212 Athletic Center, San Jose, CA 95117",
+                puresScore: 14,
+                tier: "1C",
+                industry: "Sports",
+                revenue: "$95M",
+                status: "Fan Engagement Study",
+                lastContact: "2024-02-06",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Andrew Green",
+                email: "agreen@publishing.com",
+                phone: "(408) 555-0128",
+                address: "1313 Media Blvd, San Jose, CA 95110",
+                puresScore: 12,
+                tier: "1C",
+                industry: "Publishing",
+                revenue: "$45M",
+                status: "Digital Transformation",
+                lastContact: "2024-02-03",
+                buyerType: "Relationship"
+            },
+            {
+                name: "Jennifer Adams",
+                email: "jadams@aerospace2.com",
+                phone: "(408) 555-0129",
+                address: "1414 Flight Path, San Jose, CA 95113",
+                puresScore: 18,
+                tier: "1B",
+                industry: "Aerospace",
+                revenue: "$4.5B",
+                status: "Security Clearance",
+                lastContact: "2024-01-31",
+                buyerType: "Efficiency"
+            },
+            {
+                name: "Ryan Baker",
+                email: "rbaker@gaming.com",
+                phone: "(408) 555-0130",
+                address: "1515 Game Studio Dr, San Jose, CA 95119",
+                puresScore: 16,
+                tier: "1B",
+                industry: "Gaming",
+                revenue: "$380M",
+                status: "Technology Demo",
+                lastContact: "2024-01-28",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Emily Nelson",
+                email: "enelson@nonprofit.org",
+                phone: "(408) 555-0131",
+                address: "1616 Community Center, San Jose, CA 95112",
+                puresScore: 10,
+                tier: "1C",
+                industry: "Non-Profit",
+                revenue: "$25M",
+                status: "Grant Application",
+                lastContact: "2024-01-25",
+                buyerType: "Relationship"
+            },
+            {
+                name: "Timothy Carter",
+                email: "tcarter@startup.com",
+                phone: "(408) 555-0132",
+                address: "1717 Innovation Hub, San Jose, CA 95116",
+                puresScore: 22,
+                tier: "1A",
+                industry: "Technology",
+                revenue: "$150M",
+                status: "Growth Strategy",
+                lastContact: "2024-01-22",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Angela Mitchell",
+                email: "amitchell@foodservice.com",
+                phone: "(408) 555-0133",
+                address: "1818 Restaurant Row, San Jose, CA 95111",
+                puresScore: 13,
+                tier: "1C",
+                industry: "Food Service",
+                revenue: "$180M",
+                status: "Supply Chain Review",
+                lastContact: "2024-01-19",
+                buyerType: "Efficiency"
+            },
+            {
+                name: "Jonathan Perez",
+                email: "jperez@logistics2.com",
+                phone: "(408) 555-0134",
+                address: "1919 Warehouse District, San Jose, CA 95134",
+                puresScore: 17,
+                tier: "1B",
+                industry: "Logistics",
+                revenue: "$1.1B",
+                status: "Automation Study",
+                lastContact: "2024-01-16",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Stephanie Roberts",
+                email: "sroberts@fashion.com",
+                phone: "(408) 555-0135",
+                address: "2020 Fashion District, San Jose, CA 95131",
+                puresScore: 14,
+                tier: "1C",
+                industry: "Fashion",
+                revenue: "$220M",
+                status: "Digital Strategy",
+                lastContact: "2024-01-13",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Charles Turner",
+                email: "cturner@security.com",
+                phone: "(408) 555-0136",
+                address: "2121 Security Center, San Jose, CA 95117",
+                puresScore: 20,
+                tier: "1A",
+                industry: "Security",
+                revenue: "$850M",
+                status: "Threat Assessment",
+                lastContact: "2024-01-10",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Melissa Phillips",
+                email: "mphillips@wellness.com",
+                phone: "(408) 555-0137",
+                address: "2222 Health Plaza, San Jose, CA 95110",
+                puresScore: 15,
+                tier: "1C",
+                industry: "Wellness",
+                revenue: "$75M",
+                status: "Product Integration",
+                lastContact: "2024-01-07",
+                buyerType: "Relationship"
+            },
+            {
+                name: "Joseph Campbell",
+                email: "jcampbell@maritime.com",
+                phone: "(408) 555-0138",
+                address: "2323 Port Authority, San Jose, CA 95113",
+                puresScore: 16,
+                tier: "1B",
+                industry: "Maritime",
+                revenue: "$650M",
+                status: "Regulatory Compliance",
+                lastContact: "2024-01-04",
+                buyerType: "Efficiency"
+            },
+            {
+                name: "Kimberly Parker",
+                email: "kparker@architecture.com",
+                phone: "(408) 555-0139",
+                address: "2424 Design Center, San Jose, CA 95119",
+                puresScore: 12,
+                tier: "1C",
+                industry: "Architecture",
+                revenue: "$65M",
+                status: "Portfolio Review",
+                lastContact: "2024-01-01",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Thomas Evans",
+                email: "tevans@datacenter.com",
+                phone: "(408) 555-0140",
+                address: "2525 Server Farm Rd, San Jose, CA 95112",
+                puresScore: 21,
+                tier: "1A",
+                industry: "Data Centers",
+                revenue: "$1.5B",
+                status: "Capacity Planning",
+                lastContact: "2023-12-29",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Deborah Edwards",
+                email: "dedwards@veterinary.com",
+                phone: "(408) 555-0141",
+                address: "2626 Animal Hospital Dr, San Jose, CA 95116",
+                puresScore: 11,
+                tier: "1C",
+                industry: "Veterinary",
+                revenue: "$35M",
+                status: "Practice Management",
+                lastContact: "2023-12-26",
+                buyerType: "Relationship"
+            },
+            {
+                name: "Matthew Collins",
+                email: "mcollins@fintech.com",
+                phone: "(408) 555-0142",
+                address: "2727 Blockchain Blvd, San Jose, CA 95111",
+                puresScore: 23,
+                tier: "1A",
+                industry: "FinTech",
+                revenue: "$890M",
+                status: "Integration Planning",
+                lastContact: "2023-12-23",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Carol Stewart",
+                email: "cstewart@beauty.com",
+                phone: "(408) 555-0143",
+                address: "2828 Cosmetic Center, San Jose, CA 95134",
+                puresScore: 13,
+                tier: "1C",
+                industry: "Beauty",
+                revenue: "$145M",
+                status: "Brand Strategy",
+                lastContact: "2023-12-20",
+                buyerType: "Efficiency"
+            },
+            {
+                name: "Donald Sanchez",
+                email: "dsanchez@robotics.com",
+                phone: "(408) 555-0144",
+                address: "2929 Automation Way, San Jose, CA 95131",
+                puresScore: 19,
+                tier: "1B",
+                industry: "Robotics",
+                revenue: "$520M",
+                status: "AI Implementation",
+                lastContact: "2023-12-17",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Sandra Morris",
+                email: "smorris@eventmgmt.com",
+                phone: "(408) 555-0145",
+                address: "3030 Convention Center, San Jose, CA 95117",
+                puresScore: 14,
+                tier: "1C",
+                industry: "Event Management",
+                revenue: "$85M",
+                status: "Technology Upgrade",
+                lastContact: "2023-12-14",
+                buyerType: "Relationship"
+            },
+            {
+                name: "Paul Rogers",
+                email: "progers@cleantech.com",
+                phone: "(408) 555-0146",
+                address: "3131 Green Energy Dr, San Jose, CA 95110",
+                puresScore: 18,
+                tier: "1B",
+                industry: "Clean Technology",
+                revenue: "$420M",
+                status: "Sustainability Audit",
+                lastContact: "2023-12-11",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Nancy Reed",
+                email: "nreed@consulting2.com",
+                phone: "(408) 555-0147",
+                address: "3232 Advisory Plaza, San Jose, CA 95113",
+                puresScore: 16,
+                tier: "1B",
+                industry: "Consulting",
+                revenue: "$280M",
+                status: "Strategic Partnership",
+                lastContact: "2023-12-08",
+                buyerType: "Efficiency"
+            },
+            {
+                name: "Kevin Cook",
+                email: "kcook@defense.com",
+                phone: "(408) 555-0148",
+                address: "3333 Defense Contractor Way, San Jose, CA 95119",
+                puresScore: 22,
+                tier: "1A",
+                industry: "Defense",
+                revenue: "$3.2B",
+                status: "Security Assessment",
+                lastContact: "2023-12-05",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Sharon Bailey",
+                email: "sbailey@ecommerce.com",
+                phone: "(408) 555-0149",
+                address: "3434 Online Retail Dr, San Jose, CA 95112",
+                puresScore: 17,
+                tier: "1B",
+                industry: "E-commerce",
+                revenue: "$1.8B",
+                status: "Platform Migration",
+                lastContact: "2023-12-02",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Gary Rivera",
+                email: "grivera@warehouse.com",
+                phone: "(408) 555-0150",
+                address: "3535 Distribution Hub, San Jose, CA 95116",
+                puresScore: 15,
+                tier: "1C",
+                industry: "Warehousing",
+                revenue: "$310M",
+                status: "Inventory Optimization",
+                lastContact: "2023-11-29",
+                buyerType: "Efficiency"
+            }
+        ];
+        
+        let currentClient = null;
+        let filteredData = [...clientData];
+        
+        // Initialize the system
+        document.addEventListener('DOMContentLoaded', function() {
+            populateTable(clientData);
+        });
+        
+        function populateTable(data) {
+            const tbody = document.getElementById('clientTableBody');
+            tbody.innerHTML = '';
+            
+            data.forEach((client, index) => {
+                const row = tbody.insertRow();
+                const tierClass = `tier-${client.tier.toLowerCase()}`;
+                
+                row.innerHTML = `
+                    <td>${client.name}</td>
+                    <td><a href="mailto:${client.email}" style="color: #CF2030;">${client.email}</a></td>
+                    <td><a href="tel:${client.phone}" style="color: #CF2030;">${client.phone}</a></td>
+                    <td>${client.address}</td>
+                    <td class="score-cell">${client.puresScore}/25</td>
+                    <td class="score-cell ${tierClass}">${client.tier}</td>
+                    <td>${client.industry}</td>
+                    <td>${client.revenue}</td>
+                    <td>${client.status}</td>
+                    <td>${client.lastContact}</td>
+                    <td>
+                        <button class="btn btn-contact" onclick="contactClient(${index})">Contact</button>
+                        <button class="btn" onclick="evaluateClient(${index})">P.U.R.E.S.</button>
+                    </td>
+                `;
+            });
+        }
+        
+        function showTab(tabName) {
+            // Hide all tab contents
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabContents.forEach(content => content.classList.remove('active'));
+            
+            // Remove active class from all tabs
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Show selected tab content
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+        }
+        
+        function filterTable() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const tierFilter = document.getElementById('tierFilter').value;
+            const industryFilter = document.getElementById('industryFilter').value;
+            
+            filteredData = clientData.filter(client => {
+                const matchesSearch = client.name.toLowerCase().includes(searchTerm) ||
+                                    client.email.toLowerCase().includes(searchTerm) ||
+                                    client.industry.toLowerCase().includes(searchTerm);
+                const matchesTier = !tierFilter || client.tier === tierFilter;
+                const matchesIndustry = !industryFilter || client.industry === industryFilter;
+                
+                return matchesSearch && matchesTier && matchesIndustry;
+            });
+            
+            populateTable(filteredData);
+        }
+        
+        function sortTable(columnIndex) {
+            const table = document.getElementById('clientTable');
+            const tbody = table.querySelector('tbody');
+            const rows = Array.from(tbody.rows);
+            
+            rows.sort((a, b) => {
+                const aValue = a.cells[columnIndex].textContent.trim();
+                const bValue = b.cells[columnIndex].textContent.trim();
+                
+                // Handle numeric sorting for P.U.R.E.S. scores
+                if (columnIndex === 4) {
+                    return parseInt(bValue) - parseInt(aValue);
+                }
+                
+                return aValue.localeCompare(bValue);
+            });
+            
+            tbody.innerHTML = '';
+            rows.forEach(row => tbody.appendChild(row));
+        }
+        
+        function contactClient(index) {
+            currentClient = filteredData[index];
+            const modal = document.getElementById('contactModal');
+            
+            // Pre-populate email content
+            generateEmailContent();
+            
+            modal.style.display = 'block';
+        }
+        
+        function generateEmailContent() {
+            if (!currentClient) return;
+            
+            const subjectField = document.getElementById('emailSubject');
+            const bodyField = document.getElementById('emailBody');
+            
+            const subject = `Transform Your ${currentClient.industry} Operations with Appko's Cloud Solutions`;
+            
+            const emailTemplate = `Dear ${currentClient.name},
+
+I hope this email finds you well. I'm reaching out from Appko Inc., a leading cloud development and software engineering firm based in Silicon Valley.
+
+Based on our research of ${currentClient.name.split(' ')[0]}'s company in the ${currentClient.industry} sector, I believe we can help you achieve significant operational improvements through our proven cloud solutions and enterprise software development services.
+
+Here's what sets Appko apart for ${currentClient.industry} companies:
+
+🔹 **Cloud Infrastructure Excellence**: We've built public, private, and hybrid clouds for Fortune 500 companies including Google, Nest, IBM, PayPal, and Cisco
+🔹 **Industry Expertise**: Deep experience with ${currentClient.industry} compliance, security, and scalability requirements
+🔹 **Proven Track Record**: 15+ years of profitable operations with clients like Sony, Disney, Abbott Vascular, and the U.S. Army
+🔹 **Global Talent Pool**: Access to world-class developers from Silicon Valley and Eastern Europe with 24-hour coverage
+
+Our services specifically relevant to ${currentClient.industry}:
+• Cloud migration and modernization
+• Custom software development
+• DevOps and automation solutions
+• Big Data analytics platforms
+• Mobile and web application development
+
+Given your company's estimated ${currentClient.revenue} revenue scale, we typically see 25-40% reduction in IT operational costs and 50-70% faster time-to-market for new initiatives.
+
+I'd love to schedule a brief 15-minute call to discuss how Appko can support your digital transformation goals. Would you be available next week for a quick conversation?
+
+Best regards,
+
+Sean Moreland
+President & Founder
+Appko Inc.
+📧 seanmoreland@appko.com
+📱 (408) 600-2860
+🌐 www.appko.com
+
+P.S. As a ${currentClient.buyerType} decision-maker, I'd be happy to share specific case studies from similar ${currentClient.industry} companies who've achieved remarkable ROI with our solutions.`;
+            
+            subjectField.value = subject;
+            bodyField.value = emailTemplate;
+        }
+        
+        function handleContactMethod() {
+            const method = document.getElementById('contactMethod').value;
+            const emailContent = document.getElementById('emailContent');
+            const phoneContent = document.getElementById('phoneContent');
+            const phoneScript = document.getElementById('phoneScript');
+            
+            if (method === 'email') {
+                emailContent.style.display = 'block';
+                phoneContent.style.display = 'none';
+            } else if (method === 'phone') {
+                emailContent.style.display = 'none';
+                phoneContent.style.display = 'block';
+                
+                const script = `Hi ${currentClient.name}, this is Sean Moreland from Appko Inc. 
+
+I'm calling because I noticed your company is in the ${currentClient.industry} space, and we've had tremendous success helping similar organizations transform their technology infrastructure.
+
+Quick question: What's your biggest challenge right now with your current IT setup or cloud strategy?
+
+[Listen to response]
+
+That's exactly what we help ${currentClient.industry} companies solve. We've worked with companies like [mention relevant client] to achieve [specific benefit]. 
+
+Would you be open to a brief 15-minute conversation next week to discuss how we might be able to help you achieve similar results?`;
+                
+                phoneScript.value = script;
+            }
+        }
+        
+        function initiateContact() {
+            const method = document.getElementById('contactMethod').value;
+            
+            if (method === 'email') {
+                const subject = document.getElementById('emailSubject').value;
+                const body = document.getElementById('emailBody').value;
+                const mailtoLink = `mailto:${currentClient.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+                window.open(mailtoLink);
+            } else if (method === 'phone') {
+                window.open(`tel:${currentClient.phone}`);
+            } else if (method === 'linkedin') {
+                alert('LinkedIn integration coming soon! For now, please contact via email or phone.');
+            }
+            
+            // Update contact status
+            const clientIndex = clientData.findIndex(c => c.email === currentClient.email);
+            if (clientIndex !== -1) {
+                clientData[clientIndex].status = 'Recently Contacted';
+                clientData[clientIndex].lastContact = new Date().toISOString().split('T')[0];
+                populateTable(filteredData);
+            }
+            
+            closeModal('contactModal');
+        }
+        
+        function evaluateClient(index) {
+            currentClient = filteredData[index];
+            const modal = document.getElementById('puresModal');
+            
+            // Reset form to current scores (simplified for demo)
+            document.getElementById('profitability').value = 3;
+            document.getElementById('urgency').value = 3;
+            document.getElementById('reachability').value = 3;
+            document.getElementById('engagement').value = 3;
+            document.getElementById('sustainability').value = 3;
+            
+            updateTotalScore();
+            modal.style.display = 'block';
+        }
+        
+        function updateScore(scoreType) {
+            const value = document.getElementById(scoreType).value;
+            document.getElementById(scoreType + 'Value').textContent = value;
+            updateTotalScore();
+        }
+        
+        function updateTotalScore() {
+            const p = parseInt(document.getElementById('profitability').value);
+            const u = parseInt(document.getElementById('urgency').value);
+            const r = parseInt(document.getElementById('reachability').value);
+            const e = parseInt(document.getElementById('engagement').value);
+            const s = parseInt(document.getElementById('sustainability').value);
+            
+            const total = p + u + r + e + s;
+            document.getElementById('totalScore').textContent = total;
+            
+            let tier = '1C';
+            let tierLabel = '1C - Qualified';
+            
+            if (total >= 20) {
+                tier = '1A';
+                tierLabel = '1A - Premium';
+            } else if (total >= 15) {
+                tier = '1B';
+                tierLabel = '1B - High-Value';
+            }
+            
+            document.getElementById('tierClass').textContent = tierLabel;
+        }
+        
+        function savePuresScore() {
+            if (currentClient) {
+                const total = parseInt(document.getElementById('totalScore').textContent);
+                const tier = total >= 20 ? '1A' : total >= 15 ? '1B' : '1C';
+                
+                const clientIndex = clientData.findIndex(c => c.email === currentClient.email);
+                if (clientIndex !== -1) {
+                    clientData[clientIndex].puresScore = total;
+                    clientData[clientIndex].tier = tier;
+                    populateTable(filteredData);
+                }
+            }
+            closeModal('puresModal');
+        }
+        
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+        
+        function exportData() {
+            const csv = generateCSV(filteredData);
+            downloadCSV(csv, 'appko_clients.csv');
+        }
+        
+        function generateCSV(data) {
+            const headers = ['Name', 'Email', 'Phone', 'Address', 'P.U.R.E.S. Score', 'Tier', 'Industry', 'Revenue', 'Status', 'Last Contact'];
+            const csvContent = [
+                headers.join(','),
+                ...data.map(row => [
+                    `"${row.name}"`,
+                    `"${row.email}"`,
+                    `"${row.phone}"`,
+                    `"${row.address}"`,
+                    row.puresScore,
+                    row.tier,
+                    `"${row.industry}"`,
+                    `"${row.revenue}"`,
+                    `"${row.status}"`,
+                    row.lastContact
+                ].join(','))
+            ].join('\n');
+            
+            return csvContent;
+        }
+        
+        function downloadCSV(csv, filename) {
+            const csvFile = new Blob([csv], { type: 'text/csv' });
+            const downloadLink = document.createElement('a');
+            downloadLink.download = filename;
+            downloadLink.href = window.URL.createObjectURL(csvFile);
+            downloadLink.style.display = 'none';
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            document.body.removeChild(downloadLink);
+        }
+        
+        function addNewClient() {
+            alert('Add New Client functionality coming soon! This would open a form to input new prospect information.');
+        }
+        
+        // Close modals when clicking outside
+        window.onclick = function(event) {
+            const modals = document.querySelectorAll('.modal');
+            modals.forEach(modal => {
+                if (event.target == modal) {
+                    modal.style.display = 'none';
+                }
+            });
+        }
+    </script>
+</body>
+</html>

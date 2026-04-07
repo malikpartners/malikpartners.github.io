@@ -1,0 +1,848 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>S.A.L.E. Client Report – Debi Bucciarelli | Wooden Gate Quilts</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:#000;color:#e0e0e0;font-family:'Inter',sans-serif;min-height:100vh;}
+
+  header{background:#0a0a0a;border-bottom:3px solid #CF2030;padding:14px 28px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;backdrop-filter:blur(12px);}
+  header img{height:44px;}
+  .header-right{display:flex;align-items:center;gap:12px;}
+  .report-badge{background:#CF2030;color:#fff;font-size:10px;font-weight:800;padding:4px 10px;border-radius:4px;letter-spacing:1px;}
+  nav{display:flex;gap:4px;flex-wrap:wrap;background:#111;padding:10px 28px;border-bottom:1px solid #1a1a1a;position:sticky;top:72px;z-index:190;overflow-x:auto;}
+  nav button{background:transparent;color:#CF2030;border:1px solid #CF2030;padding:8px 16px;border-radius:6px;cursor:pointer;font-size:12px;font-weight:600;transition:.25s;white-space:nowrap;flex-shrink:0;}
+  nav button:hover,nav button.active{background:#CF2030;color:#fff;box-shadow:0 0 12px rgba(207,32,48,.3);}
+
+  main{max-width:1360px;margin:0 auto;padding:28px 24px 80px;}
+  .section{display:none;animation:fadeIn .4s ease;}.section.active{display:block;}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+
+  h1{font-size:30px;color:#fff;margin-bottom:4px;letter-spacing:-.5px;}
+  .subtitle{color:#777;font-size:13px;margin-bottom:28px;border-bottom:1px solid #1a1a1a;padding-bottom:16px;}
+  h2{font-size:19px;color:#CF2030;margin:32px 0 14px;border-left:4px solid #CF2030;padding-left:14px;}
+  h3{font-size:15px;color:#bbb;margin:18px 0 10px;}
+
+  .search-bar{width:100%;padding:11px 18px;border-radius:8px;border:1px solid #2a2a2a;background:#0d0d0d;color:#eee;font-size:14px;margin-bottom:16px;transition:.3s;}
+  .search-bar:focus{outline:none;border-color:#CF2030;box-shadow:0 0 8px rgba(207,32,48,.2);}
+
+  .table-wrap{overflow-x:auto;margin-bottom:24px;border-radius:12px;border:1px solid #1a1a1a;background:#0a0a0a;}
+  table{width:100%;border-collapse:collapse;font-size:13px;}
+  thead th{background:#111;color:#CF2030;padding:13px 16px;text-align:left;cursor:pointer;user-select:none;white-space:nowrap;border-bottom:2px solid #CF2030;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.5px;}
+  thead th:hover{background:#1a1a1a;}
+  thead th::after{content:' ⇅';font-size:10px;opacity:.35;}
+  thead th.asc::after{content:' ▲';opacity:1;}
+  thead th.desc::after{content:' ▼';opacity:1;}
+  thead th.no-sort{cursor:default;}
+  thead th.no-sort::after{content:'';}
+  tbody tr{border-bottom:1px solid #141414;transition:.2s;}
+  tbody tr:hover{background:#120d10;}
+  td{padding:11px 16px;vertical-align:middle;line-height:1.5;}
+  tbody tr:nth-child(even){background:#080808;}
+
+  .btn{display:inline-flex;align-items:center;gap:4px;padding:6px 14px;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer;text-decoration:none;border:none;transition:.2s;color:#fff;}
+  .btn-call{background:#16713a;}.btn-call:hover{background:#1e9950;}
+  .btn-email{background:#1a4a8a;}.btn-email:hover{background:#2662b8;}
+  .btn-visit{background:#CF2030;}.btn-visit:hover{background:#e83a4c;}
+  .btn-linkedin{background:#0a66c2;}.btn-linkedin:hover{background:#0d80f0;}
+  .btn-web{background:#444;}.btn-web:hover{background:#666;}
+  .btn-copy{background:#CF2030;}.btn-copy:hover{background:#e83a4c;}
+  .btn-sm{padding:5px 10px;font-size:10px;}
+  .actions{display:flex;gap:5px;flex-wrap:wrap;}
+
+  .card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;}
+  .card{background:#0d0d0d;border:1px solid #1a1a1a;border-radius:12px;padding:22px;transition:.3s;}
+  .card:hover{border-color:#CF2030;transform:translateY(-3px);box-shadow:0 8px 24px rgba(207,32,48,.1);}
+  .card-title{color:#fff;font-weight:700;margin-bottom:8px;font-size:15px;}
+  .card-desc{color:#888;font-size:13px;line-height:1.6;}
+  .card a{color:#CF2030;text-decoration:none;font-size:13px;font-weight:500;}
+  .card a:hover{text-decoration:underline;}
+
+  .stats-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px;margin-bottom:28px;}
+  .stat-card{background:#0d0d0d;border:1px solid #1a1a1a;border-radius:12px;padding:22px;text-align:center;transition:.3s;}
+  .stat-card:hover{border-color:#CF2030;}
+  .stat-num{font-size:34px;font-weight:800;color:#CF2030;line-height:1;}
+  .stat-label{color:#888;font-size:12px;margin-top:8px;}
+
+  .profile-hero{display:flex;gap:36px;align-items:flex-start;flex-wrap:wrap;background:linear-gradient(135deg,#0d0d0d,#111);border:1px solid #1a1a1a;border-radius:16px;padding:36px;margin-bottom:28px;}
+  .profile-avatar{width:110px;height:110px;border-radius:50%;background:linear-gradient(135deg,#CF2030,#7a0f1a);display:flex;align-items:center;justify-content:center;font-size:38px;font-weight:800;color:#fff;flex-shrink:0;box-shadow:0 4px 20px rgba(207,32,48,.3);}
+  .profile-info{flex:1;min-width:260px;}
+  .profile-name{font-size:28px;font-weight:800;color:#fff;}
+  .profile-title{color:#CF2030;font-size:16px;font-weight:600;margin:4px 0;}
+  .profile-company{color:#999;font-size:14px;margin-bottom:14px;}
+  .profile-meta{display:flex;flex-wrap:wrap;gap:18px;margin-top:14px;}
+  .profile-meta-item{display:flex;align-items:center;gap:6px;font-size:13px;color:#888;}
+  .profile-actions{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap;}
+
+  .tag{display:inline-block;padding:4px 10px;border-radius:20px;font-size:10px;font-weight:700;margin:2px;letter-spacing:.3px;}
+  .tag-red{background:#2a0a0e;color:#CF2030;border:1px solid #CF2030;}
+  .tag-blue{background:#0a1a30;color:#5ba3e6;border:1px solid #1a4a8a;}
+  .tag-green{background:#0a2a14;color:#5ae6a0;border:1px solid #1a6b3c;}
+  .tag-purple{background:#1a0a2a;color:#b888e8;border:1px solid #5a3080;}
+  .tag-amber{background:#2a1a0a;color:#e6a05a;border:1px solid #8a5a1a;}
+
+  .insight-box{background:#0d0d0d;border-left:4px solid #CF2030;border-radius:0 12px 12px 0;padding:20px 24px;margin:18px 0;font-size:14px;line-height:1.7;}
+  .insight-box strong{color:#CF2030;}
+
+  .chart-container{background:#0d0d0d;border:1px solid #1a1a1a;border-radius:12px;padding:28px;margin:20px 0;}
+  .chart-title{font-size:14px;color:#888;margin-bottom:16px;font-weight:600;}
+  .bar-chart{display:flex;align-items:flex-end;gap:10px;height:200px;padding-top:20px;}
+  .bar-col{display:flex;flex-direction:column;align-items:center;flex:1;min-width:0;}
+  .bar{width:100%;min-width:16px;max-width:80px;background:linear-gradient(180deg,#CF2030,#7a0f1a);border-radius:6px 6px 0 0;transition:.5s;cursor:default;}
+  .bar:hover{filter:brightness(1.2);}
+  .bar-label{font-size:10px;color:#777;margin-top:10px;text-align:center;word-break:break-word;}
+  .bar-value{font-size:12px;color:#fff;font-weight:700;margin-bottom:4px;}
+  .bar-alt{background:linear-gradient(180deg,#0a66c2,#053a70);}
+  .bar-green{background:linear-gradient(180deg,#16713a,#0a3a1c);}
+  .bar-amber{background:linear-gradient(180deg,#e6a05a,#8a5a1a);}
+
+  .timeline{position:relative;padding-left:36px;margin:24px 0;}
+  .timeline::before{content:'';position:absolute;left:14px;top:0;bottom:0;width:2px;background:#222;}
+  .timeline-item{position:relative;margin-bottom:28px;}
+  .timeline-item::before{content:'';position:absolute;left:-28px;top:4px;width:14px;height:14px;border-radius:50%;background:#CF2030;border:3px solid #000;box-shadow:0 0 8px rgba(207,32,48,.4);}
+  .timeline-step{font-size:11px;color:#CF2030;font-weight:800;text-transform:uppercase;margin-bottom:5px;letter-spacing:.5px;}
+  .timeline-content{font-size:13px;color:#bbb;line-height:1.6;}
+
+  .email-template{background:#080808;border:1px solid #222;border-radius:12px;padding:24px;margin:16px 0;font-family:'Courier New',monospace;font-size:12px;line-height:1.8;color:#bbb;white-space:pre-wrap;position:relative;max-height:400px;overflow-y:auto;}
+  .copy-btn{position:sticky;top:0;float:right;background:#CF2030;color:#fff;border:none;padding:6px 16px;border-radius:6px;cursor:pointer;font-size:11px;font-weight:700;z-index:5;}
+  .copy-btn:hover{background:#e83a4c;}
+
+  .score-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:14px;margin-bottom:28px;}
+  .score-card{background:#0d0d0d;border:1px solid #1a1a1a;border-radius:12px;padding:24px 16px;text-align:center;}
+  .score-ring{width:90px;height:90px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:800;color:#fff;margin:0 auto 10px;position:relative;}
+  .score-high{background:conic-gradient(#4caf50 0deg calc(var(--score)*3.6deg),#1a1a1a calc(var(--score)*3.6deg) 360deg);}
+  .score-med{background:conic-gradient(#ff9800 0deg calc(var(--score)*3.6deg),#1a1a1a calc(var(--score)*3.6deg) 360deg);}
+  .score-inner{width:66px;height:66px;border-radius:50%;background:#0d0d0d;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:800;}
+
+  .alert-box{background:#0d0d0a;border:1px solid #333;border-radius:10px;padding:18px;margin:18px 0;font-size:13px;color:#ccc;line-height:1.6;}
+  .alert-box strong{color:#CF2030;}
+
+  .divider{border:none;border-top:1px solid #1a1a1a;margin:32px 0;}
+
+  footer{background:#0a0a0a;border-top:3px solid #CF2030;padding:24px 32px;text-align:center;}
+  footer img{height:28px;margin-bottom:8px;opacity:.7;}
+  footer p{color:#555;font-size:11px;}
+
+  ::-webkit-scrollbar{width:6px;height:6px;}
+  ::-webkit-scrollbar-track{background:#0a0a0a;}
+  ::-webkit-scrollbar-thumb{background:#333;border-radius:3px;}
+  ::-webkit-scrollbar-thumb:hover{background:#CF2030;}
+
+  @media(max-width:768px){
+    header{flex-direction:column;gap:10px;padding:12px 16px;}
+    nav{padding:8px 16px;}
+    main{padding:16px 12px 60px;}
+    .profile-hero{flex-direction:column;align-items:center;text-align:center;padding:24px;}
+    .profile-meta{justify-content:center;}
+    .profile-actions{justify-content:center;}
+    .stats-row,.score-row{grid-template-columns:1fr 1fr;}
+    .bar-chart{height:150px;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports">
+  <div class="header-right">
+    <span class="report-badge">S.A.L.E. REPORT</span>
+  </div>
+</header>
+
+<nav id="mainNav">
+  <button class="active" onclick="showSection('profile',this)">👤 Client Profile</button>
+  <button onclick="showSection('business',this)">🏪 Business Analysis</button>
+  <button onclick="showSection('network',this)">🤝 Referral Network</button>
+  <button onclick="showSection('patterns',this)">📐 Patterns & Resources</button>
+  <button onclick="showSection('strategy',this)">🎯 Outreach Strategy</button>
+  <button onclick="showSection('emails',this)">✉️ Email Templates</button>
+  <button onclick="showSection('scores',this)">📊 Scoring & Fit</button>
+</nav>
+
+<main>
+
+<!-- ==================== CLIENT PROFILE ==================== -->
+<div id="sec-profile" class="section active">
+  <h1>S.A.L.E. Client Report</h1>
+  <p class="subtitle">Simple Search And Strategy &nbsp;|&nbsp; Generated 03/26/2026 &nbsp;|&nbsp; Higgins Reports DB</p>
+
+  <div class="profile-hero">
+    <div class="profile-avatar">DB</div>
+    <div class="profile-info">
+      <div class="profile-name">Debi Bucciarelli, MBA</div>
+      <div class="profile-title">Business Owner</div>
+      <div class="profile-company">Wooden Gate Quilts &nbsp;·&nbsp; Retail &nbsp;·&nbsp; Quilting & Fabric &nbsp;·&nbsp; 11–50 employees</div>
+      <div class="profile-meta">
+        <div class="profile-meta-item">📍 San Ramon / Danville, CA</div>
+        <div class="profile-meta-item">📧 debi@woodengatequilts.com</div>
+        <div class="profile-meta-item">📞 (925) 837-8458</div>
+      </div>
+      <div style="margin-top:14px;">
+        <span class="tag tag-red">Retail</span>
+        <span class="tag tag-blue">MBA</span>
+        <span class="tag tag-green">Business Owner</span>
+        <span class="tag tag-purple">Quilting & Fabric</span>
+      </div>
+      <div class="profile-actions">
+        <a href="tel:+19258378458" class="btn btn-call">📞 Call Debi</a>
+        <a class="btn btn-email" onclick="sendMainEmail()">✉️ Email Debi</a>
+        <a href="https://www.linkedin.com/in/dbucciarelli" target="_blank" class="btn btn-linkedin">🔗 LinkedIn</a>
+        <a href="https://www.woodengatequilts.com" target="_blank" class="btn btn-web">🌐 Website</a>
+      </div>
+    </div>
+  </div>
+
+  <h2>Client Quick Facts</h2>
+  <div class="stats-row">
+    <div class="stat-card"><div class="stat-num">MBA</div><div class="stat-label">Education</div></div>
+    <div class="stat-card"><div class="stat-num">11-50</div><div class="stat-label">Employees</div></div>
+    <div class="stat-card"><div class="stat-num">Danville</div><div class="stat-label">Business Location</div></div>
+    <div class="stat-card"><div class="stat-num">Retail</div><div class="stat-label">Industry</div></div>
+  </div>
+
+  <h2>Contact Information</h2>
+  <input class="search-bar" id="searchContact" placeholder="🔍  Search contact fields…" oninput="filterTable('contactTable','searchContact')">
+  <div class="table-wrap">
+    <table id="contactTable">
+      <thead><tr><th onclick="sortTbl('contactTable',0)">Field</th><th onclick="sortTbl('contactTable',1)">Detail</th><th class="no-sort">Action</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Full Name</strong></td><td>Debi Bucciarelli, MBA</td><td>—</td></tr>
+        <tr><td><strong>Email</strong></td><td>debi@woodengatequilts.com</td><td><a href="mailto:debi@woodengatequilts.com" class="btn btn-email btn-sm">✉️ Email</a></td></tr>
+        <tr><td><strong>Phone</strong></td><td>(925) 837-8458</td><td><a href="tel:+19258378458" class="btn btn-call btn-sm">📞 Call</a></td></tr>
+        <tr><td><strong>Personal LinkedIn</strong></td><td>linkedin.com/in/dbucciarelli</td><td><a href="https://www.linkedin.com/in/dbucciarelli" target="_blank" class="btn btn-linkedin btn-sm">🔗 View</a></td></tr>
+        <tr><td><strong>Company LinkedIn</strong></td><td>linkedin.com/company/62837946</td><td><a href="https://www.linkedin.com/company/62837946" target="_blank" class="btn btn-linkedin btn-sm">🔗 View</a></td></tr>
+        <tr><td><strong>Website</strong></td><td>woodengatequilts.com</td><td><a href="https://www.woodengatequilts.com" target="_blank" class="btn btn-web btn-sm">🌐 Visit</a></td></tr>
+        <tr><td><strong>Address</strong></td><td>310 Sycamore Valley Road, Danville, CA 94526</td><td><a href="https://maps.google.com/?q=310+Sycamore+Valley+Road+Danville+CA+94526" target="_blank" class="btn btn-visit btn-sm">📍 Map</a></td></tr>
+        <tr><td><strong>Personal Location</strong></td><td>San Ramon, California</td><td>—</td></tr>
+        <tr><td><strong>Title</strong></td><td>Business Owner</td><td>—</td></tr>
+        <tr><td><strong>Company Size</strong></td><td>11–50 employees</td><td>—</td></tr>
+        <tr><td><strong>Report Date</strong></td><td>March 26, 2026</td><td>—</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ==================== BUSINESS ANALYSIS ==================== -->
+<div id="sec-business" class="section">
+  <h1>Business Analysis — Wooden Gate Quilts</h1>
+  <p class="subtitle">Products, services, market position, and operational overview</p>
+
+  <div class="stats-row">
+    <div class="stat-card"><div class="stat-num">19+</div><div class="stat-label">Products & Services</div></div>
+    <div class="stat-card"><div class="stat-num">$125+</div><div class="stat-label">Free Shipping Threshold</div></div>
+    <div class="stat-card"><div class="stat-num">4</div><div class="stat-label">Days Open / Week</div></div>
+    <div class="stat-card"><div class="stat-num">15</div><div class="stat-label">Weekly Store Hours</div></div>
+    <div class="stat-card"><div class="stat-num">9</div><div class="stat-label">Referral Partners</div></div>
+    <div class="stat-card"><div class="stat-num">10+</div><div class="stat-label">Free Resources</div></div>
+  </div>
+
+  <h2>Products & Services Catalog</h2>
+  <input class="search-bar" id="searchProducts" placeholder="🔍  Search products, categories, channels…" oninput="filterTable('productsTable','searchProducts')">
+  <div class="table-wrap">
+    <table id="productsTable">
+      <thead><tr>
+        <th onclick="sortTbl('productsTable',0)">Category</th>
+        <th onclick="sortTbl('productsTable',1)">Offering</th>
+        <th onclick="sortTbl('productsTable',2)">Type</th>
+        <th onclick="sortTbl('productsTable',3)">Channel</th>
+      </tr></thead>
+      <tbody>
+        <tr><td>Fabric</td><td>Designer Fabric Collections (Trade Winds, Counterpoint, Sunrise Sunset)</td><td><span class="tag tag-red">Product</span></td><td>In-Store & Online</td></tr>
+        <tr><td>Fabric</td><td>Art Gallery Pure Solids</td><td><span class="tag tag-red">Product</span></td><td>In-Store & Online</td></tr>
+        <tr><td>Fabric</td><td>Novelty / Kids Fabric</td><td><span class="tag tag-red">Product</span></td><td>In-Store & Online</td></tr>
+        <tr><td>Fabric</td><td>Holiday / Seasonal Fabric (NYSNO New Snow)</td><td><span class="tag tag-red">Product</span></td><td>In-Store & Online</td></tr>
+        <tr><td>Fabric</td><td>Smithsonian Collections</td><td><span class="tag tag-red">Product</span></td><td>In-Store & Online</td></tr>
+        <tr><td>Kits</td><td>Holiday Napkin Kits (Thanksgiving & Christmas)</td><td><span class="tag tag-red">Product</span></td><td>In-Store & Online</td></tr>
+        <tr><td>Kits</td><td>Neck & Shoulder Heating Pad Kit</td><td><span class="tag tag-red">Product</span></td><td>In-Store & Online</td></tr>
+        <tr><td>Kits</td><td>Origami Bento Bag Kit</td><td><span class="tag tag-red">Product</span></td><td>In-Store & Online</td></tr>
+        <tr><td>Kits</td><td>Bumble Bee Pin Cushion Kit</td><td><span class="tag tag-red">Product</span></td><td>In-Store & Online</td></tr>
+        <tr><td>Tools</td><td>Quilter's Select Cutting Mat & Wool Pad</td><td><span class="tag tag-red">Product</span></td><td>In-Store & Online</td></tr>
+        <tr><td>Tools</td><td>Acorn Precision Fabric Treatment</td><td><span class="tag tag-red">Product</span></td><td>In-Store & Online</td></tr>
+        <tr><td>Tools</td><td>Quilter's Moonshine Spray Starch</td><td><span class="tag tag-red">Product</span></td><td>In-Store & Online</td></tr>
+        <tr><td>Décor</td><td>Lori Holt Home Town Holiday Ornaments</td><td><span class="tag tag-red">Product</span></td><td>In-Store & Online</td></tr>
+        <tr><td>Classes</td><td>Quilting & Sewing Classes</td><td><span class="tag tag-blue">Service</span></td><td>In-Store</td></tr>
+        <tr><td>Community</td><td>Community Stitch Club</td><td><span class="tag tag-green">Community</span></td><td>In-Store & Online</td></tr>
+        <tr><td>Community</td><td>Newsletter Subscription</td><td><span class="tag tag-green">Community</span></td><td>Email</td></tr>
+        <tr><td>Events</td><td>Thursday Live Shopping</td><td><span class="tag tag-purple">Event</span></td><td>Online (Live Video)</td></tr>
+        <tr><td>Resources</td><td>Free Patterns & Tutorials (10+)</td><td><span class="tag tag-green">Community</span></td><td>Online</td></tr>
+        <tr><td>Referrals</td><td>Long-Arm Quilter Network (6 partners)</td><td><span class="tag tag-amber">Referral</span></td><td>In-Person</td></tr>
+        <tr><td>Referrals</td><td>Custom Quilt Maker Network (3 partners)</td><td><span class="tag tag-amber">Referral</span></td><td>In-Person</td></tr>
+        <tr><td>Shipping</td><td>Free Shipping on Orders $125+</td><td><span class="tag tag-blue">Service</span></td><td>Online</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>Revenue Channel Estimate</h2>
+  <div class="chart-container">
+    <div class="chart-title">Estimated Revenue Distribution by Channel</div>
+    <div class="bar-chart">
+      <div class="bar-col"><div class="bar-value">38%</div><div class="bar" style="height:100%"></div><div class="bar-label">Fabric Sales</div></div>
+      <div class="bar-col"><div class="bar-value">20%</div><div class="bar bar-alt" style="height:52%"></div><div class="bar-label">Kits & Tools</div></div>
+      <div class="bar-col"><div class="bar-value">16%</div><div class="bar bar-green" style="height:42%"></div><div class="bar-label">Online / eComm</div></div>
+      <div class="bar-col"><div class="bar-value">12%</div><div class="bar bar-amber" style="height:31%"></div><div class="bar-label">Classes</div></div>
+      <div class="bar-col"><div class="bar-value">8%</div><div class="bar" style="height:21%"></div><div class="bar-label">Live Shopping</div></div>
+      <div class="bar-col"><div class="bar-value">6%</div><div class="bar bar-alt" style="height:16%"></div><div class="bar-label">Events / Other</div></div>
+    </div>
+  </div>
+
+  <h2>Store Hours (Current)</h2>
+  <div class="table-wrap">
+    <table id="hoursTable">
+      <thead><tr><th onclick="sortTbl('hoursTable',0)">Day</th><th>Hours</th><th>Status</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td>Monday</td><td>—</td><td style="color:#CF2030;font-weight:700;">CLOSED</td><td>—</td></tr>
+        <tr><td>Tuesday</td><td>—</td><td style="color:#CF2030;font-weight:700;">CLOSED</td><td>—</td></tr>
+        <tr><td>Wednesday</td><td>—</td><td style="color:#CF2030;font-weight:700;">CLOSED</td><td>—</td></tr>
+        <tr><td>Thursday</td><td>11:00 AM – 4:00 PM</td><td style="color:#4caf50;font-weight:700;">OPEN</td><td>🎥 Live Shopping Events</td></tr>
+        <tr><td>Friday</td><td>11:00 AM – 4:00 PM</td><td style="color:#4caf50;font-weight:700;">OPEN</td><td>—</td></tr>
+        <tr><td>Saturday</td><td>11:00 AM – 4:00 PM</td><td style="color:#4caf50;font-weight:700;">OPEN</td><td>—</td></tr>
+        <tr><td>Sunday</td><td>—</td><td style="color:#CF2030;font-weight:700;">CLOSED</td><td>—</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>Weekly Operating Hours</h2>
+  <div class="chart-container">
+    <div class="chart-title">Hours Open Per Day</div>
+    <div class="bar-chart" style="height:160px;">
+      <div class="bar-col"><div class="bar-value">0h</div><div class="bar" style="height:4%;opacity:.3;"></div><div class="bar-label">Mon</div></div>
+      <div class="bar-col"><div class="bar-value">0h</div><div class="bar" style="height:4%;opacity:.3;"></div><div class="bar-label">Tue</div></div>
+      <div class="bar-col"><div class="bar-value">0h</div><div class="bar" style="height:4%;opacity:.3;"></div><div class="bar-label">Wed</div></div>
+      <div class="bar-col"><div class="bar-value">5h</div><div class="bar" style="height:100%"></div><div class="bar-label">Thu</div></div>
+      <div class="bar-col"><div class="bar-value">5h</div><div class="bar" style="height:100%"></div><div class="bar-label">Fri</div></div>
+      <div class="bar-col"><div class="bar-value">5h</div><div class="bar" style="height:100%"></div><div class="bar-label">Sat</div></div>
+      <div class="bar-col"><div class="bar-value">0h</div><div class="bar" style="height:4%;opacity:.3;"></div><div class="bar-label">Sun</div></div>
+    </div>
+  </div>
+
+  <div class="stats-row" style="margin-top:8px;">
+    <div class="stat-card"><div class="stat-num">15</div><div class="stat-label">Total Hours / Week</div></div>
+    <div class="stat-card"><div class="stat-num">3</div><div class="stat-label">Open Days / Week</div></div>
+    <div class="stat-card"><div class="stat-num">5h</div><div class="stat-label">Avg Hours / Open Day</div></div>
+    <div class="stat-card"><div class="stat-num">11 AM</div><div class="stat-label">Opening Time</div></div>
+  </div>
+
+  <div class="alert-box">
+    <strong>⚠️ Transition Alert:</strong> Website contains an "Announcement" page regarding retirement and future plans for the shop. Reduced hours (Thu–Sat only, down from former 6-day schedule) may indicate a wind-down phase. This presents both a <strong>time-sensitive opportunity</strong> for BNI engagement and a potential risk factor for long-term membership.
+  </div>
+
+  <h2>Competitive Strengths</h2>
+  <div class="card-grid">
+    <div class="card"><div class="card-title">🏆 Curated Specialty Retail</div><div class="card-desc">Hand-picked designer fabrics, exclusive Smithsonian collections, Tilda patterns — not a big-box competitor. Artisan quality with personal service.</div></div>
+    <div class="card"><div class="card-title">🤝 Built-In Referral Culture</div><div class="card-desc">Already operates a 9-person referral network of independent quilters. "Tell them Wooden Gate sent you!" is her native language.</div></div>
+    <div class="card"><div class="card-title">📱 Omnichannel Presence</div><div class="card-desc">Physical store, ecommerce, live video shopping, Instagram, Facebook, newsletter, Stitch Club — a robust multi-channel operation.</div></div>
+    <div class="card"><div class="card-title">🎓 MBA-Level Leadership</div><div class="card-desc">Debi's MBA indicates strategic thinking, ROI awareness, and receptivity to structured business growth systems like BNI.</div></div>
+    <div class="card"><div class="card-title">🎥 Live Commerce Pioneer</div><div class="card-desc">Thursday Live Shopping events show innovation and digital fluency — selling fabric through live video is a creative retail edge.</div></div>
+    <div class="card"><div class="card-title">📚 Education & Community</div><div class="card-desc">Classes, free patterns, tutorials, and Stitch Club create a loyal customer ecosystem that returns repeatedly.</div></div>
+  </div>
+
+  <h2>Online Presence</h2>
+  <div class="card-grid">
+    <div class="card"><div class="card-title">🌐 Website</div><a href="https://www.woodengatequilts.com" target="_blank">woodengatequilts.com →</a></div>
+    <div class="card"><div class="card-title">📘 Facebook</div><a href="https://www.facebook.com/woodengatequilts2023/" target="_blank">@woodengatequilts2023 →</a></div>
+    <div class="card"><div class="card-title">📸 Instagram</div><a href="https://www.instagram.com/woodengatequilts/" target="_blank">@woodengatequilts →</a></div>
+    <div class="card"><div class="card-title">🛒 Online Shop</div><a href="https://www.woodengatequilts.com/shop-online.htm" target="_blank">Shop Online →</a></div>
+    <div class="card"><div class="card-title">🎥 Live Shopping</div><a href="https://www.woodengatequilts.com/live-shopping.htm" target="_blank">Watch Live →</a></div>
+    <div class="card"><div class="card-title">🧵 Stitch Club</div><a href="https://www.woodengatequilts.com/community-stitch-club.htm" target="_blank">Join Community →</a></div>
+  </div>
+</div>
+
+<!-- ==================== REFERRAL NETWORK ==================== -->
+<div id="sec-network" class="section">
+  <h1>Referral Network Analysis</h1>
+  <p class="subtitle">Wooden Gate Quilts' existing independent partner network — a natural BNI alignment indicator</p>
+
+  <div class="insight-box">
+    <strong>💡 Key Insight:</strong> Debi already maintains a <strong>structured referral network of 9 independent professionals</strong> on her Resources page. She actively directs customers to these partners with the phrase "Tell them Wooden Gate sent you!" — this is textbook <strong>Givers Gain®</strong> behavior, even before any BNI involvement.
+  </div>
+
+  <div class="stats-row">
+    <div class="stat-card"><div class="stat-num">9</div><div class="stat-label">Total Referral Partners</div></div>
+    <div class="stat-card"><div class="stat-num">6</div><div class="stat-label">Long-Arm Quilters</div></div>
+    <div class="stat-card"><div class="stat-num">3</div><div class="stat-label">Custom Quilt Makers</div></div>
+    <div class="stat-card"><div class="stat-num">5</div><div class="stat-label">Cities Covered</div></div>
+  </div>
+
+  <h2>Long-Arm Quilters</h2>
+  <input class="search-bar" id="searchQuilters" placeholder="🔍  Search by name, email, phone, or location…" oninput="filterTable('quiltersTable','searchQuilters')">
+  <div class="table-wrap">
+    <table id="quiltersTable">
+      <thead><tr>
+        <th onclick="sortTbl('quiltersTable',0)">Name</th>
+        <th onclick="sortTbl('quiltersTable',1)">Email</th>
+        <th onclick="sortTbl('quiltersTable',2)">Phone</th>
+        <th onclick="sortTbl('quiltersTable',3)">Location</th>
+        <th class="no-sort">Actions</th>
+      </tr></thead>
+      <tbody>
+        <tr><td>Kathy August</td><td>kaugustquilts@gmail.com</td><td>(925) 765-4700</td><td>Walnut Creek</td><td class="actions"><a href="tel:+19257654700" class="btn btn-call btn-sm">📞 Call</a><a class="btn btn-email btn-sm" onclick="sendPartnerEmail('kaugustquilts@gmail.com','Kathy August','long-arm quilting','Walnut Creek')">✉️ Email</a></td></tr>
+        <tr><td>Jessica Kwan</td><td>jessicaahlstrand@yahoo.com</td><td>(510) 610-8616</td><td>Walnut Creek</td><td class="actions"><a href="tel:+15106108616" class="btn btn-call btn-sm">📞 Call</a><a class="btn btn-email btn-sm" onclick="sendPartnerEmail('jessicaahlstrand@yahoo.com','Jessica Kwan','long-arm quilting','Walnut Creek')">✉️ Email</a></td></tr>
+        <tr><td>Deb McPartland</td><td>dmcp48@yahoo.com</td><td>(510) 427-2760</td><td>Hayward</td><td class="actions"><a href="tel:+15104272760" class="btn btn-call btn-sm">📞 Call</a><a class="btn btn-email btn-sm" onclick="sendPartnerEmail('dmcp48@yahoo.com','Deb McPartland','long-arm quilting','Hayward')">✉️ Email</a></td></tr>
+        <tr><td>Darla Padilla</td><td>quilt4fun@comcast.net</td><td>(925) 260-8446</td><td>Livermore</td><td class="actions"><a href="tel:+19252608446" class="btn btn-call btn-sm">📞 Call</a><a class="btn btn-email btn-sm" onclick="sendPartnerEmail('quilt4fun@comcast.net','Darla Padilla','long-arm quilting','Livermore')">✉️ Email</a></td></tr>
+        <tr><td>Faye Stone</td><td>—</td><td>(408) 464-2893</td><td>Livermore</td><td class="actions"><a href="tel:+14084642893" class="btn btn-call btn-sm">📞 Call</a></td></tr>
+        <tr><td>Janet</td><td>Jan3_5@hotmail.com</td><td>(925) 315-1576</td><td>Tracy</td><td class="actions"><a href="tel:+19253151576" class="btn btn-call btn-sm">📞 Call</a><a class="btn btn-email btn-sm" onclick="sendPartnerEmail('Jan3_5@hotmail.com','Janet','long-arm quilting','Tracy')">✉️ Email</a></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>Custom Made Quilt Makers</h2>
+  <input class="search-bar" id="searchCustom" placeholder="🔍  Search by name or phone…" oninput="filterTable('customTable','searchCustom')">
+  <div class="table-wrap">
+    <table id="customTable">
+      <thead><tr>
+        <th onclick="sortTbl('customTable',0)">Name</th>
+        <th onclick="sortTbl('customTable',1)">Phone</th>
+        <th onclick="sortTbl('customTable',2)">Specialties</th>
+        <th class="no-sort">Actions</th>
+      </tr></thead>
+      <tbody>
+        <tr><td>Robin Olvera</td><td>(925) 786-3225</td><td><span class="tag tag-purple">T-Shirt Quilts</span> <span class="tag tag-purple">Memory Quilts</span></td><td class="actions"><a href="tel:+19257863225" class="btn btn-call btn-sm">📞 Call</a></td></tr>
+        <tr><td>Megan Albright</td><td>(415) 250-4074</td><td><span class="tag tag-purple">T-Shirt Quilts</span> <span class="tag tag-purple">Memory Quilts</span></td><td class="actions"><a href="tel:+14152504074" class="btn btn-call btn-sm">📞 Call</a></td></tr>
+        <tr><td>Heidi Graham</td><td>(925) 683-0359</td><td><span class="tag tag-purple">T-Shirt Quilts</span> <span class="tag tag-purple">Memory Quilts</span></td><td class="actions"><a href="tel:+19256830359" class="btn btn-call btn-sm">📞 Call</a></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>Partner Geographic Distribution</h2>
+  <div class="chart-container">
+    <div class="chart-title">Number of Partners by City</div>
+    <div class="bar-chart" style="height:160px;">
+      <div class="bar-col"><div class="bar-value">2</div><div class="bar" style="height:66%"></div><div class="bar-label">Walnut Creek</div></div>
+      <div class="bar-col"><div class="bar-value">2</div><div class="bar bar-alt" style="height:66%"></div><div class="bar-label">Livermore</div></div>
+      <div class="bar-col"><div class="bar-value">1</div><div class="bar bar-green" style="height:33%"></div><div class="bar-label">Hayward</div></div>
+      <div class="bar-col"><div class="bar-value">1</div><div class="bar bar-amber" style="height:33%"></div><div class="bar-label">Tracy</div></div>
+      <div class="bar-col"><div class="bar-value">3</div><div class="bar" style="height:100%"></div><div class="bar-label">No City Listed</div></div>
+    </div>
+  </div>
+
+  <p style="color:#555;font-size:11px;margin-top:12px;">* All partners are independent from Wooden Gate Quilts. Contact them directly for rates and scheduling. Mention "Wooden Gate sent you!"</p>
+</div>
+
+<!-- ==================== PATTERNS & RESOURCES ==================== -->
+<div id="sec-patterns" class="section">
+  <h1>Free Patterns & Resources</h1>
+  <p class="subtitle">Complimentary resources provided by Wooden Gate Quilts — demonstrating community value</p>
+
+  <input class="search-bar" id="searchPatterns" placeholder="🔍  Search patterns, tutorials, tools…" oninput="filterCards()">
+  <div class="card-grid" id="patternCards">
+    <div class="card" data-s="margaret self binding napkin holiday thanksgiving christmas"><div class="card-title">🧵 Margaret's Self-Binding Napkin</div><div class="card-desc">Elegant self-binding napkins for DIY holiday table settings. Thanksgiving & Christmas kits available.</div><br><a href="https://www.woodengatequilts.com/tutorial-how-to-sew-self-binding-napkins-for-diy-holiday-table-settings.htm" target="_blank">View Pattern →</a></div>
+    <div class="card" data-s="pillowcase ryan case smiles charity hot dog"><div class="card-title">🛏️ Pillowcase — Ryan's Case for Smiles</div><div class="card-desc">Hot dog style pillowcase pattern supporting the Case for Smiles charitable initiative.</div><br><a href="https://media.rainpos.com/9843/case_for_smiles_hot_dog_instructions_updated_1.pdf" target="_blank">Download PDF →</a></div>
+    <div class="card" data-s="japanese knot bag tutorial sewing"><div class="card-title">👜 Japanese Knot Bag</div><div class="card-desc">A stylish and functional bag using a classic Japanese knotting technique. Great for gifting!</div><br><a href="https://hellosewing.com/japanese-knot-bag-tutorial/" target="_blank">View Tutorial →</a></div>
+    <div class="card" data-s="origami bento bag diy reusable wrap"><div class="card-title">🎁 DIY Origami Bento Bag</div><div class="card-desc">Beautiful origami-inspired bag — perfect for carrying treats or as reusable gift wrap.</div><br><a href="https://www.woodengatequilts.com/how-to-make-a-diy-origami-bento-bag.htm" target="_blank">View Tutorial →</a></div>
+    <div class="card" data-s="quick jar opener youtube tutorial craft fair"><div class="card-title">🫙 Quick Jar Opener</div><div class="card-desc">Super fast and handy sewing project — perfect for craft fairs and practical gifts.</div><br><a href="https://www.youtube.com/watch?v=wL2uxRwI39A" target="_blank">Watch YouTube →</a></div>
+    <div class="card" data-s="neck shoulder warmer hot cold wrap heating pad"><div class="card-title">🔥 Neck & Shoulder Hot/Cold Wrap</div><div class="card-desc">Sew a soothing warmer that can be heated or chilled. Kit available in store.</div><br><a href="https://www.woodengatequilts.com/how-to-make-a-neck-and-shoulder-hotcold-wrap.htm" target="_blank">View Tutorial →</a></div>
+    <div class="card" data-s="tilda coral reef quilt free pattern teal blush"><div class="card-title">🐚 Tilda — Coral Reef Quilt</div><div class="card-desc">Stunning free quilt pattern from Tilda featuring teal and blush coral reef motifs.</div><br><a href="https://www.tildasworld.com/wp-content/uploads/2022/01/Coral-Reef-Quilt-teal-blush.pdf" target="_blank">Download PDF →</a></div>
+    <div class="card" data-s="tilda me my friend applique clothes"><div class="card-title">👧 Tilda — Me & My Friend Appliqué</div><div class="card-desc">Adorable appliqué clothes pattern from Tilda's free collection.</div><br><a href="https://www.tildasworld.com/wp-content/uploads/2022/01/Me-and-My-Friend-Applique-Clothes.pdf" target="_blank">Download PDF →</a></div>
+    <div class="card" data-s="bumble bee pin cushion cathleen"><div class="card-title">🐝 Bumble Bee Pin Cushion</div><div class="card-desc">Fun, whimsical project — Cathleen's bumble bee pin cushion with pattern + kit.</div><br><a href="https://www.woodengatequilts.com/tutorial-how-to-make-cathleens-bumble-bee-pin-cushion.htm" target="_blank">View Pattern + Kit →</a></div>
+    <div class="card" data-s="acorn precision fabric treatment spray video"><div class="card-title">✨ Acorn Fabric Treatment</div><div class="card-desc">How to use Acorn Easy Precision Fabric Treatment for crisp, professional results.</div><br><a href="https://youtu.be/pH27GOsVBAY?si=Wbu0oSIZ7Yvwqx9k" target="_blank">Watch Video →</a></div>
+  </div>
+
+  <h2>Quick Reference Tools</h2>
+  <div class="card-grid">
+    <div class="card"><div class="card-title">🎄 Quilter's Christmas Wish List</div><div class="card-desc">Downloadable wish list for quilters — great for holiday season.</div><br><a href="https://media.rainpos.com/9843/Quilters_Wish_List_.pdf" target="_blank">Download PDF →</a></div>
+    <div class="card"><div class="card-title">✂️ Cutting Backing Guide</div><div class="card-desc">Quick reference for cutting backing fabric for quilts.</div><br><a href="https://media.rainpos.com/9843/cutting_backing_qk_1b.pdf" target="_blank">Download PDF →</a></div>
+  </div>
+</div>
+
+<!-- ==================== OUTREACH STRATEGY ==================== -->
+<div id="sec-strategy" class="section">
+  <h1>Outreach Strategy</h1>
+  <p class="subtitle">Multi-touch engagement plan to invite Debi Bucciarelli to BNI</p>
+
+  <h2>Why Debi Is an Ideal BNI Candidate</h2>
+  <input class="search-bar" id="searchReasons" placeholder="🔍  Search reasons…" oninput="filterTable('reasonsTable','searchReasons')">
+  <div class="table-wrap">
+    <table id="reasonsTable">
+      <thead><tr>
+        <th onclick="sortTbl('reasonsTable',0)">#</th>
+        <th onclick="sortTbl('reasonsTable',1)">Factor</th>
+        <th onclick="sortTbl('reasonsTable',2)">Strength</th>
+        <th onclick="sortTbl('reasonsTable',3)">Evidence</th>
+      </tr></thead>
+      <tbody>
+        <tr><td>1</td><td>Existing Referral Culture</td><td><span class="tag tag-green">Very Strong</span></td><td>9 partner referral network on Resources page — "Tell them Wooden Gate sent you!"</td></tr>
+        <tr><td>2</td><td>Community Builder</td><td><span class="tag tag-green">Very Strong</span></td><td>Stitch Club, classes, live events, 10+ free resources — builds engaged communities naturally</td></tr>
+        <tr><td>3</td><td>Unique BNI Classification</td><td><span class="tag tag-green">Very Strong</span></td><td>Quilting/fabric retail is extremely rare — likely exclusive seat in any chapter</td></tr>
+        <tr><td>4</td><td>MBA Business Acumen</td><td><span class="tag tag-green">Strong</span></td><td>MBA credential indicates ROI awareness and strategic partnership understanding</td></tr>
+        <tr><td>5</td><td>Multi-Channel Business</td><td><span class="tag tag-green">Strong</span></td><td>Physical store, ecommerce, live video, social media — multiple referral entry points</td></tr>
+        <tr><td>6</td><td>Local Market Presence</td><td><span class="tag tag-green">Strong</span></td><td>19+ years in Danville (est. 2007); well-known in Tri-Valley area</td></tr>
+        <tr><td>7</td><td>Digital Savviness</td><td><span class="tag tag-blue">Moderate-Strong</span></td><td>Live Shopping, Instagram, Facebook, newsletter, online store with free shipping</td></tr>
+        <tr><td>8</td><td>Team Size</td><td><span class="tag tag-blue">Moderate</span></td><td>11-50 employees — enough staff to cover a weekly meeting commitment</td></tr>
+        <tr><td>9</td><td>Schedule Flexibility</td><td><span class="tag tag-amber">Moderate</span></td><td>Currently Thu-Sat only; morning meetings (before 11 AM) may work well</td></tr>
+        <tr><td>10</td><td>Business Longevity Risk</td><td><span class="tag tag-amber">Moderate Risk</span></td><td>Retirement announcement may indicate transition; but could also pivot to consulting</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>10-Day Outreach Timeline</h2>
+  <div class="timeline">
+    <div class="timeline-item"><div class="timeline-step">Day 1 — LinkedIn Connection</div><div class="timeline-content">Send personalized connection request to <strong>linkedin.com/in/dbucciarelli</strong>. Reference her Danville shop and quilting community. Do NOT pitch BNI — just connect and compliment.</div></div>
+    <div class="timeline-item"><div class="timeline-step">Day 2 — Warm Email</div><div class="timeline-content">Send Template 1 (see Email Templates tab) to <strong>debi@woodengatequilts.com</strong>. Reference her Resources page and Givers Gain alignment. Include the visitor invite link.</div></div>
+    <div class="timeline-item"><div class="timeline-step">Day 3 — Phone Call</div><div class="timeline-content">Call <strong>(925) 837-8458</strong> during open hours (Thu–Sat, 11 AM–4 PM). Use the call script. Mention you discovered Wooden Gate and admire how she supports local quilters through referrals.</div></div>
+    <div class="timeline-item"><div class="timeline-step">Day 5 — SMS Check-in</div><div class="timeline-content">Friendly text: "Hi Debi! 🧵 Just checking if you saw my note about visiting our local business networking group. Would love to have Wooden Gate Quilts represented!"</div></div>
+    <div class="timeline-item"><div class="timeline-step">Day 7 — In-Person Visit</div><div class="timeline-content">Visit the shop on Thu, Fri, or Sat. Browse, make a purchase, chat with Debi. Leave a chapter flyer. Personal connection drives conversion.</div></div>
+    <div class="timeline-item"><div class="timeline-step">Day 10 — Follow-up Email</div><div class="timeline-content">Send Template 2 (see Email Templates tab). Offer two upcoming meeting dates. Mention that a complementary member (interior designer, event planner) would love to meet her.</div></div>
+  </div>
+
+  <h2>BNI Contact Sphere Alignment</h2>
+  <input class="search-bar" id="searchSphere" placeholder="🔍  Search contact sphere professions…" oninput="filterTable('sphereTable','searchSphere')">
+  <div class="table-wrap">
+    <table id="sphereTable">
+      <thead><tr>
+        <th onclick="sortTbl('sphereTable',0)">Profession</th>
+        <th onclick="sortTbl('sphereTable',1)">Synergy Level</th>
+        <th onclick="sortTbl('sphereTable',2)">Referral Connection</th>
+      </tr></thead>
+      <tbody>
+        <tr><td>🏠 Interior Designer</td><td><span class="tag tag-green">Very High</span></td><td>Clients decorating homes want custom quilts, throw pillows, fabric accents, textile art</td></tr>
+        <tr><td>🎉 Event Planner</td><td><span class="tag tag-green">Very High</span></td><td>Custom tablecloths, napkins, décor for weddings, showers, corporate events</td></tr>
+        <tr><td>🏡 Residential Realtor</td><td><span class="tag tag-green">High</span></td><td>Housewarming gift referrals; staging with handmade textile accents</td></tr>
+        <tr><td>📸 Photographer</td><td><span class="tag tag-green">High</span></td><td>Quilts as backdrops; collaborative craft fair promotions; lifestyle shoots</td></tr>
+        <tr><td>💆 Massage Therapist</td><td><span class="tag tag-blue">High</span></td><td>Neck/shoulder wraps are a natural cross-sell; wellness client overlap</td></tr>
+        <tr><td>👩‍🏫 Art Teacher</td><td><span class="tag tag-blue">High</span></td><td>Shared creative customer base; class collaboration potential</td></tr>
+        <tr><td>👵 Senior Services Provider</td><td><span class="tag tag-blue">Moderate-High</span></td><td>Quilting is popular among retirees; classes as social and therapeutic activities</td></tr>
+        <tr><td>🎁 Gift Shop Owner</td><td><span class="tag tag-blue">Moderate-High</span></td><td>Handmade quilted items as premium gift inventory; cross-promotion</td></tr>
+        <tr><td>💻 Web Designer</td><td><span class="tag tag-amber">Moderate</span></td><td>Ecommerce optimization; photography for online shop products</td></tr>
+        <tr><td>📱 Social Media Manager</td><td><span class="tag tag-amber">Moderate</span></td><td>Live shopping optimization, Instagram growth, content strategy</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ==================== EMAIL TEMPLATES ==================== -->
+<div id="sec-emails" class="section">
+  <h1>Email & Communication Templates</h1>
+  <p class="subtitle">Pre-built, personalized outreach — click Copy or Send directly to Debi</p>
+
+  <h2>📧 Template 1: BNI Visitor Invitation</h2>
+  <div class="email-template" id="tpl1"><button class="copy-btn" onclick="copyTpl('tpl1')">📋 Copy</button>Subject: A Community of Local Business Owners Would Love to Meet You, Debi!
+
+Hi Debi,
+
+I hope this message finds you well! My name is [Your Name], and I'm a member of BNI [Chapter Name] here in the Tri-Valley area.
+
+I recently discovered Wooden Gate Quilts and was truly impressed — not just by the beautiful curated fabric collections and creative classes, but by how you actively support fellow artisans through your Resources page. The way you recommend local long-arm quilters and custom quilt makers to your customers shows a genuine "Givers Gain" spirit that is exactly what BNI is all about.
+
+I'd love to invite you to visit our BNI chapter meeting as my guest. Here's why I think you'd find it valuable:
+
+1. EXCLUSIVE CLASSIFICATION — Quilting and fabric retail is a unique specialty that no one else in our chapter represents. You'd own that seat exclusively.
+
+2. WARM REFERRALS — Imagine 20-40 local professionals actively listening for opportunities to send customers your way — for custom gifts, housewarming presents, classes, and fabric needs.
+
+3. COMMUNITY YOU ALREADY BUILD — You already run Stitch Club, host live shopping events, and teach classes. BNI gives you a structured platform to extend that community-building energy into the business-to-business world.
+
+To visit a chapter just complete this (***Visitor Invite***) simple form to reserve your seat and begin accelerating your business.
+
+Our meetings are held [Day/Time/Location]. I'd be happy to introduce you personally.
+
+Looking forward to connecting!
+
+Warm regards,
+[Your Name]
+[Your Business]
+[Your Phone]
+[Your Email]</div>
+  <div style="margin:12px 0;"><a class="btn btn-email" onclick="sendTpl1()">✉️ Send Template 1 to Debi</a></div>
+
+  <h2>📧 Template 2: 48-Hour Follow-Up</h2>
+  <div class="email-template" id="tpl2"><button class="copy-btn" onclick="copyTpl('tpl2')">📋 Copy</button>Subject: Quick Follow-Up — Would Love Wooden Gate Quilts at Our Next Meeting!
+
+Hi Debi,
+
+Just a quick follow-up on my earlier note about visiting our BNI chapter. I completely understand how busy running a shop, managing online orders, and hosting Thursday live shopping events keeps you — especially with the incredible lineup you have at Wooden Gate Quilts!
+
+I wanted to share two upcoming meetings that might work:
+
+📅 Option 1: [Date/Time]
+📅 Option 2: [Date/Time]
+
+No pressure at all — just a chance to meet some great local business owners who could become advocates for your shop. If your schedule doesn't allow, I'd also welcome one of your team members to attend in your place.
+
+To visit a chapter just complete this (***Visitor Invite***) simple form to reserve your seat.
+
+Hope to see you there!
+
+Best,
+[Your Name]
+[Your Phone]</div>
+  <div style="margin:12px 0;"><a class="btn btn-email" onclick="sendTpl2()">✉️ Send Template 2 to Debi</a></div>
+
+  <h2>📱 SMS Template (≤ 320 Characters)</h2>
+  <div class="email-template" id="sms1"><button class="copy-btn" onclick="copyTpl('sms1')">📋 Copy</button>Hi Debi! 🧵 I'm [Name] from BNI [Chapter]. I love what Wooden Gate Quilts does for the local quilting community. Would love to invite you to our networking meeting [Day] at [Time]. You'd be our only fabric/quilting expert! RSVP: [Visitor Link]</div>
+
+  <h2>📞 Phone Call Script (20-30 Seconds)</h2>
+  <div class="email-template" id="call1"><button class="copy-btn" onclick="copyTpl('call1')">📋 Copy</button>"Hi, is Debi available?
+
+Hi Debi, my name is [Your Name] and I'm a local business owner here in the Tri-Valley area. I came across Wooden Gate Quilts and was really impressed by how you support the local quilting community — especially the way you refer customers to independent quilters.
+
+I'm part of a structured business networking group called BNI where 20-40 local professionals meet weekly to share referrals. I think Wooden Gate would be a phenomenal addition. Would you be open to visiting as my guest? I'd love to send you the details — what's the best email to reach you?"
+
+[If gatekeeper]: "I'm looking for the best person to speak with about community partnerships and local business networking opportunities. Could you point me in the right direction?"</div>
+
+  <div class="alert-box" style="margin-top:28px;">
+    <strong>📋 Instructions for BNI Member:</strong> Copy the desired template above, personalize all <strong>[bracketed fields]</strong>, and replace <strong>***Visitor Invite***</strong> with your chapter's actual visitor registration URL. Then email directly to <strong>debi@woodengatequilts.com</strong> or text/call <strong>(925) 837-8458</strong>.
+  </div>
+</div>
+
+<!-- ==================== SCORING & FIT ==================== -->
+<div id="sec-scores" class="section">
+  <h1>Scoring & BNI Fit Analysis</h1>
+  <p class="subtitle">Data-driven assessment of Debi Bucciarelli as a BNI prospect</p>
+
+  <div class="score-row">
+    <div class="score-card">
+      <div class="score-ring score-high" style="--score:85;"><div class="score-inner">85</div></div>
+      <div class="stat-label">Overall BNI Fit</div>
+    </div>
+    <div class="score-card">
+      <div class="score-ring score-high" style="--score:95;"><div class="score-inner">95</div></div>
+      <div class="stat-label">Referral Mindset</div>
+    </div>
+    <div class="score-card">
+      <div class="score-ring score-high" style="--score:92;"><div class="score-inner">92</div></div>
+      <div class="stat-label">Community Impact</div>
+    </div>
+    <div class="score-card">
+      <div class="score-ring score-high" style="--score:90;"><div class="score-inner">90</div></div>
+      <div class="stat-label">Classification Value</div>
+    </div>
+    <div class="score-card">
+      <div class="score-ring score-med" style="--score:70;"><div class="score-inner">70</div></div>
+      <div class="stat-label">Schedule Fit</div>
+    </div>
+    <div class="score-card">
+      <div class="score-ring score-med" style="--score:65;"><div class="score-inner">65</div></div>
+      <div class="stat-label">Longevity Risk</div>
+    </div>
+  </div>
+
+  <h2>Detailed Scoring Breakdown</h2>
+  <input class="search-bar" id="searchScores" placeholder="🔍  Search scoring criteria…" oninput="filterTable('scoresTable','searchScores')">
+  <div class="table-wrap">
+    <table id="scoresTable">
+      <thead><tr>
+        <th onclick="sortTbl('scoresTable',0)">Criteria</th>
+        <th onclick="sortTbl('scoresTable',1)">Score</th>
+        <th onclick="sortTbl('scoresTable',2)">Weight</th>
+        <th onclick="sortTbl('scoresTable',3)">Evidence</th>
+      </tr></thead>
+      <tbody>
+        <tr><td>Existing Referral Practice</td><td style="color:#4caf50;font-weight:700;">95 / 100</td><td><span class="tag tag-red">Critical</span></td><td>9 referral partners on Resources page; actively directs customers</td></tr>
+        <tr><td>Community Engagement</td><td style="color:#4caf50;font-weight:700;">92 / 100</td><td><span class="tag tag-red">Critical</span></td><td>Stitch Club, classes, live events, 10+ free tutorials</td></tr>
+        <tr><td>Classification Uniqueness</td><td style="color:#4caf50;font-weight:700;">90 / 100</td><td><span class="tag tag-red">Critical</span></td><td>Quilting/fabric retail — extremely rare in BNI chapters</td></tr>
+        <tr><td>Business Acumen</td><td style="color:#4caf50;font-weight:700;">90 / 100</td><td><span class="tag tag-blue">High</span></td><td>MBA credential; multi-channel strategy</td></tr>
+        <tr><td>Geographic Alignment</td><td style="color:#4caf50;font-weight:700;">88 / 100</td><td><span class="tag tag-blue">High</span></td><td>Danville / San Ramon — strong Tri-Valley BNI presence</td></tr>
+        <tr><td>Online Presence</td><td style="color:#4caf50;font-weight:700;">85 / 100</td><td><span class="tag tag-blue">High</span></td><td>Website, ecommerce, Instagram, Facebook, live video</td></tr>
+        <tr><td>Contact Sphere Breadth</td><td style="color:#4caf50;font-weight:700;">85 / 100</td><td><span class="tag tag-blue">High</span></td><td>Interior design, events, gifts, wellness, real estate connections</td></tr>
+        <tr><td>Referral Revenue Potential</td><td style="color:#4caf50;font-weight:700;">82 / 100</td><td><span class="tag tag-blue">High</span></td><td>Fabric, kits, classes, custom work — diverse revenue triggers</td></tr>
+        <tr><td>Team Coverage</td><td style="color:#4caf50;font-weight:700;">78 / 100</td><td><span class="tag tag-amber">Medium</span></td><td>11-50 employees can cover while Debi attends meetings</td></tr>
+        <tr><td>Schedule Flexibility</td><td style="color:#ff9800;font-weight:700;">70 / 100</td><td><span class="tag tag-amber">Medium</span></td><td>Open Thu-Sat only; AM meetings ideal (before 11 AM opening)</td></tr>
+        <tr><td>Business Longevity</td><td style="color:#ff9800;font-weight:700;">65 / 100</td><td><span class="tag tag-amber">Medium</span></td><td>Retirement announcement — may affect long-term commitment</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>Score Visualization</h2>
+  <div class="chart-container">
+    <div class="chart-title">Score by Criteria (Sorted High → Low)</div>
+    <div class="bar-chart">
+      <div class="bar-col"><div class="bar-value">95</div><div class="bar" style="height:95%"></div><div class="bar-label">Referral</div></div>
+      <div class="bar-col"><div class="bar-value">92</div><div class="bar" style="height:92%"></div><div class="bar-label">Community</div></div>
+      <div class="bar-col"><div class="bar-value">90</div><div class="bar" style="height:90%"></div><div class="bar-label">Class.</div></div>
+      <div class="bar-col"><div class="bar-value">90</div><div class="bar bar-alt" style="height:90%"></div><div class="bar-label">Acumen</div></div>
+      <div class="bar-col"><div class="bar-value">88</div><div class="bar bar-alt" style="height:88%"></div><div class="bar-label">Location</div></div>
+      <div class="bar-col"><div class="bar-value">85</div><div class="bar bar-green" style="height:85%"></div><div class="bar-label">Online</div></div>
+      <div class="bar-col"><div class="bar-value">85</div><div class="bar bar-green" style="height:85%"></div><div class="bar-label">Sphere</div></div>
+      <div class="bar-col"><div class="bar-value">82</div><div class="bar bar-green" style="height:82%"></div><div class="bar-label">Revenue</div></div>
+      <div class="bar-col"><div class="bar-value">78</div><div class="bar bar-amber" style="height:78%"></div><div class="bar-label">Team</div></div>
+      <div class="bar-col"><div class="bar-value">70</div><div class="bar bar-amber" style="height:70%"></div><div class="bar-label">Schedule</div></div>
+      <div class="bar-col"><div class="bar-value">65</div><div class="bar bar-amber" style="height:65%"></div><div class="bar-label">Longevity</div></div>
+    </div>
+  </div>
+
+  <h2>Final Recommendation</h2>
+  <div class="insight-box" style="border-left-color:#4caf50;">
+    <strong style="color:#4caf50;">🎯 VERDICT: HIGH-PRIORITY PROSPECT — SCORE: 85/100</strong><br><br>
+    Debi Bucciarelli is an <strong>exceptional BNI candidate</strong>. Her existing 9-partner referral network, community-building track record, MBA-level strategic thinking, unique quilting/fabric classification, and multi-channel business model make her one of the strongest prospects a Tri-Valley chapter could recruit.<br><br>
+    <strong>Top 3 Selling Points for Debi:</strong><br>
+    ① She already lives Givers Gain — BNI formalizes and amplifies what she does naturally<br>
+    ② She'd own the only quilting/fabric seat in the chapter — zero competition<br>
+    ③ 20-40 professionals actively listening for her referral triggers every single week<br><br>
+    <strong>Primary Risk:</strong> Retirement announcement. Mitigate by framing BNI as a way to maximize the shop's final chapter, support a successor, or pivot Debi's expertise into consulting/teaching post-retirement.<br><br>
+    <strong>⏱️ Recommended Action:</strong> Begin outreach within <strong>7 days</strong> using the multi-touch timeline. Prioritize a <strong>Thursday in-person visit</strong> during Live Shopping hours for maximum personal impact.
+  </div>
+</div>
+
+</main>
+
+<footer>
+  <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports">
+  <p>Higgins Reports &nbsp;·&nbsp; S.A.L.E. Client Report: Debi Bucciarelli | Wooden Gate Quilts &nbsp;·&nbsp; © 2025 Higgins AI &nbsp;·&nbsp; Generated for BNI Franchise Use</p>
+</footer>
+
+<script>
+function showSection(name,btn){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.getElementById('sec-'+name).classList.add('active');
+  document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
+  if(btn)btn.classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function filterTable(tId,iId){
+  const q=document.getElementById(iId).value.toLowerCase();
+  const rows=document.getElementById(tId).querySelectorAll('tbody tr');
+  let found=false;
+  rows.forEach(r=>{
+    const t=r.textContent.toLowerCase();
+    const s=t.includes(q);
+    r.style.display=s?'':'none';
+    if(s)found=true;
+  });
+  const tbl=document.getElementById(tId);
+  let nr=tbl.querySelector('.nr-row');
+  if(nr)nr.remove();
+  if(!found){
+    const tr=document.createElement('tr');tr.className='nr-row';
+    tr.innerHTML='<td colspan="99" style="text-align:center;padding:24px;color:#555;">No matching results</td>';
+    tbl.querySelector('tbody').appendChild(tr);
+  }
+}
+
+function filterCards(){
+  const q=document.getElementById('searchPatterns').value.toLowerCase();
+  document.querySelectorAll('#patternCards .card').forEach(c=>{
+    const t=(c.textContent+' '+(c.dataset.s||'')).toLowerCase();
+    c.style.display=t.includes(q)?'':'none';
+  });
+}
+
+function sortTbl(tId,ci){
+  const tbl=document.getElementById(tId);
+  const th=tbl.querySelectorAll('thead th')[ci];
+  if(th.classList.contains('no-sort'))return;
+  const tbody=tbl.querySelector('tbody');
+  const rows=Array.from(tbody.querySelectorAll('tr:not(.nr-row)'));
+  const asc=th.classList.contains('asc');
+  tbl.querySelectorAll('thead th').forEach(h=>{h.classList.remove('asc','desc');});
+  const d=asc?-1:1;
+  th.classList.add(asc?'desc':'asc');
+  rows.sort((a,b)=>{
+    const aT=(a.children[ci]?.textContent||'').trim().toLowerCase();
+    const bT=(b.children[ci]?.textContent||'').trim().toLowerCase();
+    const aN=parseFloat(aT.replace(/[^\d.]/g,''));
+    const bN=parseFloat(bT.replace(/[^\d.]/g,''));
+    if(!isNaN(aN)&&!isNaN(bN))return(aN-bN)*d;
+    return aT>bT?d:aT<bT?-d:0;
+  });
+  rows.forEach(r=>tbody.appendChild(r));
+}
+
+function copyTpl(id){
+  const el=document.getElementById(id);
+  const txt=el.textContent.replace('📋 Copy','').trim();
+  navigator.clipboard.writeText(txt).then(()=>{
+    const btn=el.querySelector('.copy-btn');
+    btn.textContent='✅ Copied!';setTimeout(()=>{btn.textContent='📋 Copy';},2500);
+  });
+}
+
+function enc(s){return encodeURIComponent(s);}
+
+function sendMainEmail(){
+  const s=enc("Discover How BNI Can Amplify Wooden Gate Quilts' Reach!");
+  const b=enc(`Hi Debi,
+
+I hope this message finds you well! I'm reaching out because I was truly inspired by what you've built at Wooden Gate Quilts in Danville.
+
+Three things stood out about your business that make you a perfect fit for our BNI chapter:
+
+1. YOUR REFERRAL MINDSET — The way you actively recommend local long-arm quilters and custom quilt makers shows you already live "Givers Gain." In BNI, that generosity returns multiplied through 20-40+ professionals sending customers your way.
+
+2. YOUR COMMUNITY LEADERSHIP — From Stitch Club to live Thursday shopping, classes, and free tutorials, you build community naturally. BNI extends that into the business-to-business world — connecting you with interior designers, event planners, realtors, and gift shops.
+
+3. YOUR UNIQUE EXPERTISE — Curated designer fabrics, Smithsonian collections, specialty kits, and hands-on workshops are offerings no one else in our chapter provides. You'd hold an exclusive seat.
+
+To visit a chapter just complete this (***Visitor Invite***) simple form to reserve your seat and begin accelerating your business.
+
+Looking forward to connecting!
+
+Warm regards`);
+  window.open(`mailto:debi@woodengatequilts.com?subject=${s}&body=${b}`,'_blank');
+}
+
+function sendTpl1(){
+  const s=enc("A Community of Local Business Owners Would Love to Meet You, Debi!");
+  const b=enc(`Hi Debi,
+
+I hope this message finds you well! My name is [Your Name], and I'm a member of BNI [Chapter Name] here in the Tri-Valley area.
+
+I recently discovered Wooden Gate Quilts and was truly impressed — not just by the beautiful curated fabric collections and creative classes, but by how you actively support fellow artisans through your Resources page.
+
+I'd love to invite you to visit our BNI chapter meeting as my guest:
+
+1. EXCLUSIVE CLASSIFICATION — Quilting and fabric retail is unique. You'd own that seat exclusively.
+2. WARM REFERRALS — 20-40 professionals actively listening for customers to send your way.
+3. COMMUNITY YOU ALREADY BUILD — BNI extends your Stitch Club energy into business-to-business relationships.
+
+To visit a chapter just complete this (***Visitor Invite***) simple form to reserve your seat and begin accelerating your business.
+
+Looking forward to connecting!
+
+Warm regards,
+[Your Name]
+[Your Business]
+[Your Phone]`);
+  window.open(`mailto:debi@woodengatequilts.com?subject=${s}&body=${b}`,'_blank');
+}
+
+function sendTpl2(){
+  const s=enc("Quick Follow-Up — Would Love Wooden Gate Quilts at Our Next Meeting!");
+  const b=enc(`Hi Debi,
+
+Just a quick follow-up on my earlier note about visiting our BNI chapter. I completely understand how busy running a shop keeps you!
+
+Two upcoming meetings that might work:
+Option 1: [Date/Time]
+Option 2: [Date/Time]
+
+No pressure — just a chance to meet local business owners who could become advocates for your shop.
+
+To visit a chapter just complete this (***Visitor Invite***) simple form to reserve your seat.
+
+Hope to see you there!
+
+Best,
+[Your Name]
+[Your Phone]`);
+  window.open(`mailto:debi@woodengatequilts.com?subject=${s}&body=${b}`,'_blank');
+}
+
+function sendPartnerEmail(email,name,specialty,city){
+  const s=enc(`${name}, your ${specialty} expertise would be perfect for our networking group!`);
+  const b=enc(`Hi ${name},
+
+I hope this finds you well! I came across your work through Wooden Gate Quilts' referral network in ${city}, and I was impressed by your ${specialty} expertise.
+
+I'm a member of BNI (Business Network International) — a structured group of 20-40 professionals who meet weekly to share qualified business referrals. Here's why visiting could benefit your business:
+
+1. STEADY REFERRALS — 20-40 local professionals actively looking for clients to send your way every week.
+2. EXCLUSIVE SEAT — Only one person per profession. As a ${specialty} specialist, you'd have zero competition.
+3. TRUSTED RELATIONSHIPS — Just like the relationship you have with Wooden Gate Quilts, BNI is built on trust and "Givers Gain."
+
+Wooden Gate Quilts is a wonderful example of how referral-based relationships grow businesses — and BNI takes that same model to the next level with a structured, accountable system.
+
+To visit a chapter just complete this (***Visitor Invite***) simple form to reserve your seat and begin accelerating your business.
+
+Looking forward to hearing from you!
+
+Warm regards`);
+  window.open(`mailto:${email}?subject=${s}&body=${b}`,'_blank');
+}
+</script>
+</body>
+</html>

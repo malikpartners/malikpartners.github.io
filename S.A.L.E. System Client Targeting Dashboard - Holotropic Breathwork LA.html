@@ -1,0 +1,1041 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>S.A.L.E. System Client Targeting Dashboard - Holotropic Breathwork LA</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #000000;
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+        }
+
+        .header {
+            background-color: #CF2030;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(207, 32, 48, 0.3);
+        }
+
+        .logo {
+            height: 60px;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-item {
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 8px 15px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .nav-item:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .dashboard-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .dashboard-header h1 {
+            color: #CF2030;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .tabs {
+            display: flex;
+            background-color: #333;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 15px;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-weight: bold;
+        }
+
+        .tab.active {
+            background-color: #CF2030;
+        }
+
+        .tab:hover:not(.active) {
+            background-color: #555;
+        }
+
+        .tab-content {
+            display: none;
+            background-color: #1a1a1a;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .search-controls {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .search-input, .filter-select {
+            padding: 10px;
+            border: 1px solid #555;
+            border-radius: 5px;
+            background-color: #333;
+            color: #fff;
+            font-size: 14px;
+        }
+
+        .search-input {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            background-color: #CF2030;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #a91a28;
+        }
+
+        .btn-small {
+            padding: 5px 10px;
+            font-size: 12px;
+        }
+
+        .btn-success {
+            background-color: #28a745;
+        }
+
+        .btn-success:hover {
+            background-color: #218838;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            background-color: #2a2a2a;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(207, 32, 48, 0.2);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            color: #fff;
+        }
+
+        th {
+            background-color: #CF2030;
+            padding: 12px;
+            text-align: left;
+            cursor: pointer;
+            position: relative;
+            user-select: none;
+        }
+
+        th:hover {
+            background-color: #a91a28;
+        }
+
+        td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #444;
+        }
+
+        tr:hover {
+            background-color: #333;
+        }
+
+        .tier-1a { color: #00ff00; font-weight: bold; }
+        .tier-1b { color: #ffff00; font-weight: bold; }
+        .tier-1c { color: #0088ff; font-weight: bold; }
+
+        .score-input {
+            width: 50px;
+            padding: 5px;
+            background-color: #333;
+            color: #fff;
+            border: 1px solid #555;
+            border-radius: 3px;
+            text-align: center;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+
+        .modal-content {
+            background-color: #2a2a2a;
+            margin: 5% auto;
+            padding: 20px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 600px;
+            color: #fff;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: #CF2030;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 8px;
+            background-color: #333;
+            color: #fff;
+            border: 1px solid #555;
+            border-radius: 5px;
+        }
+
+        .form-group textarea {
+            height: 100px;
+            resize: vertical;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            border-top: 1px solid #333;
+            margin-top: 40px;
+        }
+
+        .footer-logo {
+            height: 30px;
+            opacity: 0.7;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background-color: #333;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            border-left: 4px solid #CF2030;
+        }
+
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            color: #CF2030;
+        }
+
+        .export-btn {
+            background-color: #17a2b8;
+            margin-left: 10px;
+        }
+
+        .export-btn:hover {
+            background-color: #138496;
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .nav-menu {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 15px;
+            }
+
+            .search-controls {
+                flex-direction: column;
+            }
+
+            .tabs {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="HigginsReports" class="logo">
+        <nav class="nav-menu">
+            <a href="#" class="nav-item">Dashboard</a>
+            <a href="#" class="nav-item">Clients</a>
+            <a href="#" class="nav-item">Analytics</a>
+            <a href="#" class="nav-item">Reports</a>
+            <a href="#" class="nav-item">Settings</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div class="dashboard-header">
+            <h1>S.A.L.E. System Client Targeting Dashboard</h1>
+            <h2 style="color: #ccc;">Holotropic Breathwork LA - Transforming Lives Through Conscious Breathing</h2>
+            <p style="color: #888;">Venice, California | Professional Training & Coaching</p>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number">50</div>
+                <div>Total Prospects</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="tier1a-count">0</div>
+                <div>Tier 1A Prospects</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="tier1b-count">0</div>
+                <div>Tier 1B Prospects</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="tier1c-count">0</div>
+                <div>Tier 1C Prospects</div>
+            </div>
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('sourcing')">S - Sourcing</button>
+            <button class="tab" onclick="showTab('assessing')">A - Assessing</button>
+            <button class="tab" onclick="showTab('listening')">L - Listening</button>
+            <button class="tab" onclick="showTab('empowering')">E - Empowering</button>
+        </div>
+
+        <div id="sourcing" class="tab-content active">
+            <h3>Client Sourcing & P.U.R.E.S. Scoring</h3>
+            <div class="search-controls">
+                <input type="text" id="searchInput" placeholder="Search clients..." class="search-input">
+                <select id="tierFilter" class="filter-select">
+                    <option value="">All Tiers</option>
+                    <option value="1A">Tier 1A</option>
+                    <option value="1B">Tier 1B</option>
+                    <option value="1C">Tier 1C</option>
+                </select>
+                <select id="industryFilter" class="filter-select">
+                    <option value="">All Industries</option>
+                    <option value="Wellness">Wellness</option>
+                    <option value="Healthcare">Healthcare</option>
+                    <option value="Technology">Technology</option>
+                    <option value="Creative">Creative</option>
+                    <option value="Professional">Professional</option>
+                    <option value="Spiritual">Spiritual</option>
+                </select>
+                <button class="btn" onclick="applyFilters()">Filter</button>
+                <button class="btn export-btn" onclick="exportToCSV()">Export CSV</button>
+            </div>
+
+            <div class="table-container">
+                <table id="clientsTable">
+                    <thead>
+                        <tr>
+                            <th onclick="sortTable(0)">Client Name</th>
+                            <th onclick="sortTable(1)">Email</th>
+                            <th onclick="sortTable(2)">Phone</th>
+                            <th onclick="sortTable(3)">Address</th>
+                            <th onclick="sortTable(4)">P.U.R.E.S. Score</th>
+                            <th onclick="sortTable(5)">Tier Level</th>
+                            <th onclick="sortTable(6)">Industry</th>
+                            <th onclick="sortTable(7)">Revenue Estimate</th>
+                            <th onclick="sortTable(8)">Contact Status</th>
+                            <th onclick="sortTable(9)">Last Contact</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="clientsTableBody">
+                        <!-- Clients will be populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="assessing" class="tab-content">
+            <h3>Client Assessment & Buying Patterns</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+                <div class="stat-card">
+                    <h4>Analytical Buyers</h4>
+                    <p>Require detailed ROI analysis, case studies, and trials</p>
+                    <div class="stat-number" id="analytical-count">0</div>
+                </div>
+                <div class="stat-card">
+                    <h4>Relationship Buyers</h4>
+                    <p>Value trust, referrals, and long-term partnerships</p>
+                    <div class="stat-number" id="relationship-count">0</div>
+                </div>
+                <div class="stat-card">
+                    <h4>Efficiency Buyers</h4>
+                    <p>Focus on time-saving and process improvement</p>
+                    <div class="stat-number" id="efficiency-count">0</div>
+                </div>
+                <div class="stat-card">
+                    <h4>Innovation Buyers</h4>
+                    <p>Seek cutting-edge solutions and competitive advantage</p>
+                    <div class="stat-number" id="innovation-count">0</div>
+                </div>
+            </div>
+        </div>
+
+        <div id="listening" class="tab-content">
+            <h3>Feedback Integration & Monitoring</h3>
+            <div style="margin-bottom: 20px;">
+                <button class="btn" onclick="showFeedbackForm()">Collect Feedback</button>
+                <button class="btn" style="background-color: #28a745; margin-left: 10px;">View Satisfaction Reports</button>
+            </div>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Client</th>
+                            <th>Feedback Type</th>
+                            <th>Rating</th>
+                            <th>Comments</th>
+                            <th>Date</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Sarah Johnson</td>
+                            <td>Post-Session</td>
+                            <td>⭐⭐⭐⭐⭐</td>
+                            <td>Transformational experience. Felt deeply connected.</td>
+                            <td>2024-12-15</td>
+                            <td>Resolved</td>
+                        </tr>
+                        <tr>
+                            <td>David Chen</td>
+                            <td>Pre-Session</td>
+                            <td>⭐⭐⭐⭐</td>
+                            <td>Excited but nervous about first session.</td>
+                            <td>2024-12-14</td>
+                            <td>Addressed</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="empowering" class="tab-content">
+            <h3>Referral Strategy & Client Advocacy</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+                <div class="stat-card">
+                    <h4>Active Referrers</h4>
+                    <div class="stat-number">12</div>
+                    <p>Clients generating referrals</p>
+                </div>
+                <div class="stat-card">
+                    <h4>Total Referrals</h4>
+                    <div class="stat-number">34</div>
+                    <p>This quarter</p>
+                </div>
+                <div class="stat-card">
+                    <h4>Conversion Rate</h4>
+                    <div class="stat-number">68%</div>
+                    <p>Referral to client</p>
+                </div>
+                <div class="stat-card">
+                    <h4>Reward Points</h4>
+                    <div class="stat-number">1,250</div>
+                    <p>Outstanding rewards</p>
+                </div>
+            </div>
+            <div style="margin-top: 20px;">
+                <button class="btn">Launch Referral Campaign</button>
+                <button class="btn" style="background-color: #17a2b8; margin-left: 10px;">Track Success Stories</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Modal -->
+    <div id="contactModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('contactModal')">&times;</span>
+            <h3>Contact Client</h3>
+            <form id="contactForm">
+                <div class="form-group">
+                    <label>Contact Method:</label>
+                    <select id="contactMethod" onchange="updateContactForm()">
+                        <option value="email">Email</option>
+                        <option value="phone">Phone Call</option>
+                        <option value="text">Text Message</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Client:</label>
+                    <input type="text" id="clientName" readonly>
+                </div>
+                <div class="form-group">
+                    <label>Subject:</label>
+                    <input type="text" id="emailSubject" value="Transform Your Life with Holotropic Breathwork">
+                </div>
+                <div class="form-group">
+                    <label>Message:</label>
+                    <textarea id="emailMessage"></textarea>
+                </div>
+                <button type="button" class="btn" onclick="sendContact()">Send</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- P.U.R.E.S. Scoring Modal -->
+    <div id="puresModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('puresModal')">&times;</span>
+            <h3>P.U.R.E.S. Scoring</h3>
+            <form id="puresForm">
+                <div class="form-group">
+                    <label>Client:</label>
+                    <input type="text" id="puresClient" readonly>
+                </div>
+                <div class="form-group">
+                    <label>Profitability (1-5):</label>
+                    <input type="number" id="profitability" min="1" max="5" class="score-input">
+                    <small>Annual revenue threshold and budget capacity</small>
+                </div>
+                <div class="form-group">
+                    <label>Urgency (1-5):</label>
+                    <input type="number" id="urgency" min="1" max="5" class="score-input">
+                    <small>Active pain points requiring immediate solutions</small>
+                </div>
+                <div class="form-group">
+                    <label>Reachability (1-5):</label>
+                    <input type="number" id="reachability" min="1" max="5" class="score-input">
+                    <small>Accessible decision makers with clear contact paths</small>
+                </div>
+                <div class="form-group">
+                    <label>Engagement (1-5):</label>
+                    <input type="number" id="engagement" min="1" max="5" class="score-input">
+                    <small>Openness to innovation and partnerships</small>
+                </div>
+                <div class="form-group">
+                    <label>Sustainability (1-5):</label>
+                    <input type="number" id="sustainability" min="1" max="5" class="score-input">
+                    <small>Long-term partnership potential with growth trajectory</small>
+                </div>
+                <button type="button" class="btn" onclick="savePuresScore()">Save Score</button>
+            </form>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="HigginsReports" class="footer-logo">
+        <p style="margin-top: 10px; color: #888;">Powered by HigginsReports - S.A.L.E. System Client Targeting Dashboard</p>
+    </footer>
+
+    <script>
+        // Sample client data for Holotropic Breathwork LA
+        let clients = [
+            { name: "Sarah Johnson", email: "sarah.johnson@gmail.com", phone: "(310) 555-0123", address: "1234 Ocean Ave, Santa Monica, CA 90401", pures: 4.2, tier: "1A", industry: "Wellness", revenue: "$150K", status: "Active", lastContact: "2024-12-15", buyerType: "Relationship" },
+            { name: "David Chen", email: "david.chen@techcorp.com", phone: "(424) 555-0145", address: "5678 Main St, Venice, CA 90291", pures: 3.8, tier: "1B", industry: "Technology", revenue: "$200K", status: "Contacted", lastContact: "2024-12-14", buyerType: "Analytical" },
+            { name: "Maria Rodriguez", email: "maria.rodriguez@yoga.com", phone: "(213) 555-0167", address: "2345 Broadway, Santa Monica, CA 90404", pures: 4.6, tier: "1A", industry: "Wellness", revenue: "$85K", status: "New", lastContact: "Never", buyerType: "Innovation" },
+            { name: "James Wilson", email: "j.wilson@lawfirm.com", phone: "(310) 555-0189", address: "7890 Wilshire Blvd, Beverly Hills, CA 90210", pures: 3.4, tier: "1C", industry: "Professional", revenue: "$300K", status: "Proposal", lastContact: "2024-12-10", buyerType: "Efficiency" },
+            { name: "Jennifer Lee", email: "jennifer.l@creativestudio.com", phone: "(323) 555-0234", address: "4567 Sunset Blvd, Los Angeles, CA 90027", pures: 4.0, tier: "1B", industry: "Creative", revenue: "$120K", status: "Active", lastContact: "2024-12-12", buyerType: "Innovation" },
+            { name: "Michael Torres", email: "m.torres@mindfulnesscentre.org", phone: "(310) 555-0256", address: "9876 Pacific Coast Hwy, Malibu, CA 90265", pures: 4.8, tier: "1A", industry: "Spiritual", revenue: "$180K", status: "Contacted", lastContact: "2024-12-13", buyerType: "Relationship" },
+            { name: "Lisa Anderson", email: "lisa.anderson@healthclinic.com", phone: "(424) 555-0278", address: "3456 Olympic Blvd, Santa Monica, CA 90404", pures: 3.6, tier: "1B", industry: "Healthcare", revenue: "$220K", status: "New", lastContact: "Never", buyerType: "Analytical" },
+            { name: "Robert Kim", email: "robert.kim@startupventure.com", phone: "(213) 555-0290", address: "6789 Hollywood Blvd, Hollywood, CA 90028", pures: 3.2, tier: "1C", industry: "Technology", revenue: "$95K", status: "Proposal", lastContact: "2024-12-08", buyerType: "Innovation" },
+            { name: "Amanda White", email: "amanda.white@holistichealing.com", phone: "(310) 555-0312", address: "1357 Lincoln Blvd, Venice, CA 90291", pures: 4.4, tier: "1A", industry: "Wellness", revenue: "$140K", status: "Active", lastContact: "2024-12-16", buyerType: "Relationship" },
+            { name: "Christopher Davis", email: "c.davis@consultingfirm.com", phone: "(323) 555-0334", address: "2468 Melrose Ave, West Hollywood, CA 90069", pures: 3.9, tier: "1B", industry: "Professional", revenue: "$280K", status: "Contacted", lastContact: "2024-12-11", buyerType: "Efficiency" },
+            { name: "Jessica Martinez", email: "jessica.martinez@artstudio.com", phone: "(424) 555-0356", address: "8642 Venice Blvd, Los Angeles, CA 90034", pures: 4.1, tier: "1B", industry: "Creative", revenue: "$105K", status: "New", lastContact: "Never", buyerType: "Innovation" },
+            { name: "Daniel Brown", email: "daniel.brown@therapycenter.com", phone: "(310) 555-0378", address: "9753 Santa Monica Blvd, West Hollywood, CA 90069", pures: 4.3, tier: "1A", industry: "Healthcare", revenue: "$195K", status: "Proposal", lastContact: "2024-12-09", buyerType: "Analytical" },
+            { name: "Nicole Thompson", email: "nicole.thompson@spiritualpath.org", phone: "(213) 555-0390", address: "1472 Abbot Kinney Blvd, Venice, CA 90291", pures: 4.7, tier: "1A", industry: "Spiritual", revenue: "$160K", status: "Active", lastContact: "2024-12-17", buyerType: "Relationship" },
+            { name: "Kevin Garcia", email: "kevin.garcia@techstartup.com", phone: "(323) 555-0412", address: "5839 Fairfax Ave, Los Angeles, CA 90036", pures: 3.3, tier: "1C", industry: "Technology", revenue: "$110K", status: "Contacted", lastContact: "2024-12-07", buyerType: "Innovation" },
+            { name: "Rachel Green", email: "rachel.green@wellnesscenter.com", phone: "(310) 555-0434", address: "7284 Beverly Blvd, Los Angeles, CA 90036", pures: 4.5, tier: "1A", industry: "Wellness", revenue: "$175K", status: "New", lastContact: "Never", buyerType: "Efficiency" },
+            { name: "Steven Clark", email: "steven.clark@lawoffice.com", phone: "(424) 555-0456", address: "3698 Pico Blvd, Santa Monica, CA 90405", pures: 3.7, tier: "1B", industry: "Professional", revenue: "$350K", status: "Proposal", lastContact: "2024-12-06", buyerType: "Analytical" },
+            { name: "Laura Johnson", email: "laura.johnson@creativecollective.com", phone: "(213) 555-0478", address: "8157 Melrose Ave, Los Angeles, CA 90046", pures: 4.2, tier: "1A", industry: "Creative", revenue: "$125K", status: "Active", lastContact: "2024-12-18", buyerType: "Innovation" },
+            { name: "Matthew Lewis", email: "matthew.lewis@medicalpractice.com", phone: "(310) 555-0490", address: "2573 Main St, Santa Monica, CA 90405", pures: 3.8, tier: "1B", industry: "Healthcare", revenue: "$240K", status: "Contacted", lastContact: "2024-12-05", buyerType: "Efficiency" },
+            { name: "Angela Walker", email: "angela.walker@mindfulness.org", phone: "(323) 555-0512", address: "6149 Sunset Strip, West Hollywood, CA 90069", pures: 4.9, tier: "1A", industry: "Spiritual", revenue: "$190K", status: "New", lastContact: "Never", buyerType: "Relationship" },
+            { name: "Timothy Hall", email: "timothy.hall@innovatetech.com", phone: "(424) 555-0534", address: "9426 Olympic Blvd, Beverly Hills, CA 90212", pures: 3.1, tier: "1C", industry: "Technology", revenue: "$130K", status: "Proposal", lastContact: "2024-12-04", buyerType: "Analytical" },
+            { name: "Samantha Young", email: "samantha.young@yogastudio.com", phone: "(310) 555-0556", address: "4815 Lincoln Blvd, Marina del Rey, CA 90292", pures: 4.6, tier: "1A", industry: "Wellness", revenue: "$155K", status: "Active", lastContact: "2024-12-19", buyerType: "Innovation" },
+            { name: "Brian Allen", email: "brian.allen@consultancy.com", phone: "(213) 555-0578", address: "7392 Wilshire Blvd, Los Angeles, CA 90036", pures: 3.5, tier: "1C", industry: "Professional", revenue: "$295K", status: "Contacted", lastContact: "2024-12-03", buyerType: "Efficiency" },
+            { name: "Michelle King", email: "michelle.king@artgallery.com", phone: "(323) 555-0590", address: "1684 Robertson Blvd, West Hollywood, CA 90069", pures: 4.0, tier: "1B", industry: "Creative", revenue: "$115K", status: "New", lastContact: "Never", buyerType: "Relationship" },
+            { name: "Andrew Wright", email: "andrew.wright@healthcenter.com", phone: "(310) 555-0612", address: "5927 Venice Blvd, Culver City, CA 90232", pures: 4.4, tier: "1A", industry: "Healthcare", revenue: "$210K", status: "Proposal", lastContact: "2024-12-02", buyerType: "Analytical" },
+            { name: "Stephanie Lopez", email: "stephanie.lopez@spiritual.org", phone: "(424) 555-0634", address: "8361 Santa Monica Blvd, Los Angeles, CA 90046", pures: 4.8, tier: "1A", industry: "Spiritual", revenue: "$170K", status: "Active", lastContact: "2024-12-20", buyerType: "Innovation" },
+            { name: "Gregory Hill", email: "gregory.hill@techconsulting.com", phone: "(213) 555-0656", address: "2948 Highland Ave, Los Angeles, CA 90068", pures: 3.4, tier: "1C", industry: "Technology", revenue: "$145K", status: "Contacted", lastContact: "2024-12-01", buyerType: "Efficiency" },
+            { name: "Kimberly Scott", email: "kimberly.scott@wellness.com", phone: "(310) 555-0678", address: "6275 Sepulveda Blvd, Culver City, CA 90230", pures: 4.3, tier: "1A", industry: "Wellness", revenue: "$165K", status: "New", lastContact: "Never", buyerType: "Relationship" },
+            { name: "Jonathan Green", email: "jonathan.green@legalservices.com", phone: "(323) 555-0690", address: "7584 Beverly Blvd, Beverly Hills, CA 90210", pures: 3.6, tier: "1B", industry: "Professional", revenue: "$320K", status: "Proposal", lastContact: "2024-11-30", buyerType: "Analytical" },
+            { name: "Melissa Adams", email: "melissa.adams@designstudio.com", phone: "(424) 555-0712", address: "1793 Abbot Kinney Blvd, Venice, CA 90291", pures: 4.1, tier: "1B", industry: "Creative", revenue: "$135K", status: "Active", lastContact: "2024-12-21", buyerType: "Innovation" },
+            { name: "Ryan Baker", email: "ryan.baker@medicalgroup.com", phone: "(310) 555-0734", address: "4627 Olympic Blvd, Los Angeles, CA 90019", pures: 3.9, tier: "1B", industry: "Healthcare", revenue: "$255K", status: "Contacted", lastContact: "2024-11-29", buyerType: "Efficiency" },
+            { name: "Heather Nelson", email: "heather.nelson@mindfulpath.org", phone: "(213) 555-0756", address: "9138 Sunset Blvd, West Hollywood, CA 90069", pures: 4.7, tier: "1A", industry: "Spiritual", revenue: "$185K", status: "New", lastContact: "Never", buyerType: "Relationship" },
+            { name: "Jason Carter", email: "jason.carter@startup.com", phone: "(323) 555-0778", address: "5412 Melrose Ave, Los Angeles, CA 90038", pures: 3.2, tier: "1C", industry: "Technology", revenue: "$105K", status: "Proposal", lastContact: "2024-11-28", buyerType: "Analytical" },
+            { name: "Rebecca Mitchell", email: "rebecca.mitchell@holisticwellness.com", phone: "(310) 555-0790", address: "8769 Lincoln Blvd, Los Angeles, CA 90045", pures: 4.5, tier: "1A", industry: "Wellness", revenue: "$180K", status: "Active", lastContact: "2024-12-22", buyerType: "Innovation" },
+            { name: "Eric Perez", email: "eric.perez@businessconsulting.com", phone: "(424) 555-0812", address: "2351 Pico Blvd, Los Angeles, CA 90006", pures: 3.8, tier: "1B", industry: "Professional", revenue: "$275K", status: "Contacted", lastContact: "2024-11-27", buyerType: "Efficiency" },
+            { name: "Tiffany Roberts", email: "tiffany.roberts@artcenter.com", phone: "(213) 555-0834", address: "6894 Hollywood Blvd, Los Angeles, CA 90028", pures: 4.2, tier: "1A", industry: "Creative", revenue: "$120K", status: "New", lastContact: "Never", buyerType: "Relationship" },
+            { name: "Mark Turner", email: "mark.turner@healthcare.com", phone: "(310) 555-0856", address: "7435 Santa Monica Blvd, Hollywood, CA 90046", pures: 4.0, tier: "1B", industry: "Healthcare", revenue: "$230K", status: "Proposal", lastContact: "2024-11-26", buyerType: "Analytical" },
+            { name: "Vanessa Phillips", email: "vanessa.phillips@spiritualhealing.org", phone: "(323) 555-0878", address: "3618 Venice Blvd, Los Angeles, CA 90019", pures: 4.6, tier: "1A", industry: "Spiritual", revenue: "$175K", status: "Active", lastContact: "2024-12-23", buyerType: "Innovation" },
+            { name: "Scott Campbell", email: "scott.campbell@techsolution.com", phone: "(424) 555-0890", address: "1926 Wilshire Blvd, Santa Monica, CA 90403", pures: 3.3, tier: "1C", industry: "Technology", revenue: "$125K", status: "Contacted", lastContact: "2024-11-25", buyerType: "Efficiency" },
+            { name: "Crystal Parker", email: "crystal.parker@wellness.org", phone: "(310) 555-0912", address: "8157 Fairfax Ave, Los Angeles, CA 90046", pures: 4.4, tier: "1A", industry: "Wellness", revenue: "$160K", status: "New", lastContact: "Never", buyerType: "Relationship" },
+            { name: "Douglas Evans", email: "douglas.evans@law.com", phone: "(213) 555-0934", address: "5283 Beverly Blvd, Los Angeles, CA 90036", pures: 3.7, tier: "1B", industry: "Professional", revenue: "$310K", status: "Proposal", lastContact: "2024-11-24", buyerType: "Analytical" },
+            { name: "Natalie Edwards", email: "natalie.edwards@creativespace.com", phone: "(323) 555-0956", address: "9472 Sunset Strip, West Hollywood, CA 90069", pures: 4.3, tier: "1A", industry: "Creative", revenue: "$140K", status: "Active", lastContact: "2024-12-24", buyerType: "Innovation" },
+            { name: "Gary Collins", email: "gary.collins@medical.com", phone: "(310) 555-0978", address: "6741 Olympic Blvd, Beverly Hills, CA 90211", pures: 3.9, tier: "1B", industry: "Healthcare", revenue: "$265K", status: "Contacted", lastContact: "2024-11-23", buyerType: "Efficiency" },
+            { name: "Brittany Stewart", email: "brittany.stewart@mindful.org", phone: "(424) 555-0990", address: "4158 Main St, Venice, CA 90291", pures: 4.8, tier: "1A", industry: "Spiritual", revenue: "$195K", status: "New", lastContact: "Never", buyerType: "Relationship" },
+            { name: "Shane Morris", email: "shane.morris@innovation.com", phone: "(213) 555-1012", address: "7629 Melrose Ave, Los Angeles, CA 90046", pures: 3.1, tier: "1C", industry: "Technology", revenue: "$115K", status: "Proposal", lastContact: "2024-11-22", buyerType: "Analytical" },
+            { name: "Courtney Rogers", email: "courtney.rogers@holistichealth.com", phone: "(310) 555-1034", address: "2847 Lincoln Blvd, Santa Monica, CA 90405", pures: 4.5, tier: "1A", industry: "Wellness", revenue: "$185K", status: "Active", lastContact: "2024-12-25", buyerType: "Innovation" },
+            { name: "Carl Reed", email: "carl.reed@consulting.com", phone: "(323) 555-1056", address: "8394 Wilshire Blvd, Beverly Hills, CA 90211", pures: 3.5, tier: "1C", industry: "Professional", revenue: "$285K", status: "Contacted", lastContact: "2024-11-21", buyerType: "Efficiency" },
+            { name: "Denise Cook", email: "denise.cook@artworld.com", phone: "(424) 555-1078", address: "5716 Hollywood Blvd, Hollywood, CA 90028", pures: 4.1, tier: "1B", industry: "Creative", revenue: "$130K", status: "New", lastContact: "Never", buyerType: "Relationship" },
+            { name: "Randy Bailey", email: "randy.bailey@healthservices.com", phone: "(310) 555-1090", address: "1394 Venice Blvd, Venice, CA 90291", pures: 4.2, tier: "1A", industry: "Healthcare", revenue: "$245K", status: "Proposal", lastContact: "2024-11-20", buyerType: "Analytical" },
+            { name: "Jenna Rivera", email: "jenna.rivera@spiritual.com", phone: "(213) 555-1112", address: "9851 Santa Monica Blvd, Beverly Hills, CA 90210", pures: 4.9, tier: "1A", industry: "Spiritual", revenue: "$200K", status: "Active", lastContact: "2024-12-26", buyerType: "Innovation" },
+            { name: "Franklin Cooper", email: "franklin.cooper@techcorp.com", phone: "(323) 555-1134", address: "6283 Sunset Blvd, Los Angeles, CA 90028", pures: 3.4, tier: "1C", industry: "Technology", revenue: "$135K", status: "Contacted", lastContact: "2024-11-19", buyerType: "Efficiency" },
+            { name: "Cheryl Richardson", email: "cheryl.richardson@wellnessjourney.com", phone: "(310) 555-1156", address: "3957 Ocean Ave, Santa Monica, CA 90401", pures: 4.6, tier: "1A", industry: "Wellness", revenue: "$170K", status: "New", lastContact: "Never", buyerType: "Relationship" }
+        ];
+
+        let filteredClients = [...clients];
+        let currentSortColumn = -1;
+        let sortDirection = 'asc';
+
+        // Initialize the dashboard
+        function initializeDashboard() {
+            populateTable();
+            updateStats();
+            updateBuyerTypeStats();
+        }
+
+        // Tab functionality
+        function showTab(tabName) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // Remove active class from all tabs
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected tab content
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+        }
+
+        // Populate the clients table
+        function populateTable() {
+            const tbody = document.getElementById('clientsTableBody');
+            tbody.innerHTML = '';
+
+            filteredClients.forEach((client, index) => {
+                const row = tbody.insertRow();
+                row.innerHTML = `
+                    <td>${client.name}</td>
+                    <td>${client.email}</td>
+                    <td>${client.phone}</td>
+                    <td>${client.address}</td>
+                    <td>${client.pures}</td>
+                    <td><span class="tier-${client.tier.toLowerCase()}">${client.tier}</span></td>
+                    <td>${client.industry}</td>
+                    <td>${client.revenue}</td>
+                    <td>${client.status}</td>
+                    <td>${client.lastContact}</td>
+                    <td>
+                        <button class="btn btn-small" onclick="contactClient(${index})">Contact</button>
+                        <button class="btn btn-small" onclick="scorePures(${index})" style="background-color: #17a2b8;">Score</button>
+                    </td>
+                `;
+            });
+        }
+
+        // Update statistics
+        function updateStats() {
+            const tier1a = clients.filter(c => c.tier === '1A').length;
+            const tier1b = clients.filter(c => c.tier === '1B').length;
+            const tier1c = clients.filter(c => c.tier === '1C').length;
+
+            document.getElementById('tier1a-count').textContent = tier1a;
+            document.getElementById('tier1b-count').textContent = tier1b;
+            document.getElementById('tier1c-count').textContent = tier1c;
+        }
+
+        // Update buyer type statistics
+        function updateBuyerTypeStats() {
+            const analytical = clients.filter(c => c.buyerType === 'Analytical').length;
+            const relationship = clients.filter(c => c.buyerType === 'Relationship').length;
+            const efficiency = clients.filter(c => c.buyerType === 'Efficiency').length;
+            const innovation = clients.filter(c => c.buyerType === 'Innovation').length;
+
+            document.getElementById('analytical-count').textContent = analytical;
+            document.getElementById('relationship-count').textContent = relationship;
+            document.getElementById('efficiency-count').textContent = efficiency;
+            document.getElementById('innovation-count').textContent = innovation;
+        }
+
+        // Apply filters
+        function applyFilters() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const tierFilter = document.getElementById('tierFilter').value;
+            const industryFilter = document.getElementById('industryFilter').value;
+
+            filteredClients = clients.filter(client => {
+                const matchesSearch = !searchTerm || 
+                    client.name.toLowerCase().includes(searchTerm) ||
+                    client.email.toLowerCase().includes(searchTerm) ||
+                    client.industry.toLowerCase().includes(searchTerm);
+                
+                const matchesTier = !tierFilter || client.tier === tierFilter;
+                const matchesIndustry = !industryFilter || client.industry === industryFilter;
+
+                return matchesSearch && matchesTier && matchesIndustry;
+            });
+
+            populateTable();
+        }
+
+        // Sort table
+        function sortTable(columnIndex) {
+            if (currentSortColumn === columnIndex) {
+                sortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
+            } else {
+                sortDirection = 'asc';
+                currentSortColumn = columnIndex;
+            }
+
+            const columnMap = ['name', 'email', 'phone', 'address', 'pures', 'tier', 'industry', 'revenue', 'status', 'lastContact'];
+            const sortKey = columnMap[columnIndex];
+
+            filteredClients.sort((a, b) => {
+                let valueA = a[sortKey];
+                let valueB = b[sortKey];
+
+                if (sortKey === 'pures') {
+                    valueA = parseFloat(valueA);
+                    valueB = parseFloat(valueB);
+                }
+
+                if (sortDirection === 'asc') {
+                    return valueA > valueB ? 1 : -1;
+                } else {
+                    return valueA < valueB ? 1 : -1;
+                }
+            });
+
+            populateTable();
+        }
+
+        // Contact client
+        function contactClient(index) {
+            const client = filteredClients[index];
+            document.getElementById('clientName').value = client.name;
+            
+            const defaultMessage = generateEmailMessage(client);
+            document.getElementById('emailMessage').value = defaultMessage;
+            
+            document.getElementById('contactModal').style.display = 'block';
+        }
+
+        // Generate personalized email message
+        function generateEmailMessage(client) {
+            const messages = {
+                'Wellness': `Dear ${client.name},
+
+Transform your wellness journey with Holotropic Breathwork - a powerful, scientifically-backed method developed by renowned psychiatrist Dr. Stan Grof.
+
+As someone in the wellness industry, you understand the importance of deep healing and transformation. Our breathwork sessions offer:
+
+• Access to non-ordinary states of consciousness without substances
+• Release of energetic blocks and trauma
+• Profound spiritual and emotional breakthroughs
+• Enhanced creativity and life clarity
+• Connection to your authentic self
+
+Join our community in Venice and experience the transformational power that has helped thousands worldwide, including John Mackey (Whole Foods founder) and countless wellness professionals.
+
+Book your session today and discover why Holotropic Breathwork is considered the gold standard in conscious breathing.
+
+Breathe, transform, transcend.
+
+Michael Stone
+Certified Holotropic Breathwork Facilitator
+Holotropic Breathwork LA`,
+
+                'Healthcare': `Dear ${client.name},
+
+As a healthcare professional, you know the power of evidence-based healing modalities. Holotropic Breathwork, developed by psychiatrist Dr. Stan Grof, offers your clients (and yourself) a profound adjunct to traditional therapy.
+
+This scientifically-validated method provides:
+
+• Non-pharmaceutical access to healing states
+• Integration support for trauma recovery
+• Enhanced therapeutic outcomes when combined with traditional methods
+• Professional development for healing practitioners
+• Self-care tools for preventing burnout
+
+Many therapists, doctors, and healthcare professionals use Holotropic Breathwork both personally and as a complement to their practice.
+
+Discover why this modality is increasingly integrated into holistic healthcare approaches worldwide.
+
+Professional consultation available.
+
+Michael Stone
+Certified Holotropic Breathwork Facilitator
+Venice, CA`,
+
+                'Technology': `Dear ${client.name},
+
+In the high-stress world of technology, peak performance requires more than just technical skills. It demands emotional intelligence, creativity, and resilience - qualities that Holotropic Breathwork uniquely develops.
+
+Tech leaders worldwide use conscious breathing to:
+
+• Unlock innovative thinking and problem-solving
+• Manage stress and prevent burnout
+• Enhance leadership presence and decision-making
+• Access flow states for peak performance
+• Integrate work-life balance
+
+This isn't just meditation - it's a scientifically-backed method that creates measurable changes in brain function and consciousness.
+
+Join other tech innovators who've discovered this competitive edge for both personal and professional success.
+
+Ready to upgrade your human operating system?
+
+Michael Stone
+Holotropic Breathwork LA
+Venice, CA`,
+
+                'Creative': `Dear ${client.name},
+
+Unlock your creative genius with Holotropic Breathwork - the transformational practice that has inspired artists, writers, and creative professionals for decades.
+
+As a creative professional, you know that true artistry comes from accessing deeper states of consciousness. Our breathwork sessions offer:
+
+• Direct access to creative source energy
+• Breakthrough insights for artistic blocks
+• Enhanced emotional range and expression
+• Connection to universal creative flow
+• Integration of personal experiences into art
+
+Many renowned artists credit breathwork with revolutionizing their creative process and opening new dimensions of artistic expression.
+
+Experience the method that transforms not just your art, but your entire creative being.
+
+Your masterpiece awaits.
+
+Michael Stone
+Certified Holotropic Breathwork Facilitator
+Venice, CA`,
+
+                'Professional': `Dear ${client.name},
+
+Excellence in professional life requires more than skills and knowledge - it demands emotional intelligence, clear decision-making, and authentic leadership presence.
+
+Holotropic Breathwork provides high-performing professionals with:
+
+• Enhanced stress management and resilience
+• Improved emotional intelligence and communication
+• Greater clarity in decision-making
+• Increased leadership presence and authenticity
+• Tools for sustainable high performance
+
+This evidence-based practice, developed by psychiatrist Dr. Stan Grof, is used by executives, entrepreneurs, and professionals worldwide to maintain peak performance while achieving greater life satisfaction.
+
+Invest in your most valuable asset - yourself.
+
+Professional sessions available in Venice.
+
+Michael Stone
+Certified Holotropic Breathwork Facilitator
+Holotropic Breathwork LA`,
+
+                'Spiritual': `Dear ${client.name},
+
+Deepen your spiritual practice with Holotropic Breathwork - a sacred technology that bridges ancient wisdom with modern consciousness research.
+
+As someone on the spiritual path, you'll appreciate this practice's ability to:
+
+• Access mystical states without substances
+• Integrate spiritual insights into daily life
+• Heal spiritual wounds and blocks
+• Connect with universal consciousness
+• Experience the Hero's Journey of transformation
+
+Developed by Dr. Stan Grof from decades of consciousness research, this practice honors both scientific rigor and spiritual authenticity.
+
+Join our community of conscious breathers in Venice and experience why this is considered one of the most powerful spiritual practices available today.
+
+In service to consciousness,
+
+Michael Stone
+Certified Holotropic Breathwork Facilitator
+Venice, CA`
+            };
+
+            return messages[client.industry] || messages['Wellness'];
+        }
+
+        // P.U.R.E.S. scoring
+        function scorePures(index) {
+            const client = filteredClients[index];
+            document.getElementById('puresClient').value = client.name;
+            document.getElementById('puresModal').style.display = 'block';
+        }
+
+        // Save P.U.R.E.S. score
+        function savePuresScore() {
+            const profitability = parseInt(document.getElementById('profitability').value);
+            const urgency = parseInt(document.getElementById('urgency').value);
+            const reachability = parseInt(document.getElementById('reachability').value);
+            const engagement = parseInt(document.getElementById('engagement').value);
+            const sustainability = parseInt(document.getElementById('sustainability').value);
+
+            const averageScore = (profitability + urgency + reachability + engagement + sustainability) / 5;
+            
+            let tier = '1C';
+            if (averageScore >= 4.5) tier = '1A';
+            else if (averageScore >= 3.5) tier = '1B';
+
+            alert(`P.U.R.E.S. Score: ${averageScore.toFixed(1)} - Tier: ${tier}`);
+            closeModal('puresModal');
+        }
+
+        // Send contact
+        function sendContact() {
+            const method = document.getElementById('contactMethod').value;
+            const client = document.getElementById('clientName').value;
+            const message = document.getElementById('emailMessage').value;
+
+            if (method === 'email') {
+                const subject = document.getElementById('emailSubject').value;
+                const email = filteredClients.find(c => c.name === client)?.email;
+                
+                // Create mailto link
+                const mailtoLink = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(message)}`;
+                window.location.href = mailtoLink;
+            }
+
+            alert(`${method.charAt(0).toUpperCase() + method.slice(1)} sent to ${client}`);
+            closeModal('contactModal');
+        }
+
+        // Update contact form based on method
+        function updateContactForm() {
+            const method = document.getElementById('contactMethod').value;
+            const subjectGroup = document.getElementById('emailSubject').parentElement;
+            
+            if (method === 'email') {
+                subjectGroup.style.display = 'block';
+            } else {
+                subjectGroup.style.display = 'none';
+            }
+        }
+
+        // Show feedback form
+        function showFeedbackForm() {
+            alert('Feedback collection form would open here');
+        }
+
+        // Export to CSV
+        function exportToCSV() {
+            const headers = ['Name', 'Email', 'Phone', 'Address', 'P.U.R.E.S. Score', 'Tier', 'Industry', 'Revenue', 'Status', 'Last Contact'];
+            const csvContent = [
+                headers.join(','),
+                ...filteredClients.map(client => [
+                    client.name,
+                    client.email,
+                    client.phone,
+                    `"${client.address}"`,
+                    client.pures,
+                    client.tier,
+                    client.industry,
+                    client.revenue,
+                    client.status,
+                    client.lastContact
+                ].join(','))
+            ].join('\n');
+
+            const blob = new Blob([csvContent], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.style.display = 'none';
+            a.href = url;
+            a.download = 'holotropic-breathwork-clients.csv';
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+
+        // Close modal
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = 'none';
+            }
+        }
+
+        // Search as you type
+        document.getElementById('searchInput').addEventListener('input', applyFilters);
+
+        // Initialize dashboard on load
+        window.onload = initializeDashboard;
+    </script>
+</body>
+</html>

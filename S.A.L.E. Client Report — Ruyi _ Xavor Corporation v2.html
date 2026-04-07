@@ -1,0 +1,694 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>S.A.L.E. Client Report — Ruyi / Xavor Corporation</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root{--r:#CF2030;--bg:#000;--c1:#0f0f0f;--c2:#161616;--c3:#1c1c1c;--bd:#252525;--t:#d0d0d0;--t2:#888;--w:#fff;--g:#2ecc71;--b:#3898ec;--y:#f1c40f;--p:#9b59b6;--o:#e67e22;--rA:rgba(207,32,48,.65);--bA:rgba(56,152,236,.65);--gA:rgba(46,204,113,.6);--yA:rgba(241,196,15,.6);--pA:rgba(155,89,182,.6);--oA:rgba(230,126,34,.6);}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--t);font-family:'Segoe UI',system-ui,-apple-system,sans-serif;line-height:1.55;}
+a{color:var(--r);text-decoration:none;transition:.2s;}a:hover{opacity:.85;text-decoration:underline;}
+::selection{background:var(--r);color:#fff;}
+::-webkit-scrollbar{width:6px;height:6px;}::-webkit-scrollbar-track{background:#111;}::-webkit-scrollbar-thumb{background:#333;border-radius:3px;}::-webkit-scrollbar-thumb:hover{background:var(--r);}
+
+/* HEADER */
+header{display:flex;align-items:center;justify-content:space-between;padding:10px 24px;background:linear-gradient(180deg,#0c0c0c,#080808);border-bottom:3px solid var(--r);position:sticky;top:0;z-index:100;backdrop-filter:blur(12px);}
+.logo{height:42px;transition:.2s;}.logo:hover{opacity:.8;}
+nav{display:flex;gap:2px;flex-wrap:wrap;}
+nav button{background:transparent;color:var(--r);border:1.5px solid var(--r);padding:6px 14px;border-radius:5px;cursor:pointer;font-size:11.5px;font-weight:700;transition:.2s;white-space:nowrap;letter-spacing:.2px;}
+nav button:hover,nav button.act{background:var(--r);color:#fff;border-color:var(--r);}
+
+/* SECTIONS */
+.sec{display:none;padding:22px 26px;max-width:1380px;margin:auto;}
+.sec.act{display:block;animation:fi .35s ease;}
+@keyframes fi{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+h1{color:var(--r);font-size:23px;margin-bottom:3px;letter-spacing:-.4px;}
+h2{color:var(--r);font-size:16px;margin:20px 0 8px;padding-bottom:5px;border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:8px;}
+h3{color:#aaa;font-size:13px;margin:10px 0 5px;}
+.sub{color:#666;font-size:12.5px;margin-bottom:14px;}
+
+/* METRIC CARDS */
+.cds{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:10px;margin:12px 0;}
+.cd{background:var(--c1);border:1px solid var(--bd);border-radius:10px;padding:14px 10px;text-align:center;transition:.25s;cursor:default;}
+.cd:hover{border-color:var(--r);transform:translateY(-3px);box-shadow:0 8px 24px rgba(207,32,48,.12);}
+.cd .n{font-size:30px;font-weight:800;color:var(--r);line-height:1.1;}
+.cd .l{font-size:10px;color:var(--t2);margin-top:3px;text-transform:uppercase;letter-spacing:.6px;font-weight:600;}
+
+/* TABLES */
+.tw{overflow-x:auto;margin:8px 0;border-radius:8px;border:1px solid var(--bd);}
+table{width:100%;border-collapse:collapse;font-size:12px;}
+th{background:var(--r);color:#fff;padding:8px 10px;text-align:left;cursor:pointer;user-select:none;white-space:nowrap;font-size:10.5px;text-transform:uppercase;letter-spacing:.5px;font-weight:700;}
+th:hover{background:#b01828;}
+th .ar{margin-left:3px;font-size:8px;opacity:.5;}
+td{padding:7px 10px;border-bottom:1px solid rgba(255,255,255,.04);}
+tr:nth-child(even) td{background:rgba(255,255,255,.015);}
+tr:hover td{background:rgba(207,32,48,.06);}
+
+/* SEARCH */
+.sb{width:100%;padding:8px 12px;border-radius:7px;border:1px solid var(--bd);background:var(--c3);color:#fff;font-size:12.5px;margin-bottom:8px;transition:.2s;}
+.sb:focus{outline:none;border-color:var(--r);box-shadow:0 0 0 3px rgba(207,32,48,.1);}
+.sb::placeholder{color:#555;}
+
+/* BADGES */
+.b{display:inline-block;padding:2px 8px;border-radius:14px;font-size:9.5px;font-weight:700;margin:1px;letter-spacing:.2px;}
+.br{background:rgba(207,32,48,.1);color:var(--r);border:1px solid rgba(207,32,48,.35);}
+.bb{background:rgba(56,152,236,.1);color:var(--b);border:1px solid rgba(56,152,236,.35);}
+.bg{background:rgba(46,204,113,.08);color:var(--g);border:1px solid rgba(46,204,113,.3);}
+.by{background:rgba(241,196,15,.08);color:var(--y);border:1px solid rgba(241,196,15,.3);}
+.bp{background:rgba(155,89,182,.08);color:var(--p);border:1px solid rgba(155,89,182,.3);}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:5px;padding:8px 16px;border-radius:6px;font-size:11.5px;font-weight:700;cursor:pointer;transition:.25s;text-decoration:none;border:none;letter-spacing:.2px;}
+.btn:hover{text-decoration:none;}
+.bp1{background:var(--r);color:#fff;}.bp1:hover{background:#a8151f;}
+.bo1{background:transparent;color:var(--r);border:1.5px solid var(--r);}.bo1:hover{background:var(--r);color:#fff;}
+.bs{padding:5px 10px;font-size:10.5px;}
+
+/* CHART BOX */
+.cb{background:var(--c1);border-radius:10px;padding:16px;margin:12px 0;border:1px solid var(--bd);}
+canvas{max-height:300px;}
+
+/* PROFILE */
+.pf{background:var(--c1);border:1px solid var(--bd);border-radius:12px;padding:22px;display:flex;gap:22px;flex-wrap:wrap;margin:12px 0;}
+.av{width:76px;height:76px;border-radius:50%;background:linear-gradient(135deg,var(--r),#e74c3c);display:flex;align-items:center;justify-content:center;font-size:30px;font-weight:800;color:#fff;flex-shrink:0;box-shadow:0 4px 16px rgba(207,32,48,.3);}
+.pi{flex:1;min-width:200px;}
+.pi .nm{font-size:19px;font-weight:700;color:#fff;}
+.pi .rl{color:var(--r);font-size:12.5px;margin:1px 0 7px;font-weight:600;}
+.pi .mt{font-size:12px;color:#999;line-height:1.85;}
+.pa{display:flex;gap:7px;margin-top:10px;flex-wrap:wrap;}
+
+/* STRATEGY */
+.si{display:flex;gap:10px;margin:7px 0;align-items:flex-start;}
+.sn{background:var(--r);color:#fff;width:26px;height:26px;min-width:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;}
+.st{font-size:12.5px;line-height:1.5;}.st strong{color:#e0e0e0;}
+
+/* TWO COL */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+
+/* PILLAR CARDS */
+.plr{background:var(--c1);border:1px solid var(--bd);border-radius:10px;padding:16px;transition:.25s;text-align:left;}
+.plr:hover{border-color:var(--r);}
+.plr h3{color:#fff;margin:6px 0 3px;font-size:13px;}
+.plr p{font-size:11.5px;color:#999;}
+
+/* MODAL */
+.mo{display:none;position:fixed;inset:0;background:rgba(0,0,0,.82);z-index:200;align-items:center;justify-content:center;backdrop-filter:blur(4px);}
+.mo.sh{display:flex;}
+.md{background:var(--c2);border:1.5px solid var(--r);border-radius:14px;padding:22px;width:94%;max-width:600px;max-height:88vh;overflow-y:auto;}
+.md h2{margin-top:0;display:flex;justify-content:space-between;align-items:center;border:none;padding:0;}
+.md textarea,.md input[type=text],.md input[type=email]{width:100%;padding:8px 11px;border-radius:6px;border:1px solid var(--bd);background:var(--c1);color:#fff;font-size:12px;margin:3px 0 8px;font-family:inherit;transition:.2s;}
+.md textarea{min-height:180px;resize:vertical;line-height:1.5;}
+.md textarea:focus,.md input:focus{outline:none;border-color:var(--r);}
+.md label{font-size:10px;color:#666;text-transform:uppercase;letter-spacing:.4px;font-weight:600;}
+.cx{cursor:pointer;font-size:18px;color:#555;transition:.2s;background:none;border:none;}.cx:hover{color:var(--r);}
+.toast{color:var(--g);font-size:10.5px;margin-top:5px;display:none;font-weight:600;}
+
+/* FOOTER */
+footer{text-align:center;padding:18px;border-top:1px solid var(--bd);margin-top:30px;font-size:10.5px;color:#444;}
+footer img{height:22px;margin:0 auto 5px;display:block;opacity:.55;}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  header{flex-direction:column;gap:8px;padding:8px 12px;}
+  nav{justify-content:center;}nav button{padding:5px 10px;font-size:10.5px;}
+  .sec{padding:12px;}
+  .pf{flex-direction:column;align-items:center;text-align:center;}
+  .g2{grid-template-columns:1fr;}
+  .logo{height:34px;}
+}
+@media(max-width:480px){
+  .cds{grid-template-columns:repeat(2,1fr);}
+  .cd .n{font-size:24px;}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <img class="logo" src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports">
+  <nav id="nav">
+    <button class="act" data-s="dashboard">Dashboard</button>
+    <button data-s="contact">Contact</button>
+    <button data-s="company">Company</button>
+    <button data-s="cases">Case Studies</button>
+    <button data-s="tech">Tech Stack</button>
+    <button data-s="bni">BNI Strategy</button>
+    <button data-s="locs">Locations</button>
+  </nav>
+</header>
+
+<!-- ========== DASHBOARD ========== -->
+<div id="dashboard" class="sec act">
+  <h1>S.A.L.E. Client Report — Xavor Corporation</h1>
+  <p class="sub">Simple Search and Strategy · Generated for <strong style="color:#fff;">Ruyi</strong> — Care Companion / Business Owner · Irvine, CA</p>
+
+  <div class="cds">
+    <div class="cd"><div class="n" data-count="500">0</div><div class="l">Clients Served</div></div>
+    <div class="cd"><div class="n" data-count="29">0</div><div class="l">Years in Business</div></div>
+    <div class="cd"><div class="n" data-count="1000">0</div><div class="l">Projects Delivered</div></div>
+    <div class="cd"><div class="n" data-count="200">0</div><div class="l">Team Resources</div></div>
+    <div class="cd"><div class="n" data-count="3">0</div><div class="l">Global Offices</div></div>
+    <div class="cd"><div class="n" data-count="51">0</div><div class="l">Employees (51-200)</div></div>
+    <div class="cd"><div class="n" data-count="20">0</div><div class="l">Case Studies</div></div>
+    <div class="cd"><div class="n" data-count="14">0</div><div class="l">Core Technologies</div></div>
+  </div>
+
+  <div class="g2">
+    <div class="cb"><h3 style="color:var(--r);margin-bottom:8px;">📊 Company Scale Metrics</h3><canvas id="ch1"></canvas></div>
+    <div class="cb"><h3 style="color:var(--r);margin-bottom:8px;">📁 Case Study Distribution</h3><canvas id="ch2"></canvas></div>
+  </div>
+
+  <h2>📋 Quick Profile</h2>
+  <div class="tw">
+    <table>
+      <tbody>
+        <tr><td style="color:#666;width:170px;font-weight:600;">Company</td><td><strong style="color:#fff;">Xavor Corporation</strong></td></tr>
+        <tr><td style="color:#666;font-weight:600;">Tagline</td><td>Delivering AI-powered innovation</td></tr>
+        <tr><td style="color:#666;font-weight:600;">Founded</td><td>1995 — 30 Years of Engineering Excellence</td></tr>
+        <tr><td style="color:#666;font-weight:600;">Industry</td><td>Information Technology & Services</td></tr>
+        <tr><td style="color:#666;font-weight:600;">Positioning</td><td>AI-first company combining world-class tech expertise, disciplined execution, and a client-first approach for Fortune 500 leaders and beyond</td></tr>
+        <tr><td style="color:#666;font-weight:600;">Website</td><td><a href="https://www.xavor.com" target="_blank">xavor.com ↗</a></td></tr>
+        <tr><td style="color:#666;font-weight:600;">Phone</td><td>+1 949-264-1472</td></tr>
+        <tr><td style="color:#666;font-weight:600;">Email</td><td>info@xavor.com</td></tr>
+        <tr><td style="color:#666;font-weight:600;">HQ Address</td><td>2211 Michelson Drive, Suite 900, Irvine, CA 92612</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>🎯 Key Service Pillars</h2>
+  <div class="cds" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr));">
+    <div class="plr"><span class="b br">AI/ML</span><h3>Production-Ready AI</h3><p>Generative AI to autonomous Agentic frameworks integrated into enterprise workflows</p></div>
+    <div class="plr"><span class="b bb">Cloud</span><h3>Multi-Cloud & DevOps</h3><p>AWS & Azure expertise with 24/7 "Follow-the-Sun" infrastructure support</p></div>
+    <div class="plr"><span class="b bg">Enterprise</span><h3>Salesforce & ServiceNow</h3><p>Complex custom implementations to daily administration for efficiency and ROI</p></div>
+    <div class="plr"><span class="b by">Hardware</span><h3>AI-Enabled Devices</h3><p>End-to-end product engineering for consumer, IoT, and wearable devices</p></div>
+  </div>
+</div>
+
+<!-- ========== CONTACT ========== -->
+<div id="contact" class="sec">
+  <h1>👤 Contact Profile</h1>
+  <div class="pf">
+    <div class="av">R</div>
+    <div class="pi">
+      <div class="nm">Ruyi</div>
+      <div class="rl">Care Companion · Business Owner</div>
+      <div class="mt">
+        📧 <a href="mailto:ruyi@xavor.com">ruyi@xavor.com</a> <span class="b bg" style="font-size:8px;">VALID</span><br>
+        🏢 Ruyi Care Companion — <a href="https://www.xavor.com" target="_blank">Xavor Corporation</a><br>
+        📍 Irvine, California, United States<br>
+        🏭 Information Technology & Services<br>
+        🔗 <a href="https://www.linkedin.com/in/ruyi-care-companion-3b2307245" target="_blank">LinkedIn Profile ↗</a> &nbsp;|&nbsp; <a href="https://www.linkedin.com/company/16452" target="_blank">Company LinkedIn ↗</a><br>
+        📅 Record: March 26, 2026
+      </div>
+      <div class="pa">
+        <button class="btn bp1" onclick="oM('emM')">✉️ Email Invitation</button>
+        <a class="btn bo1" href="https://www.linkedin.com/in/ruyi-care-companion-3b2307245" target="_blank">🔗 LinkedIn</a>
+        <a class="btn bo1" href="tel:+19492641472">📞 Call</a>
+        <button class="btn bo1" onclick="oM('smM')">💬 SMS</button>
+        <button class="btn bo1" onclick="oM('phM')">📞 Script</button>
+      </div>
+    </div>
+  </div>
+
+  <h2>📋 Complete Contact Data</h2>
+  <input class="sb" placeholder="🔍 Search contact details..." oninput="fT('cT',this.value)">
+  <div class="tw">
+    <table id="cT">
+      <thead><tr><th onclick="sT('cT',0)">Field <span class="ar">▲▼</span></th><th onclick="sT('cT',1)">Value <span class="ar">▲▼</span></th><th>Action</th></tr></thead>
+      <tbody>
+        <tr><td>Full Name</td><td>Ruyi</td><td>—</td></tr>
+        <tr><td>Email</td><td>ruyi@xavor.com</td><td><button class="btn bp1 bs" onclick="oM('emM')">✉️ Email</button></td></tr>
+        <tr><td>Email Status</td><td><span class="b bg">VALID</span></td><td>—</td></tr>
+        <tr><td>Title</td><td>Care Companion</td><td>—</td></tr>
+        <tr><td>Company</td><td>Ruyi Care Companion</td><td>—</td></tr>
+        <tr><td>Role</td><td>Business Owner</td><td>—</td></tr>
+        <tr><td>City</td><td>Irvine</td><td>—</td></tr>
+        <tr><td>State</td><td>CA</td><td>—</td></tr>
+        <tr><td>Location</td><td>Irvine, California, United States</td><td>—</td></tr>
+        <tr><td>Country</td><td>United States</td><td>—</td></tr>
+        <tr><td>Industry</td><td>Information Technology & Services</td><td>—</td></tr>
+        <tr><td>LinkedIn (Personal)</td><td><a href="https://www.linkedin.com/in/ruyi-care-companion-3b2307245" target="_blank">View ↗</a></td><td><a class="btn bo1 bs" href="https://www.linkedin.com/in/ruyi-care-companion-3b2307245" target="_blank">🔗</a></td></tr>
+        <tr><td>Parent Company</td><td>Xavor Corporation</td><td>—</td></tr>
+        <tr><td>Company Website</td><td><a href="https://www.xavor.com" target="_blank">xavor.com ↗</a></td><td><a class="btn bo1 bs" href="https://www.xavor.com" target="_blank">🌐</a></td></tr>
+        <tr><td>Company LinkedIn</td><td><a href="https://www.linkedin.com/company/16452" target="_blank">View ↗</a></td><td><a class="btn bo1 bs" href="https://www.linkedin.com/company/16452" target="_blank">🔗</a></td></tr>
+        <tr><td>Company Size</td><td>51–200 employees</td><td>—</td></tr>
+        <tr><td>Phone (Office)</td><td>+1 949-264-1472</td><td><a class="btn bo1 bs" href="tel:+19492641472">📞</a></td></tr>
+        <tr><td>General Email</td><td>info@xavor.com</td><td><button class="btn bo1 bs" onclick="oM('emM')">✉️</button></td></tr>
+        <tr><td>Record Date</td><td>2026-03-26 04:57:26</td><td>—</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ========== COMPANY ========== -->
+<div id="company" class="sec">
+  <h1>🏢 Company Deep Dive</h1>
+  <p class="sub">Xavor Corporation · AI-first · Est. 1995 · Fortune 500 clientele</p>
+
+  <div class="cb"><canvas id="ch3"></canvas></div>
+
+  <h2>⚡ Core Capabilities</h2>
+  <input class="sb" placeholder="🔍 Search capabilities..." oninput="fT('cpT',this.value)">
+  <div class="tw">
+    <table id="cpT">
+      <thead><tr>
+        <th onclick="sT('cpT',0)"># <span class="ar">▲▼</span></th>
+        <th onclick="sT('cpT',1)">Capability <span class="ar">▲▼</span></th>
+        <th onclick="sT('cpT',2)">Description <span class="ar">▲▼</span></th>
+        <th onclick="sT('cpT',3)">Category <span class="ar">▲▼</span></th>
+      </tr></thead>
+      <tbody>
+        <tr><td>1</td><td>Production-Ready AI</td><td>Generative AI to autonomous Agentic frameworks for enterprise workflows</td><td><span class="b br">AI/ML</span></td></tr>
+        <tr><td>2</td><td>Multi-Agent AI Systems</td><td>Orchestrated specialist agents for customer engagement & automation</td><td><span class="b br">AI/ML</span></td></tr>
+        <tr><td>3</td><td>Semantic Search & RAG</td><td>Pinecone, OpenSearch, vector embeddings for knowledge retrieval</td><td><span class="b br">AI/ML</span></td></tr>
+        <tr><td>4</td><td>Multi-Cloud & DevOps</td><td>AWS & Azure with 24/7 Follow-the-Sun infrastructure support</td><td><span class="b bb">Cloud</span></td></tr>
+        <tr><td>5</td><td>Salesforce Development</td><td>Complex custom CRM implementations and daily administration</td><td><span class="b bg">Enterprise</span></td></tr>
+        <tr><td>6</td><td>ServiceNow Development</td><td>ITSM platform optimization for efficiency and ROI</td><td><span class="b bg">Enterprise</span></td></tr>
+        <tr><td>7</td><td>AI-Enabled Product Engineering</td><td>Consumer, IoT, and wearable device design & manufacturing</td><td><span class="b by">Hardware</span></td></tr>
+        <tr><td>8</td><td>Data Engineering & Analytics</td><td>Power BI, Snowflake, ADF for data-driven decision making</td><td><span class="b by">Data</span></td></tr>
+        <tr><td>9</td><td>Digital Transformation</td><td>Modernize legacy systems & navigate complex transformations</td><td><span class="b bp">Consulting</span></td></tr>
+        <tr><td>10</td><td>Systems Integration</td><td>30 years of mission-critical enterprise solutions delivery</td><td><span class="b bp">Legacy</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>🤝 Partnership Value Proposition</h2>
+  <div class="tw">
+    <table>
+      <thead><tr><th>Dimension</th><th>Value Delivered</th></tr></thead>
+      <tbody>
+        <tr><td>Engineering Expertise</td><td>Deep technical expertise combined with powerful enterprise platforms</td></tr>
+        <tr><td>Digital Transformation</td><td>Adopt new technologies and modernize legacy systems with confidence</td></tr>
+        <tr><td>Scalable Solutions</td><td>Tailored, scalable solutions built for long-term growth</td></tr>
+        <tr><td>Resilient Ecosystems</td><td>Simplify complexity, unlock opportunities, build for the future</td></tr>
+        <tr><td>Client-First Approach</td><td>Bespoke solutions for Fortune 500 leaders and beyond</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ========== CASE STUDIES ========== -->
+<div id="cases" class="sec">
+  <h1>📁 Case Studies Portfolio</h1>
+  <p class="sub">20+ published case studies across AI/ML, Cloud, Data Engineering, PLM & more</p>
+
+  <div class="g2">
+    <div class="cb"><h3 style="color:var(--r);margin-bottom:8px;">By Technology Category</h3><canvas id="ch4"></canvas></div>
+    <div class="cb"><h3 style="color:var(--r);margin-bottom:8px;">By Industry Vertical</h3><canvas id="ch5"></canvas></div>
+  </div>
+
+  <h2>📋 Full Case Study Inventory</h2>
+  <input class="sb" placeholder="🔍 Search by name, category, industry, or technology..." oninput="fT('csT',this.value)">
+  <div class="tw">
+    <table id="csT">
+      <thead><tr>
+        <th onclick="sT('csT',0)"># <span class="ar">▲▼</span></th>
+        <th onclick="sT('csT',1)">Case Study <span class="ar">▲▼</span></th>
+        <th onclick="sT('csT',2)">Category <span class="ar">▲▼</span></th>
+        <th onclick="sT('csT',3)">Industry <span class="ar">▲▼</span></th>
+      </tr></thead>
+      <tbody>
+        <tr><td>1</td><td>Improving Agile PLM Usability with Custom InForm Guidance</td><td><span class="b bb">Agile PLM</span></td><td>Manufacturing</td></tr>
+        <tr><td>2</td><td>Enhancing Remote Elderly Care with AI-Powered Conversational Assistant</td><td><span class="b br">AI/ML</span></td><td>Healthcare</td></tr>
+        <tr><td>3</td><td>3-Year SharePoint Transformation for America's Premier Music Retailer</td><td><span class="b bg">Microservices</span></td><td>Retail</td></tr>
+        <tr><td>4</td><td>Modernizing Logistics Infrastructure with Microservices Architecture</td><td><span class="b bg">Microservices</span></td><td>Logistics</td></tr>
+        <tr><td>5</td><td>Automating ROHS 3 Compliance for a Medtech Manufacturer</td><td><span class="b br">AI/ML</span></td><td>MedTech</td></tr>
+        <tr><td>6</td><td>Enabling Operational Excellence with Centralized SharePoint Portal</td><td><span class="b bg">SharePoint</span></td><td>Cross-Industry</td></tr>
+        <tr><td>7</td><td>Timely & Secure Agile PLM Upgrade for Semi-conductor Leader</td><td><span class="b bb">Agile PLM</span></td><td>Semiconductor</td></tr>
+        <tr><td>8</td><td>Streamlining Secure Document Access in Agile PLM for MedTech</td><td><span class="b bb">PLM Agile</span></td><td>MedTech</td></tr>
+        <tr><td>9</td><td>Secure & Hierarchical Performance Appraisal System in SharePoint</td><td><span class="b bg">SharePoint</span></td><td>Cross-Industry</td></tr>
+        <tr><td>10</td><td>Scaling Data Monetization for a SAAS Billing Platform</td><td><span class="b by">Data Engineering</span></td><td>SaaS</td></tr>
+        <tr><td>11</td><td>Modernizing Supply Chain Visibility with ADF and Power BI</td><td><span class="b by">Power BI</span></td><td>Supply Chain</td></tr>
+        <tr><td>12</td><td>Private Text-to-SQL AI Agent for Manufacturing Analytics in Power BI</td><td><span class="b br">AI & ML</span></td><td>Manufacturing</td></tr>
+        <tr><td>13</td><td>Private ChatGPT for Secure Supply Chain Knowledge</td><td><span class="b br">AI & ML</span></td><td>Supply Chain</td></tr>
+        <tr><td>14</td><td>AI-Driven Data Governance & Predictive Analytics for Real Estate</td><td><span class="b br">AI/ML</span></td><td>Real Estate</td></tr>
+        <tr><td>15</td><td>Delivering Personalized Retail Support with Multi-Agent AI on Salesforce</td><td><span class="b br">AI & ML</span></td><td>Retail</td></tr>
+        <tr><td>16</td><td>Modernizing Real Estate Analytics with Data Governance & Power BI</td><td><span class="b by">Data/BI</span></td><td>Real Estate</td></tr>
+        <tr><td>17</td><td>Standardizing Global Data Reporting with Power BI and Snowflake</td><td><span class="b by">Data/BI</span></td><td>Healthcare</td></tr>
+        <tr><td>18</td><td>ServiceNow ITSM Service Portal UI Transformation</td><td><span class="b bp">ITSM</span></td><td>Cross-Industry</td></tr>
+        <tr><td>19</td><td>Scalable Image Transformation Pipeline with AWS ECS & CloudFront</td><td><span class="b bb">Cloud</span></td><td>E-Commerce</td></tr>
+        <tr><td>20</td><td>Enterprise Data Engineering in Semicon Manufacturing with SQL</td><td><span class="b by">SQL/Data</span></td><td>Semiconductor</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>🔬 Featured Deep Dive: Multi-Agent AI on Salesforce</h2>
+  <div style="background:var(--c1);border:1px solid var(--bd);border-radius:10px;padding:16px;margin:10px 0;">
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;">
+      <span class="b br">AI & ML</span><span class="b bb">Automation/Agents</span><span class="b bg">Cloud App Dev</span><span class="b by">Retail</span>
+    </div>
+    <h3 style="color:var(--r);">Solution Architecture</h3>
+    <input class="sb" placeholder="🔍 Search architecture..." oninput="fT('arT',this.value)">
+    <div class="tw">
+      <table id="arT">
+        <thead><tr>
+          <th onclick="sT('arT',0)">Component <span class="ar">▲▼</span></th>
+          <th onclick="sT('arT',1)">Description <span class="ar">▲▼</span></th>
+          <th onclick="sT('arT',2)">Technology <span class="ar">▲▼</span></th>
+        </tr></thead>
+        <tbody>
+          <tr><td>Hierarchical Multi-Agent Design</td><td>Specialized agents for product discovery, customer assistance, order queries</td><td><span class="b bp">Python, LangGraph</span></td></tr>
+          <tr><td>Foundation Model Diversity</td><td>Claude Haiku, Sonnet & Opus — balanced speed and reasoning</td><td><span class="b br">AWS Bedrock</span></td></tr>
+          <tr><td>Agent Orchestration</td><td>Seamless agent transitions without losing conversational thread</td><td><span class="b bb">LangGraph</span></td></tr>
+          <tr><td>Semantic Data Grounding</td><td>Vector retrieval over catalog data for real-time accuracy</td><td><span class="b bg">Pinecone, OpenSearch, Titan</span></td></tr>
+          <tr><td>CRM Integration</td><td>Salesforce workflow integration for customer data management</td><td><span class="b by">Salesforce</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <h3 style="color:var(--r);margin-top:14px;">Outcomes & Benefits</h3>
+    <div class="tw">
+      <table>
+        <thead><tr><th>Outcome</th><th>Impact</th></tr></thead>
+        <tbody>
+          <tr><td>Enhanced Discovery</td><td>Customers navigate complex product attributes through natural dialogue for more accurate matches</td></tr>
+          <tr><td>Operational Efficiency</td><td>Deflects repetitive queries from human staff, allowing focus on high-complexity interactions</td></tr>
+          <tr><td>Scalable Architecture</td><td>Modular design allows adding new specialist agents without rebuilding core engine</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ========== TECH STACK ========== -->
+<div id="tech" class="sec">
+  <h1>🔧 Technology Stack</h1>
+  <p class="sub">14 core technologies across AI/ML, Cloud, Data, and Enterprise platforms</p>
+
+  <div class="cb"><canvas id="ch6"></canvas></div>
+
+  <h2>📋 Technology Inventory</h2>
+  <input class="sb" placeholder="🔍 Search technologies..." oninput="fT('tT',this.value)">
+  <div class="tw">
+    <table id="tT">
+      <thead><tr>
+        <th onclick="sT('tT',0)"># <span class="ar">▲▼</span></th>
+        <th onclick="sT('tT',1)">Technology <span class="ar">▲▼</span></th>
+        <th onclick="sT('tT',2)">Category <span class="ar">▲▼</span></th>
+        <th onclick="sT('tT',3)">Use Case <span class="ar">▲▼</span></th>
+      </tr></thead>
+      <tbody>
+        <tr><td>1</td><td>AWS Bedrock</td><td><span class="b br">AI Platform</span></td><td>Foundation model hosting — Claude Haiku, Sonnet, Opus</td></tr>
+        <tr><td>2</td><td>LangGraph</td><td><span class="b br">Orchestration</span></td><td>Multi-agent logic orchestration and transitions</td></tr>
+        <tr><td>3</td><td>Amazon Titan</td><td><span class="b br">Embeddings</span></td><td>Vector embedding generation for semantic search</td></tr>
+        <tr><td>4</td><td>Salesforce</td><td><span class="b bg">CRM</span></td><td>Customer relationship management workflows</td></tr>
+        <tr><td>5</td><td>ServiceNow</td><td><span class="b bg">ITSM</span></td><td>IT service management portal transformation</td></tr>
+        <tr><td>6</td><td>Python</td><td><span class="b bp">Programming</span></td><td>Core language for AI agent systems</td></tr>
+        <tr><td>7</td><td>Pinecone</td><td><span class="b bb">Vector DB</span></td><td>Semantic search over product catalogs</td></tr>
+        <tr><td>8</td><td>AWS OpenSearch</td><td><span class="b bb">Search</span></td><td>Retrieval augmentation for catalog data</td></tr>
+        <tr><td>9</td><td>Power BI</td><td><span class="b by">Analytics</span></td><td>Data visualization and business reporting</td></tr>
+        <tr><td>10</td><td>Snowflake</td><td><span class="b bb">Data Warehouse</span></td><td>Cloud data platform for global reporting</td></tr>
+        <tr><td>11</td><td>SharePoint</td><td><span class="b bg">Collaboration</span></td><td>Enterprise portal and document management</td></tr>
+        <tr><td>12</td><td>AWS ECS</td><td><span class="b bb">Compute</span></td><td>Container orchestration for scalable pipelines</td></tr>
+        <tr><td>13</td><td>CloudFront</td><td><span class="b bb">CDN</span></td><td>Content delivery for image transformation</td></tr>
+        <tr><td>14</td><td>SQL Server</td><td><span class="b by">Database</span></td><td>Enterprise data engineering in manufacturing</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ========== BNI STRATEGY ========== -->
+<div id="bni" class="sec">
+  <h1>🎯 BNI Visitor Strategy</h1>
+  <p class="sub">Tailored engagement plan for Ruyi / Xavor Corporation — Irvine, CA</p>
+
+  <h2>🔥 Why Xavor Is a High-Value BNI Prospect</h2>
+  <div style="background:var(--c1);border:1px solid var(--bd);border-radius:10px;padding:16px;margin:10px 0;">
+    <div class="si"><div class="sn">1</div><div class="st"><strong>Massive Referral Surface Area</strong> — 500+ clients and Fortune 500 relationships mean Xavor can both receive and generate high-value enterprise referrals across healthcare, retail, manufacturing, and real estate.</div></div>
+    <div class="si"><div class="sn">2</div><div class="st"><strong>AI Is the Hottest Classification</strong> — Every business owner needs AI solutions. The "AI & ML / IT Services" seat is among the most in-demand BNI classifications today.</div></div>
+    <div class="si"><div class="sn">3</div><div class="st"><strong>Deep Irvine Tech Corridor Roots</strong> — Locally headquartered with natural connections to CPAs, attorneys, realtors, and agencies who serve the same enterprise clients.</div></div>
+    <div class="si"><div class="sn">4</div><div class="st"><strong>Multi-Industry Case Studies</strong> — Proven results across retail, healthcare, MedTech, real estate, semiconductors, and supply chain — they can serve virtually any chapter member's client base.</div></div>
+    <div class="si"><div class="sn">5</div><div class="st"><strong>Partnership-Driven Culture</strong> — Xavor's core philosophy that "strong partnerships are the foundation of everything we build" aligns perfectly with BNI's Givers Gain® philosophy.</div></div>
+  </div>
+
+  <h2>📊 BNI Fit Assessment</h2>
+  <div class="cb"><canvas id="ch7"></canvas></div>
+
+  <h2>🔗 Ideal Contact Sphere Matches</h2>
+  <input class="sb" placeholder="🔍 Search professions..." oninput="fT('spT',this.value)">
+  <div class="tw">
+    <table id="spT">
+      <thead><tr>
+        <th onclick="sT('spT',0)"># <span class="ar">▲▼</span></th>
+        <th onclick="sT('spT',1)">Profession <span class="ar">▲▼</span></th>
+        <th onclick="sT('spT',2)">Why Strong Match <span class="ar">▲▼</span></th>
+        <th onclick="sT('spT',3)">Referral Flow <span class="ar">▲▼</span></th>
+      </tr></thead>
+      <tbody>
+        <tr><td>1</td><td>Business Attorney</td><td>Shared Fortune 500 & enterprise client base</td><td>Both ways — contracts trigger tech needs</td></tr>
+        <tr><td>2</td><td>CPA / Accountant</td><td>Serves same SMB & enterprise decision-makers</td><td>CPA refers clients needing digital transformation</td></tr>
+        <tr><td>3</td><td>Commercial Real Estate Agent</td><td>Office expansions trigger IT infrastructure needs</td><td>New leases = new tech buildouts</td></tr>
+        <tr><td>4</td><td>Digital Marketing Agency</td><td>Marketing clients need AI-powered analytics & tools</td><td>Cross-referral on enterprise clients</td></tr>
+        <tr><td>5</td><td>Cybersecurity Consultant</td><td>Security complements AI/cloud deployments</td><td>Joint enterprise security + AI packages</td></tr>
+        <tr><td>6</td><td>HR / Recruiting Specialist</td><td>Tech companies need talent; recruiters need AI</td><td>Mutual client referrals</td></tr>
+        <tr><td>7</td><td>Commercial Insurance Broker</td><td>Enterprise clients need both tech & insurance</td><td>Insurance refers growing companies needing IT</td></tr>
+        <tr><td>8</td><td>Healthcare Consultant</td><td>Direct alignment with Xavor's healthcare case studies</td><td>Healthcare orgs need AI solutions</td></tr>
+        <tr><td>9</td><td>Business Coach / Consultant</td><td>Coaches advise on tech adoption for scaling</td><td>Refers clients ready for digital transformation</td></tr>
+        <tr><td>10</td><td>Managed IT / Hardware Provider</td><td>Complementary — hardware + Xavor's software/AI</td><td>Joint full-stack technology offerings</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>✉️ Outreach Toolkit</h2>
+  <div class="pa" style="margin:10px 0;">
+    <button class="btn bp1" onclick="oM('emM')">✉️ Email Invitation</button>
+    <button class="btn bo1" onclick="oM('smM')">💬 SMS Script</button>
+    <button class="btn bo1" onclick="oM('phM')">📞 Phone Script</button>
+    <button class="btn bo1" onclick="oM('fuM')">🔄 48hr Follow-Up</button>
+  </div>
+</div>
+
+<!-- ========== LOCATIONS ========== -->
+<div id="locs" class="sec">
+  <h1>🌍 Global Office Locations</h1>
+  <input class="sb" placeholder="🔍 Search locations..." oninput="fT('lcT',this.value)">
+  <div class="cb"><canvas id="ch8"></canvas></div>
+  <div class="tw">
+    <table id="lcT">
+      <thead><tr>
+        <th onclick="sT('lcT',0)">Office <span class="ar">▲▼</span></th>
+        <th onclick="sT('lcT',1)">Address <span class="ar">▲▼</span></th>
+        <th onclick="sT('lcT',2)">Country <span class="ar">▲▼</span></th>
+        <th onclick="sT('lcT',3)">Type <span class="ar">▲▼</span></th>
+      </tr></thead>
+      <tbody>
+        <tr><td>🇺🇸 Irvine, CA</td><td>2211 Michelson Drive, Suite 900, Irvine, CA 92612</td><td>United States</td><td><span class="b br">Headquarters</span></td></tr>
+        <tr><td>🇵🇰 Lahore</td><td>49-CCA, Sector C DHA Phase 6, Lahore 54000</td><td>Pakistan</td><td><span class="b bb">Development Center</span></td></tr>
+        <tr><td>🇨🇳 Shanghai</td><td>South Yunnan Road No. 118, Huangpu District, Shanghai 2000120</td><td>China</td><td><span class="b by">Regional Office</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ========== MODALS ========== -->
+<!-- EMAIL -->
+<div class="mo" id="emM">
+  <div class="md">
+    <h2>✉️ Email Invitation <button class="cx" onclick="cM('emM')">✕</button></h2>
+    <label>To:</label>
+    <input type="email" id="emTo" value="ruyi@xavor.com" readonly style="opacity:.6;">
+    <label>Subject:</label>
+    <input type="text" id="emSu" value="Ruyi — You're Invited to Visit Our BNI Chapter in Irvine, CA">
+    <label>Message:</label>
+    <textarea id="emBo">Dear Ruyi,
+
+I hope this message finds you well! I've been following the incredible work at Xavor Corporation, and I was genuinely impressed by three things that set your team apart:
+
+1. PRODUCTION-READY AI EXPERTISE — Xavor's ability to engineer sophisticated multi-agent AI systems integrated into platforms like Salesforce is exactly the kind of innovation that every business owner in our network needs to hear about. From Claude-powered chatbots to semantic search solutions, the depth of capability is remarkable.
+
+2. 30 YEARS OF FORTUNE 500 TRUST — With 500+ satisfied clients, 1,000+ successful projects, and nearly three decades of engineering excellence, Xavor has built the kind of track record that inspires instant confidence. This is the foundation that makes great referral partnerships possible.
+
+3. PARTNERSHIP-DRIVEN PHILOSOPHY — Xavor's core belief that "strong partnerships are the foundation of everything we build" aligns perfectly with BNI's Givers Gain® philosophy. Our chapter members actively look for opportunities to refer business to each other weekly — and an AI-first company like Xavor would be an incredibly valuable addition to this ecosystem.
+
+I'd love to personally invite you to visit our upcoming BNI chapter meeting as my guest. Here's what you can expect:
+
+• A room of established business owners and decision-makers right here in Irvine
+• Structured networking designed to generate quality referrals — not random business card exchanges
+• An opportunity to introduce Xavor's capabilities to professionals who serve enterprise clients daily
+
+Every business in our chapter — from commercial realtors and CPAs to marketing agencies, business attorneys, and insurance brokers — works with clients who need exactly what Xavor provides. The referral potential is enormous.
+
+To visit a chapter, simply complete this (***Visitor Invite***) simple form to reserve your seat and begin accelerating your business.
+
+I'm confident you'll see the value immediately. Looking forward to welcoming you!
+
+Warm regards</textarea>
+    <div style="display:flex;gap:7px;margin-top:10px;flex-wrap:wrap;">
+      <button class="btn bp1" onclick="sendM()">📤 Open Email Client</button>
+      <button class="btn bo1" onclick="cpF('emBo','emCp')">📋 Copy</button>
+      <button class="btn bo1" onclick="cM('emM')">Cancel</button>
+    </div>
+    <p class="toast" id="emCp">✅ Copied to clipboard!</p>
+  </div>
+</div>
+
+<!-- SMS -->
+<div class="mo" id="smM">
+  <div class="md">
+    <h2>💬 SMS Script <button class="cx" onclick="cM('smM')">✕</button></h2>
+    <label>Message (≤320 chars):</label>
+    <textarea id="smBo" style="min-height:90px;">Hi Ruyi! 👋 Impressed by Xavor's AI solutions & 30-year track record. Our BNI chapter in Irvine has business owners who actively refer IT/AI services weekly. Would love to invite you as my guest! RSVP here: [***Visitor Invite***] — Looking forward to connecting!</textarea>
+    <div style="display:flex;gap:7px;margin-top:10px;">
+      <button class="btn bp1" onclick="cpF('smBo','smCp')">📋 Copy SMS</button>
+      <button class="btn bo1" onclick="cM('smM')">Close</button>
+    </div>
+    <p class="toast" id="smCp">✅ Copied!</p>
+  </div>
+</div>
+
+<!-- PHONE -->
+<div class="mo" id="phM">
+  <div class="md">
+    <h2>📞 Call Script (20-30s) <button class="cx" onclick="cM('phM')">✕</button></h2>
+    <textarea id="phBo" style="min-height:180px;">Hi, is this Ruyi? Great! My name is [YOUR NAME], and I'm a member of a local BNI chapter here in Irvine, California.
+
+I came across Xavor Corporation and was really impressed by the AI and enterprise technology work — especially the multi-agent AI systems and nearly 30 years of delivering for Fortune 500 clients.
+
+BNI is a structured referral networking organization where business owners meet weekly to share qualified referrals. Our chapter includes attorneys, CPAs, commercial realtors, and marketing professionals — all of whom work with clients that need exactly what Xavor provides.
+
+I'd love to invite you to visit our next meeting as my guest. It's a great way to see how structured networking could bring new enterprise clients your way.
+
+What's the best email to send you the details?
+
+[IF GATEKEEPER]: Hi, I'm calling about a community business partnership opportunity for Xavor Corporation. Could you connect me with the person who handles business development or strategic partnerships?</textarea>
+    <div style="display:flex;gap:7px;margin-top:10px;">
+      <button class="btn bp1" onclick="cpF('phBo','phCp')">📋 Copy Script</button>
+      <a class="btn bo1" href="tel:+19492641472">📞 Dial Now</a>
+      <button class="btn bo1" onclick="cM('phM')">Close</button>
+    </div>
+    <p class="toast" id="phCp">✅ Copied!</p>
+  </div>
+</div>
+
+<!-- FOLLOW UP -->
+<div class="mo" id="fuM">
+  <div class="md">
+    <h2>🔄 48-Hour Follow-Up <button class="cx" onclick="cM('fuM')">✕</button></h2>
+    <textarea id="fuBo" style="min-height:160px;">Hi Ruyi,
+
+Just circling back on my invitation to visit our BNI chapter here in Irvine. I know things get busy — especially when managing AI solutions for enterprise clients across multiple industries!
+
+I genuinely believe Xavor Corporation would be an incredible fit. Our members serve the same types of decision-makers your team works with, and the referral potential would be significant on both sides.
+
+We have meetings coming up on:
+• [DATE OPTION 1]
+• [DATE OPTION 2]
+
+Would either of those work? If your schedule is tight but someone else on the Xavor team might be interested, they'd be equally welcome.
+
+Looking forward to hearing from you!
+
+Best regards</textarea>
+    <div style="display:flex;gap:7px;margin-top:10px;">
+      <button class="btn bp1" onclick="cpF('fuBo','fuCp')">📋 Copy</button>
+      <button class="btn bo1" onclick="cM('fuM')">Close</button>
+    </div>
+    <p class="toast" id="fuCp">✅ Copied!</p>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=500w" alt="Higgins Reports">
+  <p>Higgins Reports™ · S.A.L.E. Client Simple Search & Strategy · Powered by Higgins AI</p>
+  <p>📞 1-888-364-3924 · 📧 support@higgins.ai · 🌐 higginstraining.com · © 2026 All Rights Reserved</p>
+</footer>
+
+<script>
+/* ===== NAVIGATION ===== */
+document.querySelectorAll('#nav button').forEach(b=>{
+  b.addEventListener('click',()=>{
+    const s=b.dataset.s;
+    document.querySelectorAll('.sec').forEach(x=>x.classList.remove('act'));
+    document.getElementById(s).classList.add('act');
+    document.querySelectorAll('#nav button').forEach(x=>x.classList.remove('act'));
+    b.classList.add('act');
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+
+/* ===== COUNTER ANIMATION ===== */
+function animCount(){
+  document.querySelectorAll('[data-count]').forEach(el=>{
+    const end=+el.dataset.count;const dur=1200;const start=performance.now();
+    const step=now=>{
+      const p=Math.min((now-start)/dur,1);
+      const ease=1-Math.pow(1-p,3);
+      el.textContent=(end>=100?Math.floor(ease*end).toLocaleString():Math.floor(ease*end))+(end>=20?'+':'');
+      if(p<1)requestAnimationFrame(step);
+    };requestAnimationFrame(step);
+  });
+}
+animCount();
+
+/* ===== TABLE FILTER ===== */
+function fT(id,q){
+  const rows=document.getElementById(id).querySelectorAll('tbody tr');
+  q=q.toLowerCase();
+  rows.forEach(r=>{r.style.display=r.textContent.toLowerCase().includes(q)?'':'none';});
+}
+
+/* ===== TABLE SORT ===== */
+const ss={};
+function sT(id,c){
+  const k=id+'_'+c;ss[k]=!ss[k];const asc=ss[k];
+  const tb=document.getElementById(id).querySelector('tbody');
+  const rows=Array.from(tb.querySelectorAll('tr'));
+  rows.sort((a,b)=>{
+    const av=(a.children[c]?.textContent||'').trim(),bv=(b.children[c]?.textContent||'').trim();
+    const an=parseFloat(av),bn=parseFloat(bv);
+    if(!isNaN(an)&&!isNaN(bn))return asc?an-bn:bn-an;
+    return asc?av.localeCompare(bv):bv.localeCompare(av);
+  });
+  rows.forEach(r=>tb.appendChild(r));
+}
+
+/* ===== MODALS ===== */
+function oM(id){document.getElementById(id).classList.add('sh');}
+function cM(id){document.getElementById(id).classList.remove('sh');}
+function sendM(){
+  const t=document.getElementById('emTo').value;
+  const s=encodeURIComponent(document.getElementById('emSu').value);
+  const b=encodeURIComponent(document.getElementById('emBo').value);
+  window.open('mailto:'+t+'?subject='+s+'&body='+b,'_blank');
+}
+function cpF(fid,tid){
+  navigator.clipboard.writeText(document.getElementById(fid).value).then(()=>{
+    const t=document.getElementById(tid);t.style.display='block';
+    setTimeout(()=>t.style.display='none',2500);
+  });
+}
+
+/* ===== CHARTS ===== */
+const R='#CF2030',RA='rgba(207,32,48,.65)',BA='rgba(56,152,236,.65)',GA='rgba(46,204,113,.55)',YA='rgba(241,196,15,.55)',PA='rgba(155,89,182,.55)',OA='rgba(230,126,34,.55)';
+const cDef={responsive:true,plugins:{legend:{labels:{color:'#aaa',font:{size:10.5}}}}};
+const scDef={x:{ticks:{color:'#777',font:{size:10}},grid:{color:'#1a1a1a'}},y:{ticks:{color:'#777',font:{size:10}},grid:{color:'#1a1a1a'},beginAtZero:true}};
+
+// Dashboard Bar
+new Chart(document.getElementById('ch1'),{type:'bar',data:{labels:['Clients','Years','Projects','Resources','Offices','Studies','Tech'],datasets:[{label:'Scale Metrics',data:[500,29,1000,200,3,20,14],backgroundColor:[RA,BA,GA,YA,PA,OA,'rgba(52,152,219,.6)'],borderColor:[R,'#3898ec','#2ecc71','#f1c40f','#9b59b6','#e67e22','#3498db'],borderWidth:2,borderRadius:5}]},options:{...cDef,scales:scDef}});
+
+// Dashboard Donut
+new Chart(document.getElementById('ch2'),{type:'doughnut',data:{labels:['AI/ML (7)','PLM/Agile (3)','Data/BI (4)','SharePoint (3)','Cloud/ITSM (3)'],datasets:[{data:[7,3,4,3,3],backgroundColor:[RA,BA,YA,GA,PA],borderColor:'#000',borderWidth:2}]},options:{...cDef,plugins:{legend:{position:'right',labels:{color:'#aaa',padding:10,font:{size:10}}}}}});
+
+// Company Radar
+new Chart(document.getElementById('ch3'),{type:'radar',data:{labels:['AI/ML Depth','Cloud Expertise','Enterprise CRM','Data Analytics','IoT/Hardware','Global Reach'],datasets:[{label:'Capability Index',data:[96,90,85,82,72,76],backgroundColor:'rgba(207,32,48,.12)',borderColor:R,borderWidth:2,pointBackgroundColor:R,pointRadius:4}]},options:{...cDef,scales:{r:{ticks:{color:'#888',backdropColor:'transparent',font:{size:9}},grid:{color:'#222'},pointLabels:{color:'#bbb',font:{size:10.5}},min:0,max:100}}}});
+
+// Case Category Donut
+new Chart(document.getElementById('ch4'),{type:'doughnut',data:{labels:['AI/ML','PLM/Agile','Data/BI','SharePoint','Cloud/ITSM'],datasets:[{data:[7,3,4,3,3],backgroundColor:[RA,BA,YA,GA,PA],borderColor:'#111',borderWidth:2}]},options:{...cDef,plugins:{legend:{position:'bottom',labels:{color:'#aaa',padding:8,font:{size:10}}}}}});
+
+// Case Industry Bar
+new Chart(document.getElementById('ch5'),{type:'bar',data:{labels:['Manufacturing','Healthcare','Retail','MedTech','Real Estate','Semiconductor','Supply Chain','SaaS','Cross-Industry','E-Commerce','Logistics'],datasets:[{label:'Case Studies',data:[2,2,2,2,2,2,2,1,3,1,1],backgroundColor:RA,borderColor:R,borderWidth:1.5,borderRadius:3}]},options:{...cDef,indexAxis:'y',scales:{x:{ticks:{color:'#777',stepSize:1,font:{size:10}},grid:{color:'#1a1a1a'},beginAtZero:true},y:{ticks:{color:'#999',font:{size:9.5}},grid:{color:'#1a1a1a'}}}}});
+
+// Tech Polar
+new Chart(document.getElementById('ch6'),{type:'polarArea',data:{labels:['AWS Services (4)','AI/ML Models (3)','Databases/Search (3)','CRM/ITSM (2)','Analytics/BI (2)','Programming (1)'],datasets:[{data:[4,3,3,2,2,1],backgroundColor:['rgba(207,32,48,.4)','rgba(56,152,236,.4)','rgba(46,204,113,.4)','rgba(241,196,15,.4)','rgba(230,126,34,.4)','rgba(155,89,182,.4)'],borderColor:'#333',borderWidth:1}]},options:{...cDef,scales:{r:{ticks:{color:'#888',backdropColor:'transparent',font:{size:9}},grid:{color:'#222'}}}}});
+
+// BNI Fit Radar
+new Chart(document.getElementById('ch7'),{type:'radar',data:{labels:['Referral Potential','Industry Breadth','Local Presence','Partnership Culture','Tech Demand','Revenue Potential'],datasets:[{label:'Xavor BNI Fit',data:[95,93,88,96,98,91],backgroundColor:'rgba(207,32,48,.12)',borderColor:R,borderWidth:2,pointBackgroundColor:R,pointRadius:4},{label:'Avg BNI Prospect',data:[58,48,68,54,42,52],backgroundColor:'rgba(56,152,236,.08)',borderColor:'#3898ec',borderWidth:1.5,pointBackgroundColor:'#3898ec',pointRadius:3}]},options:{...cDef,scales:{r:{ticks:{color:'#888',backdropColor:'transparent',font:{size:9}},grid:{color:'#222'},pointLabels:{color:'#bbb',font:{size:10.5}},min:0,max:100}}}});
+
+// Location Chart
+new Chart(document.getElementById('ch8'),{type:'bar',data:{labels:['🇺🇸 United States (HQ)','🇵🇰 Pakistan (Dev Center)','🇨🇳 China (Regional)'],datasets:[{label:'Global Offices',data:[1,1,1],backgroundColor:[RA,GA,BA],borderColor:[R,'#2ecc71','#3898ec'],borderWidth:2,borderRadius:5}]},options:{...cDef,indexAxis:'y',scales:{x:{ticks:{color:'#777',stepSize:1,font:{size:10}},grid:{color:'#1a1a1a'},beginAtZero:true},y:{ticks:{color:'#999',font:{size:10.5}},grid:{color:'#1a1a1a'}}}}});
+</script>
+</body>
+</html>

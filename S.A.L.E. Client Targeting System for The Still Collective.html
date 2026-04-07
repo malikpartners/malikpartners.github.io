@@ -1,0 +1,1202 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>S.A.L.E. Client Targeting System - The Still Collective</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #000000;
+            color: #FFFFFF;
+            line-height: 1.6;
+        }
+
+        .header {
+            background-color: #CF2030;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(207, 32, 48, 0.3);
+        }
+
+        .logo {
+            height: 60px;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-item {
+            color: #FFFFFF;
+            text-decoration: none;
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .nav-item:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .section {
+            background-color: #1a1a1a;
+            margin-bottom: 2rem;
+            padding: 2rem;
+            border-radius: 10px;
+            border: 1px solid #CF2030;
+        }
+
+        .section h2 {
+            color: #CF2030;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .search-input, .filter-select {
+            padding: 0.75rem;
+            border: 1px solid #CF2030;
+            background-color: #2a2a2a;
+            color: #FFFFFF;
+            border-radius: 5px;
+            min-width: 200px;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            background-color: #CF2030;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #a91a27;
+        }
+
+        .btn-secondary {
+            background-color: #666;
+        }
+
+        .btn-secondary:hover {
+            background-color: #555;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            background-color: #2a2a2a;
+            border-radius: 10px;
+            border: 1px solid #CF2030;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 1200px;
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #444;
+        }
+
+        th {
+            background-color: #CF2030;
+            color: white;
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        th:hover {
+            background-color: #a91a27;
+        }
+
+        tr:hover {
+            background-color: #333;
+        }
+
+        .tier-1a { border-left: 4px solid #00ff00; }
+        .tier-1b { border-left: 4px solid #ffff00; }
+        .tier-1c { border-left: 4px solid #0088ff; }
+
+        .score-high { color: #00ff00; font-weight: bold; }
+        .score-medium { color: #ffff00; font-weight: bold; }
+        .score-low { color: #ff6666; font-weight: bold; }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+        }
+
+        .modal-content {
+            background-color: #1a1a1a;
+            margin: 5% auto;
+            padding: 2rem;
+            border: 2px solid #CF2030;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 800px;
+            color: #FFFFFF;
+        }
+
+        .close {
+            color: #CF2030;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: #a91a27;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #CF2030;
+            font-weight: 600;
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #CF2030;
+            background-color: #2a2a2a;
+            color: #FFFFFF;
+            border-radius: 5px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background-color: #2a2a2a;
+            padding: 1.5rem;
+            border-radius: 10px;
+            border: 1px solid #CF2030;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #CF2030;
+        }
+
+        .footer {
+            background-color: #1a1a1a;
+            padding: 2rem;
+            text-align: center;
+            border-top: 1px solid #CF2030;
+            margin-top: 4rem;
+        }
+
+        .footer-logo {
+            height: 40px;
+            margin-bottom: 1rem;
+        }
+
+        .tab-container {
+            margin-bottom: 2rem;
+        }
+
+        .tabs {
+            display: flex;
+            border-bottom: 2px solid #CF2030;
+            margin-bottom: 1rem;
+        }
+
+        .tab {
+            padding: 1rem 2rem;
+            background-color: #2a2a2a;
+            color: #FFFFFF;
+            border: none;
+            cursor: pointer;
+            border-top: 2px solid transparent;
+            border-left: 1px solid #444;
+            border-right: 1px solid #444;
+        }
+
+        .tab.active {
+            background-color: #CF2030;
+            border-top-color: #FFFFFF;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .controls {
+                flex-direction: column;
+            }
+            
+            .search-input, .filter-select {
+                min-width: 100%;
+            }
+            
+            .header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .nav-menu {
+                flex-direction: column;
+                width: 100%;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports" class="logo">
+        <nav class="nav-menu">
+            <a href="#" class="nav-item">Dashboard</a>
+            <a href="#" class="nav-item">Clients</a>
+            <a href="#" class="nav-item">Analytics</a>
+            <a href="#" class="nav-item">Reports</a>
+        </nav>
+    </div>
+
+    <div class="container">
+        <div class="section">
+            <h1 style="color: #CF2030; font-size: 2.5rem; margin-bottom: 1rem;">S.A.L.E. Client Targeting System</h1>
+            <p style="font-size: 1.2rem; color: #ccc;">The Still Collective - Premium Design Services</p>
+            <p style="color: #999;">San Anselmo, California | <a href="https://www.thestillcollective.com" style="color: #CF2030;">www.thestillcollective.com</a></p>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number">50</div>
+                <div>Total Prospects</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="tier1a-count">12</div>
+                <div>Tier 1A (Premium)</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="tier1b-count">23</div>
+                <div>Tier 1B (High-Value)</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="tier1c-count">15</div>
+                <div>Tier 1C (Qualified)</div>
+            </div>
+        </div>
+
+        <div class="tab-container">
+            <div class="tabs">
+                <button class="tab active" onclick="showTab('clients')">Client Database</button>
+                <button class="tab" onclick="showTab('pures')">P.U.R.E.S. Scoring</button>
+                <button class="tab" onclick="showTab('assessment')">Assessment</button>
+                <button class="tab" onclick="showTab('listening')">Listening</button>
+                <button class="tab" onclick="showTab('empowerment')">Empowerment</button>
+            </div>
+
+            <div id="clients-tab" class="tab-content active">
+                <div class="section">
+                    <h2>Client Database & Outreach Management</h2>
+                    
+                    <div class="controls">
+                        <input type="text" id="searchInput" placeholder="Search clients..." class="search-input">
+                        <select id="tierFilter" class="filter-select">
+                            <option value="">All Tiers</option>
+                            <option value="Tier 1A">Tier 1A - Premium</option>
+                            <option value="Tier 1B">Tier 1B - High Value</option>
+                            <option value="Tier 1C">Tier 1C - Qualified</option>
+                        </select>
+                        <select id="industryFilter" class="filter-select">
+                            <option value="">All Industries</option>
+                            <option value="Technology">Technology</option>
+                            <option value="Healthcare">Healthcare</option>
+                            <option value="Finance">Finance</option>
+                            <option value="Retail">Retail</option>
+                            <option value="Real Estate">Real Estate</option>
+                            <option value="Legal">Legal</option>
+                            <option value="Hospitality">Hospitality</option>
+                        </select>
+                        <button class="btn" onclick="exportData()">Export CSV</button>
+                        <button class="btn btn-secondary" onclick="openAddClientModal()">Add Client</button>
+                    </div>
+
+                    <div class="table-container">
+                        <table id="clientTable">
+                            <thead>
+                                <tr>
+                                    <th onclick="sortTable(0)">Client Name ↕</th>
+                                    <th onclick="sortTable(1)">Email ↕</th>
+                                    <th onclick="sortTable(2)">Phone ↕</th>
+                                    <th onclick="sortTable(3)">Address ↕</th>
+                                    <th onclick="sortTable(4)">P.U.R.E.S. Score ↕</th>
+                                    <th onclick="sortTable(5)">Tier Level ↕</th>
+                                    <th onclick="sortTable(6)">Industry ↕</th>
+                                    <th onclick="sortTable(7)">Revenue Estimate ↕</th>
+                                    <th onclick="sortTable(8)">Contact Status ↕</th>
+                                    <th onclick="sortTable(9)">Last Contact ↕</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="clientTableBody">
+                                <!-- Client data will be populated here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div id="pures-tab" class="tab-content">
+                <div class="section">
+                    <h2>P.U.R.E.S. Client Scoring System</h2>
+                    <div class="form-group">
+                        <label>Select Client for Scoring:</label>
+                        <select id="clientSelect" class="form-group input">
+                            <option value="">Choose a client...</option>
+                        </select>
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+                        <div>
+                            <h3 style="color: #CF2030;">Profitability (1-5)</h3>
+                            <input type="range" id="profitability" min="1" max="5" value="3" oninput="updateScore()">
+                            <span id="profitabilityValue">3</span>
+                            <p>Annual revenue threshold and budget capacity</p>
+                        </div>
+                        <div>
+                            <h3 style="color: #CF2030;">Urgency (1-5)</h3>
+                            <input type="range" id="urgency" min="1" max="5" value="3" oninput="updateScore()">
+                            <span id="urgencyValue">3</span>
+                            <p>Active pain points requiring immediate solutions</p>
+                        </div>
+                        <div>
+                            <h3 style="color: #CF2030;">Reachability (1-5)</h3>
+                            <input type="range" id="reachability" min="1" max="5" value="3" oninput="updateScore()">
+                            <span id="reachabilityValue">3</span>
+                            <p>Accessible decision makers with clear contact paths</p>
+                        </div>
+                        <div>
+                            <h3 style="color: #CF2030;">Engagement (1-5)</h3>
+                            <input type="range" id="engagement" min="1" max="5" value="3" oninput="updateScore()">
+                            <span id="engagementValue">3</span>
+                            <p>Openness to innovation and partnerships</p>
+                        </div>
+                        <div>
+                            <h3 style="color: #CF2030;">Sustainability (1-5)</h3>
+                            <input type="range" id="sustainability" min="1" max="5" value="3" oninput="updateScore()">
+                            <span id="sustainabilityValue">3</span>
+                            <p>Long-term partnership potential with growth trajectory</p>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 2rem; padding: 1rem; background-color: #2a2a2a; border-radius: 10px;">
+                        <h3 style="color: #CF2030;">Overall P.U.R.E.S. Score: <span id="overallScore">15</span>/25</h3>
+                        <p id="tierRecommendation">Tier Classification: Tier 1C - Qualified</p>
+                    </div>
+                    
+                    <button class="btn" style="margin-top: 1rem;" onclick="saveScore()">Save Score</button>
+                </div>
+            </div>
+
+            <div id="assessment-tab" class="tab-content">
+                <div class="section">
+                    <h2>Buying Pattern Assessment</h2>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+                        <div style="background-color: #2a2a2a; padding: 1.5rem; border-radius: 10px;">
+                            <h3 style="color: #CF2030;">Analytical Buyers</h3>
+                            <p>Require detailed ROI analysis, case studies, trials</p>
+                            <ul style="margin-top: 1rem;">
+                                <li>Data-driven decision making</li>
+                                <li>Detailed proposals needed</li>
+                                <li>Long evaluation periods</li>
+                            </ul>
+                        </div>
+                        <div style="background-color: #2a2a2a; padding: 1.5rem; border-radius: 10px;">
+                            <h3 style="color: #CF2030;">Relationship Buyers</h3>
+                            <p>Value trust, referrals, long-term partnerships</p>
+                            <ul style="margin-top: 1rem;">
+                                <li>Trust-based decisions</li>
+                                <li>Referral-driven</li>
+                                <li>Relationship-focused</li>
+                            </ul>
+                        </div>
+                        <div style="background-color: #2a2a2a; padding: 1.5rem; border-radius: 10px;">
+                            <h3 style="color: #CF2030;">Efficiency Buyers</h3>
+                            <p>Focus on time-saving, process improvement</p>
+                            <ul style="margin-top: 1rem;">
+                                <li>Quick decision makers</li>
+                                <li>ROI-focused</li>
+                                <li>Process optimization</li>
+                            </ul>
+                        </div>
+                        <div style="background-color: #2a2a2a; padding: 1.5rem; border-radius: 10px;">
+                            <h3 style="color: #CF2030;">Innovation Buyers</h3>
+                            <p>Seek cutting-edge solutions, competitive advantage</p>
+                            <ul style="margin-top: 1rem;">
+                                <li>Early adopters</li>
+                                <li>Technology-focused</li>
+                                <li>Competitive differentiation</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="listening-tab" class="tab-content">
+                <div class="section">
+                    <h2>Feedback Integration System</h2>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+                        <div style="background-color: #2a2a2a; padding: 1.5rem; border-radius: 10px;">
+                            <h3 style="color: #CF2030;">Pre-Sale Feedback</h3>
+                            <textarea placeholder="Initial client needs and concerns..." style="width: 100%; height: 100px; margin-top: 1rem;"></textarea>
+                        </div>
+                        <div style="background-color: #2a2a2a; padding: 1.5rem; border-radius: 10px;">
+                            <h3 style="color: #CF2030;">During-Sale Progress</h3>
+                            <textarea placeholder="Project milestone feedback..." style="width: 100%; height: 100px; margin-top: 1rem;"></textarea>
+                        </div>
+                        <div style="background-color: #2a2a2a; padding: 1.5rem; border-radius: 10px;">
+                            <h3 style="color: #CF2030;">Post-Sale Satisfaction</h3>
+                            <textarea placeholder="Client satisfaction and outcomes..." style="width: 100%; height: 100px; margin-top: 1rem;"></textarea>
+                        </div>
+                        <div style="background-color: #2a2a2a; padding: 1.5rem; border-radius: 10px;">
+                            <h3 style="color: #CF2030;">Complaint Resolution</h3>
+                            <textarea placeholder="Issues and resolution tracking..." style="width: 100%; height: 100px; margin-top: 1rem;"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="empowerment-tab" class="tab-content">
+                <div class="section">
+                    <h2>Referral Strategy & Empowerment</h2>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+                        <div style="background-color: #2a2a2a; padding: 1.5rem; border-radius: 10px;">
+                            <h3 style="color: #CF2030;">Success Stories</h3>
+                            <p>Document and share client success stories for referral generation</p>
+                            <button class="btn" style="margin-top: 1rem;">Add Success Story</button>
+                        </div>
+                        <div style="background-color: #2a2a2a; padding: 1.5rem; border-radius: 10px;">
+                            <h3 style="color: #CF2030;">Referral Tracking</h3>
+                            <p>Track referrals and rewards for client advocacy</p>
+                            <button class="btn" style="margin-top: 1rem;">Manage Referrals</button>
+                        </div>
+                        <div style="background-color: #2a2a2a; padding: 1.5rem; border-radius: 10px;">
+                            <h3 style="color: #CF2030;">Client Advocacy</h3>
+                            <p>Develop client advocates and brand ambassadors</p>
+                            <button class="btn" style="margin-top: 1rem;">Advocacy Program</button>
+                        </div>
+                        <div style="background-color: #2a2a2a; padding: 1.5rem; border-radius: 10px;">
+                            <h3 style="color: #CF2030;">Co-Marketing</h3>
+                            <p>Plan joint marketing opportunities with clients</p>
+                            <button class="btn" style="margin-top: 1rem;">Plan Campaign</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Modal -->
+    <div id="contactModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('contactModal')">&times;</span>
+            <h2 style="color: #CF2030;">Contact Client</h2>
+            <div id="contactContent">
+                <!-- Contact form will be populated here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Client Modal -->
+    <div id="addClientModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('addClientModal')">&times;</span>
+            <h2 style="color: #CF2030;">Add New Client</h2>
+            <form id="addClientForm">
+                <div class="form-group">
+                    <label>Client Name:</label>
+                    <input type="text" id="newClientName" required>
+                </div>
+                <div class="form-group">
+                    <label>Email:</label>
+                    <input type="email" id="newClientEmail" required>
+                </div>
+                <div class="form-group">
+                    <label>Phone:</label>
+                    <input type="tel" id="newClientPhone" required>
+                </div>
+                <div class="form-group">
+                    <label>Address:</label>
+                    <textarea id="newClientAddress" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Industry:</label>
+                    <select id="newClientIndustry" required>
+                        <option value="">Select Industry</option>
+                        <option value="Technology">Technology</option>
+                        <option value="Healthcare">Healthcare</option>
+                        <option value="Finance">Finance</option>
+                        <option value="Retail">Retail</option>
+                        <option value="Real Estate">Real Estate</option>
+                        <option value="Legal">Legal</option>
+                        <option value="Hospitality">Hospitality</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn">Add Client</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="footer">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports" class="footer-logo">
+        <p>&copy; 2024 Higgins Reports. S.A.L.E. Client Targeting System for The Still Collective</p>
+    </div>
+
+    <script>
+        // Sample client data for The Still Collective (Design company in San Anselmo, CA)
+        let clientData = [
+            {
+                name: "Sarah Mitchell",
+                email: "sarah.mitchell@techstartup.com",
+                phone: "(415) 234-5678",
+                address: "123 Main St, San Rafael, CA 94901",
+                puresScore: 22,
+                tier: "Tier 1A",
+                industry: "Technology",
+                revenue: "$2.5M",
+                contactStatus: "Qualified Lead",
+                lastContact: "2024-01-15",
+                nextAction: "Send proposal",
+                notes: "Interested in complete brand redesign",
+                buyingPattern: "Analytical"
+            },
+            {
+                name: "Michael Chen",
+                email: "m.chen@healthcareplus.com",
+                phone: "(415) 345-6789",
+                address: "456 Oak Ave, Novato, CA 94947",
+                puresScore: 20,
+                tier: "Tier 1A",
+                industry: "Healthcare",
+                revenue: "$1.8M",
+                contactStatus: "Initial Contact",
+                lastContact: "2024-01-10",
+                nextAction: "Schedule meeting",
+                notes: "Medical practice branding needs",
+                buyingPattern: "Relationship"
+            },
+            {
+                name: "Jennifer Rodriguez",
+                email: "jen.rodriguez@finservices.com",
+                phone: "(415) 456-7890",
+                address: "789 Pine St, Mill Valley, CA 94941",
+                puresScore: 21,
+                tier: "Tier 1A",
+                industry: "Finance",
+                revenue: "$3.2M",
+                contactStatus: "Proposal Sent",
+                lastContact: "2024-01-12",
+                nextAction: "Follow up call",
+                notes: "Financial services rebrand",
+                buyingPattern: "Analytical"
+            },
+            {
+                name: "David Park",
+                email: "david@retailboutique.com",
+                phone: "(415) 567-8901",
+                address: "321 Cedar Ln, Tiburon, CA 94920",
+                puresScore: 18,
+                tier: "Tier 1B",
+                industry: "Retail",
+                revenue: "$850K",
+                contactStatus: "Nurturing",
+                lastContact: "2024-01-08",
+                nextAction: "Send case studies",
+                notes: "Boutique retail store design",
+                buyingPattern: "Efficiency"
+            },
+            {
+                name: "Amanda Foster",
+                email: "amanda@realestatepro.com",
+                phone: "(415) 678-9012",
+                address: "654 Elm Dr, Corte Madera, CA 94925",
+                puresScore: 19,
+                tier: "Tier 1B",
+                industry: "Real Estate",
+                revenue: "$1.2M",
+                contactStatus: "Meeting Scheduled",
+                lastContact: "2024-01-14",
+                nextAction: "Attend meeting",
+                notes: "Real estate marketing materials",
+                buyingPattern: "Relationship"
+            },
+            {
+                name: "Robert Kim",
+                email: "robert@legalfirm.com",
+                phone: "(415) 789-0123",
+                address: "987 Maple St, San Anselmo, CA 94960",
+                puresScore: 17,
+                tier: "Tier 1B",
+                industry: "Legal",
+                revenue: "$950K",
+                contactStatus: "Cold Lead",
+                lastContact: "2024-01-05",
+                nextAction: "Initial outreach",
+                notes: "Law firm branding needs",
+                buyingPattern: "Analytical"
+            },
+            {
+                name: "Lisa Thompson",
+                email: "lisa@hospitalitygroup.com",
+                phone: "(415) 890-1234",
+                address: "147 Birch Ave, Fairfax, CA 94930",
+                puresScore: 16,
+                tier: "Tier 1B",
+                industry: "Hospitality",
+                revenue: "$780K",
+                contactStatus: "Quote Requested",
+                lastContact: "2024-01-11",
+                nextAction: "Prepare quote",
+                notes: "Restaurant chain branding",
+                buyingPattern: "Innovation"
+            },
+            {
+                name: "James Wilson",
+                email: "james@techconsulting.com",
+                phone: "(415) 901-2345",
+                address: "258 Willow St, San Rafael, CA 94901",
+                puresScore: 15,
+                tier: "Tier 1C",
+                industry: "Technology",
+                revenue: "$650K",
+                contactStatus: "Research Phase",
+                lastContact: "2024-01-09",
+                nextAction: "Educational content",
+                notes: "Tech consulting firm logo",
+                buyingPattern: "Analytical"
+            },
+            {
+                name: "Maria Garcia",
+                email: "maria@wellness-center.com",
+                phone: "(415) 012-3456",
+                address: "369 Sycamore Rd, Novato, CA 94947",
+                puresScore: 14,
+                tier: "Tier 1C",
+                industry: "Healthcare",
+                revenue: "$520K",
+                contactStatus: "Interested",
+                lastContact: "2024-01-07",
+                nextAction: "Schedule consultation",
+                notes: "Wellness center branding",
+                buyingPattern: "Relationship"
+            },
+            {
+                name: "Thomas Brown",
+                email: "thomas@creditunion.org",
+                phone: "(415) 123-4567",
+                address: "741 Redwood Dr, Mill Valley, CA 94941",
+                puresScore: 16,
+                tier: "Tier 1C",
+                industry: "Finance",
+                revenue: "$890K",
+                contactStatus: "Proposal Review",
+                lastContact: "2024-01-13",
+                nextAction: "Await decision",
+                notes: "Credit union rebrand",
+                buyingPattern: "Efficiency"
+            }
+            // Add 40 more clients to reach 50 total...
+        ];
+
+        // Add 40 more sample clients
+        const additionalClients = [
+            {
+                name: "Susan Anderson",
+                email: "susan@boutique-fashion.com",
+                phone: "(415) 234-5679",
+                address: "852 Grove St, Larkspur, CA 94939",
+                puresScore: 13,
+                tier: "Tier 1C",
+                industry: "Retail",
+                revenue: "$480K",
+                contactStatus: "Cold Lead",
+                lastContact: "2024-01-06",
+                nextAction: "Initial contact",
+                notes: "Fashion boutique needs branding",
+                buyingPattern: "Innovation"
+            },
+            {
+                name: "Kevin Lee",
+                email: "kevin@property-management.com",
+                phone: "(415) 345-6780",
+                address: "963 Valley Rd, Ross, CA 94957",
+                puresScore: 18,
+                tier: "Tier 1B",
+                industry: "Real Estate",
+                revenue: "$1.1M",
+                contactStatus: "Qualified Lead",
+                lastContact: "2024-01-16",
+                nextAction: "Send portfolio",
+                notes: "Property management company",
+                buyingPattern: "Efficiency"
+            },
+            {
+                name: "Rachel Green",
+                email: "rachel@familylaw.com",
+                phone: "(415) 456-7891",
+                address: "174 Highland Ave, San Anselmo, CA 94960",
+                puresScore: 15,
+                tier: "Tier 1C",
+                industry: "Legal",
+                revenue: "$680K",
+                contactStatus: "Nurturing",
+                lastContact: "2024-01-04",
+                nextAction: "Follow up email",
+                notes: "Family law practice",
+                buyingPattern: "Relationship"
+            },
+            {
+                name: "Mark Davis",
+                email: "mark@restaurant-group.com",
+                phone: "(415) 567-8902",
+                address: "285 Forest Dr, Kentfield, CA 94904",
+                puresScore: 19,
+                tier: "Tier 1B",
+                industry: "Hospitality",
+                revenue: "$1.3M",
+                contactStatus: "Meeting Scheduled",
+                lastContact: "2024-01-17",
+                nextAction: "Prepare presentation",
+                notes: "Restaurant group expansion",
+                buyingPattern: "Innovation"
+            },
+            {
+                name: "Linda Martinez",
+                email: "linda@dental-practice.com",
+                phone: "(415) 678-9013",
+                address: "396 Canyon Rd, Sausalito, CA 94965",
+                puresScore: 17,
+                tier: "Tier 1B",
+                industry: "Healthcare",
+                revenue: "$920K",
+                contactStatus: "Proposal Sent",
+                lastContact: "2024-01-14",
+                nextAction: "Follow up call",
+                notes: "Dental practice modernization",
+                buyingPattern: "Analytical"
+            }
+            // Continue with more clients...
+        ];
+
+        // Add the additional clients to the main array
+        clientData = clientData.concat(additionalClients);
+
+        // Add more clients to reach 50 total
+        for (let i = clientData.length; i < 50; i++) {
+            const industries = ["Technology", "Healthcare", "Finance", "Retail", "Real Estate", "Legal", "Hospitality"];
+            const tiers = ["Tier 1A", "Tier 1B", "Tier 1C"];
+            const statuses = ["Cold Lead", "Qualified Lead", "Nurturing", "Proposal Sent", "Meeting Scheduled"];
+            const patterns = ["Analytical", "Relationship", "Efficiency", "Innovation"];
+            
+            clientData.push({
+                name: `Client ${i + 1}`,
+                email: `client${i + 1}@example.com`,
+                phone: `(415) ${Math.floor(Math.random() * 900) + 100}-${Math.floor(Math.random() * 9000) + 1000}`,
+                address: `${Math.floor(Math.random() * 999) + 1} Street ${i + 1}, Marin County, CA`,
+                puresScore: Math.floor(Math.random() * 10) + 13,
+                tier: tiers[Math.floor(Math.random() * tiers.length)],
+                industry: industries[Math.floor(Math.random() * industries.length)],
+                revenue: `$${Math.floor(Math.random() * 2000) + 500}K`,
+                contactStatus: statuses[Math.floor(Math.random() * statuses.length)],
+                lastContact: `2024-01-${Math.floor(Math.random() * 20) + 1}`,
+                nextAction: "Follow up",
+                notes: `${industries[Math.floor(Math.random() * industries.length)]} client needs`,
+                buyingPattern: patterns[Math.floor(Math.random() * patterns.length)]
+            });
+        }
+
+        let filteredData = [...clientData];
+        let sortDirection = {};
+
+        function populateTable() {
+            const tableBody = document.getElementById('clientTableBody');
+            tableBody.innerHTML = '';
+
+            filteredData.forEach((client, index) => {
+                const row = document.createElement('tr');
+                row.className = client.tier.replace(' ', '').toLowerCase();
+                
+                const scoreClass = client.puresScore >= 20 ? 'score-high' : 
+                                 client.puresScore >= 15 ? 'score-medium' : 'score-low';
+
+                row.innerHTML = `
+                    <td>${client.name}</td>
+                    <td>${client.email}</td>
+                    <td>${client.phone}</td>
+                    <td>${client.address}</td>
+                    <td class="${scoreClass}">${client.puresScore}/25</td>
+                    <td>${client.tier}</td>
+                    <td>${client.industry}</td>
+                    <td>${client.revenue}</td>
+                    <td>${client.contactStatus}</td>
+                    <td>${client.lastContact}</td>
+                    <td>
+                        <button class="btn" style="margin: 2px; padding: 5px 10px;" onclick="contactClient(${index})">Contact</button>
+                        <button class="btn btn-secondary" style="margin: 2px; padding: 5px 10px;" onclick="editClient(${index})">Edit</button>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+
+            updateStats();
+            populateClientSelect();
+        }
+
+        function updateStats() {
+            const tier1a = filteredData.filter(c => c.tier === 'Tier 1A').length;
+            const tier1b = filteredData.filter(c => c.tier === 'Tier 1B').length;
+            const tier1c = filteredData.filter(c => c.tier === 'Tier 1C').length;
+
+            document.getElementById('tier1a-count').textContent = tier1a;
+            document.getElementById('tier1b-count').textContent = tier1b;
+            document.getElementById('tier1c-count').textContent = tier1c;
+        }
+
+        function populateClientSelect() {
+            const select = document.getElementById('clientSelect');
+            select.innerHTML = '<option value="">Choose a client...</option>';
+            clientData.forEach((client, index) => {
+                const option = document.createElement('option');
+                option.value = index;
+                option.textContent = client.name;
+                select.appendChild(option);
+            });
+        }
+
+        function filterTable() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const tierFilter = document.getElementById('tierFilter').value;
+            const industryFilter = document.getElementById('industryFilter').value;
+
+            filteredData = clientData.filter(client => {
+                const matchesSearch = Object.values(client).some(value => 
+                    value.toString().toLowerCase().includes(searchTerm)
+                );
+                const matchesTier = !tierFilter || client.tier === tierFilter;
+                const matchesIndustry = !industryFilter || client.industry === industryFilter;
+
+                return matchesSearch && matchesTier && matchesIndustry;
+            });
+
+            populateTable();
+        }
+
+        function sortTable(columnIndex) {
+            const columns = ['name', 'email', 'phone', 'address', 'puresScore', 'tier', 'industry', 'revenue', 'contactStatus', 'lastContact'];
+            const column = columns[columnIndex];
+            
+            if (sortDirection[column] === 'asc') {
+                sortDirection[column] = 'desc';
+                filteredData.sort((a, b) => b[column] > a[column] ? 1 : -1);
+            } else {
+                sortDirection[column] = 'asc';
+                filteredData.sort((a, b) => a[column] > b[column] ? 1 : -1);
+            }
+
+            populateTable();
+        }
+
+        function contactClient(index) {
+            const client = filteredData[index];
+            const modal = document.getElementById('contactModal');
+            const content = document.getElementById('contactContent');
+
+            const emailTemplate = `
+                Subject: Transform Your Brand with The Still Collective's Premium Design Services
+
+                Dear ${client.name},
+
+                I hope this email finds you well. I'm reaching out from The Still Collective, a premium design studio based in San Anselmo, California, specializing in creating impactful brand experiences for ${client.industry.toLowerCase()} companies like yours.
+
+                Based on our research, ${client.name.split(' ')[0]}, I believe our design expertise could significantly enhance your brand presence and help you:
+
+                ✓ Establish a distinctive visual identity that sets you apart from competitors
+                ✓ Create cohesive brand experiences across all touchpoints
+                ✓ Develop marketing materials that resonate with your target audience
+                ✓ Increase brand recognition and customer engagement
+
+                Our proven S.A.L.E. methodology ensures we:
+                • SOURCE the perfect design solutions for your unique challenges
+                • ASSESS your brand needs and market position thoroughly  
+                • LISTEN continuously to your feedback throughout the process
+                • EMPOWER your success through compelling visual storytelling
+
+                Recent success stories include helping ${client.industry.toLowerCase()} companies achieve:
+                - 40% increase in brand recognition
+                - 25% improvement in customer engagement
+                - 60% faster decision-making from clear visual communication
+
+                I'd love to schedule a brief 15-minute call to discuss how The Still Collective can help elevate your brand. Our initial consultation is complimentary, and I can share some relevant case studies from the ${client.industry.toLowerCase()} sector.
+
+                Would you have availability for a quick call this week or next?
+
+                Best regards,
+                Lori Sperling
+                The Still Collective
+                www.thestillcollective.com
+                (415) 519-0271
+
+                P.S. We're currently offering a complimentary brand audit for qualified ${client.industry.toLowerCase()} companies. This would be perfect for understanding your current brand position and identifying opportunities for growth.
+            `;
+
+            content.innerHTML = `
+                <h3>Contact: ${client.name}</h3>
+                <p><strong>Email:</strong> ${client.email}</p>
+                <p><strong>Phone:</strong> ${client.phone}</p>
+                <p><strong>Industry:</strong> ${client.industry}</p>
+                <p><strong>P.U.R.E.S. Score:</strong> ${client.puresScore}/25</p>
+                <p><strong>Buying Pattern:</strong> ${client.buyingPattern}</p>
+                
+                <div style="margin-top: 2rem;">
+                    <h4 style="color: #CF2030;">Recommended Email Template:</h4>
+                    <textarea style="width: 100%; height: 300px; margin-top: 1rem;">${emailTemplate}</textarea>
+                </div>
+                
+                <div style="margin-top: 1rem; display: flex; gap: 1rem;">
+                    <a href="mailto:${client.email}?subject=Transform Your Brand with The Still Collective's Premium Design Services&body=${encodeURIComponent(emailTemplate)}" class="btn">Send Email</a>
+                    <a href="tel:${client.phone}" class="btn btn-secondary">Call Now</a>
+                    <button class="btn btn-secondary" onclick="updateContactStatus(${index})">Mark as Contacted</button>
+                </div>
+            `;
+
+            modal.style.display = 'block';
+        }
+
+        function updateContactStatus(index) {
+            filteredData[index].lastContact = new Date().toISOString().split('T')[0];
+            filteredData[index].contactStatus = 'Recently Contacted';
+            populateTable();
+            closeModal('contactModal');
+            alert('Contact status updated successfully!');
+        }
+
+        function editClient(index) {
+            // Implement edit functionality
+            alert('Edit functionality would be implemented here');
+        }
+
+        function showTab(tabName) {
+            // Hide all tab contents
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabContents.forEach(content => content.classList.remove('active'));
+
+            // Remove active class from all tabs
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+
+            // Show selected tab content
+            document.getElementById(tabName + '-tab').classList.add('active');
+
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+        }
+
+        function updateScore() {
+            const profitability = parseInt(document.getElementById('profitability').value);
+            const urgency = parseInt(document.getElementById('urgency').value);
+            const reachability = parseInt(document.getElementById('reachability').value);
+            const engagement = parseInt(document.getElementById('engagement').value);
+            const sustainability = parseInt(document.getElementById('sustainability').value);
+
+            document.getElementById('profitabilityValue').textContent = profitability;
+            document.getElementById('urgencyValue').textContent = urgency;
+            document.getElementById('reachabilityValue').textContent = reachability;
+            document.getElementById('engagementValue').textContent = engagement;
+            document.getElementById('sustainabilityValue').textContent = sustainability;
+
+            const totalScore = profitability + urgency + reachability + engagement + sustainability;
+            document.getElementById('overallScore').textContent = totalScore;
+
+            let tier = '';
+            if (totalScore >= 20) {
+                tier = 'Tier 1A - Premium';
+            } else if (totalScore >= 15) {
+                tier = 'Tier 1B - High Value';
+            } else {
+                tier = 'Tier 1C - Qualified';
+            }
+
+            document.getElementById('tierRecommendation').textContent = `Tier Classification: ${tier}`;
+        }
+
+        function saveScore() {
+            const clientIndex = document.getElementById('clientSelect').value;
+            if (!clientIndex) {
+                alert('Please select a client first');
+                return;
+            }
+
+            const totalScore = parseInt(document.getElementById('overallScore').textContent);
+            clientData[clientIndex].puresScore = totalScore;
+
+            if (totalScore >= 20) {
+                clientData[clientIndex].tier = 'Tier 1A';
+            } else if (totalScore >= 15) {
+                clientData[clientIndex].tier = 'Tier 1B';
+            } else {
+                clientData[clientIndex].tier = 'Tier 1C';
+            }
+
+            populateTable();
+            alert('Score saved successfully!');
+        }
+
+        function exportData() {
+            const csv = convertToCSV(filteredData);
+            downloadCSV(csv, 'client-data.csv');
+        }
+
+        function convertToCSV(data) {
+            const header = ['Name', 'Email', 'Phone', 'Address', 'P.U.R.E.S. Score', 'Tier', 'Industry', 'Revenue', 'Contact Status', 'Last Contact', 'Next Action', 'Notes'];
+            const csvContent = [header.join(',')];
+
+            data.forEach(row => {
+                const csvRow = [
+                    row.name,
+                    row.email,
+                    row.phone,
+                    `"${row.address}"`,
+                    row.puresScore,
+                    row.tier,
+                    row.industry,
+                    row.revenue,
+                    row.contactStatus,
+                    row.lastContact,
+                    `"${row.nextAction}"`,
+                    `"${row.notes}"`
+                ];
+                csvContent.push(csvRow.join(','));
+            });
+
+            return csvContent.join('\n');
+        }
+
+        function downloadCSV(csv, filename) {
+            const csvFile = new Blob([csv], { type: 'text/csv' });
+            const downloadLink = document.createElement('a');
+            downloadLink.download = filename;
+            downloadLink.href = window.URL.createObjectURL(csvFile);
+            downloadLink.style.display = 'none';
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            document.body.removeChild(downloadLink);
+        }
+
+        function openAddClientModal() {
+            document.getElementById('addClientModal').style.display = 'block';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        // Event listeners
+        document.getElementById('searchInput').addEventListener('input', filterTable);
+        document.getElementById('tierFilter').addEventListener('change', filterTable);
+        document.getElementById('industryFilter').addEventListener('change', filterTable);
+
+        document.getElementById('addClientForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const newClient = {
+                name: document.getElementById('newClientName').value,
+                email: document.getElementById('newClientEmail').value,
+                phone: document.getElementById('newClientPhone').value,
+                address: document.getElementById('newClientAddress').value,
+                industry: document.getElementById('newClientIndustry').value,
+                puresScore: 15,
+                tier: 'Tier 1C',
+                revenue: '$500K',
+                contactStatus: 'New Lead',
+                lastContact: new Date().toISOString().split('T')[0],
+                nextAction: 'Initial contact',
+                notes: 'Newly added client',
+                buyingPattern: 'Unknown'
+            };
+
+            clientData.push(newClient);
+            populateTable();
+            closeModal('addClientModal');
+            alert('Client added successfully!');
+            
+            // Reset form
+            document.getElementById('addClientForm').reset();
+        });
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modals = document.querySelectorAll('.modal');
+            modals.forEach(modal => {
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+        }
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            populateTable();
+            updateScore();
+        });
+    </script>
+</body>
+</html>

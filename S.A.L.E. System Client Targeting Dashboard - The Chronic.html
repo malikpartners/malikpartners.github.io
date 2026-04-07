@@ -1,0 +1,1646 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>S.A.L.E. System Client Targeting - The Chronic</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #000000;
+            color: #ffffff;
+            line-height: 1.6;
+        }
+
+        .header {
+            background-color: #CF2030;
+            padding: 20px 0;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(207, 32, 48, 0.3);
+        }
+
+        .header img {
+            max-height: 60px;
+            width: auto;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .business-info {
+            background: linear-gradient(135deg, #CF2030, #a01828);
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .business-info h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #ffffff;
+        }
+
+        .business-info p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .tabs {
+            display: flex;
+            background-color: #1a1a1a;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 15px;
+            text-align: center;
+            background-color: #2a2a2a;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-right: 1px solid #3a3a3a;
+        }
+
+        .tab:last-child {
+            border-right: none;
+        }
+
+        .tab.active {
+            background-color: #CF2030;
+            color: #ffffff;
+        }
+
+        .tab:hover {
+            background-color: #CF2030;
+            opacity: 0.8;
+        }
+
+        .tab-content {
+            display: none;
+            background-color: #1a1a1a;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .search-box, .filter-select {
+            padding: 10px;
+            border: 1px solid #CF2030;
+            background-color: #2a2a2a;
+            color: #ffffff;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .filter-select {
+            min-width: 150px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            background-color: #CF2030;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #a01828;
+            transform: translateY(-2px);
+        }
+
+        .btn-small {
+            padding: 5px 10px;
+            font-size: 12px;
+        }
+
+        .btn-success {
+            background-color: #28a745;
+        }
+
+        .btn-success:hover {
+            background-color: #218838;
+        }
+
+        .table-container {
+            background-color: #2a2a2a;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #3a3a3a;
+        }
+
+        th {
+            background-color: #CF2030;
+            color: #ffffff;
+            font-weight: bold;
+            cursor: pointer;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        th:hover {
+            background-color: #a01828;
+        }
+
+        tr:hover {
+            background-color: #3a3a3a;
+        }
+
+        .tier-1a {
+            background-color: rgba(40, 167, 69, 0.2);
+        }
+
+        .tier-1b {
+            background-color: rgba(255, 193, 7, 0.2);
+        }
+
+        .tier-1c {
+            background-color: rgba(0, 123, 255, 0.2);
+        }
+
+        .pures-score {
+            font-weight: bold;
+            padding: 5px 10px;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .score-high {
+            background-color: #28a745;
+            color: #ffffff;
+        }
+
+        .score-medium {
+            background-color: #ffc107;
+            color: #000000;
+        }
+
+        .score-low {
+            background-color: #dc3545;
+            color: #ffffff;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+
+        .modal-content {
+            background-color: #1a1a1a;
+            margin: 5% auto;
+            padding: 30px;
+            border: 1px solid #CF2030;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 600px;
+            color: #ffffff;
+        }
+
+        .close {
+            color: #CF2030;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: #ffffff;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #CF2030;
+            font-weight: bold;
+        }
+
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #CF2030;
+            background-color: #2a2a2a;
+            color: #ffffff;
+            border-radius: 5px;
+        }
+
+        textarea {
+            height: 150px;
+            resize: vertical;
+        }
+
+        .marketing-plan {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .plan-card {
+            background-color: #2a2a2a;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #CF2030;
+        }
+
+        .plan-card h3 {
+            color: #CF2030;
+            margin-bottom: 10px;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #1a1a1a;
+            margin-top: 40px;
+        }
+
+        .footer img {
+            max-height: 30px;
+            opacity: 0.7;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background-color: #2a2a2a;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            border: 2px solid #CF2030;
+        }
+
+        .stat-number {
+            font-size: 2.5em;
+            color: #CF2030;
+            font-weight: bold;
+        }
+
+        .stat-label {
+            color: #cccccc;
+            margin-top: 5px;
+        }
+
+        @media (max-width: 768px) {
+            .controls {
+                flex-direction: column;
+            }
+            
+            .tabs {
+                flex-direction: column;
+            }
+            
+            table {
+                font-size: 12px;
+            }
+            
+            th, td {
+                padding: 8px 4px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports">
+    </div>
+
+    <div class="container">
+        <div class="business-info">
+            <h1>The Chronic - Client Targeting System</h1>
+            <p>Retail Business | Los Angeles, California | S.A.L.E. Methodology Integration</p>
+        </div>
+
+        <div class="tabs">
+            <div class="tab active" onclick="switchTab('sourcing')">S - SOURCING</div>
+            <div class="tab" onclick="switchTab('assessing')">A - ASSESSING</div>
+            <div class="tab" onclick="switchTab('listening')">L - LISTENING</div>
+            <div class="tab" onclick="switchTab('empowering')">E - EMPOWERING</div>
+            <div class="tab" onclick="switchTab('marketing')">MARKETING PLAN</div>
+        </div>
+
+        <!-- SOURCING TAB -->
+        <div id="sourcing" class="tab-content active">
+            <h2 style="color: #CF2030; margin-bottom: 20px;">S.A.L.E. SOURCING - Client Database & P.U.R.E.S. Scoring</h2>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number" id="totalClients">50</div>
+                    <div class="stat-label">Total Prospects</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="tier1aCount">12</div>
+                    <div class="stat-label">Tier 1A (Premium)</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="tier1bCount">18</div>
+                    <div class="stat-label">Tier 1B (High-Value)</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="tier1cCount">20</div>
+                    <div class="stat-label">Tier 1C (Qualified)</div>
+                </div>
+            </div>
+
+            <div class="controls">
+                <input type="text" id="searchInput" class="search-box" placeholder="Search clients by name, email, or address...">
+                <select id="tierFilter" class="filter-select">
+                    <option value="">All Tiers</option>
+                    <option value="1A">Tier 1A - Premium</option>
+                    <option value="1B">Tier 1B - High-Value</option>
+                    <option value="1C">Tier 1C - Qualified</option>
+                </select>
+                <select id="scoreFilter" class="filter-select">
+                    <option value="">All Scores</option>
+                    <option value="high">High (4.0-5.0)</option>
+                    <option value="medium">Medium (3.0-3.9)</option>
+                    <option value="low">Low (1.0-2.9)</option>
+                </select>
+                <button class="btn" onclick="exportData()">Export CSV</button>
+                <button class="btn" onclick="openScoreModal()">Add New Client</button>
+            </div>
+
+            <div class="table-container">
+                <table id="clientsTable">
+                    <thead>
+                        <tr>
+                            <th onclick="sortTable(0)">Client Name ↕</th>
+                            <th onclick="sortTable(1)">Email ↕</th>
+                            <th onclick="sortTable(2)">Phone ↕</th>
+                            <th onclick="sortTable(3)">Address ↕</th>
+                            <th onclick="sortTable(4)">P.U.R.E.S. Score ↕</th>
+                            <th onclick="sortTable(5)">Tier Level ↕</th>
+                            <th onclick="sortTable(6)">Industry ↕</th>
+                            <th onclick="sortTable(7)">Revenue Est. ↕</th>
+                            <th onclick="sortTable(8)">Contact Status ↕</th>
+                            <th onclick="sortTable(9)">Last Contact ↕</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="clientsTableBody">
+                        <!-- Data will be populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- ASSESSING TAB -->
+        <div id="assessing" class="tab-content">
+            <h2 style="color: #CF2030; margin-bottom: 20px;">A.SSESSING - Buying Pattern Analysis</h2>
+            
+            <div class="marketing-plan">
+                <div class="plan-card">
+                    <h3>Analytical Buyers (23%)</h3>
+                    <p><strong>Characteristics:</strong> Require detailed ROI analysis, case studies, trials</p>
+                    <p><strong>Strategy:</strong> Provide comprehensive product demonstrations, detailed cost-benefit analysis, and trial periods for retail products.</p>
+                </div>
+                <div class="plan-card">
+                    <h3>Relationship Buyers (31%)</h3>
+                    <p><strong>Characteristics:</strong> Value trust, referrals, long-term partnerships</p>
+                    <p><strong>Strategy:</strong> Focus on building personal connections, leverage customer testimonials, and implement referral programs.</p>
+                </div>
+                <div class="plan-card">
+                    <h3>Efficiency Buyers (28%)</h3>
+                    <p><strong>Characteristics:</strong> Focus on time-saving, process improvement</p>
+                    <p><strong>Strategy:</strong> Emphasize convenience, fast checkout, online ordering, and streamlined shopping experience.</p>
+                </div>
+                <div class="plan-card">
+                    <h3>Innovation Buyers (18%)</h3>
+                    <p><strong>Characteristics:</strong> Seek cutting-edge solutions, competitive advantage</p>
+                    <p><strong>Strategy:</strong> Showcase latest products, exclusive items, and emerging trends in retail.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- LISTENING TAB -->
+        <div id="listening" class="tab-content">
+            <h2 style="color: #CF2030; margin-bottom: 20px;">L.ISTENING - Feedback Integration System</h2>
+            
+            <div class="marketing-plan">
+                <div class="plan-card">
+                    <h3>Pre-Sale Feedback Collection</h3>
+                    <p>• Customer surveys about product preferences</p>
+                    <p>• Market research on retail trends</p>
+                    <p>• Social media sentiment analysis</p>
+                    <p>• Focus groups for new product launches</p>
+                </div>
+                <div class="plan-card">
+                    <h3>During-Sale Progress Tracking</h3>
+                    <p>• Real-time customer satisfaction monitoring</p>
+                    <p>• Sales conversion tracking</p>
+                    <p>• Customer service interaction logs</p>
+                    <p>• Purchase journey analytics</p>
+                </div>
+                <div class="plan-card">
+                    <h3>Post-Sale Satisfaction Monitoring</h3>
+                    <p>• Follow-up customer surveys</p>
+                    <p>• Product review analysis</p>
+                    <p>• Return/exchange feedback</p>
+                    <p>• Net Promoter Score tracking</p>
+                </div>
+                <div class="plan-card">
+                    <h3>Real-time Complaint Resolution</h3>
+                    <p>• 24/7 customer service system</p>
+                    <p>• Social media monitoring</p>
+                    <p>• Escalation protocols</p>
+                    <p>• Resolution tracking dashboard</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- EMPOWERING TAB -->
+        <div id="empowering" class="tab-content">
+            <h2 style="color: #CF2030; margin-bottom: 20px;">E.MPOWERING - Referral Strategy & Customer Advocacy</h2>
+            
+            <div class="marketing-plan">
+                <div class="plan-card">
+                    <h3>Success Story Documentation</h3>
+                    <p>• Customer testimonial videos</p>
+                    <p>• Before/after transformation stories</p>
+                    <p>• Case study development</p>
+                    <p>• Social proof compilation</p>
+                </div>
+                <div class="plan-card">
+                    <h3>Referral Reward Program</h3>
+                    <p>• 20% discount for successful referrals</p>
+                    <p>• VIP customer status program</p>
+                    <p>• Exclusive early access to new products</p>
+                    <p>• Loyalty points accumulation</p>
+                </div>
+                <div class="plan-card">
+                    <h3>Client Advocacy Program</h3>
+                    <p>• Brand ambassador program</p>
+                    <p>• Social media advocacy campaigns</p>
+                    <p>• Customer review incentives</p>
+                    <p>• Community building initiatives</p>
+                </div>
+                <div class="plan-card">
+                    <h3>Co-Marketing Opportunities</h3>
+                    <p>• Partner brand collaborations</p>
+                    <p>• Cross-promotional campaigns</p>
+                    <p>• Joint event hosting</p>
+                    <p>• Influencer partnerships</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- MARKETING PLAN TAB -->
+        <div id="marketing" class="tab-content">
+            <h2 style="color: #CF2030; margin-bottom: 20px;">Comprehensive Marketing Plan & Schedule</h2>
+            
+            <div class="marketing-plan">
+                <div class="plan-card">
+                    <h3>Month 1-2: Foundation Building</h3>
+                    <p><strong>Week 1-2:</strong> Customer database segmentation and P.U.R.E.S. scoring completion</p>
+                    <p><strong>Week 3-4:</strong> Email marketing campaign setup and first outreach to Tier 1A clients</p>
+                    <p><strong>Week 5-6:</strong> Social media presence optimization and content calendar creation</p>
+                    <p><strong>Week 7-8:</strong> Referral program launch and existing customer engagement</p>
+                </div>
+                <div class="plan-card">
+                    <h3>Month 3-4: Expansion & Engagement</h3>
+                    <p><strong>Week 9-10:</strong> Tier 1B client outreach campaign with targeted promotions</p>
+                    <p><strong>Week 11-12:</strong> Customer feedback collection and service improvement implementation</p>
+                    <p><strong>Week 13-14:</strong> Community events and local partnership development</p>
+                    <p><strong>Week 15-16:</strong> Performance analysis and strategy optimization</p>
+                </div>
+                <div class="plan-card">
+                    <h3>Month 5-6: Growth & Retention</h3>
+                    <p><strong>Week 17-18:</strong> Tier 1C client engagement and conversion campaigns</p>
+                    <p><strong>Week 19-20:</strong> Loyalty program enhancement and VIP customer benefits</p>
+                    <p><strong>Week 21-22:</strong> Cross-selling and upselling campaign implementation</p>
+                    <p><strong>Week 23-24:</strong> Quarterly review and next phase planning</p>
+                </div>
+                <div class="plan-card">
+                    <h3>Key Performance Indicators</h3>
+                    <p><strong>Sales Targets:</strong> 25% increase in quarterly revenue</p>
+                    <p><strong>Customer Acquisition:</strong> 30 new customers per month</p>
+                    <p><strong>Retention Rate:</strong> 85% customer retention target</p>
+                    <p><strong>Referral Goal:</strong> 15% of new customers from referrals</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONTACT MODAL -->
+    <div id="contactModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2 style="color: #CF2030;">Contact Client</h2>
+            <div id="contactForm">
+                <!-- Contact form will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- P.U.R.E.S. SCORING MODAL -->
+    <div id="scoreModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeScoreModal()">&times;</span>
+            <h2 style="color: #CF2030;">P.U.R.E.S. Client Scoring</h2>
+            <form id="puresForm">
+                <div class="form-group">
+                    <label>Client Name:</label>
+                    <input type="text" id="clientName" required>
+                </div>
+                <div class="form-group">
+                    <label>Email:</label>
+                    <input type="email" id="clientEmail" required>
+                </div>
+                <div class="form-group">
+                    <label>Phone:</label>
+                    <input type="tel" id="clientPhone" required>
+                </div>
+                <div class="form-group">
+                    <label>Address:</label>
+                    <input type="text" id="clientAddress" required>
+                </div>
+                <div class="form-group">
+                    <label>Profitability (1-5):</label>
+                    <select id="profitability" required>
+                        <option value="">Select Score</option>
+                        <option value="1">1 - Low budget capacity</option>
+                        <option value="2">2 - Limited budget</option>
+                        <option value="3">3 - Moderate budget</option>
+                        <option value="4">4 - High budget capacity</option>
+                        <option value="5">5 - Premium budget capacity</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Urgency (1-5):</label>
+                    <select id="urgency" required>
+                        <option value="">Select Score</option>
+                        <option value="1">1 - No immediate needs</option>
+                        <option value="2">2 - Future consideration</option>
+                        <option value="3">3 - Some interest</option>
+                        <option value="4">4 - Active shopping</option>
+                        <option value="5">5 - Immediate purchase intent</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Reachability (1-5):</label>
+                    <select id="reachability" required>
+                        <option value="">Select Score</option>
+                        <option value="1">1 - Very difficult to reach</option>
+                        <option value="2">2 - Limited accessibility</option>
+                        <option value="3">3 - Moderately accessible</option>
+                        <option value="4">4 - Easily reachable</option>
+                        <option value="5">5 - Highly accessible</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Engagement (1-5):</label>
+                    <select id="engagement" required>
+                        <option value="">Select Score</option>
+                        <option value="1">1 - Resistant to new ideas</option>
+                        <option value="2">2 - Cautious</option>
+                        <option value="3">3 - Open minded</option>
+                        <option value="4">4 - Eager to engage</option>
+                        <option value="5">5 - Innovation seeking</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Sustainability (1-5):</label>
+                    <select id="sustainability" required>
+                        <option value="">Select Score</option>
+                        <option value="1">1 - One-time buyer</option>
+                        <option value="2">2 - Limited repeat potential</option>
+                        <option value="3">3 - Moderate loyalty</option>
+                        <option value="4">4 - Strong relationship potential</option>
+                        <option value="5">5 - Long-term partnership</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn">Calculate Score & Add Client</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="footer">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports">
+        <p style="margin-top: 10px; color: #666;">Powered by HigginsReports S.A.L.E. Methodology</p>
+    </div>
+
+    <script>
+        // Sample client data for Los Angeles area (within 10 miles)
+        let clientsData = [
+            {
+                name: "Maria Rodriguez",
+                email: "maria.rodriguez@gmail.com",
+                phone: "(323) 555-0123",
+                address: "1234 Sunset Blvd, Los Angeles, CA 90028",
+                puresScore: 4.2,
+                tier: "1A",
+                industry: "Entertainment",
+                revenue: "$75K",
+                status: "New",
+                lastContact: "2024-01-15",
+                notes: "Interested in premium retail products"
+            },
+            {
+                name: "James Wilson",
+                email: "james.wilson@yahoo.com",
+                phone: "(213) 555-0234",
+                address: "5678 Hollywood Blvd, Los Angeles, CA 90028",
+                puresScore: 3.8,
+                tier: "1B",
+                industry: "Technology",
+                revenue: "$45K",
+                status: "Contacted",
+                lastContact: "2024-01-10",
+                notes: "Tech professional, values innovation"
+            },
+            {
+                name: "Sarah Chen",
+                email: "sarah.chen@outlook.com",
+                phone: "(310) 555-0345",
+                address: "9012 Beverly Hills Blvd, Beverly Hills, CA 90210",
+                puresScore: 4.6,
+                tier: "1A",
+                industry: "Finance",
+                revenue: "$95K",
+                status: "New",
+                lastContact: "2024-01-12",
+                notes: "High-end fashion interest"
+            },
+            {
+                name: "Michael Brown",
+                email: "michael.brown@gmail.com",
+                phone: "(818) 555-0456",
+                address: "3456 Ventura Blvd, Sherman Oaks, CA 91423",
+                puresScore: 3.4,
+                tier: "1C",
+                industry: "Healthcare",
+                revenue: "$35K",
+                status: "New",
+                lastContact: "2024-01-08",
+                notes: "Healthcare worker, practical buyer"
+            },
+            {
+                name: "Emily Davis",
+                email: "emily.davis@hotmail.com",
+                phone: "(626) 555-0567",
+                address: "7890 Colorado Blvd, Pasadena, CA 91101",
+                puresScore: 4.1,
+                tier: "1A",
+                industry: "Education",
+                revenue: "$55K",
+                status: "Contacted",
+                lastContact: "2024-01-14",
+                notes: "Teacher, values quality products"
+            },
+            {
+                name: "David Martinez",
+                email: "david.martinez@gmail.com",
+                phone: "(323) 555-0678",
+                address: "2468 Vermont Ave, Los Angeles, CA 90027",
+                puresScore: 3.6,
+                tier: "1B",
+                industry: "Real Estate",
+                revenue: "$65K",
+                status: "New",
+                lastContact: "2024-01-11",
+                notes: "Real estate agent, image conscious"
+            },
+            {
+                name: "Lisa Johnson",
+                email: "lisa.johnson@yahoo.com",
+                phone: "(310) 555-0789",
+                address: "1357 Santa Monica Blvd, Santa Monica, CA 90401",
+                puresScore: 4.4,
+                tier: "1A",
+                industry: "Marketing",
+                revenue: "$70K",
+                status: "Prospect",
+                lastContact: "2024-01-13",
+                notes: "Marketing exec, trend follower"
+            },
+            {
+                name: "Robert Garcia",
+                email: "robert.garcia@outlook.com",
+                phone: "(213) 555-0890",
+                address: "9753 Figueroa St, Los Angeles, CA 90037",
+                puresScore: 3.2,
+                tier: "1C",
+                industry: "Manufacturing",
+                revenue: "$40K",
+                status: "New",
+                lastContact: "2024-01-07",
+                notes: "Factory supervisor, practical needs"
+            },
+            {
+                name: "Jennifer White",
+                email: "jennifer.white@gmail.com",
+                phone: "(818) 555-0901",
+                address: "4567 Lankershim Blvd, North Hollywood, CA 91602",
+                puresScore: 3.9,
+                tier: "1B",
+                industry: "Entertainment",
+                revenue: "$50K",
+                status: "Contacted",
+                lastContact: "2024-01-09",
+                notes: "Actress, fashion conscious"
+            },
+            {
+                name: "Carlos Hernandez",
+                email: "carlos.hernandez@hotmail.com",
+                phone: "(323) 555-1012",
+                address: "8642 Whittier Blvd, East Los Angeles, CA 90606",
+                puresScore: 3.7,
+                tier: "1B",
+                industry: "Construction",
+                revenue: "$42K",
+                status: "New",
+                lastContact: "2024-01-06",
+                notes: "Construction manager, values durability"
+            },
+            // Adding 40 more clients to reach 50 total
+            {
+                name: "Amanda Taylor",
+                email: "amanda.taylor@gmail.com",
+                phone: "(310) 555-1123",
+                address: "5432 Wilshire Blvd, Los Angeles, CA 90036",
+                puresScore: 4.3,
+                tier: "1A",
+                industry: "Law",
+                revenue: "$85K",
+                status: "New",
+                lastContact: "2024-01-16",
+                notes: "Attorney, professional image important"
+            },
+            {
+                name: "Thomas Anderson",
+                email: "thomas.anderson@yahoo.com",
+                phone: "(626) 555-1234",
+                address: "1098 Fair Oaks Ave, Pasadena, CA 91103",
+                puresScore: 3.5,
+                tier: "1C",
+                industry: "IT",
+                revenue: "$38K",
+                status: "Prospect",
+                lastContact: "2024-01-05",
+                notes: "Software developer, tech gadget enthusiast"
+            },
+            {
+                name: "Michelle Lopez",
+                email: "michelle.lopez@outlook.com",
+                phone: "(213) 555-1345",
+                address: "7531 Broadway, Los Angeles, CA 90003",
+                puresScore: 3.8,
+                tier: "1B",
+                industry: "Retail",
+                revenue: "$46K",
+                status: "Contacted",
+                lastContact: "2024-01-17",
+                notes: "Store manager, understands retail value"
+            },
+            {
+                name: "Kevin Thompson",
+                email: "kevin.thompson@gmail.com",
+                phone: "(818) 555-1456",
+                address: "9876 Reseda Blvd, Reseda, CA 91335",
+                puresScore: 3.3,
+                tier: "1C",
+                industry: "Transportation",
+                revenue: "$33K",
+                status: "New",
+                lastContact: "2024-01-04",
+                notes: "Delivery driver, practical shopper"
+            },
+            {
+                name: "Nicole Williams",
+                email: "nicole.williams@hotmail.com",
+                phone: "(310) 555-1567",
+                address: "4321 Pico Blvd, Santa Monica, CA 90405",
+                puresScore: 4.0,
+                tier: "1B",
+                industry: "Design",
+                revenue: "$58K",
+                status: "Contacted",
+                lastContact: "2024-01-18",
+                notes: "Graphic designer, aesthetic focused"
+            },
+            {
+                name: "Ryan Clark",
+                email: "ryan.clark@gmail.com",
+                phone: "(323) 555-1678",
+                address: "6789 Melrose Ave, Los Angeles, CA 90038",
+                puresScore: 4.1,
+                tier: "1A",
+                industry: "Music",
+                revenue: "$62K",
+                status: "New",
+                lastContact: "2024-01-19",
+                notes: "Musician, style conscious"
+            },
+            {
+                name: "Stephanie Martinez",
+                email: "stephanie.martinez@yahoo.com",
+                phone: "(626) 555-1789",
+                address: "2109 Lake Ave, Altadena, CA 91001",
+                puresScore: 3.6,
+                tier: "1B",
+                industry: "Hospitality",
+                revenue: "$41K",
+                status: "Prospect",
+                lastContact: "2024-01-03",
+                notes: "Hotel manager, presentation matters"
+            },
+            {
+                name: "Daniel Rodriguez",
+                email: "daniel.rodriguez@outlook.com",
+                phone: "(213) 555-1890",
+                address: "8765 Spring St, Los Angeles, CA 90014",
+                puresScore: 3.4,
+                tier: "1C",
+                industry: "Food Service",
+                revenue: "$36K",
+                status: "New",
+                lastContact: "2024-01-02",
+                notes: "Restaurant owner, busy lifestyle"
+            },
+            {
+                name: "Rachel Kim",
+                email: "rachel.kim@gmail.com",
+                phone: "(818) 555-1901",
+                address: "1456 Glenoaks Blvd, Glendale, CA 91201",
+                puresScore: 4.2,
+                tier: "1A",
+                industry: "Healthcare",
+                revenue: "$72K",
+                status: "Contacted",
+                lastContact: "2024-01-20",
+                notes: "Nurse practitioner, values quality"
+            },
+            {
+                name: "Christopher Lee",
+                email: "christopher.lee@hotmail.com",
+                phone: "(310) 555-2012",
+                address: "3698 Washington Blvd, Marina del Rey, CA 90292",
+                puresScore: 3.7,
+                tier: "1B",
+                industry: "Engineering",
+                revenue: "$52K",
+                status: "New",
+                lastContact: "2024-01-01",
+                notes: "Engineer, analytical buyer"
+            },
+            {
+                name: "Ashley Wang",
+                email: "ashley.wang@gmail.com",
+                phone: "(323) 555-2123",
+                address: "7410 Sunset Blvd, Los Angeles, CA 90046",
+                puresScore: 4.5,
+                tier: "1A",
+                industry: "Fashion",
+                revenue: "$88K",
+                status: "Prospect",
+                lastContact: "2024-01-21",
+                notes: "Fashion stylist, trend setter"
+            },
+            {
+                name: "Matthew Johnson",
+                email: "matthew.johnson@yahoo.com",
+                phone: "(626) 555-2234",
+                address: "5274 Huntington Dr, Los Angeles, CA 90032",
+                puresScore: 3.2,
+                tier: "1C",
+                industry: "Security",
+                revenue: "$34K",
+                status: "Contacted",
+                lastContact: "2023-12-30",
+                notes: "Security guard, practical needs"
+            },
+            {
+                name: "Samantha Davis",
+                email: "samantha.davis@outlook.com",
+                phone: "(213) 555-2345",
+                address: "9147 Olympic Blvd, Los Angeles, CA 90035",
+                puresScore: 3.9,
+                tier: "1B",
+                industry: "Consulting",
+                revenue: "$54K",
+                status: "New",
+                lastContact: "2024-01-22",
+                notes: "Business consultant, professional image"
+            },
+            {
+                name: "Brandon Miller",
+                email: "brandon.miller@gmail.com",
+                phone: "(818) 555-2456",
+                address: "6383 Van Nuys Blvd, Van Nuys, CA 91401",
+                puresScore: 3.3,
+                tier: "1C",
+                industry: "Automotive",
+                revenue: "$37K",
+                status: "Prospect",
+                lastContact: "2023-12-29",
+                notes: "Auto mechanic, durability focused"
+            },
+            {
+                name: "Megan Wilson",
+                email: "megan.wilson@hotmail.com",
+                phone: "(310) 555-2567",
+                address: "2851 Sepulveda Blvd, Torrance, CA 90505",
+                puresScore: 4.0,
+                tier: "1B",
+                industry: "Fitness",
+                revenue: "$48K",
+                status: "Contacted",
+                lastContact: "2024-01-23",
+                notes: "Fitness trainer, health conscious"
+            },
+            {
+                name: "Jonathan Garcia",
+                email: "jonathan.garcia@gmail.com",
+                phone: "(323) 555-2678",
+                address: "4729 Crenshaw Blvd, Los Angeles, CA 90043",
+                puresScore: 3.5,
+                tier: "1C",
+                industry: "Education",
+                revenue: "$39K",
+                status: "New",
+                lastContact: "2023-12-28",
+                notes: "High school teacher, budget conscious"
+            },
+            {
+                name: "Kimberly Brown",
+                email: "kimberly.brown@yahoo.com",
+                phone: "(626) 555-2789",
+                address: "8562 Valley Blvd, Rosemead, CA 91770",
+                puresScore: 3.8,
+                tier: "1B",
+                industry: "Banking",
+                revenue: "$51K",
+                status: "Contacted",
+                lastContact: "2024-01-24",
+                notes: "Bank teller, conservative spender"
+            },
+            {
+                name: "Andrew Taylor",
+                email: "andrew.taylor@outlook.com",
+                phone: "(213) 555-2890",
+                address: "1472 Hill St, Los Angeles, CA 90012",
+                puresScore: 3.6,
+                tier: "1B",
+                industry: "Government",
+                revenue: "$44K",
+                status: "Prospect",
+                lastContact: "2023-12-27",
+                notes: "City employee, stable income"
+            },
+            {
+                name: "Brittany Anderson",
+                email: "brittany.anderson@gmail.com",
+                phone: "(818) 555-2901",
+                address: "9638 Topanga Canyon Blvd, Chatsworth, CA 91311",
+                puresScore: 4.3,
+                tier: "1A",
+                industry: "Real Estate",
+                revenue: "$78K",
+                status: "New",
+                lastContact: "2024-01-25",
+                notes: "Real estate broker, image important"
+            },
+            {
+                name: "Gregory Martinez",
+                email: "gregory.martinez@hotmail.com",
+                phone: "(310) 555-3012",
+                address: "5951 Imperial Hwy, South Gate, CA 90280",
+                puresScore: 3.1,
+                tier: "1C",
+                industry: "Warehouse",
+                revenue: "$32K",
+                status: "Contacted",
+                lastContact: "2023-12-26",
+                notes: "Warehouse worker, value shopper"
+            },
+            {
+                name: "Vanessa Lopez",
+                email: "vanessa.lopez@gmail.com",
+                phone: "(323) 555-3123",
+                address: "7284 Eastern Ave, Bell Gardens, CA 90201",
+                puresScore: 3.7,
+                tier: "1B",
+                industry: "Nursing",
+                revenue: "$47K",
+                status: "New",
+                lastContact: "2024-01-26",
+                notes: "Registered nurse, practical buyer"
+            },
+            {
+                name: "Eric Thompson",
+                email: "eric.thompson@yahoo.com",
+                phone: "(626) 555-3234",
+                address: "4173 Baldwin Park Blvd, Baldwin Park, CA 91706",
+                puresScore: 3.4,
+                tier: "1C",
+                industry: "Manufacturing",
+                revenue: "$35K",
+                status: "Prospect",
+                lastContact: "2023-12-25",
+                notes: "Factory worker, practical needs"
+            },
+            {
+                name: "Tiffany Williams",
+                email: "tiffany.williams@outlook.com",
+                phone: "(213) 555-3345",
+                address: "8497 Central Ave, Los Angeles, CA 90001",
+                puresScore: 4.1,
+                tier: "1A",
+                industry: "Social Work",
+                revenue: "$59K",
+                status: "Contacted",
+                lastContact: "2024-01-27",
+                notes: "Social worker, values ethical brands"
+            },
+            {
+                name: "Justin Clark",
+                email: "justin.clark@gmail.com",
+                phone: "(818) 555-3456",
+                address: "3826 Laurel Canyon Blvd, Studio City, CA 91604",
+                puresScore: 3.8,
+                tier: "1B",
+                industry: "Film",
+                revenue: "$53K",
+                status: "New",
+                lastContact: "2023-12-24",
+                notes: "Film editor, creative professional"
+            },
+            {
+                name: "Crystal Rodriguez",
+                email: "crystal.rodriguez@hotmail.com",
+                phone: "(310) 555-3567",
+                address: "6719 Hawthorne Blvd, Inglewood, CA 90302",
+                puresScore: 3.3,
+                tier: "1C",
+                industry: "Retail",
+                revenue: "$31K",
+                status: "Contacted",
+                lastContact: "2023-12-23",
+                notes: "Cashier, price sensitive"
+            },
+            {
+                name: "Tyler White",
+                email: "tyler.white@gmail.com",
+                phone: "(323) 555-3678",
+                address: "2594 Slauson Ave, Los Angeles, CA 90011",
+                puresScore: 3.6,
+                tier: "1B",
+                industry: "Sports",
+                revenue: "$43K",
+                status: "Prospect",
+                lastContact: "2024-01-28",
+                notes: "Personal trainer, athletic interests"
+            },
+            {
+                name: "Jasmine Lee",
+                email: "jasmine.lee@yahoo.com",
+                phone: "(626) 555-3789",
+                address: "4951 Ramona Blvd, Monterey Park, CA 91754",
+                puresScore: 4.2,
+                tier: "1A",
+                industry: "Technology",
+                revenue: "$67K",
+                status: "New",
+                lastContact: "2024-01-29",
+                notes: "Software engineer, tech savvy"
+            },
+            {
+                name: "Marcus Johnson",
+                email: "marcus.johnson@outlook.com",
+                phone: "(213) 555-3890",
+                address: "7162 Florence Ave, Los Angeles, CA 90001",
+                puresScore: 3.2,
+                tier: "1C",
+                industry: "Construction",
+                revenue: "$33K",
+                status: "Contacted",
+                lastContact: "2023-12-22",
+                notes: "Construction worker, practical buyer"
+            },
+            {
+                name: "Natalie Davis",
+                email: "natalie.davis@gmail.com",
+                phone: "(818) 555-3901",
+                address: "5384 Vineland Ave, North Hollywood, CA 91601",
+                puresScore: 3.9,
+                tier: "1B",
+                industry: "Photography",
+                revenue: "$49K",
+                status: "New",
+                lastContact: "2024-01-30",
+                notes: "Photographer, visual aesthetic important"
+            },
+            {
+                name: "Austin Miller",
+                email: "austin.miller@hotmail.com",
+                phone: "(310) 555-4012",
+                address: "8273 La Tijera Blvd, Los Angeles, CA 90045",
+                puresScore: 3.5,
+                tier: "1C",
+                industry: "Airport",
+                revenue: "$38K",
+                status: "Prospect",
+                lastContact: "2023-12-21",
+                notes: "Airport employee, convenience important"
+            },
+            {
+                name: "Gabrielle Wilson",
+                email: "gabrielle.wilson@gmail.com",
+                phone: "(323) 555-4123",
+                address: "1837 Jefferson Blvd, Los Angeles, CA 90018",
+                puresScore: 4.0,
+                tier: "1B",
+                industry: "Art",
+                revenue: "$56K",
+                status: "Contacted",
+                lastContact: "2024-01-31",
+                notes: "Artist, values unique products"
+            },
+            {
+                name: "Caleb Garcia",
+                email: "caleb.garcia@yahoo.com",
+                phone: "(626) 555-4234",
+                address: "6495 Atlantic Blvd, Bell, CA 90201",
+                puresScore: 3.1,
+                tier: "1C",
+                industry: "Maintenance",
+                revenue: "$29K",
+                status: "New",
+                lastContact: "2023-12-20",
+                notes: "Maintenance worker, durability focused"
+            },
+            {
+                name: "Sierra Brown",
+                email: "sierra.brown@outlook.com",
+                phone: "(213) 555-4345",
+                address: "4628 Manchester Ave, Los Angeles, CA 90043",
+                puresScore: 3.7,
+                tier: "1B",
+                industry: "Childcare",
+                revenue: "$45K",
+                status: "Contacted",
+                lastContact: "2024-02-01",
+                notes: "Daycare owner, family focused"
+            },
+            {
+                name: "Blake Taylor",
+                email: "blake.taylor@gmail.com",
+                phone: "(818) 555-4456",
+                address: "9516 Sepulveda Blvd, North Hills, CA 91343",
+                puresScore: 3.4,
+                tier: "1C",
+                industry: "Landscaping",
+                revenue: "$36K",
+                status: "Prospect",
+                lastContact: "2023-12-19",
+                notes: "Landscaper, outdoor lifestyle"
+            },
+            {
+                name: "Destiny Anderson",
+                email: "destiny.anderson@hotmail.com",
+                phone: "(310) 555-4567",
+                address: "2915 Artesia Blvd, Redondo Beach, CA 90278",
+                puresScore: 4.4,
+                tier: "1A",
+                industry: "Marketing",
+                revenue: "$81K",
+                status: "New",
+                lastContact: "2024-02-02",
+                notes: "Marketing director, brand conscious"
+            },
+            {
+                name: "Javier Martinez",
+                email: "javier.martinez@gmail.com",
+                phone: "(323) 555-4678",
+                address: "7951 Compton Ave, Los Angeles, CA 90001",
+                puresScore: 3.3,
+                tier: "1C",
+                industry: "Cleaning",
+                revenue: "$30K",
+                status: "Contacted",
+                lastContact: "2023-12-18",
+                notes: "Cleaning service owner, practical"
+            },
+            {
+                name: "Alexis Lopez",
+                email: "alexis.lopez@yahoo.com",
+                phone: "(626) 555-4789",
+                address: "5172 Whittier Blvd, East Los Angeles, CA 90022",
+                puresScore: 3.8,
+                tier: "1B",
+                industry: "Insurance",
+                revenue: "$50K",
+                status: "New",
+                lastContact: "2024-02-03",
+                notes: "Insurance agent, professional image"
+            },
+            {
+                name: "Cameron Thompson",
+                email: "cameron.thompson@outlook.com",
+                phone: "(213) 555-4890",
+                address: "8364 Vermont Ave, Los Angeles, CA 90044",
+                puresScore: 3.6,
+                tier: "1B",
+                industry: "Delivery",
+                revenue: "$41K",
+                status: "Prospect",
+                lastContact: "2023-12-17",
+                notes: "Delivery driver, time conscious"
+            },
+            {
+                name: "Paige Williams",
+                email: "paige.williams@gmail.com",
+                phone: "(818) 555-4901",
+                address: "6847 Canoga Ave, Canoga Park, CA 91303",
+                puresScore: 4.1,
+                tier: "1A",
+                industry: "Beauty",
+                revenue: "$63K",
+                status: "Contacted",
+                lastContact: "2024-02-04",
+                notes: "Beauty salon owner, style focused"
+            }
+        ];
+
+        let filteredData = [...clientsData];
+        let sortDirection = 1;
+        let sortColumn = 0;
+
+        function switchTab(tabName) {
+            // Hide all tab contents
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabContents.forEach(content => content.classList.remove('active'));
+            
+            // Remove active class from all tabs
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Show selected tab content
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+        }
+
+        function renderTable() {
+            const tbody = document.getElementById('clientsTableBody');
+            tbody.innerHTML = '';
+
+            filteredData.forEach(client => {
+                const row = document.createElement('tr');
+                row.className = `tier-${client.tier.toLowerCase()}`;
+                
+                const scoreClass = client.puresScore >= 4.0 ? 'score-high' : 
+                                 client.puresScore >= 3.0 ? 'score-medium' : 'score-low';
+
+                row.innerHTML = `
+                    <td>${client.name}</td>
+                    <td>${client.email}</td>
+                    <td>${client.phone}</td>
+                    <td>${client.address}</td>
+                    <td><span class="pures-score ${scoreClass}">${client.puresScore}</span></td>
+                    <td>Tier ${client.tier}</td>
+                    <td>${client.industry}</td>
+                    <td>${client.revenue}</td>
+                    <td>${client.status}</td>
+                    <td>${client.lastContact}</td>
+                    <td>
+                        <button class="btn btn-small" onclick="contactClient('${client.name}', '${client.email}')">Contact</button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+
+            updateStats();
+        }
+
+        function updateStats() {
+            const tier1aCount = filteredData.filter(c => c.tier === '1A').length;
+            const tier1bCount = filteredData.filter(c => c.tier === '1B').length;
+            const tier1cCount = filteredData.filter(c => c.tier === '1C').length;
+
+            document.getElementById('totalClients').textContent = filteredData.length;
+            document.getElementById('tier1aCount').textContent = tier1aCount;
+            document.getElementById('tier1bCount').textContent = tier1bCount;
+            document.getElementById('tier1cCount').textContent = tier1cCount;
+        }
+
+        function filterData() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const tierFilter = document.getElementById('tierFilter').value;
+            const scoreFilter = document.getElementById('scoreFilter').value;
+
+            filteredData = clientsData.filter(client => {
+                const matchesSearch = client.name.toLowerCase().includes(searchTerm) ||
+                                    client.email.toLowerCase().includes(searchTerm) ||
+                                    client.address.toLowerCase().includes(searchTerm);
+                
+                const matchesTier = !tierFilter || client.tier === tierFilter;
+                
+                let matchesScore = true;
+                if (scoreFilter === 'high') matchesScore = client.puresScore >= 4.0;
+                else if (scoreFilter === 'medium') matchesScore = client.puresScore >= 3.0 && client.puresScore < 4.0;
+                else if (scoreFilter === 'low') matchesScore = client.puresScore < 3.0;
+
+                return matchesSearch && matchesTier && matchesScore;
+            });
+
+            renderTable();
+        }
+
+        function sortTable(columnIndex) {
+            const columns = ['name', 'email', 'phone', 'address', 'puresScore', 'tier', 'industry', 'revenue', 'status', 'lastContact'];
+            const column = columns[columnIndex];
+            
+            if (sortColumn === columnIndex) {
+                sortDirection *= -1;
+            } else {
+                sortDirection = 1;
+                sortColumn = columnIndex;
+            }
+
+            filteredData.sort((a, b) => {
+                let aVal = a[column];
+                let bVal = b[column];
+
+                if (column === 'puresScore') {
+                    return (aVal - bVal) * sortDirection;
+                }
+
+                if (column === 'lastContact') {
+                    return (new Date(aVal) - new Date(bVal)) * sortDirection;
+                }
+
+                return aVal.localeCompare(bVal) * sortDirection;
+            });
+
+            renderTable();
+        }
+
+        function contactClient(name, email) {
+            const modal = document.getElementById('contactModal');
+            const form = document.getElementById('contactForm');
+            
+            const emailTemplate = generateEmailTemplate(name);
+            
+            form.innerHTML = `
+                <div class="form-group">
+                    <label>Contact Method:</label>
+                    <select id="contactMethod" onchange="updateContactForm()">
+                        <option value="email">Email</option>
+                        <option value="phone">Phone Call</option>
+                        <option value="text">Text Message</option>
+                    </select>
+                </div>
+                <div id="emailSection">
+                    <div class="form-group">
+                        <label>To:</label>
+                        <input type="email" value="${email}" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label>Subject:</label>
+                        <input type="text" id="emailSubject" value="Exclusive Retail Experience at The Chronic - ${name}">
+                    </div>
+                    <div class="form-group">
+                        <label>Message:</label>
+                        <textarea id="emailMessage">${emailTemplate}</textarea>
+                    </div>
+                    <button class="btn" onclick="sendEmail('${email}')">Send Email</button>
+                </div>
+                <div id="phoneSection" style="display: none;">
+                    <p>Prepare to call <strong>${name}</strong></p>
+                    <p>Key talking points:</p>
+                    <ul>
+                        <li>Introduce The Chronic's unique retail offerings</li>
+                        <li>Highlight exclusive products and experiences</li>
+                        <li>Mention limited-time promotions</li>
+                        <li>Schedule a store visit or consultation</li>
+                    </ul>
+                    <button class="btn" onclick="makeCall()">Record Call Made</button>
+                </div>
+            `;
+            
+            modal.style.display = 'block';
+        }
+
+        function generateEmailTemplate(name) {
+            return `Dear ${name},
+
+I hope this email finds you well. My name is Orlando Padilla, and I'm reaching out from The Chronic, Los Angeles's premier retail destination.
+
+Based on our research, I believe you would be interested in our exclusive collection of products that align perfectly with your lifestyle and preferences. Here's what makes The Chronic special:
+
+🌟 EXCLUSIVE OFFERINGS:
+• Curated premium retail products
+• Limited edition items not available elsewhere
+• Personalized shopping experiences
+• VIP customer benefits and early access
+
+💎 WHY VISIT THE CHRONIC:
+• Discover unique products that reflect your personal style
+• Expert consultation and personalized recommendations
+• Competitive pricing with added value
+• Convenient Los Angeles location
+
+🎯 SPECIAL INVITATION:
+As a valued member of our community, I'd like to extend a personal invitation to visit our store. When you mention this email, you'll receive:
+• 20% off your first purchase
+• Complimentary style consultation
+• Access to our VIP customer program
+
+I'd love to schedule a personalized shopping experience for you. Would you be available for a brief call this week to discuss your interests and how The Chronic can serve you?
+
+Looking forward to welcoming you to The Chronic family.
+
+Best regards,
+
+Orlando Padilla
+Business Owner
+The Chronic
+www.TheChronic.com
+(323) 546-2049
+
+P.S. Follow us on our social channels for the latest updates and exclusive previews of new arrivals!`;
+        }
+
+        function updateContactForm() {
+            const method = document.getElementById('contactMethod').value;
+            const emailSection = document.getElementById('emailSection');
+            const phoneSection = document.getElementById('phoneSection');
+
+            if (method === 'email') {
+                emailSection.style.display = 'block';
+                phoneSection.style.display = 'none';
+            } else {
+                emailSection.style.display = 'none';
+                phoneSection.style.display = 'block';
+            }
+        }
+
+        function sendEmail(email) {
+            const subject = document.getElementById('emailSubject').value;
+            const message = document.getElementById('emailMessage').value;
+            
+            // Create mailto link
+            const mailtoLink = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(message)}`;
+            window.open(mailtoLink);
+            
+            alert('Email client opened! Please send the email from your email application.');
+            closeModal();
+        }
+
+        function makeCall() {
+            alert('Call logged successfully! Remember to update the client\'s contact status and notes after your conversation.');
+            closeModal();
+        }
+
+        function closeModal() {
+            document.getElementById('contactModal').style.display = 'none';
+        }
+
+        function openScoreModal() {
+            document.getElementById('scoreModal').style.display = 'block';
+        }
+
+        function closeScoreModal() {
+            document.getElementById('scoreModal').style.display = 'none';
+        }
+
+        function exportData() {
+            let csv = 'Client Name,Email,Phone,Address,P.U.R.E.S. Score,Tier Level,Industry,Revenue Estimate,Contact Status,Last Contact,Notes\n';
+            
+            filteredData.forEach(client => {
+                csv += `"${client.name}","${client.email}","${client.phone}","${client.address}",${client.puresScore},"Tier ${client.tier}","${client.industry}","${client.revenue}","${client.status}","${client.lastContact}","${client.notes}"\n`;
+            });
+
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.setAttribute('hidden', '');
+            a.setAttribute('href', url);
+            a.setAttribute('download', 'the-chronic-client-database.csv');
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+
+        // Event listeners
+        document.getElementById('searchInput').addEventListener('input', filterData);
+        document.getElementById('tierFilter').addEventListener('change', filterData);
+        document.getElementById('scoreFilter').addEventListener('change', filterData);
+
+        // P.U.R.E.S. Form submission
+        document.getElementById('puresForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const profitability = parseInt(document.getElementById('profitability').value);
+            const urgency = parseInt(document.getElementById('urgency').value);
+            const reachability = parseInt(document.getElementById('reachability').value);
+            const engagement = parseInt(document.getElementById('engagement').value);
+            const sustainability = parseInt(document.getElementById('sustainability').value);
+            
+            const averageScore = ((profitability + urgency + reachability + engagement + sustainability) / 5).toFixed(1);
+            
+            let tier;
+            if (averageScore >= 4.0) tier = '1A';
+            else if (averageScore >= 3.0) tier = '1B';
+            else tier = '1C';
+
+            const newClient = {
+                name: document.getElementById('clientName').value,
+                email: document.getElementById('clientEmail').value,
+                phone: document.getElementById('clientPhone').value,
+                address: document.getElementById('clientAddress').value,
+                puresScore: parseFloat(averageScore),
+                tier: tier,
+                industry: 'General',
+                revenue: 'TBD',
+                status: 'New',
+                lastContact: new Date().toISOString().split('T')[0],
+                notes: 'New client added via P.U.R.E.S. scoring'
+            };
+
+            clientsData.push(newClient);
+            filteredData = [...clientsData];
+            renderTable();
+            closeScoreModal();
+            document.getElementById('puresForm').reset();
+            alert('Client added successfully!');
+        });
+
+        // Close modals when clicking outside
+        window.onclick = function(event) {
+            const contactModal = document.getElementById('contactModal');
+            const scoreModal = document.getElementById('scoreModal');
+            if (event.target === contactModal) {
+                contactModal.style.display = 'none';
+            }
+            if (event.target === scoreModal) {
+                scoreModal.style.display = 'none';
+            }
+        }
+
+        // Initialize the table
+        renderTable();
+    </script>
+</body>
+</html>

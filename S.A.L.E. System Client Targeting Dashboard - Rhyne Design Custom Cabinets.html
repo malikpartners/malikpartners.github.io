@@ -1,0 +1,930 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>S.A.L.E. System Dashboard - Rhyne Design Custom Cabinets</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #000000;
+            color: #ffffff;
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+        }
+
+        .header {
+            background-color: #CF2030;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(207, 32, 48, 0.3);
+        }
+
+        .logo {
+            height: 60px;
+        }
+
+        .company-info {
+            text-align: right;
+        }
+
+        .company-info h1 {
+            color: #ffffff;
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .company-info p {
+            color: #ffffff;
+            opacity: 0.9;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .dashboard-tabs {
+            display: flex;
+            background-color: #1a1a1a;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+
+        .tab-button {
+            background-color: transparent;
+            color: #ffffff;
+            border: none;
+            padding: 1rem 2rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            flex: 1;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .tab-button:hover {
+            background-color: #CF2030;
+        }
+
+        .tab-button.active {
+            background-color: #CF2030;
+        }
+
+        .tab-content {
+            display: none;
+            background-color: #1a1a1a;
+            border-radius: 8px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .search-filter-section {
+            background-color: #2a2a2a;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+        }
+
+        .filter-row {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .filter-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #CF2030;
+            font-weight: bold;
+        }
+
+        .filter-group input,
+        .filter-group select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #444;
+            border-radius: 4px;
+            background-color: #333;
+            color: #ffffff;
+        }
+
+        .client-table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #2a2a2a;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .client-table th {
+            background-color: #CF2030;
+            color: #ffffff;
+            padding: 1rem;
+            text-align: left;
+            cursor: pointer;
+            user-select: none;
+            position: relative;
+        }
+
+        .client-table th:hover {
+            background-color: #b71c2c;
+        }
+
+        .client-table th::after {
+            content: ' ⇅';
+            position: absolute;
+            right: 10px;
+            opacity: 0.7;
+        }
+
+        .client-table td {
+            padding: 1rem;
+            border-bottom: 1px solid #444;
+        }
+
+        .client-table tbody tr:hover {
+            background-color: #333;
+        }
+
+        .tier-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .tier-1a {
+            background-color: #4CAF50;
+            color: #ffffff;
+        }
+
+        .tier-1b {
+            background-color: #FFC107;
+            color: #000000;
+        }
+
+        .tier-1c {
+            background-color: #2196F3;
+            color: #ffffff;
+        }
+
+        .contact-btn {
+            background-color: #CF2030;
+            color: #ffffff;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            margin-right: 0.5rem;
+            margin-bottom: 0.25rem;
+            transition: background-color 0.3s;
+        }
+
+        .contact-btn:hover {
+            background-color: #b71c2c;
+        }
+
+        .pures-form {
+            background-color: #2a2a2a;
+            padding: 2rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+        }
+
+        .pures-form h3 {
+            color: #CF2030;
+            margin-bottom: 1.5rem;
+        }
+
+        .pures-criteria {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .criteria-item {
+            background-color: #333;
+            padding: 1.5rem;
+            border-radius: 8px;
+        }
+
+        .criteria-item h4 {
+            color: #CF2030;
+            margin-bottom: 1rem;
+        }
+
+        .rating-scale {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .rating-btn {
+            width: 40px;
+            height: 40px;
+            border: 2px solid #666;
+            background-color: #444;
+            color: #ffffff;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .rating-btn:hover,
+        .rating-btn.active {
+            background-color: #CF2030;
+            border-color: #CF2030;
+        }
+
+        .module-section {
+            background-color: #2a2a2a;
+            padding: 2rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+        }
+
+        .module-section h3 {
+            color: #CF2030;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid #CF2030;
+            padding-bottom: 0.5rem;
+        }
+
+        .email-template {
+            background-color: #333;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+
+        .email-template h4 {
+            color: #CF2030;
+            margin-bottom: 1rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background-color: #333;
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #CF2030;
+        }
+
+        .stat-label {
+            color: #ccc;
+            margin-top: 0.5rem;
+        }
+
+        .footer {
+            background-color: #1a1a1a;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+
+        .footer-logo {
+            height: 40px;
+            margin-bottom: 1rem;
+        }
+
+        .export-btn {
+            background-color: #4CAF50;
+            color: #ffffff;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin: 1rem;
+        }
+
+        .export-btn:hover {
+            background-color: #45a049;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .dashboard-tabs {
+                flex-direction: column;
+            }
+
+            .client-table {
+                font-size: 0.8rem;
+            }
+
+            .client-table th,
+            .client-table td {
+                padding: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports" class="logo">
+        <div class="company-info">
+            <h1>Rhyne Design Custom Cabinets</h1>
+            <p>Sebastopol, CA | Ryan Foley | Ryan@rhynedesign.com</p>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Dashboard Tabs -->
+        <div class="dashboard-tabs">
+            <button class="tab-button active" onclick="showTab('sourcing')">S - Sourcing</button>
+            <button class="tab-button" onclick="showTab('assessing')">A - Assessing</button>
+            <button class="tab-button" onclick="showTab('listening')">L - Listening</button>
+            <button class="tab-button" onclick="showTab('empowering')">E - Empowering</button>
+            <button class="tab-button" onclick="showTab('analytics')">Analytics</button>
+        </div>
+
+        <!-- SOURCING Tab -->
+        <div id="sourcing" class="tab-content active">
+            <h2>S.A.L.E. SOURCING Module</h2>
+
+            <!-- Statistics -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value">50</div>
+                    <div class="stat-label">Total Prospects</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">12</div>
+                    <div class="stat-label">Tier 1A Premium</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">18</div>
+                    <div class="stat-label">Tier 1B High-Value</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">20</div>
+                    <div class="stat-label">Tier 1C Qualified</div>
+                </div>
+            </div>
+
+            <!-- P.U.R.E.S. Client Scoring System -->
+            <div class="pures-form">
+                <h3>P.U.R.E.S. Client Scoring System</h3>
+                <div class="pures-criteria">
+                    <div class="criteria-item">
+                        <h4>Profitability</h4>
+                        <p>Annual revenue threshold and budget capacity for custom cabinetry projects</p>
+                        <div class="rating-scale">
+                            <button class="rating-btn" onclick="setRating('profitability', 1)">1</button>
+                            <button class="rating-btn" onclick="setRating('profitability', 2)">2</button>
+                            <button class="rating-btn" onclick="setRating('profitability', 3)">3</button>
+                            <button class="rating-btn" onclick="setRating('profitability', 4)">4</button>
+                            <button class="rating-btn" onclick="setRating('profitability', 5)">5</button>
+                        </div>
+                    </div>
+                    <div class="criteria-item">
+                        <h4>Urgency</h4>
+                        <p>Active kitchen/bathroom renovation needs requiring immediate custom solutions</p>
+                        <div class="rating-scale">
+                            <button class="rating-btn" onclick="setRating('urgency', 1)">1</button>
+                            <button class="rating-btn" onclick="setRating('urgency', 2)">2</button>
+                            <button class="rating-btn" onclick="setRating('urgency', 3)">3</button>
+                            <button class="rating-btn" onclick="setRating('urgency', 4)">4</button>
+                            <button class="rating-btn" onclick="setRating('urgency', 5)">5</button>
+                        </div>
+                    </div>
+                    <div class="criteria-item">
+                        <h4>Reachability</h4>
+                        <p>Accessible homeowners and contractors with clear decision-making authority</p>
+                        <div class="rating-scale">
+                            <button class="rating-btn" onclick="setRating('reachability', 1)">1</button>
+                            <button class="rating-btn" onclick="setRating('reachability', 2)">2</button>
+                            <button class="rating-btn" onclick="setRating('reachability', 3)">3</button>
+                            <button class="rating-btn" onclick="setRating('reachability', 4)">4</button>
+                            <button class="rating-btn" onclick="setRating('reachability', 5)">5</button>
+                        </div>
+                    </div>
+                    <div class="criteria-item">
+                        <h4>Engagement</h4>
+                        <p>Openness to custom design innovation and long-term partnerships</p>
+                        <div class="rating-scale">
+                            <button class="rating-btn" onclick="setRating('engagement', 1)">1</button>
+                            <button class="rating-btn" onclick="setRating('engagement', 2)">2</button>
+                            <button class="rating-btn" onclick="setRating('engagement', 3)">3</button>
+                            <button class="rating-btn" onclick="setRating('engagement', 4)">4</button>
+                            <button class="rating-btn" onclick="setRating('engagement', 5)">5</button>
+                        </div>
+                    </div>
+                    <div class="criteria-item">
+                        <h4>Sustainability</h4>
+                        <p>Long-term home improvement potential with ongoing cabinet needs</p>
+                        <div class="rating-scale">
+                            <button class="rating-btn" onclick="setRating('sustainability', 1)">1</button>
+                            <button class="rating-btn" onclick="setRating('sustainability', 2)">2</button>
+                            <button class="rating-btn" onclick="setRating('sustainability', 3)">3</button>
+                            <button class="rating-btn" onclick="setRating('sustainability', 4)">4</button>
+                            <button class="rating-btn" onclick="setRating('sustainability', 5)">5</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Search and Filter Section -->
+            <div class="search-filter-section">
+                <h3>Client Database - Sebastopol, CA Area (10 Mile Radius)</h3>
+                <div class="filter-row">
+                    <div class="filter-group">
+                        <label for="searchName">Search by Name/Company:</label>
+                        <input type="text" id="searchName" placeholder="Enter name or company..." onkeyup="filterTable()">
+                    </div>
+                    <div class="filter-group">
+                        <label for="filterTier">Filter by Tier:</label>
+                        <select id="filterTier" onchange="filterTable()">
+                            <option value="">All Tiers</option>
+                            <option value="1A">Tier 1A - Premium</option>
+                            <option value="1B">Tier 1B - High-Value</option>
+                            <option value="1C">Tier 1C - Qualified</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="filterIndustry">Filter by Type:</label>
+                        <select id="filterIndustry" onchange="filterTable()">
+                            <option value="">All Types</option>
+                            <option value="Homeowner">Homeowner</option>
+                            <option value="Contractor">Contractor</option>
+                            <option value="Designer">Interior Designer</option>
+                            <option value="Realtor">Real Estate</option>
+                        </select>
+                    </div>
+                </div>
+                <button class="export-btn" onclick="exportToCSV()">Export to CSV</button>
+            </div>
+
+            <!-- Client Table -->
+            <table class="client-table" id="clientTable">
+                <thead>
+                    <tr>
+                        <th onclick="sortTable(0)">Client Name</th>
+                        <th onclick="sortTable(1)">Email</th>
+                        <th onclick="sortTable(2)">Phone</th>
+                        <th onclick="sortTable(3)">Address</th>
+                        <th onclick="sortTable(4)">P.U.R.E.S. Score</th>
+                        <th onclick="sortTable(5)">Tier</th>
+                        <th onclick="sortTable(6)">Type</th>
+                        <th onclick="sortTable(7)">Project Value</th>
+                        <th onclick="sortTable(8)">Status</th>
+                        <th onclick="sortTable(9)">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="clientTableBody">
+                    <!-- Client data will be populated here by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- ASSESSING Tab -->
+        <div id="assessing" class="tab-content">
+            <div class="module-section">
+                <h3>A.SSESSING Module - Buying Pattern Analysis</h3>
+                
+                <div class="pures-criteria">
+                    <div class="criteria-item">
+                        <h4>Analytical Buyers (25%)</h4>
+                        <p>Require detailed ROI analysis, cabinet specifications, and material comparisons</p>
+                        <ul style="color: #ccc; margin-top: 1rem;">
+                            <li>Detailed cost breakdowns</li>
+                            <li>Material quality certifications</li>
+                            <li>Installation timeline analysis</li>
+                            <li>Warranty information</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="criteria-item">
+                        <h4>Relationship Buyers (40%)</h4>
+                        <p>Value trust, referrals, and long-term partnerships with cabinet craftsmen</p>
+                        <ul style="color: #ccc; margin-top: 1rem;">
+                            <li>Client testimonials</li>
+                            <li>Portfolio of completed projects</li>
+                            <li>Personal consultations</li>
+                            <li>Family-owned business story</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="criteria-item">
+                        <h4>Efficiency Buyers (20%)</h4>
+                        <p>Focus on time-saving, streamlined installation, minimal disruption</p>
+                        <ul style="color: #ccc; margin-top: 1rem;">
+                            <li>Quick turnaround times</li>
+                            <li>Efficient installation process</li>
+                            <li>Minimal home disruption</li>
+                            <li>Project management systems</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="criteria-item">
+                        <h4>Innovation Buyers (15%)</h4>
+                        <p>Seek cutting-edge designs, smart storage solutions, unique materials</p>
+                        <ul style="color: #ccc; margin-top: 1rem;">
+                            <li>Latest design trends</li>
+                            <li>Smart storage solutions</li>
+                            <li>Sustainable materials</li>
+                            <li>Innovative hardware</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- LISTENING Tab -->
+        <div id="listening" class="tab-content">
+            <div class="module-section">
+                <h3>L.ISTENING Module - Feedback Integration</h3>
+                
+                <div class="pures-criteria">
+                    <div class="criteria-item">
+                        <h4>Pre-Sale Feedback Collection</h4>
+                        <textarea style="width: 100%; height: 100px; background-color: #444; color: #fff; border: 1px solid #666; padding: 1rem;" placeholder="Initial consultation feedback..."></textarea>
+                    </div>
+                    
+                    <div class="criteria-item">
+                        <h4>During-Sale Progress Tracking</h4>
+                        <select style="width: 100%; padding: 0.75rem; background-color: #444; color: #fff; border: 1px solid #666;">
+                            <option>Design Phase</option>
+                            <option>Materials Selection</option>
+                            <option>Production</option>
+                            <option>Installation</option>
+                            <option>Final Walkthrough</option>
+                        </select>
+                    </div>
+                    
+                    <div class="criteria-item">
+                        <h4>Post-Sale Satisfaction Monitoring</h4>
+                        <div class="rating-scale" style="margin-bottom: 1rem;">
+                            <span style="color: #CF2030; margin-right: 1rem;">Overall Satisfaction:</span>
+                            <button class="rating-btn">1</button>
+                            <button class="rating-btn">2</button>
+                            <button class="rating-btn">3</button>
+                            <button class="rating-btn">4</button>
+                            <button class="rating-btn active">5</button>
+                        </div>
+                    </div>
+                    
+                    <div class="criteria-item">
+                        <h4>Real-time Complaint Resolution</h4>
+                        <textarea style="width: 100%; height: 80px; background-color: #444; color: #fff; border: 1px solid #666; padding: 1rem;" placeholder="Resolution notes..."></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- EMPOWERING Tab -->
+        <div id="empowering" class="tab-content">
+            <div class="module-section">
+                <h3>E.MPOWERING Module - Referral Strategy</h3>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value">23</div>
+                        <div class="stat-label">Active Referrals</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">$47,500</div>
+                        <div class="stat-label">Referral Revenue</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">8</div>
+                        <div class="stat-label">Client Advocates</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">4.8/5</div>
+                        <div class="stat-label">Average Rating</div>
+                    </div>
+                </div>
+
+                <div class="pures-criteria">
+                    <div class="criteria-item">
+                        <h4>Success Story Documentation</h4>
+                        <p style="color: #ccc;">Document completed projects for portfolio and marketing materials</p>
+                        <button class="contact-btn">Add New Project</button>
+                    </div>
+                    
+                    <div class="criteria-item">
+                        <h4>Referral Reward Tracking</h4>
+                        <p style="color: #ccc;">Track and manage referral incentives and rewards</p>
+                        <button class="contact-btn">Manage Rewards</button>
+                    </div>
+                    
+                    <div class="criteria-item">
+                        <h4>Client Advocacy Program</h4>
+                        <p style="color: #ccc;">Engage satisfied customers as brand ambassadors</p>
+                        <button class="contact-btn">View Advocates</button>
+                    </div>
+                    
+                    <div class="criteria-item">
+                        <h4>Co-marketing Opportunities</h4>
+                        <p style="color: #ccc;">Partner with contractors, designers, and real estate agents</p>
+                        <button class="contact-btn">Plan Campaign</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ANALYTICS Tab -->
+        <div id="analytics" class="tab-content">
+            <div class="module-section">
+                <h3>S.A.L.E. Performance Analytics</h3>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value">85%</div>
+                        <div class="stat-label">P.U.R.E.S. Accuracy</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">92%</div>
+                        <div class="stat-label">Assessment Accuracy</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">78%</div>
+                        <div class="stat-label">Feedback Collection</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">2.4</div>
+                        <div class="stat-label">Avg Referrals/Client</div>
+                    </div>
+                </div>
+
+                <div class="email-template">
+                    <h4>Email Template Library</h4>
+                    
+                    <div style="background-color: #444; padding: 1rem; border-radius: 4px; margin: 1rem 0;">
+                        <strong>Tier 1A Premium Template:</strong>
+                        <p style="margin-top: 0.5rem; color: #ccc;">
+                            Subject: Transform Your Kitchen with Custom Cabinetry - Exclusive Consultation<br><br>
+                            Dear [CLIENT_NAME],<br><br>
+                            Your beautiful home in [LOCATION] deserves the finest custom cabinetry. At Rhyne Design, we specialize in creating luxury kitchen and bathroom solutions that combine exquisite craftsmanship with innovative storage solutions.<br><br>
+                            What makes us different:<br>
+                            • 100% custom design tailored to your space<br>
+                            • Premium hardwood construction with lifetime warranty<br>
+                            • Award-winning design team with 20+ years experience<br>
+                            • Seamless installation with minimal disruption<br><br>
+                            I'd love to schedule a complimentary consultation to discuss how we can transform your vision into reality.<br><br>
+                            Best regards,<br>
+                            Ryan Foley | Rhyne Design Custom Cabinets
+                        </p>
+                    </div>
+
+                    <div style="background-color: #444; padding: 1rem; border-radius: 4px; margin: 1rem 0;">
+                        <strong>General Outreach Template:</strong>
+                        <p style="margin-top: 0.5rem; color: #ccc;">
+                            Subject: Custom Cabinets for Your Home Renovation Project<br><br>
+                            Hello [CLIENT_NAME],<br><br>
+                            Planning a kitchen or bathroom renovation? Rhyne Design Custom Cabinets creates beautiful, functional storage solutions for homes throughout Sebastopol and Sonoma County.<br><br>
+                            Our specialties include:<br>
+                            • Kitchen cabinet design and installation<br>
+                            • Bathroom vanities and storage<br>
+                            • Built-in entertainment centers<br>
+                            • Home office solutions<br><br>
+                            Let's discuss how we can enhance your home with custom cabinetry that fits your style and budget.<br><br>
+                            Ryan Foley | (707) 555-0123 | Ryan@rhynedesign.com
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports" class="footer-logo">
+        <p style="color: #666;">Powered by HigginsReports S.A.L.E. System | © 2024 All Rights Reserved</p>
+    </footer>
+
+    <script>
+        // Sample client data for Sebastopol, CA area
+        const clientData = [
+            // Tier 1A Premium Clients
+            ['Sarah & Michael Chen', 'sarah.chen@email.com', '(707) 555-0101', '1245 Vineyard Ave, Sebastopol, CA 95472', '4.8', '1A', 'Homeowner', '$45,000', 'Hot Lead'],
+            ['Jennifer Rodriguez', 'j.rodriguez@email.com', '(707) 555-0102', '892 Apple Ridge Rd, Sebastopol, CA 95472', '4.6', '1A', 'Homeowner', '$52,000', 'In Progress'],
+            ['David & Lisa Thompson', 'dthompson@email.com', '(707) 555-0103', '567 Gravenstein Hwy, Sebastopol, CA 95472', '4.7', '1A', 'Homeowner', '$38,500', 'Qualified'],
+            ['Martinez Construction', 'info@martinezbuilds.com', '(707) 555-0104', '234 Main St, Sebastopol, CA 95472', '4.9', '1A', 'Contractor', '$75,000', 'Partnership'],
+            ['Robert & Patricia Kim', 'rkim@email.com', '(707) 555-0105', '1876 Bodega Ave, Sebastopol, CA 95472', '4.5', '1A', 'Homeowner', '$41,200', 'Follow-up'],
+            ['Green Valley Homes', 'contact@greenvalley.com', '(707) 555-0106', '445 Petaluma Ave, Sebastopol, CA 95472', '4.8', '1A', 'Developer', '$125,000', 'Contract Signed'],
+            ['Amanda & James Wilson', 'awilson@email.com', '(707) 555-0107', '789 Occidental Rd, Sebastopol, CA 95472', '4.4', '1A', 'Homeowner', '$48,700', 'Estimate Sent'],
+            ['Susan Taylor Designs', 'susan@taylordesigns.com', '(707) 555-0108', '321 Florence Ave, Sebastopol, CA 95472', '4.7', '1A', 'Designer', '$62,300', 'Active Client'],
+            ['The Johnson Family', 'mjohnson@email.com', '(707) 555-0109', '1534 High School Rd, Sebastopol, CA 95472', '4.6', '1A', 'Homeowner', '$39,800', 'Consultation'],
+            ['Elite Realty Group', 'hello@eliterealty.com', '(707) 555-0110', '678 Sebastopol Ave, Sebastopol, CA 95472', '4.5', '1A', 'Realtor', '$55,000', 'Referral Source'],
+            ['Catherine & Steven Lee', 'clee@email.com', '(707) 555-0111', '2103 Burnside Rd, Sebastopol, CA 95472', '4.8', '1A', 'Homeowner', '$43,600', 'Design Phase'],
+            ['Heritage Custom Homes', 'info@heritagecustom.com', '(707) 555-0112', '987 Guerneville Rd, Sebastopol, CA 95472', '4.9', '1A', 'Contractor', '$95,500', 'Long-term Partner'],
+
+            // Tier 1B High-Value Clients  
+            ['Mark & Diana Foster', 'mfoster@email.com', '(707) 555-0201', '456 Green Valley Rd, Sebastopol, CA 95472', '3.9', '1B', 'Homeowner', '$28,000', 'Interested'],
+            ['Rachel Martinez', 'rmartinez@email.com', '(707) 555-0202', '812 Pleasant Ave, Sebastopol, CA 95472', '3.7', '1B', 'Homeowner', '$31,500', 'Quote Request'],
+            ['Golden Gate Contractors', 'team@goldengate.com', '(707) 555-0203', '234 Llano Rd, Sebastopol, CA 95472', '4.0', '1B', 'Contractor', '$42,000', 'Negotiating'],
+            ['Brian & Kelly Santos', 'bsantos@email.com', '(707) 555-0204', '1687 Bloomfield Rd, Sebastopol, CA 95472', '3.8', '1B', 'Homeowner', '$29,700', 'Site Visit'],
+            ['Coastal Design Studio', 'info@coastaldesign.com', '(707) 555-0205', '543 Morris St, Sebastopol, CA 95472', '3.9', '1B', 'Designer', '$35,800', 'Collaboration'],
+            ['Thomas & Grace Wang', 'twang@email.com', '(707) 555-0206', '1423 Fircrest Ave, Sebastopol, CA 95472', '3.6', '1B', 'Homeowner', '$26,900', 'Warm Lead'],
+            ['Pacific Builders Inc', 'admin@pacificbuilders.com', '(707) 555-0207', '789 Healdsburg Ave, Sebastopol, CA 95472', '4.1', '1B', 'Contractor', '$38,400', 'Proposal Sent'],
+            ['Nancy & Richard Davis', 'ndavis@email.com', '(707) 555-0208', '2567 Gravenstein Hwy, Sebastopol, CA 95472', '3.7', '1B', 'Homeowner', '$32,100', 'Following Up'],
+            ['Modern Living Interiors', 'hello@modernliving.com', '(707) 555-0209', '876 Sebastopol Rd, Sebastopol, CA 95472', '3.8', '1B', 'Designer', '$33,600', 'Partnership'],
+            ['John & Mary Anderson', 'janderson@email.com', '(707) 555-0210', '1234 Mill Station Rd, Sebastopol, CA 95472', '3.9', '1B', 'Homeowner', '$30,200', 'Qualified'],
+            ['Vineyard Properties', 'contact@vineyardprop.com', '(707) 555-0211', '654 Highway 116, Sebastopol, CA 95472', '4.0', '1B', 'Realtor', '$36,700', 'Referral Partner'],
+            ['Laura & Chris Garcia', 'lgarcia@email.com', '(707) 555-0212', '1890 Bodega Ave, Sebastopol, CA 95472', '3.6', '1B', 'Homeowner', '$27,800', 'Initial Contact'],
+            ['Sunset Construction', 'info@sunsetconstruction.com', '(707) 555-0213', '432 Pleasant Hill Rd, Sebastopol, CA 95472', '3.8', '1B', 'Contractor', '$34,500', 'Exploring'],
+            ['Karen & Paul Mitchell', 'kmitchell@email.com', '(707) 555-0214', '1765 Occidental Rd, Sebastopol, CA 95472', '3.7', '1B', 'Homeowner', '$29,300', 'Research Phase'],
+            ['Design Elements', 'team@designelements.com', '(707) 555-0215', '321 Burnside Rd, Sebastopol, CA 95472', '3.9', '1B', 'Designer', '$31,900', 'Networking'],
+            ['Steve & Angela Brown', 'sbrown@email.com', '(707) 555-0216', '2109 Bloomfield Rd, Sebastopol, CA 95472', '3.8', '1B', 'Homeowner', '$28,600', 'Budget Review'],
+            ['West County Homes', 'info@westcounty.com', '(707) 555-0217', '567 Guerneville Rd, Sebastopol, CA 95472', '4.0', '1B', 'Developer', '$40,100', 'Discussion'],
+            ['Michelle & Tony Clark', 'mclark@email.com', '(707) 555-0218', '1456 Apple Ridge Rd, Sebastopol, CA 95472', '3.7', '1B', 'Homeowner', '$32,800', 'Information'],
+
+            // Tier 1C Qualified Clients
+            ['Jennifer & Mike Walsh', 'jwalsh@email.com', '(707) 555-0301', '789 Green St, Sebastopol, CA 95472', '3.4', '1C', 'Homeowner', '$22,000', 'Cold Lead'],
+            ['Handyman Plus', 'contact@handymanplus.com', '(707) 555-0302', '234 Main St, Sebastopol, CA 95472', '3.2', '1C', 'Contractor', '$18,500', 'Inquiry'],
+            ['Rita & Frank Lopez', 'rlopez@email.com', '(707) 555-0303', '1567 Morris St, Sebastopol, CA 95472', '3.3', '1C', 'Homeowner', '$19,800', 'Price Check'],
+            ['Simple Designs', 'info@simpledesigns.com', '(707) 555-0304', '456 Florence Ave, Sebastopol, CA 95472', '3.1', '1C', 'Designer', '$21,300', 'Comparison'],
+            ['Carol & Ted Johnson', 'cjohnson@email.com', '(707) 555-0305', '2234 Burnside Rd, Sebastopol, CA 95472', '3.4', '1C', 'Homeowner', '$20,600', 'Exploring'],
+            ['Valley Contractors', 'team@valleycontractors.com', '(707) 555-0306', '678 Pleasant Ave, Sebastopol, CA 95472', '3.0', '1C', 'Contractor', '$17,900', 'Information'],
+            ['Sandra & Robert Lee', 'slee@email.com', '(707) 555-0307', '1789 Fircrest Ave, Sebastopol, CA 95472', '3.3', '1C', 'Homeowner', '$23,100', 'Timeline'],
+            ['Budget Home Solutions', 'hello@budgethome.com', '(707) 555-0308', '345 Highway 116, Sebastopol, CA 95472', '3.2', '1C', 'Contractor', '$19,200', 'Cost Estimate'],
+            ['Maria & Carlos Ruiz', 'mruiz@email.com', '(707) 555-0309', '1890 Mill Station Rd, Sebastopol, CA 95472', '3.4', '1C', 'Homeowner', '$21,800', 'Considering'],
+            ['Home Sweet Home Realty', 'info@homesweethome.com', '(707) 555-0310', '567 Sebastopol Ave, Sebastopol, CA 95472', '3.1', '1C', 'Realtor', '$20,400', 'Potential'],
+            ['Lisa & George Adams', 'ladams@email.com', '(707) 555-0311', '2456 Occidental Rd, Sebastopol, CA 95472', '3.3', '1C', 'Homeowner', '$18,700', 'Early Stage'],
+            ['Quick Fix Contractors', 'contact@quickfix.com', '(707) 555-0312', '789 Llano Rd, Sebastopol, CA 95472', '3.0', '1C', 'Contractor', '$16,800', 'Inquiry'],
+            ['Betty & William Wong', 'bwong@email.com', '(707) 555-0313', '1345 Pleasant Hill Rd, Sebastopol, CA 95472', '3.2', '1C', 'Homeowner', '$22,500', 'Research'],
+            ['Economy Builds', 'team@economybuilds.com', '(707) 555-0314', '432 Gravenstein Hwy, Sebastopol, CA 95472', '3.1', '1C', 'Contractor', '$19,600', 'Exploring'],
+            ['Helen & Mark Taylor', 'htaylor@email.com', '(707) 555-0315', '1678 Bodega Ave, Sebastopol, CA 95472', '3.4', '1C', 'Homeowner', '$20,900', 'Information'],
+            ['Affordable Interiors', 'info@affordableinteriors.com', '(707) 555-0316', '234 Healdsburg Ave, Sebastopol, CA 95472', '3.0', '1C', 'Designer', '$17,300', 'Comparison'],
+            ['Kevin & Sarah Miller', 'kmiller@email.com', '(707) 555-0317', '2567 Bloomfield Rd, Sebastopol, CA 95472', '3.3', '1C', 'Homeowner', '$21,200', 'Budget'],
+            ['Local Home Repairs', 'contact@localhome.com', '(707) 555-0318', '567 Apple Ridge Rd, Sebastopol, CA 95472', '3.2', '1C', 'Contractor', '$18,100', 'Quote'],
+            ['Patricia & Donald Chen', 'pchen@email.com', '(707) 555-0319', '1234 Green Valley Rd, Sebastopol, CA 95472', '3.1', '1C', 'Homeowner', '$19,400', 'Inquiry'],
+            ['Community Builders', 'info@communitybuilders.com', '(707) 555-0320', '789 High School Rd, Sebastopol, CA 95472', '3.2', '1C', 'Contractor', '$20,100', 'Initial'],
+        ];
+
+        let currentData = [...clientData];
+
+        // Populate table on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            populateTable();
+        });
+
+        function populateTable() {
+            const tbody = document.getElementById('clientTableBody');
+            tbody.innerHTML = '';
+            
+            currentData.forEach((row, index) => {
+                const tr = document.createElement('tr');
+                
+                const tierClass = row[5] === '1A' ? 'tier-1a' : row[5] === '1B' ? 'tier-1b' : 'tier-1c';
+                
+                tr.innerHTML = `
+                    <td>${row[0]}</td>
+                    <td>${row[1]}</td>
+                    <td>${row[2]}</td>
+                    <td>${row[3]}</td>
+                    <td>${row[4]}</td>
+                    <td><span class="tier-badge ${tierClass}">Tier ${row[5]}</span></td>
+                    <td>${row[6]}</td>
+                    <td>${row[7]}</td>
+                    <td>${row[8]}</td>
+                    <td>
+                        <button class="contact-btn" onclick="sendEmail('${row[1]}', '${row[0]}', '${row[5]}')">Email</button>
+                        <button class="contact-btn" onclick="makeCall('${row[2]}')">Call</button>
+                    </td>
+                `;
+                
+                tbody.appendChild(tr);
+            });
+        }
+
+        function filterTable() {
+            const searchName = document.getElementById('searchName').value.toLowerCase();
+            const filterTier = document.getElementById('filterTier').value;
+            const filterIndustry = document.getElementById('filterIndustry').value;
+            
+            currentData = clientData.filter(row => {
+                const nameMatch = row[0].toLowerCase().includes(searchName);
+                const tierMatch = !filterTier || row[5] === filterTier;
+                const industryMatch = !filterIndustry || row[6] === filterIndustry;
+                
+                return nameMatch && tierMatch && industryMatch;
+            });
+            
+            populateTable();
+        }
+
+        function sortTable(column) {
+            currentData.sort((a, b) => {
+                if (column === 4) { // P.U.R.E.S. Score
+                    return parseFloat(b[column]) - parseFloat(a[column]);
+                } else if (column === 7) { // Project Value
+                    const aValue = parseFloat(a[column].replace(/[$,]/g, ''));
+                    const bValue = parseFloat(b[column].replace(/[$,]/g, ''));
+                    return bValue - aValue;
+                } else {
+                    return a[column].localeCompare(b[column]);
+                }
+            });
+            populateTable();
+        }
+
+        function sendEmail(email, name, tier) {
+            let subject, body;
+            
+            if (tier === '1A') {
+                subject = 'Transform Your Kitchen with Custom Cabinetry - Exclusive Consultation';
+                body = `Dear ${name.split(' ')[0]},\n\nYour beautiful home deserves the finest custom cabinetry. At Rhyne Design, we specialize in creating luxury kitchen and bathroom solutions that combine exquisite craftsmanship with innovative storage solutions.\n\nWhat makes us different:\n• 100% custom design tailored to your space\n• Premium hardwood construction with lifetime warranty\n• Award-winning design team with 20+ years experience\n• Seamless installation with minimal disruption\n\nI'd love to schedule a complimentary consultation to discuss how we can transform your vision into reality.\n\nBest regards,\nRyan Foley\nRhyne Design Custom Cabinets\n(707) 555-0123\nRyan@rhynedesign.com`;
+            } else {
+                subject = 'Custom Cabinets for Your Home Renovation Project';
+                body = `Hello ${name.split(' ')[0]},\n\nPlanning a kitchen or bathroom renovation? Rhyne Design Custom Cabinets creates beautiful, functional storage solutions for homes throughout Sebastopol and Sonoma County.\n\nOur specialties include:\n• Kitchen cabinet design and installation\n• Bathroom vanities and storage\n• Built-in entertainment centers\n• Home office solutions\n\nLet's discuss how we can enhance your home with custom cabinetry that fits your style and budget.\n\nRyan Foley\nRhyne Design Custom Cabinets\n(707) 555-0123\nRyan@rhynedesign.com`;
+            }
+            
+            const mailtoLink = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+            window.location.href = mailtoLink;
+        }
+
+        function makeCall(phone) {
+            window.location.href = `tel:${phone}`;
+        }
+
+        function showTab(tabName) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Remove active class from all buttons
+            document.querySelectorAll('.tab-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked button
+            event.target.classList.add('active');
+        }
+
+        function setRating(criteria, value) {
+            // Remove active class from all buttons in this criteria
+            event.target.parentNode.querySelectorAll('.rating-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Add active class to clicked button and all previous buttons
+            const buttons = event.target.parentNode.querySelectorAll('.rating-btn');
+            for (let i = 0; i < value; i++) {
+                buttons[i].classList.add('active');
+            }
+        }
+
+        function exportToCSV() {
+            const headers = ['Client Name', 'Email', 'Phone', 'Address', 'P.U.R.E.S. Score', 'Tier', 'Type', 'Project Value', 'Status'];
+            const csvContent = [
+                headers.join(','),
+                ...currentData.map(row => row.join(','))
+            ].join('\n');
+            
+            const blob = new Blob([csvContent], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'rhyne_design_clients.csv';
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+    </script>
+</body>
+</html>

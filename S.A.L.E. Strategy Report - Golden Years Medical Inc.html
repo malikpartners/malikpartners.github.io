@@ -1,0 +1,517 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>S.A.L.E. Strategy Report - Golden Years Medical Inc</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:#000;color:#e0e0e0;font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;min-height:100vh;}
+  a{color:#CF2030;text-decoration:none;}
+  a:hover{text-decoration:underline;opacity:.85;}
+
+  /* HEADER */
+  header{background:#111;border-bottom:3px solid #CF2030;padding:18px 30px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
+  header img{height:52px;}
+  nav{display:flex;gap:6px;flex-wrap:wrap;}
+  nav button{background:#CF2030;color:#fff;border:none;padding:8px 16px;border-radius:6px;cursor:pointer;font-size:.85rem;font-weight:600;transition:.2s;}
+  nav button:hover{background:#a81828;}
+  nav button.active{background:#fff;color:#CF2030;box-shadow:0 0 8px rgba(207,32,48,.5);}
+
+  /* MAIN */
+  main{max-width:1260px;margin:0 auto;padding:28px 20px 60px;}
+  .section{display:none;}
+  .section.active{display:block;}
+  h1{font-size:1.8rem;color:#CF2030;margin-bottom:6px;}
+  h2{font-size:1.35rem;color:#CF2030;margin:28px 0 12px;border-left:4px solid #CF2030;padding-left:12px;}
+  h3{font-size:1.1rem;color:#e74c5a;margin:18px 0 8px;}
+  p,.desc{color:#bbb;line-height:1.65;margin-bottom:10px;}
+
+  /* SEARCH */
+  .search-bar{margin:14px 0;display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
+  .search-bar input{background:#1a1a1a;border:1px solid #333;color:#eee;padding:9px 14px;border-radius:6px;width:280px;font-size:.9rem;}
+  .search-bar input::placeholder{color:#666;}
+  .search-bar input:focus{outline:none;border-color:#CF2030;}
+
+  /* TABLE */
+  .table-wrap{overflow-x:auto;margin:10px 0 22px;border-radius:8px;border:1px solid #222;}
+  table{width:100%;border-collapse:collapse;font-size:.88rem;}
+  thead{background:#1a1a1a;}
+  th{padding:11px 14px;text-align:left;color:#CF2030;cursor:pointer;user-select:none;white-space:nowrap;position:relative;}
+  th:hover{background:#222;}
+  th .arrow{font-size:.7rem;margin-left:4px;opacity:.5;}
+  th.sorted .arrow{opacity:1;}
+  td{padding:10px 14px;border-top:1px solid #1e1e1e;}
+  tr:hover td{background:#141414;}
+  .badge{display:inline-block;background:#CF2030;color:#fff;padding:2px 9px;border-radius:12px;font-size:.75rem;font-weight:600;}
+
+  /* CONTACT BTN */
+  .contact-btn{background:#CF2030;color:#fff;border:none;padding:6px 14px;border-radius:5px;cursor:pointer;font-size:.8rem;font-weight:600;transition:.2s;}
+  .contact-btn:hover{background:#a81828;transform:scale(1.04);}
+
+  /* CARDS */
+  .card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:16px;margin:14px 0;}
+  .card{background:#141414;border:1px solid #222;border-radius:10px;padding:20px;transition:.25s;}
+  .card:hover{border-color:#CF2030;transform:translateY(-2px);box-shadow:0 4px 20px rgba(207,32,48,.15);}
+  .card h4{color:#CF2030;margin-bottom:6px;font-size:1rem;}
+  .card p{font-size:.85rem;color:#999;line-height:1.55;}
+  .card .icon{font-size:1.6rem;margin-bottom:8px;}
+
+  /* CHART AREA */
+  .chart-container{background:#111;border:1px solid #222;border-radius:10px;padding:24px;margin:16px 0;}
+  .bar-chart{display:flex;align-items:flex-end;gap:18px;height:220px;padding:10px 0;border-bottom:2px solid #333;}
+  .bar-col{display:flex;flex-direction:column;align-items:center;flex:1;}
+  .bar{background:linear-gradient(180deg,#CF2030,#a81828);border-radius:6px 6px 0 0;width:100%;max-width:60px;transition:.4s;position:relative;min-height:4px;}
+  .bar:hover{opacity:.85;}
+  .bar-label{color:#999;font-size:.72rem;margin-top:8px;text-align:center;word-break:break-word;}
+  .bar-value{color:#fff;font-size:.75rem;font-weight:700;margin-bottom:4px;}
+
+  /* DONUT */
+  .donut-wrap{display:flex;align-items:center;gap:30px;flex-wrap:wrap;justify-content:center;}
+  .donut-legend{display:flex;flex-direction:column;gap:6px;}
+  .donut-legend .leg-item{display:flex;align-items:center;gap:8px;font-size:.85rem;color:#ccc;}
+  .leg-color{width:14px;height:14px;border-radius:3px;flex-shrink:0;}
+
+  /* MODAL */
+  .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:200;align-items:center;justify-content:center;}
+  .modal-overlay.show{display:flex;}
+  .modal{background:#1a1a1a;border:1px solid #CF2030;border-radius:12px;padding:28px;max-width:560px;width:92%;max-height:85vh;overflow-y:auto;}
+  .modal h3{color:#CF2030;margin-bottom:14px;}
+  .modal label{color:#aaa;font-size:.85rem;display:block;margin:10px 0 4px;}
+  .modal input,.modal textarea{width:100%;background:#111;border:1px solid #333;color:#eee;padding:9px 12px;border-radius:6px;font-size:.88rem;}
+  .modal textarea{min-height:140px;resize:vertical;line-height:1.5;}
+  .modal input:focus,.modal textarea:focus{outline:none;border-color:#CF2030;}
+  .modal-actions{display:flex;gap:10px;margin-top:16px;}
+  .modal-actions button{padding:9px 20px;border-radius:6px;border:none;font-weight:600;cursor:pointer;font-size:.88rem;}
+  .btn-send{background:#CF2030;color:#fff;}
+  .btn-send:hover{background:#a81828;}
+  .btn-cancel{background:#333;color:#ccc;}
+  .btn-cancel:hover{background:#444;}
+
+  /* FOOTER */
+  footer{background:#111;border-top:2px solid #CF2030;padding:18px 30px;text-align:center;}
+  footer img{height:30px;margin-bottom:6px;}
+  footer p{color:#666;font-size:.75rem;}
+
+  /* TALKING POINTS */
+  .talking-point{background:#141414;border-left:3px solid #CF2030;padding:14px 18px;margin:10px 0;border-radius:0 8px 8px 0;font-style:italic;color:#ccc;line-height:1.6;}
+
+  /* RESPONSIVE */
+  @media(max-width:700px){
+    header{flex-direction:column;gap:12px;}
+    nav{justify-content:center;}
+    .bar-chart{height:160px;gap:8px;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports">
+  <nav id="mainNav">
+    <button onclick="showSection('overview')" class="active">Overview</button>
+    <button onclick="showSection('company')">Company</button>
+    <button onclick="showSection('contactsphere')">Contact Sphere</button>
+    <button onclick="showSection('strategy')">S.A.L.E. Strategy</button>
+    <button onclick="showSection('charts')">Analytics</button>
+    <button onclick="showSection('action')">Take Action</button>
+  </nav>
+</header>
+
+<main>
+
+<!-- ==================== OVERVIEW ==================== -->
+<div id="overview" class="section active">
+  <h1>🔍 S.A.L.E. Client Strategy Report</h1>
+  <p>Interactive strategy dashboard for <strong style="color:#CF2030">Viggie Naiker</strong> — Golden Years Medical Inc</p>
+
+  <h2>📋 Client Profile</h2>
+  <div class="search-bar">
+    <input type="text" id="searchClient" placeholder="🔎 Search client details..." oninput="filterTable('clientTable',this.value)">
+  </div>
+  <div class="table-wrap">
+    <table id="clientTable">
+      <thead>
+        <tr>
+          <th onclick="sortTable('clientTable',0)">Field <span class="arrow">▲▼</span></th>
+          <th onclick="sortTable('clientTable',1)">Details <span class="arrow">▲▼</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Name</strong></td><td>Viggie Naiker</td></tr>
+        <tr><td><strong>Title</strong></td><td>Business Owner</td></tr>
+        <tr><td><strong>Email</strong></td><td><a href="mailto:naiker.viggie@goldenyearsmedical.com">naiker.viggie@goldenyearsmedical.com</a> <button class="contact-btn" style="margin-left:8px;" onclick="openEmailModal('Viggie Naiker','naiker.viggie@goldenyearsmedical.com')">✉ Contact</button></td></tr>
+        <tr><td><strong>LinkedIn</strong></td><td><a href="https://www.linkedin.com/in/viggienaiker" target="_blank">linkedin.com/in/viggienaiker</a></td></tr>
+        <tr><td><strong>Location</strong></td><td>San Rafael, California (San Francisco Bay Area)</td></tr>
+        <tr><td><strong>Country</strong></td><td>United States</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>🏢 Company Snapshot</h2>
+  <div class="card-grid">
+    <div class="card"><div class="icon">🏥</div><h4>Golden Years Medical Inc</h4><p>Medical Device / Business Supplies & Equipment</p></div>
+    <div class="card"><div class="icon">👥</div><h4>11–50 Employees</h4><p>Mid-size local business with a dedicated team in San Rafael, CA</p></div>
+    <div class="card"><div class="icon">🌐</div><h4>Online Presence</h4><p><a href="http://www.goldenyearsmedical.com" target="_blank">goldenyearsmedical.com</a><br><a href="https://www.linkedin.com/company/3898447" target="_blank">LinkedIn Company Page</a></p></div>
+    <div class="card"><div class="icon">📍</div><h4>San Rafael, CA</h4><p>Serving the greater San Francisco Bay Area</p></div>
+  </div>
+</div>
+
+<!-- ==================== COMPANY ==================== -->
+<div id="company" class="section">
+  <h1>🏢 Company Deep Dive</h1>
+  <p>Golden Years Medical Inc — <em>"Where you'll find affordable quality solutions for all of your home healthcare needs."</em></p>
+
+  <h2>🌐 Website Insights</h2>
+  <div class="search-bar">
+    <input type="text" id="searchCompany" placeholder="🔎 Search company details..." oninput="filterTable('companyTable',this.value)">
+  </div>
+  <div class="table-wrap">
+    <table id="companyTable">
+      <thead>
+        <tr>
+          <th onclick="sortTable('companyTable',0)">Field <span class="arrow">▲▼</span></th>
+          <th onclick="sortTable('companyTable',1)">Details <span class="arrow">▲▼</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Company</strong></td><td>Golden Years Medical Inc</td></tr>
+        <tr><td><strong>Website</strong></td><td><a href="http://www.goldenyearsmedical.com" target="_blank">goldenyearsmedical.com</a></td></tr>
+        <tr><td><strong>Industry</strong></td><td>Medical Device / Business Supplies & Equipment</td></tr>
+        <tr><td><strong>Size</strong></td><td>11–50 employees</td></tr>
+        <tr><td><strong>Headquarters</strong></td><td>San Rafael, California, United States</td></tr>
+        <tr><td><strong>State</strong></td><td>California</td></tr>
+        <tr><td><strong>City</strong></td><td>San Rafael</td></tr>
+        <tr><td><strong>LinkedIn</strong></td><td><a href="https://www.linkedin.com/company/3898447" target="_blank">Company Page</a></td></tr>
+        <tr><td><strong>Record Date</strong></td><td>March 26, 2026</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>⭐ Key Differentiators</h2>
+  <div class="card-grid">
+    <div class="card"><div class="icon">💰</div><h4>Affordable Quality</h4><p>Top-quality medical supplies at accessible price points — making home healthcare attainable for more families.</p></div>
+    <div class="card"><div class="icon">🧠</div><h4>Knowledgeable Staff</h4><p>Expert guidance on home healthcare equipment selection and fitting — personalized service that big-box stores can't match.</p></div>
+    <div class="card"><div class="icon">🌟</div><h4>Independence-Focused</h4><p>Products designed to help people rediscover confidence and mobility — work, play, school, and beyond.</p></div>
+  </div>
+</div>
+
+<!-- ==================== CONTACT SPHERE ==================== -->
+<div id="contactsphere" class="section">
+  <h1>🤝 BNI Contact Sphere Analysis</h1>
+  <p>Ideal referral partners for Golden Years Medical — professionals who naturally serve the same clients.</p>
+
+  <h2>🎯 Contact Sphere Matches</h2>
+  <div class="search-bar">
+    <input type="text" id="searchSphere" placeholder="🔎 Search professions, overlap, or scores..." oninput="filterTable('sphereTable',this.value)">
+  </div>
+  <div class="table-wrap">
+    <table id="sphereTable">
+      <thead>
+        <tr>
+          <th onclick="sortTable('sphereTable',0)">Rank <span class="arrow">▲▼</span></th>
+          <th onclick="sortTable('sphereTable',1)">Profession <span class="arrow">▲▼</span></th>
+          <th onclick="sortTable('sphereTable',2)">Client Overlap <span class="arrow">▲▼</span></th>
+          <th onclick="sortTable('sphereTable',3)">Referral Score <span class="arrow">▲▼</span></th>
+          <th onclick="sortTable('sphereTable',4)">Synergy <span class="arrow">▲▼</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>1</td><td>🏠 In-Home Care Provider</td><td>Direct client overlap</td><td><span class="badge">98</span></td><td>Very High</td></tr>
+        <tr><td>2</td><td>👩‍⚕️ Physical Therapist</td><td>Patients need mobility equipment</td><td><span class="badge">96</span></td><td>Very High</td></tr>
+        <tr><td>3</td><td>🦴 Chiropractor</td><td>Clients needing supportive devices</td><td><span class="badge">91</span></td><td>High</td></tr>
+        <tr><td>4</td><td>👴 Senior Service Provider</td><td>Aging population market</td><td><span class="badge">89</span></td><td>High</td></tr>
+        <tr><td>5</td><td>📋 Elder Law Attorney</td><td>Estate/long-term care planning clients</td><td><span class="badge">85</span></td><td>High</td></tr>
+        <tr><td>6</td><td>💊 Pharmacist</td><td>Cross-referral on medical needs</td><td><span class="badge">83</span></td><td>Medium-High</td></tr>
+        <tr><td>7</td><td>🏡 Residential Realtor (Senior Living)</td><td>Home modifications & accessibility</td><td><span class="badge">78</span></td><td>Medium-High</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ==================== STRATEGY ==================== -->
+<div id="strategy" class="section">
+  <h1>🎯 S.A.L.E. Strategy Breakdown</h1>
+  <p>A structured approach to inviting Viggie Naiker to your BNI chapter.</p>
+
+  <h2>🔍 S — Search & Understand</h2>
+  <div class="card" style="margin:10px 0;">
+    <p>Viggie runs a <strong>medical supply store</strong> serving patients, caregivers, and healthcare providers across the Bay Area. His ideal referral partners include anyone working with aging populations, individuals with mobility challenges, or those recovering from surgery/injury.</p>
+  </div>
+
+  <h2>🤝 A — Approach & Align</h2>
+  <div class="search-bar">
+    <input type="text" id="searchAlign" placeholder="🔎 Search alignment matches..." oninput="filterTable('alignTable',this.value)">
+  </div>
+  <div class="table-wrap">
+    <table id="alignTable">
+      <thead>
+        <tr>
+          <th onclick="sortTable('alignTable',0)">Contact Sphere Partner <span class="arrow">▲▼</span></th>
+          <th onclick="sortTable('alignTable',1)">Alignment Reason <span class="arrow">▲▼</span></th>
+          <th onclick="sortTable('alignTable',2)">Referral Flow <span class="arrow">▲▼</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>🏠 In-Home Care Providers</td><td>Direct client overlap</td><td>Bi-directional</td></tr>
+        <tr><td>👩‍⚕️ Physical Therapists</td><td>Patients need mobility equipment</td><td>Inbound-heavy</td></tr>
+        <tr><td>🦴 Chiropractors</td><td>Clients needing supportive devices</td><td>Bi-directional</td></tr>
+        <tr><td>👴 Senior Service Providers</td><td>Aging population market</td><td>Inbound-heavy</td></tr>
+        <tr><td>📋 Elder Law Attorneys</td><td>Estate/long-term care planning</td><td>Bi-directional</td></tr>
+        <tr><td>💊 Pharmacists</td><td>Cross-referral on medical needs</td><td>Bi-directional</td></tr>
+        <tr><td>🏡 Residential Realtors</td><td>Home modifications for seniors</td><td>Inbound-heavy</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>💡 L — Leverage the Value</h2>
+  <div class="card-grid">
+    <div class="card"><div class="icon">🔄</div><h4>Recurring Referral Pipeline</h4><p>Every PT, home care provider, and doctor sees patients who need medical supplies <strong>weekly</strong>.</p></div>
+    <div class="card"><div class="icon">🤝</div><h4>Community Trust</h4><p>BNI relationships build the <strong>trust</strong> that healthcare decisions require.</p></div>
+    <div class="card"><div class="icon">📈</div><h4>Local Business Growth</h4><p>Structured networking in the Bay Area can significantly <strong>expand his customer base</strong> beyond walk-in traffic.</p></div>
+  </div>
+
+  <h2>🚀 E — Execute & Engage</h2>
+  <h3>Recommended Talking Points</h3>
+  <div class="talking-point">"Viggie, your commitment to helping people regain independence through quality medical equipment is exactly the kind of business that thrives in BNI."</div>
+  <div class="talking-point">"Imagine getting weekly referrals from physical therapists, home care agencies, and elder law attorneys — all people whose clients need what you provide."</div>
+  <div class="talking-point">"BNI's structured referral system can become a consistent source of new customers for Golden Years Medical."</div>
+</div>
+
+<!-- ==================== CHARTS ==================== -->
+<div id="charts" class="section">
+  <h1>📊 Analytics Dashboard</h1>
+  <p>Visual breakdown of referral potential and contact sphere synergy scores.</p>
+
+  <h2>📈 Contact Sphere Referral Scores</h2>
+  <div class="chart-container">
+    <div class="bar-chart" id="barChart"></div>
+  </div>
+
+  <h2>🍩 Referral Flow Distribution</h2>
+  <div class="chart-container">
+    <div class="donut-wrap">
+      <svg width="210" height="210" viewBox="0 0 42 42">
+        <circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#CF2030" stroke-width="4" stroke-dasharray="43 57" stroke-dashoffset="25"></circle>
+        <circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#e74c5a" stroke-width="4" stroke-dasharray="43 57" stroke-dashoffset="68"></circle>
+        <circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#ff8c94" stroke-width="4" stroke-dasharray="14 86" stroke-dashoffset="25"></circle>
+        <text x="21" y="22" text-anchor="middle" font-size="4" fill="#fff" font-weight="bold">7</text>
+        <text x="21" y="25.5" text-anchor="middle" font-size="2.2" fill="#999">Partners</text>
+      </svg>
+      <div class="donut-legend">
+        <div class="leg-item"><div class="leg-color" style="background:#CF2030;"></div> Bi-directional Referrals (3 partners — 43%)</div>
+        <div class="leg-item"><div class="leg-color" style="background:#e74c5a;"></div> Inbound-Heavy Referrals (3 partners — 43%)</div>
+        <div class="leg-item"><div class="leg-color" style="background:#ff8c94;"></div> Cross-Referral (1 partner — 14%)</div>
+      </div>
+    </div>
+  </div>
+
+  <h2>📊 Company Metrics</h2>
+  <div class="search-bar">
+    <input type="text" id="searchMetrics" placeholder="🔎 Search metrics..." oninput="filterTable('metricsTable',this.value)">
+  </div>
+  <div class="table-wrap">
+    <table id="metricsTable">
+      <thead>
+        <tr>
+          <th onclick="sortTable('metricsTable',0)">Metric <span class="arrow">▲▼</span></th>
+          <th onclick="sortTable('metricsTable',1)">Value <span class="arrow">▲▼</span></th>
+          <th onclick="sortTable('metricsTable',2)">Insight <span class="arrow">▲▼</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Employee Count</td><td>11–50</td><td>Established local business with capacity to handle BNI referral volume</td></tr>
+        <tr><td>Contact Sphere Matches</td><td>7</td><td>Strong network of complementary professions available</td></tr>
+        <tr><td>Avg Referral Score</td><td>88.6</td><td>Excellent synergy across all identified contact sphere partners</td></tr>
+        <tr><td>Top Referral Score</td><td>98</td><td>In-Home Care Providers — highest potential referral partner</td></tr>
+        <tr><td>Bi-directional Partners</td><td>3</td><td>Mutual referral flow — highest value relationships</td></tr>
+        <tr><td>Inbound-Heavy Partners</td><td>3</td><td>Partners likely to send more referrals than they receive</td></tr>
+        <tr><td>Bay Area Market Reach</td><td>Regional</td><td>Serving greater SF Bay Area from San Rafael hub</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ==================== ACTION ==================== -->
+<div id="action" class="section">
+  <h1>🚀 Take Action</h1>
+  <p>Ready to move forward with Viggie Naiker? Choose your next step below.</p>
+
+  <h2>📬 Contact Viggie Directly</h2>
+  <div class="card" style="margin:10px 0;text-align:center;">
+    <p style="margin-bottom:14px;">Send Viggie a personalized invitation based on Golden Years Medical's offerings and BNI value.</p>
+    <button class="contact-btn" style="font-size:1rem;padding:12px 28px;" onclick="openEmailModal('Viggie Naiker','naiker.viggie@goldenyearsmedical.com')">✉ Email Viggie Naiker</button>
+    <span style="margin:0 12px;color:#555;">|</span>
+    <a href="https://www.linkedin.com/in/viggienaiker" target="_blank" class="contact-btn" style="display:inline-block;text-decoration:none;font-size:1rem;padding:12px 28px;">🔗 LinkedIn Profile</a>
+  </div>
+
+  <h2>🎯 Next Steps — BNI Visitor Tools</h2>
+  <div class="card-grid">
+    <div class="card" style="text-align:center;cursor:pointer;" onclick="alert('Use the Higgins AI Invite BNI Visitor tool to generate a personalized invitation for Viggie.')">
+      <div class="icon">📩</div><h4>Invite BNI Visitor</h4><p>Generate a customized BNI chapter visit invitation for Viggie.</p>
+    </div>
+    <div class="card" style="text-align:center;cursor:pointer;" onclick="alert('Use the Higgins AI BNI Visitor Introduction tool to introduce Viggie to the chapter.')">
+      <div class="icon">🎤</div><h4>BNI Visitor Introduction</h4><p>Create a compelling introduction for Viggie to present at the chapter meeting.</p>
+    </div>
+    <div class="card" style="text-align:center;cursor:pointer;" onclick="alert('Use the Higgins AI BNI Visitor Follow-up tool after Viggie visits your chapter.')">
+      <div class="icon">📝</div><h4>BNI Visitor Follow-up</h4><p>Draft a follow-up message after Viggie attends a BNI meeting.</p>
+    </div>
+    <div class="card" style="text-align:center;cursor:pointer;" onclick="alert('Use the Higgins AI Visitor Industry Search tool to find more prospects like Viggie.')">
+      <div class="icon">🔍</div><h4>Visitor Industry Search</h4><p>Find more medical supply professionals in the Bay Area to invite.</p>
+    </div>
+    <div class="card" style="text-align:center;cursor:pointer;" onclick="alert('Use the Higgins AI Contact Sphere Analysis tool for a deeper dive.')">
+      <div class="icon">🎯</div><h4>Contact Sphere Analysis</h4><p>Deep dive into referral-rich professions aligned with medical supplies.</p>
+    </div>
+    <div class="card" style="text-align:center;cursor:pointer;" onclick="alert('Use the Higgins AI Growth Strategy tool for a full chapter growth plan.')">
+      <div class="icon">📈</div><h4>BNI Growth Strategy</h4><p>Generate a comprehensive chapter growth strategy around medical services.</p>
+    </div>
+  </div>
+</div>
+
+</main>
+
+<!-- EMAIL MODAL -->
+<div class="modal-overlay" id="emailModal">
+  <div class="modal">
+    <h3>✉ Contact — BNI Visitor Invitation</h3>
+    <label>To:</label>
+    <input type="text" id="modalTo" readonly>
+    <label>Subject:</label>
+    <input type="text" id="modalSubject">
+    <label>Message:</label>
+    <textarea id="modalBody"></textarea>
+    <div class="modal-actions">
+      <button class="btn-send" onclick="sendEmail()">📤 Open in Email Client</button>
+      <button class="btn-send" style="background:#1a7a2f;" onclick="copyEmail()">📋 Copy to Clipboard</button>
+      <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+    </div>
+    <p style="margin-top:10px;font-size:.75rem;color:#666;" id="copyStatus"></p>
+  </div>
+</div>
+
+<footer>
+  <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports">
+  <p>Higgins Reports — S.A.L.E. Client Strategy Report | Golden Years Medical Inc | Generated for BNI</p>
+  <p style="margin-top:4px;">© 2026 Higgins AI — <a href="https://higginstraining.com">higginstraining.com</a> | 📞 1-888-364-3924 | ✉ support@higgins.ai</p>
+</footer>
+
+<script>
+// NAV
+function showSection(id){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
+  event.target.classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// SORT
+const sortState={};
+function sortTable(tableId,colIdx){
+  const table=document.getElementById(tableId);
+  const tbody=table.querySelector('tbody');
+  const rows=Array.from(tbody.querySelectorAll('tr'));
+  const key=tableId+'_'+colIdx;
+  sortState[key]=!sortState[key];
+  const dir=sortState[key]?1:-1;
+  rows.sort((a,b)=>{
+    let aT=a.cells[colIdx]?.textContent.trim()||'';
+    let bT=b.cells[colIdx]?.textContent.trim()||'';
+    const aN=parseFloat(aT),bN=parseFloat(bT);
+    if(!isNaN(aN)&&!isNaN(bN))return(aN-bN)*dir;
+    return aT.localeCompare(bT)*dir;
+  });
+  rows.forEach(r=>tbody.appendChild(r));
+}
+
+// FILTER
+function filterTable(tableId,query){
+  const table=document.getElementById(tableId);
+  const rows=table.querySelectorAll('tbody tr');
+  const q=query.toLowerCase();
+  rows.forEach(r=>{
+    r.style.display=r.textContent.toLowerCase().includes(q)?'':'none';
+  });
+}
+
+// BAR CHART
+const sphereData=[
+  {label:'In-Home Care',score:98},
+  {label:'Physical Therapist',score:96},
+  {label:'Chiropractor',score:91},
+  {label:'Senior Services',score:89},
+  {label:'Elder Law Atty',score:85},
+  {label:'Pharmacist',score:83},
+  {label:'Realtor (Senior)',score:78}
+];
+function renderBarChart(){
+  const container=document.getElementById('barChart');
+  container.innerHTML='';
+  const maxScore=100;
+  sphereData.forEach(d=>{
+    const col=document.createElement('div');
+    col.className='bar-col';
+    const val=document.createElement('div');
+    val.className='bar-value';
+    val.textContent=d.score;
+    const bar=document.createElement('div');
+    bar.className='bar';
+    bar.style.height=(d.score/maxScore*100)+'%';
+    bar.title=d.label+': '+d.score;
+    const lbl=document.createElement('div');
+    lbl.className='bar-label';
+    lbl.textContent=d.label;
+    col.appendChild(val);
+    col.appendChild(bar);
+    col.appendChild(lbl);
+    container.appendChild(col);
+  });
+}
+renderBarChart();
+
+// EMAIL MODAL
+function openEmailModal(name,email){
+  document.getElementById('modalTo').value=email;
+  document.getElementById('modalSubject').value='Invitation to Visit Our BNI Chapter — A Perfect Fit for '+name;
+  document.getElementById('modalBody').value=`Dear ${name},
+
+I hope this message finds you well! I came across Golden Years Medical Inc and was truly impressed by your mission to provide affordable, quality home healthcare solutions that help people regain their independence and confidence.
+
+I'd love to invite you to visit our BNI (Business Network International) chapter as a guest. Here's why I believe BNI would be an incredible fit for Golden Years Medical:
+
+1. RECURRING REFERRAL PIPELINE — Our chapter includes professionals like physical therapists, in-home care providers, chiropractors, and elder law attorneys who work with clients every week that need exactly what you provide. Imagine a consistent stream of qualified referrals flowing to your business.
+
+2. COMMUNITY TRUST — Healthcare decisions require trust, and BNI's structured relationship-building creates deep, authentic connections with professionals who can confidently recommend Golden Years Medical to their patients and clients.
+
+3. LOCAL BUSINESS GROWTH — Your expertise in helping people rediscover mobility and independence is exactly the kind of service that thrives through word-of-mouth networking. BNI can expand your reach well beyond walk-in traffic across the entire San Francisco Bay Area.
+
+Your commitment to knowledgeable staff guidance and independence-focused solutions sets Golden Years Medical apart — and that's exactly the kind of business our chapter members love to refer.
+
+To visit our chapter, just complete this (***Visitor Invite***) simple form to reserve your seat and begin accelerating your business.
+
+I'd be happy to answer any questions. Looking forward to welcoming you!
+
+Warm regards`;
+  document.getElementById('emailModal').classList.add('show');
+  document.getElementById('copyStatus').textContent='';
+}
+function closeModal(){document.getElementById('emailModal').classList.remove('show');}
+function sendEmail(){
+  const to=document.getElementById('modalTo').value;
+  const subj=encodeURIComponent(document.getElementById('modalSubject').value);
+  const body=encodeURIComponent(document.getElementById('modalBody').value);
+  window.open('mailto:'+to+'?subject='+subj+'&body='+body,'_blank');
+}
+function copyEmail(){
+  const text='To: '+document.getElementById('modalTo').value+'\nSubject: '+document.getElementById('modalSubject').value+'\n\n'+document.getElementById('modalBody').value;
+  navigator.clipboard.writeText(text).then(()=>{
+    document.getElementById('copyStatus').textContent='✅ Copied to clipboard!';
+  }).catch(()=>{
+    document.getElementById('copyStatus').textContent='⚠ Copy failed — please select and copy manually.';
+  });
+}
+document.getElementById('emailModal').addEventListener('click',function(e){if(e.target===this)closeModal();});
+</script>
+</body>
+</html>

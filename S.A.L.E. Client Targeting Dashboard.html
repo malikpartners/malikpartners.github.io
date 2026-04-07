@@ -1,0 +1,750 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>S.A.L.E. Client Targeting Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #000000;
+            color: #ffffff;
+            line-height: 1.6;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #CF2030, #a01628);
+            padding: 1rem 0;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            height: 60px;
+            margin-right: 2rem;
+        }
+
+        .header-title {
+            color: white;
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .card {
+            background: linear-gradient(145deg, #1a1a1a, #2a2a2a);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 8px 32px rgba(207, 32, 48, 0.1);
+            border: 1px solid #CF2030;
+        }
+
+        .card h2 {
+            color: #CF2030;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .scoring-form {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .score-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem;
+            background: rgba(207, 32, 48, 0.1);
+            border-radius: 6px;
+        }
+
+        .score-input {
+            width: 60px;
+            padding: 0.5rem;
+            border: 1px solid #CF2030;
+            border-radius: 4px;
+            background: #333;
+            color: white;
+            text-align: center;
+        }
+
+        .controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 250px;
+            padding: 0.75rem;
+            border: 2px solid #CF2030;
+            border-radius: 6px;
+            background: #1a1a1a;
+            color: white;
+            font-size: 1rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #CF2030, #a01628);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(207, 32, 48, 0.3);
+        }
+
+        .btn-secondary {
+            background: #333;
+            color: white;
+            border: 1px solid #CF2030;
+        }
+
+        .btn-small {
+            padding: 0.4rem 0.8rem;
+            font-size: 0.85rem;
+        }
+
+        .table-container {
+            background: #1a1a1a;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #333;
+        }
+
+        th {
+            background: linear-gradient(135deg, #CF2030, #a01628);
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        th:hover {
+            background: linear-gradient(135deg, #a01628, #CF2030);
+        }
+
+        tr:hover {
+            background: rgba(207, 32, 48, 0.1);
+        }
+
+        .tier-1a { background: rgba(40, 167, 69, 0.2); }
+        .tier-1b { background: rgba(255, 193, 7, 0.2); }
+        .tier-1c { background: rgba(23, 162, 184, 0.2); }
+
+        .tier-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: bold;
+        }
+
+        .tier-1a-badge { background: #28a745; color: white; }
+        .tier-1b-badge { background: #ffc107; color: black; }
+        .tier-1c-badge { background: #17a2b8; color: white; }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+        }
+
+        .modal-content {
+            background: linear-gradient(145deg, #1a1a1a, #2a2a2a);
+            margin: 5% auto;
+            padding: 2rem;
+            border-radius: 12px;
+            width: 80%;
+            max-width: 600px;
+            border: 2px solid #CF2030;
+        }
+
+        .close {
+            color: #CF2030;
+            float: right;
+            font-size: 2rem;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .footer {
+            margin-top: 4rem;
+            text-align: center;
+            padding: 2rem;
+            border-top: 2px solid #CF2030;
+        }
+
+        .footer-logo {
+            height: 30px;
+            margin-bottom: 1rem;
+        }
+
+        .marketing-schedule {
+            margin-top: 2rem;
+        }
+
+        .schedule-item {
+            background: rgba(207, 32, 48, 0.1);
+            margin: 0.5rem 0;
+            padding: 1rem;
+            border-radius: 6px;
+            border-left: 4px solid #CF2030;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .controls {
+                flex-direction: column;
+            }
+            
+            .table-container {
+                overflow-x: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports" class="logo">
+            <h1 class="header-title">S.A.L.E. Client Targeting Dashboard</h1>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="dashboard-grid">
+            <div class="card">
+                <h2>P.U.R.E.S. Client Scoring</h2>
+                <div class="scoring-form">
+                    <div class="score-item">
+                        <span>Profitability (Budget Capacity)</span>
+                        <input type="number" class="score-input" min="1" max="5" value="3" id="profitability">
+                    </div>
+                    <div class="score-item">
+                        <span>Urgency (Immediate Needs)</span>
+                        <input type="number" class="score-input" min="1" max="5" value="3" id="urgency">
+                    </div>
+                    <div class="score-item">
+                        <span>Reachability (Decision Makers)</span>
+                        <input type="number" class="score-input" min="1" max="5" value="3" id="reachability">
+                    </div>
+                    <div class="score-item">
+                        <span>Engagement (Innovation Openness)</span>
+                        <input type="number" class="score-input" min="1" max="5" value="3" id="engagement">
+                    </div>
+                    <div class="score-item">
+                        <span>Sustainability (Growth Potential)</span>
+                        <input type="number" class="score-input" min="1" max="5" value="3" id="sustainability">
+                    </div>
+                </div>
+                <button class="btn btn-primary" style="width: 100%; margin-top: 1rem;" onclick="updateScoring()">Update Client Scoring</button>
+            </div>
+
+            <div class="card">
+                <h2>Marketing Action Plan</h2>
+                <div class="marketing-schedule">
+                    <div class="schedule-item">
+                        <strong>Week 1-2:</strong> Tier 1A Premium Outreach Campaign<br>
+                        <small>Deploy personalized ROI-focused email sequences to high-value prospects</small>
+                    </div>
+                    <div class="schedule-item">
+                        <strong>Week 3-4:</strong> Relationship Building Phase<br>
+                        <small>Schedule 1-on-1 consultations and needs assessment meetings</small>
+                    </div>
+                    <div class="schedule-item">
+                        <strong>Week 5-6:</strong> Solution Presentation & Proposal<br>
+                        <small>Present customized energy solutions based on assessment data</small>
+                    </div>
+                    <div class="schedule-item">
+                        <strong>Week 7-8:</strong> Follow-up & Referral Activation<br>
+                        <small>Convert satisfied clients into referral partners and advocates</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <input type="text" class="search-box" id="searchInput" placeholder="Search clients by name, email, address, or industry...">
+            <button class="btn btn-secondary" onclick="exportData()">Export to CSV</button>
+            <button class="btn btn-primary" onclick="addNewClient()">Add New Client</button>
+        </div>
+
+        <div class="table-container">
+            <table id="clientTable">
+                <thead>
+                    <tr>
+                        <th onclick="sortTable(0)">Client Name ▼</th>
+                        <th onclick="sortTable(1)">Email ▼</th>
+                        <th onclick="sortTable(2)">Phone ▼</th>
+                        <th onclick="sortTable(3)">Address ▼</th>
+                        <th onclick="sortTable(4)">P.U.R.E.S. Score ▼</th>
+                        <th onclick="sortTable(5)">Tier Level ▼</th>
+                        <th onclick="sortTable(6)">Industry ▼</th>
+                        <th onclick="sortTable(7)">Revenue Estimate ▼</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="clientTableBody">
+                    <!-- Client data will be populated by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Email Modal -->
+    <div id="emailModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeEmailModal()">&times;</span>
+            <h2>Send Email</h2>
+            <div style="margin: 1rem 0;">
+                <label>To: <span id="emailTo"></span></label>
+            </div>
+            <div style="margin: 1rem 0;">
+                <label>Subject:</label>
+                <input type="text" id="emailSubject" style="width: 100%; padding: 0.5rem; margin-top: 0.5rem; background: #333; color: white; border: 1px solid #CF2030; border-radius: 4px;">
+            </div>
+            <div style="margin: 1rem 0;">
+                <label>Message:</label>
+                <textarea id="emailBody" rows="10" style="width: 100%; padding: 0.5rem; margin-top: 0.5rem; background: #333; color: white; border: 1px solid #CF2030; border-radius: 4px;"></textarea>
+            </div>
+            <button class="btn btn-primary" onclick="sendEmail()">Send Email</button>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports" class="footer-logo">
+        <p>&copy; 2026 Higgins Reports. Powered by S.A.L.E. Methodology</p>
+    </footer>
+
+    <script>
+        // Sample client data - 50 prospects within 10 miles of Pleasanton, CA
+        let clientData = [
+            {
+                name: "Sarah Johnson",
+                email: "sarah.johnson@techcorp.com",
+                phone: "(925) 555-0101",
+                address: "123 Innovation Dr, Dublin, CA 94568",
+                puresScore: 4.2,
+                tier: "1A",
+                industry: "Technology",
+                revenue: "$2.5M",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Michael Chen",
+                email: "m.chen@greenbuilders.com",
+                phone: "(925) 555-0102",
+                address: "456 Sustainable Way, Livermore, CA 94550",
+                puresScore: 4.0,
+                tier: "1A",
+                industry: "Construction",
+                revenue: "$5.2M",
+                buyerType: "Efficiency"
+            },
+            {
+                name: "Lisa Rodriguez",
+                email: "lisa.r@healthplus.org",
+                phone: "(925) 555-0103",
+                address: "789 Wellness Blvd, Pleasanton, CA 94566",
+                puresScore: 3.8,
+                tier: "1B",
+                industry: "Healthcare",
+                revenue: "$1.8M",
+                buyerType: "Analytical"
+            },
+            {
+                name: "David Park",
+                email: "dpark@innovatemanuf.com",
+                phone: "(925) 555-0104",
+                address: "321 Industrial Ave, San Ramon, CA 94583",
+                puresScore: 4.4,
+                tier: "1A",
+                industry: "Manufacturing",
+                revenue: "$8.1M",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Jennifer Williams",
+                email: "j.williams@retailmax.com",
+                phone: "(925) 555-0105",
+                address: "654 Commerce St, Castro Valley, CA 94546",
+                puresScore: 3.6,
+                tier: "1B",
+                industry: "Retail",
+                revenue: "$3.2M",
+                buyerType: "Efficiency"
+            },
+            {
+                name: "Robert Thompson",
+                email: "r.thompson@financecorp.com",
+                phone: "(925) 555-0106",
+                address: "987 Banking Plaza, Danville, CA 94526",
+                puresScore: 4.1,
+                tier: "1A",
+                industry: "Financial Services",
+                revenue: "$12.5M",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Amanda Davis",
+                email: "amanda@edutechsolutions.com",
+                phone: "(925) 555-0107",
+                address: "147 Learning Lane, Fremont, CA 94538",
+                puresScore: 3.4,
+                tier: "1C",
+                industry: "Education",
+                revenue: "$950K",
+                buyerType: "Relationship"
+            },
+            {
+                name: "James Miller",
+                email: "jmiller@logisticspro.com",
+                phone: "(925) 555-0108",
+                address: "258 Transport Way, Union City, CA 94587",
+                puresScore: 3.9,
+                tier: "1B",
+                industry: "Logistics",
+                revenue: "$4.7M",
+                buyerType: "Efficiency"
+            },
+            {
+                name: "Maria Garcia",
+                email: "maria.g@foodservice.com",
+                phone: "(925) 555-0109",
+                address: "369 Culinary Ct, Hayward, CA 94544",
+                puresScore: 3.2,
+                tier: "1C",
+                industry: "Food Service",
+                revenue: "$1.1M",
+                buyerType: "Relationship"
+            },
+            {
+                name: "Kevin Lee",
+                email: "k.lee@propmanagement.com",
+                phone: "(925) 555-0110",
+                address: "741 Property Dr, San Leandro, CA 94577",
+                puresScore: 4.3,
+                tier: "1A",
+                industry: "Real Estate",
+                revenue: "$6.8M",
+                buyerType: "Analytical"
+            },
+            // Additional 40 clients would continue here...
+            {
+                name: "Patricia White",
+                email: "p.white@autoservices.com",
+                phone: "(925) 555-0111",
+                address: "852 Mechanic Ave, Alameda, CA 94501",
+                puresScore: 3.7,
+                tier: "1B",
+                industry: "Automotive",
+                revenue: "$2.3M",
+                buyerType: "Efficiency"
+            },
+            {
+                name: "Thomas Brown",
+                email: "tbrown@legalfirm.com",
+                phone: "(925) 555-0112",
+                address: "963 Justice Blvd, Berkeley, CA 94704",
+                puresScore: 4.0,
+                tier: "1A",
+                industry: "Legal Services",
+                revenue: "$3.9M",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Nancy Wilson",
+                email: "nwilson@consultinggroup.com",
+                phone: "(925) 555-0113",
+                address: "159 Strategy St, Walnut Creek, CA 94596",
+                puresScore: 4.2,
+                tier: "1A",
+                industry: "Consulting",
+                revenue: "$7.2M",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Christopher Taylor",
+                email: "c.taylor@pharmaco.com",
+                phone: "(925) 555-0114",
+                address: "357 Research Rd, Emeryville, CA 94608",
+                puresScore: 4.5,
+                tier: "1A",
+                industry: "Pharmaceutical",
+                revenue: "$15.3M",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Sandra Anderson",
+                email: "sandra@nonprofitorg.org",
+                phone: "(925) 555-0115",
+                address: "468 Community Way, Oakland, CA 94612",
+                puresScore: 3.1,
+                tier: "1C",
+                industry: "Non-Profit",
+                revenue: "$750K",
+                buyerType: "Relationship"
+            },
+            {
+                name: "Mark Jackson",
+                email: "m.jackson@sportsclub.com",
+                phone: "(925) 555-0116",
+                address: "579 Fitness Blvd, Dublin, CA 94568",
+                puresScore: 3.5,
+                tier: "1C",
+                industry: "Recreation",
+                revenue: "$1.4M",
+                buyerType: "Relationship"
+            },
+            {
+                name: "Helen Martin",
+                email: "h.martin@designstudio.com",
+                phone: "(925) 555-0117",
+                address: "680 Creative Ave, Livermore, CA 94551",
+                puresScore: 3.3,
+                tier: "1C",
+                industry: "Design",
+                revenue: "$890K",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Paul Harris",
+                email: "paul@insurancepro.com",
+                phone: "(925) 555-0118",
+                address: "791 Protection Pl, San Ramon, CA 94583",
+                puresScore: 3.8,
+                tier: "1B",
+                industry: "Insurance",
+                revenue: "$2.8M",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Laura Clark",
+                email: "l.clark@marketingfirm.com",
+                phone: "(925) 555-0119",
+                address: "812 Promotion St, Castro Valley, CA 94546",
+                puresScore: 3.6,
+                tier: "1B",
+                industry: "Marketing",
+                revenue: "$1.9M",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Steven Lewis",
+                email: "s.lewis@architectgroup.com",
+                phone: "(925) 555-0120",
+                address: "923 Design Dr, Danville, CA 94526",
+                puresScore: 4.1,
+                tier: "1A",
+                industry: "Architecture",
+                revenue: "$5.7M",
+                buyerType: "Innovation"
+            }
+            // Continue with remaining clients...
+        ];
+
+        // Add remaining 30 clients to reach 50 total
+        const additionalClients = [];
+        const industries = ["Technology", "Healthcare", "Manufacturing", "Retail", "Financial Services", "Education", "Construction"];
+        const buyerTypes = ["Analytical", "Relationship", "Efficiency", "Innovation"];
+        const cities = ["Pleasanton", "Dublin", "Livermore", "San Ramon", "Castro Valley", "Danville", "Fremont", "Union City", "Hayward", "San Leandro"];
+        
+        for (let i = 21; i <= 50; i++) {
+            const score = (Math.random() * 2 + 2.5).toFixed(1);
+            let tier = "1C";
+            if (score >= 4.0) tier = "1A";
+            else if (score >= 3.5) tier = "1B";
+            
+            additionalClients.push({
+                name: `Client ${i}`,
+                email: `client${i}@company${i}.com`,
+                phone: `(925) 555-${(i + 100).toString().padStart(4, '0')}`,
+                address: `${i}00 Business St, ${cities[i % cities.length]}, CA 945${(i % 99).toString().padStart(2, '0')}`,
+                puresScore: parseFloat(score),
+                tier: tier,
+                industry: industries[i % industries.length],
+                revenue: `$${(Math.random() * 10 + 1).toFixed(1)}M`,
+                buyerType: buyerTypes[i % buyerTypes.length]
+            });
+        }
+        
+        clientData = clientData.concat(additionalClients);
+
+        function populateTable(data = clientData) {
+            const tbody = document.getElementById('clientTableBody');
+            tbody.innerHTML = '';
+            
+            data.forEach((client, index) => {
+                const row = document.createElement('tr');
+                row.className = `tier-${client.tier.toLowerCase()}`;
+                row.innerHTML = `
+                    <td>${client.name}</td>
+                    <td>${client.email}</td>
+                    <td>${client.phone}</td>
+                    <td>${client.address}</td>
+                    <td>${client.puresScore}</td>
+                    <td><span class="tier-badge tier-${client.tier.toLowerCase()}-badge">${client.tier}</span></td>
+                    <td>${client.industry}</td>
+                    <td>${client.revenue}</td>
+                    <td>
+                        <button class="btn btn-primary btn-small" onclick="openEmailModal('${client.email}', '${client.name}', '${client.buyerType}')">Email</button>
+                        <button class="btn btn-secondary btn-small" onclick="callClient('${client.phone}')">Call</button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function openEmailModal(email, name, buyerType) {
+            document.getElementById('emailTo').textContent = email;
+            document.getElementById('emailSubject').value = `Exclusive Energy Solutions for ${name}`;
+            
+            let emailBody = "";
+            switch(buyerType) {
+                case "Analytical":
+                    emailBody = `Dear ${name},\n\nI hope this message finds you well. Based on our analysis, your organization could benefit significantly from our advanced energy solutions.\n\nKey Benefits for Your Business:\n• 25-40% reduction in energy costs within 12 months\n• ROI typically achieved in 18-24 months\n• Comprehensive energy audit and optimization plan\n• Advanced smart grid integration capabilities\n\nOur solutions have helped similar organizations save an average of $150,000 annually. I'd love to schedule a 30-minute consultation to discuss your specific energy challenges and present a customized analysis.\n\nWould you be available for a brief call this week?\n\nBest regards,\nPooja Garg\nPG&E Energy Solutions`;
+                    break;
+                case "Relationship":
+                    emailBody = `Hi ${name},\n\nI wanted to personally reach out because we have a proven track record of building long-term partnerships with organizations like yours.\n\nWhy Our Clients Choose to Stay with Us:\n• Dedicated account management team\n• 24/7 support and monitoring\n• Flexible service agreements tailored to your needs\n• Local community commitment and support\n\nMany of our clients have been with us for over 10 years because we believe in growing together. I'd love to learn more about your energy goals and explore how we can support your long-term success.\n\nCould we schedule a coffee meeting next week to discuss your needs?\n\nWarm regards,\nPooja Garg\nPG&E Energy Solutions`;
+                    break;
+                case "Efficiency":
+                    emailBody = `Hello ${name},\n\nTime is valuable, so I'll keep this brief. We can help streamline your energy operations and eliminate inefficiencies.\n\nQuick Wins for Your Organization:\n• Automated energy monitoring and reporting\n• Streamlined billing and account management\n• Fast implementation (typically 2-4 weeks)\n• Immediate cost visibility and control\n\nOur efficient onboarding process means you can start seeing savings within the first month. No lengthy consultations or complex installations required.\n\nInterested in a 15-minute overview call this week?\n\nEfficiently yours,\nPooja Garg\nPG&E Energy Solutions`;
+                    break;
+                case "Innovation":
+                    emailBody = `Dear ${name},\n\nAs an innovation leader in your industry, you'll appreciate our cutting-edge energy solutions that are transforming how businesses operate.\n\nInnovative Solutions We Offer:\n• AI-powered energy optimization systems\n• Smart building integration technology\n• Renewable energy microgrids\n• Real-time energy analytics dashboard\n• Carbon footprint reduction programs\n\nWe're at the forefront of energy technology, working with companies who want to lead rather than follow. Our solutions don't just cut costs—they provide competitive advantages.\n\nWould you like to see a demo of our latest energy innovation platform?\n\nInnovationally yours,\nPooja Garg\nPG&E Energy Solutions`;
+                    break;
+            }
+            
+            document.getElementById('emailBody').value = emailBody;
+            document.getElementById('emailModal').style.display = 'block';
+        }
+
+        function closeEmailModal() {
+            document.getElementById('emailModal').style.display = 'none';
+        }
+
+        function sendEmail() {
+            const email = document.getElementById('emailTo').textContent;
+            const subject = document.getElementById('emailSubject').value;
+            const body = document.getElementById('emailBody').value;
+            
+            // Create mailto link
+            const mailtoLink = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+            window.open(mailtoLink);
+            
+            closeEmailModal();
+        }
+
+        function callClient(phone) {
+            alert(`Calling ${phone}...\n\nIn a real implementation, this would:\n• Open your phone app or CRM dialer\n• Log the call attempt\n• Start call recording if enabled\n• Update client contact status`);
+        }
+
+        function sortTable(columnIndex) {
+            // Implementation for sorting table columns
+            console.log(`Sorting by column ${columnIndex}`);
+        }
+
+        function updateScoring() {
+            const profitability = document.getElementById('profitability').value;
+            const urgency = document.getElementById('urgency').value;
+            const reachability = document.getElementById('reachability').value;
+            const engagement = document.getElementById('engagement').value;
+            const sustainability = document.getElementById('sustainability').value;
+            
+            alert(`P.U.R.E.S. Scoring Updated:\nProfitability: ${profitability}\nUrgency: ${urgency}\nReachability: ${reachability}\nEngagement: ${engagement}\nSustainability: ${sustainability}\n\nAverage Score: ${((+profitability + +urgency + +reachability + +engagement + +sustainability) / 5).toFixed(1)}`);
+        }
+
+        function exportData() {
+            // CSV export functionality
+            alert('Exporting client data to CSV...\n\nThis would generate a downloadable CSV file with all client information.');
+        }
+
+        function addNewClient() {
+            alert('Add New Client form would open here, allowing you to input:\n• Client details\n• P.U.R.E.S. scoring\n• Buyer type assessment\n• Contact preferences');
+        }
+
+        // Search functionality
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const filteredData = clientData.filter(client => 
+                client.name.toLowerCase().includes(searchTerm) ||
+                client.email.toLowerCase().includes(searchTerm) ||
+                client.address.toLowerCase().includes(searchTerm) ||
+                client.industry.toLowerCase().includes(searchTerm)
+            );
+            populateTable(filteredData);
+        });
+
+        // Initialize table
+        populateTable();
+
+        // Close modal when clicking outside of it
+        window.onclick = function(event) {
+            const modal = document.getElementById('emailModal');
+            if (event.target === modal) {
+                closeEmailModal();
+            }
+        }
+    </script>
+</body>
+</html>

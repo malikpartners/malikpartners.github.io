@@ -1,0 +1,999 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Capsule Shop - S.A.L.E. Client Targeting System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #000000;
+            color: #ffffff;
+            line-height: 1.6;
+        }
+
+        .header {
+            background-color: #CF2030;
+            padding: 1rem;
+            text-align: center;
+            border-bottom: 3px solid #ffffff;
+        }
+
+        .header img {
+            max-height: 60px;
+            width: auto;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .dashboard-nav {
+            display: flex;
+            background-color: #CF2030;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+
+        .nav-tab {
+            flex: 1;
+            padding: 1rem;
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .nav-tab:hover, .nav-tab.active {
+            background-color: rgba(255,255,255,0.2);
+        }
+
+        .module {
+            background-color: #1a1a1a;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 2px solid #CF2030;
+        }
+
+        .module h2 {
+            color: #CF2030;
+            border-bottom: 2px solid #CF2030;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .pures-form {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .pures-item {
+            background-color: #2a2a2a;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid #CF2030;
+        }
+
+        .pures-item label {
+            display: block;
+            color: #CF2030;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .rating-scale {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .rating-scale input[type="radio"] {
+            margin: 0 5px;
+        }
+
+        .search-controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            align-items: center;
+        }
+
+        .search-input {
+            flex: 1;
+            min-width: 250px;
+            padding: 0.75rem;
+            border: 2px solid #CF2030;
+            border-radius: 6px;
+            background-color: #2a2a2a;
+            color: white;
+            font-size: 14px;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background-color: #CF2030;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #a91729;
+        }
+
+        .btn-secondary {
+            background-color: #2a2a2a;
+            color: white;
+            border: 2px solid #CF2030;
+        }
+
+        .btn-small {
+            padding: 0.5rem 1rem;
+            font-size: 12px;
+        }
+
+        .client-table {
+            width: 100%;
+            background-color: #2a2a2a;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(207, 32, 48, 0.3);
+        }
+
+        .client-table th {
+            background-color: #CF2030;
+            color: white;
+            padding: 1rem 0.75rem;
+            text-align: left;
+            cursor: pointer;
+            user-select: none;
+            position: relative;
+        }
+
+        .client-table th:hover {
+            background-color: #a91729;
+        }
+
+        .client-table td {
+            padding: 0.75rem;
+            border-bottom: 1px solid #404040;
+        }
+
+        .client-table tr:hover {
+            background-color: #3a3a3a;
+        }
+
+        .tier-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .tier-1a { background-color: #4CAF50; color: white; }
+        .tier-1b { background-color: #FF9800; color: white; }
+        .tier-1c { background-color: #2196F3; color: white; }
+
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            border-top: 2px solid #CF2030;
+            margin-top: 3rem;
+        }
+
+        .footer img {
+            max-height: 30px;
+            width: auto;
+            opacity: 0.7;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .email-template {
+            background-color: #2a2a2a;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid #CF2030;
+            margin-top: 1rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background-color: #2a2a2a;
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+            border: 2px solid #CF2030;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #CF2030;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #1a1a1a;
+            padding: 2rem;
+            border-radius: 12px;
+            border: 2px solid #CF2030;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            background: none;
+            border: none;
+            color: #CF2030;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .dashboard-nav {
+                flex-direction: column;
+            }
+            
+            .search-controls {
+                flex-direction: column;
+            }
+            
+            .client-table {
+                font-size: 12px;
+            }
+            
+            .client-table th,
+            .client-table td {
+                padding: 0.5rem 0.25rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports" />
+    </header>
+
+    <div class="container">
+        <nav class="dashboard-nav">
+            <button class="nav-tab active" onclick="showModule('sourcing')">S.OURCING</button>
+            <button class="nav-tab" onclick="showModule('assessing')">A.SSESSING</button>
+            <button class="nav-tab" onclick="showModule('listening')">L.ISTENING</button>
+            <button class="nav-tab" onclick="showModule('empowering')">E.MPOWERING</button>
+            <button class="nav-tab" onclick="showModule('clients')">CLIENT DATABASE</button>
+        </nav>
+
+        <!-- SOURCING Module -->
+        <div id="sourcing" class="module">
+            <h2>S.OURCING - P.U.R.E.S. Client Scoring System</h2>
+            <p style="margin-bottom: 2rem; color: #ccc;">Evaluate potential clients using our P.U.R.E.S. methodology to identify high-value prospects for Capsule Shop.</p>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">15</div>
+                    <div>Tier 1A Clients</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">20</div>
+                    <div>Tier 1B Clients</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">15</div>
+                    <div>Tier 1C Clients</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">4.2</div>
+                    <div>Avg P.U.R.E.S. Score</div>
+                </div>
+            </div>
+
+            <div class="pures-form">
+                <div class="pures-item">
+                    <label>PROFITABILITY - Annual revenue threshold and budget capacity</label>
+                    <div class="rating-scale">
+                        <span>1</span>
+                        <input type="radio" name="profitability" value="1">
+                        <input type="radio" name="profitability" value="2">
+                        <input type="radio" name="profitability" value="3">
+                        <input type="radio" name="profitability" value="4" checked>
+                        <input type="radio" name="profitability" value="5">
+                        <span>5</span>
+                    </div>
+                    <small style="color: #ccc;">Rate client's ability to afford premium fashion pieces</small>
+                </div>
+
+                <div class="pures-item">
+                    <label>URGENCY - Active pain points requiring immediate solutions</label>
+                    <div class="rating-scale">
+                        <span>1</span>
+                        <input type="radio" name="urgency" value="1">
+                        <input type="radio" name="urgency" value="2">
+                        <input type="radio" name="urgency" value="3" checked>
+                        <input type="radio" name="urgency" value="4">
+                        <input type="radio" name="urgency" value="5">
+                        <span>5</span>
+                    </div>
+                    <small style="color: #ccc;">Rate need for wardrobe refresh or style consultation</small>
+                </div>
+
+                <div class="pures-item">
+                    <label>REACHABILITY - Accessible decision makers with clear contact paths</label>
+                    <div class="rating-scale">
+                        <span>1</span>
+                        <input type="radio" name="reachability" value="1">
+                        <input type="radio" name="reachability" value="2">
+                        <input type="radio" name="reachability" value="3">
+                        <input type="radio" name="reachability" value="4">
+                        <input type="radio" name="reachability" value="5" checked>
+                        <span>5</span>
+                    </div>
+                    <small style="color: #ccc;">Rate ease of contact and engagement</small>
+                </div>
+
+                <div class="pures-item">
+                    <label>ENGAGEMENT - Openness to innovation and partnerships</label>
+                    <div class="rating-scale">
+                        <span>1</span>
+                        <input type="radio" name="engagement" value="1">
+                        <input type="radio" name="engagement" value="2">
+                        <input type="radio" name="engagement" value="3">
+                        <input type="radio" name="engagement" value="4" checked>
+                        <input type="radio" name="engagement" value="5">
+                        <span>5</span>
+                    </div>
+                    <small style="color: #ccc;">Rate client's social media activity and fashion interest</small>
+                </div>
+
+                <div class="pures-item">
+                    <label>SUSTAINABILITY - Long-term partnership potential with growth trajectory</label>
+                    <div class="rating-scale">
+                        <span>1</span>
+                        <input type="radio" name="sustainability" value="1">
+                        <input type="radio" name="sustainability" value="2">
+                        <input type="radio" name="sustainability" value="3">
+                        <input type="radio" name="sustainability" value="4">
+                        <input type="radio" name="sustainability" value="5" checked>
+                        <span>5</span>
+                    </div>
+                    <small style="color: #ccc;">Rate potential for repeat purchases and referrals</small>
+                </div>
+            </div>
+
+            <button class="btn btn-primary" onclick="calculatePuresScore()">Calculate P.U.R.E.S. Score</button>
+            <div id="pures-result" style="margin-top: 1rem;"></div>
+        </div>
+
+        <!-- ASSESSING Module -->
+        <div id="assessing" class="module hidden">
+            <h2>A.SSESSING - Buying Pattern Analysis</h2>
+            <p style="margin-bottom: 2rem; color: #ccc;">Understand client buying behaviors to tailor your fashion offerings and sales approach.</p>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">35%</div>
+                    <div>Relationship Buyers</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">25%</div>
+                    <div>Innovation Buyers</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">25%</div>
+                    <div>Efficiency Buyers</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">15%</div>
+                    <div>Analytical Buyers</div>
+                </div>
+            </div>
+
+            <div class="pures-form">
+                <div class="pures-item">
+                    <h4 style="color: #CF2030;">Analytical Buyers</h4>
+                    <p>Fashion-conscious professionals who research trends, compare prices, and read reviews before purchasing. They want detailed product information, size guides, and styling advice.</p>
+                    <strong>Approach:</strong> Provide detailed product descriptions, styling guides, and customer reviews.
+                </div>
+
+                <div class="pures-item">
+                    <h4 style="color: #CF2030;">Relationship Buyers</h4>
+                    <p>Loyal customers who value personal styling advice and trust your fashion expertise. They prefer personal consultations and exclusive access.</p>
+                    <strong>Approach:</strong> Build personal relationships through styling sessions and VIP experiences.
+                </div>
+
+                <div class="pures-item">
+                    <h4 style="color: #CF2030;">Efficiency Buyers</h4>
+                    <p>Busy professionals who want quick, convenient shopping experiences. They value curated collections and time-saving services.</p>
+                    <strong>Approach:</strong> Offer subscription boxes, quick checkout, and curated capsule collections.
+                </div>
+
+                <div class="pures-item">
+                    <h4 style="color: #CF2030;">Innovation Buyers</h4>
+                    <p>Trendsetters seeking the latest fashion innovations, sustainable materials, and unique pieces that make statements.</p>
+                    <strong>Approach:</strong> Showcase latest arrivals, eco-friendly options, and limited editions.
+                </div>
+            </div>
+        </div>
+
+        <!-- LISTENING Module -->
+        <div id="listening" class="module hidden">
+            <h2>L.ISTENING - Feedback Integration</h2>
+            <p style="margin-bottom: 2rem; color: #ccc;">Track client feedback throughout their fashion journey to improve service and build loyalty.</p>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">4.8/5</div>
+                    <div>Customer Satisfaction</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">92%</div>
+                    <div>Feedback Response Rate</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">3.2 days</div>
+                    <div>Avg Response Time</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">15%</div>
+                    <div>Repeat Purchase Rate</div>
+                </div>
+            </div>
+
+            <div class="pures-form">
+                <div class="pures-item">
+                    <h4 style="color: #CF2030;">Pre-Sale Feedback</h4>
+                    <p>Style preferences survey, size consultation, budget discussion</p>
+                    <button class="btn btn-secondary btn-small">Create Survey</button>
+                </div>
+
+                <div class="pures-item">
+                    <h4 style="color: #CF2030;">During-Sale Tracking</h4>
+                    <p>Fitting feedback, styling satisfaction, additional needs assessment</p>
+                    <button class="btn btn-secondary btn-small">Track Progress</button>
+                </div>
+
+                <div class="pures-item">
+                    <h4 style="color: #CF2030;">Post-Sale Monitoring</h4>
+                    <p>Purchase satisfaction, styling success, future needs planning</p>
+                    <button class="btn btn-secondary btn-small">Send Follow-up</button>
+                </div>
+
+                <div class="pures-item">
+                    <h4 style="color: #CF2030;">Complaint Resolution</h4>
+                    <p>Size exchanges, styling adjustments, quality concerns</p>
+                    <button class="btn btn-secondary btn-small">Report Issue</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- EMPOWERING Module -->
+        <div id="empowering" class="module hidden">
+            <h2>E.MPOWERING - Referral Strategy</h2>
+            <p style="margin-bottom: 2rem; color: #ccc;">Transform satisfied customers into brand ambassadors who drive new business to Capsule Shop.</p>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">28</div>
+                    <div>Active Referrers</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">47</div>
+                    <div>Referrals This Month</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">$2,340</div>
+                    <div>Referral Revenue</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">15%</div>
+                    <div>Conversion Rate</div>
+                </div>
+            </div>
+
+            <div class="pures-form">
+                <div class="pures-item">
+                    <h4 style="color: #CF2030;">Success Stories</h4>
+                    <p>Document styling transformations and customer success stories for marketing</p>
+                    <button class="btn btn-secondary btn-small">Add Story</button>
+                </div>
+
+                <div class="pures-item">
+                    <h4 style="color: #CF2030;">Referral Rewards</h4>
+                    <p>Track referral bonuses: 15% off for referrer, 10% off for new customer</p>
+                    <button class="btn btn-secondary btn-small">Manage Rewards</button>
+                </div>
+
+                <div class="pures-item">
+                    <h4 style="color: #CF2030;">Client Advocacy</h4>
+                    <p>VIP styling events, early access to collections, social media features</p>
+                    <button class="btn btn-secondary btn-small">Launch Program</button>
+                </div>
+
+                <div class="pures-item">
+                    <h4 style="color: #CF2030;">Co-Marketing</h4>
+                    <p>Instagram collaborations, styling challenges, fashion blogger partnerships</p>
+                    <button class="btn btn-secondary btn-small">Plan Campaign</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- CLIENT DATABASE Module -->
+        <div id="clients" class="module hidden">
+            <h2>CLIENT DATABASE - Los Angeles Area Prospects</h2>
+            <p style="margin-bottom: 2rem; color: #ccc;">50 high-potential clients within 10 miles of Capsule Shop, optimized for fashion retail targeting.</p>
+
+            <div class="search-controls">
+                <input type="text" id="searchInput" class="search-input" placeholder="Search clients by name, email, industry..." onkeyup="filterTable()">
+                <button class="btn btn-secondary" onclick="sortTable('tier')">Sort by Tier</button>
+                <button class="btn btn-secondary" onclick="sortTable('pures')">Sort by Score</button>
+                <button class="btn btn-primary" onclick="exportData()">Export CSV</button>
+            </div>
+
+            <div style="overflow-x: auto;">
+                <table class="client-table" id="clientTable">
+                    <thead>
+                        <tr>
+                            <th onclick="sortTable('name')">Client Name ↕</th>
+                            <th onclick="sortTable('email')">Email ↕</th>
+                            <th onclick="sortTable('phone')">Phone ↕</th>
+                            <th onclick="sortTable('address')">Address ↕</th>
+                            <th onclick="sortTable('pures')">P.U.R.E.S. Score ↕</th>
+                            <th onclick="sortTable('tier')">Tier ↕</th>
+                            <th onclick="sortTable('industry')">Industry ↕</th>
+                            <th onclick="sortTable('revenue')">Est. Income ↕</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="clientTableBody">
+                        <!-- Client data will be populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Email Modal -->
+    <div id="emailModal" class="modal">
+        <div class="modal-content">
+            <button class="close-modal" onclick="closeModal()">&times;</button>
+            <h3 style="color: #CF2030; margin-bottom: 1rem;">Email Template</h3>
+            <div id="emailContent"></div>
+            <button class="btn btn-primary" onclick="sendEmail()" style="margin-top: 1rem;">Open in Email Client</button>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports" />
+        <p style="margin-top: 1rem; color: #ccc;">Powered by HigginsReports S.A.L.E. System</p>
+    </footer>
+
+    <script>
+        // Sample client data for Los Angeles area
+        const clientData = [
+            {name: "Sarah Chen", email: "sarah.chen@gmail.com", phone: "(323) 555-0123", address: "Beverly Hills, CA", pures: 4.8, tier: "1A", industry: "Entertainment", revenue: "$150K+", buyerType: "Innovation"},
+            {name: "Maria Rodriguez", email: "maria.r@yahoo.com", phone: "(213) 555-0124", address: "Downtown LA, CA", pures: 4.2, tier: "1B", industry: "Marketing", revenue: "$85K", buyerType: "Relationship"},
+            {name: "Jennifer Kim", email: "jen.kim@outlook.com", phone: "(310) 555-0125", address: "Santa Monica, CA", pures: 4.6, tier: "1A", industry: "Tech", revenue: "$120K", buyerType: "Efficiency"},
+            {name: "Ashley Thompson", email: "ashley.t@gmail.com", phone: "(424) 555-0126", address: "West Hollywood, CA", pures: 3.8, tier: "1C", industry: "Fashion", revenue: "$70K", buyerType: "Analytical"},
+            {name: "Nicole Brown", email: "nicole.brown@icloud.com", phone: "(323) 555-0127", address: "Hollywood, CA", pures: 4.4, tier: "1B", industry: "Media", revenue: "$95K", buyerType: "Innovation"},
+            {name: "Lisa Wang", email: "lisa.wang@gmail.com", phone: "(213) 555-0128", address: "Koreatown, CA", pures: 4.0, tier: "1B", industry: "Healthcare", revenue: "$80K", buyerType: "Relationship"},
+            {name: "Amanda Davis", email: "amanda.davis@yahoo.com", phone: "(310) 555-0129", address: "Venice, CA", pures: 3.6, tier: "1C", industry: "Creative", revenue: "$65K", buyerType: "Innovation"},
+            {name: "Rachel Green", email: "rachel.g@outlook.com", phone: "(424) 555-0130", address: "Culver City, CA", pures: 4.2, tier: "1B", industry: "Finance", revenue: "$90K", buyerType: "Analytical"},
+            {name: "Michelle Lee", email: "michelle.lee@gmail.com", phone: "(323) 555-0131", address: "Los Feliz, CA", pures: 4.7, tier: "1A", industry: "Real Estate", revenue: "$130K", buyerType: "Relationship"},
+            {name: "Stephanie Wilson", email: "steph.wilson@icloud.com", phone: "(213) 555-0132", address: "Silver Lake, CA", pures: 3.9, tier: "1C", industry: "Education", revenue: "$75K", buyerType: "Efficiency"},
+            {name: "Kimberly Jones", email: "kim.jones@yahoo.com", phone: "(310) 555-0133", address: "Manhattan Beach, CA", pures: 4.5, tier: "1A", industry: "Legal", revenue: "$110K", buyerType: "Analytical"},
+            {name: "Jessica Martinez", email: "jessica.m@gmail.com", phone: "(424) 555-0134", address: "Redondo Beach, CA", pures: 4.1, tier: "1B", industry: "Consulting", revenue: "$85K", buyerType: "Efficiency"},
+            {name: "Lauren Garcia", email: "lauren.garcia@outlook.com", phone: "(323) 555-0135", address: "Echo Park, CA", pures: 3.7, tier: "1C", industry: "Non-Profit", revenue: "$60K", buyerType: "Relationship"},
+            {name: "Megan Taylor", email: "megan.taylor@icloud.com", phone: "(213) 555-0136", address: "Arts District, CA", pures: 4.3, tier: "1B", industry: "Architecture", revenue: "$95K", buyerType: "Innovation"},
+            {name: "Samantha Clark", email: "sam.clark@gmail.com", phone: "(310) 555-0137", address: "Brentwood, CA", pures: 4.6, tier: "1A", industry: "Entertainment", revenue: "$125K", buyerType: "Innovation"},
+            {name: "Brittany White", email: "brittany.w@yahoo.com", phone: "(424) 555-0138", address: "Marina del Rey, CA", pures: 4.0, tier: "1B", industry: "Tech", revenue: "$80K", buyerType: "Efficiency"},
+            {name: "Danielle Lewis", email: "danielle.lewis@outlook.com", phone: "(323) 555-0139", address: "Mid-City, CA", pures: 3.8, tier: "1C", industry: "Retail", revenue: "$70K", buyerType: "Analytical"},
+            {name: "Courtney Hall", email: "courtney.h@gmail.com", phone: "(213) 555-0140", address: "Historic Core, CA", pures: 4.4, tier: "1B", industry: "PR", revenue: "$90K", buyerType: "Relationship"},
+            {name: "Lindsey Young", email: "lindsey.young@icloud.com", phone: "(310) 555-0141", address: "El Segundo, CA", pures: 4.2, tier: "1B", industry: "Aerospace", revenue: "$85K", buyerType: "Analytical"},
+            {name: "Kayla King", email: "kayla.king@yahoo.com", phone: "(424) 555-0142", address: "Playa del Rey, CA", pures: 3.9, tier: "1C", industry: "Hospitality", revenue: "$75K", buyerType: "Efficiency"},
+            {name: "Alexis Wright", email: "alexis.wright@gmail.com", phone: "(323) 555-0143", address: "Hancock Park, CA", pures: 4.5, tier: "1A", industry: "Medicine", revenue: "$115K", buyerType: "Analytical"},
+            {name: "Victoria Scott", email: "victoria.s@outlook.com", phone: "(213) 555-0144", address: "Boyle Heights, CA", pures: 4.1, tier: "1B", industry: "Social Work", revenue: "$80K", buyerType: "Relationship"},
+            {name: "Tiffany Green", email: "tiffany.green@icloud.com", phone: "(310) 555-0145", address: "Westchester, CA", pures: 3.6, tier: "1C", industry: "Government", revenue: "$65K", buyerType: "Efficiency"},
+            {name: "Crystal Adams", email: "crystal.adams@gmail.com", phone: "(424) 555-0146", address: "Pico-Union, CA", pures: 4.3, tier: "1B", industry: "Insurance", revenue: "$90K", buyerType: "Analytical"},
+            {name: "Vanessa Baker", email: "vanessa.baker@yahoo.com", phone: "(323) 555-0147", address: "Larchmont, CA", pures: 4.7, tier: "1A", industry: "Investment", revenue: "$135K", buyerType: "Innovation"},
+            {name: "Monica Nelson", email: "monica.n@outlook.com", phone: "(213) 555-0148", address: "Little Tokyo, CA", pures: 4.0, tier: "1B", industry: "Food Service", revenue: "$75K", buyerType: "Efficiency"},
+            {name: "Diana Carter", email: "diana.carter@gmail.com", phone: "(310) 555-0149", address: "Palms, CA", pures: 3.8, tier: "1C", industry: "Event Planning", revenue: "$70K", buyerType: "Relationship"},
+            {name: "Erica Mitchell", email: "erica.mitchell@icloud.com", phone: "(424) 555-0150", address: "Cheviot Hills, CA", pures: 4.4, tier: "1B", industry: "Interior Design", revenue: "$95K", buyerType: "Innovation"},
+            {name: "Heather Perez", email: "heather.p@yahoo.com", phone: "(323) 555-0151", address: "Los Feliz, CA", pures: 4.2, tier: "1B", industry: "Publishing", revenue: "$85K", buyerType: "Analytical"},
+            {name: "Katherine Roberts", email: "katherine.r@gmail.com", phone: "(213) 555-0152", address: "Bunker Hill, CA", pures: 4.6, tier: "1A", industry: "Banking", revenue: "$120K", buyerType: "Efficiency"},
+            {name: "Angela Turner", email: "angela.turner@outlook.com", phone: "(310) 555-0153", address: "Mar Vista, CA", pures: 3.9, tier: "1C", industry: "Fitness", revenue: "$75K", buyerType: "Innovation"},
+            {name: "Christine Phillips", email: "christine.p@icloud.com", phone: "(424) 555-0154", address: "Del Rey, CA", pures: 4.1, tier: "1B", industry: "Photography", revenue: "$80K", buyerType: "Relationship"},
+            {name: "Melissa Campbell", email: "melissa.c@gmail.com", phone: "(323) 555-0155", address: "Highland Park, CA", pures: 4.5, tier: "1A", industry: "Wellness", revenue: "$110K", buyerType: "Innovation"},
+            {name: "Rebecca Parker", email: "rebecca.parker@yahoo.com", phone: "(213) 555-0156", address: "Fashion District, CA", pures: 3.7, tier: "1C", industry: "Manufacturing", revenue: "$65K", buyerType: "Analytical"},
+            {name: "Kelly Evans", email: "kelly.evans@outlook.com", phone: "(310) 555-0157", address: "Sawtelle, CA", pures: 4.3, tier: "1B", industry: "Tech Startup", revenue: "$90K", buyerType: "Efficiency"},
+            {name: "Amy Edwards", email: "amy.edwards@gmail.com", phone: "(424) 555-0158", address: "Century City, CA", pures: 4.8, tier: "1A", industry: "Entertainment Law", revenue: "$145K", buyerType: "Analytical"},
+            {name: "Cynthia Collins", email: "cynthia.c@icloud.com", phone: "(323) 555-0159", address: "Atwater Village, CA", pures: 4.0, tier: "1B", industry: "Graphic Design", revenue: "$80K", buyerType: "Innovation"},
+            {name: "Patricia Stewart", email: "patricia.s@yahoo.com", phone: "(213) 555-0160", address: "Chinatown, CA", pures: 3.8, tier: "1C", industry: "Import/Export", revenue: "$70K", buyerType: "Relationship"},
+            {name: "Laura Sanchez", email: "laura.sanchez@gmail.com", phone: "(310) 555-0161", address: "Westside, CA", pures: 4.4, tier: "1B", industry: "Venture Capital", revenue: "$100K", buyerType: "Innovation"},
+            {name: "Jacqueline Morris", email: "jackie.m@outlook.com", phone: "(424) 555-0162", address: "LAX Area, CA", pures: 4.2, tier: "1B", industry: "Aviation", revenue: "$85K", buyerType: "Efficiency"},
+            {name: "Denise Rogers", email: "denise.rogers@icloud.com", phone: "(323) 555-0163", address: "Eagle Rock, CA", pures: 3.6, tier: "1C", industry: "Music", revenue: "$60K", buyerType: "Innovation"},
+            {name: "Shannon Reed", email: "shannon.reed@gmail.com", phone: "(213) 555-0164", address: "Grand Central, CA", pures: 4.7, tier: "1A", industry: "Corporate Law", revenue: "$130K", buyerType: "Analytical"},
+            {name: "Cheryl Cook", email: "cheryl.cook@yahoo.com", phone: "(310) 555-0165", address: "Pacific Palisades, CA", pures: 4.5, tier: "1A", industry: "Luxury Retail", revenue: "$115K", buyerType: "Relationship"},
+            {name: "Frances Bailey", email: "frances.b@outlook.com", phone: "(424) 555-0166", address: "Playa Vista, CA", pures: 4.1, tier: "1B", industry: "Digital Media", revenue: "$85K", buyerType: "Efficiency"},
+            {name: "Janet Rivera", email: "janet.rivera@gmail.com", phone: "(323) 555-0167", address: "Mount Washington, CA", pures: 3.9, tier: "1C", industry: "Nonprofit", revenue: "$75K", buyerType: "Relationship"},
+            {name: "Catherine Cooper", email: "catherine.c@icloud.com", phone: "(213) 555-0168", address: "South Park, CA", pures: 4.3, tier: "1B", industry: "Urban Planning", revenue: "$90K", buyerType: "Analytical"},
+            {name: "Anna Richardson", email: "anna.r@yahoo.com", phone: "(310) 555-0169", address: "Westwood, CA", pures: 4.6, tier: "1A", industry: "Research", revenue: "$120K", buyerType: "Innovation"},
+            {name: "Ruth Cox", email: "ruth.cox@gmail.com", phone: "(424) 555-0170", address: "Pico-Robertson, CA", pures: 4.0, tier: "1B", industry: "Healthcare Admin", revenue: "$80K", buyerType: "Efficiency"},
+            {name: "Sharon Ward", email: "sharon.ward@outlook.com", phone: "(323) 555-0171", address: "Griffith Park Area, CA", pures: 3.8, tier: "1C", industry: "Parks & Rec", revenue: "$70K", buyerType: "Relationship"},
+            {name: "Carolyn Torres", email: "carolyn.t@icloud.com", phone: "(213) 555-0172", address: "University Park, CA", pures: 4.4, tier: "1B", industry: "Education", revenue: "$95K", buyerType: "Analytical"},
+            {name: "Marie Peterson", email: "marie.peterson@gmail.com", phone: "(310) 555-0173", address: "West LA, CA", pures: 4.2, tier: "1B", industry: "Psychology", revenue: "$85K", buyerType: "Relationship"}
+        ];
+
+        let currentEmailData = {};
+
+        function showModule(moduleName) {
+            // Hide all modules
+            document.querySelectorAll('.module').forEach(module => module.classList.add('hidden'));
+            
+            // Remove active class from all tabs
+            document.querySelectorAll('.nav-tab').forEach(tab => tab.classList.remove('active'));
+            
+            // Show selected module
+            document.getElementById(moduleName).classList.remove('hidden');
+            
+            // Add active class to selected tab
+            event.target.classList.add('active');
+            
+            // Populate client table if clients module is selected
+            if (moduleName === 'clients') {
+                populateClientTable();
+            }
+        }
+
+        function calculatePuresScore() {
+            const profitability = document.querySelector('input[name="profitability"]:checked').value;
+            const urgency = document.querySelector('input[name="urgency"]:checked').value;
+            const reachability = document.querySelector('input[name="reachability"]:checked').value;
+            const engagement = document.querySelector('input[name="engagement"]:checked').value;
+            const sustainability = document.querySelector('input[name="sustainability"]:checked').value;
+            
+            const total = (parseInt(profitability) + parseInt(urgency) + parseInt(reachability) + parseInt(engagement) + parseInt(sustainability)) / 5;
+            
+            let tier = '';
+            if (total >= 4.5) tier = '1A (Premium)';
+            else if (total >= 3.5) tier = '1B (High-Value)';
+            else tier = '1C (Qualified)';
+            
+            document.getElementById('pures-result').innerHTML = `
+                <div class="email-template">
+                    <h4 style="color: #CF2030;">P.U.R.E.S. Score Result</h4>
+                    <p><strong>Total Score:</strong> ${total.toFixed(1)}/5.0</p>
+                    <p><strong>Client Tier:</strong> ${tier}</p>
+                    <p><strong>Recommendation:</strong> ${tier.includes('1A') ? 'Prioritize immediate outreach with premium styling services' : tier.includes('1B') ? 'Schedule personal consultation within 1-2 weeks' : 'Include in general marketing campaigns'}</p>
+                </div>
+            `;
+        }
+
+        function populateClientTable() {
+            const tbody = document.getElementById('clientTableBody');
+            tbody.innerHTML = '';
+            
+            clientData.forEach(client => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${client.name}</td>
+                    <td>${client.email}</td>
+                    <td>${client.phone}</td>
+                    <td>${client.address}</td>
+                    <td>${client.pures}</td>
+                    <td><span class="tier-badge tier-${client.tier.toLowerCase()}">${client.tier}</span></td>
+                    <td>${client.industry}</td>
+                    <td>${client.revenue}</td>
+                    <td>
+                        <button class="btn btn-primary btn-small" onclick="contactClient('${client.name}', '${client.email}', '${client.tier}', '${client.buyerType}')">Email</button>
+                        <button class="btn btn-secondary btn-small" onclick="callClient('${client.phone}')">Call</button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function contactClient(name, email, tier, buyerType) {
+            currentEmailData = { name, email, tier, buyerType };
+            
+            const emailTemplate = generateEmailTemplate(name, tier, buyerType);
+            document.getElementById('emailContent').innerHTML = emailTemplate;
+            document.getElementById('emailModal').style.display = 'block';
+        }
+
+        function generateEmailTemplate(name, tier, buyerType) {
+            let subject = '';
+            let body = '';
+            
+            switch(buyerType) {
+                case 'Innovation':
+                    subject = `Exclusive Preview: Latest Fashion Innovations at Capsule Shop`;
+                    body = `Hi ${name},
+
+I hope this message finds you well! As someone who appreciates cutting-edge fashion, I wanted to personally invite you to discover our latest arrivals at Capsule Shop.
+
+🌟 Why Capsule Shop is perfect for you:
+• Curated selection of the season's most innovative designs
+• Limited edition pieces from emerging designers
+• Sustainable fashion options that make a statement
+• Early access to trend-setting collections
+
+As a ${tier === '1A' ? 'VIP' : 'valued'} client prospect, you're invited to:
+✨ Private styling consultation (complimentary)
+✨ 20% off your first purchase
+✨ Exclusive access to our new sustainable luxury line
+
+Our capsule approach means every piece is carefully selected to create a complete, versatile wardrobe that reflects your innovative style.
+
+Would you like to schedule a private styling session this week? I'd love to show you how our pieces can elevate your personal brand.
+
+Best regards,
+Emily Park
+Owner, Capsule Shop
+📱 (323) 555-STYLE
+🌐 www.capsuleshoponline.com
+📍 Los Angeles, CA`;
+                    break;
+                    
+                case 'Relationship':
+                    subject = `Personal Invitation: Join the Capsule Shop Fashion Family`;
+                    body = `Dear ${name},
+
+I'm Emily Park, owner of Capsule Shop, and I'd love to personally welcome you to our fashion family here in Los Angeles.
+
+💎 What makes Capsule Shop special:
+• Personal styling relationships built on trust and expertise
+• Curated collections that understand your lifestyle
+• Ongoing wardrobe guidance and seasonal updates
+• Exclusive member events and fashion insights
+
+As a ${tier === '1A' ? 'potential VIP member' : 'valued prospect'}, I'd like to offer:
+🤝 Complimentary personal styling consultation
+🤝 20% discount on your first curated collection
+🤝 Invitation to our monthly fashion & wine events
+🤝 Personal WhatsApp styling advice
+
+I believe fashion should be personal, and I'm committed to understanding your unique style goals and helping you achieve them through thoughtfully curated pieces.
+
+I'd love to meet you over coffee and learn about your style aspirations. When would work best for you this week?
+
+Warmly,
+Emily Park
+Personal Stylist & Owner
+Capsule Shop
+📞 (323) 555-STYLE`;
+                    break;
+                    
+                case 'Efficiency':
+                    subject = `Save Time, Look Amazing: Capsule Shop's Efficient Fashion Solution`;
+                    body = `Hello ${name},
+
+As a busy professional, you need a wardrobe that works as hard as you do. That's exactly what Capsule Shop delivers.
+
+⚡ Time-Saving Benefits:
+• Pre-curated capsule collections that mix and match perfectly
+• 15-minute styling appointments that fit your schedule
+• Online personal shopping with same-day LA delivery
+• Subscription styling service for ongoing convenience
+
+${tier === '1A' ? 'Premium' : 'Special'} Offer for You:
+🚀 Express styling session (30 minutes max)
+🚀 Ready-to-wear capsule collection recommendations
+🚀 20% off your first time-saving wardrobe solution
+🚀 Optional monthly styling subscription
+
+No more wasting time shopping or wondering what to wear. Every piece we select is designed to create multiple outfits that transition seamlessly from meetings to dinner.
+
+Ready to streamline your style? Book your express consultation online or reply to this email.
+
+Efficiently yours,
+Emily Park
+Capsule Shop
+⏰ Book online: www.capsuleshoponline.com/express
+📱 Quick text: (323) 555-STYLE`;
+                    break;
+                    
+                case 'Analytical':
+                    subject = `Data-Driven Fashion: The Capsule Shop Advantage`;
+                    body = `Hi ${name},
+
+I know you appreciate making informed decisions, so let me share why Capsule Shop is the smart choice for your wardrobe investment.
+
+📊 The Numbers:
+• 95% client satisfaction rate over 3+ years
+• Average 40% wardrobe cost reduction through strategic pieces
+• 85% of clients report improved confidence and style
+• 300+ five-star reviews from LA professionals
+
+📈 Your ROI with Capsule Shop:
+• Quality pieces that last 3x longer than fast fashion
+• Versatile designs create 15+ outfits from 8 core pieces
+• Professional styling guidance included at no extra cost
+• Wardrobe planning reduces impulse purchases by 60%
+
+💰 ${tier === '1A' ? 'Exclusive' : 'Limited-Time'} Offer:
+✓ Free wardrobe analysis and cost-benefit report
+✓ 20% off your first capsule collection
+✓ Detailed style guide with mix-match combinations
+✓ 30-day satisfaction guarantee
+
+I'd be happy to provide references from other analytical clients and show you our detailed styling methodology.
+
+Schedule a consultation to see the data behind great style.
+
+Best regards,
+Emily Park
+Founder & Data-Driven Stylist
+Capsule Shop
+📊 See our reviews: www.capsuleshoponline.com/reviews
+📧 Questions: emily@capsuleshoponline.com`;
+                    break;
+            }
+            
+            return `
+                <div class="email-template">
+                    <p><strong>To:</strong> ${currentEmailData.email}</p>
+                    <p><strong>Subject:</strong> ${subject}</p>
+                    <hr style="margin: 1rem 0; border-color: #CF2030;">
+                    <pre style="white-space: pre-wrap; font-family: Arial, sans-serif; color: #fff;">${body}</pre>
+                </div>
+            `;
+        }
+
+        function sendEmail() {
+            const subject = document.querySelector('.email-template p:nth-child(2)').textContent.replace('Subject: ', '');
+            const body = document.querySelector('.email-template pre').textContent;
+            const email = currentEmailData.email;
+            
+            const mailtoLink = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+            window.location.href = mailtoLink;
+        }
+
+        function callClient(phone) {
+            window.location.href = `tel:${phone}`;
+        }
+
+        function closeModal() {
+            document.getElementById('emailModal').style.display = 'none';
+        }
+
+        function filterTable() {
+            const input = document.getElementById('searchInput').value.toLowerCase();
+            const table = document.getElementById('clientTable');
+            const rows = table.getElementsByTagName('tr');
+            
+            for (let i = 1; i < rows.length; i++) {
+                const row = rows[i];
+                const cells = row.getElementsByTagName('td');
+                let found = false;
+                
+                for (let j = 0; j < cells.length - 1; j++) {
+                    if (cells[j].textContent.toLowerCase().includes(input)) {
+                        found = true;
+                        break;
+                    }
+                }
+                
+                row.style.display = found ? '' : 'none';
+            }
+        }
+
+        function sortTable(column) {
+            const table = document.getElementById('clientTable');
+            const tbody = table.querySelector('tbody');
+            const rows = Array.from(tbody.querySelectorAll('tr'));
+            
+            const columnIndex = {
+                'name': 0,
+                'email': 1,
+                'phone': 2,
+                'address': 3,
+                'pures': 4,
+                'tier': 5,
+                'industry': 6,
+                'revenue': 7
+            }[column];
+            
+            rows.sort((a, b) => {
+                let aVal = a.cells[columnIndex].textContent;
+                let bVal = b.cells[columnIndex].textContent;
+                
+                if (column === 'pures') {
+                    return parseFloat(bVal) - parseFloat(aVal);
+                } else if (column === 'tier') {
+                    const tierOrder = {'1A': 3, '1B': 2, '1C': 1};
+                    return tierOrder[bVal] - tierOrder[aVal];
+                }
+                
+                return aVal.localeCompare(bVal);
+            });
+            
+            rows.forEach(row => tbody.appendChild(row));
+        }
+
+        function exportData() {
+            let csv = 'Name,Email,Phone,Address,PURES Score,Tier,Industry,Revenue\n';
+            
+            clientData.forEach(client => {
+                csv += `"${client.name}","${client.email}","${client.phone}","${client.address}",${client.pures},"${client.tier}","${client.industry}","${client.revenue}"\n`;
+            });
+            
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'capsule-shop-clients.csv';
+            a.click();
+        }
+
+        // Initialize the dashboard
+        window.onload = function() {
+            populateClientTable();
+        };
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('emailModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        };
+    </script>
+</body>
+</html>

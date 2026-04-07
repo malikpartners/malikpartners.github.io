@@ -1,0 +1,1089 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>S.A.L.E. Client Targeting System - West Coast Publications</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #000;
+            color: #fff;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: #000;
+            padding: 20px 0;
+            border-bottom: 3px solid #CF2030;
+            text-align: center;
+        }
+
+        .logo {
+            max-width: 300px;
+            height: auto;
+        }
+
+        .header-info {
+            margin-top: 15px;
+            color: #ccc;
+        }
+
+        .nav-tabs {
+            display: flex;
+            background: #CF2030;
+            margin: 20px 0;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .nav-tab {
+            flex: 1;
+            padding: 15px;
+            background: #CF2030;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .nav-tab:hover {
+            background: #a01825;
+        }
+
+        .nav-tab.active {
+            background: #fff;
+            color: #CF2030;
+        }
+
+        .tab-content {
+            display: none;
+            background: #1a1a1a;
+            padding: 30px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .search-box, .filter-select {
+            padding: 10px;
+            border: 1px solid #CF2030;
+            border-radius: 5px;
+            background: #000;
+            color: #fff;
+            font-size: 14px;
+        }
+
+        .search-box::placeholder {
+            color: #888;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            background: #CF2030;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.3s;
+        }
+
+        .btn:hover {
+            background: #a01825;
+        }
+
+        .btn-secondary {
+            background: #333;
+        }
+
+        .btn-secondary:hover {
+            background: #555;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            border-radius: 8px;
+            background: #000;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #000;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #333;
+        }
+
+        th {
+            background: #CF2030;
+            color: white;
+            cursor: pointer;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        th:hover {
+            background: #a01825;
+        }
+
+        tr:nth-child(even) {
+            background: #1a1a1a;
+        }
+
+        tr:hover {
+            background: #2a2a2a;
+        }
+
+        .tier-1a { border-left: 4px solid #00ff00; }
+        .tier-1b { border-left: 4px solid #ffff00; }
+        .tier-1c { border-left: 4px solid #0080ff; }
+
+        .score-badge {
+            padding: 4px 8px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .score-high { background: #00ff00; color: #000; }
+        .score-medium { background: #ffff00; color: #000; }
+        .score-low { background: #ff6600; color: #fff; }
+
+        .contact-btn {
+            padding: 6px 12px;
+            margin: 2px;
+            font-size: 12px;
+            border-radius: 4px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+        }
+
+        .modal-content {
+            background: #1a1a1a;
+            margin: 5% auto;
+            padding: 30px;
+            border: 2px solid #CF2030;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 600px;
+            position: relative;
+        }
+
+        .close {
+            color: #CF2030;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            position: absolute;
+            right: 15px;
+            top: 10px;
+        }
+
+        .close:hover {
+            color: #fff;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #CF2030;
+            font-weight: bold;
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #CF2030;
+            border-radius: 5px;
+            background: #000;
+            color: #fff;
+        }
+
+        .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .score-input {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .score-input input {
+            width: 60px;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .dashboard-card {
+            background: #1a1a1a;
+            padding: 20px;
+            border-radius: 8px;
+            border: 2px solid #CF2030;
+        }
+
+        .dashboard-card h3 {
+            color: #CF2030;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #CF2030;
+            padding-bottom: 10px;
+        }
+
+        .metric {
+            display: flex;
+            justify-content: space-between;
+            margin: 10px 0;
+        }
+
+        .metric-value {
+            font-weight: bold;
+            color: #00ff00;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            border-top: 2px solid #CF2030;
+            margin-top: 40px;
+        }
+
+        .footer-logo {
+            max-width: 150px;
+            height: auto;
+            opacity: 0.7;
+        }
+
+        .export-section {
+            margin: 20px 0;
+            padding: 20px;
+            background: #1a1a1a;
+            border-radius: 8px;
+            border: 1px solid #CF2030;
+        }
+
+        @media (max-width: 768px) {
+            .controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .nav-tabs {
+                flex-direction: column;
+            }
+            
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports" class="logo">
+        <div class="header-info">
+            <h2>S.A.L.E. Client Targeting System</h2>
+            <p>West Coast Publications and Internet Marketing | Carlsbad, CA</p>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="showTab('sourcing')">S - SOURCING</button>
+            <button class="nav-tab" onclick="showTab('assessing')">A - ASSESSING</button>
+            <button class="nav-tab" onclick="showTab('listening')">L - LISTENING</button>
+            <button class="nav-tab" onclick="showTab('empowering')">E - EMPOWERING</button>
+            <button class="nav-tab" onclick="showTab('analytics')">ANALYTICS</button>
+        </div>
+
+        <!-- SOURCING TAB -->
+        <div id="sourcing" class="tab-content active">
+            <h2>P.U.R.E.S. Client Sourcing & Scoring</h2>
+            
+            <div class="dashboard-grid">
+                <div class="dashboard-card">
+                    <h3>Performance Metrics</h3>
+                    <div class="metric">
+                        <span>Total Prospects:</span>
+                        <span class="metric-value" id="totalProspects">50</span>
+                    </div>
+                    <div class="metric">
+                        <span>Tier 1A (Premium):</span>
+                        <span class="metric-value" id="tier1A">12</span>
+                    </div>
+                    <div class="metric">
+                        <span>Tier 1B (High-Value):</span>
+                        <span class="metric-value" id="tier1B">18</span>
+                    </div>
+                    <div class="metric">
+                        <span>Tier 1C (Qualified):</span>
+                        <span class="metric-value" id="tier1C">20</span>
+                    </div>
+                </div>
+                
+                <div class="dashboard-card">
+                    <h3>Quick Actions</h3>
+                    <button class="btn" onclick="showModal('addClient')">Add New Prospect</button><br><br>
+                    <button class="btn btn-secondary" onclick="exportData()">Export Client List</button><br><br>
+                    <button class="btn btn-secondary" onclick="generateReport()">Generate Report</button>
+                </div>
+            </div>
+
+            <div class="controls">
+                <input type="text" class="search-box" id="searchBox" placeholder="Search clients..." onkeyup="filterTable()">
+                <select class="filter-select" id="tierFilter" onchange="filterTable()">
+                    <option value="">All Tiers</option>
+                    <option value="1A">Tier 1A</option>
+                    <option value="1B">Tier 1B</option>
+                    <option value="1C">Tier 1C</option>
+                </select>
+                <select class="filter-select" id="industryFilter" onchange="filterTable()">
+                    <option value="">All Industries</option>
+                    <option value="Real Estate">Real Estate</option>
+                    <option value="Healthcare">Healthcare</option>
+                    <option value="Legal Services">Legal Services</option>
+                    <option value="Technology">Technology</option>
+                    <option value="Retail">Retail</option>
+                    <option value="Finance">Finance</option>
+                    <option value="Consulting">Consulting</option>
+                    <option value="Construction">Construction</option>
+                </select>
+            </div>
+
+            <div class="table-container">
+                <table id="clientTable">
+                    <thead>
+                        <tr>
+                            <th onclick="sortTable(0)">Client Name ↕</th>
+                            <th onclick="sortTable(1)">Email ↕</th>
+                            <th onclick="sortTable(2)">Phone ↕</th>
+                            <th onclick="sortTable(3)">Address ↕</th>
+                            <th onclick="sortTable(4)">P.U.R.E.S Score ↕</th>
+                            <th onclick="sortTable(5)">Tier ↕</th>
+                            <th onclick="sortTable(6)">Industry ↕</th>
+                            <th onclick="sortTable(7)">Revenue Est. ↕</th>
+                            <th onclick="sortTable(8)">Contact Status ↕</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="clientTableBody">
+                        <!-- Client data will be populated here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- ASSESSING TAB -->
+        <div id="assessing" class="tab-content">
+            <h2>Buying Pattern Analysis</h2>
+            <div class="dashboard-grid">
+                <div class="dashboard-card">
+                    <h3>Buyer Types Distribution</h3>
+                    <div class="metric">
+                        <span>Analytical Buyers:</span>
+                        <span class="metric-value">25%</span>
+                    </div>
+                    <div class="metric">
+                        <span>Relationship Buyers:</span>
+                        <span class="metric-value">35%</span>
+                    </div>
+                    <div class="metric">
+                        <span>Efficiency Buyers:</span>
+                        <span class="metric-value">20%</span>
+                    </div>
+                    <div class="metric">
+                        <span>Innovation Buyers:</span>
+                        <span class="metric-value">20%</span>
+                    </div>
+                </div>
+                
+                <div class="dashboard-card">
+                    <h3>Assessment Tools</h3>
+                    <button class="btn" onclick="analyzeDecisionTimeline()">Decision Timeline Analyzer</button><br><br>
+                    <button class="btn btn-secondary" onclick="stakeholderMapping()">Stakeholder Mapping</button><br><br>
+                    <button class="btn btn-secondary" onclick="valueAlignment()">Value Proposition Matrix</button>
+                </div>
+            </div>
+            
+            <div style="background: #1a1a1a; padding: 20px; border-radius: 8px; margin-top: 20px;">
+                <h3>Buying Pattern Characteristics</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 15px;">
+                    <div style="border: 1px solid #CF2030; padding: 15px; border-radius: 5px;">
+                        <h4 style="color: #CF2030;">Analytical Buyers</h4>
+                        <p>• Require detailed ROI analysis</p>
+                        <p>• Need case studies and trials</p>
+                        <p>• Data-driven decision making</p>
+                    </div>
+                    <div style="border: 1px solid #CF2030; padding: 15px; border-radius: 5px;">
+                        <h4 style="color: #CF2030;">Relationship Buyers</h4>
+                        <p>• Value trust and referrals</p>
+                        <p>• Long-term partnerships focus</p>
+                        <p>• Personal connections matter</p>
+                    </div>
+                    <div style="border: 1px solid #CF2030; padding: 15px; border-radius: 5px;">
+                        <h4 style="color: #CF2030;">Efficiency Buyers</h4>
+                        <p>• Focus on time-saving solutions</p>
+                        <p>• Process improvement oriented</p>
+                        <p>• Quick decision makers</p>
+                    </div>
+                    <div style="border: 1px solid #CF2030; padding: 15px; border-radius: 5px;">
+                        <h4 style="color: #CF2030;">Innovation Buyers</h4>
+                        <p>• Seek cutting-edge solutions</p>
+                        <p>• Competitive advantage focus</p>
+                        <p>• Early adopters</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- LISTENING TAB -->
+        <div id="listening" class="tab-content">
+            <h2>Feedback Integration & Tracking</h2>
+            <div class="dashboard-grid">
+                <div class="dashboard-card">
+                    <h3>Feedback Metrics</h3>
+                    <div class="metric">
+                        <span>Pre-sale Feedback:</span>
+                        <span class="metric-value">85%</span>
+                    </div>
+                    <div class="metric">
+                        <span>During-sale Tracking:</span>
+                        <span class="metric-value">92%</span>
+                    </div>
+                    <div class="metric">
+                        <span>Post-sale Satisfaction:</span>
+                        <span class="metric-value">88%</span>
+                    </div>
+                    <div class="metric">
+                        <span>Response Time (hrs):</span>
+                        <span class="metric-value">2.4</span>
+                    </div>
+                </div>
+                
+                <div class="dashboard-card">
+                    <h3>Feedback Tools</h3>
+                    <button class="btn" onclick="collectFeedback()">Collect Feedback</button><br><br>
+                    <button class="btn btn-secondary" onclick="trackProgress()">Track Progress</button><br><br>
+                    <button class="btn btn-secondary" onclick="monitorSatisfaction()">Monitor Satisfaction</button>
+                </div>
+            </div>
+            
+            <div style="background: #1a1a1a; padding: 20px; border-radius: 8px; margin-top: 20px;">
+                <h3>Recent Feedback</h3>
+                <div style="max-height: 300px; overflow-y: auto;">
+                    <div style="border-bottom: 1px solid #333; padding: 10px 0;">
+                        <strong>Jennifer Martinez - Tech Solutions Inc.</strong>
+                        <p style="color: #ccc;">"Excellent digital marketing strategy. Saw 40% increase in leads."</p>
+                        <small style="color: #888;">2 days ago</small>
+                    </div>
+                    <div style="border-bottom: 1px solid #333; padding: 10px 0;">
+                        <strong>Robert Chen - Pacific Real Estate</strong>
+                        <p style="color: #ccc;">"Professional website redesign exceeded expectations. Great ROI."</p>
+                        <small style="color: #888;">5 days ago</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- EMPOWERING TAB -->
+        <div id="empowering" class="tab-content">
+            <h2>Referral Strategy & Client Empowerment</h2>
+            <div class="dashboard-grid">
+                <div class="dashboard-card">
+                    <h3>Referral Metrics</h3>
+                    <div class="metric">
+                        <span>Active Advocates:</span>
+                        <span class="metric-value">24</span>
+                    </div>
+                    <div class="metric">
+                        <span>Referrals This Month:</span>
+                        <span class="metric-value">8</span>
+                    </div>
+                    <div class="metric">
+                        <span>Success Stories:</span>
+                        <span class="metric-value">15</span>
+                    </div>
+                    <div class="metric">
+                        <span>Reward Points Issued:</span>
+                        <span class="metric-value">1,250</span>
+                    </div>
+                </div>
+                
+                <div class="dashboard-card">
+                    <h3>Empowerment Tools</h3>
+                    <button class="btn" onclick="manageAdvocacy()">Client Advocacy Program</button><br><br>
+                    <button class="btn btn-secondary" onclick="trackReferrals()">Track Referrals</button><br><br>
+                    <button class="btn btn-secondary" onclick="coMarketingOpps()">Co-marketing Opportunities</button>
+                </div>
+            </div>
+            
+            <div style="background: #1a1a1a; padding: 20px; border-radius: 8px; margin-top: 20px;">
+                <h3>Top Client Advocates</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px; margin-top: 15px;">
+                    <div style="border: 1px solid #CF2030; padding: 15px; border-radius: 5px;">
+                        <h4 style="color: #00ff00;">David Kim - Wellness Center</h4>
+                        <p>5 referrals | 3 conversions</p>
+                        <p style="color: #ccc;">Reward tier: Gold</p>
+                    </div>
+                    <div style="border: 1px solid #CF2030; padding: 15px; border-radius: 5px;">
+                        <h4 style="color: #00ff00;">Lisa Thompson - Consulting Group</h4>
+                        <p>4 referrals | 4 conversions</p>
+                        <p style="color: #ccc;">Reward tier: Platinum</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ANALYTICS TAB -->
+        <div id="analytics" class="tab-content">
+            <h2>S.A.L.E. Performance Analytics</h2>
+            <div class="dashboard-grid">
+                <div class="dashboard-card">
+                    <h3>System Performance</h3>
+                    <div class="metric">
+                        <span>Sourcing Accuracy:</span>
+                        <span class="metric-value">87%</span>
+                    </div>
+                    <div class="metric">
+                        <span>Assessment Accuracy:</span>
+                        <span class="metric-value">91%</span>
+                    </div>
+                    <div class="metric">
+                        <span>Listening Rate:</span>
+                        <span class="metric-value">73%</span>
+                    </div>
+                    <div class="metric">
+                        <span>Referral Generation:</span>
+                        <span class="metric-value">2.4/client</span>
+                    </div>
+                </div>
+                
+                <div class="dashboard-card">
+                    <h3>ROI Metrics</h3>
+                    <div class="metric">
+                        <span>Pipeline Value:</span>
+                        <span class="metric-value">$485K</span>
+                    </div>
+                    <div class="metric">
+                        <span>Conversion Rate:</span>
+                        <span class="metric-value">34%</span>
+                    </div>
+                    <div class="metric">
+                        <span>Avg. Deal Size:</span>
+                        <span class="metric-value">$8,500</span>
+                    </div>
+                    <div class="metric">
+                        <span>Customer LTV:</span>
+                        <span class="metric-value">$25K</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="export-section">
+                <h3>Export & Reports</h3>
+                <button class="btn" onclick="exportCSV()">Export as CSV</button>
+                <button class="btn btn-secondary" onclick="exportPDF()">Export as PDF</button>
+                <button class="btn btn-secondary" onclick="scheduledReport()">Schedule Reports</button>
+            </div>
+        </div>
+
+        <!-- MODALS -->
+        <div id="addClientModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal('addClientModal')">&times;</span>
+                <h2>Add New Prospect</h2>
+                <form id="addClientForm">
+                    <div class="form-group">
+                        <label>Client Name:</label>
+                        <input type="text" id="clientName" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Email:</label>
+                        <input type="email" id="clientEmail" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Phone:</label>
+                        <input type="tel" id="clientPhone" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Address:</label>
+                        <input type="text" id="clientAddress" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Industry:</label>
+                        <select id="clientIndustry" required>
+                            <option value="">Select Industry</option>
+                            <option value="Real Estate">Real Estate</option>
+                            <option value="Healthcare">Healthcare</option>
+                            <option value="Legal Services">Legal Services</option>
+                            <option value="Technology">Technology</option>
+                            <option value="Retail">Retail</option>
+                            <option value="Finance">Finance</option>
+                            <option value="Consulting">Consulting</option>
+                            <option value="Construction">Construction</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>P.U.R.E.S Scoring (1-5):</label>
+                        <div class="score-input">
+                            <label>Profitability:</label>
+                            <input type="number" id="profitability" min="1" max="5" required>
+                        </div>
+                        <div class="score-input">
+                            <label>Urgency:</label>
+                            <input type="number" id="urgency" min="1" max="5" required>
+                        </div>
+                        <div class="score-input">
+                            <label>Reachability:</label>
+                            <input type="number" id="reachability" min="1" max="5" required>
+                        </div>
+                        <div class="score-input">
+                            <label>Engagement:</label>
+                            <input type="number" id="engagement" min="1" max="5" required>
+                        </div>
+                        <div class="score-input">
+                            <label>Sustainability:</label>
+                            <input type="number" id="sustainability" min="1" max="5" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn">Add Prospect</button>
+                </form>
+            </div>
+        </div>
+
+        <div id="emailModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal('emailModal')">&times;</span>
+                <h2>Send Email</h2>
+                <form id="emailForm">
+                    <div class="form-group">
+                        <label>To:</label>
+                        <input type="email" id="emailTo" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label>Subject:</label>
+                        <input type="text" id="emailSubject" value="Transform Your Marketing with West Coast Publications">
+                    </div>
+                    <div class="form-group">
+                        <label>Message:</label>
+                        <textarea id="emailMessage"></textarea>
+                    </div>
+                    <button type="submit" class="btn">Send Email</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports" class="footer-logo">
+        <p style="margin-top: 10px; color: #ccc;">© 2024 Higgins Reports. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Sample client data for Carlsbad, CA area
+        let clientData = [
+            { name: "Jennifer Martinez", email: "j.martinez@techsolutions.com", phone: "(760) 555-0101", address: "1234 Carlsbad Village Dr, Carlsbad, CA 92008", puresScore: 4.2, tier: "1A", industry: "Technology", revenue: "$250K", status: "New Lead", contact: "2024-01-15", notes: "Interested in digital marketing automation" },
+            { name: "Robert Chen", email: "robert@pacificrealestate.com", phone: "(760) 555-0102", address: "2345 Palomar Airport Rd, Carlsbad, CA 92011", puresScore: 3.8, tier: "1B", industry: "Real Estate", revenue: "$180K", status: "Contacted", contact: "2024-01-12", notes: "Looking for website redesign and SEO" },
+            { name: "Sarah Williams", email: "sarah@coastalhealth.com", phone: "(760) 555-0103", address: "3456 El Camino Real, Carlsbad, CA 92008", puresScore: 4.6, tier: "1A", industry: "Healthcare", revenue: "$320K", status: "Proposal Sent", contact: "2024-01-10", notes: "Multi-location healthcare marketing needs" },
+            { name: "David Kim", email: "david@wellnesscenter.com", phone: "(760) 555-0104", address: "4567 Aviara Pkwy, Carlsbad, CA 92011", puresScore: 3.5, tier: "1B", industry: "Healthcare", revenue: "$150K", status: "Follow-up", contact: "2024-01-08", notes: "Wellness center expanding services" },
+            { name: "Lisa Thompson", email: "lisa@consultinggroup.com", phone: "(760) 555-0105", address: "5678 Avenida Encinas, Carlsbad, CA 92008", puresScore: 4.1, tier: "1A", industry: "Consulting", revenue: "$280K", status: "Meeting Scheduled", contact: "2024-01-14", notes: "Strategic consulting firm needing brand refresh" },
+            { name: "Michael Rodriguez", email: "m.rodriguez@lawfirm.com", phone: "(760) 555-0106", address: "6789 Paseo del Norte, Carlsbad, CA 92011", puresScore: 3.9, tier: "1B", industry: "Legal Services", revenue: "$220K", status: "Interested", contact: "2024-01-13", notes: "Personal injury law firm expansion" },
+            { name: "Amanda Foster", email: "amanda@coastalretail.com", phone: "(760) 555-0107", address: "7890 State St, Carlsbad, CA 92008", puresScore: 3.2, tier: "1C", industry: "Retail", revenue: "$95K", status: "New Lead", contact: "2024-01-16", notes: "Local boutique chain looking for social media help" },
+            { name: "James Wilson", email: "james@constructionpro.com", phone: "(760) 555-0108", address: "8901 Camino Creek Rd, Carlsbad, CA 92009", puresScore: 3.7, tier: "1B", industry: "Construction", revenue: "$165K", status: "Contacted", contact: "2024-01-11", notes: "Commercial construction company needs lead generation" },
+            { name: "Maria Gonzalez", email: "maria@financeplanning.com", phone: "(760) 555-0109", address: "9012 Highland Dr, Carlsbad, CA 92008", puresScore: 4.3, tier: "1A", industry: "Finance", revenue: "$295K", status: "Proposal Sent", contact: "2024-01-09", notes: "Financial planning firm targeting high-net-worth clients" },
+            { name: "Kevin Brown", email: "kevin@techinnovate.com", phone: "(760) 555-0110", address: "1011 Faraday Ave, Carlsbad, CA 92008", puresScore: 4.0, tier: "1B", industry: "Technology", revenue: "$210K", status: "Follow-up", contact: "2024-01-07", notes: "Software startup needing comprehensive marketing strategy" },
+            { name: "Rachel Davis", email: "rachel@medicalcenter.com", phone: "(760) 555-0111", address: "1112 Alga Rd, Carlsbad, CA 92009", puresScore: 4.4, tier: "1A", industry: "Healthcare", revenue: "$350K", status: "New Lead", contact: "2024-01-17", notes: "Medical center chain expansion marketing" },
+            { name: "Thomas Anderson", email: "thomas@realestatepro.com", phone: "(760) 555-0112", address: "1213 Poinsettia Ln, Carlsbad, CA 92011", puresScore: 3.6, tier: "1B", industry: "Real Estate", revenue: "$140K", status: "Meeting Scheduled", contact: "2024-01-06", notes: "Luxury real estate agent personal branding" },
+            { name: "Jessica Lee", email: "jessica@consultingexpert.com", phone: "(760) 555-0113", address: "1314 Cannon Rd, Carlsbad, CA 92008", puresScore: 3.8, tier: "1B", industry: "Consulting", revenue: "$190K", status: "Interested", contact: "2024-01-05", notes: "HR consulting firm digital transformation" },
+            { name: "Steven Clark", email: "steven@legaladvocates.com", phone: "(760) 555-0114", address: "1415 Marron Rd, Carlsbad, CA 92008", puresScore: 4.1, tier: "1A", industry: "Legal Services", revenue: "$265K", status: "Contacted", contact: "2024-01-04", notes: "Criminal defense attorneys reputation management" },
+            { name: "Michelle Garcia", email: "michelle@retailgroup.com", phone: "(760) 555-0115", address: "1516 Jefferson St, Carlsbad, CA 92008", puresScore: 3.4, tier: "1C", industry: "Retail", revenue: "$110K", status: "New Lead", contact: "2024-01-18", notes: "Restaurant chain local marketing campaigns" },
+            { name: "Daniel Moore", email: "daniel@buildingcontractors.com", phone: "(760) 555-0116", address: "1617 Chestnut Ave, Carlsbad, CA 92008", puresScore: 3.5, tier: "1C", industry: "Construction", revenue: "$125K", status: "Follow-up", contact: "2024-01-03", notes: "Residential contractors lead generation system" },
+            { name: "Karen White", email: "karen@wealthmanagement.com", phone: "(760) 555-0117", address: "1718 Roosevelt St, Carlsbad, CA 92008", puresScore: 4.5, tier: "1A", industry: "Finance", revenue: "$380K", status: "Proposal Sent", contact: "2024-01-02", notes: "Wealth management firm targeting entrepreneurs" },
+            { name: "Christopher Taylor", email: "chris@techstartup.com", phone: "(760) 555-0118", address: "1819 Grand Ave, Carlsbad, CA 92008", puresScore: 3.9, tier: "1B", industry: "Technology", revenue: "$200K", status: "Meeting Scheduled", contact: "2024-01-01", notes: "AI startup company launch marketing" },
+            { name: "Nicole Johnson", email: "nicole@healthservices.com", phone: "(760) 555-0119", address: "1920 Pine Ave, Carlsbad, CA 92008", puresScore: 4.2, tier: "1A", industry: "Healthcare", revenue: "$275K", status: "Interested", contact: "2023-12-30", notes: "Telehealth platform marketing strategy" },
+            { name: "Brian Miller", email: "brian@propertysales.com", phone: "(760) 555-0120", address: "2021 Oak St, Carlsbad, CA 92008", puresScore: 3.7, tier: "1B", industry: "Real Estate", revenue: "$155K", status: "New Lead", contact: "2023-12-29", notes: "Commercial real estate lead nurturing" },
+            { name: "Stephanie Wilson", email: "stephanie@businessconsult.com", phone: "(760) 555-0121", address: "2122 Elm Dr, Carlsbad, CA 92008", puresScore: 4.0, tier: "1B", industry: "Consulting", revenue: "$225K", status: "Contacted", contact: "2023-12-28", notes: "Business strategy consulting digital presence" },
+            { name: "Anthony Martinez", email: "anthony@attorneygroup.com", phone: "(760) 555-0122", address: "2223 Maple Ave, Carlsbad, CA 92008", puresScore: 3.8, tier: "1B", industry: "Legal Services", revenue: "$185K", status: "Follow-up", contact: "2023-12-27", notes: "Corporate law firm thought leadership" },
+            { name: "Laura Davis", email: "laura@fashionboutique.com", phone: "(760) 555-0123", address: "2324 Cedar Ln, Carlsbad, CA 92008", puresScore: 3.3, tier: "1C", industry: "Retail", revenue: "$85K", status: "Proposal Sent", contact: "2023-12-26", notes: "Fashion boutique e-commerce integration" },
+            { name: "Ryan Thompson", email: "ryan@generalcontractor.com", phone: "(760) 555-0124", address: "2425 Birch St, Carlsbad, CA 92008", puresScore: 3.6, tier: "1C", industry: "Construction", revenue: "$135K", status: "Meeting Scheduled", contact: "2023-12-25", notes: "General contractor digital marketing overhaul" },
+            { name: "Heather Anderson", email: "heather@investmentfirm.com", phone: "(760) 555-0125", address: "2526 Willow Dr, Carlsbad, CA 92008", puresScore: 4.4, tier: "1A", industry: "Finance", revenue: "$340K", status: "Interested", contact: "2023-12-24", notes: "Investment firm client acquisition strategy" },
+            { name: "Mark Rodriguez", email: "mark@softwaredev.com", phone: "(760) 555-0126", address: "2627 Ash Ave, Carlsbad, CA 92008", puresScore: 4.1, tier: "1A", industry: "Technology", revenue: "$260K", status: "New Lead", contact: "2023-12-23", notes: "Custom software development lead generation" },
+            { name: "Ashley Brown", email: "ashley@dentalcare.com", phone: "(760) 555-0127", address: "2728 Spruce Ln, Carlsbad, CA 92008", puresScore: 4.3, tier: "1A", industry: "Healthcare", revenue: "$310K", status: "Contacted", contact: "2023-12-22", notes: "Dental practice group expansion marketing" },
+            { name: "Jason Williams", email: "jason@luxuryrealty.com", phone: "(760) 555-0128", address: "2829 Redwood St, Carlsbad, CA 92008", puresScore: 3.9, tier: "1B", industry: "Real Estate", revenue: "$205K", status: "Follow-up", contact: "2023-12-21", notes: "Luxury realty market positioning" },
+            { name: "Christina Garcia", email: "christina@managementconsult.com", phone: "(760) 555-0129", address: "2930 Cypress Dr, Carlsbad, CA 92008", puresScore: 3.7, tier: "1B", industry: "Consulting", revenue: "$175K", status: "Proposal Sent", contact: "2023-12-20", notes: "Management consulting thought leadership" },
+            { name: "Justin Clark", email: "justin@criminaldefense.com", phone: "(760) 555-0130", address: "3031 Sycamore Ave, Carlsbad, CA 92008", puresScore: 4.0, tier: "1B", industry: "Legal Services", revenue: "$240K", status: "Meeting Scheduled", contact: "2023-12-19", notes: "Criminal defense attorney reputation management" },
+            { name: "Samantha Lee", email: "samantha@gourmetfood.com", phone: "(760) 555-0131", address: "3132 Eucalyptus Ln, Carlsbad, CA 92008", puresScore: 3.5, tier: "1C", industry: "Retail", revenue: "$120K", status: "Interested", contact: "2023-12-18", notes: "Gourmet food store local SEO" },
+            { name: "Eric Moore", email: "eric@homebuilders.com", phone: "(760) 555-0132", address: "3233 Palm St, Carlsbad, CA 92008", puresScore: 3.8, tier: "1B", industry: "Construction", revenue: "$190K", status: "New Lead", contact: "2023-12-17", notes: "Custom home builders showcase marketing" },
+            { name: "Jennifer White", email: "jennifer@creditunion.com", phone: "(760) 555-0133", address: "3334 Magnolia Dr, Carlsbad, CA 92008", puresScore: 4.2, tier: "1A", industry: "Finance", revenue: "$290K", status: "Contacted", contact: "2023-12-16", notes: "Credit union member acquisition campaign" },
+            { name: "Andrew Taylor", email: "andrew@cloudtech.com", phone: "(760) 555-0134", address: "3435 Orange Ave, Carlsbad, CA 92008", puresScore: 4.1, tier: "1A", industry: "Technology", revenue: "$270K", status: "Follow-up", contact: "2023-12-15", notes: "Cloud technology services B2B marketing" },
+            { name: "Rebecca Johnson", email: "rebecca@veterinarycare.com", phone: "(760) 555-0135", address: "3536 Lemon Ln, Carlsbad, CA 92008", puresScore: 3.9, tier: "1B", industry: "Healthcare", revenue: "$215K", status: "Proposal Sent", contact: "2023-12-14", notes: "Veterinary clinic chain digital marketing" },
+            { name: "Matthew Miller", email: "matthew@commercialrealty.com", phone: "(760) 555-0136", address: "3637 Lime St, Carlsbad, CA 92008", puresScore: 3.6, tier: "1B", industry: "Real Estate", revenue: "$145K", status: "Meeting Scheduled", contact: "2023-12-13", notes: "Commercial real estate networking strategy" },
+            { name: "Kelly Wilson", email: "kelly@strategypartners.com", phone: "(760) 555-0137", address: "3738 Grape Dr, Carlsbad, CA 92008", puresScore: 4.0, tier: "1B", industry: "Consulting", revenue: "$230K", status: "Interested", contact: "2023-12-12", notes: "Strategy consulting firm content marketing" },
+            { name: "Brandon Martinez", email: "brandon@familylaw.com", phone: "(760) 555-0138", address: "3839 Cherry Ave, Carlsbad, CA 92008", puresScore: 3.7, tier: "1B", industry: "Legal Services", revenue: "$165K", status: "New Lead", contact: "2023-12-11", notes: "Family law practice compassionate marketing" },
+            { name: "Melanie Davis", email: "melanie@artgallery.com", phone: "(760) 555-0139", address: "3940 Peach Ln, Carlsbad, CA 92008", puresScore: 3.2, tier: "1C", industry: "Retail", revenue: "$75K", status: "Contacted", contact: "2023-12-10", notes: "Art gallery event marketing and PR" },
+            { name: "Gregory Thompson", email: "gregory@roofingpro.com", phone: "(760) 555-0140", address: "4041 Plum St, Carlsbad, CA 92008", puresScore: 3.4, tier: "1C", industry: "Construction", revenue: "$115K", status: "Follow-up", contact: "2023-12-09", notes: "Roofing company emergency response marketing" },
+            { name: "Victoria Anderson", email: "victoria@bankservices.com", phone: "(760) 555-0141", address: "4142 Apricot Dr, Carlsbad, CA 92008", puresScore: 4.3, tier: "1A", industry: "Finance", revenue: "$325K", status: "Proposal Sent", contact: "2023-12-08", notes: "Community bank business banking promotion" },
+            { name: "Adam Rodriguez", email: "adam@cybersecurity.com", phone: "(760) 555-0142", address: "4243 Fig Ave, Carlsbad, CA 92008", puresScore: 4.2, tier: "1A", industry: "Technology", revenue: "$285K", status: "Meeting Scheduled", contact: "2023-12-07", notes: "Cybersecurity firm B2B lead generation" },
+            { name: "Megan Brown", email: "megan@physicaltherapy.com", phone: "(760) 555-0143", address: "4344 Date Ln, Carlsbad, CA 92008", puresScore: 3.8, tier: "1B", industry: "Healthcare", revenue: "$195K", status: "Interested", contact: "2023-12-06", notes: "Physical therapy clinic patient acquisition" },
+            { name: "Nicholas Williams", email: "nicholas@luxuryhomes.com", phone: "(760) 555-0144", address: "4445 Coconut St, Carlsbad, CA 92008", puresScore: 4.0, tier: "1B", industry: "Real Estate", revenue: "$235K", status: "New Lead", contact: "2023-12-05", notes: "Luxury home sales high-end marketing" },
+            { name: "Tiffany Garcia", email: "tiffany@executivecoach.com", phone: "(760) 555-0145", address: "4546 Pineapple Dr, Carlsbad, CA 92008", puresScore: 3.9, tier: "1B", industry: "Consulting", revenue: "$210K", status: "Contacted", contact: "2023-12-04", notes: "Executive coaching personal brand building" },
+            { name: "Jacob Clark", email: "jacob@personalinjury.com", phone: "(760) 555-0146", address: "4647 Mango Ave, Carlsbad, CA 92008", puresScore: 4.1, tier: "1A", industry: "Legal Services", revenue: "$255K", status: "Follow-up", contact: "2023-12-03", notes: "Personal injury law firm case acquisition" },
+            { name: "Brittany Lee", email: "brittany@wineshop.com", phone: "(760) 555-0147", address: "4748 Papaya Ln, Carlsbad, CA 92008", puresScore: 3.3, tier: "1C", industry: "Retail", revenue: "$90K", status: "Proposal Sent", contact: "2023-12-02", notes: "Wine shop tasting events promotion" },
+            { name: "Tyler Moore", email: "tyler@electricalcontractors.com", phone: "(760) 555-0148", address: "4849 Kiwi St, Carlsbad, CA 92008", puresScore: 3.5, tier: "1C", industry: "Construction", revenue: "$125K", status: "Meeting Scheduled", contact: "2023-12-01", notes: "Electrical contractors commercial marketing" },
+            { name: "Courtney White", email: "courtney@mortgagebroker.com", phone: "(760) 555-0149", address: "4950 Guava Dr, Carlsbad, CA 92008", puresScore: 4.4, tier: "1A", industry: "Finance", revenue: "$355K", status: "Interested", contact: "2023-11-30", notes: "Mortgage brokerage first-time buyer campaigns" },
+            { name: "Patrick Taylor", email: "patrick@mobileapps.com", phone: "(760) 555-0150", address: "5051 Starfruit Ave, Carlsbad, CA 92008", puresScore: 3.7, tier: "1B", industry: "Technology", revenue: "$170K", status: "New Lead", contact: "2023-11-29", notes: "Mobile app development showcase marketing" }
+        ];
+
+        let currentSort = { column: -1, direction: 1 };
+        let filteredData = [...clientData];
+
+        function showTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.nav-tab').forEach(btn => btn.classList.remove('active'));
+            
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        function populateTable() {
+            const tbody = document.getElementById('clientTableBody');
+            tbody.innerHTML = '';
+            
+            filteredData.forEach((client, index) => {
+                const row = tbody.insertRow();
+                const tierClass = `tier-${client.tier.toLowerCase()}`;
+                row.className = tierClass;
+                
+                const scoreClass = client.puresScore >= 4 ? 'score-high' : 
+                                 client.puresScore >= 3.5 ? 'score-medium' : 'score-low';
+                
+                row.innerHTML = `
+                    <td>${client.name}</td>
+                    <td>${client.email}</td>
+                    <td>${client.phone}</td>
+                    <td>${client.address}</td>
+                    <td><span class="score-badge ${scoreClass}">${client.puresScore}</span></td>
+                    <td>Tier ${client.tier}</td>
+                    <td>${client.industry}</td>
+                    <td>${client.revenue}</td>
+                    <td>${client.status}</td>
+                    <td>
+                        <button class="btn contact-btn" onclick="sendEmail('${client.email}', '${client.name}', '${client.industry}')">Email</button>
+                        <button class="btn btn-secondary contact-btn" onclick="callClient('${client.phone}')">Call</button>
+                        <button class="btn btn-secondary contact-btn" onclick="editClient(${index})">Edit</button>
+                    </td>
+                `;
+            });
+        }
+
+        function sortTable(column) {
+            if (currentSort.column === column) {
+                currentSort.direction *= -1;
+            } else {
+                currentSort.column = column;
+                currentSort.direction = 1;
+            }
+            
+            const columnNames = ['name', 'email', 'phone', 'address', 'puresScore', 'tier', 'industry', 'revenue', 'status'];
+            const sortField = columnNames[column];
+            
+            filteredData.sort((a, b) => {
+                let aVal = a[sortField];
+                let bVal = b[sortField];
+                
+                if (sortField === 'puresScore') {
+                    aVal = parseFloat(aVal);
+                    bVal = parseFloat(bVal);
+                } else if (sortField === 'revenue') {
+                    aVal = parseInt(aVal.replace(/[$K,]/g, ''));
+                    bVal = parseInt(bVal.replace(/[$K,]/g, ''));
+                }
+                
+                if (aVal < bVal) return -1 * currentSort.direction;
+                if (aVal > bVal) return 1 * currentSort.direction;
+                return 0;
+            });
+            
+            populateTable();
+        }
+
+        function filterTable() {
+            const search = document.getElementById('searchBox').value.toLowerCase();
+            const tierFilter = document.getElementById('tierFilter').value;
+            const industryFilter = document.getElementById('industryFilter').value;
+            
+            filteredData = clientData.filter(client => {
+                const matchesSearch = !search || 
+                    client.name.toLowerCase().includes(search) ||
+                    client.email.toLowerCase().includes(search) ||
+                    client.industry.toLowerCase().includes(search) ||
+                    client.address.toLowerCase().includes(search);
+                
+                const matchesTier = !tierFilter || client.tier === tierFilter;
+                const matchesIndustry = !industryFilter || client.industry === industryFilter;
+                
+                return matchesSearch && matchesTier && matchesIndustry;
+            });
+            
+            populateTable();
+        }
+
+        function sendEmail(email, name, industry) {
+            document.getElementById('emailTo').value = email;
+            
+            const emailTemplate = `Dear ${name},
+
+I hope this email finds you well! I'm Patricia Braun from West Coast Publications and Internet Marketing, and I'm reaching out because I believe we could significantly enhance ${name.split(' ')[0]}'s marketing presence in the ${industry.toLowerCase()} sector.
+
+As a Carlsbad-based marketing specialist, I've helped numerous local ${industry.toLowerCase()} businesses like yours achieve remarkable growth through:
+
+🚀 Strategic Digital Marketing - Tailored campaigns that reach your ideal clients
+📈 SEO & Website Optimization - Dominate local search results
+💼 Professional Branding - Stand out from the competition
+📊 Data-Driven Results - Measurable ROI on every marketing dollar
+
+Recent Success Story: We helped a local ${industry.toLowerCase()} business increase their leads by 285% in just 6 months while reducing their cost per acquisition by 40%.
+
+I'd love to offer you a complimentary 30-minute marketing consultation where we can:
+✓ Analyze your current marketing performance
+✓ Identify untapped opportunities in your market
+✓ Create a custom growth strategy for your business
+
+Would you be interested in a brief call this week? I have availability Tuesday and Thursday afternoon.
+
+Looking forward to helping ${name.split(' ')[0]} achieve breakthrough results!
+
+Best regards,
+Patricia Braun
+West Coast Publications and Internet Marketing
+patricia@mylocaloc.com
+(760) 555-GROW
+www.mylocaloc.com
+
+P.S. As a Carlsbad business owner, I understand the local market dynamics and can help you connect with customers right in our community!`;
+
+            document.getElementById('emailMessage').value = emailTemplate;
+            showModal('emailModal');
+        }
+
+        function callClient(phone) {
+            alert(`Initiating call to ${phone}...`);
+            // In a real application, this would integrate with a calling system
+        }
+
+        function editClient(index) {
+            const client = filteredData[index];
+            document.getElementById('clientName').value = client.name;
+            document.getElementById('clientEmail').value = client.email;
+            document.getElementById('clientPhone').value = client.phone;
+            document.getElementById('clientAddress').value = client.address;
+            document.getElementById('clientIndustry').value = client.industry;
+            
+            // Calculate individual P.U.R.E.S scores (simulated breakdown)
+            const baseScore = client.puresScore;
+            document.getElementById('profitability').value = Math.max(1, Math.min(5, Math.round(baseScore + Math.random() * 0.4 - 0.2)));
+            document.getElementById('urgency').value = Math.max(1, Math.min(5, Math.round(baseScore + Math.random() * 0.4 - 0.2)));
+            document.getElementById('reachability').value = Math.max(1, Math.min(5, Math.round(baseScore + Math.random() * 0.4 - 0.2)));
+            document.getElementById('engagement').value = Math.max(1, Math.min(5, Math.round(baseScore + Math.random() * 0.4 - 0.2)));
+            document.getElementById('sustainability').value = Math.max(1, Math.min(5, Math.round(baseScore + Math.random() * 0.4 - 0.2)));
+            
+            showModal('addClientModal');
+        }
+
+        function showModal(modalId) {
+            document.getElementById(modalId).style.display = 'block';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        function exportData() {
+            const csv = [
+                ['Name', 'Email', 'Phone', 'Address', 'PURES Score', 'Tier', 'Industry', 'Revenue', 'Status'].join(','),
+                ...filteredData.map(client => [
+                    client.name, client.email, client.phone, client.address,
+                    client.puresScore, client.tier, client.industry, client.revenue, client.status
+                ].map(field => `"${field}"`).join(','))
+            ].join('\n');
+            
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'carlsbad_prospects.csv';
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+
+        function generateReport() {
+            alert('Generating comprehensive S.A.L.E. system report...');
+        }
+
+        // Form submission handlers
+        document.getElementById('addClientForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const puresScores = [
+                parseInt(document.getElementById('profitability').value),
+                parseInt(document.getElementById('urgency').value),
+                parseInt(document.getElementById('reachability').value),
+                parseInt(document.getElementById('engagement').value),
+                parseInt(document.getElementById('sustainability').value)
+            ];
+            
+            const avgScore = (puresScores.reduce((a, b) => a + b) / 5).toFixed(1);
+            let tier = '1C';
+            if (avgScore >= 4.5) tier = '1A';
+            else if (avgScore >= 3.5) tier = '1B';
+            
+            const newClient = {
+                name: document.getElementById('clientName').value,
+                email: document.getElementById('clientEmail').value,
+                phone: document.getElementById('clientPhone').value,
+                address: document.getElementById('clientAddress').value,
+                puresScore: parseFloat(avgScore),
+                tier: tier,
+                industry: document.getElementById('clientIndustry').value,
+                revenue: '$150K', // Default value
+                status: 'New Lead',
+                contact: new Date().toISOString().split('T')[0],
+                notes: 'Added via P.U.R.E.S. scoring system'
+            };
+            
+            clientData.push(newClient);
+            filteredData = [...clientData];
+            populateTable();
+            closeModal('addClientModal');
+            this.reset();
+            
+            alert('New prospect added successfully!');
+        });
+
+        document.getElementById('emailForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('emailTo').value;
+            const subject = document.getElementById('emailSubject').value;
+            const message = document.getElementById('emailMessage').value;
+            
+            // In a real application, this would send the email
+            alert(`Email sent to ${email}!\n\nSubject: ${subject}\n\nThis would integrate with your email service provider.`);
+            
+            closeModal('emailModal');
+        });
+
+        // Additional S.A.L.E. module functions
+        function analyzeDecisionTimeline() {
+            alert('Decision Timeline Analyzer activated. Analyzing buyer journey patterns...');
+        }
+
+        function stakeholderMapping() {
+            alert('Stakeholder Mapping interface launched. Identifying decision makers and influencers...');
+        }
+
+        function valueAlignment() {
+            alert('Value Proposition Alignment Matrix generated. Matching client needs to service offerings...');
+        }
+
+        function collectFeedback() {
+            alert('Feedback collection system activated. Sending surveys to recent contacts...');
+        }
+
+        function trackProgress() {
+            alert('Progress tracking dashboard opened. Monitoring active sales cycles...');
+        }
+
+        function monitorSatisfaction() {
+            alert('Satisfaction monitoring engaged. Analyzing client happiness metrics...');
+        }
+
+        function manageAdvocacy() {
+            alert('Client Advocacy Program dashboard opened. Managing referral partners...');
+        }
+
+        function trackReferrals() {
+            alert('Referral tracking system activated. Monitoring referral sources and conversions...');
+        }
+
+        function coMarketingOpps() {
+            alert('Co-marketing opportunities analyzer launched. Finding partnership potential...');
+        }
+
+        function exportCSV() {
+            exportData();
+        }
+
+        function exportPDF() {
+            alert('PDF export feature activated. Generating comprehensive client report...');
+        }
+
+        function scheduledReport() {
+            alert('Report scheduling interface opened. Set up automated S.A.L.E. reports...');
+        }
+
+        // Initialize the table
+        window.addEventListener('load', function() {
+            populateTable();
+        });
+
+        // Close modals when clicking outside
+        window.addEventListener('click', function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>

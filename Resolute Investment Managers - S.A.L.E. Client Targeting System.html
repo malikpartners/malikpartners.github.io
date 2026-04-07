@@ -1,0 +1,1725 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resolute Investment Managers - S.A.L.E. Client Targeting System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #000000;
+            color: #ffffff;
+            line-height: 1.6;
+        }
+
+        .header {
+            background-color: #1a1a1a;
+            padding: 1rem;
+            border-bottom: 3px solid #CF2030;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header img {
+            height: 60px;
+        }
+
+        .header h1 {
+            color: #CF2030;
+            font-size: 1.8rem;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .dashboard-nav {
+            background-color: #1a1a1a;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 2rem;
+            border: 2px solid #CF2030;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            background-color: #CF2030;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .nav-btn:hover {
+            background-color: #a01828;
+        }
+
+        .nav-btn.active {
+            background-color: #ffffff;
+            color: #CF2030;
+        }
+
+        .section {
+            display: none;
+            background-color: #1a1a1a;
+            border-radius: 8px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid #333;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .section h2 {
+            color: #CF2030;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+
+        .search-filters {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .filter-group label {
+            font-weight: bold;
+            color: #CF2030;
+        }
+
+        .filter-group input, .filter-group select {
+            padding: 0.5rem;
+            border: 1px solid #555;
+            border-radius: 4px;
+            background-color: #2a2a2a;
+            color: white;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background-color: #2a2a2a;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid #CF2030;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #CF2030;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #ccc;
+        }
+
+        .client-table-container {
+            overflow-x: auto;
+            border-radius: 8px;
+            border: 1px solid #555;
+        }
+
+        .client-table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #2a2a2a;
+        }
+
+        .client-table th {
+            background-color: #CF2030;
+            color: white;
+            padding: 1rem 0.5rem;
+            text-align: left;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .client-table th:hover {
+            background-color: #a01828;
+        }
+
+        .client-table td {
+            padding: 0.75rem 0.5rem;
+            border-bottom: 1px solid #555;
+        }
+
+        .client-table tr:hover {
+            background-color: #333;
+        }
+
+        .tier-1a { background-color: #004d00 !important; }
+        .tier-1b { background-color: #4d4d00 !important; }
+        .tier-1c { background-color: #4d0000 !important; }
+
+        .contact-btn {
+            background-color: #CF2030;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            margin: 0.2rem;
+        }
+
+        .contact-btn:hover {
+            background-color: #a01828;
+        }
+
+        .pures-form {
+            background-color: #2a2a2a;
+            padding: 2rem;
+            border-radius: 8px;
+            border: 1px solid #555;
+            margin-bottom: 2rem;
+        }
+
+        .pures-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .pures-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .pures-item label {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: #CF2030;
+        }
+
+        .pures-item input[type="range"] {
+            width: 100%;
+            margin-bottom: 0.5rem;
+        }
+
+        .score-display {
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #CF2030;
+        }
+
+        .marketing-calendar {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 1px;
+            background-color: #555;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .calendar-day {
+            background-color: #2a2a2a;
+            padding: 1rem;
+            min-height: 120px;
+            position: relative;
+        }
+
+        .calendar-day-number {
+            font-weight: bold;
+            color: #CF2030;
+            margin-bottom: 0.5rem;
+        }
+
+        .calendar-event {
+            background-color: #CF2030;
+            color: white;
+            padding: 0.2rem 0.5rem;
+            border-radius: 3px;
+            font-size: 0.8rem;
+            margin-bottom: 0.2rem;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            border-top: 1px solid #333;
+            color: #666;
+        }
+
+        .footer img {
+            height: 30px;
+            opacity: 0.7;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+        }
+
+        .modal-content {
+            background-color: #1a1a1a;
+            margin: 5% auto;
+            padding: 2rem;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 600px;
+            border: 2px solid #CF2030;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 2rem;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: #CF2030;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #CF2030;
+        }
+
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #555;
+            border-radius: 4px;
+            background-color: #2a2a2a;
+            color: white;
+        }
+
+        .btn-primary {
+            background-color: #CF2030;
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+        }
+
+        .btn-primary:hover {
+            background-color: #a01828;
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .search-filters {
+                flex-direction: column;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="HigginsReports Logo">
+        <h1>S.A.L.E. Client Targeting System</h1>
+        <div>
+            <strong>Resolute Investment Managers</strong><br>
+            Irving, Texas
+        </div>
+    </header>
+
+    <div class="container">
+        <nav class="dashboard-nav">
+            <div class="nav-buttons">
+                <button class="nav-btn active" onclick="showSection('sourcing')">S - SOURCING</button>
+                <button class="nav-btn" onclick="showSection('assessing')">A - ASSESSING</button>
+                <button class="nav-btn" onclick="showSection('listening')">L - LISTENING</button>
+                <button class="nav-btn" onclick="showSection('empowering')">E - EMPOWERING</button>
+                <button class="nav-btn" onclick="showSection('marketing')">Marketing Calendar</button>
+            </div>
+        </nav>
+
+        <!-- SOURCING Section -->
+        <section id="sourcing" class="section active">
+            <h2>SOURCING Module - P.U.R.E.S. Client Database</h2>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number" id="total-clients">50</div>
+                    <div class="stat-label">Total Prospects</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="tier-1a-count">15</div>
+                    <div class="stat-label">Tier 1A (Premium)</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="tier-1b-count">20</div>
+                    <div class="stat-label">Tier 1B (High-Value)</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="tier-1c-count">15</div>
+                    <div class="stat-label">Tier 1C (Qualified)</div>
+                </div>
+            </div>
+
+            <div class="search-filters">
+                <div class="filter-group">
+                    <label>Search:</label>
+                    <input type="text" id="searchInput" placeholder="Search clients..." onkeyup="filterTable()">
+                </div>
+                <div class="filter-group">
+                    <label>Tier Filter:</label>
+                    <select id="tierFilter" onchange="filterTable()">
+                        <option value="">All Tiers</option>
+                        <option value="1A">Tier 1A</option>
+                        <option value="1B">Tier 1B</option>
+                        <option value="1C">Tier 1C</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Industry:</label>
+                    <select id="industryFilter" onchange="filterTable()">
+                        <option value="">All Industries</option>
+                        <option value="Healthcare">Healthcare</option>
+                        <option value="Technology">Technology</option>
+                        <option value="Real Estate">Real Estate</option>
+                        <option value="Legal">Legal</option>
+                        <option value="Manufacturing">Manufacturing</option>
+                        <option value="Retail">Retail</option>
+                        <option value="Finance">Finance</option>
+                        <option value="Construction">Construction</option>
+                        <option value="Education">Education</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="client-table-container">
+                <table class="client-table" id="clientTable">
+                    <thead>
+                        <tr>
+                            <th onclick="sortTable(0)">Client Name</th>
+                            <th onclick="sortTable(1)">Email</th>
+                            <th onclick="sortTable(2)">Phone</th>
+                            <th onclick="sortTable(3)">Address</th>
+                            <th onclick="sortTable(4)">P.U.R.E.S Score</th>
+                            <th onclick="sortTable(5)">Tier</th>
+                            <th onclick="sortTable(6)">Industry</th>
+                            <th onclick="sortTable(7)">Revenue Est.</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="clientTableBody">
+                        <!-- Client data will be populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- ASSESSING Section -->
+        <section id="assessing" class="section">
+            <h2>ASSESSING Module - Client P.U.R.E.S. Evaluation</h2>
+            
+            <div class="pures-form">
+                <h3 style="color: #CF2030; margin-bottom: 1.5rem;">P.U.R.E.S. Client Scoring System</h3>
+                <div class="pures-grid">
+                    <div class="pures-item">
+                        <label>Profitability (1-5)</label>
+                        <input type="range" id="profitability" min="1" max="5" value="3" oninput="updatePuresScore()">
+                        <div class="score-display" id="profitabilityScore">3</div>
+                        <small>Annual revenue threshold & budget capacity</small>
+                    </div>
+                    <div class="pures-item">
+                        <label>Urgency (1-5)</label>
+                        <input type="range" id="urgency" min="1" max="5" value="3" oninput="updatePuresScore()">
+                        <div class="score-display" id="urgencyScore">3</div>
+                        <small>Active investment needs requiring immediate solutions</small>
+                    </div>
+                    <div class="pures-item">
+                        <label>Reachability (1-5)</label>
+                        <input type="range" id="reachability" min="1" max="5" value="3" oninput="updatePuresScore()">
+                        <div class="score-display" id="reachabilityScore">3</div>
+                        <small>Accessible decision makers with clear contact paths</small>
+                    </div>
+                    <div class="pures-item">
+                        <label>Engagement (1-5)</label>
+                        <input type="range" id="engagement" min="1" max="5" value="3" oninput="updatePuresScore()">
+                        <div class="score-display" id="engagementScore">3</div>
+                        <small>Openness to investment innovation & partnerships</small>
+                    </div>
+                    <div class="pures-item">
+                        <label>Sustainability (1-5)</label>
+                        <input type="range" id="sustainability" min="1" max="5" value="3" oninput="updatePuresScore()">
+                        <div class="score-display" id="sustainabilityScore">3</div>
+                        <small>Long-term partnership potential with growth trajectory</small>
+                    </div>
+                </div>
+                
+                <div style="text-align: center; margin-top: 2rem; padding: 1.5rem; background-color: #333; border-radius: 8px;">
+                    <h3>Total P.U.R.E.S Score: <span id="totalPuresScore" style="color: #CF2030; font-size: 2rem;">15</span>/25</h3>
+                    <div id="puresTier" style="font-size: 1.2rem; margin-top: 0.5rem;">Tier: 1B (High-Value)</div>
+                </div>
+            </div>
+
+            <div class="pures-form">
+                <h3 style="color: #CF2030; margin-bottom: 1.5rem;">Client Buying Pattern Analysis</h3>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number">35%</div>
+                        <div class="stat-label">Analytical Buyers<br><small>Require detailed ROI analysis & case studies</small></div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">30%</div>
+                        <div class="stat-label">Relationship Buyers<br><small>Value trust, referrals & long-term partnerships</small></div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">20%</div>
+                        <div class="stat-label">Efficiency Buyers<br><small>Focus on time-saving & process improvement</small></div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">15%</div>
+                        <div class="stat-label">Innovation Buyers<br><small>Seek cutting-edge solutions & competitive advantage</small></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- LISTENING Section -->
+        <section id="listening" class="section">
+            <h2>LISTENING Module - Feedback Integration System</h2>
+            
+            <div class="pures-form">
+                <h3 style="color: #CF2030; margin-bottom: 1.5rem;">Client Feedback Dashboard</h3>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number">92%</div>
+                        <div class="stat-label">Client Satisfaction Rate</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">78%</div>
+                        <div class="stat-label">Feedback Collection Rate</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">24hrs</div>
+                        <div class="stat-label">Avg. Response Time</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">15</div>
+                        <div class="stat-label">Active Feedback Items</div>
+                    </div>
+                </div>
+
+                <div style="margin-top: 2rem;">
+                    <h4 style="color: #CF2030;">Feedback Categories</h4>
+                    <div class="stats-grid" style="margin-top: 1rem;">
+                        <div class="stat-card">
+                            <div class="stat-number">8</div>
+                            <div class="stat-label">Portfolio Performance</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">4</div>
+                            <div class="stat-label">Communication</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">2</div>
+                            <div class="stat-label">Service Delivery</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">1</div>
+                            <div class="stat-label">Technology Platform</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pures-form">
+                <h3 style="color: #CF2030; margin-bottom: 1.5rem;">Recent Client Interactions</h3>
+                <div class="client-table-container">
+                    <table class="client-table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Client</th>
+                                <th>Type</th>
+                                <th>Rating</th>
+                                <th>Status</th>
+                                <th>Action Required</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>2024-01-15</td>
+                                <td>Robert Johnson</td>
+                                <td>Portfolio Review</td>
+                                <td>⭐⭐⭐⭐⭐</td>
+                                <td>Resolved</td>
+                                <td>Follow-up in 30 days</td>
+                            </tr>
+                            <tr>
+                                <td>2024-01-14</td>
+                                <td>Sarah Williams</td>
+                                <td>Fee Structure</td>
+                                <td>⭐⭐⭐⭐</td>
+                                <td>In Progress</td>
+                                <td>Schedule meeting</td>
+                            </tr>
+                            <tr>
+                                <td>2024-01-13</td>
+                                <td>Michael Davis</td>
+                                <td>Platform Access</td>
+                                <td>⭐⭐⭐</td>
+                                <td>Open</td>
+                                <td>Technical support needed</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- EMPOWERING Section -->
+        <section id="empowering" class="section">
+            <h2>EMPOWERING Module - Referral Strategy Dashboard</h2>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">23</div>
+                    <div class="stat-label">Active Referral Sources</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">47</div>
+                    <div class="stat-label">Referrals This Quarter</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">68%</div>
+                    <div class="stat-label">Referral Conversion Rate</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">$2.1M</div>
+                    <div class="stat-label">Referral AUM Added</div>
+                </div>
+            </div>
+
+            <div class="pures-form">
+                <h3 style="color: #CF2030; margin-bottom: 1.5rem;">Top Referral Partners</h3>
+                <div class="client-table-container">
+                    <table class="client-table">
+                        <thead>
+                            <tr>
+                                <th>Partner Name</th>
+                                <th>Type</th>
+                                <th>Referrals YTD</th>
+                                <th>Conversion Rate</th>
+                                <th>AUM Generated</th>
+                                <th>Last Reward</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Johnson & Associates CPA</td>
+                                <td>Accounting Firm</td>
+                                <td>12</td>
+                                <td>75%</td>
+                                <td>$850K</td>
+                                <td>Q4 2023</td>
+                            </tr>
+                            <tr>
+                                <td>Irving Estate Planning Law</td>
+                                <td>Law Firm</td>
+                                <td>8</td>
+                                <td>88%</td>
+                                <td>$1.2M</td>
+                                <td>Q1 2024</td>
+                            </tr>
+                            <tr>
+                                <td>Dallas Business Insurance</td>
+                                <td>Insurance Agency</td>
+                                <td>15</td>
+                                <td>60%</td>
+                                <td>$650K</td>
+                                <td>Q4 2023</td>
+                            </tr>
+                            <tr>
+                                <td>Texas Real Estate Group</td>
+                                <td>Real Estate</td>
+                                <td>6</td>
+                                <td>83%</td>
+                                <td>$425K</td>
+                                <td>Q1 2024</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="pures-form">
+                <h3 style="color: #CF2030; margin-bottom: 1.5rem;">Referral Reward Program</h3>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number">$15K</div>
+                        <div class="stat-label">Rewards Paid YTD</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">32</div>
+                        <div class="stat-label">Rewards Distributed</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">1:14</div>
+                        <div class="stat-label">ROI Ratio</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">95%</div>
+                        <div class="stat-label">Partner Satisfaction</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- MARKETING Section -->
+        <section id="marketing" class="section">
+            <h2>Strategic Marketing Calendar & Outreach Plan</h2>
+            
+            <div class="pures-form">
+                <h3 style="color: #CF2030; margin-bottom: 1.5rem;">Q1 2024 Marketing Activities</h3>
+                <div class="marketing-calendar">
+                    <div class="calendar-day">
+                        <div class="calendar-day-number">Jan 15</div>
+                        <div class="calendar-event">Tier 1A Email Campaign</div>
+                        <div class="calendar-event">Webinar Prep</div>
+                    </div>
+                    <div class="calendar-day">
+                        <div class="calendar-day-number">Jan 16</div>
+                        <div class="calendar-event">Client Check-ins</div>
+                    </div>
+                    <div class="calendar-day">
+                        <div class="calendar-day-number">Jan 17</div>
+                        <div class="calendar-event">Referral Partner Lunch</div>
+                    </div>
+                    <div class="calendar-day">
+                        <div class="calendar-day-number">Jan 18</div>
+                        <div class="calendar-event">LinkedIn Content</div>
+                        <div class="calendar-event">Follow-up Calls</div>
+                    </div>
+                    <div class="calendar-day">
+                        <div class="calendar-day-number">Jan 19</div>
+                        <div class="calendar-event">Market Analysis</div>
+                    </div>
+                    <div class="calendar-day">
+                        <div class="calendar-day-number">Jan 22</div>
+                        <div class="calendar-event">Tier 1B Outreach</div>
+                    </div>
+                    <div class="calendar-day">
+                        <div class="calendar-day-number">Jan 23</div>
+                        <div class="calendar-event">Webinar: Tax Planning</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stats-grid" style="margin-top: 2rem;">
+                <div class="stat-card">
+                    <div class="stat-number">156</div>
+                    <div class="stat-label">Email Opens This Week</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">23</div>
+                    <div class="stat-label">Scheduled Meetings</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">8</div>
+                    <div class="stat-label">New Prospects</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">$750K</div>
+                    <div class="stat-label">Pipeline Value</div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Email Modal -->
+    <div id="emailModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2 style="color: #CF2030;">Send Email to <span id="modalClientName"></span></h2>
+            <form id="emailForm">
+                <div class="form-group">
+                    <label>To:</label>
+                    <input type="email" id="modalEmail" readonly>
+                </div>
+                <div class="form-group">
+                    <label>Subject:</label>
+                    <input type="text" id="emailSubject" value="Exclusive Investment Opportunity - Resolute Investment Managers">
+                </div>
+                <div class="form-group">
+                    <label>Message:</label>
+                    <textarea id="emailMessage" rows="10"></textarea>
+                </div>
+                <button type="button" class="btn-primary" onclick="sendEmail()">Send Email</button>
+            </form>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="HigginsReports Logo">
+        <p>© 2024 HigginsReports. Powered by S.A.L.E. Methodology for Resolute Investment Managers.</p>
+    </footer>
+
+    <script>
+        // Sample client data for Irving, Texas area (within 10 miles)
+        const clients = [
+            {
+                name: "Robert Johnson",
+                email: "robert.johnson@gmail.com",
+                phone: "(214) 555-0101",
+                address: "1234 Oak Street, Irving, TX 75038",
+                pures: 23,
+                tier: "1A",
+                industry: "Healthcare",
+                revenue: "$2.5M",
+                status: "New",
+                lastContact: "2024-01-10",
+                nextAction: "Initial Meeting"
+            },
+            {
+                name: "Sarah Williams",
+                email: "sarah.williams@outlook.com",
+                phone: "(972) 555-0102",
+                address: "5678 Maple Avenue, Dallas, TX 75235",
+                pures: 21,
+                tier: "1A",
+                industry: "Technology",
+                revenue: "$3.2M",
+                status: "Contacted",
+                lastContact: "2024-01-08",
+                nextAction: "Follow-up Call"
+            },
+            {
+                name: "Michael Davis",
+                email: "michael.davis@yahoo.com",
+                phone: "(214) 555-0103",
+                address: "9012 Pine Road, Irving, TX 75039",
+                pures: 19,
+                tier: "1B",
+                industry: "Real Estate",
+                revenue: "$1.8M",
+                status: "Qualified",
+                lastContact: "2024-01-05",
+                nextAction: "Proposal Prep"
+            },
+            {
+                name: "Jennifer Brown",
+                email: "jennifer.brown@gmail.com",
+                phone: "(972) 555-0104",
+                address: "3456 Cedar Lane, Dallas, TX 75230",
+                pures: 22,
+                tier: "1A",
+                industry: "Legal",
+                revenue: "$2.1M",
+                status: "Meeting Scheduled",
+                lastContact: "2024-01-12",
+                nextAction: "Prepare Presentation"
+            },
+            {
+                name: "David Wilson",
+                email: "david.wilson@hotmail.com",
+                phone: "(214) 555-0105",
+                address: "7890 Elm Street, Irving, TX 75062",
+                pures: 18,
+                tier: "1B",
+                industry: "Manufacturing",
+                revenue: "$1.5M",
+                status: "Cold",
+                lastContact: "Never",
+                nextAction: "Initial Outreach"
+            },
+            {
+                name: "Lisa Anderson",
+                email: "lisa.anderson@gmail.com",
+                phone: "(972) 555-0106",
+                address: "2345 Birch Drive, Dallas, TX 75231",
+                pures: 20,
+                tier: "1B",
+                industry: "Retail",
+                revenue: "$1.9M",
+                status: "Nurturing",
+                lastContact: "2024-01-03",
+                nextAction: "Newsletter Send"
+            },
+            {
+                name: "James Martinez",
+                email: "james.martinez@outlook.com",
+                phone: "(214) 555-0107",
+                address: "6789 Walnut Avenue, Irving, TX 75063",
+                pures: 17,
+                tier: "1C",
+                industry: "Finance",
+                revenue: "$1.2M",
+                status: "Contacted",
+                lastContact: "2024-01-09",
+                nextAction: "Information Packet"
+            },
+            {
+                name: "Mary Taylor",
+                email: "mary.taylor@yahoo.com",
+                phone: "(972) 555-0108",
+                address: "1357 Spruce Street, Dallas, TX 75232",
+                pures: 24,
+                tier: "1A",
+                industry: "Healthcare",
+                revenue: "$2.8M",
+                status: "Proposal Sent",
+                lastContact: "2024-01-11",
+                nextAction: "Decision Follow-up"
+            },
+            {
+                name: "Christopher Garcia",
+                email: "christopher.garcia@gmail.com",
+                phone: "(214) 555-0109",
+                address: "8024 Hickory Lane, Irving, TX 75061",
+                pures: 16,
+                tier: "1C",
+                industry: "Construction",
+                revenue: "$1.1M",
+                status: "Cold",
+                lastContact: "Never",
+                nextAction: "Research Company"
+            },
+            {
+                name: "Patricia Rodriguez",
+                email: "patricia.rodriguez@hotmail.com",
+                phone: "(972) 555-0110",
+                address: "4681 Sycamore Road, Dallas, TX 75233",
+                pures: 19,
+                tier: "1B",
+                industry: "Education",
+                revenue: "$1.6M",
+                status: "Qualified",
+                lastContact: "2024-01-06",
+                nextAction: "Needs Assessment"
+            },
+            {
+                name: "Mark Thompson",
+                email: "mark.thompson@gmail.com",
+                phone: "(214) 555-0111",
+                address: "9753 Willow Street, Irving, TX 75060",
+                pures: 21,
+                tier: "1A",
+                industry: "Technology",
+                revenue: "$2.4M",
+                status: "Meeting Held",
+                lastContact: "2024-01-13",
+                nextAction: "Proposal Creation"
+            },
+            {
+                name: "Susan Lee",
+                email: "susan.lee@outlook.com",
+                phone: "(972) 555-0112",
+                address: "1592 Cherry Avenue, Dallas, TX 75234",
+                pures: 18,
+                tier: "1B",
+                industry: "Healthcare",
+                revenue: "$1.7M",
+                status: "Nurturing",
+                lastContact: "2024-01-04",
+                nextAction: "Educational Content"
+            },
+            {
+                name: "Kevin White",
+                email: "kevin.white@yahoo.com",
+                phone: "(214) 555-0113",
+                address: "3698 Poplar Drive, Irving, TX 75038",
+                pures: 15,
+                tier: "1C",
+                industry: "Retail",
+                revenue: "$900K",
+                status: "Cold",
+                lastContact: "Never",
+                nextAction: "LinkedIn Connect"
+            },
+            {
+                name: "Michelle Harris",
+                email: "michelle.harris@gmail.com",
+                phone: "(972) 555-0114",
+                address: "7415 Magnolia Lane, Dallas, TX 75235",
+                pures: 20,
+                tier: "1B",
+                industry: "Legal",
+                revenue: "$2.0M",
+                status: "Contacted",
+                lastContact: "2024-01-07",
+                nextAction: "Schedule Meeting"
+            },
+            {
+                name: "Daniel Clark",
+                email: "daniel.clark@hotmail.com",
+                phone: "(214) 555-0115",
+                address: "8521 Dogwood Street, Irving, TX 75039",
+                pures: 22,
+                tier: "1A",
+                industry: "Manufacturing",
+                revenue: "$2.6M",
+                status: "Qualified",
+                lastContact: "2024-01-10",
+                nextAction: "Site Visit"
+            },
+            {
+                name: "Nancy Lewis",
+                email: "nancy.lewis@gmail.com",
+                phone: "(972) 555-0116",
+                address: "2847 Cypress Road, Dallas, TX 75230",
+                pures: 17,
+                tier: "1C",
+                industry: "Finance",
+                revenue: "$1.3M",
+                status: "Cold",
+                lastContact: "Never",
+                nextAction: "Initial Email"
+            },
+            {
+                name: "Paul Walker",
+                email: "paul.walker@outlook.com",
+                phone: "(214) 555-0117",
+                address: "6394 Pecan Avenue, Irving, TX 75062",
+                pures: 19,
+                tier: "1B",
+                industry: "Construction",
+                revenue: "$1.8M",
+                status: "Nurturing",
+                lastContact: "2024-01-02",
+                nextAction: "Market Update"
+            },
+            {
+                name: "Karen Hall",
+                email: "karen.hall@yahoo.com",
+                phone: "(972) 555-0118",
+                address: "4173 Redwood Drive, Dallas, TX 75231",
+                pures: 23,
+                tier: "1A",
+                industry: "Technology",
+                revenue: "$2.9M",
+                status: "Meeting Scheduled",
+                lastContact: "2024-01-12",
+                nextAction: "Prep Deck"
+            },
+            {
+                name: "Steven Allen",
+                email: "steven.allen@gmail.com",
+                phone: "(214) 555-0119",
+                address: "9628 Ash Street, Irving, TX 75063",
+                pures: 16,
+                tier: "1C",
+                industry: "Education",
+                revenue: "$1.0M",
+                status: "Cold",
+                lastContact: "Never",
+                nextAction: "Company Research"
+            },
+            {
+                name: "Donna Young",
+                email: "donna.young@hotmail.com",
+                phone: "(972) 555-0120",
+                address: "5739 Beech Lane, Dallas, TX 75232",
+                pures: 21,
+                tier: "1A",
+                industry: "Healthcare",
+                revenue: "$2.3M",
+                status: "Contacted",
+                lastContact: "2024-01-09",
+                nextAction: "Value Prop Send"
+            },
+            {
+                name: "Edward King",
+                email: "edward.king@gmail.com",
+                phone: "(214) 555-0121",
+                address: "1486 Fir Avenue, Irving, TX 75061",
+                pures: 18,
+                tier: "1B",
+                industry: "Real Estate",
+                revenue: "$1.6M",
+                status: "Qualified",
+                lastContact: "2024-01-05",
+                nextAction: "ROI Analysis"
+            },
+            {
+                name: "Betty Wright",
+                email: "betty.wright@outlook.com",
+                phone: "(972) 555-0122",
+                address: "8052 Cedar Street, Dallas, TX 75233",
+                pures: 20,
+                tier: "1B",
+                industry: "Manufacturing",
+                revenue: "$1.9M",
+                status: "Meeting Held",
+                lastContact: "2024-01-11",
+                nextAction: "Follow-up Email"
+            },
+            {
+                name: "Kenneth Lopez",
+                email: "kenneth.lopez@yahoo.com",
+                phone: "(214) 555-0123",
+                address: "3617 Juniper Road, Irving, TX 75060",
+                pures: 15,
+                tier: "1C",
+                industry: "Retail",
+                revenue: "$850K",
+                status: "Cold",
+                lastContact: "Never",
+                nextAction: "Social Media Check"
+            },
+            {
+                name: "Helen Scott",
+                email: "helen.scott@gmail.com",
+                phone: "(972) 555-0124",
+                address: "7284 Palm Drive, Dallas, TX 75234",
+                pures: 22,
+                tier: "1A",
+                industry: "Legal",
+                revenue: "$2.7M",
+                status: "Proposal Sent",
+                lastContact: "2024-01-13",
+                nextAction: "Decision Call"
+            },
+            {
+                name: "Jason Green",
+                email: "jason.green@hotmail.com",
+                phone: "(214) 555-0125",
+                address: "4928 Holly Lane, Irving, TX 75038",
+                pures: 17,
+                tier: "1C",
+                industry: "Finance",
+                revenue: "$1.4M",
+                status: "Nurturing",
+                lastContact: "2024-01-01",
+                nextAction: "Industry Report"
+            },
+            {
+                name: "Sharon Adams",
+                email: "sharon.adams@gmail.com",
+                phone: "(972) 555-0126",
+                address: "6815 Pine Street, Dallas, TX 75235",
+                pures: 19,
+                tier: "1B",
+                industry: "Construction",
+                revenue: "$1.7M",
+                status: "Contacted",
+                lastContact: "2024-01-08",
+                nextAction: "Capability Deck"
+            },
+            {
+                name: "Matthew Baker",
+                email: "matthew.baker@outlook.com",
+                phone: "(214) 555-0127",
+                address: "2194 Elm Avenue, Irving, TX 75039",
+                pures: 21,
+                tier: "1A",
+                industry: "Technology",
+                revenue: "$2.5M",
+                status: "Qualified",
+                lastContact: "2024-01-10",
+                nextAction: "Demo Prep"
+            },
+            {
+                name: "Kimberly Nelson",
+                email: "kimberly.nelson@yahoo.com",
+                phone: "(972) 555-0128",
+                address: "8573 Oak Road, Dallas, TX 75230",
+                pures: 16,
+                tier: "1C",
+                industry: "Education",
+                revenue: "$1.1M",
+                status: "Cold",
+                lastContact: "Never",
+                nextAction: "Warm Intro Search"
+            },
+            {
+                name: "Timothy Carter",
+                email: "timothy.carter@gmail.com",
+                phone: "(214) 555-0129",
+                address: "5461 Maple Drive, Irving, TX 75062",
+                pures: 18,
+                tier: "1B",
+                industry: "Healthcare",
+                revenue: "$1.8M",
+                status: "Meeting Scheduled",
+                lastContact: "2024-01-12",
+                nextAction: "Agenda Prep"
+            },
+            {
+                name: "Brenda Mitchell",
+                email: "brenda.mitchell@hotmail.com",
+                phone: "(972) 555-0130",
+                address: "9037 Birch Street, Dallas, TX 75231",
+                pures: 20,
+                tier: "1B",
+                industry: "Real Estate",
+                revenue: "$2.0M",
+                status: "Nurturing",
+                lastContact: "2024-01-04",
+                nextAction: "Market Insights"
+            },
+            {
+                name: "Jeffrey Perez",
+                email: "jeffrey.perez@gmail.com",
+                phone: "(214) 555-0131",
+                address: "3782 Walnut Lane, Irving, TX 75063",
+                pures: 23,
+                tier: "1A",
+                industry: "Manufacturing",
+                revenue: "$3.1M",
+                status: "Meeting Held",
+                lastContact: "2024-01-13",
+                nextAction: "Contract Draft"
+            },
+            {
+                name: "Amy Roberts",
+                email: "amy.roberts@outlook.com",
+                phone: "(972) 555-0132",
+                address: "6249 Spruce Avenue, Dallas, TX 75232",
+                pures: 15,
+                tier: "1C",
+                industry: "Retail",
+                revenue: "$950K",
+                status: "Cold",
+                lastContact: "Never",
+                nextAction: "Email Campaign"
+            },
+            {
+                name: "Gregory Turner",
+                email: "gregory.turner@yahoo.com",
+                phone: "(214) 555-0133",
+                address: "1675 Hickory Road, Irving, TX 75061",
+                pures: 19,
+                tier: "1B",
+                industry: "Legal",
+                revenue: "$1.9M",
+                status: "Contacted",
+                lastContact: "2024-01-07",
+                nextAction: "Lunch Meeting"
+            },
+            {
+                name: "Deborah Phillips",
+                email: "deborah.phillips@gmail.com",
+                phone: "(972) 555-0134",
+                address: "8394 Sycamore Drive, Dallas, TX 75233",
+                pures: 22,
+                tier: "1A",
+                industry: "Technology",
+                revenue: "$2.8M",
+                status: "Proposal Sent",
+                lastContact: "2024-01-11",
+                nextAction: "Negotiate Terms"
+            },
+            {
+                name: "Ronald Campbell",
+                email: "ronald.campbell@hotmail.com",
+                phone: "(214) 555-0135",
+                address: "4516 Willow Avenue, Irving, TX 75060",
+                pures: 17,
+                tier: "1C",
+                industry: "Finance",
+                revenue: "$1.3M",
+                status: "Cold",
+                lastContact: "Never",
+                nextAction: "Referral Check"
+            },
+            {
+                name: "Carol Parker",
+                email: "carol.parker@gmail.com",
+                phone: "(972) 555-0136",
+                address: "7128 Cherry Street, Dallas, TX 75234",
+                pures: 21,
+                tier: "1A",
+                industry: "Healthcare",
+                revenue: "$2.6M",
+                status: "Qualified",
+                lastContact: "2024-01-09",
+                nextAction: "Compliance Review"
+            },
+            {
+                name: "Anthony Evans",
+                email: "anthony.evans@outlook.com",
+                phone: "(214) 555-0137",
+                address: "2893 Poplar Lane, Irving, TX 75038",
+                pures: 18,
+                tier: "1B",
+                industry: "Construction",
+                revenue: "$1.7M",
+                status: "Nurturing",
+                lastContact: "2024-01-03",
+                nextAction: "Project Update"
+            },
+            {
+                name: "Sandra Edwards",
+                email: "sandra.edwards@yahoo.com",
+                phone: "(972) 555-0138",
+                address: "6751 Magnolia Road, Dallas, TX 75235",
+                pures: 16,
+                tier: "1C",
+                industry: "Education",
+                revenue: "$1.2M",
+                status: "Cold",
+                lastContact: "Never",
+                nextAction: "Content Share"
+            },
+            {
+                name: "Ryan Collins",
+                email: "ryan.collins@gmail.com",
+                phone: "(214) 555-0139",
+                address: "5417 Dogwood Avenue, Irving, TX 75039",
+                pures: 20,
+                tier: "1B",
+                industry: "Real Estate",
+                revenue: "$2.1M",
+                status: "Meeting Scheduled",
+                lastContact: "2024-01-12",
+                nextAction: "Portfolio Review"
+            },
+            {
+                name: "Dorothy Stewart",
+                email: "dorothy.stewart@hotmail.com",
+                phone: "(972) 555-0140",
+                address: "9684 Cypress Lane, Dallas, TX 75230",
+                pures: 24,
+                tier: "1A",
+                industry: "Manufacturing",
+                revenue: "$3.3M",
+                status: "Meeting Held",
+                lastContact: "2024-01-13",
+                nextAction: "Implementation Plan"
+            },
+            {
+                name: "Benjamin Sanchez",
+                email: "benjamin.sanchez@gmail.com",
+                phone: "(214) 555-0141",
+                address: "1829 Pecan Street, Irving, TX 75062",
+                pures: 15,
+                tier: "1C",
+                industry: "Retail",
+                revenue: "$800K",
+                status: "Cold",
+                lastContact: "Never",
+                nextAction: "Trade Show Follow"
+            },
+            {
+                name: "Lisa Morris",
+                email: "lisa.morris@outlook.com",
+                phone: "(972) 555-0142",
+                address: "4572 Redwood Avenue, Dallas, TX 75231",
+                pures: 19,
+                tier: "1B",
+                industry: "Technology",
+                revenue: "$1.8M",
+                status: "Contacted",
+                lastContact: "2024-01-08",
+                nextAction: "Technical Demo"
+            },
+            {
+                name: "Frank Rogers",
+                email: "frank.rogers@yahoo.com",
+                phone: "(214) 555-0143",
+                address: "8265 Ash Road, Irving, TX 75063",
+                pures: 22,
+                tier: "1A",
+                industry: "Legal",
+                revenue: "$2.9M",
+                status: "Proposal Sent",
+                lastContact: "2024-01-11",
+                nextAction: "Close Call"
+            },
+            {
+                name: "Carolyn Reed",
+                email: "carolyn.reed@gmail.com",
+                phone: "(972) 555-0144",
+                address: "3146 Beech Drive, Dallas, TX 75232",
+                pures: 17,
+                tier: "1C",
+                industry: "Finance",
+                revenue: "$1.4M",
+                status: "Nurturing",
+                lastContact: "2024-01-02",
+                nextAction: "Quarterly Check"
+            },
+            {
+                name: "Scott Cook",
+                email: "scott.cook@hotmail.com",
+                phone: "(214) 555-0145",
+                address: "6938 Fir Lane, Irving, TX 75061",
+                pures: 18,
+                tier: "1B",
+                industry: "Healthcare",
+                revenue: "$1.6M",
+                status: "Qualified",
+                lastContact: "2024-01-06",
+                nextAction: "References Call"
+            },
+            {
+                name: "Janet Morgan",
+                email: "janet.morgan@gmail.com",
+                phone: "(972) 555-0146",
+                address: "5483 Cedar Avenue, Dallas, TX 75233",
+                pures: 21,
+                tier: "1A",
+                industry: "Manufacturing",
+                revenue: "$2.4M",
+                status: "Meeting Scheduled",
+                lastContact: "2024-01-12",
+                nextAction: "Executive Brief"
+            },
+            {
+                name: "Ralph Bell",
+                email: "ralph.bell@outlook.com",
+                phone: "(214) 555-0147",
+                address: "2617 Juniper Street, Irving, TX 75060",
+                pures: 16,
+                tier: "1C",
+                industry: "Construction",
+                revenue: "$1.1M",
+                status: "Cold",
+                lastContact: "Never",
+                nextAction: "Industry Event"
+            },
+            {
+                name: "Frances Murphy",
+                email: "frances.murphy@yahoo.com",
+                phone: "(972) 555-0148",
+                address: "7594 Palm Lane, Dallas, TX 75234",
+                pures: 20,
+                tier: "1B",
+                industry: "Education",
+                revenue: "$1.9M",
+                status: "Contacted",
+                lastContact: "2024-01-07",
+                nextAction: "Needs Analysis"
+            },
+            {
+                name: "Peter Bailey",
+                email: "peter.bailey@gmail.com",
+                phone: "(214) 555-0149",
+                address: "4371 Holly Road, Irving, TX 75038",
+                pures: 23,
+                tier: "1A",
+                industry: "Technology",
+                revenue: "$3.0M",
+                status: "Meeting Held",
+                lastContact: "2024-01-13",
+                nextAction: "Final Proposal"
+            },
+            {
+                name: "Annie Rivera",
+                email: "annie.rivera@hotmail.com",
+                phone: "(972) 555-0150",
+                address: "8752 Pine Drive, Dallas, TX 75235",
+                pures: 15,
+                tier: "1C",
+                industry: "Retail",
+                revenue: "$750K",
+                status: "Cold",
+                lastContact: "Never",
+                nextAction: "Cold Outreach"
+            }
+        ];
+
+        let filteredClients = [...clients];
+
+        function populateTable() {
+            const tbody = document.getElementById('clientTableBody');
+            tbody.innerHTML = '';
+
+            filteredClients.forEach((client, index) => {
+                const row = tbody.insertRow();
+                row.className = `tier-${client.tier.toLowerCase()}`;
+                
+                row.innerHTML = `
+                    <td>${client.name}</td>
+                    <td>${client.email}</td>
+                    <td>${client.phone}</td>
+                    <td>${client.address}</td>
+                    <td>${client.pures}/25</td>
+                    <td>${client.tier}</td>
+                    <td>${client.industry}</td>
+                    <td>${client.revenue}</td>
+                    <td>
+                        <button class="contact-btn" onclick="openEmailModal('${client.name}', '${client.email}', '${client.tier}')">
+                            📧 Email
+                        </button>
+                        <button class="contact-btn" onclick="callClient('${client.phone}')">
+                            📞 Call
+                        </button>
+                    </td>
+                `;
+            });
+        }
+
+        function filterTable() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const tierFilter = document.getElementById('tierFilter').value;
+            const industryFilter = document.getElementById('industryFilter').value;
+
+            filteredClients = clients.filter(client => {
+                const matchesSearch = client.name.toLowerCase().includes(searchTerm) || 
+                                    client.email.toLowerCase().includes(searchTerm) ||
+                                    client.address.toLowerCase().includes(searchTerm);
+                const matchesTier = !tierFilter || client.tier === tierFilter;
+                const matchesIndustry = !industryFilter || client.industry === industryFilter;
+
+                return matchesSearch && matchesTier && matchesIndustry;
+            });
+
+            populateTable();
+            updateStats();
+        }
+
+        function sortTable(columnIndex) {
+            const table = document.getElementById('clientTable');
+            const tbody = table.tBodies[0];
+            const rows = Array.from(tbody.rows);
+
+            rows.sort((a, b) => {
+                const aText = a.cells[columnIndex].textContent.trim();
+                const bText = b.cells[columnIndex].textContent.trim();
+                
+                return aText.localeCompare(bText, undefined, { numeric: true });
+            });
+
+            tbody.innerHTML = '';
+            rows.forEach(row => tbody.appendChild(row));
+        }
+
+        function updateStats() {
+            const tier1A = filteredClients.filter(c => c.tier === '1A').length;
+            const tier1B = filteredClients.filter(c => c.tier === '1B').length;
+            const tier1C = filteredClients.filter(c => c.tier === '1C').length;
+
+            document.getElementById('total-clients').textContent = filteredClients.length;
+            document.getElementById('tier-1a-count').textContent = tier1A;
+            document.getElementById('tier-1b-count').textContent = tier1B;
+            document.getElementById('tier-1c-count').textContent = tier1C;
+        }
+
+        function showSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+
+            // Remove active class from all nav buttons
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // Show selected section
+            document.getElementById(sectionId).classList.add('active');
+
+            // Add active class to clicked button
+            event.target.classList.add('active');
+        }
+
+        function openEmailModal(clientName, clientEmail, tier) {
+            document.getElementById('modalClientName').textContent = clientName;
+            document.getElementById('modalEmail').value = clientEmail;
+            
+            const emailTemplates = {
+                '1A': `Dear ${clientName},
+
+I hope this email finds you well. As the Regional Vice President at Resolute Investment Managers, I wanted to personally reach out regarding an exclusive investment opportunity that aligns perfectly with high-net-worth individuals like yourself.
+
+Given your success in the ${clients.find(c => c.email === clientEmail)?.industry || 'business'} sector, I believe you would appreciate our institutional-grade investment solutions that have consistently delivered:
+
+• Superior risk-adjusted returns through our quantitative approach
+• Personalized portfolio construction tailored to your specific goals
+• Direct access to our senior investment team and exclusive research
+• Comprehensive wealth preservation and growth strategies
+
+Our clients typically see:
+✓ 15-20% improvement in portfolio efficiency
+✓ Reduced volatility while maintaining growth potential  
+✓ Tax-optimized strategies saving 10-15% annually
+✓ Access to alternative investments typically reserved for institutions
+
+As a Tier 1A prospect, I'd like to offer you an exclusive consultation where we can discuss your current investment objectives and demonstrate how our proven methodologies can enhance your portfolio performance.
+
+Would you be available for a brief 30-minute discussion this week? I can work around your schedule and would be happy to meet at your office or via a secure video conference.
+
+Looking forward to the opportunity to serve your investment needs.
+
+Best regards,
+James Maertz
+Regional Vice President
+Resolute Investment Managers
+(817) 391-6100
+jm@resolutemanagers.com`,
+
+                '1B': `Dear ${clientName},
+
+I hope you're having a successful start to the year. I'm James Maertz, Regional Vice President at Resolute Investment Managers, and I wanted to introduce you to our investment solutions that have been helping professionals in the ${clients.find(c => c.email === clientEmail)?.industry || 'business'} industry achieve their financial goals.
+
+What sets Resolute apart:
+• Proven track record with institutional-quality investment management
+• Personalized approach tailored to your risk tolerance and objectives
+• Comprehensive financial planning beyond just portfolio management
+• Competitive fee structure with transparent pricing
+
+Many of our clients have found value in our:
+→ Diversified portfolio strategies
+→ Tax-efficient investment approaches  
+→ Regular portfolio reviews and adjustments
+→ Educational resources and market insights
+
+I'd welcome the opportunity to discuss how we might help optimize your investment strategy. Would you be interested in a brief 20-minute conversation to explore whether our services align with your needs?
+
+Please let me know a time that works best for you, and I'll be happy to accommodate your schedule.
+
+Best regards,
+James Maertz
+Regional Vice President
+Resolute Investment Managers
+(817) 391-6100
+jm@resolutemanagers.com`,
+
+                '1C': `Dear ${clientName},
+
+I hope this message finds you well. My name is James Maertz, and I'm the Regional Vice President at Resolute Investment Managers here in the Dallas-Irving area.
+
+I noticed you're in the ${clients.find(c => c.email === clientEmail)?.industry || 'local business'} sector, and I wanted to reach out because we've been successfully helping local business owners and professionals like yourself with their investment and retirement planning needs.
+
+At Resolute, we believe everyone deserves access to professional investment management, regardless of portfolio size. That's why we offer:
+
+✓ No minimum account requirements  
+✓ Straightforward, competitive pricing
+✓ Local service with national resources
+✓ Personalized investment strategies
+✓ Regular portfolio monitoring and rebalancing
+
+We understand that as a busy professional, you need an investment partner who can help grow your wealth while you focus on what you do best - running your business.
+
+Would you be interested in a brief, no-obligation conversation about your current investment strategy? I'd be happy to provide a complimentary portfolio review and share some insights about the current market environment.
+
+I'm available for a quick 15-minute call at your convenience, or we could meet for coffee if you prefer an in-person discussion.
+
+Looking forward to hearing from you.
+
+Best regards,
+James Maertz
+Regional Vice President
+Resolute Investment Managers
+(817) 391-6100
+jm@resolutemanagers.com`
+            };
+
+            document.getElementById('emailMessage').value = emailTemplates[tier] || emailTemplates['1C'];
+            document.getElementById('emailModal').style.display = 'block';
+        }
+
+        function callClient(phoneNumber) {
+            if (navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry|Phone)/)) {
+                window.location.href = `tel:${phoneNumber}`;
+            } else {
+                alert(`Call ${phoneNumber}\n\nNote: Click-to-call is available on mobile devices.`);
+            }
+        }
+
+        function sendEmail() {
+            const email = document.getElementById('modalEmail').value;
+            const subject = document.getElementById('emailSubject').value;
+            const message = document.getElementById('emailMessage').value;
+
+            // Create mailto link
+            const mailtoLink = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(message)}`;
+            
+            // Open mail client
+            window.location.href = mailtoLink;
+            
+            // Close modal
+            document.getElementById('emailModal').style.display = 'none';
+        }
+
+        function updatePuresScore() {
+            const profitability = parseInt(document.getElementById('profitability').value);
+            const urgency = parseInt(document.getElementById('urgency').value);
+            const reachability = parseInt(document.getElementById('reachability').value);
+            const engagement = parseInt(document.getElementById('engagement').value);
+            const sustainability = parseInt(document.getElementById('sustainability').value);
+
+            document.getElementById('profitabilityScore').textContent = profitability;
+            document.getElementById('urgencyScore').textContent = urgency;
+            document.getElementById('reachabilityScore').textContent = reachability;
+            document.getElementById('engagementScore').textContent = engagement;
+            document.getElementById('sustainabilityScore').textContent = sustainability;
+
+            const total = profitability + urgency + reachability + engagement + sustainability;
+            document.getElementById('totalPuresScore').textContent = total;
+
+            let tier = '';
+            if (total >= 20) tier = '1A (Premium)';
+            else if (total >= 15) tier = '1B (High-Value)';
+            else tier = '1C (Qualified)';
+
+            document.getElementById('puresTier').textContent = `Tier: ${tier}`;
+        }
+
+        // Modal functionality
+        document.querySelector('.close').onclick = function() {
+            document.getElementById('emailModal').style.display = 'none';
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('emailModal');
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        }
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            populateTable();
+            updateStats();
+        });
+    </script>
+</body>
+</html>

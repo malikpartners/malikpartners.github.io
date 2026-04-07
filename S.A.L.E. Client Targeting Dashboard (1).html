@@ -1,0 +1,1083 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>S.A.L.E. Client Targeting Dashboard - HigginsReports</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #000000;
+            color: #ffffff;
+            line-height: 1.6;
+        }
+
+        .header {
+            background-color: #000000;
+            padding: 1rem;
+            border-bottom: 2px solid #CF2030;
+        }
+
+        .header img {
+            height: 60px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .dashboard-nav {
+            background-color: #CF2030;
+            padding: 1rem;
+            margin-bottom: 2rem;
+            border-radius: 8px;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            background-color: #ffffff;
+            color: #CF2030;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            background-color: #f0f0f0;
+            transform: translateY(-2px);
+        }
+
+        .nav-btn.active {
+            background-color: #000000;
+            color: #ffffff;
+        }
+
+        .module {
+            background-color: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            display: none;
+        }
+
+        .module.active {
+            display: block;
+        }
+
+        .module h2 {
+            color: #CF2030;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid #CF2030;
+            padding-bottom: 0.5rem;
+        }
+
+        .search-controls {
+            background-color: #2a2a2a;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+        }
+
+        .search-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            color: #CF2030;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+
+        .form-group input,
+        .form-group select {
+            padding: 0.75rem;
+            border: 1px solid #555;
+            border-radius: 4px;
+            background-color: #333;
+            color: #ffffff;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: #CF2030;
+            outline: none;
+            box-shadow: 0 0 5px rgba(207, 32, 48, 0.3);
+        }
+
+        .table-container {
+            background-color: #2a2a2a;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        .client-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .client-table th {
+            background-color: #CF2030;
+            color: #ffffff;
+            padding: 1rem;
+            text-align: left;
+            font-weight: bold;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .client-table th:hover {
+            background-color: #b01d2a;
+        }
+
+        .client-table th::after {
+            content: '↕';
+            position: absolute;
+            right: 8px;
+            opacity: 0.7;
+        }
+
+        .client-table td {
+            padding: 1rem;
+            border-bottom: 1px solid #444;
+        }
+
+        .client-table tr:nth-child(even) {
+            background-color: #1a1a1a;
+        }
+
+        .client-table tr:hover {
+            background-color: #333;
+        }
+
+        .tier-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .tier-1a { background-color: #28a745; color: white; }
+        .tier-1b { background-color: #ffc107; color: black; }
+        .tier-1c { background-color: #17a2b8; color: white; }
+
+        .score-display {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .score-bar {
+            width: 50px;
+            height: 8px;
+            background-color: #555;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .score-fill {
+            height: 100%;
+            background-color: #CF2030;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background-color: #CF2030;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #b01d2a;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+
+        .pures-form {
+            background-color: #2a2a2a;
+            padding: 2rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+        }
+
+        .pures-criteria {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .criteria-item {
+            background-color: #1a1a1a;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid #333;
+        }
+
+        .criteria-item h4 {
+            color: #CF2030;
+            margin-bottom: 1rem;
+        }
+
+        .rating-input {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .rating-btn {
+            width: 40px;
+            height: 40px;
+            border: 2px solid #555;
+            background-color: transparent;
+            color: #ffffff;
+            border-radius: 50%;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .rating-btn:hover,
+        .rating-btn.active {
+            background-color: #CF2030;
+            border-color: #CF2030;
+        }
+
+        .feedback-section {
+            background-color: #2a2a2a;
+            padding: 2rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+        }
+
+        .feedback-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .feedback-card {
+            background-color: #1a1a1a;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid #333;
+        }
+
+        .referral-dashboard {
+            background-color: #2a2a2a;
+            padding: 2rem;
+            border-radius: 8px;
+        }
+
+        .referral-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background-color: #1a1a1a;
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid #333;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #CF2030;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+
+        .modal-content {
+            background-color: #1a1a1a;
+            margin: 5% auto;
+            padding: 2rem;
+            border: 1px solid #333;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: #CF2030;
+        }
+
+        .footer {
+            background-color: #000000;
+            padding: 1rem;
+            text-align: center;
+            border-top: 2px solid #CF2030;
+            margin-top: 3rem;
+        }
+
+        .footer img {
+            height: 30px;
+            opacity: 0.8;
+        }
+
+        .email-template {
+            background-color: #333;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+        }
+
+        .email-template textarea {
+            width: 100%;
+            height: 200px;
+            background-color: #1a1a1a;
+            color: #ffffff;
+            border: 1px solid #555;
+            border-radius: 4px;
+            padding: 1rem;
+            font-family: monospace;
+            resize: vertical;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .search-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .client-table {
+                font-size: 0.9rem;
+            }
+            
+            .client-table th,
+            .client-table td {
+                padding: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="HigginsReports Logo">
+    </header>
+
+    <div class="container">
+        <div class="dashboard-nav">
+            <div class="nav-buttons">
+                <button class="nav-btn active" onclick="showModule('sourcing')">S.OURCING</button>
+                <button class="nav-btn" onclick="showModule('assessing')">A.SSESSING</button>
+                <button class="nav-btn" onclick="showModule('listening')">L.ISTENING</button>
+                <button class="nav-btn" onclick="showModule('empowering')">E.MPOWERING</button>
+                <button class="nav-btn" onclick="showModule('clients')">CLIENT DATABASE</button>
+            </div>
+        </div>
+
+        <!-- SOURCING MODULE -->
+        <div id="sourcing" class="module active">
+            <h2>S.OURCING - P.U.R.E.S. Client Scoring System</h2>
+            
+            <div class="pures-form">
+                <h3 style="color: #CF2030; margin-bottom: 2rem;">Evaluate Potential Client</h3>
+                
+                <div class="pures-criteria">
+                    <div class="criteria-item">
+                        <h4>Profitability</h4>
+                        <p>Annual revenue threshold and budget capacity</p>
+                        <div class="rating-input" data-criteria="profitability">
+                            <button class="rating-btn" onclick="setRating('profitability', 1)">1</button>
+                            <button class="rating-btn" onclick="setRating('profitability', 2)">2</button>
+                            <button class="rating-btn" onclick="setRating('profitability', 3)">3</button>
+                            <button class="rating-btn" onclick="setRating('profitability', 4)">4</button>
+                            <button class="rating-btn" onclick="setRating('profitability', 5)">5</button>
+                        </div>
+                    </div>
+
+                    <div class="criteria-item">
+                        <h4>Urgency</h4>
+                        <p>Active pain points requiring immediate solutions</p>
+                        <div class="rating-input" data-criteria="urgency">
+                            <button class="rating-btn" onclick="setRating('urgency', 1)">1</button>
+                            <button class="rating-btn" onclick="setRating('urgency', 2)">2</button>
+                            <button class="rating-btn" onclick="setRating('urgency', 3)">3</button>
+                            <button class="rating-btn" onclick="setRating('urgency', 4)">4</button>
+                            <button class="rating-btn" onclick="setRating('urgency', 5)">5</button>
+                        </div>
+                    </div>
+
+                    <div class="criteria-item">
+                        <h4>Reachability</h4>
+                        <p>Accessible decision makers with clear contact paths</p>
+                        <div class="rating-input" data-criteria="reachability">
+                            <button class="rating-btn" onclick="setRating('reachability', 1)">1</button>
+                            <button class="rating-btn" onclick="setRating('reachability', 2)">2</button>
+                            <button class="rating-btn" onclick="setRating('reachability', 3)">3</button>
+                            <button class="rating-btn" onclick="setRating('reachability', 4)">4</button>
+                            <button class="rating-btn" onclick="setRating('reachability', 5)">5</button>
+                        </div>
+                    </div>
+
+                    <div class="criteria-item">
+                        <h4>Engagement</h4>
+                        <p>Openness to innovation and partnerships</p>
+                        <div class="rating-input" data-criteria="engagement">
+                            <button class="rating-btn" onclick="setRating('engagement', 1)">1</button>
+                            <button class="rating-btn" onclick="setRating('engagement', 2)">2</button>
+                            <button class="rating-btn" onclick="setRating('engagement', 3)">3</button>
+                            <button class="rating-btn" onclick="setRating('engagement', 4)">4</button>
+                            <button class="rating-btn" onclick="setRating('engagement', 5)">5</button>
+                        </div>
+                    </div>
+
+                    <div class="criteria-item">
+                        <h4>Sustainability</h4>
+                        <p>Long-term partnership potential with growth trajectory</p>
+                        <div class="rating-input" data-criteria="sustainability">
+                            <button class="rating-btn" onclick="setRating('sustainability', 1)">1</button>
+                            <button class="rating-btn" onclick="setRating('sustainability', 2)">2</button>
+                            <button class="rating-btn" onclick="setRating('sustainability', 3)">3</button>
+                            <button class="rating-btn" onclick="setRating('sustainability', 4)">4</button>
+                            <button class="rating-btn" onclick="setRating('sustainability', 5)">5</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin-top: 2rem; padding-top: 2rem; border-top: 1px solid #333;">
+                    <h4 style="color: #CF2030;">P.U.R.E.S. Score: <span id="pures-score">0.0</span>/5.0</h4>
+                    <h4 style="color: #CF2030;">Client Tier: <span id="client-tier">Not Rated</span></h4>
+                </div>
+            </div>
+        </div>
+
+        <!-- ASSESSING MODULE -->
+        <div id="assessing" class="module">
+            <h2>A.SSESSING - Buying Pattern Analysis</h2>
+            
+            <div class="pures-criteria">
+                <div class="criteria-item">
+                    <h4>Analytical Buyers</h4>
+                    <p>Require detailed ROI analysis, case studies, trials</p>
+                    <ul style="margin-top: 1rem; color: #ccc;">
+                        <li>Request comprehensive data and metrics</li>
+                        <li>Need detailed cost-benefit analysis</li>
+                        <li>Prefer pilot programs or trials</li>
+                        <li>Make decisions based on hard evidence</li>
+                    </ul>
+                </div>
+
+                <div class="criteria-item">
+                    <h4>Relationship Buyers</h4>
+                    <p>Value trust, referrals, long-term partnerships</p>
+                    <ul style="margin-top: 1rem; color: #ccc;">
+                        <li>Trust and credibility are paramount</li>
+                        <li>Referrals carry significant weight</li>
+                        <li>Focus on long-term relationships</li>
+                        <li>Personal connections influence decisions</li>
+                    </ul>
+                </div>
+
+                <div class="criteria-item">
+                    <h4>Efficiency Buyers</h4>
+                    <p>Focus on time-saving, process improvement</p>
+                    <ul style="margin-top: 1rem; color: #ccc;">
+                        <li>Prioritize time and resource savings</li>
+                        <li>Interested in process optimization</li>
+                        <li>Quick decision-making process</li>
+                        <li>Value immediate implementation</li>
+                    </ul>
+                </div>
+
+                <div class="criteria-item">
+                    <h4>Innovation Buyers</h4>
+                    <p>Seek cutting-edge solutions, competitive advantage</p>
+                    <ul style="margin-top: 1rem; color: #ccc;">
+                        <li>Early adopters of new technology</li>
+                        <li>Seek competitive differentiation</li>
+                        <li>Willing to take calculated risks</li>
+                        <li>Value unique and innovative features</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- LISTENING MODULE -->
+        <div id="listening" class="module">
+            <h2>L.ISTENING - Feedback Integration</h2>
+            
+            <div class="feedback-section">
+                <div class="feedback-grid">
+                    <div class="feedback-card">
+                        <h4 style="color: #CF2030;">Pre-Sale Feedback</h4>
+                        <p>Collect initial client requirements and expectations</p>
+                        <div style="margin-top: 1rem;">
+                            <textarea placeholder="Enter pre-sale feedback notes..." style="width: 100%; height: 100px; background-color: #333; color: #fff; border: 1px solid #555; border-radius: 4px; padding: 0.5rem;"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="feedback-card">
+                        <h4 style="color: #CF2030;">During-Sale Progress</h4>
+                        <p>Track engagement and address concerns throughout the sales process</p>
+                        <div style="margin-top: 1rem;">
+                            <textarea placeholder="Enter progress tracking notes..." style="width: 100%; height: 100px; background-color: #333; color: #fff; border: 1px solid #555; border-radius: 4px; padding: 0.5rem;"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="feedback-card">
+                        <h4 style="color: #CF2030;">Post-Sale Satisfaction</h4>
+                        <p>Monitor client satisfaction and identify improvement opportunities</p>
+                        <div style="margin-top: 1rem;">
+                            <textarea placeholder="Enter satisfaction monitoring notes..." style="width: 100%; height: 100px; background-color: #333; color: #fff; border: 1px solid #555; border-radius: 4px; padding: 0.5rem;"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="feedback-card">
+                        <h4 style="color: #CF2030;">Complaint Resolution</h4>
+                        <p>Real-time tracking and resolution of client concerns</p>
+                        <div style="margin-top: 1rem;">
+                            <textarea placeholder="Enter complaint resolution notes..." style="width: 100%; height: 100px; background-color: #333; color: #fff; border: 1px solid #555; border-radius: 4px; padding: 0.5rem;"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- EMPOWERING MODULE -->
+        <div id="empowering" class="module">
+            <h2>E.MPOWERING - Referral Strategy</h2>
+            
+            <div class="referral-dashboard">
+                <div class="referral-stats">
+                    <div class="stat-card">
+                        <div class="stat-number">24</div>
+                        <div>Active Referrals</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">18</div>
+                        <div>Success Stories</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">$125K</div>
+                        <div>Referral Revenue</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">92%</div>
+                        <div>Client Satisfaction</div>
+                    </div>
+                </div>
+
+                <div class="pures-criteria">
+                    <div class="criteria-item">
+                        <h4>Success Story Documentation</h4>
+                        <p>Capture and document client success stories for future referrals</p>
+                        <textarea placeholder="Document success story..." style="width: 100%; height: 80px; background-color: #333; color: #fff; border: 1px solid #555; border-radius: 4px; padding: 0.5rem; margin-top: 1rem;"></textarea>
+                    </div>
+
+                    <div class="criteria-item">
+                        <h4>Referral Reward Tracking</h4>
+                        <p>Track and manage referral rewards and incentives</p>
+                        <select style="width: 100%; padding: 0.5rem; background-color: #333; color: #fff; border: 1px solid #555; border-radius: 4px; margin-top: 1rem;">
+                            <option>Select Reward Type</option>
+                            <option>Commission Based</option>
+                            <option>Fixed Amount</option>
+                            <option>Service Credit</option>
+                            <option>Product Discount</option>
+                        </select>
+                    </div>
+
+                    <div class="criteria-item">
+                        <h4>Client Advocacy Program</h4>
+                        <p>Manage client advocacy and ambassador programs</p>
+                        <div style="margin-top: 1rem;">
+                            <label><input type="checkbox" style="margin-right: 0.5rem;"> Newsletter Participation</label><br>
+                            <label><input type="checkbox" style="margin-right: 0.5rem;"> Case Study Authorization</label><br>
+                            <label><input type="checkbox" style="margin-right: 0.5rem;"> Speaking Opportunities</label><br>
+                            <label><input type="checkbox" style="margin-right: 0.5rem;"> Reference Calls</label>
+                        </div>
+                    </div>
+
+                    <div class="criteria-item">
+                        <h4>Co-Marketing Opportunities</h4>
+                        <p>Plan and track collaborative marketing initiatives</p>
+                        <textarea placeholder="Plan co-marketing opportunity..." style="width: 100%; height: 80px; background-color: #333; color: #fff; border: 1px solid #555; border-radius: 4px; padding: 0.5rem; margin-top: 1rem;"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CLIENT DATABASE MODULE -->
+        <div id="clients" class="module">
+            <h2>Client Database - Los Angeles Area Prospects</h2>
+            
+            <div class="search-controls">
+                <div class="search-row">
+                    <div class="form-group">
+                        <label>Search Clients</label>
+                        <input type="text" id="searchInput" placeholder="Search by name, email, or company..." onkeyup="filterClients()">
+                    </div>
+                    <div class="form-group">
+                        <label>Filter by Tier</label>
+                        <select id="tierFilter" onchange="filterClients()">
+                            <option value="">All Tiers</option>
+                            <option value="1A">Tier 1A (Premium)</option>
+                            <option value="1B">Tier 1B (High-Value)</option>
+                            <option value="1C">Tier 1C (Qualified)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Filter by Industry</label>
+                        <select id="industryFilter" onchange="filterClients()">
+                            <option value="">All Industries</option>
+                            <option value="Technology">Technology</option>
+                            <option value="Manufacturing">Manufacturing</option>
+                            <option value="Healthcare">Healthcare</option>
+                            <option value="Finance">Finance</option>
+                            <option value="Retail">Retail</option>
+                            <option value="Professional Services">Professional Services</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Min P.U.R.E.S. Score</label>
+                        <input type="number" id="scoreFilter" min="1" max="5" step="0.1" placeholder="3.0" onchange="filterClients()">
+                    </div>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <table class="client-table" id="clientTable">
+                    <thead>
+                        <tr>
+                            <th onclick="sortTable(0)">Client Name</th>
+                            <th onclick="sortTable(1)">Email</th>
+                            <th onclick="sortTable(2)">Phone</th>
+                            <th onclick="sortTable(3)">Address</th>
+                            <th onclick="sortTable(4)">P.U.R.E.S. Score</th>
+                            <th onclick="sortTable(5)">Tier</th>
+                            <th onclick="sortTable(6)">Industry</th>
+                            <th onclick="sortTable(7)">Revenue Est.</th>
+                            <th onclick="sortTable(8)">Contact Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="clientTableBody">
+                        <!-- Client data will be populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Email Modal -->
+    <div id="emailModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('emailModal')">&times;</span>
+            <h2 style="color: #CF2030;">Compose Email</h2>
+            <div style="margin-bottom: 1rem;">
+                <label style="color: #CF2030; display: block; margin-bottom: 0.5rem;">To:</label>
+                <input type="text" id="emailTo" style="width: 100%; padding: 0.5rem; background-color: #333; color: #fff; border: 1px solid #555; border-radius: 4px;">
+            </div>
+            <div style="margin-bottom: 1rem;">
+                <label style="color: #CF2030; display: block; margin-bottom: 0.5rem;">Subject:</label>
+                <input type="text" id="emailSubject" value="Exclusive Aerospace Solutions Partnership Opportunity" style="width: 100%; padding: 0.5rem; background-color: #333; color: #fff; border: 1px solid #555; border-radius: 4px;">
+            </div>
+            <div class="email-template">
+                <label style="color: #CF2030; display: block; margin-bottom: 0.5rem;">Message:</label>
+                <textarea id="emailBody" style="width: 100%; height: 300px; background-color: #1a1a1a; color: #fff; border: 1px solid #555; border-radius: 4px; padding: 1rem; font-family: Arial, sans-serif;">Dear [CLIENT_NAME],
+
+I hope this message finds you well. I'm reaching out from L3Harris Technologies, a leading provider of advanced aerospace and defense solutions.
+
+Based on your role as [POSITION] at [COMPANY], I believe our cutting-edge technologies could provide significant value to your organization:
+
+🚀 Advanced Avionics & Flight Systems
+✈️ Mission-Critical Communication Solutions  
+🛡️ Defense & Security Technologies
+📡 Space & Satellite Systems
+🔧 Engineering & Technical Services
+
+As a Senior Associate Material Planner at L3Harris, I understand the critical importance of:
+- Supply chain optimization and efficiency
+- Cost-effective sourcing strategies
+- Quality assurance and compliance
+- Streamlined procurement processes
+- Technology integration solutions
+
+Our solutions have helped aerospace leaders achieve:
+• 25% reduction in procurement costs
+• 40% improvement in supply chain visibility  
+• 99.9% on-time delivery performance
+• Enhanced operational efficiency
+• Strengthened competitive positioning
+
+I'd welcome the opportunity to discuss how L3Harris can support your organization's strategic objectives. Would you be available for a brief 15-minute call next week to explore potential collaboration opportunities?
+
+Please let me know what day and time works best for your schedule.
+
+Best regards,
+
+Yahya Khafajizadeh
+Senior Associate Material Planner
+L3Harris Technologies
+📧 yahya.khafajizadeh@l3harris.com
+🔗 LinkedIn: https://www.linkedin.com/in/yahya-khafajizadeh
+🌐 www.l3harris.com
+
+P.S. I'd be happy to share some relevant case studies that demonstrate our impact in your industry sector.</textarea>
+            </div>
+            <div style="margin-top: 1.5rem; display: flex; gap: 1rem;">
+                <button class="btn btn-primary" onclick="sendEmail()">Send Email</button>
+                <button class="btn btn-secondary" onclick="closeModal('emailModal')">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="HigginsReports Logo">
+        <p style="margin-top: 0.5rem; color: #666;">&copy; 2024 HigginsReports. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Sample client data for Los Angeles area (within 10 miles)
+        const clientData = [
+            {name: "Sarah Martinez", email: "sarah.martinez@techcorp.com", phone: "(310) 555-0101", address: "1234 Wilshire Blvd, Los Angeles, CA 90017", puresScore: 4.2, tier: "1A", industry: "Technology", revenue: "$2.5M", status: "New Lead", lastContact: "2024-01-15", nextAction: "Initial Call", notes: "Interested in supply chain optimization"},
+            {name: "Michael Chen", email: "mchen@aerospace-inc.com", phone: "(323) 555-0202", address: "5678 Aviation Blvd, El Segundo, CA 90245", puresScore: 4.5, tier: "1A", industry: "Manufacturing", revenue: "$5.2M", status: "In Progress", lastContact: "2024-01-18", nextAction: "Proposal Review", notes: "Decision maker for Q2 procurement"},
+            {name: "Jennifer Davis", email: "j.davis@medtech-solutions.com", phone: "(213) 555-0303", address: "9012 Medical Center Dr, Los Angeles, CA 90048", puresScore: 3.8, tier: "1B", industry: "Healthcare", revenue: "$1.8M", status: "Contacted", lastContact: "2024-01-12", nextAction: "Follow-up Email", notes: "Budget approved for new systems"},
+            {name: "David Rodriguez", email: "drodriguez@financecorp.com", phone: "(424) 555-0404", address: "3456 Financial Way, Beverly Hills, CA 90210", puresScore: 4.1, tier: "1A", industry: "Finance", revenue: "$3.7M", status: "Qualified", lastContact: "2024-01-20", nextAction: "Demo Scheduled", notes: "Compliance requirements priority"},
+            {name: "Lisa Thompson", email: "lthompson@retail-giant.com", phone: "(310) 555-0505", address: "7890 Commerce St, Los Angeles, CA 90040", puresScore: 3.5, tier: "1B", industry: "Retail", revenue: "$4.1M", status: "New Lead", lastContact: "2024-01-10", nextAction: "Needs Assessment", notes: "Expanding operations Q2"},
+            {name: "Robert Kim", email: "rkim@consulting-pro.com", phone: "(818) 555-0606", address: "2468 Professional Ave, Burbank, CA 91505", puresScore: 3.9, tier: "1B", industry: "Professional Services", revenue: "$900K", status: "In Progress", lastContact: "2024-01-16", nextAction: "Contract Review", notes: "Multi-year agreement potential"},
+            {name: "Amanda Wilson", email: "awilson@techstart-la.com", phone: "(213) 555-0707", address: "1357 Startup Blvd, Santa Monica, CA 90401", puresScore: 4.3, tier: "1A", industry: "Technology", revenue: "$1.2M", status: "Hot Lead", lastContact: "2024-01-21", nextAction: "Immediate Call", notes: "Urgent implementation needed"},
+            {name: "James Park", email: "jpark@manufacturing-co.com", phone: "(562) 555-0808", address: "8024 Industrial Way, Long Beach, CA 90802", puresScore: 3.7, tier: "1B", industry: "Manufacturing", revenue: "$6.3M", status: "Contacted", lastContact: "2024-01-14", nextAction: "Site Visit", notes: "Interested in automation solutions"},
+            {name: "Maria Gonzalez", email: "mgonzalez@healthsys.com", phone: "(323) 555-0909", address: "4680 Healthcare Dr, Los Angeles, CA 90033", puresScore: 4.0, tier: "1A", industry: "Healthcare", revenue: "$2.9M", status: "Qualified", lastContact: "2024-01-19", nextAction: "Proposal Due", notes: "Budget cycle starts Q2"},
+            {name: "Kevin Lee", email: "klee@fintech-innov.com", phone: "(310) 555-1010", address: "9753 Innovation Way, Culver City, CA 90232", puresScore: 4.4, tier: "1A", industry: "Finance", revenue: "$3.1M", status: "In Progress", lastContact: "2024-01-17", nextAction: "Technical Demo", notes: "Integration requirements complex"},
+            {name: "Rachel Adams", email: "radams@retail-chain.com", phone: "(213) 555-1111", address: "1596 Retail Row, Los Angeles, CA 90014", puresScore: 3.3, tier: "1C", industry: "Retail", revenue: "$2.2M", status: "New Lead", lastContact: "2024-01-11", nextAction: "Initial Presentation", notes: "Seasonal demand patterns"},
+            {name: "Steven Wright", email: "swright@consulting-elite.com", phone: "(424) 555-1212", address: "7531 Executive Ave, West Hollywood, CA 90069", puresScore: 3.6, tier: "1B", industry: "Professional Services", revenue: "$1.5M", status: "Contacted", lastContact: "2024-01-13", nextAction: "Needs Analysis", notes: "Growth plans aggressive"},
+            {name: "Nicole Johnson", email: "njohnson@tech-solutions.com", phone: "(818) 555-1313", address: "8642 Tech Park Dr, Glendale, CA 91201", puresScore: 4.1, tier: "1A", industry: "Technology", revenue: "$4.8M", status: "Hot Lead", lastContact: "2024-01-22", nextAction: "Contract Negotiation", notes: "Ready to move forward"},
+            {name: "Thomas Anderson", email: "tanderson@aero-tech.com", phone: "(310) 555-1414", address: "3792 Aerospace Blvd, Hawthorne, CA 90250", puresScore: 4.6, tier: "1A", industry: "Manufacturing", revenue: "$7.1M", status: "In Progress", lastContact: "2024-01-20", nextAction: "Executive Meeting", notes: "Strategic partnership opportunity"},
+            {name: "Christina Lopez", email: "clopez@med-innovations.com", phone: "(213) 555-1515", address: "4863 Medical Mile, Los Angeles, CA 90057", puresScore: 3.9, tier: "1B", industry: "Healthcare", revenue: "$3.4M", status: "Qualified", lastContact: "2024-01-18", nextAction: "ROI Presentation", notes: "Cost justification required"},
+            {name: "Andrew Miller", email: "amiller@financial-group.com", phone: "(323) 555-1616", address: "9174 Finance Center, Los Angeles, CA 90071", puresScore: 4.2, tier: "1A", industry: "Finance", revenue: "$5.6M", status: "In Progress", lastContact: "2024-01-19", nextAction: "Security Review", notes: "Compliance critical factor"},
+            {name: "Melissa Brown", email: "mbrown@retail-solutions.com", phone: "(562) 555-1717", address: "6285 Commerce Plaza, Long Beach, CA 90831", puresScore: 3.4, tier: "1C", industry: "Retail", revenue: "$1.9M", status: "New Lead", lastContact: "2024-01-09", nextAction: "Discovery Call", notes: "Digital transformation focus"},
+            {name: "Jonathan Taylor", email: "jtaylor@pro-services.com", phone: "(424) 555-1818", address: "5074 Professional Way, Beverly Hills, CA 90212", puresScore: 3.8, tier: "1B", industry: "Professional Services", revenue: "$2.1M", status: "Contacted", lastContact: "2024-01-15", nextAction: "Service Demo", notes: "Efficiency improvements needed"},
+            {name: "Samantha White", email: "swhite@tech-corp.com", phone: "(818) 555-1919", address: "2963 Technology Ave, Pasadena, CA 91101", puresScore: 4.0, tier: "1A", industry: "Technology", revenue: "$3.8M", status: "Hot Lead", lastContact: "2024-01-21", nextAction: "Pilot Program", notes: "Scalability requirements"},
+            {name: "Daniel Garcia", email: "dgarcia@industrial-sys.com", phone: "(310) 555-2020", address: "7418 Industrial Blvd, Torrance, CA 90501", puresScore: 3.7, tier: "1B", industry: "Manufacturing", revenue: "$4.7M", status: "In Progress", lastContact: "2024-01-16", nextAction: "Technical Evaluation", notes: "Legacy system integration"},
+            {name: "Laura Martinez", email: "lmartinez@health-tech.com", phone: "(213) 555-2121", address: "8519 Medical Technology Dr, Los Angeles, CA 90028", puresScore: 4.3, tier: "1A", industry: "Healthcare", revenue: "$2.7M", status: "Qualified", lastContact: "2024-01-17", nextAction: "Compliance Review", notes: "HIPAA requirements strict"},
+            {name: "Ryan Davis", email: "rdavis@fintech-pro.com", phone: "(323) 555-2222", address: "3651 Financial Innovation St, Los Angeles, CA 90013", puresScore: 4.1, tier: "1A", industry: "Finance", revenue: "$4.2M", status: "In Progress", lastContact: "2024-01-18", nextAction: "Integration Planning", notes: "API requirements complex"},
+            {name: "Ashley Wilson", email: "awilson@retail-innovations.com", phone: "(424) 555-2323", address: "9862 Retail Tech Way, Santa Monica, CA 90404", puresScore: 3.5, tier: "1B", industry: "Retail", revenue: "$3.3M", status: "Contacted", lastContact: "2024-01-14", nextAction: "ROI Analysis", notes: "Omnichannel strategy focus"},
+            {name: "Christopher Lee", email: "clee@consulting-solutions.com", phone: "(562) 555-2424", address: "1574 Advisory Blvd, Long Beach, CA 90815", puresScore: 3.6, tier: "1B", industry: "Professional Services", revenue: "$1.8M", status: "New Lead", lastContact: "2024-01-12", nextAction: "Capability Presentation", notes: "Client base expanding"},
+            {name: "Stephanie Kim", email: "skim@tech-innovations.com", phone: "(818) 555-2525", address: "4297 Innovation Dr, Van Nuys, CA 91401", puresScore: 4.4, tier: "1A", industry: "Technology", revenue: "$6.1M", status: "Hot Lead", lastContact: "2024-01-22", nextAction: "Executive Approval", notes: "Board decision pending"},
+            {name: "Matthew Rodriguez", email: "mrodriguez@aerospace-corp.com", phone: "(310) 555-2626", address: "7683 Aerospace Center, El Segundo, CA 90245", puresScore: 4.7, tier: "1A", industry: "Manufacturing", revenue: "$8.9M", status: "In Progress", lastContact: "2024-01-20", nextAction: "Contract Finalization", notes: "Multi-million dollar opportunity"},
+            {name: "Jennifer Thompson", email: "jthompson@medical-systems.com", phone: "(213) 555-2727", address: "5940 Healthcare Blvd, Los Angeles, CA 90036", puresScore: 3.8, tier: "1B", industry: "Healthcare", revenue: "$2.5M", status: "Qualified", lastContact: "2024-01-16", nextAction: "Clinical Demo", notes: "Patient safety priority"},
+            {name: "Joshua Park", email: "jpark@financial-tech.com", phone: "(323) 555-2828", address: "2185 Fintech Ave, Los Angeles, CA 90015", puresScore: 4.0, tier: "1A", industry: "Finance", revenue: "$3.9M", status: "In Progress", lastContact: "2024-01-19", nextAction: "Risk Assessment", notes: "Regulatory approval needed"},
+            {name: "Emily Gonzalez", email: "egonzalez@retail-group.com", phone: "(424) 555-2929", address: "8076 Commerce Center, Culver City, CA 90230", puresScore: 3.2, tier: "1C", industry: "Retail", revenue: "$1.7M", status: "New Lead", lastContact: "2024-01-10", nextAction: "Market Analysis", notes: "Competitive pressure high"},
+            {name: "Alexander Adams", email: "aadams@pro-consulting.com", phone: "(562) 555-3030", address: "6428 Professional Plaza, Long Beach, CA 90840", puresScore: 3.9, tier: "1B", industry: "Professional Services", revenue: "$2.3M", status: "Contacted", lastContact: "2024-01-13", nextAction: "Service Mapping", notes: "Process optimization focus"},
+            {name: "Victoria Wright", email: "vwright@tech-systems.com", phone: "(818) 555-3131", address: "1759 Technology Center, Burbank, CA 91502", puresScore: 4.2, tier: "1A", industry: "Technology", revenue: "$4.5M", status: "Hot Lead", lastContact: "2024-01-21", nextAction: "Implementation Plan", notes: "Aggressive timeline required"},
+            {name: "Brandon Johnson", email: "bjohnson@manufacturing-pro.com", phone: "(310) 555-3232", address: "9341 Industrial Park, Torrance, CA 90503", puresScore: 3.6, tier: "1B", industry: "Manufacturing", revenue: "$5.4M", status: "In Progress", lastContact: "2024-01-17", nextAction: "Equipment Demo", notes: "Capacity expansion planned"},
+            {name: "Megan Anderson", email: "manderson@health-solutions.com", phone: "(213) 555-3333", address: "4052 Medical Plaza, Los Angeles, CA 90029", puresScore: 4.1, tier: "1A", industry: "Healthcare", revenue: "$3.1M", status: "Qualified", lastContact: "2024-01-18", nextAction: "Regulatory Review", notes: "FDA approval considerations"},
+            {name: "Tyler Lopez", email: "tlopez@finance-corp.com", phone: "(323) 555-3434", address: "7295 Banking Blvd, Los Angeles, CA 90017", puresScore: 3.9, tier: "1B", industry: "Finance", revenue: "$4.8M", status: "In Progress", lastContact: "2024-01-19", nextAction: "Audit Requirements", notes: "Compliance framework needed"},
+            {name: "Kayla Miller", email: "kmiller@retail-tech.com", phone: "(424) 555-3535", address: "5167 Digital Commerce Way, Santa Monica, CA 90405", puresScore: 3.7, tier: "1B", industry: "Retail", revenue: "$2.8M", status: "Contacted", lastContact: "2024-01-15", nextAction: "Technology Assessment", notes: "E-commerce integration priority"},
+            {name: "Jacob Brown", email: "jbrown@advisory-group.com", phone: "(562) 555-3636", address: "8930 Consulting Center, Long Beach, CA 90807", puresScore: 3.4, tier: "1C", industry: "Professional Services", revenue: "$1.4M", status: "New Lead", lastContact: "2024-01-11", nextAction: "Service Overview", notes: "Boutique firm characteristics"},
+            {name: "Hannah Taylor", email: "htaylor@innovation-tech.com", phone: "(818) 555-3737", address: "2614 Tech Valley Dr, Glendale, CA 91203", puresScore: 4.3, tier: "1A", industry: "Technology", revenue: "$5.7M", status: "Hot Lead", lastContact: "2024-01-22", nextAction: "Partnership Discussion", notes: "Strategic alliance potential"},
+            {name: "Zachary White", email: "zwhite@precision-mfg.com", phone: "(310) 555-3838", address: "6083 Manufacturing Way, Hawthorne, CA 90250", puresScore: 4.0, tier: "1A", industry: "Manufacturing", revenue: "$6.8M", status: "In Progress", lastContact: "2024-01-20", nextAction: "Quality Audit", notes: "Precision requirements critical"},
+            {name: "Olivia Garcia", email: "ogarcia@healthcare-net.com", phone: "(213) 555-3939", address: "3476 Medical Network Dr, Los Angeles, CA 90038", puresScore: 3.8, tier: "1B", industry: "Healthcare", revenue: "$2.4M", status: "Qualified", lastContact: "2024-01-16", nextAction: "Network Integration", notes: "Interoperability requirements"},
+            {name: "Nathan Davis", email: "ndavis@wealth-management.com", phone: "(323) 555-4040", address: "9758 Investment Ave, Los Angeles, CA 90067", puresScore: 4.4, tier: "1A", industry: "Finance", revenue: "$7.2M", status: "In Progress", lastContact: "2024-01-19", nextAction: "Portfolio Review", notes: "High-net-worth focus"},
+            {name: "Grace Wilson", email: "gwilson@omnichannel-retail.com", phone: "(424) 555-4141", address: "1425 Retail Evolution Blvd, Culver City, CA 90233", puresScore: 3.6, tier: "1B", industry: "Retail", revenue: "$3.6M", status: "Contacted", lastContact: "2024-01-14", nextAction: "Channel Strategy", notes: "Digital transformation underway"},
+            {name: "Ethan Lee", email: "elee@strategic-consulting.com", phone: "(562) 555-4242", address: "5892 Strategy Center, Long Beach, CA 90822", puresScore: 3.7, tier: "1B", industry: "Professional Services", revenue: "$2.9M", status: "New Lead", lastContact: "2024-01-12", nextAction: "Strategic Assessment", notes: "Fortune 500 client base"},
+            {name: "Chloe Kim", email: "ckim@next-gen-tech.com", phone: "(818) 555-4343", address: "7241 Future Technology Dr, Van Nuys, CA 91405", puresScore: 4.5, tier: "1A", industry: "Technology", revenue: "$8.3M", status: "Hot Lead", lastContact: "2024-01-22", nextAction: "Proof of Concept", notes: "Cutting-edge requirements"},
+            {name: "Mason Rodriguez", email: "mrodriguez@advanced-manufacturing.com", phone: "(310) 555-4444", address: "4658 Advanced Systems Blvd, El Segundo, CA 90245", puresScore: 4.1, tier: "1A", industry: "Manufacturing", revenue: "$9.7M", status: "In Progress", lastContact: "2024-01-20", nextAction: "Technology Transfer", notes: "IP considerations important"},
+            {name: "Sophia Thompson", email: "sthompson@integrated-health.com", phone: "(213) 555-4545", address: "8375 Integrated Care Ave, Los Angeles, CA 90048", puresScore: 4.0, tier: "1A", industry: "Healthcare", revenue: "$4.3M", status: "Qualified", lastContact: "2024-01-17", nextAction: "Clinical Workflow", notes: "Patient outcome focus"},
+            {name: "Lucas Park", email: "lpark@quantum-finance.com", phone: "(323) 555-4646", address: "2947 Quantum Financial Way, Los Angeles, CA 90012", puresScore: 4.2, tier: "1A", industry: "Finance", revenue: "$5.9M", status: "In Progress", lastContact: "2024-01-18", nextAction: "Algorithm Review", notes: "Advanced analytics required"},
+            {name: "Isabella Gonzalez", email: "igonzalez@future-retail.com", phone: "(424) 555-4747", address: "6150 Future Commerce Dr, Santa Monica, CA 90401", puresScore: 3.5, tier: "1B", industry: "Retail", revenue: "$2.1M", status: "Contacted", lastContact: "2024-01-13", nextAction: "Innovation Workshop", notes: "Experiential retail focus"},
+            {name: "Henry Adams", email: "hadams@elite-advisory.com", phone: "(562) 555-4848", address: "9683 Elite Consulting Plaza, Long Beach, CA 90814", puresScore: 3.8, tier: "1B", industry: "Professional Services", revenue: "$3.7M", status: "New Lead", lastContact: "2024-01-11", nextAction: "Expertise Mapping", notes: "Specialized industry knowledge"},
+            {name: "Aria Wright", email: "awright@disruptive-tech.com", phone: "(818) 555-4949", address: "1504 Disruption Ave, Pasadena, CA 91104", puresScore: 4.6, tier: "1A", industry: "Technology", revenue: "$12.4M", status: "Hot Lead", lastContact: "2024-01-22", nextAction: "Venture Partnership", notes: "Unicorn potential identified"},
+            {name: "Carter Johnson", email: "cjohnson@smart-manufacturing.com", phone: "(310) 555-5050", address: "3729 Smart Factory Blvd, Torrance, CA 90505", puresScore: 4.3, tier: "1A", industry: "Manufacturing", revenue: "$11.2M", status: "In Progress", lastContact: "2024-01-21", nextAction: "IoT Integration", notes: "Industry 4.0 implementation"}
+        ];
+
+        let currentPuresScores = {
+            profitability: 0,
+            urgency: 0,
+            reachability: 0,
+            engagement: 0,
+            sustainability: 0
+        };
+
+        // Initialize the application
+        function initializeApp() {
+            populateClientTable();
+            updatePuresScore();
+        }
+
+        // Show/hide modules
+        function showModule(moduleId) {
+            // Hide all modules
+            document.querySelectorAll('.module').forEach(module => {
+                module.classList.remove('active');
+            });
+            
+            // Remove active class from all nav buttons
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected module
+            document.getElementById(moduleId).classList.add('active');
+            
+            // Add active class to clicked button
+            event.target.classList.add('active');
+        }
+
+        // Set P.U.R.E.S. rating
+        function setRating(criteria, rating) {
+            currentPuresScores[criteria] = rating;
+            
+            // Update button states
+            const buttons = document.querySelectorAll(`[data-criteria="${criteria}"] .rating-btn`);
+            buttons.forEach((btn, index) => {
+                if (index < rating) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+            
+            updatePuresScore();
+        }
+
+        // Update P.U.R.E.S. score display
+        function updatePuresScore() {
+            const scores = Object.values(currentPuresScores);
+            const average = scores.reduce((a, b) => a + b, 0) / scores.length;
+            
+            document.getElementById('pures-score').textContent = average.toFixed(1);
+            
+            let tier = 'Not Rated';
+            if (average >= 4.0) tier = 'Tier 1A (Premium)';
+            else if (average >= 3.0) tier = 'Tier 1B (High-Value)';
+            else if (average > 0) tier = 'Tier 1C (Qualified)';
+            
+            document.getElementById('client-tier').textContent = tier;
+        }
+
+        // Populate client table
+        function populateClientTable() {
+            const tbody = document.getElementById('clientTableBody');
+            tbody.innerHTML = '';
+            
+            clientData.forEach((client, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${client.name}</td>
+                    <td>${client.email}</td>
+                    <td>${client.phone}</td>
+                    <td>${client.address}</td>
+                    <td>
+                        <div class="score-display">
+                            <span>${client.puresScore}</span>
+                            <div class="score-bar">
+                                <div class="score-fill" style="width: ${(client.puresScore / 5) * 100}%"></div>
+                            </div>
+                        </div>
+                    </td>
+                    <td><span class="tier-badge tier-${client.tier.toLowerCase()}">${client.tier}</span></td>
+                    <td>${client.industry}</td>
+                    <td>${client.revenue}</td>
+                    <td>${client.status}</td>
+                    <td class="action-buttons">
+                        <button class="btn btn-primary" onclick="composeEmail('${client.email}', '${client.name}')">Email</button>
+                        <button class="btn btn-secondary" onclick="callClient('${client.phone}')">Call</button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // Filter clients based on search criteria
+        function filterClients() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const tierFilter = document.getElementById('tierFilter').value;
+            const industryFilter = document.getElementById('industryFilter').value;
+            const scoreFilter = parseFloat(document.getElementById('scoreFilter').value) || 0;
+            
+            const filteredData = clientData.filter(client => {
+                const matchesSearch = client.name.toLowerCase().includes(searchTerm) ||
+                                    client.email.toLowerCase().includes(searchTerm) ||
+                                    client.industry.toLowerCase().includes(searchTerm);
+                const matchesTier = !tierFilter || client.tier === tierFilter;
+                const matchesIndustry = !industryFilter || client.industry === industryFilter;
+                const matchesScore = client.puresScore >= scoreFilter;
+                
+                return matchesSearch && matchesTier && matchesIndustry && matchesScore;
+            });
+            
+            displayFilteredClients(filteredData);
+        }
+
+        // Display filtered clients
+        function displayFilteredClients(data) {
+            const tbody = document.getElementById('clientTableBody');
+            tbody.innerHTML = '';
+            
+            data.forEach((client, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${client.name}</td>
+                    <td>${client.email}</td>
+                    <td>${client.phone}</td>
+                    <td>${client.address}</td>
+                    <td>
+                        <div class="score-display">
+                            <span>${client.puresScore}</span>
+                            <div class="score-bar">
+                                <div class="score-fill" style="width: ${(client.puresScore / 5) * 100}%"></div>
+                            </div>
+                        </div>
+                    </td>
+                    <td><span class="tier-badge tier-${client.tier.toLowerCase()}">${client.tier}</span></td>
+                    <td>${client.industry}</td>
+                    <td>${client.revenue}</td>
+                    <td>${client.status}</td>
+                    <td class="action-buttons">
+                        <button class="btn btn-primary" onclick="composeEmail('${client.email}', '${client.name}')">Email</button>
+                        <button class="btn btn-secondary" onclick="callClient('${client.phone}')">Call</button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // Sort table by column
+        function sortTable(columnIndex) {
+            const table = document.getElementById('clientTable');
+            const tbody = table.querySelector('tbody');
+            const rows = Array.from(tbody.querySelectorAll('tr'));
+            
+            const sortedRows = rows.sort((a, b) => {
+                const aText = a.children[columnIndex].textContent.trim();
+                const bText = b.children[columnIndex].textContent.trim();
+                
+                // Handle numeric sorting for score column
+                if (columnIndex === 4) {
+                    return parseFloat(bText) - parseFloat(aText);
+                }
+                
+                return aText.localeCompare(bText);
+            });
+            
+            tbody.innerHTML = '';
+            sortedRows.forEach(row => tbody.appendChild(row));
+        }
+
+        // Compose email
+        function composeEmail(email, name) {
+            document.getElementById('emailTo').value = email;
+            document.getElementById('emailModal').style.display = 'block';
+            
+            // Update email body with client name
+            const emailBody = document.getElementById('emailBody');
+            emailBody.value = emailBody.value.replace('[CLIENT_NAME]', name);
+        }
+
+        // Call client
+        function callClient(phone) {
+            alert(`Initiating call to ${phone}\n\nIn a real implementation, this would integrate with your phone system or CRM to place the call.`);
+        }
+
+        // Send email
+        function sendEmail() {
+            const to = document.getElementById('emailTo').value;
+            const subject = document.getElementById('emailSubject').value;
+            const body = document.getElementById('emailBody').value;
+            
+            // Create mailto link
+            const mailtoLink = `mailto:${to}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+            
+            // Open email client
+            window.location.href = mailtoLink;
+            
+            // Close modal
+            closeModal('emailModal');
+            
+            // Show success message
+            alert('Email client opened with pre-filled message. Please send from your email application.');
+        }
+
+        // Close modal
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modals = document.querySelectorAll('.modal');
+            modals.forEach(modal => {
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+        }
+
+        // Initialize the application when page loads
+        document.addEventListener('DOMContentLoaded', initializeApp);
+    </script>
+</body>
+</html>

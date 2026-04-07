@@ -1,0 +1,1185 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>S.A.L.E. Strategy Report – Dexter Chow</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: #000000;
+    color: #e0e0e0;
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  .header {
+    background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+    border-bottom: 3px solid #CF2030;
+    padding: 16px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    backdrop-filter: blur(10px);
+  }
+
+  .header-logo img {
+    height: 48px;
+    object-fit: contain;
+  }
+
+  .header-title {
+    text-align: right;
+  }
+
+  .header-title h1 {
+    font-size: 18px;
+    font-weight: 700;
+    color: #CF2030;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  .header-title p {
+    font-size: 12px;
+    color: #888;
+    margin-top: 2px;
+  }
+
+  /* NAV */
+  .nav-bar {
+    background: #0d0d0d;
+    border-bottom: 1px solid #222;
+    padding: 0 40px;
+    display: flex;
+    gap: 0;
+    overflow-x: auto;
+    position: sticky;
+    top: 79px;
+    z-index: 999;
+  }
+
+  .nav-item {
+    padding: 14px 22px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #999;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    transition: all 0.3s;
+    white-space: nowrap;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .nav-item:hover {
+    color: #fff;
+    background: rgba(207, 32, 48, 0.08);
+  }
+
+  .nav-item.active {
+    color: #CF2030;
+    border-bottom-color: #CF2030;
+    background: rgba(207, 32, 48, 0.05);
+  }
+
+  /* SECTIONS */
+  .section {
+    display: none;
+    padding: 40px;
+    max-width: 1400px;
+    margin: 0 auto;
+    animation: fadeIn 0.4s ease;
+  }
+
+  .section.active { display: block; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .section-title {
+    font-size: 28px;
+    font-weight: 800;
+    color: #CF2030;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .section-subtitle {
+    font-size: 14px;
+    color: #777;
+    margin-bottom: 30px;
+  }
+
+  /* CARDS */
+  .card {
+    background: linear-gradient(145deg, #111 0%, #1a1a1a 100%);
+    border: 1px solid #222;
+    border-radius: 16px;
+    padding: 28px;
+    margin-bottom: 24px;
+    transition: all 0.3s;
+  }
+
+  .card:hover {
+    border-color: #CF2030;
+    box-shadow: 0 0 30px rgba(207, 32, 48, 0.1);
+  }
+
+  .card-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #CF2030;
+    margin-bottom: 16px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  /* GRID */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px; }
+
+  @media (max-width: 900px) {
+    .grid-2, .grid-3 { grid-template-columns: 1fr; }
+    .header { padding: 12px 20px; }
+    .section { padding: 20px; }
+    .nav-bar { padding: 0 10px; }
+  }
+
+  /* TABLES */
+  .search-box {
+    width: 100%;
+    padding: 12px 18px;
+    background: #0a0a0a;
+    border: 1px solid #333;
+    border-radius: 10px;
+    color: #fff;
+    font-size: 14px;
+    margin-bottom: 16px;
+    outline: none;
+    transition: border-color 0.3s;
+  }
+
+  .search-box:focus { border-color: #CF2030; }
+
+  .search-box::placeholder { color: #555; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+  }
+
+  th {
+    background: #CF2030;
+    color: #fff;
+    padding: 14px 16px;
+    text-align: left;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-size: 12px;
+    cursor: pointer;
+    user-select: none;
+    position: relative;
+    white-space: nowrap;
+  }
+
+  th:hover { background: #b81c2a; }
+
+  th .sort-icon {
+    margin-left: 6px;
+    font-size: 10px;
+    opacity: 0.6;
+  }
+
+  th.sorted-asc .sort-icon::after { content: ' ▲'; }
+  th.sorted-desc .sort-icon::after { content: ' ▼'; }
+
+  td {
+    padding: 12px 16px;
+    border-bottom: 1px solid #1a1a1a;
+    color: #ccc;
+  }
+
+  tr:hover td { background: rgba(207, 32, 48, 0.05); }
+
+  tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+  tr:nth-child(even):hover td { background: rgba(207, 32, 48, 0.05); }
+
+  /* TAGS */
+  .tag {
+    display: inline-block;
+    padding: 4px 12px;
+    background: rgba(207, 32, 48, 0.15);
+    color: #CF2030;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    margin: 2px 4px 2px 0;
+  }
+
+  .tag-green {
+    background: rgba(16, 185, 129, 0.15);
+    color: #10b981;
+  }
+
+  .tag-blue {
+    background: rgba(59, 130, 246, 0.15);
+    color: #3b82f6;
+  }
+
+  .tag-gold {
+    background: rgba(245, 158, 11, 0.15);
+    color: #f59e0b;
+  }
+
+  /* BUTTONS */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-decoration: none;
+  }
+
+  .btn-primary {
+    background: #CF2030;
+    color: #fff;
+  }
+
+  .btn-primary:hover {
+    background: #e8243a;
+    box-shadow: 0 4px 20px rgba(207, 32, 48, 0.4);
+    transform: translateY(-1px);
+  }
+
+  .btn-outline {
+    background: transparent;
+    color: #CF2030;
+    border: 2px solid #CF2030;
+  }
+
+  .btn-outline:hover {
+    background: rgba(207, 32, 48, 0.1);
+  }
+
+  .btn-dark {
+    background: #1a1a1a;
+    color: #ccc;
+    border: 1px solid #333;
+  }
+
+  .btn-dark:hover { background: #222; border-color: #CF2030; color: #fff; }
+
+  .contact-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 16px;
+  }
+
+  /* STARS */
+  .stars { color: #f59e0b; letter-spacing: 2px; font-size: 16px; }
+
+  /* CHART BARS */
+  .chart-bar-container { margin-bottom: 14px; }
+
+  .chart-bar-label {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 6px;
+    font-size: 13px;
+  }
+
+  .chart-bar-label span:first-child { color: #ccc; font-weight: 500; }
+  .chart-bar-label span:last-child { color: #CF2030; font-weight: 700; }
+
+  .chart-bar-track {
+    width: 100%;
+    height: 28px;
+    background: #1a1a1a;
+    border-radius: 14px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .chart-bar-fill {
+    height: 100%;
+    border-radius: 14px;
+    background: linear-gradient(90deg, #CF2030, #e8243a);
+    transition: width 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    width: 0%;
+    position: relative;
+  }
+
+  .chart-bar-fill.green { background: linear-gradient(90deg, #059669, #10b981); }
+  .chart-bar-fill.blue { background: linear-gradient(90deg, #2563eb, #3b82f6); }
+  .chart-bar-fill.gold { background: linear-gradient(90deg, #d97706, #f59e0b); }
+
+  /* TIMELINE */
+  .timeline-item {
+    display: flex;
+    gap: 20px;
+    padding: 16px 0;
+    border-left: 3px solid #222;
+    padding-left: 24px;
+    position: relative;
+    transition: all 0.3s;
+  }
+
+  .timeline-item:hover { border-left-color: #CF2030; }
+
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -8px;
+    top: 22px;
+    width: 13px;
+    height: 13px;
+    background: #CF2030;
+    border-radius: 50%;
+    border: 3px solid #000;
+  }
+
+  .timeline-day {
+    font-size: 28px;
+    font-weight: 800;
+    color: #CF2030;
+    min-width: 60px;
+  }
+
+  .timeline-action {
+    font-size: 14px;
+    color: #ccc;
+    line-height: 1.6;
+  }
+
+  .timeline-action strong { color: #fff; }
+
+  /* HIGHLIGHT NUMBERS */
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  .stat-card {
+    background: #111;
+    border: 1px solid #222;
+    border-radius: 14px;
+    padding: 20px;
+    text-align: center;
+    transition: all 0.3s;
+  }
+
+  .stat-card:hover { border-color: #CF2030; transform: translateY(-2px); }
+
+  .stat-number {
+    font-size: 36px;
+    font-weight: 900;
+    color: #CF2030;
+    line-height: 1;
+  }
+
+  .stat-label {
+    font-size: 12px;
+    color: #888;
+    margin-top: 8px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  /* DONUT CHART */
+  .donut-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+  }
+
+  .donut-chart {
+    position: relative;
+    width: 200px;
+    height: 200px;
+  }
+
+  .donut-chart svg { transform: rotate(-90deg); }
+
+  .donut-center {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+  }
+
+  .donut-center .score {
+    font-size: 42px;
+    font-weight: 900;
+    color: #CF2030;
+  }
+
+  .donut-center .label {
+    font-size: 11px;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .legend { display: flex; flex-direction: column; gap: 10px; }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    color: #ccc;
+  }
+
+  .legend-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* COPY BUTTON */
+  .copy-section {
+    position: relative;
+    background: #0a0a0a;
+    border: 1px solid #222;
+    border-radius: 12px;
+    padding: 24px;
+    margin-top: 16px;
+    white-space: pre-wrap;
+    font-size: 14px;
+    line-height: 1.8;
+    color: #bbb;
+  }
+
+  .copy-btn {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    padding: 6px 14px;
+    background: #CF2030;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 12px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s;
+  }
+
+  .copy-btn:hover { background: #e8243a; }
+
+  /* BADGE */
+  .badge-excellent {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 20px;
+    background: linear-gradient(135deg, #059669, #10b981);
+    color: #fff;
+    border-radius: 30px;
+    font-weight: 800;
+    font-size: 14px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  /* FOOTER */
+  .footer {
+    background: #0a0a0a;
+    border-top: 2px solid #CF2030;
+    padding: 24px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 60px;
+  }
+
+  .footer img { height: 30px; opacity: 0.7; }
+
+  .footer-text {
+    font-size: 12px;
+    color: #555;
+  }
+
+  /* SCROLL BAR */
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-track { background: #0a0a0a; }
+  ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: #CF2030; }
+
+  /* Tooltip */
+  .tooltip-wrap {
+    position: relative;
+    display: inline-block;
+  }
+  .tooltip-wrap:hover .tooltip-text { visibility: visible; opacity: 1; }
+  .tooltip-text {
+    visibility: hidden;
+    opacity: 0;
+    background: #CF2030;
+    color: #fff;
+    text-align: center;
+    border-radius: 8px;
+    padding: 6px 12px;
+    position: absolute;
+    z-index: 10;
+    bottom: 125%;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 12px;
+    white-space: nowrap;
+    transition: opacity 0.3s;
+  }
+
+  .print-btn {
+    background: none;
+    border: 1px solid #444;
+    color: #999;
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: all 0.3s;
+  }
+  .print-btn:hover { border-color: #CF2030; color: #CF2030; }
+
+  @media print {
+    .header, .nav-bar, .footer { display: none; }
+    .section { display: block !important; page-break-inside: avoid; }
+    body { background: #fff; color: #000; }
+    .card { border: 1px solid #ddd; }
+    th { background: #CF2030; color: #fff; -webkit-print-color-adjust: exact; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-logo">
+    <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports" />
+  </div>
+  <div class="header-title">
+    <h1>S.A.L.E. Strategy Report</h1>
+    <p>Dexter Chow — Cheeky Monkey Toys</p>
+  </div>
+</div>
+
+<!-- NAV -->
+<div class="nav-bar">
+  <div class="nav-item active" onclick="showSection('profile')">📋 Profile</div>
+  <div class="nav-item" onclick="showSection('snapshot')">🏪 Snapshot</div>
+  <div class="nav-item" onclick="showSection('situation')">🔍 Situation</div>
+  <div class="nav-item" onclick="showSection('approach')">🎯 Approach</div>
+  <div class="nav-item" onclick="showSection('leverage')">💡 Leverage</div>
+  <div class="nav-item" onclick="showSection('execute')">🚀 Execute</div>
+  <div class="nav-item" onclick="showSection('score')">📊 Score</div>
+  <div class="nav-item" onclick="showSection('timeline')">📅 Timeline</div>
+</div>
+
+<!-- ===== PROFILE ===== -->
+<div class="section active" id="section-profile">
+  <div class="section-title">📋 Prospect Profile</div>
+  <div class="section-subtitle">Complete contact and business profile for the prospect</div>
+
+  <input class="search-box" type="text" placeholder="🔍 Search profile fields..." onkeyup="filterTable('profile-table', this.value)" />
+
+  <div class="card">
+    <table id="profile-table">
+      <thead>
+        <tr>
+          <th onclick="sortTable('profile-table', 0)">Field <span class="sort-icon"></span></th>
+          <th onclick="sortTable('profile-table', 1)">Details <span class="sort-icon"></span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Name</strong></td><td>Dexter Chow</td></tr>
+        <tr><td><strong>Title</strong></td><td>Business Owner</td></tr>
+        <tr><td><strong>Company</strong></td><td>Cheeky Monkey Toys</td></tr>
+        <tr><td><strong>Industry</strong></td><td>Retail — Toy Store</td></tr>
+        <tr><td><strong>Locations</strong></td><td>Menlo Park & Los Altos, California</td></tr>
+        <tr><td><strong>Company Size</strong></td><td>11–50 Employees</td></tr>
+        <tr><td><strong>Phone</strong></td><td><a href="tel:6503287975" style="color:#CF2030">(650) 328-7975</a></td></tr>
+        <tr><td><strong>Email</strong></td><td><a href="#" onclick="openContactEmail()" style="color:#CF2030">chow@cheekymonkeytoys.com</a></td></tr>
+        <tr><td><strong>Website</strong></td><td><a href="http://www.cheekymonkeytoys.com" target="_blank" style="color:#CF2030">cheekymonkeytoys.com</a></td></tr>
+        <tr><td><strong>LinkedIn (Personal)</strong></td><td><a href="https://www.linkedin.com/in/dexterchow" target="_blank" style="color:#CF2030">linkedin.com/in/dexterchow</a></td></tr>
+        <tr><td><strong>LinkedIn (Company)</strong></td><td><a href="https://www.linkedin.com/company/8182157" target="_blank" style="color:#CF2030">Company Page</a></td></tr>
+        <tr><td><strong>Country</strong></td><td>United States</td></tr>
+        <tr><td><strong>State</strong></td><td>California</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📞 Contact Dexter Chow</div>
+    <p style="color:#888; margin-bottom:16px; font-size:14px;">Choose a method to reach out. Email will auto-populate with a BNI invitation.</p>
+    <div class="contact-actions">
+      <a class="btn btn-primary" href="#" onclick="openContactEmail(); return false;">📧 Send Email Invite</a>
+      <a class="btn btn-outline" href="tel:6503287975">📞 Call (650) 328-7975</a>
+      <a class="btn btn-outline" href="sms:6503287975?body=Hi%20Dexter!%20I%27m%20a%20member%20of%20a%20local%20business%20networking%20group%20(BNI)%20%26%20thought%20Cheeky%20Monkey%20Toys%20would%20be%20a%20great%20fit.%20We%20meet%20weekly%20to%20exchange%20referrals.%20Would%20you%20be%20interested%20in%20visiting%20as%20my%20guest%3F%20No%20obligation!%20Reply%20YES%20%26%20I%27ll%20send%20details.">💬 Send SMS</a>
+      <a class="btn btn-dark" href="https://www.linkedin.com/in/dexterchow" target="_blank">🔗 LinkedIn</a>
+      <button class="btn btn-dark" onclick="window.print()">🖨️ Print Report</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SNAPSHOT ===== -->
+<div class="section" id="section-snapshot">
+  <div class="section-title">🏪 Business Snapshot</div>
+  <div class="section-subtitle">Cheeky Monkey Toys — 25+ years awakening imaginations</div>
+
+  <div class="stat-grid">
+    <div class="stat-card">
+      <div class="stat-number">25+</div>
+      <div class="stat-label">Years in Business</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">2</div>
+      <div class="stat-label">Store Locations</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">11–50</div>
+      <div class="stat-label">Employees</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">$100+</div>
+      <div class="stat-label">Free Shipping Threshold</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">1999</div>
+      <div class="stat-label">Year Founded</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🏆 Key Highlights</div>
+    <input class="search-box" type="text" placeholder="🔍 Search highlights..." onkeyup="filterTable('highlight-table', this.value)" />
+    <table id="highlight-table">
+      <thead>
+        <tr>
+          <th onclick="sortTable('highlight-table', 0)">Highlight <span class="sort-icon"></span></th>
+          <th onclick="sortTable('highlight-table', 1)">Details <span class="sort-icon"></span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>🏆 Award-Winning</td><td>Voted "Best Toy Store"</td></tr>
+        <tr><td>🏘️ Community-Rooted</td><td>A neighborhood staple serving families since 1999</td></tr>
+        <tr><td>🎁 Premium Experience</td><td>Complimentary gift wrapping, knowledgeable staff, free in-store pickup</td></tr>
+        <tr><td>🛒 Omnichannel</td><td>Shopify-powered e-commerce with free shipping on $100+ orders</td></tr>
+        <tr><td>📱 Social Media</td><td>Active on Instagram with engaged community</td></tr>
+        <tr><td>⭐ Glowing Reviews</td><td>Praised for fast shipping, excellent service, great selection, top quality</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ===== SITUATION ===== -->
+<div class="section" id="section-situation">
+  <div class="section-title">🔍 S — Situation</div>
+  <div class="section-subtitle">Market positioning and competitive landscape analysis</div>
+
+  <div class="card">
+    <div class="card-title">Market Overview</div>
+    <p style="line-height:1.8; color:#bbb;">
+      Dexter Chow operates a <strong style="color:#fff;">well-established, multi-location independent retail business</strong> in one of the most affluent areas of <strong style="color:#CF2030;">Silicon Valley</strong>. The business competes against large online retailers (Amazon, Target) while differentiating through:
+    </p>
+    <div style="margin-top:16px; display:flex; flex-wrap:wrap; gap:8px;">
+      <span class="tag">Curated Product Selection</span>
+      <span class="tag-green tag">Personalized Service</span>
+      <span class="tag-blue tag">Deep Community Ties</span>
+      <span class="tag-gold tag">25+ Years Experience</span>
+      <span class="tag">Multi-Location</span>
+      <span class="tag-green tag">E-Commerce Enabled</span>
+    </div>
+  </div>
+
+  <div class="grid-2" style="margin-top:24px;">
+    <div class="card">
+      <div class="card-title">💪 Strengths</div>
+      <ul style="list-style:none; padding:0;">
+        <li style="padding:8px 0; border-bottom:1px solid #1a1a1a; color:#ccc;">✅ Award-winning reputation</li>
+        <li style="padding:8px 0; border-bottom:1px solid #1a1a1a; color:#ccc;">✅ 2 prime Silicon Valley locations</li>
+        <li style="padding:8px 0; border-bottom:1px solid #1a1a1a; color:#ccc;">✅ 25+ years of community trust</li>
+        <li style="padding:8px 0; border-bottom:1px solid #1a1a1a; color:#ccc;">✅ Premium customer experience</li>
+        <li style="padding:8px 0; color:#ccc;">✅ Active omnichannel presence</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-title">⚡ Challenges</div>
+      <ul style="list-style:none; padding:0;">
+        <li style="padding:8px 0; border-bottom:1px solid #1a1a1a; color:#ccc;">🔶 Competing with Amazon & big-box retailers</li>
+        <li style="padding:8px 0; border-bottom:1px solid #1a1a1a; color:#ccc;">🔶 Seasonal revenue fluctuations</li>
+        <li style="padding:8px 0; border-bottom:1px solid #1a1a1a; color:#ccc;">🔶 Multi-location operational complexity</li>
+        <li style="padding:8px 0; border-bottom:1px solid #1a1a1a; color:#ccc;">🔶 Digital marketing investment needs</li>
+        <li style="padding:8px 0; color:#ccc;">🔶 Customer retention at scale</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ===== APPROACH ===== -->
+<div class="section" id="section-approach">
+  <div class="section-title">🎯 A — Approach</div>
+  <div class="section-subtitle">Key pain points and business opportunities identified</div>
+
+  <input class="search-box" type="text" placeholder="🔍 Search pain points & opportunities..." onkeyup="filterTable('approach-table', this.value)" />
+
+  <div class="card">
+    <table id="approach-table">
+      <thead>
+        <tr>
+          <th onclick="sortTable('approach-table', 0)">Pain Point / Opportunity <span class="sort-icon"></span></th>
+          <th onclick="sortTable('approach-table', 1)">Details <span class="sort-icon"></span></th>
+          <th onclick="sortTable('approach-table', 2)">Priority <span class="sort-icon"></span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Foot Traffic & Visibility</strong></td><td>Driving consistent foot traffic is essential — especially against online competitors</td><td><span class="tag">Critical</span></td></tr>
+        <tr><td><strong>Seasonal Revenue Peaks</strong></td><td>Toy retail is highly seasonal (holidays, birthdays, back-to-school). Filling gaps between peaks is critical</td><td><span class="tag">Critical</span></td></tr>
+        <tr><td><strong>Local Community Partnerships</strong></td><td>Strong opportunities to partner with schools, pediatricians, family services, event planners, children's activity providers</td><td><span class="tag-green tag">High</span></td></tr>
+        <tr><td><strong>E-commerce Growth</strong></td><td>Website is live and functional, but scaling online sales requires ongoing marketing investment</td><td><span class="tag-green tag">High</span></td></tr>
+        <tr><td><strong>Customer Retention & Loyalty</strong></td><td>Turning one-time buyers into repeat loyal customers through events, loyalty programs, personalized recommendations</td><td><span class="tag-gold tag">Medium</span></td></tr>
+        <tr><td><strong>Multi-Location Management</strong></td><td>Coordinating inventory, staffing, and marketing across two locations adds complexity</td><td><span class="tag-gold tag">Medium</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card" style="margin-top:24px;">
+    <div class="card-title">📈 Opportunity Impact Chart</div>
+    <div class="chart-bar-container">
+      <div class="chart-bar-label"><span>Foot Traffic & Visibility</span><span>95%</span></div>
+      <div class="chart-bar-track"><div class="chart-bar-fill animated-bar" data-width="95"></div></div>
+    </div>
+    <div class="chart-bar-container">
+      <div class="chart-bar-label"><span>Seasonal Revenue Stabilization</span><span>90%</span></div>
+      <div class="chart-bar-track"><div class="chart-bar-fill green animated-bar" data-width="90"></div></div>
+    </div>
+    <div class="chart-bar-container">
+      <div class="chart-bar-label"><span>Local Community Partnerships</span><span>92%</span></div>
+      <div class="chart-bar-track"><div class="chart-bar-fill blue animated-bar" data-width="92"></div></div>
+    </div>
+    <div class="chart-bar-container">
+      <div class="chart-bar-label"><span>E-commerce Growth</span><span>75%</span></div>
+      <div class="chart-bar-track"><div class="chart-bar-fill gold animated-bar" data-width="75"></div></div>
+    </div>
+    <div class="chart-bar-container">
+      <div class="chart-bar-label"><span>Customer Retention & Loyalty</span><span>80%</span></div>
+      <div class="chart-bar-track"><div class="chart-bar-fill animated-bar" data-width="80"></div></div>
+    </div>
+    <div class="chart-bar-container">
+      <div class="chart-bar-label"><span>Multi-Location Efficiency</span><span>65%</span></div>
+      <div class="chart-bar-track"><div class="chart-bar-fill green animated-bar" data-width="65"></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== LEVERAGE ===== -->
+<div class="section" id="section-leverage">
+  <div class="section-title">💡 L — Leverage</div>
+  <div class="section-subtitle">How BNI directly impacts Cheeky Monkey Toys</div>
+
+  <input class="search-box" type="text" placeholder="🔍 Search BNI value propositions..." onkeyup="filterTable('leverage-table', this.value)" />
+
+  <div class="card">
+    <table id="leverage-table">
+      <thead>
+        <tr>
+          <th onclick="sortTable('leverage-table', 0)"># <span class="sort-icon"></span></th>
+          <th onclick="sortTable('leverage-table', 1)">BNI Value Proposition <span class="sort-icon"></span></th>
+          <th onclick="sortTable('leverage-table', 2)">Impact for Cheeky Monkey <span class="sort-icon"></span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>1</td><td><strong>Trusted Referral Network</strong></td><td>Members are parents, grandparents, gift-givers — every member becomes a repeat customer AND referral source</td></tr>
+        <tr><td>2</td><td><strong>Word-of-Mouth at Scale</strong></td><td>Store gets mentioned in conversations weekly. Word-of-mouth is the #1 driver of new customers for local retail</td></tr>
+        <tr><td>3</td><td><strong>High-Value Contact Spheres</strong></td><td>Pediatricians, event planners, realtors, family law attorneys, schools, photographers</td></tr>
+        <tr><td>4</td><td><strong>Community Authority</strong></td><td>Reinforces identity as THE neighborhood toy store, strengthening brand loyalty</td></tr>
+        <tr><td>5</td><td><strong>B2B Opportunities</strong></td><td>Corporate gifting, employee appreciation, event sponsorships through professional networking</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card" style="margin-top:24px;">
+    <div class="card-title">🎯 Natural Contact Sphere Connections</div>
+    <input class="search-box" type="text" placeholder="🔍 Search contact spheres..." onkeyup="filterTable('sphere-table', this.value)" />
+    <table id="sphere-table">
+      <thead>
+        <tr>
+          <th onclick="sortTable('sphere-table', 0)">Profession <span class="sort-icon"></span></th>
+          <th onclick="sortTable('sphere-table', 1)">Referral Connection <span class="sort-icon"></span></th>
+          <th onclick="sortTable('sphere-table', 2)">Synergy <span class="sort-icon"></span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Pediatricians & Family Doctors</td><td>Waiting rooms, recommendations for developmental toys</td><td><span class="stars">★★★★★</span></td></tr>
+        <tr><td>Event Planners & Party Suppliers</td><td>Birthday parties, corporate family events</td><td><span class="stars">★★★★★</span></td></tr>
+        <tr><td>Realtors</td><td>Welcome-to-the-neighborhood gifts for families</td><td><span class="stars">★★★★★</span></td></tr>
+        <tr><td>Family Law Attorneys</td><td>Gift ideas for clients navigating custody arrangements</td><td><span class="stars">★★★★☆</span></td></tr>
+        <tr><td>Schools & Tutors</td><td>Educational toy partnerships</td><td><span class="stars">★★★★☆</span></td></tr>
+        <tr><td>Children's Photographers</td><td>Cross-promotions, gift partnerships</td><td><span class="stars">★★★★☆</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ===== EXECUTE ===== -->
+<div class="section" id="section-execute">
+  <div class="section-title">🚀 E — Execute</div>
+  <div class="section-subtitle">Ready-to-use outreach templates for Dexter Chow</div>
+
+  <div class="card">
+    <div class="card-title">📧 Email Invitation</div>
+    <p style="font-size:13px; color:#888; margin-bottom:12px;">Subject Lines (click to copy):</p>
+    <div style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:16px;">
+      <span class="tag" style="cursor:pointer;" onclick="copyText(this.innerText)" title="Click to copy">Dexter — A Room Full of Professionals Who Love Supporting Local Businesses</span>
+      <span class="tag-green tag" style="cursor:pointer;" onclick="copyText(this.innerText)" title="Click to copy">How 25+ Years of Imagination Could Inspire a Whole New Referral Stream</span>
+      <span class="tag-blue tag" style="cursor:pointer;" onclick="copyText(this.innerText)" title="Click to copy">Cheeky Monkey Toys + BNI = The Ultimate Word-of-Mouth Engine</span>
+    </div>
+    <div class="copy-section" id="email-draft">
+      <button class="copy-btn" onclick="copyBlock('email-draft')">📋 Copy</button>Hi Dexter,
+
+As a fellow professional who appreciates what it means to build something meaningful in a local community, I wanted to reach out because your story at Cheeky Monkey Toys genuinely resonated with me.
+
+Awakening imaginations since 1999, earning the title of "Best Toy Store," and growing to two thriving locations in Menlo Park and Los Altos — that doesn't happen without incredible dedication to quality and customer experience.
+
+I'd love to invite you to visit my BNI chapter as my guest. BNI is a structured professional networking group where local business owners meet weekly to build relationships and exchange qualified referrals. Here's why I think it's a perfect fit for Cheeky Monkey Toys:
+
+1. Instant Access to Loyal Local Advocates — Every member in the room is a connected professional in the community. Many are parents, grandparents, and gift-givers who would love knowing a curated, award-winning toy store is right in their neighborhood.
+
+2. Consistent Referral Flow — Imagine realtors recommending Cheeky Monkey as THE housewarming gift stop for families moving to the area, or event planners partnering with you for children's birthday parties and corporate family events.
+
+3. Community Visibility That Compounds — BNI members don't just refer once — they become long-term advocates. With your commitment to complimentary gift wrapping, knowledgeable staff, and a joyful shopping experience, every referral turns into a repeat customer.
+
+There's no obligation — just come see what it's all about. I truly believe the connections you'd make could open doors for Cheeky Monkey Toys that traditional advertising simply can't.
+
+To visit a chapter just complete this (***Visitor Invite***) simple form to reserve your seat and begin accelerating your business.
+
+Looking forward to welcoming you!
+
+Warm regards,
+[Your Name]
+[Your BNI Chapter Name]</div>
+    <div class="contact-actions" style="margin-top:16px;">
+      <a class="btn btn-primary" href="#" onclick="openContactEmail(); return false;">📧 Send This Email to Dexter</a>
+    </div>
+  </div>
+
+  <div class="grid-2" style="margin-top:24px;">
+    <div class="card">
+      <div class="card-title">💬 SMS Outreach</div>
+      <div class="copy-section" id="sms-draft" style="font-size:13px;">
+        <button class="copy-btn" onclick="copyBlock('sms-draft')">📋 Copy</button>Hi Dexter! I'm a member of a local business networking group (BNI) & thought Cheeky Monkey Toys would be a great fit. We meet weekly to exchange referrals. Would you be interested in visiting as my guest? No obligation! Reply YES & I'll send details.</div>
+      <div class="contact-actions" style="margin-top:12px;">
+        <a class="btn btn-outline" href="sms:6503287975?body=Hi%20Dexter!%20I%27m%20a%20member%20of%20a%20local%20business%20networking%20group%20(BNI)%20%26%20thought%20Cheeky%20Monkey%20Toys%20would%20be%20a%20great%20fit.%20We%20meet%20weekly%20to%20exchange%20referrals.%20Would%20you%20be%20interested%20in%20visiting%20as%20my%20guest%3F%20No%20obligation!%20Reply%20YES%20%26%20I%27ll%20send%20details.">💬 Send SMS</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">📞 Call Script (20–30 Seconds)</div>
+      <div class="copy-section" id="call-draft" style="font-size:13px;">
+        <button class="copy-btn" onclick="copyBlock('call-draft')">📋 Copy</button>"Hi Dexter, my name is [Your Name]. I'm a local business owner here in the Menlo Park/Peninsula area and a member of BNI — a professional referral networking group. I've been a fan of Cheeky Monkey Toys and I think the connections in our chapter could drive a lot of foot traffic and referrals to your stores. I'd love to invite you as my guest to an upcoming meeting — can I send you the details by email?"</div>
+      <div class="contact-actions" style="margin-top:12px;">
+        <a class="btn btn-outline" href="tel:6503287975">📞 Call Dexter</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SCORE ===== -->
+<div class="section" id="section-score">
+  <div class="section-title">📊 Referral Potential Score</div>
+  <div class="section-subtitle">Overall BNI fit assessment for Cheeky Monkey Toys</div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">Category Ratings</div>
+      <input class="search-box" type="text" placeholder="🔍 Search categories..." onkeyup="filterTable('score-table', this.value)" />
+      <table id="score-table">
+        <thead>
+          <tr>
+            <th onclick="sortTable('score-table', 0)">Category <span class="sort-icon"></span></th>
+            <th onclick="sortTable('score-table', 1)">Rating <span class="sort-icon"></span></th>
+            <th onclick="sortTable('score-table', 2)">Score <span class="sort-icon"></span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Community Rootedness</td><td><span class="stars">★★★★★</span></td><td>5 / 5</td></tr>
+          <tr><td>Referral-Friendly Business</td><td><span class="stars">★★★★★</span></td><td>5 / 5</td></tr>
+          <tr><td>Contact Sphere Alignment</td><td><span class="stars">★★★★★</span></td><td>5 / 5</td></tr>
+          <tr><td>B2B Potential</td><td><span class="stars">★★★★☆</span></td><td>4 / 5</td></tr>
+          <tr><td>Online Presence</td><td><span class="stars">★★★★☆</span></td><td>4 / 5</td></tr>
+        </tbody>
+      </table>
+      <div style="margin-top:20px; text-align:center;">
+        <div class="badge-excellent">🏆 Overall BNI Fit: EXCELLENT</div>
+      </div>
+    </div>
+
+    <div class="card" style="display:flex; flex-direction:column; align-items:center; justify-content:center;">
+      <div class="card-title" style="text-align:center;">Overall Score</div>
+      <div class="donut-wrapper">
+        <div class="donut-chart">
+          <svg width="200" height="200" viewBox="0 0 200 200">
+            <circle cx="100" cy="100" r="80" fill="none" stroke="#1a1a1a" stroke-width="20" />
+            <circle cx="100" cy="100" r="80" fill="none" stroke="#CF2030" stroke-width="20"
+              stroke-dasharray="462" stroke-dashoffset="462" stroke-linecap="round"
+              id="donut-fill" />
+          </svg>
+          <div class="donut-center">
+            <div class="score" id="donut-score">0</div>
+            <div class="label">out of 25</div>
+          </div>
+        </div>
+        <div class="legend">
+          <div class="legend-item"><div class="legend-dot" style="background:#CF2030;"></div>Community (5/5)</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#e8243a;"></div>Referral-Friendly (5/5)</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#10b981;"></div>Contact Spheres (5/5)</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#3b82f6;"></div>B2B Potential (4/5)</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#f59e0b;"></div>Online Presence (4/5)</div>
+        </div>
+      </div>
+
+      <div style="margin-top:24px; width:100%;">
+        <div class="chart-bar-container">
+          <div class="chart-bar-label"><span>Community Rootedness</span><span>5/5</span></div>
+          <div class="chart-bar-track"><div class="chart-bar-fill animated-bar" data-width="100"></div></div>
+        </div>
+        <div class="chart-bar-container">
+          <div class="chart-bar-label"><span>Referral-Friendly</span><span>5/5</span></div>
+          <div class="chart-bar-track"><div class="chart-bar-fill green animated-bar" data-width="100"></div></div>
+        </div>
+        <div class="chart-bar-container">
+          <div class="chart-bar-label"><span>Contact Sphere Alignment</span><span>5/5</span></div>
+          <div class="chart-bar-track"><div class="chart-bar-fill blue animated-bar" data-width="100"></div></div>
+        </div>
+        <div class="chart-bar-container">
+          <div class="chart-bar-label"><span>B2B Potential</span><span>4/5</span></div>
+          <div class="chart-bar-track"><div class="chart-bar-fill gold animated-bar" data-width="80"></div></div>
+        </div>
+        <div class="chart-bar-container">
+          <div class="chart-bar-label"><span>Online Presence</span><span>4/5</span></div>
+          <div class="chart-bar-track"><div class="chart-bar-fill animated-bar" data-width="80"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== TIMELINE ===== -->
+<div class="section" id="section-timeline">
+  <div class="section-title">📅 Follow-Up Timeline</div>
+  <div class="section-subtitle">10-day outreach execution plan</div>
+
+  <input class="search-box" type="text" placeholder="🔍 Search actions..." onkeyup="filterTable('timeline-table', this.value)" />
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">📋 Action Plan Table</div>
+      <table id="timeline-table">
+        <thead>
+          <tr>
+            <th onclick="sortTable('timeline-table', 0)">Day <span class="sort-icon"></span></th>
+            <th onclick="sortTable('timeline-table', 1)">Action <span class="sort-icon"></span></th>
+            <th onclick="sortTable('timeline-table', 2)">Channel <span class="sort-icon"></span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Day 1</td><td>Send personalized email</td><td><span class="tag">Email</span></td></tr>
+          <tr><td>Day 1</td><td>Send SMS introduction</td><td><span class="tag-green tag">SMS</span></td></tr>
+          <tr><td>Day 3</td><td>Follow-up call if no response</td><td><span class="tag-blue tag">Phone</span></td></tr>
+          <tr><td>Day 5</td><td>Second email — "Just checking in"</td><td><span class="tag">Email</span></td></tr>
+          <tr><td>Day 7</td><td>LinkedIn connection request with personal note</td><td><span class="tag-gold tag">LinkedIn</span></td></tr>
+          <tr><td>Day 10</td><td>Visit the store in person, introduce yourself</td><td><span class="tag" style="background:rgba(139,92,246,0.15); color:#8b5cf6;">In-Person</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <div class="card-title">📅 Visual Timeline</div>
+      <div class="timeline-item">
+        <div class="timeline-day">1</div>
+        <div class="timeline-action"><strong>Email + SMS</strong><br/>Send personalized email invitation and SMS introduction</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-day">3</div>
+        <div class="timeline-action"><strong>Phone Call</strong><br/>Follow-up call if no response — use the call script</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-day">5</div>
+        <div class="timeline-action"><strong>Follow-Up Email</strong><br/>Second email — "Just checking in" with meeting details</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-day">7</div>
+        <div class="timeline-action"><strong>LinkedIn</strong><br/>Connection request with a personal note referencing the store</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-day">10</div>
+        <div class="timeline-action"><strong>In-Person Visit</strong><br/>Visit Cheeky Monkey Toys, introduce yourself, and personally invite Dexter</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:24px;">
+    <div class="card-title">⚡ Quick Actions</div>
+    <div class="contact-actions">
+      <a class="btn btn-primary" href="#" onclick="openContactEmail(); return false;">📧 Send Email (Day 1)</a>
+      <a class="btn btn-outline" href="sms:6503287975?body=Hi%20Dexter!%20I%27m%20a%20member%20of%20a%20local%20business%20networking%20group%20(BNI)%20%26%20thought%20Cheeky%20Monkey%20Toys%20would%20be%20a%20great%20fit.%20We%20meet%20weekly%20to%20exchange%20referrals.%20Would%20you%20be%20interested%20in%20visiting%20as%20my%20guest%3F%20No%20obligation!%20Reply%20YES%20%26%20I%27ll%20send%20details.">💬 Send SMS (Day 1)</a>
+      <a class="btn btn-outline" href="tel:6503287975">📞 Call (Day 3)</a>
+      <a class="btn btn-dark" href="https://www.linkedin.com/in/dexterchow" target="_blank">🔗 LinkedIn (Day 7)</a>
+      <a class="btn btn-dark" href="http://www.cheekymonkeytoys.com" target="_blank">🏪 Visit Website</a>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=500w" alt="Higgins Reports" />
+  <div class="footer-text">
+    S.A.L.E. Client Strategy Report &bull; Generated by Higgins Reports &bull; &copy; 2026 Higgins AI &bull; <a href="https://higgins.ai" target="_blank" style="color:#CF2030;">higgins.ai</a> &bull; 1-888-364-3924
+  </div>
+</div>
+
+<script>
+  // NAVIGATION
+  function showSection(id) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    document.getElementById('section-' + id).classList.add('active');
+    event.target.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    animateBars();
+    if (id === 'score') animateDonut();
+  }
+
+  // TABLE SEARCH/FILTER
+  function filterTable(tableId, query) {
+    const table = document.getElementById(tableId);
+    const rows = table.querySelectorAll('tbody tr');
+    const q = query.toLowerCase();
+    rows.forEach(row => {
+      const text = row.textContent.toLowerCase();
+      row.style.display = text.includes(q) ? '' : 'none';
+    });
+  }
+
+  // TABLE SORT
+  const sortStates = {};
+  function sortTable(tableId, colIndex) {
+    const table = document.getElementById(tableId);
+    const tbody = table.querySelector('tbody');
+    const rows = Array.from(tbody.querySelectorAll('tr'));
+    const key = tableId + '-' + colIndex;
+    const asc = sortStates[key] !== 'asc';
+    sortStates[key] = asc ? 'asc' : 'desc';
+
+    // Clear sort classes
+    table.querySelectorAll('th').forEach(th => th.classList.remove('sorted-asc', 'sorted-desc'));
+    const th = table.querySelectorAll('th')[colIndex];
+    th.classList.add(asc ? 'sorted-asc' : 'sorted-desc');
+
+    rows.sort((a, b) => {
+      let aVal = a.cells[colIndex].textContent.trim();
+      let bVal = b.cells[colIndex].textContent.trim();
+      // Try numeric sort
+      const aNum = parseFloat(aVal.replace(/[^0-9.-]/g, ''));
+      const bNum = parseFloat(bVal.replace(/[^0-9.-]/g, ''));
+      if (!isNaN(aNum) && !isNaN(bNum)) {
+        return asc ? aNum - bNum : bNum - aNum;
+      }
+      return asc ? aVal.localeCompare(bVal) : bVal.localeCompare(aVal);
+    });
+    rows.forEach(r => tbody.appendChild(r));
+  }
+
+  // COPY
+  function copyBlock(id) {
+    const el = document.getElementById(id);
+    const btn = el.querySelector('.copy-btn');
+    const text = el.textContent.replace('📋 Copy', '').trim();
+    navigator.clipboard.writeText(text).then(() => {
+      btn.textContent = '✅ Copied!';
+      setTimeout(() => btn.textContent = '📋 Copy', 2000);
+    });
+  }
+
+  function copyText(text) {
+    navigator.clipboard.writeText(text).then(() => {
+      const toast = document.createElement('div');
+      toast.textContent = '✅ Subject line copied!';
+      toast.style.cssText = 'position:fixed;bottom:30px;right:30px;background:#CF2030;color:#fff;padding:12px 24px;border-radius:10px;font-size:14px;z-index:9999;animation:fadeIn 0.3s;';
+      document.body.appendChild(toast);
+      setTimeout(() => toast.remove(), 2000);
+    });
+  }
+
+  // EMAIL CONTACT
+  function openContactEmail() {
+    const subject = encodeURIComponent('Dexter — A Room Full of Professionals Who Love Supporting Local Businesses');
+    const body = encodeURIComponent(
+      `Hi Dexter,\n\nAs a fellow professional who appreciates what it means to build something meaningful in a local community, I wanted to reach out because your story at Cheeky Monkey Toys genuinely resonated with me.\n\nAwakening imaginations since 1999, earning the title of "Best Toy Store," and growing to two thriving locations in Menlo Park and Los Altos — that doesn't happen without incredible dedication to quality and customer experience.\n\nI'd love to invite you to visit my BNI chapter as my guest. BNI is a structured professional networking group where local business owners meet weekly to build relationships and exchange qualified referrals. Here's why I think it's a perfect fit for Cheeky Monkey Toys:\n\n1. Instant Access to Loyal Local Advocates — Every member in the room is a connected professional in the community. Many are parents, grandparents, and gift-givers who would love knowing a curated, award-winning toy store is right in their neighborhood.\n\n2. Consistent Referral Flow — Imagine realtors recommending Cheeky Monkey as THE housewarming gift stop for families moving to the area, or event planners partnering with you for children's birthday parties and corporate family events.\n\n3. Community Visibility That Compounds — BNI members don't just refer once — they become long-term advocates. With your commitment to complimentary gift wrapping, knowledgeable staff, and a joyful shopping experience, every referral turns into a repeat customer.\n\nThere's no obligation — just come see what it's all about. I truly believe the connections you'd make could open doors for Cheeky Monkey Toys that traditional advertising simply can't.\n\nLooking forward to welcoming you!\n\nWarm regards,\n[Your Name]\n[Your BNI Chapter Name]`
+    );
+    window.open(`mailto:chow@cheekymonkeytoys.com?subject=${subject}&body=${body}`);
+  }
+
+  // ANIMATE BARS
+  function animateBars() {
+    setTimeout(() => {
+      document.querySelectorAll('.animated-bar').forEach(bar => {
+        bar.style.width = bar.getAttribute('data-width') + '%';
+      });
+    }, 200);
+  }
+
+  // ANIMATE DONUT
+  function animateDonut() {
+    const circle = document.getElementById('donut-fill');
+    const scoreEl = document.getElementById('donut-score');
+    const totalScore = 23;
+    const maxScore = 25;
+    const circumference = 2 * Math.PI * 80; // ~502.6
+    const offset = circumference - (totalScore / maxScore) * circumference;
+
+    setTimeout(() => {
+      circle.style.transition = 'stroke-dashoffset 1.5s ease';
+      circle.style.strokeDashoffset = offset;
+
+      let current = 0;
+      const interval = setInterval(() => {
+        current++;
+        scoreEl.textContent = current;
+        if (current >= totalScore) clearInterval(interval);
+      }, 60);
+    }, 300);
+  }
+
+  // INIT
+  animateBars();
+</script>
+</body>
+</html>

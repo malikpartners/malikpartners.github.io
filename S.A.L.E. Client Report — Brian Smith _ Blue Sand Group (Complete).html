@@ -1,0 +1,693 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>S.A.L.E. Report — Brian Smith | Blue Sand Group</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'Inter',sans-serif;background:#000;color:#e0e0e0;min-height:100vh;overflow-x:hidden;}
+  ::-webkit-scrollbar{width:8px;}
+  ::-webkit-scrollbar-track{background:#111;}
+  ::-webkit-scrollbar-thumb{background:#CF2030;border-radius:4px;}
+
+  header{background:linear-gradient(135deg,#080808,#151515);border-bottom:3px solid #CF2030;padding:12px 28px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:1000;box-shadow:0 4px 30px rgba(207,32,48,.2);flex-wrap:wrap;gap:10px;}
+  header img.logo{height:44px;object-fit:contain;}
+  nav{display:flex;gap:4px;flex-wrap:wrap;}
+  nav a{color:#CF2030;text-decoration:none;font-weight:600;font-size:11px;padding:7px 13px;border-radius:6px;transition:.25s;border:1px solid transparent;text-transform:uppercase;letter-spacing:.6px;cursor:pointer;white-space:nowrap;}
+  nav a:hover,nav a.active{background:#CF2030;color:#fff;border-color:#CF2030;}
+
+  .container{max-width:1320px;margin:0 auto;padding:26px 18px 50px;}
+  .report-title{text-align:center;margin-bottom:30px;}
+  .report-title h1{font-size:28px;font-weight:900;color:#CF2030;letter-spacing:-.5px;}
+  .report-title h2{font-size:17px;font-weight:400;color:#888;margin-top:2px;}
+  .badge{display:inline-block;background:#CF2030;color:#fff;font-size:10px;font-weight:700;padding:4px 14px;border-radius:20px;margin-top:8px;letter-spacing:1px;text-transform:uppercase;}
+
+  .section{display:none;animation:fadeIn .3s ease;}
+  .section.active{display:block;}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+
+  .card{background:linear-gradient(145deg,#111,#181818);border:1px solid #252525;border-radius:12px;padding:22px;margin-bottom:20px;transition:border-color .3s;}
+  .card:hover{border-color:#CF2030;}
+  .card h3{color:#CF2030;font-size:16px;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+
+  .profile-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;}
+  .profile-item{background:#0b0b0b;border:1px solid #1e1e1e;border-radius:8px;padding:12px 16px;}
+  .profile-item .label{font-size:9px;text-transform:uppercase;letter-spacing:1.3px;color:#CF2030;font-weight:700;margin-bottom:3px;}
+  .profile-item .value{font-size:14px;color:#ddd;font-weight:500;word-break:break-word;}
+  .profile-item .value a{color:#CF2030;text-decoration:none;transition:.2s;}
+  .profile-item .value a:hover{color:#ff4455;text-decoration:underline;}
+
+  .search-bar{width:100%;padding:10px 16px;background:#080808;border:1px solid #2a2a2a;border-radius:8px;color:#e0e0e0;font-size:13px;margin-bottom:14px;outline:none;transition:.3s;}
+  .search-bar:focus{border-color:#CF2030;box-shadow:0 0 0 3px rgba(207,32,48,.1);}
+  .search-bar::placeholder{color:#555;}
+
+  .tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+  table{width:100%;border-collapse:collapse;font-size:12px;}
+  thead th{background:#CF2030;color:#fff;text-align:left;padding:10px 12px;font-weight:700;font-size:10px;text-transform:uppercase;letter-spacing:.5px;cursor:pointer;user-select:none;white-space:nowrap;position:relative;}
+  thead th:hover{background:#b81c2a;}
+  thead th::after{content:' ⇅';font-size:9px;opacity:.4;}
+  thead th.asc::after{content:' ▲';opacity:1;}
+  thead th.desc::after{content:' ▼';opacity:1;}
+  tbody tr{border-bottom:1px solid #1a1a1a;transition:.2s;}
+  tbody tr:hover{background:rgba(207,32,48,.06);}
+  tbody td{padding:10px 12px;color:#bbb;vertical-align:top;}
+  tbody td a{color:#CF2030;text-decoration:none;font-weight:600;}
+  tbody td a:hover{text-decoration:underline;color:#ff4455;}
+
+  .btn{display:inline-flex;align-items:center;gap:6px;background:#CF2030;color:#fff;font-weight:700;font-size:12px;padding:10px 20px;border:none;border-radius:8px;cursor:pointer;transition:.3s;text-decoration:none;text-transform:uppercase;letter-spacing:.5px;}
+  .btn:hover{background:#e82535;transform:translateY(-1px);box-shadow:0 6px 20px rgba(207,32,48,.25);}
+  .btn-outline{background:transparent;border:1.5px solid #CF2030;color:#CF2030;}
+  .btn-outline:hover{background:#CF2030;color:#fff;}
+
+  .stats-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px;margin-bottom:20px;}
+  .stat-card{background:linear-gradient(145deg,#111,#181818);border:1px solid #252525;border-radius:10px;padding:18px;text-align:center;transition:.3s;}
+  .stat-card:hover{border-color:#CF2030;transform:translateY(-2px);}
+  .stat-card .stat-num{font-size:28px;font-weight:900;color:#CF2030;line-height:1.1;}
+  .stat-card .stat-label{font-size:9px;text-transform:uppercase;letter-spacing:1px;color:#777;margin-top:5px;font-weight:600;}
+
+  .bar-row{display:flex;align-items:center;margin-bottom:8px;gap:8px;}
+  .bar-label{min-width:150px;font-size:11px;color:#999;text-align:right;flex-shrink:0;}
+  .bar-track{flex:1;background:#151515;border-radius:6px;height:24px;overflow:hidden;}
+  .bar-fill{height:100%;border-radius:6px;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:10px;font-weight:700;color:#fff;min-width:32px;transition:width .8s ease;}
+
+  .chart-container{display:flex;gap:20px;flex-wrap:wrap;margin-top:12px;}
+  .chart-box{flex:1;min-width:260px;background:#0b0b0b;border:1px solid #1e1e1e;border-radius:10px;padding:18px;}
+  .chart-box h4{color:#CF2030;font-size:12px;font-weight:700;margin-bottom:14px;text-transform:uppercase;letter-spacing:.5px;}
+  .donut-wrap{display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px;}
+  .donut-legend{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;}
+  .donut-legend-item{display:flex;align-items:center;gap:5px;font-size:10px;color:#999;}
+  .donut-legend-item .dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+
+  .sub-tabs{display:flex;gap:5px;margin-bottom:16px;flex-wrap:wrap;}
+  .sub-tab{background:#161616;color:#777;border:1px solid #252525;padding:7px 16px;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer;transition:.3s;text-transform:uppercase;letter-spacing:.3px;}
+  .sub-tab:hover,.sub-tab.active{background:#CF2030;color:#fff;border-color:#CF2030;}
+  .sub-panel{display:none;}
+  .sub-panel.active{display:block;}
+
+  .timeline{position:relative;padding-left:26px;}
+  .timeline::before{content:'';position:absolute;left:7px;top:0;bottom:0;width:2px;background:linear-gradient(to bottom,#CF2030,#ff6b78);}
+  .tl-item{position:relative;margin-bottom:20px;padding:14px 18px;background:#0b0b0b;border:1px solid #1e1e1e;border-radius:10px;transition:.3s;}
+  .tl-item:hover{border-color:#CF2030;}
+  .tl-item::before{content:'';position:absolute;left:-23px;top:17px;width:12px;height:12px;background:#CF2030;border-radius:50%;border:2px solid #000;}
+  .tl-item h4{color:#CF2030;font-size:13px;font-weight:700;margin-bottom:2px;}
+  .tl-item .tl-time{font-size:10px;color:#555;font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+  .tl-item p{font-size:12px;color:#999;line-height:1.6;}
+
+  .lev-card{background:#0b0b0b;border:1px solid #1e1e1e;border-left:4px solid #CF2030;border-radius:8px;padding:14px 18px;margin-bottom:12px;transition:.3s;}
+  .lev-card:hover{border-color:#CF2030;}
+  .lev-card h4{color:#e0e0e0;font-size:13px;font-weight:700;margin-bottom:3px;}
+  .lev-card p{color:#888;font-size:12px;line-height:1.6;}
+
+  .email-box{background:#0b0b0b;border:1px solid #1e1e1e;border-radius:10px;padding:20px;text-align:left;max-width:740px;margin:0 auto;}
+  .email-box h4{color:#CF2030;font-size:13px;margin-bottom:10px;}
+  .email-meta{color:#666;font-size:11px;margin-bottom:3px;}
+  .email-meta strong{color:#999;}
+  .email-body{color:#bbb;font-size:12px;line-height:1.8;}
+
+  .gauge-row{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;margin-top:14px;}
+  .gauge-card{background:#0b0b0b;border:1px solid #1e1e1e;border-radius:10px;padding:16px;text-align:center;min-width:140px;flex:1;max-width:200px;}
+  .gauge-card .g-label{font-size:10px;text-transform:uppercase;letter-spacing:.5px;color:#888;font-weight:600;margin-bottom:8px;}
+  .gauge-ring{position:relative;display:inline-block;}
+  .gauge-ring svg{transform:rotate(-90deg);}
+  .gauge-val{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:16px;font-weight:900;color:#CF2030;}
+
+  footer{background:#080808;border-top:2px solid #CF2030;padding:20px 28px;text-align:center;}
+  footer img.logo-sm{height:26px;margin-bottom:6px;opacity:.7;}
+  footer p{color:#444;font-size:10px;line-height:1.6;}
+  footer a{color:#CF2030;text-decoration:none;}
+
+  @media(max-width:768px){
+    header{flex-direction:column;gap:8px;padding:10px 12px;}
+    nav{justify-content:center;}
+    nav a{font-size:9px;padding:5px 7px;}
+    .container{padding:14px 8px 30px;}
+    .report-title h1{font-size:20px;}
+    .bar-label{min-width:80px;font-size:9px;}
+    .profile-grid{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <img class="logo" src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports"/>
+  <nav id="mainNav">
+    <a class="active" onclick="go('overview',this)">Overview</a>
+    <a onclick="go('services',this)">Services</a>
+    <a onclick="go('portfolio',this)">Portfolio</a>
+    <a onclick="go('sphere',this)">Contact Sphere</a>
+    <a onclick="go('sale',this)">S.A.L.E. Strategy</a>
+    <a onclick="go('engagement',this)">Engagement</a>
+    <a onclick="go('contact',this)">Contact</a>
+  </nav>
+</header>
+
+<div class="container">
+  <div class="report-title">
+    <h1>S.A.L.E. Client Simple Search & Strategy</h1>
+    <h2>Brian Smith — Blue Sand Group</h2>
+    <span class="badge">Marketing & Advertising • Long Beach, CA 90802</span>
+  </div>
+
+  <!-- ========== OVERVIEW ========== -->
+  <div id="overview" class="section active">
+    <div class="stats-row">
+      <div class="stat-card"><div class="stat-num">11–50</div><div class="stat-label">Employees</div></div>
+      <div class="stat-card"><div class="stat-num">12</div><div class="stat-label">Core Services</div></div>
+      <div class="stat-card"><div class="stat-num">27</div><div class="stat-label">Portfolio Clients</div></div>
+      <div class="stat-card"><div class="stat-num">7</div><div class="stat-label">Sphere Matches</div></div>
+      <div class="stat-card"><div class="stat-num">90802</div><div class="stat-label">Zip Code</div></div>
+      <div class="stat-card"><div class="stat-num">2.6K</div><div class="stat-label">Social Followers</div></div>
+    </div>
+
+    <div class="card">
+      <h3>📋 Client Profile</h3>
+      <input type="text" class="search-bar" id="profS" placeholder="🔍  Search profile fields..." oninput="fProf()">
+      <div class="profile-grid" id="profG">
+        <div class="profile-item" data-s="name brian smith"><div class="label">Full Name</div><div class="value">Brian Smith</div></div>
+        <div class="profile-item" data-s="email brian choosebsg"><div class="label">Email</div><div class="value"><a href="mailto:brian@choosebsg.com">brian@choosebsg.com</a></div></div>
+        <div class="profile-item" data-s="title owner"><div class="label">Title</div><div class="value">Business Owner</div></div>
+        <div class="profile-item" data-s="company blue sand group bsg"><div class="label">Company</div><div class="value">Blue Sand Group</div></div>
+        <div class="profile-item" data-s="industry marketing advertising"><div class="label">Industry</div><div class="value">Marketing & Advertising</div></div>
+        <div class="profile-item" data-s="location long beach california"><div class="label">Location</div><div class="value">Long Beach, California, US</div></div>
+        <div class="profile-item" data-s="size employees 11 50"><div class="label">Company Size</div><div class="value">11–50 Employees</div></div>
+        <div class="profile-item" data-s="zip 90802"><div class="label">Zip Code</div><div class="value">90802</div></div>
+        <div class="profile-item" data-s="corporate office el segundo 90245"><div class="label">Corporate Office</div><div class="value">PO Box 2754, El Segundo, CA 90245</div></div>
+        <div class="profile-item" data-s="website choosebsg"><div class="label">Website</div><div class="value"><a href="https://www.choosebsg.com" target="_blank">www.choosebsg.com</a></div></div>
+        <div class="profile-item" data-s="linkedin personal"><div class="label">LinkedIn (Personal)</div><div class="value"><a href="https://www.linkedin.com/in/brian-smith-041a3314b/" target="_blank">View Profile ↗</a></div></div>
+        <div class="profile-item" data-s="linkedin company"><div class="label">LinkedIn (Company)</div><div class="value"><a href="https://www.linkedin.com/company/6421621" target="_blank">View Page ↗</a></div></div>
+        <div class="profile-item" data-s="record date 2026 march"><div class="label">Record Date</div><div class="value">March 26, 2026</div></div>
+        <div class="profile-item" data-s="social followers 2600"><div class="label">Social Followers</div><div class="value">2,600+</div></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>🏢 Business Intelligence Summary</h3>
+      <p style="color:#999;font-size:13px;line-height:1.85;">
+        <strong style="color:#e0e0e0;">Blue Sand Group (BSG)</strong> is a full-service digital marketing firm headquartered in Long Beach, California (ZIP 90802), with a corporate office at PO Box 2754, El Segundo, CA 90245. BSG positions itself as a <em>"design meets tech"</em> company — a group of dedicated, resourceful people who seek to achieve the very best and stay near the leading edge of digital marketing. Their team includes <strong style="color:#CF2030;">award-winning website designers</strong>, programmers, marketers, app builders, and social media specialists.
+      </p><br>
+      <p style="color:#999;font-size:13px;line-height:1.85;">
+        BSG's value proposition centers on <strong style="color:#CF2030;">long-term client relationships</strong> rather than one-time projects. As stated on their website: <em>"The digital marketing services we provide are not just a one-time-and-out proposition. We aim to craft a relationship on a continuing basis."</em> They serve small-to-mid-sized businesses, building branding, marketing, and communications that consistently drive customer acquisition and retention. Their SEO professionals have lifted companies from Google's page 2 and beyond to top first-page positions. BSG's portfolio of <strong style="color:#e0e0e0;">27+ named clients</strong> spans healthcare, hospitality, legal, real estate, manufacturing, food & beverage, and entertainment.
+      </p>
+    </div>
+
+    <div class="card">
+      <h3>📊 Key Performance Gauges</h3>
+      <div class="gauge-row" id="gaugeRow"></div>
+    </div>
+  </div>
+
+  <!-- ========== SERVICES ========== -->
+  <div id="services" class="section">
+    <div class="card">
+      <h3>⚙️ Core Services — Blue Sand Group (12)</h3>
+      <input type="text" class="search-bar" id="svcS" placeholder="🔍  Search services..." oninput="fTbl('svcT','svcS')">
+      <div class="tbl-wrap">
+        <table id="svcT">
+          <thead><tr>
+            <th onclick="srt('svcT',0)">#</th>
+            <th onclick="srt('svcT',1)">Service</th>
+            <th onclick="srt('svcT',2)">Description</th>
+            <th onclick="srt('svcT',3)">Referral Score</th>
+          </tr></thead>
+          <tbody>
+            <tr><td>1</td><td>🌐 Website Design & Development</td><td>Custom responsive websites with forward-thinking, original designs that convert users into customers</td><td>5</td></tr>
+            <tr><td>2</td><td>🔍 Search Engine Optimization</td><td>Google ranking strategies, link building, algorithm-adaptive SEO — lifted clients from page 2+ to page 1</td><td>5</td></tr>
+            <tr><td>3</td><td>📱 Social Media Marketing</td><td>Multi-channel brand presence across Facebook, Twitter, Google+ and more — "If users can be on any channel, brands must be on every channel"</td><td>4</td></tr>
+            <tr><td>4</td><td>🎥 Video Marketing & Production</td><td>Video editing and production essential for converting viewers into customers in the modern digital landscape</td><td>4</td></tr>
+            <tr><td>5</td><td>🖼️ Branding & Logo Design</td><td>Full brand identity creation — logos and visual design systems that represent companies for the long haul</td><td>4</td></tr>
+            <tr><td>6</td><td>📊 Ad Placement & SEM</td><td>Strategic paid advertising placement and search engine marketing campaigns that deliver measurable ROI</td><td>4</td></tr>
+            <tr><td>7</td><td>📐 Mobile Responsive Design</td><td>Leading-edge mobile viewing — completely responsive sites that perform on any device</td><td>4</td></tr>
+            <tr><td>8</td><td>💻 Content Management Systems</td><td>CMS integration — web-based publishing, format management, revision control, indexing, search & retrieval</td><td>3</td></tr>
+            <tr><td>9</td><td>📢 Public Relations & Reputation</td><td>Conceptualizes, designs, develops, and maintains overall online branding and reputation management</td><td>3</td></tr>
+            <tr><td>10</td><td>📲 App & Mobile Development</td><td>Beautiful, intuitive applications and mobile websites built to specification with future updates in mind</td><td>3</td></tr>
+            <tr><td>11</td><td>🖨️ Promotional Products</td><td>Custom printing for events, trade shows — "Take your logo off the digital space and print it on a wide range of products"</td><td>3</td></tr>
+            <tr><td>12</td><td>🖥️ Custom Programming</td><td>Advanced coding in CSS, HTML5, PHP, Java to take site capabilities to the next level</td><td>3</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>📊 Service Referral Potential Analysis</h3>
+      <div class="chart-container">
+        <div class="chart-box" style="flex:2;">
+          <h4>Referral Score by Service (1–5)</h4>
+          <div id="svcBar"></div>
+        </div>
+        <div class="chart-box" style="flex:1;min-width:240px;">
+          <h4>Service Category Mix</h4>
+          <div class="donut-wrap">
+            <svg viewBox="0 0 200 200" width="190" height="190" id="donut1"></svg>
+            <div id="leg1" class="donut-legend"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== PORTFOLIO ========== -->
+  <div id="portfolio" class="section">
+    <div class="stats-row">
+      <div class="stat-card"><div class="stat-num">27</div><div class="stat-label">Named Clients</div></div>
+      <div class="stat-card"><div class="stat-num">13</div><div class="stat-label">Industries Served</div></div>
+      <div class="stat-card"><div class="stat-num">Award</div><div class="stat-label">Winning Designs</div></div>
+    </div>
+
+    <div class="card">
+      <h3>🎨 Portfolio Clients — Blue Sand Group</h3>
+      <input type="text" class="search-bar" id="portS" placeholder="🔍  Search portfolio by name or industry..." oninput="fTbl('portT','portS')">
+      <div class="tbl-wrap">
+        <table id="portT">
+          <thead><tr>
+            <th onclick="srt('portT',0)">#</th>
+            <th onclick="srt('portT',1)">Client</th>
+            <th onclick="srt('portT',2)">Industry / Type</th>
+            <th onclick="srt('portT',3)">View</th>
+          </tr></thead>
+          <tbody>
+            <tr><td>1</td><td>SBCHC</td><td>Healthcare / Community</td><td><a href="https://www.choosebsg.com/portfolios/sbchc/" target="_blank">View ↗</a></td></tr>
+            <tr><td>2</td><td>American Bars</td><td>Hospitality / Beverage</td><td><a href="https://www.choosebsg.com/portfolios/american-bars/" target="_blank">View ↗</a></td></tr>
+            <tr><td>3</td><td>Ortho Precision</td><td>Healthcare / Orthodontics</td><td><a href="https://www.choosebsg.com/portfolios/ortho-precision/" target="_blank">View ↗</a></td></tr>
+            <tr><td>4</td><td>Baur Films</td><td>Entertainment / Film</td><td><a href="https://www.choosebsg.com/portfolios/baur-films/" target="_blank">View ↗</a></td></tr>
+            <tr><td>5</td><td>Stewart Properties</td><td>Real Estate</td><td><a href="https://www.choosebsg.com/portfolios/stewart-properties/" target="_blank">View ↗</a></td></tr>
+            <tr><td>6</td><td>RJR Fabrics</td><td>Manufacturing / Textiles</td><td><a href="https://www.choosebsg.com/portfolios/rjr-fabrics/" target="_blank">View ↗</a></td></tr>
+            <tr><td>7</td><td>Flying Cloud Yachts</td><td>Marine / Luxury</td><td><a href="https://www.choosebsg.com/portfolios/flying-cloud-yachts/" target="_blank">View ↗</a></td></tr>
+            <tr><td>8</td><td>Cotton+Steel Fabrics</td><td>Manufacturing / Textiles</td><td><a href="https://www.choosebsg.com/portfolios/cotton-steel-fabrics/" target="_blank">View ↗</a></td></tr>
+            <tr><td>9</td><td>West Coast Defense</td><td>Legal / Criminal Defense</td><td><a href="https://www.choosebsg.com/portfolios/west-coast-defense/" target="_blank">View ↗</a></td></tr>
+            <tr><td>10</td><td>PCB Label</td><td>Manufacturing / Labels</td><td><a href="https://www.choosebsg.com/portfolios/pcb-label/" target="_blank">View ↗</a></td></tr>
+            <tr><td>11</td><td>AD Auditor</td><td>Finance / Auditing</td><td><a href="https://www.choosebsg.com/portfolios/ad-auditor/" target="_blank">View ↗</a></td></tr>
+            <tr><td>12</td><td>Bird and Bird</td><td>Legal / Law Firm</td><td><a href="https://www.choosebsg.com/portfolios/bird-and-bird/" target="_blank">View ↗</a></td></tr>
+            <tr><td>13</td><td>Matrix Business Capital</td><td>Finance / Lending</td><td><a href="https://www.choosebsg.com/portfolios/matrix-business-capital/" target="_blank">View ↗</a></td></tr>
+            <tr><td>14</td><td>CBT International</td><td>Consulting</td><td><a href="https://www.choosebsg.com/portfolios/cbt-international/" target="_blank">View ↗</a></td></tr>
+            <tr><td>15</td><td>Stephen Cockriel</td><td>Professional Services</td><td><a href="https://www.choosebsg.com/portfolios/stephen-cockriel/" target="_blank">View ↗</a></td></tr>
+            <tr><td>16</td><td>Mendocino Farms</td><td>Food & Beverage</td><td><a href="https://www.choosebsg.com/portfolios/mendocino-farms/" target="_blank">View ↗</a></td></tr>
+            <tr><td>17</td><td>Queen Mary</td><td>Hospitality / Tourism</td><td><a href="https://www.choosebsg.com/portfolios/queen-mary/" target="_blank">View ↗</a></td></tr>
+            <tr><td>18</td><td>McGregor</td><td>Professional Services</td><td><a href="https://www.choosebsg.com/portfolios/mcgregor/" target="_blank">View ↗</a></td></tr>
+            <tr><td>19</td><td>Dial One Schilling</td><td>Home Services / Plumbing</td><td><a href="https://www.choosebsg.com/portfolios/dial-one-schilling/" target="_blank">View ↗</a></td></tr>
+            <tr><td>20</td><td>Harold & Belle's</td><td>Food & Beverage</td><td><a href="https://www.choosebsg.com/portfolios/harolld-belle/" target="_blank">View ↗</a></td></tr>
+            <tr><td>21</td><td>Mowery & Thomas</td><td>Professional Services</td><td><a href="https://www.choosebsg.com/portfolios/mowery-thomas/" target="_blank">View ↗</a></td></tr>
+            <tr><td>22</td><td>Parker Thatch</td><td>Retail / Luxury Goods</td><td><a href="https://www.choosebsg.com/portfolios/parker-thatch/" target="_blank">View ↗</a></td></tr>
+            <tr><td>23</td><td>Pacific Coast Advertising</td><td>Marketing / Advertising</td><td><a href="https://www.choosebsg.com/portfolios/pacific-coast-advertising/" target="_blank">View ↗</a></td></tr>
+            <tr><td>24</td><td>O Hotel</td><td>Hospitality / Hotels</td><td><a href="https://www.choosebsg.com/portfolios/o-hotel/" target="_blank">View ↗</a></td></tr>
+            <tr><td>25</td><td>Antelope Valley Fair</td><td>Events / Entertainment</td><td><a href="https://www.choosebsg.com/portfolios/antelope-valley-fair/" target="_blank">View ↗</a></td></tr>
+            <tr><td>26</td><td>Drago Centro</td><td>Food & Beverage</td><td><a href="https://www.choosebsg.com/portfolios/drago-centro/" target="_blank">View ↗</a></td></tr>
+            <tr><td>27</td><td>Baron Hat</td><td>Retail / Fashion</td><td><a href="https://www.choosebsg.com/portfolios/baron-hat/" target="_blank">View ↗</a></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>📊 Portfolio Industry Distribution</h3>
+      <div id="portBar"></div>
+    </div>
+  </div>
+
+  <!-- ========== CONTACT SPHERE ========== -->
+  <div id="sphere" class="section">
+    <div class="card">
+      <h3>🤝 Contact Sphere Alignment — Marketing & Advertising</h3>
+      <input type="text" class="search-bar" id="sphS" placeholder="🔍  Search contact sphere..." oninput="fTbl('sphT','sphS')">
+      <div class="tbl-wrap">
+        <table id="sphT">
+          <thead><tr>
+            <th onclick="srt('sphT',0)">#</th>
+            <th onclick="srt('sphT',1)">Profession</th>
+            <th onclick="srt('sphT',2)">Why It Works</th>
+            <th onclick="srt('sphT',3)">Referral Flow</th>
+            <th onclick="srt('sphT',4)">Strength</th>
+          </tr></thead>
+          <tbody>
+            <tr><td>1</td><td>Residential Realtor</td><td>Needs websites, SEO for listings, social media — BSG's Stewart Properties client proves this</td><td>⇄ Bi-directional</td><td>5</td></tr>
+            <tr><td>2</td><td>CPA / Accountant</td><td>Serves the same small business clients — BSG served AD Auditor (finance/accounting)</td><td>⇄ Bi-directional</td><td>5</td></tr>
+            <tr><td>3</td><td>Business Attorney</td><td>Startup & small biz clients need branding — BSG built for Bird & Bird, West Coast Defense</td><td>→ Inbound heavy</td><td>5</td></tr>
+            <tr><td>4</td><td>Commercial Printer</td><td>Complementary — BSG's digital + physical printing (promo products division)</td><td>⇄ Bi-directional</td><td>4</td></tr>
+            <tr><td>5</td><td>IT / Managed Services</td><td>Technical overlap — hosting, security, CMS maintenance, infrastructure</td><td>⇄ Bi-directional</td><td>4</td></tr>
+            <tr><td>6</td><td>Photographer / Videographer</td><td>BSG offers video marketing — natural creative production partnership</td><td>⇄ Bi-directional</td><td>4</td></tr>
+            <tr><td>7</td><td>Financial Advisor</td><td>High-income professionals need online presence — BSG served Matrix Business Capital</td><td>→ Inbound heavy</td><td>3</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>📈 Contact Sphere Referral Strength</h3>
+      <div id="sphBar"></div>
+    </div>
+  </div>
+
+  <!-- ========== S.A.L.E. STRATEGY ========== -->
+  <div id="sale" class="section">
+    <div class="sub-tabs">
+      <div class="sub-tab active" onclick="subT('pS',this)">S — Situation</div>
+      <div class="sub-tab" onclick="subT('pA',this)">A — Approach</div>
+      <div class="sub-tab" onclick="subT('pL',this)">L — Leverage</div>
+      <div class="sub-tab" onclick="subT('pE',this)">E — Engagement</div>
+    </div>
+
+    <div id="pS" class="sub-panel active">
+      <div class="card">
+        <h3>🔎 S — Situation Analysis</h3>
+        <p style="color:#bbb;font-size:13px;line-height:1.85;">
+          Brian Smith runs an <strong style="color:#e0e0e0;">11–50 person digital marketing agency</strong> in Long Beach, CA (ZIP 90802). Blue Sand Group positions itself as a "design meets tech" company focused on small-to-mid-sized businesses needing web presence, SEO, and social media management. With a proven portfolio spanning <strong style="color:#CF2030;">27 named clients</strong> across 13 industries — including the Queen Mary, Mendocino Farms, Antelope Valley Fair, West Coast Defense, and Matrix Business Capital — BSG demonstrates both range and depth.
+        </p><br>
+        <p style="color:#bbb;font-size:13px;line-height:1.85;">
+          Their tagline: <em>"Your Business. Our Priority."</em> Their promise: <em>"We aim to craft a relationship on a continuing basis."</em> BSG's multi-service platform (12 distinct services from web design to promo products) creates <strong style="color:#CF2030;">12 referral entry points</strong> for BNI members, making Brian one of the most versatile and referral-ready classifications in any chapter.
+        </p>
+      </div>
+    </div>
+
+    <div id="pA" class="sub-panel">
+      <div class="card">
+        <h3>🧭 A — Approach & Alignment</h3>
+        <p style="color:#bbb;font-size:13px;line-height:1.8;margin-bottom:16px;">
+          As a <strong style="color:#e0e0e0;">Marketing & Advertising</strong> professional, Brian's BNI seat is one of the <strong style="color:#CF2030;">highest-value classifications</strong> in any chapter. Nearly every BNI member needs marketing services or knows someone who does.
+        </p>
+        <input type="text" class="search-bar" id="appS" placeholder="🔍  Search alignment factors..." oninput="fTbl('appT','appS')">
+        <div class="tbl-wrap">
+          <table id="appT">
+            <thead><tr>
+              <th onclick="srt('appT',0)">Alignment Factor</th>
+              <th onclick="srt('appT',1)">Score</th>
+              <th onclick="srt('appT',2)">Details</th>
+            </tr></thead>
+            <tbody>
+              <tr><td>Universal Service Demand</td><td>10</td><td>Every business needs a website and marketing — unlimited referral pool</td></tr>
+              <tr><td>BNI Classification Value</td><td>10</td><td>Marketing seat is a top-3 most referred classification in BNI globally</td></tr>
+              <tr><td>Multi-Service Cross-Sell</td><td>9</td><td>12 distinct services = 12 referral entry points per conversation</td></tr>
+              <tr><td>Portfolio Credibility</td><td>9</td><td>27 named clients across 13 industries with award-winning design</td></tr>
+              <tr><td>Client Retention Model</td><td>9</td><td>Long-term relationship approach = recurring referral value for years</td></tr>
+              <tr><td>Local Market Authority</td><td>8</td><td>Long Beach HQ with 2.6K social followers — established local brand</td></tr>
+              <tr><td>Team Depth</td><td>8</td><td>11–50 employees means capacity to handle referrals without bottlenecks</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div id="pL" class="sub-panel">
+      <div class="card">
+        <h3>💡 L — Leverage Points</h3>
+        <p style="color:#777;font-size:12px;margin-bottom:16px;">Three powerful reasons Brian's business is a <strong style="color:#e0e0e0;">referral magnet</strong> in BNI:</p>
+        <div class="lev-card">
+          <h4>1. Universal Demand — Every Business Needs What BSG Sells</h4>
+          <p>Every business needs a website and SEO. Members don't need to find niche clients — virtually any business owner is a potential referral for BSG. This makes Brian the easiest member to refer in the entire chapter.</p>
+        </div>
+        <div class="lev-card">
+          <h4>2. Relationship-First Model = Lifetime Client Value</h4>
+          <p>BSG explicitly states they are "not just a one-time-and-out proposition" — they build continuing partnerships. One referral to Brian can produce years of recurring revenue, which incentivizes generous reciprocation.</p>
+        </div>
+        <div class="lev-card">
+          <h4>3. 12-Service Portfolio = Maximum Referral Entry Points</h4>
+          <p>From web design to video production to promo products, Brian can be referred for multiple needs. A single conversation at a networking event or 1-2-1 can uncover 2–3 BSG services, multiplying the value of every introduction.</p>
+        </div>
+      </div>
+    </div>
+
+    <div id="pE" class="sub-panel">
+      <div class="card">
+        <h3>📅 E — Engagement Strategy</h3>
+        <div class="timeline">
+          <div class="tl-item">
+            <div class="tl-time">Week 1</div>
+            <h4>🤝 Schedule 1-2-1</h4>
+            <p>Learn Brian's ideal client profile — industry, revenue size, pain points. Identify which of BSG's 12 services drive the most revenue and which client types convert best.</p>
+          </div>
+          <div class="tl-item">
+            <div class="tl-time">Week 2–4</div>
+            <h4>🎤 Feature Presentation</h4>
+            <p>Help Brian showcase SEO or web design using his portfolio — before/after case studies from Queen Mary, Mendocino Farms, or Dial One Schilling make powerful visual demonstrations.</p>
+          </div>
+          <div class="tl-item">
+            <div class="tl-time">Ongoing</div>
+            <h4>🔗 Cross-Referral Plan</h4>
+            <p>Identify 3 members whose clients need marketing — create warm introductions. Set a goal of 1 qualified referral per month in each direction.</p>
+          </div>
+          <div class="tl-item">
+            <div class="tl-time">Ongoing</div>
+            <h4>📣 Social Proof & Visibility</h4>
+            <p>Share BSG's work with your network. Tag Blue Sand Group on social media. Leave Google reviews. Amplify Brian's brand to demonstrate the power of BNI.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== ENGAGEMENT ========== -->
+  <div id="engagement" class="section">
+    <div class="stats-row">
+      <div class="stat-card"><div class="stat-num">6</div><div class="stat-label">Total Actions</div></div>
+      <div class="stat-card"><div class="stat-num">3</div><div class="stat-label">🔴 High Priority</div></div>
+      <div class="stat-card"><div class="stat-num">2</div><div class="stat-label">🟠 Medium Priority</div></div>
+      <div class="stat-card"><div class="stat-num">1</div><div class="stat-label">🟢 Post-Visit</div></div>
+    </div>
+
+    <div class="card">
+      <h3>✅ Engagement Action Tracker</h3>
+      <input type="text" class="search-bar" id="engS" placeholder="🔍  Search actions..." oninput="fTbl('engT','engS')">
+      <div class="tbl-wrap">
+        <table id="engT">
+          <thead><tr>
+            <th onclick="srt('engT',0)">Action</th>
+            <th onclick="srt('engT',1)">Timeline</th>
+            <th onclick="srt('engT',2)">Details</th>
+            <th onclick="srt('engT',3)">Priority</th>
+            <th onclick="srt('engT',4)">Status</th>
+          </tr></thead>
+          <tbody>
+            <tr><td>🤝 Schedule 1-2-1</td><td>Week 1</td><td>Learn ideal client profile, revenue drivers, pain points across 12 services</td><td>🔴 High</td><td>⬜ Pending</td></tr>
+            <tr><td>📧 Send BNI Visitor Invite</td><td>This Week</td><td>Email personalized invitation referencing BSG's portfolio and capabilities</td><td>🔴 High</td><td>⬜ Pending</td></tr>
+            <tr><td>🎤 Feature Presentation</td><td>Week 2–4</td><td>Showcase portfolio — before/after case studies for web design & SEO</td><td>🔴 High</td><td>⬜ Pending</td></tr>
+            <tr><td>🔗 Cross-Referral Plan</td><td>Ongoing</td><td>Identify 3 chapter members with clients needing marketing services</td><td>🟠 Medium</td><td>⬜ Pending</td></tr>
+            <tr><td>📣 Social Amplification</td><td>Ongoing</td><td>Share BSG work on social, tag company, leave Google reviews</td><td>🟠 Medium</td><td>⬜ Pending</td></tr>
+            <tr><td>🔄 Post-Visit Follow-Up</td><td>After Visit</td><td>Send thank you + 3 compelling reasons to apply for BNI membership</td><td>🟢 Post-Visit</td><td>⬜ Pending</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== CONTACT ========== -->
+  <div id="contact" class="section">
+    <div class="card" style="text-align:center;">
+      <h3 style="justify-content:center;">✉️ Contact Brian Smith — Blue Sand Group</h3>
+      <p style="color:#888;font-size:13px;margin-bottom:20px;">Reach out to Brian about visiting a BNI chapter or exploring partnership opportunities.</p>
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:22px;">
+        <a class="btn" onclick="sendEmail()" style="cursor:pointer;">✉️ Email Brian — BNI Invite</a>
+        <a class="btn btn-outline" href="https://www.linkedin.com/in/brian-smith-041a3314b/" target="_blank">🔗 LinkedIn</a>
+        <a class="btn btn-outline" href="https://www.choosebsg.com" target="_blank">🌐 Website</a>
+        <a class="btn btn-outline" href="https://www.choosebsg.com/contact" target="_blank">📞 BSG Contact</a>
+        <a class="btn btn-outline" href="https://www.choosebsg.com/portfolio/" target="_blank">🎨 Portfolio</a>
+      </div>
+
+      <div class="email-box">
+        <h4>📧 Email Preview — BNI Visitor Invitation</h4>
+        <p class="email-meta"><strong>To:</strong> brian@choosebsg.com</p>
+        <p class="email-meta"><strong>Subject:</strong> Brian — Blue Sand Group Deserves a Seat at the Table</p>
+        <hr style="border-color:#1e1e1e;margin:12px 0;">
+        <div class="email-body">
+          Hi Brian,<br><br>
+          I've been looking at what Blue Sand Group is doing in the Long Beach digital marketing space, and I'm genuinely impressed. Three things stood out to me:<br><br>
+          <strong>1. Award-Winning Portfolio Depth:</strong> The range of your client work — from the iconic Queen Mary and Mendocino Farms to West Coast Defense and Matrix Business Capital — shows a team that delivers exceptional results across every industry. That kind of versatility is rare and exactly what makes a great BNI member.<br><br>
+          <strong>2. Relationship-First Philosophy:</strong> Your approach of building continuing partnerships rather than one-time transactions mirrors the core of what BNI is built on — trust-based, long-term business relationships that grow over time.<br><br>
+          <strong>3. Full-Service Digital Capability:</strong> With 12 services under one roof — web design, SEO, social media, video production, branding, app development, CMS, promotional products, and more — you are the kind of business that BNI members naturally want to refer, because every client needs at least one of your services.<br><br>
+          I'd like to personally invite you to visit our BNI chapter as my guest. Here's why it would be worth your time:<br><br>
+          • <strong>Instant access to 20–40+ business owners</strong> who actively seek marketing services for themselves and their clients<br>
+          • <strong>Build strategic partnerships</strong> with realtors, attorneys, CPAs, and IT professionals who share the same client base<br>
+          • <strong>Position BSG as the go-to marketing firm</strong> in a structured referral network that generates measurable, consistent new business<br><br>
+          To visit a chapter, just complete this (<strong>***Visitor Invite***</strong>) simple form to reserve your seat and begin accelerating your business.<br><br>
+          I'd be honored to welcome you. Looking forward to connecting!<br><br>
+          Warm regards
+        </div>
+      </div>
+      <br>
+      <p style="color:#555;font-size:11px;">💡 <strong>BNI Member Instructions:</strong> Copy the email above from Higgins, replace the Visitor Invite URL with your chapter's registration link, and send directly to Brian.</p>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <img class="logo-sm" src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports"/><br>
+  <p>© 2026 Higgins Reports — S.A.L.E. Client Strategy Report<br>
+  <a href="https://higginstraining.com" target="_blank">higginstraining.com</a> • <a href="mailto:support@higgins.ai">support@higgins.ai</a> • 1-888-364-3924</p>
+</footer>
+
+<script>
+// NAV
+function go(id,el){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('#mainNav a').forEach(a=>a.classList.remove('active'));
+  if(el)el.classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// SUB TABS
+function subT(id,el){
+  const p=el.closest('.section');
+  p.querySelectorAll('.sub-panel').forEach(x=>x.classList.remove('active'));
+  p.querySelectorAll('.sub-tab').forEach(x=>x.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  el.classList.add('active');
+}
+
+// PROFILE FILTER
+function fProf(){
+  const q=document.getElementById('profS').value.toLowerCase();
+  document.querySelectorAll('#profG .profile-item').forEach(i=>{
+    i.style.display=(i.getAttribute('data-s')+' '+i.textContent).toLowerCase().includes(q)?'':'none';
+  });
+}
+
+// TABLE FILTER
+function fTbl(t,i){
+  const q=document.getElementById(i).value.toLowerCase();
+  document.querySelectorAll('#'+t+' tbody tr').forEach(r=>{
+    r.style.display=r.textContent.toLowerCase().includes(q)?'':'none';
+  });
+}
+
+// TABLE SORT
+const ss={};
+function srt(t,c){
+  const tbl=document.getElementById(t),tb=tbl.querySelector('tbody'),rows=Array.from(tb.querySelectorAll('tr')),ths=tbl.querySelectorAll('thead th');
+  const k=t+'_'+c,asc=ss[k]!=='asc';ss[k]=asc?'asc':'desc';
+  ths.forEach((h,i)=>{h.classList.remove('asc','desc');if(i===c)h.classList.add(asc?'asc':'desc');});
+  rows.sort((a,b)=>{
+    let av=a.cells[c]?.textContent.trim()||'',bv=b.cells[c]?.textContent.trim()||'';
+    const an=parseFloat(av),bn=parseFloat(bv);
+    if(!isNaN(an)&&!isNaN(bn))return asc?an-bn:bn-an;
+    return asc?av.localeCompare(bv):bv.localeCompare(av);
+  });
+  rows.forEach(r=>tb.appendChild(r));
+}
+
+// EMAIL
+function sendEmail(){
+  const s=encodeURIComponent("Brian — Blue Sand Group Deserves a Seat at the Table");
+  const b=encodeURIComponent(
+    "Hi Brian,\n\nI've been looking at what Blue Sand Group is doing in the Long Beach digital marketing space, and I'm genuinely impressed. Three things stood out to me:\n\n"+
+    "1. Award-Winning Portfolio Depth: The range of your client work — from the iconic Queen Mary and Mendocino Farms to West Coast Defense and Matrix Business Capital — shows a team that delivers exceptional results across every industry.\n\n"+
+    "2. Relationship-First Philosophy: Your approach of building continuing partnerships rather than one-time transactions mirrors the core of what BNI is built on — trust-based, long-term business relationships.\n\n"+
+    "3. Full-Service Digital Capability: With 12 services under one roof — web design, SEO, social media, video production, branding, app development, CMS, promotional products, and more — you are the kind of business that BNI members naturally want to refer.\n\n"+
+    "I'd like to personally invite you to visit our BNI chapter as my guest. Here's why:\n\n"+
+    "• Instant access to 20-40+ business owners who actively seek marketing services\n"+
+    "• Build strategic partnerships with realtors, attorneys, CPAs, and IT professionals\n"+
+    "• Position BSG as the go-to marketing firm in a structured referral network\n\n"+
+    "To visit a chapter, just complete this (***Visitor Invite***) simple form to reserve your seat and begin accelerating your business.\n\n"+
+    "I'd be honored to welcome you. Looking forward to connecting!\n\nWarm regards"
+  );
+  window.open('mailto:brian@choosebsg.com?subject='+s+'&body='+b,'_self');
+}
+
+// BARS HELPER
+function mkBars(id,data){
+  const c=document.getElementById(id);
+  data.forEach(d=>{
+    c.innerHTML+=`<div class="bar-row"><div class="bar-label">${d.l}</div><div class="bar-track"><div class="bar-fill" style="width:${d.p}%;background:${d.c};">${d.t}</div></div></div>`;
+  });
+}
+
+// DONUT HELPER
+function mkDonut(svgId,legId,data,centerTxt){
+  const svg=document.getElementById(svgId),leg=document.getElementById(legId);
+  const cx=100,cy=100,r=70,ir=42;let ca=-90;
+  data.forEach(s=>{
+    const sa=ca,sw=(s.pct/100)*360;ca+=sw;
+    const s1=Math.PI/180*sa,e1=Math.PI/180*ca;
+    const x1o=cx+r*Math.cos(s1),y1o=cy+r*Math.sin(s1),x2o=cx+r*Math.cos(e1),y2o=cy+r*Math.sin(e1);
+    const x1i=cx+ir*Math.cos(e1),y1i=cy+ir*Math.sin(e1),x2i=cx+ir*Math.cos(s1),y2i=cy+ir*Math.sin(s1);
+    const lg=sw>180?1:0;
+    const p=document.createElementNS('http://www.w3.org/2000/svg','path');
+    p.setAttribute('d',`M ${x1o} ${y1o} A ${r} ${r} 0 ${lg} 1 ${x2o} ${y2o} L ${x1i} ${y1i} A ${ir} ${ir} 0 ${lg} 0 ${x2i} ${y2i} Z`);
+    p.setAttribute('fill',s.c);p.setAttribute('stroke','#000');p.setAttribute('stroke-width','2');
+    svg.appendChild(p);
+    leg.innerHTML+=`<div class="donut-legend-item"><span class="dot" style="background:${s.c}"></span>${s.l} (${s.pct}%)</div>`;
+  });
+  const t=document.createElementNS('http://www.w3.org/2000/svg','text');
+  t.setAttribute('x',cx);t.setAttribute('y',cy+2);t.setAttribute('text-anchor','middle');t.setAttribute('dominant-baseline','middle');
+  t.setAttribute('fill','#CF2030');t.setAttribute('font-size','11');t.setAttribute('font-weight','800');t.setAttribute('font-family','Inter,sans-serif');
+  t.textContent=centerTxt;svg.appendChild(t);
+}
+
+// GAUGE HELPER
+function mkGauge(id,data){
+  const c=document.getElementById(id);
+  data.forEach(g=>{
+    const pct=g.v/g.max*100;
+    const r=32,circ=2*Math.PI*r,off=circ-(pct/100*circ);
+    c.innerHTML+=`<div class="gauge-card"><div class="g-label">${g.l}</div><div class="gauge-ring"><svg width="80" height="80" viewBox="0 0 80 80"><circle cx="40" cy="40" r="${r}" fill="none" stroke="#1a1a1a" stroke-width="6"/><circle cx="40" cy="40" r="${r}" fill="none" stroke="#CF2030" stroke-width="6" stroke-dasharray="${circ}" stroke-dashoffset="${off}" stroke-linecap="round"/></svg><div class="gauge-val">${g.d}</div></div></div>`;
+  });
+}
+
+// ===== RENDER ALL CHARTS =====
+// Service bars
+mkBars('svcBar',[
+  {l:'Web Design & Dev',p:100,c:'#CF2030',t:'5/5'},
+  {l:'SEO',p:100,c:'#CF2030',t:'5/5'},
+  {l:'Social Media',p:80,c:'#e84455',t:'4/5'},
+  {l:'Video Marketing',p:80,c:'#e84455',t:'4/5'},
+  {l:'Branding & Logo',p:80,c:'#e84455',t:'4/5'},
+  {l:'Ad Placement / SEM',p:80,c:'#e84455',t:'4/5'},
+  {l:'Mobile Responsive',p:80,c:'#e84455',t:'4/5'},
+  {l:'CMS',p:60,c:'#ff6b78',t:'3/5'},
+  {l:'Public Relations',p:60,c:'#ff6b78',t:'3/5'},
+  {l:'App Development',p:60,c:'#ff6b78',t:'3/5'},
+  {l:'Promo Products',p:60,c:'#ff6b78',t:'3/5'},
+  {l:'Custom Programming',p:60,c:'#ff6b78',t:'3/5'}
+]);
+
+// Service donut
+mkDonut('donut1','leg1',[
+  {l:'Web & Dev',pct:22,c:'#CF2030'},
+  {l:'SEO & SEM',pct:18,c:'#e84455'},
+  {l:'Social & Video',pct:18,c:'#ff6b78'},
+  {l:'Branding & PR',pct:16,c:'#ff8f9a'},
+  {l:'Mobile & Apps',pct:14,c:'#ffb3bb'},
+  {l:'Print & Other',pct:12,c:'#ffd5da'}
+],'12 Services');
+
+// Portfolio bars
+mkBars('portBar',[
+  {l:'Professional Services',p:100,c:'#CF2030',t:'4'},
+  {l:'Food & Beverage',p:75,c:'#CF2030',t:'3'},
+  {l:'Hospitality / Tourism',p:75,c:'#e84455',t:'3'},
+  {l:'Manufacturing',p:75,c:'#e84455',t:'3'},
+  {l:'Legal',p:50,c:'#ff6b78',t:'2'},
+  {l:'Finance / Accounting',p:50,c:'#ff6b78',t:'2'},
+  {l:'Healthcare',p:50,c:'#ff6b78',t:'2'},
+  {l:'Events / Entertainment',p:50,c:'#ff8f9a',t:'2'},
+  {l:'Retail / Fashion',p:50,c:'#ff8f9a',t:'2'},
+  {l:'Real Estate',p:25,c:'#ffb3bb',t:'1'},
+  {l:'Home Services',p:25,c:'#ffb3bb',t:'1'},
+  {l:'Marketing',p:25,c:'#ffd5da',t:'1'},
+  {l:'Consulting',p:25,c:'#ffd5da',t:'1'}
+]);
+
+// Sphere bars
+mkBars('sphBar',[
+  {l:'Residential Realtor',p:100,c:'#CF2030',t:'5/5'},
+  {l:'CPA / Accountant',p:100,c:'#CF2030',t:'5/5'},
+  {l:'Business Attorney',p:100,c:'#CF2030',t:'5/5'},
+  {l:'Commercial Printer',p:80,c:'#e84455',t:'4/5'},
+  {l:'IT / Managed Services',p:80,c:'#e84455',t:'4/5'},
+  {l:'Photographer / Video',p:80,c:'#e84455',t:'4/5'},
+  {l:'Financial Advisor',p:60,c:'#ff6b78',t:'3/5'}
+]);
+
+// Gauges
+mkGauge('gaugeRow',[
+  {l:'Services',v:12,max:15,d:'12'},
+  {l:'Portfolio',v:27,max:30,d:'27'},
+  {l:'Sphere Matches',v:7,max:10,d:'7'},
+  {l:'Industries',v:13,max:15,d:'13'},
+  {l:'Alignment Score',v:9,max:10,d:'9/10'}
+]);
+</script>
+</body>
+</html>

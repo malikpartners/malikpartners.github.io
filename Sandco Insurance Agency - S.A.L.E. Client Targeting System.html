@@ -1,0 +1,1463 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sandco Insurance Agency - S.A.L.E. Client Targeting System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #000000;
+            color: #ffffff;
+            line-height: 1.6;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #CF2030, #8B0000);
+            padding: 1rem;
+            box-shadow: 0 4px 6px rgba(207, 32, 48, 0.3);
+        }
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            height: 60px;
+            width: auto;
+        }
+        
+        .business-info {
+            text-align: right;
+            color: white;
+        }
+        
+        .business-info h1 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .sidebar {
+            background: linear-gradient(145deg, #1a1a1a, #2d2d2d);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid #CF2030;
+        }
+        
+        .sidebar h3 {
+            color: #CF2030;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+        
+        .search-filters {
+            margin-bottom: 1.5rem;
+        }
+        
+        .search-filters input, .search-filters select {
+            width: 100%;
+            padding: 0.75rem;
+            margin-bottom: 0.5rem;
+            border: 1px solid #CF2030;
+            border-radius: 6px;
+            background: #333;
+            color: white;
+            font-size: 0.9rem;
+        }
+        
+        .search-filters input:focus, .search-filters select:focus {
+            outline: none;
+            border-color: #FF4560;
+            box-shadow: 0 0 5px rgba(207, 32, 48, 0.5);
+        }
+        
+        .pures-scoring {
+            background: #1a1a1a;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid #444;
+        }
+        
+        .pures-item {
+            margin-bottom: 1rem;
+        }
+        
+        .pures-item label {
+            display: block;
+            color: #CF2030;
+            margin-bottom: 0.3rem;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+        
+        .score-buttons {
+            display: flex;
+            gap: 0.3rem;
+        }
+        
+        .score-btn {
+            padding: 0.3rem 0.6rem;
+            border: 1px solid #CF2030;
+            background: transparent;
+            color: white;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .score-btn:hover {
+            background: #CF2030;
+            color: white;
+        }
+        
+        .score-btn.active {
+            background: #CF2030;
+            color: white;
+        }
+        
+        .main-content {
+            background: linear-gradient(145deg, #1a1a1a, #2d2d2d);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid #CF2030;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, #CF2030, #8B0000);
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+            color: white;
+        }
+        
+        .stat-card h4 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-card p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        
+        .table-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .table-controls button {
+            background: #CF2030;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+        
+        .table-controls button:hover {
+            background: #8B0000;
+            transform: translateY(-2px);
+        }
+        
+        .client-table-container {
+            overflow-x: auto;
+            border-radius: 8px;
+            border: 1px solid #444;
+        }
+        
+        .client-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #1a1a1a;
+        }
+        
+        .client-table th {
+            background: #CF2030;
+            color: white;
+            padding: 1rem;
+            text-align: left;
+            font-weight: bold;
+            cursor: pointer;
+            user-select: none;
+            transition: background 0.3s;
+        }
+        
+        .client-table th:hover {
+            background: #8B0000;
+        }
+        
+        .client-table td {
+            padding: 0.75rem;
+            border-bottom: 1px solid #333;
+            color: #e0e0e0;
+        }
+        
+        .client-table tr:hover {
+            background: #2a2a2a;
+        }
+        
+        .tier-badge {
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .tier-1a { background: #28a745; color: white; }
+        .tier-1b { background: #ffc107; color: #000; }
+        .tier-1c { background: #17a2b8; color: white; }
+        .tier-low { background: #6c757d; color: white; }
+        
+        .contact-btn, .email-btn {
+            padding: 0.5rem 1rem;
+            margin: 0.2rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.3s;
+        }
+        
+        .contact-btn {
+            background: #28a745;
+            color: white;
+        }
+        
+        .email-btn {
+            background: #007bff;
+            color: white;
+        }
+        
+        .contact-btn:hover {
+            background: #218838;
+        }
+        
+        .email-btn:hover {
+            background: #0056b3;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+        }
+        
+        .modal-content {
+            background: linear-gradient(145deg, #1a1a1a, #2d2d2d);
+            margin: 5% auto;
+            padding: 2rem;
+            border: 1px solid #CF2030;
+            border-radius: 12px;
+            width: 80%;
+            max-width: 600px;
+            color: white;
+        }
+        
+        .close {
+            color: #CF2030;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .close:hover {
+            color: #FF4560;
+        }
+        
+        .email-template {
+            background: #333;
+            padding: 1rem;
+            border-radius: 6px;
+            margin: 1rem 0;
+            border-left: 4px solid #CF2030;
+        }
+        
+        footer {
+            background: #1a1a1a;
+            padding: 2rem;
+            text-align: center;
+            margin-top: 3rem;
+            border-top: 1px solid #333;
+        }
+        
+        .footer-logo {
+            height: 30px;
+            width: auto;
+            margin-bottom: 1rem;
+            opacity: 0.7;
+        }
+        
+        .sale-modules {
+            margin-top: 2rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+        
+        .sale-module {
+            background: linear-gradient(135deg, #2d2d2d, #1a1a1a);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid #444;
+        }
+        
+        .sale-module h4 {
+            color: #CF2030;
+            margin-bottom: 1rem;
+        }
+        
+        @media (max-width: 768px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .table-controls {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="HigginsReports" class="logo">
+            <div class="business-info">
+                <h1>Sandco Insurance Agency</h1>
+                <p>S.A.L.E. Client Targeting System</p>
+                <p>Hermosa Beach, CA | (310) 361-5630</p>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="dashboard-grid">
+            <div class="sidebar">
+                <h3>Search & Filters</h3>
+                <div class="search-filters">
+                    <input type="text" id="searchInput" placeholder="Search clients...">
+                    <select id="tierFilter">
+                        <option value="">All Tiers</option>
+                        <option value="Tier 1A">Tier 1A (Premium)</option>
+                        <option value="Tier 1B">Tier 1B (High-Value)</option>
+                        <option value="Tier 1C">Tier 1C (Qualified)</option>
+                        <option value="Low Priority">Low Priority</option>
+                    </select>
+                    <select id="industryFilter">
+                        <option value="">All Industries</option>
+                        <option value="Real Estate">Real Estate</option>
+                        <option value="Healthcare">Healthcare</option>
+                        <option value="Restaurant">Restaurant</option>
+                        <option value="Retail">Retail</option>
+                        <option value="Construction">Construction</option>
+                        <option value="Professional Services">Professional Services</option>
+                        <option value="Technology">Technology</option>
+                        <option value="Manufacturing">Manufacturing</option>
+                        <option value="Transportation">Transportation</option>
+                        <option value="Personal">Personal</option>
+                    </select>
+                </div>
+
+                <h3>P.U.R.E.S. Scoring</h3>
+                <div class="pures-scoring">
+                    <div class="pures-item">
+                        <label>Profitability (1-5):</label>
+                        <div class="score-buttons">
+                            <button class="score-btn" data-score="1">1</button>
+                            <button class="score-btn" data-score="2">2</button>
+                            <button class="score-btn" data-score="3">3</button>
+                            <button class="score-btn" data-score="4">4</button>
+                            <button class="score-btn" data-score="5">5</button>
+                        </div>
+                    </div>
+                    <div class="pures-item">
+                        <label>Urgency (1-5):</label>
+                        <div class="score-buttons">
+                            <button class="score-btn" data-score="1">1</button>
+                            <button class="score-btn" data-score="2">2</button>
+                            <button class="score-btn" data-score="3">3</button>
+                            <button class="score-btn" data-score="4">4</button>
+                            <button class="score-btn" data-score="5">5</button>
+                        </div>
+                    </div>
+                    <div class="pures-item">
+                        <label>Reachability (1-5):</label>
+                        <div class="score-buttons">
+                            <button class="score-btn" data-score="1">1</button>
+                            <button class="score-btn" data-score="2">2</button>
+                            <button class="score-btn" data-score="3">3</button>
+                            <button class="score-btn" data-score="4">4</button>
+                            <button class="score-btn" data-score="5">5</button>
+                        </div>
+                    </div>
+                    <div class="pures-item">
+                        <label>Engagement (1-5):</label>
+                        <div class="score-buttons">
+                            <button class="score-btn" data-score="1">1</button>
+                            <button class="score-btn" data-score="2">2</button>
+                            <button class="score-btn" data-score="3">3</button>
+                            <button class="score-btn" data-score="4">4</button>
+                            <button class="score-btn" data-score="5">5</button>
+                        </div>
+                    </div>
+                    <div class="pures-item">
+                        <label>Sustainability (1-5):</label>
+                        <div class="score-buttons">
+                            <button class="score-btn" data-score="1">1</button>
+                            <button class="score-btn" data-score="2">2</button>
+                            <button class="score-btn" data-score="3">3</button>
+                            <button class="score-btn" data-score="4">4</button>
+                            <button class="score-btn" data-score="5">5</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="main-content">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h4>50</h4>
+                        <p>Total Prospects</p>
+                    </div>
+                    <div class="stat-card">
+                        <h4>12</h4>
+                        <p>Tier 1A Premium</p>
+                    </div>
+                    <div class="stat-card">
+                        <h4>18</h4>
+                        <p>Tier 1B High-Value</p>
+                    </div>
+                    <div class="stat-card">
+                        <h4>15</h4>
+                        <p>Tier 1C Qualified</p>
+                    </div>
+                </div>
+
+                <div class="table-controls">
+                    <div>
+                        <button onclick="exportToCSV()">Export CSV</button>
+                        <button onclick="printReport()">Print Report</button>
+                    </div>
+                    <div>
+                        <span id="recordCount">Showing 50 records</span>
+                    </div>
+                </div>
+
+                <div class="client-table-container">
+                    <table class="client-table" id="clientTable">
+                        <thead>
+                            <tr>
+                                <th onclick="sortTable(0)">Name ↕</th>
+                                <th onclick="sortTable(1)">Email ↕</th>
+                                <th onclick="sortTable(2)">Phone ↕</th>
+                                <th onclick="sortTable(3)">Address ↕</th>
+                                <th onclick="sortTable(4)">P.U.R.E.S. Score ↕</th>
+                                <th onclick="sortTable(5)">Tier Level ↕</th>
+                                <th onclick="sortTable(6)">Industry ↕</th>
+                                <th onclick="sortTable(7)">Revenue Est. ↕</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="clientTableBody">
+                            <!-- Client data will be populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="sale-modules">
+            <div class="sale-module">
+                <h4>S - Sourcing</h4>
+                <p>P.U.R.E.S. scoring system to identify high-value prospects based on Profitability, Urgency, Reachability, Engagement, and Sustainability factors.</p>
+            </div>
+            <div class="sale-module">
+                <h4>A - Assessing</h4>
+                <p>Analyze buying patterns: Analytical, Relationship, Efficiency, and Innovation buyers to tailor your approach.</p>
+            </div>
+            <div class="sale-module">
+                <h4>L - Listening</h4>
+                <p>Feedback tracking throughout the sales process for continuous improvement and relationship building.</p>
+            </div>
+            <div class="sale-module">
+                <h4>E - Empowering</h4>
+                <p>Referral strategy and client advocacy program to leverage satisfied customers for business growth.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Email Modal -->
+    <div id="emailModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h3>Email Template for <span id="clientName"></span></h3>
+            <div class="email-template">
+                <p><strong>Subject:</strong> Protect Your Business & Family with Comprehensive Insurance Solutions</p>
+                <div id="emailContent">
+                    <!-- Email content will be populated by JavaScript -->
+                </div>
+            </div>
+            <button onclick="sendEmail()" class="contact-btn">Send Email</button>
+        </div>
+    </div>
+
+    <footer>
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="HigginsReports" class="footer-logo">
+        <p>&copy; 2026 Sandco Insurance Agency. Powered by HigginsReports.</p>
+    </footer>
+
+    <script>
+        // Client data for Hermosa Beach, CA area
+        const clientData = [
+            {
+                name: "Maria Rodriguez",
+                email: "maria.rodriguez@coastalrealty.com",
+                phone: "(310) 555-0101",
+                address: "123 Beach Blvd, Manhattan Beach, CA",
+                puresScore: 4.8,
+                tier: "Tier 1A",
+                industry: "Real Estate",
+                revenue: "$2.5M",
+                buyerType: "Relationship"
+            },
+            {
+                name: "Dr. James Chen",
+                email: "jchen@southbayclinic.com",
+                phone: "(310) 555-0102",
+                address: "456 Medical Center Dr, Redondo Beach, CA",
+                puresScore: 4.6,
+                tier: "Tier 1A",
+                industry: "Healthcare",
+                revenue: "$3.2M",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Sarah Williams",
+                email: "sarah@oceanviewcafe.com",
+                phone: "(310) 555-0103",
+                address: "789 Pier Ave, Hermosa Beach, CA",
+                puresScore: 3.8,
+                tier: "Tier 1B",
+                industry: "Restaurant",
+                revenue: "$850K",
+                buyerType: "Efficiency"
+            },
+            {
+                name: "Michael Thompson",
+                email: "mthompson@beachsidebuilders.com",
+                phone: "(310) 555-0104",
+                address: "321 Construction Way, El Segundo, CA",
+                puresScore: 4.2,
+                tier: "Tier 1A",
+                industry: "Construction",
+                revenue: "$4.1M",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Lisa Park",
+                email: "lpark@techstartup.io",
+                phone: "(310) 555-0105",
+                address: "654 Innovation Dr, Hawthorne, CA",
+                puresScore: 4.4,
+                tier: "Tier 1A",
+                industry: "Technology",
+                revenue: "$1.8M",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Robert Davis",
+                email: "rdavis@coastallegal.com",
+                phone: "(310) 555-0106",
+                address: "987 Law Center Blvd, Torrance, CA",
+                puresScore: 4.0,
+                tier: "Tier 1B",
+                industry: "Professional Services",
+                revenue: "$1.2M",
+                buyerType: "Relationship"
+            },
+            {
+                name: "Jennifer Kim",
+                email: "jkim@beachfashion.com",
+                phone: "(310) 555-0107",
+                address: "147 Retail Row, Manhattan Beach, CA",
+                puresScore: 3.6,
+                tier: "Tier 1B",
+                industry: "Retail",
+                revenue: "$950K",
+                buyerType: "Efficiency"
+            },
+            {
+                name: "Carlos Martinez",
+                email: "cmartinez@oceanlogistics.com",
+                phone: "(310) 555-0108",
+                address: "258 Port Dr, San Pedro, CA",
+                puresScore: 4.1,
+                tier: "Tier 1A",
+                industry: "Transportation",
+                revenue: "$3.8M",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Amanda Johnson",
+                email: "ajohnson@personaltrainer.com",
+                phone: "(310) 555-0109",
+                address: "369 Fitness Ave, Redondo Beach, CA",
+                puresScore: 3.2,
+                tier: "Tier 1C",
+                industry: "Personal",
+                revenue: "$120K",
+                buyerType: "Relationship"
+            },
+            {
+                name: "David Lee",
+                email: "dlee@manufacturing.com",
+                phone: "(310) 555-0110",
+                address: "741 Industrial Way, Carson, CA",
+                puresScore: 4.3,
+                tier: "Tier 1A",
+                industry: "Manufacturing",
+                revenue: "$5.2M",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Susan Garcia",
+                email: "sgarcia@coastalconsulting.com",
+                phone: "(310) 555-0111",
+                address: "852 Business Park Dr, El Segundo, CA",
+                puresScore: 3.9,
+                tier: "Tier 1B",
+                industry: "Professional Services",
+                revenue: "$1.4M",
+                buyerType: "Relationship"
+            },
+            {
+                name: "Kevin Brown",
+                email: "kbrown@beachautodealer.com",
+                phone: "(310) 555-0112",
+                address: "963 Auto Row, Torrance, CA",
+                puresScore: 3.7,
+                tier: "Tier 1B",
+                industry: "Retail",
+                revenue: "$2.8M",
+                buyerType: "Efficiency"
+            },
+            {
+                name: "Patricia White",
+                email: "pwhite@coastaldental.com",
+                phone: "(310) 555-0113",
+                address: "159 Dental Plaza, Manhattan Beach, CA",
+                puresScore: 4.0,
+                tier: "Tier 1B",
+                industry: "Healthcare",
+                revenue: "$890K",
+                buyerType: "Relationship"
+            },
+            {
+                name: "Thomas Wilson",
+                email: "twilson@techinnovations.com",
+                phone: "(310) 555-0114",
+                address: "357 Tech Center Dr, Hawthorne, CA",
+                puresScore: 4.5,
+                tier: "Tier 1A",
+                industry: "Technology",
+                revenue: "$2.1M",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Michelle Anderson",
+                email: "manderson@realestategroup.com",
+                phone: "(310) 555-0115",
+                address: "753 Property Lane, Hermosa Beach, CA",
+                puresScore: 4.2,
+                tier: "Tier 1A",
+                industry: "Real Estate",
+                revenue: "$1.9M",
+                buyerType: "Relationship"
+            },
+            {
+                name: "Christopher Moore",
+                email: "cmoore@constructionco.com",
+                phone: "(310) 555-0116",
+                address: "951 Builder's Way, Carson, CA",
+                puresScore: 3.8,
+                tier: "Tier 1B",
+                industry: "Construction",
+                revenue: "$2.3M",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Nicole Taylor",
+                email: "ntaylor@boutiqueshop.com",
+                phone: "(310) 555-0117",
+                address: "468 Fashion Dr, Manhattan Beach, CA",
+                puresScore: 3.4,
+                tier: "Tier 1C",
+                industry: "Retail",
+                revenue: "$420K",
+                buyerType: "Efficiency"
+            },
+            {
+                name: "Daniel Jackson",
+                email: "djackson@lawfirm.com",
+                phone: "(310) 555-0118",
+                address: "246 Legal Center, Torrance, CA",
+                puresScore: 4.1,
+                tier: "Tier 1A",
+                industry: "Professional Services",
+                revenue: "$1.6M",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Rebecca Martin",
+                email: "rmartin@beachspa.com",
+                phone: "(310) 555-0119",
+                address: "135 Wellness Way, Redondo Beach, CA",
+                puresScore: 3.1,
+                tier: "Tier 1C",
+                industry: "Personal",
+                revenue: "$280K",
+                buyerType: "Relationship"
+            },
+            {
+                name: "Mark Thompson",
+                email: "mthompson@techstartup2.com",
+                phone: "(310) 555-0120",
+                address: "579 Innovation Blvd, El Segundo, CA",
+                puresScore: 4.3,
+                tier: "Tier 1A",
+                industry: "Technology",
+                revenue: "$1.7M",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Laura Davis",
+                email: "ldavis@coastalmarketing.com",
+                phone: "(310) 555-0121",
+                address: "802 Marketing Ave, Hermosa Beach, CA",
+                puresScore: 3.6,
+                tier: "Tier 1B",
+                industry: "Professional Services",
+                revenue: "$750K",
+                buyerType: "Relationship"
+            },
+            {
+                name: "James Rodriguez",
+                email: "jrodriguez@transportlogistics.com",
+                phone: "(310) 555-0122",
+                address: "417 Freight Way, San Pedro, CA",
+                puresScore: 3.9,
+                tier: "Tier 1B",
+                industry: "Transportation",
+                revenue: "$2.4M",
+                buyerType: "Efficiency"
+            },
+            {
+                name: "Karen Miller",
+                email: "kmiller@coastalcafe.com",
+                phone: "(310) 555-0123",
+                address: "683 Restaurant Row, Manhattan Beach, CA",
+                puresScore: 3.5,
+                tier: "Tier 1C",
+                industry: "Restaurant",
+                revenue: "$680K",
+                buyerType: "Efficiency"
+            },
+            {
+                name: "Steven Wilson",
+                email: "swilson@manufacturingplus.com",
+                phone: "(310) 555-0124",
+                address: "194 Factory Dr, Carson, CA",
+                puresScore: 4.0,
+                tier: "Tier 1B",
+                industry: "Manufacturing",
+                revenue: "$3.1M",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Angela Garcia",
+                email: "agarcia@healthcenter.com",
+                phone: "(310) 555-0125",
+                address: "506 Medical Plaza, Redondo Beach, CA",
+                puresScore: 3.8,
+                tier: "Tier 1B",
+                industry: "Healthcare",
+                revenue: "$1.1M",
+                buyerType: "Relationship"
+            },
+            {
+                name: "Paul Martinez",
+                email: "pmartinez@constructionpro.com",
+                phone: "(310) 555-0126",
+                address: "728 Builder Blvd, Hawthorne, CA",
+                puresScore: 3.7,
+                tier: "Tier 1B",
+                industry: "Construction",
+                revenue: "$1.8M",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Linda Brown",
+                email: "lbrown@coastalproperty.com",
+                phone: "(310) 555-0127",
+                address: "829 Real Estate Dr, Manhattan Beach, CA",
+                puresScore: 4.1,
+                tier: "Tier 1A",
+                industry: "Real Estate",
+                revenue: "$2.2M",
+                buyerType: "Relationship"
+            },
+            {
+                name: "Gary Johnson",
+                email: "gjohnson@techsolutions.com",
+                phone: "(310) 555-0128",
+                address: "341 Technology Way, El Segundo, CA",
+                puresScore: 4.4,
+                tier: "Tier 1A",
+                industry: "Technology",
+                revenue: "$1.9M",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Helen Lee",
+                email: "hlee@boutiquefashion.com",
+                phone: "(310) 555-0129",
+                address: "592 Style Street, Hermosa Beach, CA",
+                puresScore: 3.3,
+                tier: "Tier 1C",
+                industry: "Retail",
+                revenue: "$390K",
+                buyerType: "Efficiency"
+            },
+            {
+                name: "Brian Anderson",
+                email: "banderson@professionalfirm.com",
+                phone: "(310) 555-0130",
+                address: "715 Business Center, Torrance, CA",
+                puresScore: 3.9,
+                tier: "Tier 1B",
+                industry: "Professional Services",
+                revenue: "$1.3M",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Nancy Taylor",
+                email: "ntaylor@personalcare.com",
+                phone: "(310) 555-0131",
+                address: "486 Wellness Dr, Redondo Beach, CA",
+                puresScore: 3.0,
+                tier: "Tier 1C",
+                industry: "Personal",
+                revenue: "$180K",
+                buyerType: "Relationship"
+            },
+            {
+                name: "Kenneth Clark",
+                email: "kclark@transportcompany.com",
+                phone: "(310) 555-0132",
+                address: "637 Logistics Lane, San Pedro, CA",
+                puresScore: 3.8,
+                tier: "Tier 1B",
+                industry: "Transportation",
+                revenue: "$2.6M",
+                buyerType: "Efficiency"
+            },
+            {
+                name: "Sharon Walker",
+                email: "swalker@beachrestaurant.com",
+                phone: "(310) 555-0133",
+                address: "758 Dining Ave, Manhattan Beach, CA",
+                puresScore: 3.6,
+                tier: "Tier 1B",
+                industry: "Restaurant",
+                revenue: "$720K",
+                buyerType: "Relationship"
+            },
+            {
+                name: "Ronald Harris",
+                email: "rharris@manufacturingcorp.com",
+                phone: "(310) 555-0134",
+                address: "819 Industrial Blvd, Carson, CA",
+                puresScore: 4.2,
+                tier: "Tier 1A",
+                industry: "Manufacturing",
+                revenue: "$4.3M",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Deborah Lewis",
+                email: "dlewis@medicalgroup.com",
+                phone: "(310) 555-0135",
+                address: "240 Healthcare Dr, Hawthorne, CA",
+                puresScore: 3.7,
+                tier: "Tier 1B",
+                industry: "Healthcare",
+                revenue: "$960K",
+                buyerType: "Relationship"
+            },
+            {
+                name: "Richard Young",
+                email: "ryoung@constructionllc.com",
+                phone: "(310) 555-0136",
+                address: "361 Development Way, El Segundo, CA",
+                puresScore: 3.9,
+                tier: "Tier 1B",
+                industry: "Construction",
+                revenue: "$2.1M",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Barbara King",
+                email: "bking@coastalrealty2.com",
+                phone: "(310) 555-0137",
+                address: "482 Property Plaza, Hermosa Beach, CA",
+                puresScore: 4.0,
+                tier: "Tier 1B",
+                industry: "Real Estate",
+                revenue: "$1.5M",
+                buyerType: "Relationship"
+            },
+            {
+                name: "Joseph Wright",
+                email: "jwright@techcompany.com",
+                phone: "(310) 555-0138",
+                address: "603 Software St, Torrance, CA",
+                puresScore: 4.3,
+                tier: "Tier 1A",
+                industry: "Technology",
+                revenue: "$2.0M",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Betty Lopez",
+                email: "blopez@retailstore.com",
+                phone: "(310) 555-0139",
+                address: "724 Shopping Center, Manhattan Beach, CA",
+                puresScore: 3.4,
+                tier: "Tier 1C",
+                industry: "Retail",
+                revenue: "$480K",
+                buyerType: "Efficiency"
+            },
+            {
+                name: "Edward Hall",
+                email: "ehall@consultingfirm.com",
+                phone: "(310) 555-0140",
+                address: "845 Advisory Ave, Redondo Beach, CA",
+                puresScore: 3.8,
+                tier: "Tier 1B",
+                industry: "Professional Services",
+                revenue: "$1.0M",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Dorothy Green",
+                email: "dgreen@personalservices.com",
+                phone: "(310) 555-0141",
+                address: "166 Service Dr, San Pedro, CA",
+                puresScore: 2.9,
+                tier: "Low Priority",
+                industry: "Personal",
+                revenue: "$150K",
+                buyerType: "Relationship"
+            },
+            {
+                name: "Larry Allen",
+                email: "lallen@logisticsplus.com",
+                phone: "(310) 555-0142",
+                address: "287 Transport Way, Carson, CA",
+                puresScore: 3.7,
+                tier: "Tier 1B",
+                industry: "Transportation",
+                revenue: "$1.9M",
+                buyerType: "Efficiency"
+            },
+            {
+                name: "Sandra Scott",
+                email: "sscott@cafebeach.com",
+                phone: "(310) 555-0143",
+                address: "408 Coastal Ave, Hermosa Beach, CA",
+                puresScore: 3.3,
+                tier: "Tier 1C",
+                industry: "Restaurant",
+                revenue: "$520K",
+                buyerType: "Relationship"
+            },
+            {
+                name: "Frank Adams",
+                email: "fadams@factoryworks.com",
+                phone: "(310) 555-0144",
+                address: "529 Manufacturing Dr, Hawthorne, CA",
+                puresScore: 3.9,
+                tier: "Tier 1B",
+                industry: "Manufacturing",
+                revenue: "$2.7M",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Ruth Baker",
+                email: "rbaker@cliniccare.com",
+                phone: "(310) 555-0145",
+                address: "640 Health Plaza, El Segundo, CA",
+                puresScore: 3.6,
+                tier: "Tier 1B",
+                industry: "Healthcare",
+                revenue: "$840K",
+                buyerType: "Relationship"
+            },
+            {
+                name: "Gregory Gonzalez",
+                email: "ggonzalez@buildingco.com",
+                phone: "(310) 555-0146",
+                address: "751 Construction Ave, Torrance, CA",
+                puresScore: 3.8,
+                tier: "Tier 1B",
+                industry: "Construction",
+                revenue: "$1.7M",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Melissa Nelson",
+                email: "mnelson@propertygroup.com",
+                phone: "(310) 555-0147",
+                address: "872 Estate Dr, Manhattan Beach, CA",
+                puresScore: 4.1,
+                tier: "Tier 1A",
+                industry: "Real Estate",
+                revenue: "$1.8M",
+                buyerType: "Relationship"
+            },
+            {
+                name: "Raymond Carter",
+                email: "rcarter@techdev.com",
+                phone: "(310) 555-0148",
+                address: "193 Innovation Center, Redondo Beach, CA",
+                puresScore: 4.2,
+                tier: "Tier 1A",
+                industry: "Technology",
+                revenue: "$1.6M",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Donna Mitchell",
+                email: "dmitchell@coastalshop.com",
+                phone: "(310) 555-0149",
+                address: "314 Retail Blvd, San Pedro, CA",
+                puresScore: 3.2,
+                tier: "Tier 1C",
+                industry: "Retail",
+                revenue: "$380K",
+                buyerType: "Efficiency"
+            },
+            {
+                name: "Jerry Perez",
+                email: "jperez@servicepro.com",
+                phone: "(310) 555-0150",
+                address: "435 Professional Way, Carson, CA",
+                puresScore: 3.7,
+                tier: "Tier 1B",
+                industry: "Professional Services",
+                revenue: "$920K",
+                buyerType: "Analytical"
+            }
+        ];
+
+        let filteredData = clientData;
+        let sortDirection = 1;
+
+        // Initialize the table
+        function initializeTable() {
+            populateTable(clientData);
+            setupEventListeners();
+        }
+
+        // Populate the table with client data
+        function populateTable(data) {
+            const tableBody = document.getElementById('clientTableBody');
+            tableBody.innerHTML = '';
+
+            data.forEach(client => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${client.name}</td>
+                    <td>${client.email}</td>
+                    <td>${client.phone}</td>
+                    <td>${client.address}</td>
+                    <td>${client.puresScore}</td>
+                    <td><span class="tier-badge ${getTierClass(client.tier)}">${client.tier}</span></td>
+                    <td>${client.industry}</td>
+                    <td>${client.revenue}</td>
+                    <td>
+                        <button class="contact-btn" onclick="callClient('${client.phone}')">Call</button>
+                        <button class="email-btn" onclick="openEmailModal('${client.name}', '${client.email}', '${client.industry}', '${client.buyerType}')">Email</button>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+
+            document.getElementById('recordCount').textContent = `Showing ${data.length} records`;
+        }
+
+        // Get CSS class for tier badge
+        function getTierClass(tier) {
+            switch(tier) {
+                case 'Tier 1A': return 'tier-1a';
+                case 'Tier 1B': return 'tier-1b';
+                case 'Tier 1C': return 'tier-1c';
+                default: return 'tier-low';
+            }
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Search functionality
+            document.getElementById('searchInput').addEventListener('input', filterTable);
+            document.getElementById('tierFilter').addEventListener('change', filterTable);
+            document.getElementById('industryFilter').addEventListener('change', filterTable);
+
+            // Modal functionality
+            const modal = document.getElementById('emailModal');
+            const closeBtn = document.querySelector('.close');
+            
+            closeBtn.onclick = function() {
+                modal.style.display = 'none';
+            }
+
+            window.onclick = function(event) {
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                }
+            }
+
+            // P.U.R.E.S. scoring buttons
+            document.querySelectorAll('.score-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const parent = this.parentNode;
+                    parent.querySelectorAll('.score-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+        }
+
+        // Filter table based on search and filters
+        function filterTable() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const tierFilter = document.getElementById('tierFilter').value;
+            const industryFilter = document.getElementById('industryFilter').value;
+
+            filteredData = clientData.filter(client => {
+                const matchesSearch = client.name.toLowerCase().includes(searchTerm) ||
+                                    client.email.toLowerCase().includes(searchTerm) ||
+                                    client.industry.toLowerCase().includes(searchTerm);
+                const matchesTier = !tierFilter || client.tier === tierFilter;
+                const matchesIndustry = !industryFilter || client.industry === industryFilter;
+
+                return matchesSearch && matchesTier && matchesIndustry;
+            });
+
+            populateTable(filteredData);
+        }
+
+        // Sort table by column
+        function sortTable(columnIndex) {
+            const headers = ['name', 'email', 'phone', 'address', 'puresScore', 'tier', 'industry', 'revenue'];
+            const sortKey = headers[columnIndex];
+
+            filteredData.sort((a, b) => {
+                let aVal = a[sortKey];
+                let bVal = b[sortKey];
+
+                if (sortKey === 'puresScore') {
+                    aVal = parseFloat(aVal);
+                    bVal = parseFloat(bVal);
+                } else if (sortKey === 'revenue') {
+                    aVal = parseFloat(aVal.replace(/[$KM,]/g, '')) * (aVal.includes('M') ? 1000000 : aVal.includes('K') ? 1000 : 1);
+                    bVal = parseFloat(bVal.replace(/[$KM,]/g, '')) * (bVal.includes('M') ? 1000000 : bVal.includes('K') ? 1000 : 1);
+                } else {
+                    aVal = aVal.toString().toLowerCase();
+                    bVal = bVal.toString().toLowerCase();
+                }
+
+                if (aVal < bVal) return -1 * sortDirection;
+                if (aVal > bVal) return 1 * sortDirection;
+                return 0;
+            });
+
+            sortDirection *= -1;
+            populateTable(filteredData);
+        }
+
+        // Call client function
+        function callClient(phone) {
+            window.location.href = `tel:${phone}`;
+        }
+
+        // Open email modal
+        function openEmailModal(name, email, industry, buyerType) {
+            const modal = document.getElementById('emailModal');
+            const clientNameSpan = document.getElementById('clientName');
+            const emailContent = document.getElementById('emailContent');
+
+            clientNameSpan.textContent = name;
+
+            // Generate personalized email content based on industry and buyer type
+            const emailTemplate = generateEmailTemplate(name, industry, buyerType);
+            emailContent.innerHTML = emailTemplate;
+
+            modal.style.display = 'block';
+        }
+
+        // Generate personalized email template
+        function generateEmailTemplate(name, industry, buyerType) {
+            let template = `
+                <p>Dear ${name},</p>
+                <p>I hope this message finds you well. As a local business owner in the ${industry} industry, I understand the unique challenges and opportunities you face every day.</p>
+            `;
+
+            // Industry-specific content
+            switch(industry) {
+                case 'Real Estate':
+                    template += `
+                        <p>In real estate, protecting your clients' investments and your professional liability is crucial. Our comprehensive insurance solutions include:</p>
+                        <ul>
+                            <li>Professional Liability (E&O) Insurance</li>
+                            <li>General Liability Coverage</li>
+                            <li>Property Management Insurance</li>
+                            <li>Cyber Liability Protection</li>
+                        </ul>
+                    `;
+                    break;
+                case 'Healthcare':
+                    template += `
+                        <p>Healthcare providers face unique risks that require specialized coverage. We offer:</p>
+                        <ul>
+                            <li>Medical Malpractice Insurance</li>
+                            <li>HIPAA Compliance Protection</li>
+                            <li>Employment Practices Liability</li>
+                            <li>Business Interruption Coverage</li>
+                        </ul>
+                    `;
+                    break;
+                case 'Restaurant':
+                    template += `
+                        <p>The restaurant industry presents specific challenges that our insurance solutions address:</p>
+                        <ul>
+                            <li>Liquor Liability Coverage</li>
+                            <li>Food Contamination Insurance</li>
+                            <li>Equipment Breakdown Protection</li>
+                            <li>Workers' Compensation</li>
+                        </ul>
+                    `;
+                    break;
+                case 'Construction':
+                    template += `
+                        <p>Construction businesses need robust protection against industry-specific risks:</p>
+                        <ul>
+                            <li>Contractor's General Liability</li>
+                            <li>Builder's Risk Insurance</li>
+                            <li>Surety Bonds</li>
+                            <li>Commercial Auto Coverage</li>
+                        </ul>
+                    `;
+                    break;
+                case 'Technology':
+                    template += `
+                        <p>Technology companies face evolving risks in the digital age. Our coverage includes:</p>
+                        <ul>
+                            <li>Cyber Liability & Data Breach Protection</li>
+                            <li>Technology E&O Insurance</li>
+                            <li>Intellectual Property Coverage</li>
+                            <li>Directors & Officers Liability</li>
+                        </ul>
+                    `;
+                    break;
+                case 'Retail':
+                    template += `
+                        <p>Retail businesses need comprehensive protection for both physical and digital operations:</p>
+                        <ul>
+                            <li>Commercial Property Insurance</li>
+                            <li>Product Liability Coverage</li>
+                            <li>Business Income Protection</li>
+                            <li>Cyber Security Insurance</li>
+                        </ul>
+                    `;
+                    break;
+                case 'Professional Services':
+                    template += `
+                        <p>Professional service firms require specialized coverage for their unique exposures:</p>
+                        <ul>
+                            <li>Professional Liability (E&O) Insurance</li>
+                            <li>Employment Practices Liability</li>
+                            <li>Cyber Liability Protection</li>
+                            <li>Business Owner's Policy (BOP)</li>
+                        </ul>
+                    `;
+                    break;
+                case 'Transportation':
+                    template += `
+                        <p>Transportation companies face complex risks that require specialized coverage:</p>
+                        <ul>
+                            <li>Commercial Auto & Fleet Insurance</li>
+                            <li>Cargo & Freight Protection</li>
+                            <li>Motor Truck Cargo Insurance</li>
+                            <li>Non-Trucking Liability</li>
+                        </ul>
+                    `;
+                    break;
+                case 'Manufacturing':
+                    template += `
+                        <p>Manufacturing businesses need comprehensive protection against operational risks:</p>
+                        <ul>
+                            <li>Product Liability Insurance</li>
+                            <li>Equipment Breakdown Coverage</li>
+                            <li>Commercial Property Protection</li>
+                            <li>Business Interruption Insurance</li>
+                        </ul>
+                    `;
+                    break;
+                default:
+                    template += `
+                        <p>Every business needs protection against unexpected events. Our comprehensive insurance solutions include:</p>
+                        <ul>
+                            <li>General Liability Insurance</li>
+                            <li>Property Insurance</li>
+                            <li>Workers' Compensation</li>
+                            <li>Business Interruption Coverage</li>
+                        </ul>
+                    `;
+            }
+
+            // Buyer type specific approach
+            switch(buyerType) {
+                case 'Analytical':
+                    template += `
+                        <p><strong>ROI Analysis:</strong> Our clients typically save 15-25% on their insurance costs while improving their coverage quality. We provide detailed risk assessments and cost-benefit analyses to help you make informed decisions.</p>
+                    `;
+                    break;
+                case 'Relationship':
+                    template += `
+                        <p><strong>Partnership Approach:</strong> With over 40 years of experience, we believe in building long-term relationships based on trust and exceptional service. Many of our clients have been with us for decades because we treat their business like our own.</p>
+                    `;
+                    break;
+                case 'Efficiency':
+                    template += `
+                        <p><strong>Streamlined Process:</strong> Our automated technology and streamlined procedures mean faster quotes, quicker claims processing, and less time spent on insurance administration so you can focus on growing your business.</p>
+                    `;
+                    break;
+                case 'Innovation':
+                    template += `
+                        <p><strong>Cutting-Edge Solutions:</strong> We leverage the latest insurance technology and innovative coverage options to provide forward-thinking solutions that adapt to your evolving business needs.</p>
+                    `;
+                    break;
+            }
+
+            template += `
+                <p><strong>Why Choose Sandco Insurance Agency?</strong></p>
+                <ul>
+                    <li>40+ years of experience in the insurance industry</li>
+                    <li>Local presence with personalized service</li>
+                    <li>Direct access to experienced agents</li>
+                    <li>Advanced technology for faster processing</li>
+                    <li>Comprehensive risk management solutions</li>
+                </ul>
+                
+                <p>I'd love to schedule a brief consultation to discuss how we can protect your business and potentially save you money on your insurance costs. Are you available for a 15-minute call this week?</p>
+                
+                <p>Best regards,<br>
+                Julian Summers<br>
+                Sandco Insurance Agency<br>
+                (310) 361-5630<br>
+                julian@sandco-ins.com</p>
+                
+                <p><em>P.S. As a local business owner myself, I understand the importance of protecting what you've worked so hard to build. Let's discuss how we can give you peace of mind.</em></p>
+            `;
+
+            return template;
+        }
+
+        // Send email function
+        function sendEmail() {
+            const clientName = document.getElementById('clientName').textContent;
+            const emailContent = document.getElementById('emailContent').innerHTML;
+            
+            // Create mailto link with the email content
+            const subject = encodeURIComponent('Protect Your Business & Family with Comprehensive Insurance Solutions');
+            const body = encodeURIComponent(emailContent.replace(/<[^>]*>/g, '\n').replace(/\n\s*\n/g, '\n\n'));
+            
+            window.location.href = `mailto:?subject=${subject}&body=${body}`;
+            
+            document.getElementById('emailModal').style.display = 'none';
+        }
+
+        // Export to CSV function
+        function exportToCSV() {
+            const csvContent = "data:text/csv;charset=utf-8," + 
+                "Name,Email,Phone,Address,P.U.R.E.S. Score,Tier Level,Industry,Revenue Est.\n" +
+                filteredData.map(client => 
+                    `"${client.name}","${client.email}","${client.phone}","${client.address}","${client.puresScore}","${client.tier}","${client.industry}","${client.revenue}"`
+                ).join("\n");
+
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "sandco_clients.csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        // Print report function
+        function printReport() {
+            window.print();
+        }
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', initializeTable);
+    </script>
+</body>
+</html>

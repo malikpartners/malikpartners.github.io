@@ -1,0 +1,802 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>S.A.L.E. System Dashboard - Rowland Fashion</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #000000;
+            color: #ffffff;
+            line-height: 1.6;
+        }
+
+        .header {
+            background-color: #CF2030;
+            padding: 1rem;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(207, 32, 48, 0.3);
+        }
+
+        .header img {
+            max-height: 60px;
+            width: auto;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .dashboard-tabs {
+            display: flex;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid #CF2030;
+        }
+
+        .tab {
+            padding: 1rem 2rem;
+            cursor: pointer;
+            background-color: #333;
+            margin-right: 1rem;
+            border-radius: 8px 8px 0 0;
+            transition: all 0.3s ease;
+        }
+
+        .tab.active {
+            background-color: #CF2030;
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+            background-color: #1a1a1a;
+            padding: 2rem;
+            border-radius: 0 8px 8px 8px;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .search-controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .search-controls input, .search-controls select {
+            padding: 0.5rem;
+            background-color: #333;
+            color: white;
+            border: 1px solid #CF2030;
+            border-radius: 4px;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            background-color: #CF2030;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #a01828;
+        }
+
+        .btn-small {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.8rem;
+        }
+
+        .client-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 2rem;
+            background-color: #2a2a2a;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .client-table th,
+        .client-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #444;
+        }
+
+        .client-table th {
+            background-color: #CF2030;
+            font-weight: bold;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .client-table th:hover {
+            background-color: #a01828;
+        }
+
+        .tier-1a {
+            background-color: rgba(0, 255, 0, 0.1);
+        }
+
+        .tier-1b {
+            background-color: rgba(255, 255, 0, 0.1);
+        }
+
+        .tier-1c {
+            background-color: rgba(0, 150, 255, 0.1);
+        }
+
+        .pures-form {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            background-color: #333;
+            padding: 2rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            color: #CF2030;
+        }
+
+        .rating-slider {
+            width: 100%;
+            height: 8px;
+            border-radius: 4px;
+            background: #555;
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        .rating-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #CF2030;
+            cursor: pointer;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+
+        .modal-content {
+            background-color: #2a2a2a;
+            margin: 5% auto;
+            padding: 2rem;
+            border-radius: 8px;
+            width: 80%;
+            max-width: 600px;
+            color: white;
+        }
+
+        .close {
+            color: #CF2030;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: #a01828;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background-color: #333;
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+            border: 2px solid #CF2030;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #CF2030;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            border-top: 1px solid #333;
+            margin-top: 2rem;
+        }
+
+        .footer img {
+            max-height: 30px;
+            width: auto;
+            opacity: 0.7;
+        }
+
+        #clientTable tbody tr {
+            transition: background-color 0.3s ease;
+        }
+
+        #clientTable tbody tr:hover {
+            background-color: rgba(207, 32, 48, 0.1);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .search-controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .client-table {
+                font-size: 0.8rem;
+            }
+
+            .client-table th,
+            .client-table td {
+                padding: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="HigginsReports Logo">
+        <h1>S.A.L.E. System Dashboard - Rowland Fashion</h1>
+        <p>Brisbane, Queensland, Australia | Apparel & Fashion</p>
+    </header>
+
+    <div class="container">
+        <div class="dashboard-tabs">
+            <div class="tab active" onclick="showTab('sourcing')">S.OURCING</div>
+            <div class="tab" onclick="showTab('assessing')">A.SSESSING</div>
+            <div class="tab" onclick="showTab('listening')">L.ISTENING</div>
+            <div class="tab" onclick="showTab('empowering')">E.MPOWERING</div>
+        </div>
+
+        <!-- SOURCING TAB -->
+        <div id="sourcing" class="tab-content active">
+            <h2>S.OURCING - P.U.R.E.S. Client Targeting</h2>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number" id="totalClients">50</div>
+                    <div>Total Prospects</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="tier1aCount">12</div>
+                    <div>Tier 1A (Premium)</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="tier1bCount">18</div>
+                    <div>Tier 1B (High-Value)</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="tier1cCount">20</div>
+                    <div>Tier 1C (Qualified)</div>
+                </div>
+            </div>
+
+            <div class="search-controls">
+                <input type="text" id="searchInput" placeholder="Search clients..." onkeyup="filterClients()">
+                <select id="tierFilter" onchange="filterClients()">
+                    <option value="">All Tiers</option>
+                    <option value="1A">Tier 1A (Premium)</option>
+                    <option value="1B">Tier 1B (High-Value)</option>
+                    <option value="1C">Tier 1C (Qualified)</option>
+                </select>
+                <select id="industryFilter" onchange="filterClients()">
+                    <option value="">All Industries</option>
+                    <option value="Fashion">Fashion</option>
+                    <option value="Retail">Retail</option>
+                    <option value="Beauty">Beauty</option>
+                    <option value="Lifestyle">Lifestyle</option>
+                    <option value="Corporate">Corporate</option>
+                </select>
+                <button class="btn" onclick="exportData()">Export CSV</button>
+                <button class="btn" onclick="showPURESForm()">Add New Client</button>
+            </div>
+
+            <table class="client-table" id="clientTable">
+                <thead>
+                    <tr>
+                        <th onclick="sortTable(0)">Client Name</th>
+                        <th onclick="sortTable(1)">Email</th>
+                        <th onclick="sortTable(2)">Phone</th>
+                        <th onclick="sortTable(3)">Address</th>
+                        <th onclick="sortTable(4)">P.U.R.E.S. Score</th>
+                        <th onclick="sortTable(5)">Tier Level</th>
+                        <th onclick="sortTable(6)">Industry</th>
+                        <th onclick="sortTable(7)">Revenue Est.</th>
+                        <th onclick="sortTable(8)">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="clientTableBody">
+                    <!-- Client data will be populated by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- ASSESSING TAB -->
+        <div id="assessing" class="tab-content">
+            <h2>A.SSESSING - Buying Pattern Analysis</h2>
+            <div class="pures-form">
+                <div class="form-group">
+                    <label>Analytical Buyers (ROI Focused)</label>
+                    <p>Require detailed analysis, case studies, trials</p>
+                    <ul style="margin-top: 1rem; color: #ccc;">
+                        <li>Fashion retailers seeking proven ROI</li>
+                        <li>Corporate clients needing detailed proposals</li>
+                        <li>Boutique owners analyzing profit margins</li>
+                    </ul>
+                </div>
+                <div class="form-group">
+                    <label>Relationship Buyers (Trust Focused)</label>
+                    <p>Value trust, referrals, long-term partnerships</p>
+                    <ul style="margin-top: 1rem; color: #ccc;">
+                        <li>Established fashion professionals</li>
+                        <li>Repeat customers seeking quality</li>
+                        <li>Word-of-mouth referral clients</li>
+                    </ul>
+                </div>
+                <div class="form-group">
+                    <label>Efficiency Buyers (Time Focused)</label>
+                    <p>Focus on time-saving, process improvement</p>
+                    <ul style="margin-top: 1rem; color: #ccc;">
+                        <li>Busy professionals needing style solutions</li>
+                        <li>Corporate wardrobe services</li>
+                        <li>Quick decision makers</li>
+                    </ul>
+                </div>
+                <div class="form-group">
+                    <label>Innovation Buyers (Trend Focused)</label>
+                    <p>Seek cutting-edge solutions, competitive advantage</p>
+                    <ul style="margin-top: 1rem; color: #ccc;">
+                        <li>Fashion-forward influencers</li>
+                        <li>Trend-setting businesses</li>
+                        <li>Early adopters of new styles</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- LISTENING TAB -->
+        <div id="listening" class="tab-content">
+            <h2>L.ISTENING - Feedback Integration</h2>
+            <div class="pures-form">
+                <div class="form-group">
+                    <label>Pre-Sale Feedback Collection</label>
+                    <textarea placeholder="Customer style preferences, sizing needs, budget range..." style="background-color: #555; color: white; border: 1px solid #CF2030; padding: 0.5rem; border-radius: 4px; min-height: 100px;"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>During-Sale Progress Tracking</label>
+                    <textarea placeholder="Fitting sessions, style consultations, modification requests..." style="background-color: #555; color: white; border: 1px solid #CF2030; padding: 0.5rem; border-radius: 4px; min-height: 100px;"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Post-Sale Satisfaction Monitoring</label>
+                    <textarea placeholder="Follow-up on satisfaction, fit quality, styling results..." style="background-color: #555; color: white; border: 1px solid #CF2030; padding: 0.5rem; border-radius: 4px; min-height: 100px;"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Real-time Complaint Resolution</label>
+                    <textarea placeholder="Address sizing issues, style concerns, delivery problems..." style="background-color: #555; color: white; border: 1px solid #CF2030; padding: 0.5rem; border-radius: 4px; min-height: 100px;"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- EMPOWERING TAB -->
+        <div id="empowering" class="tab-content">
+            <h2>E.MPOWERING - Referral Strategy</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">87%</div>
+                    <div>Client Satisfaction</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">34</div>
+                    <div>Active Referrals</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">$45k</div>
+                    <div>Referral Revenue</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">92%</div>
+                    <div>Retention Rate</div>
+                </div>
+            </div>
+            
+            <div class="pures-form">
+                <div class="form-group">
+                    <label>Success Story Documentation</label>
+                    <p>Document transformation stories, before/after styling results</p>
+                </div>
+                <div class="form-group">
+                    <label>Referral Reward Tracking</label>
+                    <p>10% discount for successful referrals, VIP styling sessions</p>
+                </div>
+                <div class="form-group">
+                    <label>Client Advocacy Program</label>
+                    <p>Fashion ambassador program, social media features</p>
+                </div>
+                <div class="form-group">
+                    <label>Co-marketing Opportunities</label>
+                    <p>Partner with local beauty salons, photographers, event planners</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- P.U.R.E.S. Modal -->
+    <div id="puresModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closePURESForm()">&times;</span>
+            <h2>P.U.R.E.S. Client Evaluation</h2>
+            <form class="pures-form" id="puresForm">
+                <div class="form-group">
+                    <label>Client Name:</label>
+                    <input type="text" id="clientName" required>
+                </div>
+                <div class="form-group">
+                    <label>Email:</label>
+                    <input type="email" id="clientEmail" required>
+                </div>
+                <div class="form-group">
+                    <label>Phone:</label>
+                    <input type="tel" id="clientPhone">
+                </div>
+                <div class="form-group">
+                    <label>Address:</label>
+                    <input type="text" id="clientAddress">
+                </div>
+                <div class="form-group">
+                    <label>Profitability (1-5): <span id="profitValue">3</span></label>
+                    <input type="range" class="rating-slider" id="profitability" min="1" max="5" value="3" oninput="updateSliderValue('profitValue', this.value)">
+                </div>
+                <div class="form-group">
+                    <label>Urgency (1-5): <span id="urgencyValue">3</span></label>
+                    <input type="range" class="rating-slider" id="urgency" min="1" max="5" value="3" oninput="updateSliderValue('urgencyValue', this.value)">
+                </div>
+                <div class="form-group">
+                    <label>Reachability (1-5): <span id="reachValue">3</span></label>
+                    <input type="range" class="rating-slider" id="reachability" min="1" max="5" value="3" oninput="updateSliderValue('reachValue', this.value)">
+                </div>
+                <div class="form-group">
+                    <label>Engagement (1-5): <span id="engageValue">3</span></label>
+                    <input type="range" class="rating-slider" id="engagement" min="1" max="5" value="3" oninput="updateSliderValue('engageValue', this.value)">
+                </div>
+                <div class="form-group">
+                    <label>Sustainability (1-5): <span id="sustainValue">3</span></label>
+                    <input type="range" class="rating-slider" id="sustainability" min="1" max="5" value="3" oninput="updateSliderValue('sustainValue', this.value)">
+                </div>
+                <button type="submit" class="btn">Add Client</button>
+            </form>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="HigginsReports Logo">
+        <p>&copy; 2024 HigginsReports. S.A.L.E. System Dashboard for Rowland Fashion.</p>
+    </footer>
+
+    <script>
+        // Sample client data for Brisbane area (within 10 miles)
+        let clientData = [
+            {name: "Sarah Mitchell", email: "sarah.mitchell@gmail.com", phone: "+61 7 3123 4567", address: "45 Queen Street, Brisbane City QLD 4000", pures: 4.6, tier: "1A", industry: "Fashion", revenue: "$150k", buyingPattern: "Relationship", notes: "High-end fashion retailer, excellent referral potential"},
+            {name: "Emma Thompson", email: "emma@stylehaus.com.au", phone: "+61 7 3234 5678", address: "78 Adelaide Street, Brisbane City QLD 4000", pures: 4.4, tier: "1A", industry: "Retail", revenue: "$120k", buyingPattern: "Innovation", notes: "Boutique owner, trend-focused"},
+            {name: "Isabella Rodriguez", email: "bella.style@outlook.com", phone: "+61 7 3345 6789", address: "23 George Street, Brisbane City QLD 4000", pures: 4.2, tier: "1A", industry: "Beauty", revenue: "$95k", buyingPattern: "Analytical", notes: "Style consultant, data-driven decisions"},
+            {name: "Olivia Chen", email: "olivia@fashionforward.com.au", phone: "+61 7 3456 7890", address: "56 Elizabeth Street, Brisbane City QLD 4000", pures: 4.8, tier: "1A", industry: "Fashion", revenue: "$200k", buyingPattern: "Innovation", notes: "Premium fashion designer, high influence"},
+            {name: "Sophie Williams", email: "sophie.w@gmail.com", phone: "+61 7 3567 8901", address: "89 Ann Street, Brisbane City QLD 4000", pures: 4.0, tier: "1A", industry: "Corporate", revenue: "$180k", buyingPattern: "Efficiency", notes: "Corporate stylist, time-sensitive needs"},
+            {name: "Grace Anderson", email: "grace@eleganttouch.com.au", phone: "+61 7 3678 9012", address: "34 Charlotte Street, Brisbane City QLD 4000", pures: 4.3, tier: "1A", industry: "Fashion", revenue: "$130k", buyingPattern: "Relationship", notes: "Wedding fashion specialist"},
+            {name: "Zoe Turner", email: "zoe.turner@hotmail.com", phone: "+61 7 3789 0123", address: "67 Mary Street, Brisbane City QLD 4000", pures: 4.5, tier: "1A", industry: "Lifestyle", revenue: "$165k", buyingPattern: "Innovation", notes: "Lifestyle blogger with fashion focus"},
+            {name: "Chloe Davis", email: "chloe@modernstyling.com.au", phone: "+61 7 3890 1234", address: "12 Creek Street, Brisbane City QLD 4000", pures: 4.1, tier: "1A", industry: "Retail", revenue: "$110k", buyingPattern: "Analytical", notes: "Modern styling service"},
+            {name: "Lily Jackson", email: "lily.j@fashionista.com.au", phone: "+61 7 3901 2345", address: "45 Edward Street, Brisbane City QLD 4000", pures: 4.7, tier: "1A", industry: "Fashion", revenue: "$190k", buyingPattern: "Relationship", notes: "High-end fashion influencer"},
+            {name: "Mia Thompson", email: "mia@chicsolutions.com.au", phone: "+61 7 4012 3456", address: "78 Albert Street, Brisbane City QLD 4000", pures: 4.4, tier: "1A", industry: "Beauty", revenue: "$140k", buyingPattern: "Efficiency", notes: "Beauty and fashion consultant"},
+            {name: "Amelia White", email: "amelia.white@gmail.com", phone: "+61 7 4123 4567", address: "23 Roma Street, Brisbane City QLD 4000", pures: 4.2, tier: "1A", industry: "Corporate", revenue: "$125k", buyingPattern: "Innovation", notes: "Corporate image consultant"},
+            {name: "Charlotte Brown", email: "charlotte@styleme.com.au", phone: "+61 7 4234 5678", address: "56 Turbot Street, Brisbane City QLD 4000", pures: 4.6, tier: "1A", industry: "Fashion", revenue: "$175k", buyingPattern: "Relationship", notes: "Personal styling service"},
+            
+            {name: "Hannah Wilson", email: "hannah.wilson@gmail.com", phone: "+61 7 4345 6789", address: "89 Wickham Street, Fortitude Valley QLD 4006", pures: 3.8, tier: "1B", industry: "Retail", revenue: "$75k", buyingPattern: "Efficiency", notes: "Small boutique owner"},
+            {name: "Jessica Moore", email: "jessica@trendy.com.au", phone: "+61 7 4456 7890", address: "34 Ann Street, Fortitude Valley QLD 4006", pures: 3.6, tier: "1B", industry: "Fashion", revenue: "$65k", buyingPattern: "Innovation", notes: "Trendy fashion retailer"},
+            {name: "Madison Taylor", email: "madison.t@outlook.com", phone: "+61 7 4567 8901", address: "67 Brunswick Street, Fortitude Valley QLD 4006", pures: 3.9, tier: "1B", industry: "Beauty", revenue: "$80k", buyingPattern: "Analytical", notes: "Beauty salon owner"},
+            {name: "Abigail Martin", email: "abby@stylish.com.au", phone: "+61 7 4678 9012", address: "12 James Street, Fortitude Valley QLD 4006", pures: 3.7, tier: "1B", industry: "Lifestyle", revenue: "$70k", buyingPattern: "Relationship", notes: "Lifestyle brand manager"},
+            {name: "Emily Garcia", email: "emily.garcia@gmail.com", phone: "+61 7 4789 0123", address: "45 McLachlan Street, Fortitude Valley QLD 4006", pures: 3.5, tier: "1B", industry: "Corporate", revenue: "$85k", buyingPattern: "Efficiency", notes: "Corporate fashion buyer"},
+            {name: "Victoria Lee", email: "victoria@fashion.com.au", phone: "+61 7 4890 1234", address: "78 Robertson Street, Fortitude Valley QLD 4006", pures: 3.8, tier: "1B", industry: "Fashion", revenue: "$72k", buyingPattern: "Innovation", notes: "Fashion design student"},
+            {name: "Lauren Clark", email: "lauren.clark@hotmail.com", phone: "+61 7 4901 2345", address: "23 Duncan Street, Fortitude Valley QLD 4006", pures: 3.4, tier: "1B", industry: "Retail", revenue: "$60k", buyingPattern: "Analytical", notes: "Online fashion retailer"},
+            {name: "Natalie Lewis", email: "natalie@stylepoint.com.au", phone: "+61 7 5012 3456", address: "56 Water Street, Fortitude Valley QLD 4006", pures: 3.9, tier: "1B", industry: "Beauty", revenue: "$78k", buyingPattern: "Relationship", notes: "Beauty and style advisor"},
+            {name: "Samantha Walker", email: "samantha.w@gmail.com", phone: "+61 7 5123 4567", address: "89 Doggett Street, Fortitude Valley QLD 4006", pures: 3.6, tier: "1B", industry: "Lifestyle", revenue: "$68k", buyingPattern: "Efficiency", notes: "Lifestyle influencer"},
+            {name: "Rachel Hall", email: "rachel@fashionhub.com.au", phone: "+61 7 5234 5678", address: "34 Warner Street, Fortitude Valley QLD 4006", pures: 3.7, tier: "1B", industry: "Fashion", revenue: "$74k", buyingPattern: "Innovation", notes: "Fashion hub coordinator"},
+            {name: "Ashley Allen", email: "ashley.allen@outlook.com", phone: "+61 7 5345 6789", address: "67 Berwick Street, Fortitude Valley QLD 4006", pures: 3.8, tier: "1B", industry: "Corporate", revenue: "$76k", buyingPattern: "Analytical", notes: "Corporate stylist assistant"},
+            {name: "Brittany Young", email: "brittany@style.com.au", phone: "+61 7 5456 7890", address: "12 Costin Street, Fortitude Valley QLD 4006", pures: 3.5, tier: "1B", industry: "Retail", revenue: "$62k", buyingPattern: "Relationship", notes: "Specialty retail manager"},
+            {name: "Kimberly King", email: "kimberly.king@gmail.com", phone: "+61 7 5567 8901", address: "45 Gipps Street, Fortitude Valley QLD 4006", pures: 3.9, tier: "1B", industry: "Beauty", revenue: "$82k", buyingPattern: "Efficiency", notes: "Beauty product distributor"},
+            {name: "Amanda Wright", email: "amanda@trendsetter.com.au", phone: "+61 7 5678 9012", address: "78 Phillips Street, Fortitude Valley QLD 4006", pures: 3.6, tier: "1B", industry: "Fashion", revenue: "$66k", buyingPattern: "Innovation", notes: "Trend forecasting consultant"},
+            {name: "Stephanie Lopez", email: "stephanie.l@hotmail.com", phone: "+61 7 5789 0123", address: "23 Constance Street, Fortitude Valley QLD 4006", pures: 3.7, tier: "1B", industry: "Lifestyle", revenue: "$71k", buyingPattern: "Analytical", notes: "Lifestyle product manager"},
+            {name: "Michelle Hill", email: "michelle@elegance.com.au", phone: "+61 7 5890 1234", address: "56 Arthur Street, Fortitude Valley QLD 4006", pures: 3.8, tier: "1B", industry: "Corporate", revenue: "$77k", buyingPattern: "Relationship", notes: "Corporate wardrobe consultant"},
+            {name: "Nicole Scott", email: "nicole.scott@gmail.com", phone: "+61 7 5901 2345", address: "89 Marshall Street, Fortitude Valley QLD 4006", pures: 3.4, tier: "1B", industry: "Retail", revenue: "$59k", buyingPattern: "Efficiency", notes: "Retail fashion coordinator"},
+            {name: "Danielle Green", email: "danielle@fashionista.com.au", phone: "+61 7 6012 3456", address: "34 Brookes Street, Fortitude Valley QLD 4006", pures: 3.9, tier: "1B", industry: "Fashion", revenue: "$79k", buyingPattern: "Innovation", notes: "Fashion week coordinator"},
+
+            {name: "Rebecca Adams", email: "rebecca.adams@gmail.com", phone: "+61 7 6123 4567", address: "67 Given Terrace, Paddington QLD 4064", pures: 3.2, tier: "1C", industry: "Beauty", revenue: "$45k", buyingPattern: "Relationship", notes: "Small beauty business owner"},
+            {name: "Catherine Baker", email: "catherine@boutique.com.au", phone: "+61 7 6234 5678", address: "12 Latrobe Terrace, Paddington QLD 4064", pures: 3.0, tier: "1C", industry: "Retail", revenue: "$40k", buyingPattern: "Analytical", notes: "Independent boutique operator"},
+            {name: "Jennifer Gonzalez", email: "jennifer.g@outlook.com", phone: "+61 7 6345 6789", address: "45 Caxton Street, Paddington QLD 4064", pures: 3.3, tier: "1C", industry: "Fashion", revenue: "$48k", buyingPattern: "Efficiency", notes: "Fashion design graduate"},
+            {name: "Lisa Nelson", email: "lisa@stylecorner.com.au", phone: "+61 7 6456 7890", address: "78 Fernberg Road, Paddington QLD 4064", pures: 3.1, tier: "1C", industry: "Lifestyle", revenue: "$42k", buyingPattern: "Innovation", notes: "Lifestyle brand startup"},
+            {name: "Karen Carter", email: "karen.carter@hotmail.com", phone: "+61 7 6567 8901", address: "23 Rosalie Road, Paddington QLD 4064", pures: 3.4, tier: "1C", industry: "Corporate", revenue: "$50k", buyingPattern: "Relationship", notes: "Corporate trainer"},
+            {name: "Amy Mitchell", email: "amy@fashion.com.au", phone: "+61 7 6678 9012", address: "56 Petrie Terrace, Paddington QLD 4064", pures: 3.2, tier: "1C", industry: "Beauty", revenue: "$46k", buyingPattern: "Analytical", notes: "Beauty therapist"},
+            {name: "Julie Perez", email: "julie.perez@gmail.com", phone: "+61 7 6789 0123", address: "89 Hale Street, Paddington QLD 4064", pures: 3.0, tier: "1C", industry: "Retail", revenue: "$38k", buyingPattern: "Efficiency", notes: "Online fashion seller"},
+            {name: "Sarah Roberts", email: "sarah.roberts@outlook.com", phone: "+61 7 6890 1234", address: "34 Nash Street, Paddington QLD 4064", pures: 3.3, tier: "1C", industry: "Fashion", revenue: "$47k", buyingPattern: "Innovation", notes: "Fashion blogger"},
+            {name: "Laura Turner", email: "laura@style.com.au", phone: "+61 7 6901 2345", address: "67 Mollison Street, Paddington QLD 4064", pures: 3.1, tier: "1C", industry: "Lifestyle", revenue: "$43k", buyingPattern: "Relationship", notes: "Lifestyle content creator"},
+            {name: "Kelly Phillips", email: "kelly.phillips@gmail.com", phone: "+61 7 7012 3456", address: "12 Lambert Road, Paddington QLD 4064", pures: 3.4, tier: "1C", industry: "Corporate", revenue: "$51k", buyingPattern: "Analytical", notes: "Corporate communications"},
+            {name: "Christina Campbell", email: "christina@beauty.com.au", phone: "+61 7 7123 4567", address: "45 Baroona Road, Paddington QLD 4064", pures: 3.2, tier: "1C", industry: "Beauty", revenue: "$45k", buyingPattern: "Efficiency", notes: "Beauty product sales"},
+            {name: "Heather Parker", email: "heather.parker@hotmail.com", phone: "+61 7 7234 5678", address: "78 Castlemaine Street, Paddington QLD 4064", pures: 3.0, tier: "1C", industry: "Retail", revenue: "$39k", buyingPattern: "Innovation", notes: "Vintage clothing store"},
+            {name: "Angela Evans", email: "angela@fashion.com.au", phone: "+61 7 7345 6789", address: "23 Prospect Terrace, Paddington QLD 4064", pures: 3.3, tier: "1C", industry: "Fashion", revenue: "$48k", buyingPattern: "Relationship", notes: "Fashion journalism"},
+            {name: "Melissa Edwards", email: "melissa.edwards@gmail.com", phone: "+61 7 7456 7890", address: "56 Morley Street, Paddington QLD 4064", pures: 3.1, tier: "1C", industry: "Lifestyle", revenue: "$44k", buyingPattern: "Analytical", notes: "Lifestyle coach"},
+            {name: "Donna Collins", email: "donna@style.com.au", phone: "+61 7 7567 8901", address: "89 Musgrave Road, Paddington QLD 4064", pures: 3.4, tier: "1C", industry: "Corporate", revenue: "$52k", buyingPattern: "Efficiency", notes: "Corporate wellness"},
+            {name: "Carol Stewart", email: "carol.stewart@outlook.com", phone: "+61 7 7678 9012", address: "34 Dornoch Terrace, Paddington QLD 4064", pures: 3.2, tier: "1C", industry: "Beauty", revenue: "$46k", buyingPattern: "Innovation", notes: "Beauty workshop instructor"},
+            {name: "Ruth Sanchez", email: "ruth@fashion.com.au", phone: "+61 7 7789 0123", address: "67 Hardgrave Road, West End QLD 4101", pures: 3.0, tier: "1C", industry: "Retail", revenue: "$40k", buyingPattern: "Relationship", notes: "Community market vendor"},
+            {name: "Sharon Morris", email: "sharon.morris@gmail.com", phone: "+61 7 7890 1234", address: "12 Montague Road, West End QLD 4101", pures: 3.3, tier: "1C", industry: "Fashion", revenue: "$49k", buyingPattern: "Analytical", notes: "Fashion sustainability advocate"},
+            {name: "Lisa Rogers", email: "lisa.rogers@hotmail.com", phone: "+61 7 7901 2345", address: "45 Vulture Street, West End QLD 4101", pures: 3.1, tier: "1C", industry: "Lifestyle", revenue: "$41k", buyingPattern: "Efficiency", notes: "Wellness lifestyle brand"},
+            {name: "Deborah Reed", email: "deborah@style.com.au", phone: "+61 7 8012 3456", address: "78 Russell Street, West End QLD 4101", pures: 3.4, tier: "1C", industry: "Corporate", revenue: "$53k", buyingPattern: "Innovation", notes: "Startup fashion tech"}
+        ];
+
+        function showTab(tabName) {
+            // Hide all tab contents
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabContents.forEach(content => content.classList.remove('active'));
+            
+            // Remove active class from all tabs
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        function populateClientTable() {
+            const tbody = document.getElementById('clientTableBody');
+            tbody.innerHTML = '';
+            
+            clientData.forEach((client, index) => {
+                const row = tbody.insertRow();
+                row.className = `tier-${client.tier.toLowerCase()}`;
+                
+                row.innerHTML = `
+                    <td>${client.name}</td>
+                    <td>${client.email}</td>
+                    <td>${client.phone}</td>
+                    <td>${client.address}</td>
+                    <td>${client.pures}/5</td>
+                    <td>${client.tier}</td>
+                    <td>${client.industry}</td>
+                    <td>${client.revenue}</td>
+                    <td class="action-buttons">
+                        <button class="btn btn-small" onclick="contactClient('${client.email}', '${client.name}')">Email</button>
+                        <button class="btn btn-small" onclick="callClient('${client.phone}')">Call</button>
+                        <button class="btn btn-small" onclick="editClient(${index})">Edit</button>
+                    </td>
+                `;
+            });
+        }
+
+        function contactClient(email, name) {
+            const subject = "Exclusive Fashion Styling Opportunity - Rowland Brisbane";
+            const body = `Dear ${name},
+
+I hope this message finds you well. I'm Amy Wong from Rowland Fashion, Brisbane's premier destination for personalized styling and contemporary fashion.
+
+Based on our analysis, I believe you would be perfect for our exclusive styling services. Here's what makes Rowland Fashion special:
+
+🌟 Personalized Style Consultations
+We offer one-on-one consultations to understand your unique style preferences, body type, and lifestyle needs.
+
+✨ Premium Fashion Collection
+Our curated collection features the latest trends from both Australian and international designers, carefully selected for quality and style.
+
+💫 Complete Styling Services
+From wardrobe audits to special event styling, we provide comprehensive fashion solutions that boost confidence and enhance your personal brand.
+
+🎯 Exclusive Benefits for VIP Clients
+- 15% discount on first styling session
+- Priority access to new collections
+- Seasonal wardrobe planning sessions
+- Complimentary alterations service
+
+Why choose Rowland Fashion?
+- Expert styling advice tailored to Brisbane's climate and lifestyle
+- Quality garments that stand the test of time
+- Sustainable fashion choices
+- Personalized service with lasting relationships
+
+I'd love to schedule a complimentary 30-minute consultation to discuss how we can elevate your style. Our Brisbane showroom is conveniently located and offers a comfortable, private environment for your styling experience.
+
+Would you be available for a quick call this week to explore how Rowland Fashion can enhance your wardrobe?
+
+Best regards,
+Amy Wong
+Founder & Creative Director
+Rowland Fashion
+Brisbane, QLD
+Phone: ${document.querySelector('#clientTable').rows[1]?.cells[2]?.textContent || '+61 7 3000 0000'}
+Website: www.rowland.com.au
+
+P.S. Follow us on Instagram @rowlandfashion for daily style inspiration!`;
+
+            const mailtoLink = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+            window.open(mailtoLink);
+        }
+
+        function callClient(phone) {
+            window.open(`tel:${phone}`);
+        }
+
+        function editClient(index) {
+            // Open P.U.R.E.S. modal with client data
+            const client = clientData[index];
+            document.getElementById('clientName').value = client.name;
+            document.getElementById('clientEmail').value = client.email;
+            document.getElementById('clientPhone').value = client.phone;
+            document.getElementById('clientAddress').value = client.address;
+            
+            document.getElementById('puresModal').style.display = 'block';
+        }
+
+        function filterClients() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const tierFilter = document.getElementById('tierFilter').value;
+            const industryFilter = document.getElementById('industryFilter').value;
+            
+            const rows = document.getElementById('clientTableBody').rows;
+            
+            for (let i = 0; i < rows.length; i++) {
+                const row = rows[i];
+                const name = row.cells[0].textContent.toLowerCase();
+                const email = row.cells[1].textContent.toLowerCase();
+                const tier = row.cells[5].textContent;
+                const industry = row.cells[6].textContent;
+                
+                const matchesSearch = name.includes(searchTerm) || email.includes(searchTerm);
+                const matchesTier = !tierFilter || tier === tierFilter;
+                const matchesIndustry = !industryFilter || industry === industryFilter;
+                
+                if (matchesSearch && matchesTier && matchesIndustry) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            }
+        }
+
+        function sortTable(columnIndex) {
+            const table = document.getElementById('clientTable');
+            const tbody = table.querySelector('tbody');
+            const rows = Array.from(tbody.rows);
+            
+            rows.sort((a, b) => {
+                const aVal = a.cells[columnIndex].textContent.trim();
+                const bVal = b.cells[columnIndex].textContent.trim();
+                
+                // Handle numeric sorting for P.U.R.E.S. score
+                if (columnIndex === 4) {
+                    return parseFloat(bVal) - parseFloat(aVal);
+                }
+                
+                return aVal.localeCompare(bVal);
+            });
+            
+            rows.forEach(row => tbody.appendChild(row));
+        }
+
+        function showPURESForm() {
+            document.getElementById('puresModal').style.display = 'block';
+        }
+
+        function closePURESForm() {
+            document.getElementById('puresModal').style.display = 'none';
+            document.getElementById('puresForm').reset();
+        }
+
+        function updateSliderValue(spanId, value) {
+            document.getElementById(spanId).textContent = value;
+        }
+
+        function exportData() {
+            let csv = 'Client Name,Email,Phone,Address,P.U.R.E.S. Score,Tier Level,Industry,Revenue Estimate\n';
+            
+            clientData.forEach(client => {
+                csv += `"${client.name}","${client.email}","${client.phone}","${client.address}","${client.pures}","${client.tier}","${client.industry}","${client.revenue}"\n`;
+            });
+            
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'rowland-fashion-clients.csv';
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+
+        // Initialize the dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            populateClientTable();
+            
+            // Handle P.U.R.E.S. form submission
+            document.getElementById('puresForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const profitability = parseInt(document.getElementById('profitability').value);
+                const urgency = parseInt(document.getElementById('urgency').value);
+                const reachability = parseInt(document.getElementById('reachability').value);
+                const engagement = parseInt(document.getElementById('engagement').value);
+                const sustainability = parseInt(document.getElementById('sustainability').value);
+                
+                const puresScore = ((profitability + urgency + reachability + engagement + sustainability) / 5).toFixed(1);
+                let tier = "1C";
+                if (puresScore >= 4.5) tier = "1A";
+                else if (puresScore >= 3.5) tier = "1B";
+                
+                const newClient = {
+                    name: document.getElementById('clientName').value,
+                    email: document.getElementById('clientEmail').value,
+                    phone: document.getElementById('clientPhone').value,
+                    address: document.getElementById('clientAddress').value,
+                    pures: parseFloat(puresScore),
+                    tier: tier,
+                    industry: "Fashion",
+                    revenue: "$50k",
+                    buyingPattern: "Relationship",
+                    notes: "New client added via P.U.R.E.S. evaluation"
+                };
+                
+                clientData.push(newClient);
+                populateClientTable();
+                closePURESForm();
+            });
+            
+            // Close modal when clicking outside
+            window.onclick = function(event) {
+                const modal = document.getElementById('puresModal');
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                }
+            };
+        });
+    </script>
+</body>
+</html>

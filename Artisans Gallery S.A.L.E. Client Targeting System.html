@@ -1,0 +1,800 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Artisans Gallery - S.A.L.E. Client Targeting System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #000000;
+            color: #ffffff;
+            line-height: 1.6;
+        }
+        
+        .header {
+            background-color: #000000;
+            padding: 20px;
+            text-align: center;
+            border-bottom: 3px solid #CF2030;
+        }
+        
+        .header img {
+            max-height: 80px;
+            width: auto;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .nav-tabs {
+            display: flex;
+            background-color: #CF2030;
+            border-radius: 10px 10px 0 0;
+            overflow: hidden;
+            margin-bottom: 0;
+        }
+        
+        .nav-tab {
+            flex: 1;
+            padding: 15px 20px;
+            background-color: #CF2030;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+        
+        .nav-tab:hover, .nav-tab.active {
+            background-color: #a01825;
+            transform: translateY(-2px);
+        }
+        
+        .tab-content {
+            background-color: #1a1a1a;
+            padding: 30px;
+            border-radius: 0 0 10px 10px;
+            min-height: 600px;
+        }
+        
+        .tab-pane {
+            display: none;
+        }
+        
+        .tab-pane.active {
+            display: block;
+        }
+        
+        .section-header {
+            color: #CF2030;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #CF2030;
+            padding-bottom: 10px;
+        }
+        
+        .client-table-container {
+            overflow-x: auto;
+            background-color: #2a2a2a;
+            border-radius: 10px;
+            padding: 20px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 1200px;
+        }
+        
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #444;
+        }
+        
+        th {
+            background-color: #CF2030;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            position: sticky;
+            top: 0;
+        }
+        
+        th:hover {
+            background-color: #a01825;
+        }
+        
+        tr:hover {
+            background-color: #333;
+        }
+        
+        .tier-1a { background-color: rgba(40, 167, 69, 0.2); }
+        .tier-1b { background-color: rgba(255, 193, 7, 0.2); }
+        .tier-1c { background-color: rgba(23, 162, 184, 0.2); }
+        
+        .search-controls {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .search-input, .filter-select {
+            padding: 10px;
+            border: 1px solid #444;
+            background-color: #2a2a2a;
+            color: white;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        
+        .search-input {
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .btn {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn-primary {
+            background-color: #CF2030;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: #a01825;
+            transform: translateY(-2px);
+        }
+        
+        .btn-success {
+            background-color: #28a745;
+            color: white;
+        }
+        
+        .btn-info {
+            background-color: #17a2b8;
+            color: white;
+        }
+        
+        .btn-sm {
+            padding: 5px 10px;
+            font-size: 12px;
+        }
+        
+        .pures-form {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            background-color: #2a2a2a;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .pures-item {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .pures-item label {
+            color: #CF2030;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .pures-item input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #444;
+            background-color: #333;
+            color: white;
+            border-radius: 5px;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .stat-card {
+            background-color: #2a2a2a;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #CF2030;
+        }
+        
+        .stat-number {
+            font-size: 32px;
+            font-weight: bold;
+            color: #CF2030;
+        }
+        
+        .stat-label {
+            color: #ccc;
+            font-size: 14px;
+        }
+        
+        .footer {
+            background-color: #000000;
+            padding: 20px;
+            text-align: center;
+            border-top: 2px solid #CF2030;
+            margin-top: 40px;
+        }
+        
+        .footer img {
+            max-height: 40px;
+            width: auto;
+            opacity: 0.8;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+        }
+        
+        .modal-content {
+            background-color: #1a1a1a;
+            margin: 15% auto;
+            padding: 20px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 600px;
+            border: 2px solid #CF2030;
+        }
+        
+        .close {
+            color: #CF2030;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .close:hover {
+            opacity: 0.7;
+        }
+        
+        .email-template {
+            background-color: #2a2a2a;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports">
+    </div>
+
+    <div class="container">
+        <h1 style="text-align: center; color: #CF2030; font-size: 36px; margin-bottom: 30px;">
+            Artisans Gallery S.A.L.E. Client Targeting System
+        </h1>
+        
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="showTab('sourcing')">S.OURCING</button>
+            <button class="nav-tab" onclick="showTab('assessing')">A.SSESSING</button>
+            <button class="nav-tab" onclick="showTab('listening')">L.ISTENING</button>
+            <button class="nav-tab" onclick="showTab('empowering')">E.MPOWERING</button>
+            <button class="nav-tab" onclick="showTab('dashboard')">DASHBOARD</button>
+        </div>
+
+        <div class="tab-content">
+            <!-- SOURCING Tab -->
+            <div id="sourcing" class="tab-pane active">
+                <div class="section-header">S.OURCING - P.U.R.E.S. Client Scoring System</div>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number" id="tier1a-count">12</div>
+                        <div class="stat-label">Tier 1A Clients (Premium)</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="tier1b-count">18</div>
+                        <div class="stat-label">Tier 1B Clients (High-Value)</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="tier1c-count">20</div>
+                        <div class="stat-label">Tier 1C Clients (Qualified)</div>
+                    </div>
+                </div>
+
+                <div class="search-controls">
+                    <input type="text" class="search-input" id="searchInput" placeholder="Search clients..." onkeyup="filterTable()">
+                    <select class="filter-select" id="tierFilter" onchange="filterTable()">
+                        <option value="">All Tiers</option>
+                        <option value="1A">Tier 1A</option>
+                        <option value="1B">Tier 1B</option>
+                        <option value="1C">Tier 1C</option>
+                    </select>
+                    <button class="btn btn-primary" onclick="exportClients()">Export CSV</button>
+                </div>
+
+                <div class="client-table-container">
+                    <table id="clientTable">
+                        <thead>
+                            <tr>
+                                <th onclick="sortTable(0)">Client Name ↕</th>
+                                <th onclick="sortTable(1)">Email ↕</th>
+                                <th onclick="sortTable(2)">Phone ↕</th>
+                                <th onclick="sortTable(3)">Address ↕</th>
+                                <th onclick="sortTable(4)">P.U.R.E.S. Score ↕</th>
+                                <th onclick="sortTable(5)">Tier ↕</th>
+                                <th onclick="sortTable(6)">Industry ↕</th>
+                                <th onclick="sortTable(7)">Revenue Est. ↕</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="clientTableBody">
+                            <!-- Client data will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- ASSESSING Tab -->
+            <div id="assessing" class="tab-pane">
+                <div class="section-header">A.SSESSING - Buying Pattern Analysis</div>
+                
+                <div class="pures-form">
+                    <div class="pures-item">
+                        <label>Client Name:</label>
+                        <input type="text" id="assessClientName" placeholder="Enter client name">
+                    </div>
+                    <div class="pures-item">
+                        <label>Buying Pattern:</label>
+                        <select id="buyingPattern" style="padding: 8px; background-color: #333; color: white; border: 1px solid #444;">
+                            <option>Analytical Buyer</option>
+                            <option>Relationship Buyer</option>
+                            <option>Efficiency Buyer</option>
+                            <option>Innovation Buyer</option>
+                        </select>
+                    </div>
+                    <div class="pures-item">
+                        <label>Decision Timeline:</label>
+                        <select id="decisionTimeline" style="padding: 8px; background-color: #333; color: white; border: 1px solid #444;">
+                            <option>Immediate (1-2 weeks)</option>
+                            <option>Short-term (1-2 months)</option>
+                            <option>Medium-term (3-6 months)</option>
+                            <option>Long-term (6+ months)</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div style="background-color: #2a2a2a; padding: 20px; border-radius: 10px;">
+                    <h3 style="color: #CF2030; margin-bottom: 15px;">Buying Pattern Characteristics:</h3>
+                    <div id="buyingPatternDetails">
+                        <strong>Analytical Buyers:</strong> Require detailed ROI analysis, case studies, and trial periods before making purchase decisions. Focus on facts and data.
+                    </div>
+                </div>
+            </div>
+
+            <!-- LISTENING Tab -->
+            <div id="listening" class="tab-pane">
+                <div class="section-header">L.ISTENING - Feedback Integration</div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div style="background-color: #2a2a2a; padding: 20px; border-radius: 10px;">
+                        <h3 style="color: #CF2030; margin-bottom: 15px;">Pre-Sale Feedback</h3>
+                        <textarea placeholder="Customer inquiries, questions, concerns..." style="width: 100%; height: 100px; background-color: #333; color: white; border: 1px solid #444; padding: 10px;"></textarea>
+                        <button class="btn btn-primary" style="margin-top: 10px;">Save Feedback</button>
+                    </div>
+                    
+                    <div style="background-color: #2a2a2a; padding: 20px; border-radius: 10px;">
+                        <h3 style="color: #CF2030; margin-bottom: 15px;">Post-Sale Satisfaction</h3>
+                        <div style="margin-bottom: 10px;">
+                            <label>Satisfaction Rating:</label>
+                            <select style="padding: 5px; background-color: #333; color: white; border: 1px solid #444; margin-left: 10px;">
+                                <option>⭐⭐⭐⭐⭐ Excellent</option>
+                                <option>⭐⭐⭐⭐ Good</option>
+                                <option>⭐⭐⭐ Average</option>
+                                <option>⭐⭐ Below Average</option>
+                                <option>⭐ Poor</option>
+                            </select>
+                        </div>
+                        <textarea placeholder="Customer feedback, testimonials..." style="width: 100%; height: 60px; background-color: #333; color: white; border: 1px solid #444; padding: 10px;"></textarea>
+                        <button class="btn btn-success" style="margin-top: 10px;">Record Review</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EMPOWERING Tab -->
+            <div id="empowering" class="tab-pane">
+                <div class="section-header">E.MPOWERING - Referral Strategy</div>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number">28</div>
+                        <div class="stat-label">Active Referral Partners</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">142</div>
+                        <div class="stat-label">Referrals Generated</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">$18,450</div>
+                        <div class="stat-label">Referral Revenue</div>
+                    </div>
+                </div>
+                
+                <div style="background-color: #2a2a2a; padding: 20px; border-radius: 10px;">
+                    <h3 style="color: #CF2030; margin-bottom: 15px;">Referral Campaign Templates</h3>
+                    <div style="margin-bottom: 15px;">
+                        <strong>Jewelry Lovers Campaign:</strong><br>
+                        "Share the beauty of handcrafted jewelry with friends and earn 15% off your next purchase!"
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <strong>Gift Finder Campaign:</strong><br>
+                        "Know someone looking for unique gifts? Refer them to our curated collection and both receive a special discount!"
+                    </div>
+                    <button class="btn btn-primary">Launch Campaign</button>
+                    <button class="btn btn-info" style="margin-left: 10px;">Create Custom Campaign</button>
+                </div>
+            </div>
+
+            <!-- DASHBOARD Tab -->
+            <div id="dashboard" class="tab-pane">
+                <div class="section-header">S.A.L.E. Performance Dashboard</div>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number">85%</div>
+                        <div class="stat-label">P.U.R.E.S. Score Accuracy</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">92%</div>
+                        <div class="stat-label">Needs Assessment Accuracy</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">78%</div>
+                        <div class="stat-label">Feedback Collection Rate</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">2.3</div>
+                        <div class="stat-label">Avg. Referrals per Client</div>
+                    </div>
+                </div>
+                
+                <div style="background-color: #2a2a2a; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+                    <h3 style="color: #CF2030; margin-bottom: 15px;">Marketing Schedule</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px;">
+                        <div style="background-color: #333; padding: 15px; border-radius: 5px;">
+                            <strong>Week 1-2:</strong> Launch Tier 1A email campaign focusing on exclusive jewelry collections
+                        </div>
+                        <div style="background-color: #333; padding: 15px; border-radius: 5px;">
+                            <strong>Week 3-4:</strong> Social media campaign highlighting artisan stories and craftsmanship
+                        </div>
+                        <div style="background-color: #333; padding: 15px; border-radius: 5px;">
+                            <strong>Week 5-6:</strong> Kids collection promotion for family-oriented customers
+                        </div>
+                        <div style="background-color: #333; padding: 15px; border-radius: 5px;">
+                            <strong>Week 7-8:</strong> Holiday gift campaign with personalized recommendations
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Email Modal -->
+    <div id="emailModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('emailModal')">&times;</span>
+            <h2 style="color: #CF2030; margin-bottom: 20px;">Send Email to Client</h2>
+            <div id="emailContent">
+                <div style="margin-bottom: 15px;">
+                    <strong>To:</strong> <span id="emailTo"></span>
+                </div>
+                <div style="margin-bottom: 15px;">
+                    <strong>Subject:</strong> Discover Unique Handcrafted Treasures at Artisans Gallery
+                </div>
+                <div class="email-template" id="emailBody">
+                    <!-- Email content will be populated here -->
+                </div>
+                <div style="margin-top: 20px;">
+                    <button class="btn btn-primary" onclick="sendEmail()">Send Email</button>
+                    <button class="btn" onclick="closeModal('emailModal')" style="background-color: #666; color: white; margin-left: 10px;">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Powered by Higgins Reports">
+        <p style="margin-top: 10px; color: #666; font-size: 12px;">Powered by Higgins Reports - Advanced S.A.L.E. System Analytics</p>
+    </div>
+
+    <script>
+        // Sample client data for Santa Cruz area
+        const clientData = [
+            {name: "Sarah Mitchell", email: "sarah.mitchell@gmail.com", phone: "(831) 555-0123", address: "234 Ocean St, Santa Cruz, CA 95060", pures: 4.2, tier: "1A", industry: "Interior Design", revenue: "$85K", status: "Active", lastContact: "2024-03-15", notes: "Interested in statement jewelry pieces"},
+            {name: "Maria Rodriguez", email: "maria.r.design@yahoo.com", phone: "(831) 555-0187", address: "456 Mission St, Santa Cruz, CA 95060", pures: 4.0, tier: "1A", industry: "Art Gallery Owner", revenue: "$120K", status: "Prospect", lastContact: "2024-03-20", notes: "Looking for artisan collaborations"},
+            {name: "Jennifer Chen", email: "jchen.creative@gmail.com", phone: "(831) 555-0234", address: "789 Pacific Ave, Santa Cruz, CA 95060", pures: 3.8, tier: "1B", industry: "Photography", revenue: "$65K", status: "Active", lastContact: "2024-03-18", notes: "Frequent buyer of handmade jewelry"},
+            {name: "Lisa Thompson", email: "lisa.thompson.sc@hotmail.com", phone: "(831) 555-0345", address: "321 Cedar St, Santa Cruz, CA 95062", pures: 3.9, tier: "1B", industry: "Event Planning", revenue: "$75K", status: "Follow-up", lastContact: "2024-03-10", notes: "Needs jewelry for client events"},
+            {name: "Amanda Foster", email: "afoster.wellness@gmail.com", phone: "(831) 555-0456", address: "567 Soquel Ave, Santa Cruz, CA 95062", pures: 3.7, tier: "1B", industry: "Wellness Coach", revenue: "$55K", status: "Active", lastContact: "2024-03-22", notes: "Loves nature-inspired pieces"},
+            {name: "Rachel Davis", email: "rachel.davis.realtor@gmail.com", phone: "(831) 555-0567", address: "890 Water St, Santa Cruz, CA 95060", pures: 4.1, tier: "1A", industry: "Real Estate", revenue: "$95K", status: "Active", lastContact: "2024-03-19", notes: "Gifts for client appreciation"},
+            {name: "Nicole Park", email: "nicole.park.attorney@lawfirm.com", phone: "(831) 555-0678", address: "123 Locust St, Santa Cruz, CA 95060", pures: 4.3, tier: "1A", industry: "Legal", revenue: "$135K", status: "Active", lastContact: "2024-03-21", notes: "Professional jewelry collection"},
+            {name: "Stephanie Lee", email: "stephanie.lee.designs@gmail.com", phone: "(831) 555-0789", address: "456 Laurel St, Santa Cruz, CA 95060", pures: 3.6, tier: "1C", industry: "Graphic Design", revenue: "$45K", status: "Prospect", lastContact: "2024-03-17", notes: "Student budget but frequent visitor"},
+            {name: "Jessica White", email: "j.white.marketing@company.com", phone: "(831) 555-0890", address: "789 High St, Santa Cruz, CA 95064", pures: 3.8, tier: "1B", industry: "Marketing", revenue: "$68K", status: "Active", lastContact: "2024-03-16", notes: "Social media influencer potential"},
+            {name: "Melissa Brown", email: "melissa.brown.teacher@scusd.edu", phone: "(831) 555-0901", address: "321 Chestnut St, Santa Cruz, CA 95060", pures: 3.4, tier: "1C", industry: "Education", revenue: "$52K", status: "Follow-up", lastContact: "2024-03-14", notes: "Teacher appreciation gifts"},
+            {name: "Catherine Wilson", email: "cath.wilson.design@studio.com", phone: "(831) 555-1012", address: "567 Seabright Ave, Santa Cruz, CA 95062", pures: 4.0, tier: "1A", industry: "Fashion Design", revenue: "$88K", status: "Active", lastContact: "2024-03-23", notes: "Accessory inspiration seeker"},
+            {name: "Laura Martinez", email: "laura.martinez.consulting@gmail.com", phone: "(831) 555-1123", address: "890 Riverside Ave, Santa Cruz, CA 95060", pures: 3.9, tier: "1B", industry: "Business Consulting", revenue: "$72K", status: "Active", lastContact: "2024-03-20", notes: "Corporate gift buyer"},
+            {name: "Diana Johnson", email: "diana.j.wellness@healthcenter.com", phone: "(831) 555-1234", address: "234 Front St, Santa Cruz, CA 95060", pures: 3.5, tier: "1C", industry: "Healthcare", revenue: "$58K", status: "Prospect", lastContact: "2024-03-12", notes: "Healing crystal jewelry interest"},
+            {name: "Kimberly Garcia", email: "kim.garcia.spa@sanctuary.com", phone: "(831) 555-1345", address: "456 Broadway, Santa Cruz, CA 95060", pures: 3.7, tier: "1B", industry: "Spa/Wellness", revenue: "$63K", status: "Active", lastContact: "2024-03-18", notes: "Retail partner potential"},
+            {name: "Michelle Taylor", email: "michelle.taylor.writer@freelance.com", phone: "(831) 555-1456", address: "789 Garfield Park, Santa Cruz, CA 95062", pures: 3.3, tier: "1C", industry: "Writing", revenue: "$42K", status: "Follow-up", lastContact: "2024-03-11", notes: "Artisan story contributor"},
+            {name: "Ashley Anderson", email: "ashley.anderson.yoga@studio.com", phone: "(831) 555-1567", address: "321 41st Ave, Santa Cruz, CA 95062", pures: 3.6, tier: "1C", industry: "Fitness/Yoga", revenue: "$48K", status: "Active", lastContact: "2024-03-19", notes: "Mindful jewelry collection"},
+            {name: "Brittany Thomas", email: "brittany.thomas.events@celebration.com", phone: "(831) 555-1678", address: "567 17th Ave, Santa Cruz, CA 95062", pures: 3.8, tier: "1B", industry: "Event Planning", revenue: "$69K", status: "Active", lastContact: "2024-03-22", notes: "Wedding jewelry specialist"},
+            {name: "Samantha Jackson", email: "sam.jackson.boutique@fashion.com", phone: "(831) 555-1789", address: "890 Delaware Ave, Santa Cruz, CA 95060", pures: 4.2, tier: "1A", industry: "Retail Fashion", revenue: "$98K", status: "Active", lastContact: "2024-03-24", notes: "Boutique collaboration opportunity"},
+            {name: "Andrea Harris", email: "andrea.harris.interior@design.com", phone: "(831) 555-1890", address: "234 California St, Santa Cruz, CA 95060", pures: 4.1, tier: "1A", industry: "Interior Design", revenue: "$91K", status: "Active", lastContact: "2024-03-21", notes: "Home staging accessories"},
+            {name: "Christina Martin", email: "christina.martin.nonprofit@org.com", phone: "(831) 555-1901", address: "456 Morrissey Blvd, Santa Cruz, CA 95065", pures: 3.2, tier: "1C", industry: "Non-profit", revenue: "$38K", status: "Prospect", lastContact: "2024-03-13", notes: "Fundraising auction items"},
+            // Additional 30 clients to reach 50 total
+            {name: "Victoria Clark", email: "victoria.clark.architect@design.com", phone: "(831) 555-2012", address: "123 Swift St, Santa Cruz, CA 95060", pures: 4.4, tier: "1A", industry: "Architecture", revenue: "$125K", status: "Active", lastContact: "2024-03-25", notes: "High-end client gifts"},
+            {name: "Rebecca Lewis", email: "rebecca.lewis.finance@advisory.com", phone: "(831) 555-2123", address: "567 Woodrow Ave, Santa Cruz, CA 95060", pures: 4.0, tier: "1A", industry: "Financial Services", revenue: "$105K", status: "Active", lastContact: "2024-03-20", notes: "Investment in luxury pieces"},
+            {name: "Danielle Walker", email: "danielle.walker.therapist@wellness.com", phone: "(831) 555-2234", address: "890 Escalona Dr, Santa Cruz, CA 95060", pures: 3.5, tier: "1C", industry: "Mental Health", revenue: "$55K", status: "Follow-up", lastContact: "2024-03-15", notes: "Therapeutic jewelry interest"},
+            {name: "Heather Hall", email: "heather.hall.vet@animalcare.com", phone: "(831) 555-2345", address: "234 Graham Hill Rd, Santa Cruz, CA 95060", pures: 3.7, tier: "1B", industry: "Veterinary", revenue: "$70K", status: "Active", lastContact: "2024-03-18", notes: "Animal-themed jewelry lover"},
+            {name: "Megan Allen", email: "megan.allen.chef@restaurant.com", phone: "(831) 555-2456", address: "456 Empire Grade, Santa Cruz, CA 95060", pures: 3.6, tier: "1C", industry: "Culinary", revenue: "$58K", status: "Active", lastContact: "2024-03-17", notes: "Food-inspired accessories"},
+            {name: "Kayla Young", email: "kayla.young.fitness@gym.com", phone: "(831) 555-2567", address: "789 Alba Rd, Santa Cruz, CA 95060", pures: 3.4, tier: "1C", industry: "Fitness", revenue: "$45K", status: "Prospect", lastContact: "2024-03-12", notes: "Active lifestyle jewelry"},
+            {name: "Lauren Hernandez", email: "lauren.hernandez.dance@studio.com", phone: "(831) 555-2678", address: "321 Bean Creek Rd, Santa Cruz, CA 95066", pures: 3.3, tier: "1C", industry: "Dance/Arts", revenue: "$41K", status: "Follow-up", lastContact: "2024-03-14", notes: "Performance jewelry needs"},
+            {name: "Taylor King", email: "taylor.king.music@production.com", phone: "(831) 555-2789", address: "567 Felton Empire Rd, Santa Cruz, CA 95018", pures: 3.8, tier: "1B", industry: "Music Production", revenue: "$67K", status: "Active", lastContact: "2024-03-19", notes: "Stage jewelry collection"},
+            {name: "Jordan Scott", email: "jordan.scott.tech@startup.com", phone: "(831) 555-2890", address: "890 Mount Hermon Rd, Santa Cruz, CA 95005", pures: 4.2, tier: "1A", industry: "Technology", revenue: "$115K", status: "Active", lastContact: "2024-03-23", notes: "Modern minimalist style"},
+            {name: "Alexis Green", email: "alexis.green.pr@agency.com", phone: "(831) 555-2901", address: "234 Love Creek Rd, Santa Cruz, CA 95018", pures: 3.9, tier: "1B", industry: "Public Relations", revenue: "$74K", status: "Active", lastContact: "2024-03-21", notes: "Media event accessories"},
+            {name: "Morgan Adams", email: "morgan.adams.wine@vineyard.com", phone: "(831) 555-3012", address: "456 Glen Arbor Rd, Santa Cruz, CA 95066", pures: 4.1, tier: "1A", industry: "Wine Industry", revenue: "$89K", status: "Active", lastContact: "2024-03-22", notes: "Vineyard event jewelry"},
+            {name: "Sydney Baker", email: "sydney.baker.travel@agency.com", phone: "(831) 555-3123", address: "789 Bonny Doon Rd, Santa Cruz, CA 95060", pures: 3.7, tier: "1B", industry: "Travel", revenue: "$62K", status: "Follow-up", lastContact: "2024-03-16", notes: "Travel-inspired pieces"},
+            {name: "Courtney Gonzalez", email: "courtney.g.bookstore@literary.com", phone: "(831) 555-3234", address: "321 Pine St, Santa Cruz, CA 95062", pures: 3.2, tier: "1C", industry: "Retail Books", revenue: "$39K", status: "Prospect", lastContact: "2024-03-13", notes: "Literary-themed jewelry"},
+            {name: "Kelsey Nelson", email: "kelsey.nelson.florist@flowers.com", phone: "(831) 555-3345", address: "567 Walnut Ave, Santa Cruz, CA 95060", pures: 3.5, tier: "1C", industry: "Floral Design", revenue: "$51K", status: "Active", lastContact: "2024-03-18", notes: "Botanical jewelry appreciation"},
+            {name: "Paige Carter", email: "paige.carter.skincare@beauty.com", phone: "(831) 555-3456", address: "890 Capitola Ave, Santa Cruz, CA 95062", pures: 3.6, tier: "1C", industry: "Beauty/Skincare", revenue: "$56K", status: "Active", lastContact: "2024-03-20", notes: "Natural beauty aesthetic"},
+            {name: "Brooke Mitchell", email: "brooke.mitchell.massage@therapy.com", phone: "(831) 555-3567", address: "234 Porter St, Santa Cruz, CA 95062", pures: 3.4, tier: "1C", industry: "Massage Therapy", revenue: "$47K", status: "Follow-up", lastContact: "2024-03-15", notes: "Healing stone jewelry"},
+            {name: "Chloe Perez", email: "chloe.perez.gallery@art.com", phone: "(831) 555-3678", address: "456 Union St, Santa Cruz, CA 95060", pures: 3.8, tier: "1B", industry: "Art Gallery", revenue: "$68K", status: "Active", lastContact: "2024-03-19", notes: "Artistic collaboration potential"},
+            {name: "Jasmine Roberts", email: "jasmine.roberts.coaching@life.com", phone: "(831) 555-3789", address: "789 Green St, Santa Cruz, CA 95060", pures: 3.3, tier: "1C", industry: "Life Coaching", revenue: "$43K", status: "Prospect", lastContact: "2024-03-14", notes: "Empowerment jewelry themes"},
+            {name: "Destiny Turner", email: "destiny.turner.catering@events.com", phone: "(831) 555-3890", address: "321 Felt St, Santa Cruz, CA 95060", pures: 3.7, tier: "1B", industry: "Catering", revenue: "$65K", status: "Active", lastContact: "2024-03-21", notes: "Event jewelry needs"},
+            {name: "Sierra Phillips", email: "sierra.phillips.boutique@unique.com", phone: "(831) 555-3901", address: "567 Lincoln St, Santa Cruz, CA 95060", pures: 4.0, tier: "1A", industry: "Boutique Retail", revenue: "$82K", status: "Active", lastContact: "2024-03-24", notes: "Exclusive piece buyer"},
+            {name: "Autumn Campbell", email: "autumn.campbell.yoga@mindful.com", phone: "(831) 555-4012", address: "890 Bay St, Santa Cruz, CA 95060", pures: 3.5, tier: "1C", industry: "Yoga Instruction", revenue: "$49K", status: "Follow-up", lastContact: "2024-03-17", notes: "Mindfulness jewelry collection"},
+            {name: "Savannah Parker", email: "savannah.parker.design@creative.com", phone: "(831) 555-4123", address: "234 Maple St, Santa Cruz, CA 95062", pures: 3.9, tier: "1B", industry: "Graphic Design", revenue: "$71K", status: "Active", lastContact: "2024-03-22", notes: "Creative inspiration pieces"},
+            {name: "Haley Evans", email: "haley.evans.wellness@holistic.com", phone: "(831) 555-4234", address: "456 Elm St, Santa Cruz, CA 95060", pures: 3.6, tier: "1C", industry: "Holistic Health", revenue: "$53K", status: "Active", lastContact: "2024-03-18", notes: "Crystal healing jewelry"},
+            {name: "Gabrielle Edwards", email: "gabrielle.edwards.nonprofit@community.org", phone: "(831) 555-4345", address: "789 Vine St, Santa Cruz, CA 95062", pures: 3.1, tier: "1C", industry: "Community Service", revenue: "$36K", status: "Prospect", lastContact: "2024-03-12", notes: "Community event pieces"},
+            {name: "Isabelle Collins", email: "isabelle.collins.photography@studio.com", phone: "(831) 555-4456", address: "321 Oak Ave, Santa Cruz, CA 95065", pures: 3.8, tier: "1B", industry: "Photography", revenue: "$66K", status: "Active", lastContact: "2024-03-20", notes: "Photo shoot accessories"},
+            {name: "Natalie Stewart", email: "natalie.stewart.wedding@planning.com", phone: "(831) 555-4567", address: "567 Cypress St, Santa Cruz, CA 95060", pures: 4.1, tier: "1A", industry: "Wedding Planning", revenue: "$94K", status: "Active", lastContact: "2024-03-23", notes: "Bridal jewelry specialist"},
+            {name: "Vanessa Morris", email: "vanessa.morris.salon@beauty.com", phone: "(831) 555-4678", address: "890 Redwood St, Santa Cruz, CA 95060", pures: 3.4, tier: "1C", industry: "Hair Salon", revenue: "$46K", status: "Follow-up", lastContact: "2024-03-16", notes: "Stylist accessories"},
+            {name: "Trinity Rogers", email: "trinity.rogers.music@lessons.com", phone: "(831) 555-4789", address: "234 Sycamore Ave, Santa Cruz, CA 95062", pures: 3.2, tier: "1C", industry: "Music Education", revenue: "$40K", status: "Prospect", lastContact: "2024-03-14", notes: "Music-themed jewelry interest"},
+            {name: "Faith Reed", email: "faith.reed.craft@studio.com", phone: "(831) 555-4890", address: "456 Poplar St, Santa Cruz, CA 95060", pures: 3.7, tier: "1B", industry: "Craft Studio", revenue: "$61K", status: "Active", lastContact: "2024-03-19", notes: "Artisan collaboration potential"},
+            {name: "Hope Cook", email: "hope.cook.bookkeeping@financial.com", phone: "(831) 555-4901", address: "789 Willow St, Santa Cruz, CA 95062", pures: 3.5, tier: "1C", industry: "Accounting", revenue: "$52K", status: "Active", lastContact: "2024-03-21", notes: "Professional jewelry collection"}
+        ];
+
+        // Initialize the application
+        function initializeApp() {
+            populateClientTable();
+            updateStats();
+        }
+
+        // Show specific tab
+        function showTab(tabName) {
+            // Hide all tab panes
+            document.querySelectorAll('.tab-pane').forEach(pane => {
+                pane.classList.remove('active');
+            });
+            
+            // Remove active class from all tabs
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected tab pane
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+        }
+
+        // Populate client table
+        function populateClientTable() {
+            const tbody = document.getElementById('clientTableBody');
+            tbody.innerHTML = '';
+            
+            clientData.forEach(client => {
+                const row = document.createElement('tr');
+                row.className = `tier-${client.tier.toLowerCase()}`;
+                row.innerHTML = `
+                    <td>${client.name}</td>
+                    <td>${client.email}</td>
+                    <td>${client.phone}</td>
+                    <td>${client.address}</td>
+                    <td>${client.pures}</td>
+                    <td><span class="badge tier-${client.tier.toLowerCase()}">${client.tier}</span></td>
+                    <td>${client.industry}</td>
+                    <td>${client.revenue}</td>
+                    <td>
+                        <button class="btn btn-primary btn-sm" onclick="sendEmailToClient('${client.name}', '${client.email}', '${client.industry}')">Email</button>
+                        <button class="btn btn-success btn-sm" onclick="callClient('${client.phone}')">Call</button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // Filter table based on search and filters
+        function filterTable() {
+            const searchInput = document.getElementById('searchInput').value.toLowerCase();
+            const tierFilter = document.getElementById('tierFilter').value;
+            const rows = document.querySelectorAll('#clientTableBody tr');
+            
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                const tierCell = row.children[5].textContent;
+                
+                const matchesSearch = text.includes(searchInput);
+                const matchesTier = !tierFilter || tierCell.includes(tierFilter);
+                
+                row.style.display = matchesSearch && matchesTier ? '' : 'none';
+            });
+        }
+
+        // Sort table by column
+        function sortTable(columnIndex) {
+            const table = document.getElementById('clientTable');
+            const rows = Array.from(table.querySelector('tbody').rows);
+            const isNumeric = columnIndex === 4; // P.U.R.E.S. Score column
+            
+            rows.sort((a, b) => {
+                const aValue = a.cells[columnIndex].textContent.trim();
+                const bValue = b.cells[columnIndex].textContent.trim();
+                
+                if (isNumeric) {
+                    return parseFloat(bValue) - parseFloat(aValue);
+                }
+                
+                return aValue.localeCompare(bValue);
+            });
+            
+            const tbody = table.querySelector('tbody');
+            tbody.innerHTML = '';
+            rows.forEach(row => tbody.appendChild(row));
+        }
+
+        // Send email to client
+        function sendEmailToClient(name, email, industry) {
+            document.getElementById('emailTo').textContent = email;
+            
+            const emailBody = generatePersonalizedEmail(name, industry);
+            document.getElementById('emailBody').innerHTML = emailBody;
+            
+            document.getElementById('emailModal').style.display = 'block';
+        }
+
+        // Generate personalized email content
+        function generatePersonalizedEmail(name, industry) {
+            const artisanFocus = industry.toLowerCase().includes('design') || industry.toLowerCase().includes('art') ? 
+                'artisan collaborations and exclusive designer pieces' : 
+                'handcrafted jewelry and unique artisan creations';
+            
+            return `
+                <p>Dear ${name},</p>
+                
+                <p>I hope this message finds you well! As someone in the ${industry} field, I believe you'd appreciate the exceptional quality and artistry we showcase at Artisans Gallery.</p>
+                
+                <p><strong>Why visit us?</strong></p>
+                <ul>
+                    <li><strong>Handcrafted Excellence:</strong> Each piece in our collection is meticulously crafted by talented artisans, ensuring uniqueness and quality.</li>
+                    <li><strong>Curated Selection:</strong> From statement jewelry featuring natural gemstones to whimsical children's items, we offer pieces that tell a story.</li>
+                    <li><strong>Local Artisan Support:</strong> By shopping with us, you're supporting local and regional artists who pour their passion into every creation.</li>
+                    <li><strong>Perfect for ${industry}:</strong> Our collection includes pieces ideal for ${artisanFocus}.</li>
+                </ul>
+                
+                <p><strong>Special Invitation:</strong> Visit us this month and mention this email to receive 15% off your first purchase!</p>
+                
+                <p>Located at 1368 Pacific Avenue in Santa Cruz, we're open:</p>
+                <ul>
+                    <li>Sunday-Thursday: 10:30am-6:30pm</li>
+                    <li>Friday-Saturday: 10:30am-8:30pm</li>
+                </ul>
+                
+                <p>I'd love to show you pieces that would complement your aesthetic and discuss potential collaboration opportunities.</p>
+                
+                <p>Warm regards,<br>
+                Linnaea Holgers James<br>
+                Owner, Artisans Gallery<br>
+                (831) 423-8183<br>
+                linnaea@artisanssantacruz.com</p>
+                
+                <p><em>P.S. Follow us on social media for behind-the-scenes glimpses of our artisans at work!</em></p>
+            `;
+        }
+
+        // Call client
+        function callClient(phone) {
+            alert(`Calling ${phone}...\n\nThis would integrate with your phone system or open your default calling application.`);
+        }
+
+        // Send email
+        function sendEmail() {
+            alert('Email sent successfully!\n\nThis would integrate with your email system (Gmail, Outlook, etc.) to send the personalized message.');
+            closeModal('emailModal');
+        }
+
+        // Close modal
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        // Export clients to CSV
+        function exportClients() {
+            let csv = 'Client Name,Email,Phone,Address,P.U.R.E.S. Score,Tier,Industry,Revenue Estimate\n';
+            
+            clientData.forEach(client => {
+                csv += `"${client.name}","${client.email}","${client.phone}","${client.address}","${client.pures}","${client.tier}","${client.industry}","${client.revenue}"\n`;
+            });
+            
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'artisans_gallery_clients.csv';
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+
+        // Update statistics
+        function updateStats() {
+            const tier1a = clientData.filter(client => client.tier === '1A').length;
+            const tier1b = clientData.filter(client => client.tier === '1B').length;
+            const tier1c = clientData.filter(client => client.tier === '1C').length;
+            
+            document.getElementById('tier1a-count').textContent = tier1a;
+            document.getElementById('tier1b-count').textContent = tier1b;
+            document.getElementById('tier1c-count').textContent = tier1c;
+        }
+
+        // Update buying pattern details
+        document.getElementById('buyingPattern')?.addEventListener('change', function() {
+            const details = {
+                'Analytical Buyer': 'Require detailed ROI analysis, case studies, and trial periods before making purchase decisions. Focus on facts and data.',
+                'Relationship Buyer': 'Value trust, referrals, and long-term partnerships. Decision-making based on personal connections and recommendations.',
+                'Efficiency Buyer': 'Focus on time-saving solutions and process improvements. Want quick, streamlined purchasing experiences.',
+                'Innovation Buyer': 'Seek cutting-edge solutions and competitive advantages. Early adopters who value uniqueness and innovation.'
+            };
+            
+            document.getElementById('buyingPatternDetails').innerHTML = `<strong>${this.value}s:</strong> ${details[this.value]}`;
+        });
+
+        // Initialize the application when page loads
+        window.addEventListener('load', initializeApp);
+
+        // Close modals when clicking outside
+        window.addEventListener('click', function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>

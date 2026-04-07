@@ -1,0 +1,800 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Findecor - S.A.L.E. System Client Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: black;
+            color: white;
+            line-height: 1.6;
+        }
+        
+        .header {
+            background: #CF2030;
+            padding: 1rem 0;
+            box-shadow: 0 2px 10px rgba(207, 32, 48, 0.3);
+        }
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+        
+        .logo img {
+            height: 50px;
+        }
+        
+        .nav {
+            display: flex;
+            gap: 2rem;
+        }
+        
+        .nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.3s;
+        }
+        
+        .nav a:hover {
+            opacity: 0.8;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .dashboard-title {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .dashboard-title h1 {
+            color: #CF2030;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .controls {
+            background: #1a1a1a;
+            padding: 2rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            border: 1px solid #333;
+        }
+        
+        .controls-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .control-group {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .control-group label {
+            color: #CF2030;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .control-group input, .control-group select {
+            padding: 0.75rem;
+            border: 1px solid #444;
+            background: #2a2a2a;
+            color: white;
+            border-radius: 5px;
+        }
+        
+        .btn {
+            background: #CF2030;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+        
+        .btn:hover {
+            background: #b01d2a;
+        }
+        
+        .btn-small {
+            padding: 0.4rem 0.8rem;
+            font-size: 0.8rem;
+        }
+        
+        .sale-tabs {
+            display: flex;
+            margin-bottom: 2rem;
+            background: #1a1a1a;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .tab {
+            flex: 1;
+            padding: 1rem;
+            background: #2a2a2a;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+        
+        .tab.active {
+            background: #CF2030;
+        }
+        
+        .tab-content {
+            display: none;
+            background: #1a1a1a;
+            padding: 2rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            border: 1px solid #333;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .pures-scoring {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .score-card {
+            background: #2a2a2a;
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .score-card h4 {
+            color: #CF2030;
+            margin-bottom: 0.5rem;
+        }
+        
+        .score-slider {
+            width: 100%;
+            margin: 1rem 0;
+        }
+        
+        .table-container {
+            background: #1a1a1a;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid #333;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #333;
+        }
+        
+        th {
+            background: #CF2030;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            user-select: none;
+        }
+        
+        th:hover {
+            background: #b01d2a;
+        }
+        
+        td {
+            background: #2a2a2a;
+            color: white;
+        }
+        
+        tr:hover td {
+            background: #3a3a3a;
+        }
+        
+        .tier-1a { border-left: 4px solid #00ff00; }
+        .tier-1b { border-left: 4px solid #ffff00; }
+        .tier-1c { border-left: 4px solid #ff9900; }
+        
+        .contact-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: #1a1a1a;
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+            border: 1px solid #333;
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            color: #CF2030;
+            font-weight: bold;
+        }
+        
+        .footer {
+            background: #1a1a1a;
+            padding: 2rem 0;
+            text-align: center;
+            margin-top: 4rem;
+            border-top: 1px solid #333;
+        }
+        
+        .footer img {
+            height: 30px;
+            margin-bottom: 1rem;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+        }
+        
+        .modal-content {
+            background: #2a2a2a;
+            margin: 5% auto;
+            padding: 2rem;
+            width: 80%;
+            max-width: 600px;
+            border-radius: 10px;
+            border: 1px solid #CF2030;
+        }
+        
+        .close {
+            color: #CF2030;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="HigginsReports">
+            </div>
+            <nav class="nav">
+                <a href="#sourcing">Sourcing</a>
+                <a href="#assessing">Assessing</a>
+                <a href="#listening">Listening</a>
+                <a href="#empowering">Empowering</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="dashboard-title">
+            <h1>Findecor S.A.L.E. System</h1>
+            <p>AI-Powered Client Targeting for Rug & Carpet Retailers</p>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value">50</div>
+                <div>Total Prospects</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">12</div>
+                <div>Tier 1A Premium</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">18</div>
+                <div>Tier 1B High-Value</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">20</div>
+                <div>Tier 1C Qualified</div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <div class="controls-row">
+                <div class="control-group">
+                    <label>Search Clients</label>
+                    <input type="text" id="searchInput" placeholder="Search by name, company, or industry...">
+                </div>
+                <div class="control-group">
+                    <label>Filter by Tier</label>
+                    <select id="tierFilter">
+                        <option value="">All Tiers</option>
+                        <option value="1A">Tier 1A - Premium</option>
+                        <option value="1B">Tier 1B - High-Value</option>
+                        <option value="1C">Tier 1C - Qualified</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label>Filter by Industry</label>
+                    <select id="industryFilter">
+                        <option value="">All Industries</option>
+                        <option value="Interior Design">Interior Design</option>
+                        <option value="Real Estate">Real Estate</option>
+                        <option value="Hospitality">Hospitality</option>
+                        <option value="Retail">Retail</option>
+                        <option value="Construction">Construction</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label>Actions</label>
+                    <button class="btn" onclick="exportData()">Export Data</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="sale-tabs">
+            <button class="tab active" onclick="showTab('sourcing')">S - Sourcing</button>
+            <button class="tab" onclick="showTab('assessing')">A - Assessing</button>
+            <button class="tab" onclick="showTab('listening')">L - Listening</button>
+            <button class="tab" onclick="showTab('empowering')">E - Empowering</button>
+        </div>
+
+        <div id="sourcing" class="tab-content active">
+            <h3>P.U.R.E.S. Client Scoring System</h3>
+            <div class="pures-scoring">
+                <div class="score-card">
+                    <h4>Profitability</h4>
+                    <input type="range" class="score-slider" min="1" max="5" value="3">
+                    <p>Budget Capacity & Revenue</p>
+                </div>
+                <div class="score-card">
+                    <h4>Urgency</h4>
+                    <input type="range" class="score-slider" min="1" max="5" value="3">
+                    <p>Immediate Pain Points</p>
+                </div>
+                <div class="score-card">
+                    <h4>Reachability</h4>
+                    <input type="range" class="score-slider" min="1" max="5" value="3">
+                    <p>Decision Maker Access</p>
+                </div>
+                <div class="score-card">
+                    <h4>Engagement</h4>
+                    <input type="range" class="score-slider" min="1" max="5" value="3">
+                    <p>Innovation Openness</p>
+                </div>
+                <div class="score-card">
+                    <h4>Sustainability</h4>
+                    <input type="range" class="score-slider" min="1" max="5" value="3">
+                    <p>Long-term Potential</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="assessing" class="tab-content">
+            <h3>Buying Pattern Analysis</h3>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                <div style="background: #2a2a2a; padding: 1rem; border-radius: 8px;">
+                    <h4 style="color: #CF2030;">Analytical Buyers (35%)</h4>
+                    <p>Require detailed ROI analysis, case studies, trials</p>
+                    <ul>
+                        <li>Focus on data-driven decisions</li>
+                        <li>Need comprehensive product comparisons</li>
+                        <li>Value technical specifications</li>
+                    </ul>
+                </div>
+                <div style="background: #2a2a2a; padding: 1rem; border-radius: 8px;">
+                    <h4 style="color: #CF2030;">Relationship Buyers (25%)</h4>
+                    <p>Value trust, referrals, long-term partnerships</p>
+                    <ul>
+                        <li>Prefer personal recommendations</li>
+                        <li>Build on existing relationships</li>
+                        <li>Value customer service excellence</li>
+                    </ul>
+                </div>
+                <div style="background: #2a2a2a; padding: 1rem; border-radius: 8px;">
+                    <h4 style="color: #CF2030;">Efficiency Buyers (25%)</h4>
+                    <p>Focus on time-saving, process improvement</p>
+                    <ul>
+                        <li>Streamlined decision making</li>
+                        <li>Quick implementation needs</li>
+                        <li>Value operational efficiency</li>
+                    </ul>
+                </div>
+                <div style="background: #2a2a2a; padding: 1rem; border-radius: 8px;">
+                    <h4 style="color: #CF2030;">Innovation Buyers (15%)</h4>
+                    <p>Seek cutting-edge solutions, competitive advantage</p>
+                    <ul>
+                        <li>Early technology adopters</li>
+                        <li>Competitive differentiation focus</li>
+                        <li>Premium solution seekers</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div id="listening" class="tab-content">
+            <h3>Feedback Integration System</h3>
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem;">
+                <div style="background: #2a2a2a; padding: 1rem; border-radius: 8px; text-align: center;">
+                    <h4 style="color: #CF2030;">Pre-Sale Feedback</h4>
+                    <div class="stat-value">85%</div>
+                    <p>Collection Rate</p>
+                </div>
+                <div style="background: #2a2a2a; padding: 1rem; border-radius: 8px; text-align: center;">
+                    <h4 style="color: #CF2030;">Progress Tracking</h4>
+                    <div class="stat-value">92%</div>
+                    <p>Satisfaction Score</p>
+                </div>
+                <div style="background: #2a2a2a; padding: 1rem; border-radius: 8px; text-align: center;">
+                    <h4 style="color: #CF2030;">Post-Sale Monitoring</h4>
+                    <div class="stat-value">78%</div>
+                    <p>Follow-up Rate</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="empowering" class="tab-content">
+            <h3>Referral Strategy Dashboard</h3>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                <div style="background: #2a2a2a; padding: 1rem; border-radius: 8px;">
+                    <h4 style="color: #CF2030;">Referral Performance</h4>
+                    <p>Active Advocates: <strong>23</strong></p>
+                    <p>Referrals Generated: <strong>47</strong></p>
+                    <p>Conversion Rate: <strong>68%</strong></p>
+                    <p>Average Referral Value: <strong>$2,850</strong></p>
+                </div>
+                <div style="background: #2a2a2a; padding: 1rem; border-radius: 8px;">
+                    <h4 style="color: #CF2030;">Co-Marketing Opportunities</h4>
+                    <p>Joint Campaigns: <strong>8</strong></p>
+                    <p>Partner Events: <strong>12</strong></p>
+                    <p>Shared Content: <strong>35 pieces</strong></p>
+                    <p>Cross-Promotion ROI: <strong>340%</strong></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="table-container">
+            <table id="clientTable">
+                <thead>
+                    <tr>
+                        <th onclick="sortTable(0)">Client Name ↕</th>
+                        <th onclick="sortTable(1)">Company ↕</th>
+                        <th onclick="sortTable(2)">Email ↕</th>
+                        <th onclick="sortTable(3)">Phone ↕</th>
+                        <th onclick="sortTable(4)">Address ↕</th>
+                        <th onclick="sortTable(5)">P.U.R.E.S. Score ↕</th>
+                        <th onclick="sortTable(6)">Tier ↕</th>
+                        <th onclick="sortTable(7)">Industry ↕</th>
+                        <th onclick="sortTable(8)">Revenue Est. ↕</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="clientTableBody">
+                    <!-- Client data will be populated here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="HigginsReports">
+        <p>&copy; 2024 HigginsReports - Powered by Findecor S.A.L.E. System</p>
+    </footer>
+
+    <!-- Email Modal -->
+    <div id="emailModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeEmailModal()">&times;</span>
+            <h3 style="color: #CF2030; margin-bottom: 1rem;">Compose Email</h3>
+            <div style="margin-bottom: 1rem;">
+                <label style="color: #CF2030; display: block; margin-bottom: 0.5rem;">To:</label>
+                <input type="email" id="emailTo" style="width: 100%; padding: 0.5rem; background: #1a1a1a; border: 1px solid #444; color: white; border-radius: 4px;">
+            </div>
+            <div style="margin-bottom: 1rem;">
+                <label style="color: #CF2030; display: block; margin-bottom: 0.5rem;">Subject:</label>
+                <input type="text" id="emailSubject" style="width: 100%; padding: 0.5rem; background: #1a1a1a; border: 1px solid #444; color: white; border-radius: 4px;">
+            </div>
+            <div style="margin-bottom: 1rem;">
+                <label style="color: #CF2030; display: block; margin-bottom: 0.5rem;">Message:</label>
+                <textarea id="emailMessage" rows="10" style="width: 100%; padding: 0.5rem; background: #1a1a1a; border: 1px solid #444; color: white; border-radius: 4px;"></textarea>
+            </div>
+            <button class="btn" onclick="sendEmail()">Send Email</button>
+        </div>
+    </div>
+
+    <script>
+        // Sample client data for San Francisco area
+        const clientData = [
+            {name: "Sarah Chen", company: "Modern Living Designs", email: "sarah@modernliving.com", phone: "(415) 555-0123", address: "123 Market St, San Francisco, CA 94102", pures: 4.8, tier: "1A", industry: "Interior Design", revenue: "$500K"},
+            {name: "David Rodriguez", company: "Bay Area Realty", email: "david@bayrealty.com", phone: "(415) 555-0234", address: "456 Mission St, San Francisco, CA 94105", pures: 4.2, tier: "1B", industry: "Real Estate", revenue: "$750K"},
+            {name: "Emily Johnson", company: "Luxury Hotel Group", email: "emily@luxuryhotel.com", phone: "(415) 555-0345", address: "789 Union Square, San Francisco, CA 94108", pures: 4.9, tier: "1A", industry: "Hospitality", revenue: "$2M"},
+            {name: "Michael Kim", company: "Urban Furniture Co", email: "michael@urbanfurniture.com", phone: "(415) 555-0456", address: "321 Fillmore St, San Francisco, CA 94117", pures: 3.8, tier: "1B", industry: "Retail", revenue: "$300K"},
+            {name: "Jessica Martinez", company: "Elite Interior Studios", email: "jessica@eliteinteriors.com", phone: "(415) 555-0567", address: "654 Van Ness Ave, San Francisco, CA 94102", pures: 4.5, tier: "1A", industry: "Interior Design", revenue: "$650K"},
+            {name: "Robert Taylor", company: "Construction Plus", email: "robert@constructionplus.com", phone: "(415) 555-0678", address: "987 Howard St, San Francisco, CA 94103", pures: 3.6, tier: "1B", industry: "Construction", revenue: "$400K"},
+            {name: "Amanda White", company: "Boutique Hotel Chain", email: "amanda@boutiquechain.com", phone: "(415) 555-0789", address: "147 Nob Hill, San Francisco, CA 94108", pures: 4.7, tier: "1A", industry: "Hospitality", revenue: "$1.2M"},
+            {name: "James Wilson", company: "Premium Property Group", email: "james@premiumproper.com", phone: "(415) 555-0890", address: "258 California St, San Francisco, CA 94111", pures: 4.1, tier: "1B", industry: "Real Estate", revenue: "$850K"},
+            {name: "Lisa Brown", company: "Creative Spaces Design", email: "lisa@creativespaces.com", phone: "(415) 555-0901", address: "369 Castro St, San Francisco, CA 94114", pures: 3.9, tier: "1B", industry: "Interior Design", revenue: "$380K"},
+            {name: "Kevin Davis", company: "Bay Construction Co", email: "kevin@bayconst.com", phone: "(415) 555-1012", address: "741 Brannan St, San Francisco, CA 94107", pures: 3.4, tier: "1C", industry: "Construction", revenue: "$250K"},
+            {name: "Nicole Garcia", company: "Elegant Home Furnishings", email: "nicole@eleganthome.com", phone: "(415) 555-1123", address: "852 Valencia St, San Francisco, CA 94110", pures: 4.3, tier: "1B", industry: "Retail", revenue: "$420K"},
+            {name: "Christopher Lee", company: "Luxury Living Developments", email: "chris@luxuryliving.com", phone: "(415) 555-1234", address: "963 Pacific Ave, San Francisco, CA 94133", pures: 4.8, tier: "1A", industry: "Real Estate", revenue: "$1.5M"},
+            {name: "Rachel Green", company: "Modern Design Studio", email: "rachel@modernstudio.com", phone: "(415) 555-1345", address: "159 Lombard St, San Francisco, CA 94111", pures: 4.0, tier: "1B", industry: "Interior Design", revenue: "$320K"},
+            {name: "Anthony Clark", company: "Hospitality Innovations", email: "anthony@hospinnovate.com", phone: "(415) 555-1456", address: "357 Geary St, San Francisco, CA 94102", pures: 4.6, tier: "1A", industry: "Hospitality", revenue: "$900K"},
+            {name: "Stephanie Hill", company: "Premium Retail Spaces", email: "stephanie@premiumretail.com", phone: "(415) 555-1567", address: "468 Chestnut St, San Francisco, CA 94123", pures: 3.7, tier: "1C", industry: "Retail", revenue: "$280K"},
+            {name: "Matthew Adams", company: "Elite Construction", email: "matthew@eliteconst.com", phone: "(415) 555-1678", address: "579 Folsom St, San Francisco, CA 94105", pures: 3.5, tier: "1C", industry: "Construction", revenue: "$220K"},
+            {name: "Jennifer Scott", company: "Luxury Interior Concepts", email: "jennifer@luxuryinterior.com", phone: "(415) 555-1789", address: "680 Bush St, San Francisco, CA 94108", pures: 4.4, tier: "1A", industry: "Interior Design", revenue: "$580K"},
+            {name: "Daniel Baker", company: "Bay Area Hospitality", email: "daniel@bayhosp.com", phone: "(415) 555-1890", address: "791 Grant Ave, San Francisco, CA 94108", pures: 4.2, tier: "1B", industry: "Hospitality", revenue: "$680K"},
+            {name: "Laura Rivera", company: "Modern Retail Solutions", email: "laura@modernretail.com", phone: "(415) 555-1901", address: "892 Irving St, San Francisco, CA 94122", pures: 3.6, tier: "1C", industry: "Retail", revenue: "$290K"},
+            {name: "Ryan Mitchell", company: "Premium Property Services", email: "ryan@premiumprop.com", phone: "(415) 555-2012", address: "103 Divisadero St, San Francisco, CA 94117", pures: 4.1, tier: "1B", industry: "Real Estate", revenue: "$450K"},
+            {name: "Maria Gonzalez", company: "Elite Home Design", email: "maria@elitehome.com", phone: "(415) 555-2123", address: "214 24th St, San Francisco, CA 94110", pures: 4.3, tier: "1B", industry: "Interior Design", revenue: "$390K"},
+            {name: "Steven Young", company: "Construction Elite", email: "steven@constelite.com", phone: "(415) 555-2234", address: "325 3rd St, San Francisco, CA 94107", pures: 3.3, tier: "1C", industry: "Construction", revenue: "$180K"},
+            {name: "Kimberly Turner", company: "Luxury Hospitality Group", email: "kimberly@luxuryhosp.com", phone: "(415) 555-2345", address: "436 Post St, San Francisco, CA 94102", pures: 4.7, tier: "1A", industry: "Hospitality", revenue: "$1.1M"},
+            {name: "Jonathan Phillips", company: "Premium Retail Group", email: "jonathan@premiumret.com", phone: "(415) 555-2456", address: "547 Columbus Ave, San Francisco, CA 94133", pures: 3.8, tier: "1C", industry: "Retail", revenue: "$310K"},
+            {name: "Ashley Campbell", company: "Modern Property Co", email: "ashley@modernprop.com", phone: "(415) 555-2567", address: "658 Stockton St, San Francisco, CA 94108", pures: 4.0, tier: "1B", industry: "Real Estate", revenue: "$520K"},
+            {name: "Thomas Evans", company: "Elite Interior Design", email: "thomas@eliteinter.com", phone: "(415) 555-2678", address: "769 Polk St, San Francisco, CA 94109", pures: 4.5, tier: "1A", industry: "Interior Design", revenue: "$720K"},
+            {name: "Michelle Robinson", company: "Bay Construction Group", email: "michelle@bayconstruct.com", phone: "(415) 555-2789", address: "870 Harrison St, San Francisco, CA 94107", pures: 3.4, tier: "1C", industry: "Construction", revenue: "$240K"},
+            {name: "Brandon Thompson", company: "Luxury Living Spaces", email: "brandon@luxuryliving.com", phone: "(415) 555-2890", address: "981 Green St, San Francisco, CA 94133", pures: 4.6, tier: "1A", industry: "Interior Design", revenue: "$800K"},
+            {name: "Rebecca Collins", company: "Premium Hospitality", email: "rebecca@premiumhosp.com", phone: "(415) 555-2901", address: "192 Mason St, San Francisco, CA 94102", pures: 4.2, tier: "1B", industry: "Hospitality", revenue: "$650K"},
+            {name: "Charles Stewart", company: "Elite Retail Solutions", email: "charles@eliteretail.com", phone: "(415) 555-3012", address: "203 Steiner St, San Francisco, CA 94117", pures: 3.7, tier: "1C", industry: "Retail", revenue: "$270K"},
+            {name: "Samantha Morris", company: "Modern Construction Co", email: "samantha@modernconst.com", phone: "(415) 555-3123", address: "314 Hayes St, San Francisco, CA 94102", pures: 3.5, tier: "1C", industry: "Construction", revenue: "$210K"},
+            {name: "Gregory Murphy", company: "Luxury Property Group", email: "gregory@luxuryprop.com", phone: "(415) 555-3234", address: "425 Sutter St, San Francisco, CA 94108", pures: 4.4, tier: "1A", industry: "Real Estate", revenue: "$920K"},
+            {name: "Brittany Cook", company: "Premier Design Studios", email: "brittany@premierdesign.com", phone: "(415) 555-3345", address: "536 Kearny St, San Francisco, CA 94108", pures: 4.1, tier: "1B", industry: "Interior Design", revenue: "$480K"},
+            {name: "Eric Rogers", company: "Bay Hospitality Services", email: "eric@bayhosp.com", phone: "(415) 555-3456", address: "647 Taylor St, San Francisco, CA 94102", pures: 4.3, tier: "1B", industry: "Hospitality", revenue: "$540K"},
+            {name: "Crystal Reed", company: "Elite Retail Group", email: "crystal@eliteretailgrp.com", phone: "(415) 555-3567", address: "758 Mission St, San Francisco, CA 94103", pures: 3.6, tier: "1C", industry: "Retail", revenue: "$260K"},
+            {name: "Andrew Bailey", company: "Premium Construction", email: "andrew@premiumconst.com", phone: "(415) 555-3678", address: "869 Bryant St, San Francisco, CA 94103", pures: 3.8, tier: "1C", industry: "Construction", revenue: "$330K"},
+            {name: "Heather Cooper", company: "Luxury Interior Group", email: "heather@luxuryinteriorgrp.com", phone: "(415) 555-3789", address: "970 Jones St, San Francisco, CA 94109", pures: 4.7, tier: "1A", industry: "Interior Design", revenue: "$850K"},
+            {name: "Timothy Ward", company: "Modern Hospitality Co", email: "timothy@modernhosp.com", phone: "(415) 555-3890", address: "181 Ellis St, San Francisco, CA 94102", pures: 4.0, tier: "1B", industry: "Hospitality", revenue: "$470K"},
+            {name: "Catherine Bell", company: "Premium Real Estate", email: "catherine@premiumre.com", phone: "(415) 555-3901", address: "292 Grove St, San Francisco, CA 94102", pures: 4.2, tier: "1B", industry: "Real Estate", revenue: "$610K"},
+            {name: "Jeremy Peterson", company: "Elite Construction Group", email: "jeremy@eliteconstructgrp.com", phone: "(415) 555-4012", address: "403 Van Ness Ave, San Francisco, CA 94102", pures: 3.9, tier: "1C", industry: "Construction", revenue: "$350K"},
+            {name: "Vanessa Gray", company: "Luxury Retail Concepts", email: "vanessa@luxuryretail.com", phone: "(415) 555-4123", address: "514 Market St, San Francisco, CA 94102", pures: 4.1, tier: "1B", industry: "Retail", revenue: "$440K"},
+            {name: "Nathan Howard", company: "Premier Property Solutions", email: "nathan@premierprop.com", phone: "(415) 555-4234", address: "625 Montgomery St, San Francisco, CA 94111", pures: 4.5, tier: "1A", industry: "Real Estate", revenue: "$780K"},
+            {name: "Tiffany Russell", company: "Modern Design Group", email: "tiffany@moderndesigngrp.com", phone: "(415) 555-4345", address: "736 Pine St, San Francisco, CA 94108", pures: 4.3, tier: "1B", industry: "Interior Design", revenue: "$560K"},
+            {name: "Philip Jenkins", company: "Bay Elite Construction", email: "philip@bayelite.com", phone: "(415) 555-4456", address: "847 Townsend St, San Francisco, CA 94107", pures: 3.7, tier: "1C", industry: "Construction", revenue: "$290K"},
+            {name: "Karen Perry", company: "Luxury Hospitality Solutions", email: "karen@luxuryhospsol.com", phone: "(415) 555-4567", address: "958 California St, San Francisco, CA 94108", pures: 4.8, tier: "1A", industry: "Hospitality", revenue: "$1.3M"},
+            {name: "Sean Powell", company: "Premium Interior Design", email: "sean@premiuminterior.com", phone: "(415) 555-4678", address: "169 Fillmore St, San Francisco, CA 94117", pures: 4.4, tier: "1A", industry: "Interior Design", revenue: "$690K"},
+            {name: "Patricia Long", company: "Elite Retail Solutions", email: "patricia@eliteretailsol.com", phone: "(415) 555-4789", address: "270 Valencia St, San Francisco, CA 94103", pures: 3.8, tier: "1C", industry: "Retail", revenue: "$320K"},
+            {name: "Carl Hughes", company: "Modern Property Group", email: "carl@modernpropgrp.com", phone: "(415) 555-4890", address: "381 Cesar Chavez St, San Francisco, CA 94131", pures: 4.0, tier: "1B", industry: "Real Estate", revenue: "$490K"},
+            {name: "Diana Foster", company: "Bay Premium Construction", email: "diana@baypremium.com", phone: "(415) 555-4901", address: "492 16th St, San Francisco, CA 94114", pures: 3.6, tier: "1C", industry: "Construction", revenue: "$250K"},
+            {name: "Victor Sanders", company: "Luxury Living Design", email: "victor@luxurylivingdes.com", phone: "(415) 555-5012", address: "503 Castro St, San Francisco, CA 94114", pures: 4.6, tier: "1A", industry: "Interior Design", revenue: "$820K"},
+            {name: "Andrea Price", company: "Premier Hospitality Group", email: "andrea@premierhospgrp.com", phone: "(415) 555-5123", address: "614 Potrero Ave, San Francisco, CA 94110", pures: 4.2, tier: "1B", industry: "Hospitality", revenue: "$580K"}
+        ];
+
+        let filteredData = [...clientData];
+        let sortDirection = {};
+
+        function populateTable(data = filteredData) {
+            const tbody = document.getElementById('clientTableBody');
+            tbody.innerHTML = '';
+            
+            data.forEach((client, index) => {
+                const row = document.createElement('tr');
+                row.className = `tier-${client.tier.toLowerCase()}`;
+                
+                row.innerHTML = `
+                    <td>${client.name}</td>
+                    <td>${client.company}</td>
+                    <td>${client.email}</td>
+                    <td>${client.phone}</td>
+                    <td>${client.address}</td>
+                    <td>${client.pures}</td>
+                    <td><span style="background: ${getTierColor(client.tier)}; padding: 0.2rem 0.5rem; border-radius: 3px; font-size: 0.8rem;">${client.tier}</span></td>
+                    <td>${client.industry}</td>
+                    <td>${client.revenue}</td>
+                    <td class="contact-actions">
+                        <button class="btn btn-small" onclick="openEmailModal('${client.email}', '${client.name}', '${client.company}')">Email</button>
+                        <button class="btn btn-small" onclick="callClient('${client.phone}')">Call</button>
+                    </td>
+                `;
+                
+                tbody.appendChild(row);
+            });
+        }
+
+        function getTierColor(tier) {
+            switch(tier) {
+                case '1A': return '#00ff00';
+                case '1B': return '#ffff00';
+                case '1C': return '#ff9900';
+                default: return '#666';
+            }
+        }
+
+        function openEmailModal(email, name, company) {
+            document.getElementById('emailTo').value = email;
+            document.getElementById('emailSubject').value = `Transform Your ${company} with Findecor's AI Sales Revolution`;
+            
+            const emailTemplate = `Dear ${name},
+
+I hope this email finds you well. As someone leading ${company} in the ${getIndustryFromEmail(email)} space, you understand the challenges of providing exceptional customer service while scaling your business.
+
+At Findecor, we've revolutionized how rug and carpet retailers connect with their customers through our specialized AI Sales Agent platform. Here's how we can transform your business:
+
+🎯 **24/7 Expert Sales Coverage**
+Our AI agent understands rug materials, patterns, sizes, and customer needs - providing expert recommendations when your team isn't available.
+
+💰 **Increase Sales & Reduce Costs**
+- Capture leads around the clock
+- Qualify customers automatically
+- Reduce time spent on repetitive questions
+- Increase online conversion rates by up to 40%
+
+🚀 **Multi-Channel Presence**
+Deploy our AI across your website, WhatsApp, Instagram, and even in-store via QR codes - one intelligent brain serving all customer touchpoints.
+
+📊 **Real-Time Inventory Intelligence**
+The AI knows your exact stock levels, materials, colors, and patterns - only recommending products you can actually sell.
+
+Given ${company}'s focus on excellence in the ${getIndustryFromEmail(email)} industry, I believe Findecor could significantly impact your customer experience and bottom line.
+
+Would you be available for a 15-minute demo this week to see how other retailers like yourself are revolutionizing their sales process?
+
+Best regards,
+Hikmatillo U.
+CEO, Findecor
+hikmatillo@findecor.io
+https://findecor.io
+
+P.S. We're offering new partners $50 in free credits to get started. Let's discuss how we can help ${company} capture more sales opportunities.`;
+
+            document.getElementById('emailMessage').value = emailTemplate;
+            document.getElementById('emailModal').style.display = 'block';
+        }
+
+        function getIndustryFromEmail(email) {
+            const client = clientData.find(c => c.email === email);
+            return client ? client.industry : 'retail';
+        }
+
+        function closeEmailModal() {
+            document.getElementById('emailModal').style.display = 'none';
+        }
+
+        function sendEmail() {
+            const to = document.getElementById('emailTo').value;
+            const subject = document.getElementById('emailSubject').value;
+            const message = document.getElementById('emailMessage').value;
+            
+            const mailtoLink = `mailto:${to}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(message)}`;
+            window.location.href = mailtoLink;
+            
+            closeEmailModal();
+            alert('Email client opened with pre-filled content!');
+        }
+
+        function callClient(phone) {
+            window.location.href = `tel:${phone}`;
+        }
+
+        function showTab(tabName) {
+            // Hide all tab contents
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabContents.forEach(content => content.classList.remove('active'));
+            
+            // Remove active class from all tabs
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Show selected tab content
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+        }
+
+        function sortTable(columnIndex) {
+            const column = ['name', 'company', 'email', 'phone', 'address', 'pures', 'tier', 'industry', 'revenue'][columnIndex];
+            
+            if (!sortDirection[column]) sortDirection[column] = 'asc';
+            else sortDirection[column] = sortDirection[column] === 'asc' ? 'desc' : 'asc';
+            
+            filteredData.sort((a, b) => {
+                let aVal = a[column];
+                let bVal = b[column];
+                
+                if (column === 'pures') {
+                    aVal = parseFloat(aVal);
+                    bVal = parseFloat(bVal);
+                }
+                
+                if (sortDirection[column] === 'asc') {
+                    return aVal > bVal ? 1 : -1;
+                } else {
+                    return aVal < bVal ? 1 : -1;
+                }
+            });
+            
+            populateTable();
+        }
+
+        function filterData() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const tierFilter = document.getElementById('tierFilter').value;
+            const industryFilter = document.getElementById('industryFilter').value;
+            
+            filteredData = clientData.filter(client => {
+                const matchesSearch = !searchTerm || 
+                    client.name.toLowerCase().includes(searchTerm) ||
+                    client.company.toLowerCase().includes(searchTerm) ||
+                    client.industry.toLowerCase().includes(searchTerm) ||
+                    client.email.toLowerCase().includes(searchTerm);
+                
+                const matchesTier = !tierFilter || client.tier === tierFilter;
+                const matchesIndustry = !industryFilter || client.industry === industryFilter;
+                
+                return matchesSearch && matchesTier && matchesIndustry;
+            });
+            
+            populateTable();
+        }
+
+        function exportData() {
+            const csvContent = "data:text/csv;charset=utf-8," + 
+                "Name,Company,Email,Phone,Address,PURES Score,Tier,Industry,Revenue\n" +
+                filteredData.map(client => 
+                    `"${client.name}","${client.company}","${client.email}","${client.phone}","${client.address}",${client.pures},"${client.tier}","${client.industry}","${client.revenue}"`
+                ).join("\n");
+            
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "findecor_clients.csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        // Event listeners
+        document.getElementById('searchInput').addEventListener('input', filterData);
+        document.getElementById('tierFilter').addEventListener('change', filterData);
+        document.getElementById('industryFilter').addEventListener('change', filterData);
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('emailModal');
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        }
+
+        // Initialize table
+        populateTable();
+    </script>
+</body>
+</html>

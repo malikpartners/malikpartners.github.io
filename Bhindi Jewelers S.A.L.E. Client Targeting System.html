@@ -1,0 +1,991 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bhindi Jewelers - S.A.L.E. Client Targeting System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
+            color: #ffffff;
+            line-height: 1.6;
+        }
+
+        .header {
+            background: #000000;
+            padding: 1rem 2rem;
+            border-bottom: 3px solid #CF2030;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header img {
+            height: 60px;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-menu a {
+            color: #CF2030;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+
+        .nav-menu a:hover {
+            color: #ffffff;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .dashboard-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .dashboard-header h1 {
+            color: #CF2030;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .tab-container {
+            margin-bottom: 2rem;
+        }
+
+        .tab-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .tab-button {
+            padding: 1rem 2rem;
+            background: #333333;
+            border: none;
+            color: #ffffff;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+
+        .tab-button.active {
+            background: #CF2030;
+        }
+
+        .tab-content {
+            display: none;
+            background: #1a1a1a;
+            padding: 2rem;
+            border-radius: 10px;
+            border: 1px solid #333333;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .search-controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .search-input {
+            flex: 1;
+            min-width: 200px;
+            padding: 0.75rem;
+            border: 1px solid #CF2030;
+            background: #000000;
+            color: #ffffff;
+            border-radius: 5px;
+        }
+
+        .filter-select {
+            padding: 0.75rem;
+            border: 1px solid #CF2030;
+            background: #000000;
+            color: #ffffff;
+            border-radius: 5px;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: #CF2030;
+            color: #ffffff;
+        }
+
+        .btn-secondary {
+            background: #333333;
+            color: #ffffff;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(207, 32, 48, 0.3);
+        }
+
+        .table-container {
+            overflow-x: auto;
+            background: #000000;
+            border-radius: 10px;
+            border: 1px solid #333333;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #333333;
+        }
+
+        th {
+            background: #CF2030;
+            color: #ffffff;
+            font-weight: bold;
+            cursor: pointer;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        th:hover {
+            background: #a01828;
+        }
+
+        tr:hover {
+            background: #262626;
+        }
+
+        .tier-1a {
+            background: linear-gradient(90deg, #004d00 0%, #006600 100%);
+        }
+
+        .tier-1b {
+            background: linear-gradient(90deg, #664d00 0%, #996600 100%);
+        }
+
+        .tier-1c {
+            background: linear-gradient(90deg, #000066 0%, #003399 100%);
+        }
+
+        .score-badge {
+            padding: 0.25rem 0.5rem;
+            border-radius: 3px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .score-high { background: #28a745; }
+        .score-medium { background: #ffc107; color: #000; }
+        .score-low { background: #dc3545; }
+
+        .pures-form {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            margin-bottom: 0.5rem;
+            color: #CF2030;
+            font-weight: bold;
+        }
+
+        .form-group input, .form-group select {
+            padding: 0.75rem;
+            border: 1px solid #333333;
+            background: #000000;
+            color: #ffffff;
+            border-radius: 5px;
+        }
+
+        .analytics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .analytics-card {
+            background: linear-gradient(135deg, #1a1a1a 0%, #333333 100%);
+            padding: 1.5rem;
+            border-radius: 10px;
+            border: 1px solid #CF2030;
+            text-align: center;
+        }
+
+        .analytics-card h3 {
+            color: #CF2030;
+            margin-bottom: 0.5rem;
+        }
+
+        .analytics-card .value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #ffffff;
+        }
+
+        .email-template {
+            background: #1a1a1a;
+            padding: 1.5rem;
+            border-radius: 10px;
+            border: 1px solid #333333;
+            margin-bottom: 1rem;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            border-top: 1px solid #333333;
+            margin-top: 3rem;
+        }
+
+        .footer img {
+            height: 30px;
+            margin-bottom: 1rem;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+        }
+
+        .modal-content {
+            background: #1a1a1a;
+            margin: 5% auto;
+            padding: 2rem;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 600px;
+            border: 2px solid #CF2030;
+        }
+
+        .close {
+            color: #CF2030;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: #ffffff;
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-menu {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .container {
+                padding: 1rem;
+            }
+
+            .search-controls {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports">
+        <nav class="nav-menu">
+            <a href="#client-database">Client Database</a>
+            <a href="#pures-scoring">P.U.R.E.S. Scoring</a>
+            <a href="#analytics">Analytics</a>
+            <a href="#outreach">Outreach</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div class="dashboard-header">
+            <h1>Bhindi Jewelers - S.A.L.E. Client Targeting System</h1>
+            <p>Premium Luxury Watch & Jewelry Client Management Dashboard</p>
+        </div>
+
+        <div class="tab-container">
+            <div class="tab-buttons">
+                <button class="tab-button active" onclick="showTab('client-database')">Client Database</button>
+                <button class="tab-button" onclick="showTab('pures-scoring')">P.U.R.E.S. Scoring</button>
+                <button class="tab-button" onclick="showTab('analytics')">S.A.L.E. Analytics</button>
+                <button class="tab-button" onclick="showTab('outreach')">Outreach Templates</button>
+            </div>
+
+            <div id="client-database" class="tab-content active">
+                <h2>Client Database - 50 High-Value Prospects (10-Mile Radius)</h2>
+                
+                <div class="search-controls">
+                    <input type="text" id="searchInput" class="search-input" placeholder="Search clients..." onkeyup="filterTable()">
+                    <select id="tierFilter" class="filter-select" onchange="filterTable()">
+                        <option value="">All Tiers</option>
+                        <option value="1A">Tier 1A (Premium)</option>
+                        <option value="1B">Tier 1B (High-Value)</option>
+                        <option value="1C">Tier 1C (Qualified)</option>
+                    </select>
+                    <button class="btn btn-primary" onclick="exportData()">Export CSV</button>
+                    <button class="btn btn-secondary" onclick="addClient()">Add New Client</button>
+                </div>
+
+                <div class="table-container">
+                    <table id="clientTable">
+                        <thead>
+                            <tr>
+                                <th onclick="sortTable(0)">Client Name ↕</th>
+                                <th onclick="sortTable(1)">Email ↕</th>
+                                <th onclick="sortTable(2)">Phone ↕</th>
+                                <th onclick="sortTable(3)">Address ↕</th>
+                                <th onclick="sortTable(4)">P.U.R.E.S. Score ↕</th>
+                                <th onclick="sortTable(5)">Tier Level ↕</th>
+                                <th onclick="sortTable(6)">Industry ↕</th>
+                                <th onclick="sortTable(7)">Revenue Est. ↕</th>
+                                <th onclick="sortTable(8)">Last Contact ↕</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="clientTableBody">
+                            <!-- Client data will be inserted here by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="pures-scoring" class="tab-content">
+                <h2>P.U.R.E.S. Client Evaluation System</h2>
+                
+                <div class="pures-form">
+                    <div class="form-group">
+                        <label>Client Name</label>
+                        <input type="text" id="clientName" placeholder="Enter client name">
+                    </div>
+                    <div class="form-group">
+                        <label>Profitability (1-5)</label>
+                        <select id="profitability">
+                            <option value="5">5 - $500K+ Annual Revenue</option>
+                            <option value="4">4 - $250K-$499K Revenue</option>
+                            <option value="3">3 - $100K-$249K Revenue</option>
+                            <option value="2">2 - $50K-$99K Revenue</option>
+                            <option value="1">1 - Under $50K Revenue</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Urgency (1-5)</label>
+                        <select id="urgency">
+                            <option value="5">5 - Immediate Purchase Intent</option>
+                            <option value="4">4 - Active Shopping (30 days)</option>
+                            <option value="3">3 - Research Phase (60 days)</option>
+                            <option value="2">2 - Future Planning (6+ months)</option>
+                            <option value="1">1 - No Current Intent</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Reachability (1-5)</label>
+                        <select id="reachability">
+                            <option value="5">5 - Direct Decision Maker</option>
+                            <option value="4">4 - Strong Influence on Decision</option>
+                            <option value="3">3 - Part of Decision Process</option>
+                            <option value="2">2 - Limited Decision Authority</option>
+                            <option value="1">1 - No Decision Authority</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Engagement (1-5)</label>
+                        <select id="engagement">
+                            <option value="5">5 - Highly Engaged & Responsive</option>
+                            <option value="4">4 - Good Communication</option>
+                            <option value="3">3 - Moderate Engagement</option>
+                            <option value="2">2 - Limited Response</option>
+                            <option value="1">1 - Unresponsive</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Sustainability (1-5)</label>
+                        <select id="sustainability">
+                            <option value="5">5 - Long-term Partnership Potential</option>
+                            <option value="4">4 - Multiple Purchase Potential</option>
+                            <option value="3">3 - Moderate Repeat Business</option>
+                            <option value="2">2 - Limited Future Potential</option>
+                            <option value="1">1 - One-time Transaction</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <button class="btn btn-primary" onclick="calculatePURES()">Calculate P.U.R.E.S. Score</button>
+                
+                <div id="puresResult" style="margin-top: 2rem; display: none;">
+                    <div class="analytics-card">
+                        <h3>P.U.R.E.S. Score Result</h3>
+                        <div class="value" id="puresScore">0.0</div>
+                        <p id="tierRecommendation"></p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="analytics" class="tab-content">
+                <h2>S.A.L.E. Performance Analytics</h2>
+                
+                <div class="analytics-grid">
+                    <div class="analytics-card">
+                        <h3>Total Prospects</h3>
+                        <div class="value" id="totalProspects">50</div>
+                    </div>
+                    <div class="analytics-card">
+                        <h3>Tier 1A Premium</h3>
+                        <div class="value" id="tier1A">12</div>
+                    </div>
+                    <div class="analytics-card">
+                        <h3>Tier 1B High-Value</h3>
+                        <div class="value" id="tier1B">23</div>
+                    </div>
+                    <div class="analytics-card">
+                        <h3>Tier 1C Qualified</h3>
+                        <div class="value" id="tier1C">15</div>
+                    </div>
+                    <div class="analytics-card">
+                        <h3>Avg. P.U.R.E.S. Score</h3>
+                        <div class="value" id="avgScore">3.8</div>
+                    </div>
+                    <div class="analytics-card">
+                        <h3>Contact Success Rate</h3>
+                        <div class="value" id="successRate">72%</div>
+                    </div>
+                </div>
+                
+                <h3>Marketing Schedule & Next Actions</h3>
+                <div class="email-template">
+                    <h4>Week 1-2: Tier 1A Premium Outreach</h4>
+                    <p>• Personalized luxury watch consultation invitations</p>
+                    <p>• Exclusive private showroom appointments</p>
+                    <p>• VIP customer appreciation events</p>
+                </div>
+                <div class="email-template">
+                    <h4>Week 3-4: Tier 1B High-Value Campaign</h4>
+                    <p>• Designer jewelry collection previews</p>
+                    <p>• Limited-time promotion announcements</p>
+                    <p>• Educational content on luxury timepieces</p>
+                </div>
+                <div class="email-template">
+                    <h4>Week 5-6: Tier 1C Qualified Nurturing</h4>
+                    <p>• Brand story and heritage content</p>
+                    <p>• Entry-level luxury product showcases</p>
+                    <p>• Seasonal gift guide promotions</p>
+                </div>
+            </div>
+
+            <div id="outreach" class="tab-content">
+                <h2>Luxury Outreach Email Templates</h2>
+                
+                <div class="email-template">
+                    <h3>Tier 1A Premium Template - Rolex & High-End Luxury</h3>
+                    <p><strong>Subject:</strong> Exclusive Rolex Collection Preview - VIP Invitation</p>
+                    <textarea readonly style="width: 100%; height: 200px; background: #000; color: #fff; border: 1px solid #333; padding: 1rem; border-radius: 5px;">
+Dear [CLIENT_NAME],
+
+As one of California's most distinguished connoisseurs of luxury timepieces, we would like to extend an exclusive invitation for a private viewing of our latest Rolex collection at Bhindi Jewelers.
+
+Your appreciation for exceptional craftsmanship and exclusive luxury aligns perfectly with our newest arrivals:
+• Rolex Certified Pre-Owned Collection
+• Limited Edition Omega Seamaster Series  
+• Exclusive Cartier Timepiece Collection
+• Grand Seiko Master Craft Series
+
+What sets Bhindi apart:
+✓ Authorized dealer for 12+ premium Swiss brands
+✓ GIA-certified gemologists and expert consultations
+✓ White-glove concierge service and private appointments
+✓ Lifetime service and authentication guarantee
+
+We would be honored to arrange a personal consultation at your convenience, where our master horologists can present pieces specifically curated for your refined taste.
+
+Please contact us at (562) 402-8755 to schedule your exclusive appointment.
+
+With utmost respect,
+The Bhindi Jewelers Team
+bjewelers@bhindi.com | www.bhindi.com
+                    </textarea>
+                </div>
+
+                <div class="email-template">
+                    <h3>Tier 1B High-Value Template - Designer Jewelry Focus</h3>
+                    <p><strong>Subject:</strong> Discover California's Premier Diamond & Bridal Collection</p>
+                    <textarea readonly style="width: 100%; height: 200px; background: #000; color: #fff; border: 1px solid #333; padding: 1rem; border-radius: 5px;">
+Dear [CLIENT_NAME],
+
+Bhindi Jewelers has earned recognition as California and Georgia's premier destination for luxury jewelry and timepieces, and we believe our collection would captivate your discerning taste.
+
+Our signature offerings include:
+• Custom-designed engagement rings and bridal sets
+• VVS clarity diamonds with F-color certification
+• Traditional Indian Kundan and contemporary designs
+• Exclusive TAG Heuer and Zenith timepieces
+
+Why sophisticated clients choose Bhindi:
+✓ In-house manufacturing facility for custom designs
+✓ State-of-the-art technology and craftsmanship
+✓ Unparalleled delivery timeframes
+✓ Fusion of traditional artistry with modern innovation
+
+"Our diamond pendants glisten when worn by our customers, because we refuse to use anything but VVS-Clarity and F-color diamonds." - Ashwin Bhindi
+
+We invite you to experience the Bhindi difference with a complimentary consultation.
+
+Warm regards,
+Bhindi Jewelers
+(562) 402-8755 | bjewelers@bhindi.com
+                    </textarea>
+                </div>
+
+                <div class="email-template">
+                    <h3>Tier 1C Qualified Template - Brand Introduction</h3>
+                    <p><strong>Subject:</strong> Welcome to Luxury - Bhindi Jewelers Collection</p>
+                    <textarea readonly style="width: 100%; height: 200px; background: #000; color: #fff; border: 1px solid #333; padding: 1rem; border-radius: 5px;">
+Dear [CLIENT_NAME],
+
+Welcome to the world of Bhindi Jewelers, where luxury meets artistry and tradition blends with innovation.
+
+Discover our carefully curated collection:
+• Swiss timepieces from OMEGA, RADO, and Oris
+• Diamond jewelry that will shine for generations
+• Panerai and NOMOS Glashütte luxury watches
+• Traditional and contemporary jewelry designs
+
+What makes us special:
+✓ Family-owned business with decades of expertise
+✓ Personalized service and attention to detail
+✓ Quality craftsmanship that lasts generations
+✓ Educational approach to luxury purchases
+
+Whether you're seeking the perfect timepiece or a memorable piece of jewelry, our expert team is here to guide you through an exceptional selection process.
+
+Visit our showrooms in California and Georgia, or browse our collection online.
+
+Best wishes,
+The Bhindi Jewelers Family
+(562) 402-8755 | www.bhindi.com
+                    </textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Email Modal -->
+    <div id="emailModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2>Send Email to <span id="modalClientName"></span></h2>
+            <div style="margin: 1rem 0;">
+                <label>Template:</label>
+                <select id="templateSelect" onchange="loadTemplate()">
+                    <option value="premium">Tier 1A Premium</option>
+                    <option value="highvalue">Tier 1B High-Value</option>
+                    <option value="qualified">Tier 1C Qualified</option>
+                </select>
+            </div>
+            <textarea id="emailBody" style="width: 100%; height: 300px; background: #000; color: #fff; border: 1px solid #333; padding: 1rem; border-radius: 5px;"></textarea>
+            <div style="margin-top: 1rem;">
+                <button class="btn btn-primary" onclick="sendEmail()">Send Email</button>
+                <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports">
+        <p>&copy; 2026 Higgins Reports & Bhindi Jewelers. All Rights Reserved.</p>
+        <p>Powered by S.A.L.E. System Technology</p>
+    </footer>
+
+    <script>
+        // Sample client data for Bhindi Jewelers (50 prospects within 10 miles of Artesia, CA)
+        const clientData = [
+            {name: "Alexander Whitman", email: "a.whitman@luxurygroup.com", phone: "(562) 445-7823", address: "1245 Luxury Ave, Beverly Hills, CA", puresScore: 4.8, tier: "1A", industry: "Entertainment", revenue: "$750K", lastContact: "2024-01-15", buyingProfile: "Innovation"},
+            {name: "Sofia Rodriguez-Chen", email: "sofia.chen@primeventures.net", phone: "(562) 334-9876", address: "892 Executive Dr, Manhattan Beach, CA", puresScore: 4.6, tier: "1A", industry: "Investment", revenue: "$650K", lastContact: "2024-01-20", buyingProfile: "Analytical"},
+            {name: "Michael Thompson", email: "m.thompson@techcorp.com", phone: "(562) 278-5432", address: "456 Innovation Blvd, Torrance, CA", puresScore: 4.4, tier: "1A", industry: "Technology", revenue: "$580K", lastContact: "2024-01-18", buyingProfile: "Efficiency"},
+            {name: "Isabella Martinez", email: "isabella@designstudio.com", phone: "(562) 567-8901", address: "321 Creative St, Redondo Beach, CA", puresScore: 4.2, tier: "1B", industry: "Design", revenue: "$420K", lastContact: "2024-01-22", buyingProfile: "Relationship"},
+            {name: "David Kim", email: "david.kim@financialgroup.com", phone: "(562) 789-2345", address: "789 Business Center, Long Beach, CA", puresScore: 4.7, tier: "1A", industry: "Finance", revenue: "$680K", lastContact: "2024-01-16", buyingProfile: "Analytical"},
+            {name: "Emma Johnson", email: "emma@luxuryrealty.com", phone: "(562) 345-6789", address: "234 Prestige Lane, Hermosa Beach, CA", puresScore: 4.3, tier: "1B", industry: "Real Estate", revenue: "$480K", lastContact: "2024-01-19", buyingProfile: "Relationship"},
+            {name: "Carlos Mendez", email: "carlos@premierlegal.com", phone: "(562) 456-7890", address: "567 Justice Blvd, Carson, CA", puresScore: 4.1, tier: "1B", industry: "Legal", revenue: "$390K", lastContact: "2024-01-21", buyingProfile: "Analytical"},
+            {name: "Olivia Brown", email: "olivia@healthpartners.com", phone: "(562) 678-9012", address: "890 Medical Plaza, Cerritos, CA", puresScore: 3.9, tier: "1B", industry: "Healthcare", revenue: "$350K", lastContact: "2024-01-23", buyingProfile: "Relationship"},
+            {name: "James Wilson", email: "james@constructionpro.com", phone: "(562) 789-0123", address: "345 Industry Dr, Compton, CA", puresScore: 3.8, tier: "1C", industry: "Construction", revenue: "$320K", lastContact: "2024-01-17", buyingProfile: "Efficiency"},
+            {name: "Sophie Chen", email: "sophie@importexport.com", phone: "(562) 890-1234", address: "678 Commerce Way, Lakewood, CA", puresScore: 4.0, tier: "1B", industry: "Import/Export", revenue: "$380K", lastContact: "2024-01-24", buyingProfile: "Innovation"},
+            {name: "Robert Davis", email: "robert@energysolutions.com", phone: "(562) 234-5678", address: "901 Energy Blvd, Downey, CA", puresScore: 4.5, tier: "1A", industry: "Energy", revenue: "$620K", lastContact: "2024-01-14", buyingProfile: "Analytical"},
+            {name: "Amanda White", email: "amanda@fashionhouse.com", phone: "(562) 345-7890", address: "123 Style Ave, El Segundo, CA", puresScore: 3.7, tier: "1C", industry: "Fashion", revenue: "$290K", lastContact: "2024-01-25", buyingProfile: "Innovation"},
+            {name: "Daniel Garcia", email: "daniel@autogroup.com", phone: "(562) 456-8901", address: "456 Motor Pkwy, Gardena, CA", puresScore: 3.6, tier: "1C", industry: "Automotive", revenue: "$280K", lastContact: "2024-01-26", buyingProfile: "Efficiency"},
+            {name: "Grace Liu", email: "grace@consultech.com", phone: "(562) 567-9012", address: "789 Consulting Dr, Hawthorne, CA", puresScore: 4.2, tier: "1B", industry: "Consulting", revenue: "$450K", lastContact: "2024-01-12", buyingProfile: "Analytical"},
+            {name: "Marcus Johnson", email: "marcus@restaurantgroup.com", phone: "(562) 678-0123", address: "234 Culinary St, Inglewood, CA", puresScore: 3.5, tier: "1C", industry: "Food Service", revenue: "$260K", lastContact: "2024-01-27", buyingProfile: "Relationship"},
+            {name: "Victoria Anderson", email: "victoria@pharmaco.com", phone: "(562) 789-1234", address: "567 Pharma Blvd, Lawndale, CA", puresScore: 4.4, tier: "1A", industry: "Pharmaceutical", revenue: "$560K", lastContact: "2024-01-13", buyingProfile: "Analytical"},
+            {name: "Christopher Lee", email: "chris@architecturefirm.com", phone: "(562) 890-2345", address: "890 Design Plaza, Lynwood, CA", puresScore: 3.8, tier: "1C", industry: "Architecture", revenue: "$340K", lastContact: "2024-01-28", buyingProfile: "Innovation"},
+            {name: "Natalie Foster", email: "natalie@marketingpro.com", phone: "(562) 234-6789", address: "123 Marketing Ave, Manhattan Beach, CA", puresScore: 3.9, tier: "1B", industry: "Marketing", revenue: "$360K", lastContact: "2024-01-11", buyingProfile: "Innovation"},
+            {name: "Andrew Taylor", email: "andrew@insurancepro.com", phone: "(562) 345-8901", address: "456 Protection Dr, Norwalk, CA", puresScore: 3.4, tier: "1C", industry: "Insurance", revenue: "$240K", lastContact: "2024-01-29", buyingProfile: "Relationship"},
+            {name: "Rachel Green", email: "rachel@eventplanning.com", phone: "(562) 456-9012", address: "789 Celebration St, Palos Verdes, CA", puresScore: 3.6, tier: "1C", industry: "Event Planning", revenue: "$270K", lastContact: "2024-01-10", buyingProfile: "Relationship"},
+            {name: "Benjamin Wright", email: "benjamin@logisticspro.com", phone: "(562) 567-0123", address: "234 Supply Chain Dr, Rancho Palos Verdes, CA", puresScore: 4.1, tier: "1B", industry: "Logistics", revenue: "$410K", lastContact: "2024-01-30", buyingProfile: "Efficiency"},
+            {name: "Laura Martinez", email: "laura@educationgroup.com", phone: "(562) 678-1234", address: "567 Learning Blvd, Redondo Beach, CA", puresScore: 3.3, tier: "1C", industry: "Education", revenue: "$220K", lastContact: "2024-01-09", buyingProfile: "Relationship"},
+            {name: "Nicholas Brown", email: "nicholas@sportsmgmt.com", phone: "(562) 789-2345", address: "890 Athletic Ave, Rolling Hills, CA", puresScore: 3.7, tier: "1C", industry: "Sports Management", revenue: "$310K", lastContact: "2024-01-31", buyingProfile: "Innovation"},
+            {name: "Jessica Adams", email: "jessica@beautyempire.com", phone: "(562) 890-3456", address: "123 Beauty Blvd, San Pedro, CA", puresScore: 3.8, tier: "1C", industry: "Beauty/Cosmetics", revenue: "$330K", lastContact: "2024-02-01", buyingProfile: "Innovation"},
+            {name: "Ryan Mitchell", email: "ryan@securityservices.com", phone: "(562) 234-7890", address: "456 Safety St, Signal Hill, CA", puresScore: 3.5, tier: "1C", industry: "Security", revenue: "$250K", lastContact: "2024-02-02", buyingProfile: "Efficiency"},
+            {name: "Samantha Turner", email: "samantha@travelluxury.com", phone: "(562) 345-9012", address: "789 Adventure Dr, South Gate, CA", puresScore: 4.0, tier: "1B", industry: "Travel/Tourism", revenue: "$370K", lastContact: "2024-02-03", buyingProfile: "Relationship"},
+            {name: "Kevin Rodriguez", email: "kevin@techstartup.com", phone: "(562) 456-0123", address: "234 Innovation Way, Torrance, CA", puresScore: 3.9, tier: "1B", industry: "Technology", revenue: "$355K", lastContact: "2024-02-04", buyingProfile: "Innovation"},
+            {name: "Megan Clark", email: "megan@wealthmgmt.com", phone: "(562) 567-1234", address: "567 Investment Plaza, Vernon, CA", puresScore: 4.3, tier: "1B", industry: "Wealth Management", revenue: "$470K", lastContact: "2024-02-05", buyingProfile: "Analytical"},
+            {name: "Jonathan Hill", email: "jonathan@realestate.com", phone: "(562) 678-2345", address: "890 Property Lane, West Carson, CA", puresScore: 4.1, tier: "1B", industry: "Real Estate", revenue: "$400K", lastContact: "2024-02-06", buyingProfile: "Relationship"},
+            {name: "Ashley Cooper", email: "ashley@medicalgroup.com", phone: "(562) 789-3456", address: "123 Health Center Dr, Wilmington, CA", puresScore: 4.2, tier: "1B", industry: "Medical Practice", revenue: "$430K", lastContact: "2024-02-07", buyingProfile: "Analytical"},
+            {name: "Tyler Nelson", email: "tyler@engineeringfirm.com", phone: "(562) 890-4567", address: "456 Engineering Blvd, Artesia, CA", puresScore: 3.8, tier: "1C", industry: "Engineering", revenue: "$340K", lastContact: "2024-02-08", buyingProfile: "Analytical"},
+            {name: "Hannah Scott", email: "hannah@artgallery.com", phone: "(562) 234-8901", address: "789 Culture Ave, Bellflower, CA", puresScore: 3.4, tier: "1C", industry: "Arts", revenue: "$235K", lastContact: "2024-02-09", buyingProfile: "Innovation"},
+            {name: "Brandon King", email: "brandon@retailchain.com", phone: "(562) 345-0123", address: "234 Commerce St, Cerritos, CA", puresScore: 3.6, tier: "1C", industry: "Retail", revenue: "$275K", lastContact: "2024-02-10", buyingProfile: "Efficiency"},
+            {name: "Chloe Parker", email: "chloe@publishinghouse.com", phone: "(562) 456-1234", address: "567 Literature Dr, Compton, CA", puresScore: 3.2, tier: "1C", industry: "Publishing", revenue: "$210K", lastContact: "2024-02-11", buyingProfile: "Innovation"},
+            {name: "Justin Ward", email: "justin@mobilitytech.com", phone: "(562) 567-2345", address: "890 Transportation Ave, Cudahy, CA", puresScore: 4.0, tier: "1B", industry: "Transportation Tech", revenue: "$385K", lastContact: "2024-02-12", buyingProfile: "Innovation"},
+            {name: "Stephanie Hall", email: "stephanie@hospitality.com", phone: "(562) 678-3456", address: "123 Hospitality Blvd, Downey, CA", puresScore: 3.7, tier: "1C", industry: "Hospitality", revenue: "$295K", lastContact: "2024-02-13", buyingProfile: "Relationship"},
+            {name: "Mason Young", email: "mason@cleanenergy.com", phone: "(562) 789-4567", address: "456 Green Tech Dr, East Rancho Dominguez, CA", puresScore: 4.1, tier: "1B", industry: "Clean Energy", revenue: "$415K", lastContact: "2024-02-14", buyingProfile: "Innovation"},
+            {name: "Brittany Allen", email: "brittany@fitnessempire.com", phone: "(562) 890-5678", address: "789 Wellness Way, El Segundo, CA", puresScore: 3.5, tier: "1C", industry: "Fitness", revenue: "$255K", lastContact: "2024-02-15", buyingProfile: "Relationship"},
+            {name: "Lucas Wright", email: "lucas@aerospace.com", phone: "(562) 234-9012", address: "234 Aviation Blvd, Gardena, CA", puresScore: 4.4, tier: "1A", industry: "Aerospace", revenue: "$540K", lastContact: "2024-02-16", buyingProfile: "Analytical"},
+            {name: "Madison Roberts", email: "madison@biotechcorp.com", phone: "(562) 345-1234", address: "567 Biotech Plaza, Hawthorne, CA", puresScore: 4.3, tier: "1B", industry: "Biotechnology", revenue: "$460K", lastContact: "2024-02-17", buyingProfile: "Innovation"},
+            {name: "Ethan Moore", email: "ethan@gamingtech.com", phone: "(562) 456-2345", address: "890 Digital Dr, Inglewood, CA", puresScore: 3.8, tier: "1C", industry: "Gaming/Tech", revenue: "$325K", lastContact: "2024-02-18", buyingProfile: "Innovation"},
+            {name: "Alexis Thompson", email: "alexis@luxurygoods.com", phone: "(562) 567-3456", address: "123 Premium Ave, Lawndale, CA", puresScore: 4.2, tier: "1B", industry: "Luxury Goods", revenue: "$440K", lastContact: "2024-02-19", buyingProfile: "Relationship"},
+            {name: "Gabriel Martinez", email: "gabriel@architectdesign.com", phone: "(562) 678-4567", address: "456 Blueprint St, Lynwood, CA", puresScore: 3.9, tier: "1B", industry: "Architecture", revenue: "$365K", lastContact: "2024-02-20", buyingProfile: "Innovation"},
+            {name: "Paige Anderson", email: "paige@socialimpact.org", phone: "(562) 789-5678", address: "789 Community Dr, Maywood, CA", puresScore: 3.1, tier: "1C", industry: "Non-Profit", revenue: "$195K", lastContact: "2024-02-21", buyingProfile: "Relationship"},
+            {name: "Cameron Lewis", email: "cameron@venturecapital.com", phone: "(562) 890-6789", address: "234 Investment Way, Norwalk, CA", puresScore: 4.6, tier: "1A", industry: "Venture Capital", revenue: "$680K", lastContact: "2024-02-22", buyingProfile: "Analytical"},
+            {name: "Zoe Walker", email: "zoe@environmentaltech.com", phone: "(562) 234-0123", address: "567 Sustainability Blvd, Paramount, CA", puresScore: 3.6, tier: "1C", industry: "Environmental", revenue: "$285K", lastContact: "2024-02-23", buyingProfile: "Innovation"},
+            {name: "Noah Phillips", email: "noah@cryptocorp.com", phone: "(562) 345-2345", address: "890 Blockchain Ave, Pico Rivera, CA", puresScore: 4.0, tier: "1B", industry: "Cryptocurrency", revenue: "$395K", lastContact: "2024-02-24", buyingProfile: "Innovation"},
+            {name: "Aria Johnson", email: "aria@intellectualproperty.com", phone: "(562) 456-3456", address: "123 Patent Dr, San Pedro, CA", puresScore: 4.1, tier: "1B", industry: "IP Law", revenue: "$405K", lastContact: "2024-02-25", buyingProfile: "Analytical"},
+            {name: "Caleb Rivera", email: "caleb@manufacturingtech.com", phone: "(562) 567-4567", address: "456 Industrial Blvd, Signal Hill, CA", puresScore: 3.7, tier: "1C", industry: "Manufacturing", revenue: "$305K", lastContact: "2024-02-26", buyingProfile: "Efficiency"},
+            {name: "Lily Chen", email: "lily@luxurytravel.com", phone: "(562) 678-5678", address: "789 Wanderlust Way, South Gate, CA", puresScore: 3.9, tier: "1B", industry: "Luxury Travel", revenue: "$375K", lastContact: "2024-02-27", buyingProfile: "Relationship"},
+            {name: "Owen Rodriguez", email: "owen@smartcity.gov", phone: "(562) 789-6789", address: "234 Municipal Dr, Vernon, CA", puresScore: 3.3, tier: "1C", industry: "Government", revenue: "$225K", lastContact: "2024-02-28", buyingProfile: "Efficiency"}
+        ];
+
+        let filteredData = [...clientData];
+        let sortDirection = {};
+        let currentClient = '';
+
+        // Email templates
+        const emailTemplates = {
+            premium: `Dear [CLIENT_NAME],
+
+As one of California's most distinguished connoisseurs of luxury timepieces, we would like to extend an exclusive invitation for a private viewing of our latest Rolex collection at Bhindi Jewelers.
+
+Your appreciation for exceptional craftsmanship and exclusive luxury aligns perfectly with our newest arrivals:
+• Rolex Certified Pre-Owned Collection
+• Limited Edition Omega Seamaster Series  
+• Exclusive Cartier Timepiece Collection
+• Grand Seiko Master Craft Series
+
+What sets Bhindi apart:
+✓ Authorized dealer for 12+ premium Swiss brands
+✓ GIA-certified gemologists and expert consultations
+✓ White-glove concierge service and private appointments
+✓ Lifetime service and authentication guarantee
+
+We would be honored to arrange a personal consultation at your convenience, where our master horologists can present pieces specifically curated for your refined taste.
+
+Please contact us at (562) 402-8755 to schedule your exclusive appointment.
+
+With utmost respect,
+The Bhindi Jewelers Team
+bjewelers@bhindi.com | www.bhindi.com`,
+            
+            highvalue: `Dear [CLIENT_NAME],
+
+Bhindi Jewelers has earned recognition as California and Georgia's premier destination for luxury jewelry and timepieces, and we believe our collection would captivate your discerning taste.
+
+Our signature offerings include:
+• Custom-designed engagement rings and bridal sets
+• VVS clarity diamonds with F-color certification
+• Traditional Indian Kundan and contemporary designs
+• Exclusive TAG Heuer and Zenith timepieces
+
+Why sophisticated clients choose Bhindi:
+✓ In-house manufacturing facility for custom designs
+✓ State-of-the-art technology and craftsmanship
+✓ Unparalleled delivery timeframes
+✓ Fusion of traditional artistry with modern innovation
+
+"Our diamond pendants glisten when worn by our customers, because we refuse to use anything but VVS-Clarity and F-color diamonds." - Ashwin Bhindi
+
+We invite you to experience the Bhindi difference with a complimentary consultation.
+
+Warm regards,
+Bhindi Jewelers
+(562) 402-8755 | bjewelers@bhindi.com`,
+            
+            qualified: `Dear [CLIENT_NAME],
+
+Welcome to the world of Bhindi Jewelers, where luxury meets artistry and tradition blends with innovation.
+
+Discover our carefully curated collection:
+• Swiss timepieces from OMEGA, RADO, and Oris
+• Diamond jewelry that will shine for generations
+• Panerai and NOMOS Glashütte luxury watches
+• Traditional and contemporary jewelry designs
+
+What makes us special:
+✓ Family-owned business with decades of expertise
+✓ Personalized service and attention to detail
+✓ Quality craftsmanship that lasts generations
+✓ Educational approach to luxury purchases
+
+Whether you're seeking the perfect timepiece or a memorable piece of jewelry, our expert team is here to guide you through an exceptional selection process.
+
+Visit our showrooms in California and Georgia, or browse our collection online.
+
+Best wishes,
+The Bhindi Jewelers Family
+(562) 402-8755 | www.bhindi.com`
+        };
+
+        function populateTable() {
+            const tbody = document.getElementById('clientTableBody');
+            tbody.innerHTML = '';
+            
+            filteredData.forEach(client => {
+                const row = tbody.insertRow();
+                row.className = `tier-${client.tier.toLowerCase()}`;
+                
+                row.innerHTML = `
+                    <td>${client.name}</td>
+                    <td>${client.email}</td>
+                    <td>${client.phone}</td>
+                    <td>${client.address}</td>
+                    <td><span class="score-badge score-${getScoreClass(client.puresScore)}">${client.puresScore}</span></td>
+                    <td>Tier ${client.tier}</td>
+                    <td>${client.industry}</td>
+                    <td>${client.revenue}</td>
+                    <td>${client.lastContact}</td>
+                    <td>
+                        <button class="btn btn-primary" style="margin: 2px; padding: 5px 10px;" onclick="openEmailModal('${client.name}', '${client.email}', '${client.tier}')">📧 Email</button>
+                        <button class="btn btn-secondary" style="margin: 2px; padding: 5px 10px;" onclick="callClient('${client.phone}')">📞 Call</button>
+                    </td>
+                `;
+            });
+        }
+
+        function getScoreClass(score) {
+            if (score >= 4.0) return 'high';
+            if (score >= 3.0) return 'medium';
+            return 'low';
+        }
+
+        function filterTable() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const tierFilter = document.getElementById('tierFilter').value;
+            
+            filteredData = clientData.filter(client => {
+                const matchesSearch = 
+                    client.name.toLowerCase().includes(searchTerm) ||
+                    client.email.toLowerCase().includes(searchTerm) ||
+                    client.industry.toLowerCase().includes(searchTerm) ||
+                    client.address.toLowerCase().includes(searchTerm);
+                
+                const matchesTier = !tierFilter || client.tier === tierFilter;
+                
+                return matchesSearch && matchesTier;
+            });
+            
+            populateTable();
+        }
+
+        function sortTable(columnIndex) {
+            const columns = ['name', 'email', 'phone', 'address', 'puresScore', 'tier', 'industry', 'revenue', 'lastContact'];
+            const column = columns[columnIndex];
+            
+            if (!sortDirection[column]) {
+                sortDirection[column] = 'asc';
+            } else {
+                sortDirection[column] = sortDirection[column] === 'asc' ? 'desc' : 'asc';
+            }
+            
+            filteredData.sort((a, b) => {
+                let aVal = a[column];
+                let bVal = b[column];
+                
+                if (column === 'puresScore') {
+                    aVal = parseFloat(aVal);
+                    bVal = parseFloat(bVal);
+                } else if (column === 'lastContact') {
+                    aVal = new Date(aVal);
+                    bVal = new Date(bVal);
+                }
+                
+                if (aVal < bVal) return sortDirection[column] === 'asc' ? -1 : 1;
+                if (aVal > bVal) return sortDirection[column] === 'asc' ? 1 : -1;
+                return 0;
+            });
+            
+            populateTable();
+        }
+
+        function showTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Remove active class from all buttons
+            document.querySelectorAll('.tab-button').forEach(button => {
+                button.classList.remove('active');
+            });
+            
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked button
+            event.target.classList.add('active');
+        }
+
+        function calculatePURES() {
+            const profitability = parseInt(document.getElementById('profitability').value);
+            const urgency = parseInt(document.getElementById('urgency').value);
+            const reachability = parseInt(document.getElementById('reachability').value);
+            const engagement = parseInt(document.getElementById('engagement').value);
+            const sustainability = parseInt(document.getElementById('sustainability').value);
+            
+            const score = ((profitability + urgency + reachability + engagement + sustainability) / 5).toFixed(1);
+            
+            document.getElementById('puresScore').textContent = score;
+            
+            let tier = '';
+            let recommendation = '';
+            
+            if (score >= 4.0) {
+                tier = '1A (Premium)';
+                recommendation = 'High-priority client with excellent potential. Recommend immediate personalized outreach with luxury consultation.';
+            } else if (score >= 3.0) {
+                tier = '1B (High-Value)';
+                recommendation = 'Strong prospect. Recommend structured follow-up campaign with educational content and product showcases.';
+            } else {
+                tier = '1C (Qualified)';
+                recommendation = 'Qualified lead for nurturing. Recommend brand introduction and entry-level luxury product focus.';
+            }
+            
+            document.getElementById('tierRecommendation').innerHTML = `<strong>Recommended Tier: ${tier}</strong><br>${recommendation}`;
+            document.getElementById('puresResult').style.display = 'block';
+        }
+
+        function openEmailModal(clientName, email, tier) {
+            currentClient = {name: clientName, email: email, tier: tier};
+            document.getElementById('modalClientName').textContent = clientName;
+            
+            // Set appropriate template based on tier
+            const templateSelect = document.getElementById('templateSelect');
+            if (tier === '1A') {
+                templateSelect.value = 'premium';
+            } else if (tier === '1B') {
+                templateSelect.value = 'highvalue';
+            } else {
+                templateSelect.value = 'qualified';
+            }
+            
+            loadTemplate();
+            document.getElementById('emailModal').style.display = 'block';
+        }
+
+        function loadTemplate() {
+            const template = document.getElementById('templateSelect').value;
+            const emailBody = document.getElementById('emailBody');
+            emailBody.value = emailTemplates[template].replace('[CLIENT_NAME]', currentClient.name);
+        }
+
+        function closeModal() {
+            document.getElementById('emailModal').style.display = 'none';
+        }
+
+        function sendEmail() {
+            const emailBody = document.getElementById('emailBody').value;
+            const subject = document.getElementById('templateSelect').value === 'premium' ? 
+                'Exclusive Rolex Collection Preview - VIP Invitation' :
+                document.getElementById('templateSelect').value === 'highvalue' ?
+                'Discover California\'s Premier Diamond & Bridal Collection' :
+                'Welcome to Luxury - Bhindi Jewelers Collection';
+            
+            const mailtoLink = `mailto:${currentClient.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(emailBody)}`;
+            window.location.href = mailtoLink;
+            
+            closeModal();
+            alert(`Email prepared for ${currentClient.name}. Your email client should open automatically.`);
+        }
+
+        function callClient(phone) {
+            alert(`Calling ${phone}...\n\nPhone dialer should open automatically on mobile devices.`);
+            window.location.href = `tel:${phone}`;
+        }
+
+        function exportData() {
+            let csv = 'Client Name,Email,Phone,Address,P.U.R.E.S. Score,Tier Level,Industry,Revenue Estimate,Last Contact\n';
+            
+            filteredData.forEach(client => {
+                csv += `"${client.name}","${client.email}","${client.phone}","${client.address}",${client.puresScore},"Tier ${client.tier}","${client.industry}","${client.revenue}","${client.lastContact}"\n`;
+            });
+            
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'bhindi_jewelers_clients.csv';
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+
+        function addClient() {
+            alert('Add Client functionality would open a form to input new client data and calculate their P.U.R.E.S. score.');
+        }
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            populateTable();
+        });
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('emailModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+    </script>
+</body>
+</html>

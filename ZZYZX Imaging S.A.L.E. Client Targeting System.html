@@ -1,0 +1,768 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZZYZX Imaging - S.A.L.E. Client Targeting System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #000000;
+            color: #ffffff;
+            line-height: 1.6;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #CF2030, #8B1820);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+
+        .logo {
+            height: 60px;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-menu a {
+            color: #CF2030;
+            text-decoration: none;
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: background 0.3s;
+        }
+
+        .nav-menu a:hover {
+            background: rgba(207, 32, 48, 0.2);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .card {
+            background: #1a1a1a;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            border: 1px solid #333;
+        }
+
+        .card h3 {
+            color: #CF2030;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .pures-scoring {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .score-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .score-item label {
+            font-weight: 500;
+        }
+
+        .score-slider {
+            width: 100px;
+            margin: 0 10px;
+        }
+
+        .score-value {
+            font-weight: bold;
+            color: #CF2030;
+            min-width: 20px;
+        }
+
+        .filters {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .filter-group label {
+            font-weight: 500;
+            color: #CF2030;
+        }
+
+        input, select {
+            padding: 0.5rem;
+            border: 1px solid #444;
+            border-radius: 4px;
+            background: #2a2a2a;
+            color: #ffffff;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #CF2030;
+        }
+
+        .table-container {
+            background: #1a1a1a;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #333;
+        }
+
+        th {
+            background: #CF2030;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            position: relative;
+        }
+
+        th:hover {
+            background: #8B1820;
+        }
+
+        th::after {
+            content: ' ⇅';
+            opacity: 0.5;
+        }
+
+        tr:nth-child(even) {
+            background: #2a2a2a;
+        }
+
+        tr:hover {
+            background: #333;
+        }
+
+        .tier-1a { border-left: 4px solid #00ff00; }
+        .tier-1b { border-left: 4px solid #ffff00; }
+        .tier-1c { border-left: 4px solid #0099ff; }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: #CF2030;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #8B1820;
+        }
+
+        .btn-secondary {
+            background: #444;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #555;
+        }
+
+        .btn-small {
+            padding: 0.3rem 0.6rem;
+            font-size: 0.8rem;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+        }
+
+        .modal-content {
+            background: #1a1a1a;
+            margin: 5% auto;
+            padding: 2rem;
+            border-radius: 8px;
+            width: 80%;
+            max-width: 600px;
+            border: 1px solid #333;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 2rem;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: #CF2030;
+        }
+
+        .email-template {
+            background: #2a2a2a;
+            padding: 1rem;
+            border-radius: 4px;
+            margin-top: 1rem;
+            border: 1px solid #444;
+        }
+
+        .footer {
+            background: #1a1a1a;
+            padding: 2rem;
+            text-align: center;
+            border-top: 1px solid #333;
+            margin-top: 3rem;
+        }
+
+        .footer-logo {
+            height: 40px;
+            margin-bottom: 1rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: #2a2a2a;
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid #444;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #CF2030;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+            
+            .filters {
+                grid-template-columns: 1fr;
+            }
+            
+            .table-container {
+                overflow-x: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="HigginsReports" class="logo">
+        <nav class="nav-menu">
+            <a href="#clients">Clients</a>
+            <a href="#analytics">Analytics</a>
+            <a href="#campaigns">Campaigns</a>
+            <a href="#reports">Reports</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <h1>ZZYZX Imaging - S.A.L.E. Client Targeting System</h1>
+        <p>Design Services | San Diego, California | <strong>10-Mile Radius Client Analysis</strong></p>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number">50</div>
+                <div>Total Prospects</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="tier1a-count">0</div>
+                <div>Tier 1A Premium</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="tier1b-count">0</div>
+                <div>Tier 1B High-Value</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="tier1c-count">0</div>
+                <div>Tier 1C Qualified</div>
+            </div>
+        </div>
+
+        <div class="dashboard">
+            <div class="card">
+                <h3>P.U.R.E.S. Client Scoring</h3>
+                <div class="pures-scoring">
+                    <div class="score-item">
+                        <label>Profitability:</label>
+                        <input type="range" min="1" max="5" value="3" class="score-slider" id="profitability">
+                        <span class="score-value" id="profitability-value">3</span>
+                    </div>
+                    <div class="score-item">
+                        <label>Urgency:</label>
+                        <input type="range" min="1" max="5" value="3" class="score-slider" id="urgency">
+                        <span class="score-value" id="urgency-value">3</span>
+                    </div>
+                    <div class="score-item">
+                        <label>Reachability:</label>
+                        <input type="range" min="1" max="5" value="3" class="score-slider" id="reachability">
+                        <span class="score-value" id="reachability-value">3</span>
+                    </div>
+                    <div class="score-item">
+                        <label>Engagement:</label>
+                        <input type="range" min="1" max="5" value="3" class="score-slider" id="engagement">
+                        <span class="score-value" id="engagement-value">3</span>
+                    </div>
+                    <div class="score-item">
+                        <label>Sustainability:</label>
+                        <input type="range" min="1" max="5" value="3" class="score-slider" id="sustainability">
+                        <span class="score-value" id="sustainability-value">3</span>
+                    </div>
+                </div>
+                <button class="btn btn-primary" style="margin-top: 1rem;" onclick="applyPURESFilter()">Apply P.U.R.E.S. Filter</button>
+            </div>
+
+            <div class="card">
+                <h3>S.A.L.E. Marketing Strategy</h3>
+                <p><strong>SOURCING:</strong> Target design-focused businesses within 10 miles of San Diego</p>
+                <p><strong>ASSESSING:</strong> Evaluate buying patterns and decision-making processes</p>
+                <p><strong>LISTENING:</strong> Gather feedback through surveys and direct communication</p>
+                <p><strong>EMPOWERING:</strong> Build referral network and success story documentation</p>
+                <div style="margin-top: 1rem;">
+                    <button class="btn btn-secondary btn-small" onclick="exportCSV()">Export Data</button>
+                    <button class="btn btn-secondary btn-small" onclick="generateReport()">Generate Report</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="filters">
+            <div class="filter-group">
+                <label>Search Clients:</label>
+                <input type="text" id="searchInput" placeholder="Search by name, company, or industry">
+            </div>
+            <div class="filter-group">
+                <label>Filter by Tier:</label>
+                <select id="tierFilter">
+                    <option value="">All Tiers</option>
+                    <option value="1A">Tier 1A - Premium</option>
+                    <option value="1B">Tier 1B - High-Value</option>
+                    <option value="1C">Tier 1C - Qualified</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>Filter by Industry:</label>
+                <select id="industryFilter">
+                    <option value="">All Industries</option>
+                    <option value="Technology">Technology</option>
+                    <option value="Healthcare">Healthcare</option>
+                    <option value="Retail">Retail</option>
+                    <option value="Real Estate">Real Estate</option>
+                    <option value="Hospitality">Hospitality</option>
+                    <option value="Professional Services">Professional Services</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>Contact Status:</label>
+                <select id="statusFilter">
+                    <option value="">All Status</option>
+                    <option value="Not Contacted">Not Contacted</option>
+                    <option value="Initial Contact">Initial Contact</option>
+                    <option value="Follow-up Required">Follow-up Required</option>
+                    <option value="Proposal Sent">Proposal Sent</option>
+                    <option value="Client">Client</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="table-container">
+            <table id="clientTable">
+                <thead>
+                    <tr>
+                        <th onclick="sortTable(0)">Client Name</th>
+                        <th onclick="sortTable(1)">Company</th>
+                        <th onclick="sortTable(2)">Email</th>
+                        <th onclick="sortTable(3)">Phone</th>
+                        <th onclick="sortTable(4)">Address</th>
+                        <th onclick="sortTable(5)">P.U.R.E.S. Score</th>
+                        <th onclick="sortTable(6)">Tier</th>
+                        <th onclick="sortTable(7)">Industry</th>
+                        <th onclick="sortTable(8)">Revenue Est.</th>
+                        <th onclick="sortTable(9)">Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="clientTableBody">
+                    <!-- Client data will be populated by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Email Modal -->
+    <div id="emailModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h3>Send Email to <span id="emailClientName"></span></h3>
+            <div class="email-template">
+                <p><strong>Subject:</strong> <span id="emailSubject"></span></p>
+                <div id="emailContent"></div>
+            </div>
+            <button class="btn btn-primary" style="margin-top: 1rem;" onclick="sendEmail()">Send Email</button>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="HigginsReports" class="footer-logo">
+        <p>&copy; 2024 HigginsReports. Powered by S.A.L.E. Methodology</p>
+        <p>ZZYZX Imaging Client Management System | San Diego, CA</p>
+    </footer>
+
+    <script>
+        // Sample client data for ZZYZX Imaging (Design Services in San Diego)
+        const clientData = [
+            {name: "Sarah Chen", company: "TechFlow Solutions", email: "sarah@techflow.com", phone: "619-555-0101", address: "123 Innovation Dr, San Diego, CA", puresScore: 4.2, tier: "1A", industry: "Technology", revenue: "$2.5M", status: "Not Contacted", notes: "Expanding rapidly, needs brand redesign"},
+            {name: "Michael Rodriguez", company: "Coastal Medical Group", email: "mrodriguez@coastalmed.com", phone: "619-555-0102", address: "456 Healthcare Blvd, La Jolla, CA", puresScore: 4.0, tier: "1A", industry: "Healthcare", revenue: "$3.2M", status: "Initial Contact", notes: "New clinic opening, marketing materials needed"},
+            {name: "Jennifer Park", company: "Park & Associates Law", email: "jpark@parklaw.com", phone: "619-555-0103", address: "789 Legal Ave, Downtown SD, CA", puresScore: 3.8, tier: "1B", industry: "Professional Services", revenue: "$1.8M", status: "Follow-up Required", notes: "Professional rebrand project"},
+            {name: "David Thompson", company: "Thompson Real Estate", email: "david@thompsonre.com", phone: "619-555-0104", address: "321 Realty Row, Hillcrest, CA", puresScore: 4.4, tier: "1A", industry: "Real Estate", revenue: "$4.1M", status: "Proposal Sent", notes: "Luxury property marketing materials"},
+            {name: "Amanda Foster", company: "Foster Marketing Agency", email: "amanda@fostermarketing.com", phone: "619-555-0105", address: "654 Marketing St, Mission Valley, CA", puresScore: 3.6, tier: "1B", industry: "Professional Services", revenue: "$950K", status: "Not Contacted", notes: "Creative partnership opportunity"},
+            {name: "Robert Kim", company: "Kim's Korean Kitchen", email: "robert@kimskitchen.com", phone: "619-555-0106", address: "987 Culinary Ln, Kearny Mesa, CA", puresScore: 3.2, tier: "1C", industry: "Hospitality", revenue: "$650K", status: "Initial Contact", notes: "Restaurant chain expansion branding"},
+            {name: "Lisa Wang", company: "Wang Financial Planning", email: "lisa@wangfp.com", phone: "619-555-0107", address: "147 Finance Way, UTC, CA", puresScore: 3.9, tier: "1B", industry: "Professional Services", revenue: "$1.2M", status: "Client", notes: "Annual report design needs"},
+            {name: "James Martinez", company: "Martinez Construction", email: "james@martinezconstruction.com", phone: "619-555-0108", address: "258 Builder Blvd, Chula Vista, CA", puresScore: 3.4, tier: "1C", industry: "Construction", revenue: "$2.8M", status: "Follow-up Required", notes: "Company vehicle wraps and signage"},
+            {name: "Rachel Green", company: "Green Thumb Nursery", email: "rachel@greenthumb.com", phone: "619-555-0109", address: "369 Garden Grove, Encinitas, CA", puresScore: 3.0, tier: "1C", industry: "Retail", revenue: "$800K", status: "Not Contacted", notes: "Seasonal marketing campaigns"},
+            {name: "Thomas Brown", company: "Brown Tech Consulting", email: "thomas@browntech.com", phone: "619-555-0110", address: "741 Tech Center Dr, Sorrento Valley, CA", puresScore: 4.1, tier: "1A", industry: "Technology", revenue: "$1.9M", status: "Initial Contact", notes: "B2B marketing collateral"},
+            {name: "Maria Gonzalez", company: "Gonzalez Dental Practice", email: "maria@gonzalezdental.com", phone: "619-555-0111", address: "852 Dental Dr, National City, CA", puresScore: 3.7, tier: "1B", industry: "Healthcare", revenue: "$1.1M", status: "Proposal Sent", notes: "Modern practice branding"},
+            {name: "Kevin Lee", company: "Lee's Auto Repair", email: "kevin@leesauto.com", phone: "619-555-0112", address: "963 Mechanic Ave, El Cajon, CA", puresScore: 2.8, tier: "1C", industry: "Automotive", revenue: "$550K", status: "Not Contacted", notes: "Shop signage and uniforms"},
+            {name: "Nicole Davis", company: "Davis Interior Design", email: "nicole@davisinteriors.com", phone: "619-555-0113", address: "174 Design District, Pacific Beach, CA", puresScore: 4.3, tier: "1A", industry: "Design", revenue: "$1.6M", status: "Client", notes: "Portfolio website redesign"},
+            {name: "Andrew Wilson", company: "Wilson Fitness Center", email: "andrew@wilsonfitness.com", phone: "619-555-0114", address: "285 Fitness Blvd, Clairemont, CA", puresScore: 3.5, tier: "1B", industry: "Fitness", revenue: "$890K", status: "Follow-up Required", notes: "Membership drive materials"},
+            {name: "Stephanie Taylor", company: "Taylor Event Planning", email: "stephanie@tayloreventplan.com", phone: "619-555-0115", address: "396 Event Center Way, Gaslamp, CA", puresScore: 3.3, tier: "1C", industry: "Hospitality", revenue: "$720K", status: "Initial Contact", notes: "Wedding package brochures"},
+            {name: "Daniel Anderson", company: "Anderson Insurance Group", email: "daniel@andersoninsurance.com", phone: "619-555-0116", address: "507 Insurance Plaza, Mira Mesa, CA", puresScore: 3.8, tier: "1B", industry: "Professional Services", revenue: "$1.4M", status: "Not Contacted", notes: "Client education materials"},
+            {name: "Jessica Rodriguez", company: "Rodriguez Veterinary Clinic", email: "jessica@rodriguezvet.com", phone: "619-555-0117", address: "618 Pet Care Dr, Oceanside, CA", puresScore: 3.6, tier: "1B", industry: "Healthcare", revenue: "$980K", status: "Proposal Sent", notes: "Animal-friendly branding update"},
+            {name: "Mark Johnson", company: "Johnson Plumbing Services", email: "mark@johnsonplumbing.com", phone: "619-555-0118", address: "729 Plumber Ln, Santee, CA", puresScore: 3.1, tier: "1C", industry: "Home Services", revenue: "$680K", status: "Follow-up Required", notes: "Service truck graphics"},
+            {name: "Christine Adams", company: "Adams Bakery & Cafe", email: "christine@adamsbakery.com", phone: "619-555-0119", address: "840 Baker St, Del Mar, CA", puresScore: 3.4, tier: "1C", industry: "Hospitality", revenue: "$520K", status: "Client", notes: "Menu design and packaging"},
+            {name: "Ryan Murphy", company: "Murphy Software Solutions", email: "ryan@murphysoft.com", phone: "619-555-0120", address: "951 Software Way, Carlsbad, CA", puresScore: 4.0, tier: "1A", industry: "Technology", revenue: "$2.1M", status: "Initial Contact", notes: "SaaS product branding"},
+            {name: "Lauren Clark", company: "Clark Photography Studio", email: "lauren@clarkphoto.com", phone: "619-555-0121", address: "162 Studio Ave, Solana Beach, CA", puresScore: 3.2, tier: "1C", industry: "Creative Services", revenue: "$450K", status: "Not Contacted", notes: "Portfolio showcase design"},
+            {name: "Steven Garcia", company: "Garcia Accounting Services", email: "steven@garciaaccounting.com", phone: "619-555-0122", address: "273 Numbers Dr, La Mesa, CA", puresScore: 3.7, tier: "1B", industry: "Professional Services", revenue: "$1.3M", status: "Proposal Sent", notes: "Tax season marketing"},
+            {name: "Monica Wright", company: "Wright Beauty Salon", email: "monica@wrightbeauty.com", phone: "619-555-0123", address: "384 Beauty Blvd, Poway, CA", puresScore: 2.9, tier: "1C", industry: "Personal Services", revenue: "$380K", status: "Follow-up Required", notes: "Salon rebranding"},
+            {name: "Brian Turner", company: "Turner Home Staging", email: "brian@turnerhomestaging.com", phone: "619-555-0124", address: "495 Staging St, Rancho Bernardo, CA", puresScore: 3.5, tier: "1B", industry: "Real Estate", revenue: "$760K", status: "Client", notes: "Marketing material updates"},
+            {name: "Samantha Lewis", company: "Lewis Legal Services", email: "samantha@lewislegal.com", phone: "619-555-0125", address: "606 Legal Plaza, Vista, CA", puresScore: 3.9, tier: "1B", industry: "Professional Services", revenue: "$1.5M", status: "Initial Contact", notes: "Professional stationery design"},
+            {name: "Christopher Hall", company: "Hall Roofing Contractors", email: "chris@hallroofing.com", phone: "619-555-0126", address: "717 Roofing Rd, Escondido, CA", puresScore: 3.3, tier: "1C", industry: "Construction", revenue: "$920K", status: "Not Contacted", notes: "Safety materials and signage"},
+            {name: "Kimberly Allen", company: "Allen Marketing Consultants", email: "kim@allenmarketing.com", phone: "619-555-0127", address: "828 Consultant Ct, Coronado, CA", puresScore: 4.2, tier: "1A", industry: "Professional Services", revenue: "$1.7M", status: "Follow-up Required", notes: "Thought leadership materials"},
+            {name: "Jonathan Young", company: "Young Tech Repair", email: "jonathan@youngtechrepair.com", phone: "619-555-0128", address: "939 Repair Row, Lemon Grove, CA", puresScore: 2.7, tier: "1C", industry: "Technology", revenue: "$420K", status: "Initial Contact", notes: "Service brochures"},
+            {name: "Melissa King", company: "King Catering Company", email: "melissa@kingcatering.com", phone: "619-555-0129", address: "150 Catering Cir, Spring Valley, CA", puresScore: 3.6, tier: "1B", industry: "Hospitality", revenue: "$1.1M", status: "Proposal Sent", notes: "Event marketing materials"},
+            {name: "Peter Scott", company: "Scott Investment Advisors", email: "peter@scottinvest.com", phone: "619-555-0130", address: "261 Investment Way, Bonita, CA", puresScore: 4.1, tier: "1A", industry: "Professional Services", revenue: "$2.3M", status: "Client", notes: "Quarterly report designs"},
+            {name: "Rebecca Green", company: "Green Valley Spa", email: "rebecca@greenvalleyspa.com", phone: "619-555-0131", address: "372 Spa Springs Dr, Fallbrook, CA", puresScore: 3.4, tier: "1C", industry: "Personal Services", revenue: "$640K", status: "Not Contacted", notes: "Wellness package brochures"},
+            {name: "Timothy Baker", company: "Baker & Sons Construction", email: "tim@bakersons.com", phone: "619-555-0132", address: "483 Construction Ct, Ramona, CA", puresScore: 3.8, tier: "1B", industry: "Construction", revenue: "$1.6M", status: "Follow-up Required", notes: "Company branding overhaul"},
+            {name: "Vanessa Carter", company: "Carter Dance Studio", email: "vanessa@carterdance.com", phone: "619-555-0133", address: "594 Dance Dr, Imperial Beach, CA", puresScore: 3.0, tier: "1C", industry: "Education", revenue: "$290K", status: "Initial Contact", notes: "Recital program design"},
+            {name: "William Parker", company: "Parker Security Systems", email: "william@parkersecurity.com", phone: "619-555-0134", address: "705 Security Blvd, Bonita, CA", puresScore: 3.7, tier: "1B", industry: "Technology", revenue: "$1.2M", status: "Proposal Sent", notes: "B2B sales materials"},
+            {name: "Tiffany Evans", company: "Evans Pet Grooming", email: "tiffany@evanspetgrooming.com", phone: "619-555-0135", address: "816 Pet Plaza, Alpine, CA", puresScore: 2.8, tier: "1C", industry: "Personal Services", revenue: "$350K", status: "Client", notes: "Loyalty program materials"},
+            {name: "Gregory Phillips", company: "Phillips Landscaping", email: "greg@phillipslandscape.com", phone: "619-555-0136", address: "927 Landscape Ln, Jamul, CA", puresScore: 3.2, tier: "1C", industry: "Home Services", revenue: "$580K", status: "Not Contacted", notes: "Seasonal service brochures"},
+            {name: "Heather Campbell", company: "Campbell Counseling Services", email: "heather@campbellcounseling.com", phone: "619-555-0137", address: "138 Therapy Terr, Pine Valley, CA", puresScore: 3.5, tier: "1B", industry: "Healthcare", revenue: "$480K", status: "Follow-up Required", notes: "Mental health awareness materials"},
+            {name: "Patrick Mitchell", company: "Mitchell HVAC Solutions", email: "patrick@mitchellhvac.com", phone: "619-555-0138", address: "249 HVAC Hwy, Tecate, CA", puresScore: 3.3, tier: "1C", industry: "Home Services", revenue: "$750K", status: "Initial Contact", notes: "Service agreement templates"},
+            {name: "Natalie Roberts", company: "Roberts Fashion Boutique", email: "natalie@robertsfashion.com", phone: "619-555-0139", address: "360 Fashion Forward Dr, Boulevard, CA", puresScore: 3.1, tier: "1C", industry: "Retail", revenue: "$420K", status: "Proposal Sent", notes: "Seasonal lookbook design"},
+            {name: "Eric Turner", company: "Turner Digital Marketing", email: "eric@turnerdigital.com", phone: "619-555-0140", address: "471 Digital Dr, Campo, CA", puresScore: 4.0, tier: "1A", industry: "Professional Services", revenue: "$1.8M", status: "Client", notes: "Agency rebrand project"},
+            {name: "Allison White", company: "White Orthodontics", email: "allison@whiteortho.com", phone: "619-555-0141", address: "582 Smile St, Descanso, CA", puresScore: 3.8, tier: "1B", industry: "Healthcare", revenue: "$1.4M", status: "Not Contacted", notes: "Patient education materials"},
+            {name: "Jason Harris", company: "Harris Pool Services", email: "jason@harrispools.com", phone: "619-555-0142", address: "693 Pool Paradise Ln, Jacumba, CA", puresScore: 2.9, tier: "1C", industry: "Home Services", revenue: "$460K", status: "Follow-up Required", notes: "Summer service promotions"},
+            {name: "Crystal Martin", company: "Martin Wedding Planning", email: "crystal@martinweddings.com", phone: "619-555-0143", address: "804 Wedding Way, Dulzura, CA", puresScore: 3.6, tier: "1B", industry: "Hospitality", revenue: "$890K", status: "Initial Contact", notes: "Bridal package brochures"},
+            {name: "Douglas Thompson", company: "Thompson Auto Sales", email: "doug@thompsonauto.com", phone: "619-555-0144", address: "915 Auto Ave, Barrett, CA", puresScore: 3.4, tier: "1C", industry: "Automotive", revenue: "$1.2M", status: "Proposal Sent", notes: "Dealership signage update"},
+            {name: "Amber Jackson", company: "Jackson Yoga Studio", email: "amber@jacksonyoga.com", phone: "619-555-0145", address: "126 Zen Zone Dr, Potrero, CA", puresScore: 3.0, tier: "1C", industry: "Personal Services", revenue: "$320K", status: "Client", notes: "Class schedule design"},
+            {name: "Sean Taylor", company: "Taylor IT Solutions", email: "sean@tayloritns.com", phone: "619-555-0146", address: "237 Tech Tower, Cuyamaca, CA", puresScore: 3.9, tier: "1B", industry: "Technology", revenue: "$1.3M", status: "Not Contacted", notes: "Managed services brochures"},
+            {name: "Lindsay Davis", company: "Davis Physical Therapy", email: "lindsay@davispt.com", phone: "619-555-0147", address: "348 Recovery Rd, Julian, CA", puresScore: 3.7, tier: "1B", industry: "Healthcare", revenue: "$950K", status: "Follow-up Required", notes: "Patient rehabilitation guides"},
+            {name: "Kenneth Wilson", company: "Wilson Electrical Contractors", email: "ken@wilsonelectric.com", phone: "619-555-0148", address: "459 Electric Elm St, Santa Ysabel, CA", puresScore: 3.2, tier: "1C", industry: "Construction", revenue: "$680K", status: "Initial Contact", notes: "Safety certification materials"},
+            {name: "Brittany Moore", company: "Moore Event Rentals", email: "brittany@mooreeventrentals.com", phone: "619-555-0149", address: "570 Rental Row, Ranchita, CA", puresScore: 3.5, tier: "1B", industry: "Hospitality", revenue: "$720K", status: "Proposal Sent", notes: "Catalog design project"},
+            {name: "Charles Anderson", company: "Anderson Pest Control", email: "charles@andersonpest.com", phone: "619-555-0150", address: "681 Pest Prevention Pkwy, Warner Springs, CA", puresScore: 2.8, tier: "1C", industry: "Home Services", revenue: "$430K", status: "Client", notes: "Service reminder postcards"}
+        ];
+
+        let filteredData = [...clientData];
+        let sortDirection = {};
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            renderTable();
+            updateStats();
+            setupEventListeners();
+        });
+
+        function setupEventListeners() {
+            // P.U.R.E.S. slider events
+            ['profitability', 'urgency', 'reachability', 'engagement', 'sustainability'].forEach(id => {
+                const slider = document.getElementById(id);
+                const value = document.getElementById(id + '-value');
+                slider.addEventListener('input', function() {
+                    value.textContent = this.value;
+                });
+            });
+
+            // Filter events
+            document.getElementById('searchInput').addEventListener('input', applyFilters);
+            document.getElementById('tierFilter').addEventListener('change', applyFilters);
+            document.getElementById('industryFilter').addEventListener('change', applyFilters);
+            document.getElementById('statusFilter').addEventListener('change', applyFilters);
+        }
+
+        function renderTable() {
+            const tbody = document.getElementById('clientTableBody');
+            tbody.innerHTML = '';
+
+            filteredData.forEach((client, index) => {
+                const row = document.createElement('tr');
+                row.className = `tier-${client.tier.toLowerCase()}`;
+                row.innerHTML = `
+                    <td>${client.name}</td>
+                    <td>${client.company}</td>
+                    <td>${client.email}</td>
+                    <td>${client.phone}</td>
+                    <td>${client.address}</td>
+                    <td>${client.puresScore}</td>
+                    <td>Tier ${client.tier}</td>
+                    <td>${client.industry}</td>
+                    <td>${client.revenue}</td>
+                    <td>${client.status}</td>
+                    <td>
+                        <button class="btn btn-primary btn-small" onclick="openEmailModal(${clientData.indexOf(client)})">Email</button>
+                        <button class="btn btn-secondary btn-small" onclick="callClient('${client.phone}')">Call</button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function updateStats() {
+            const tier1a = filteredData.filter(c => c.tier === '1A').length;
+            const tier1b = filteredData.filter(c => c.tier === '1B').length;
+            const tier1c = filteredData.filter(c => c.tier === '1C').length;
+
+            document.getElementById('tier1a-count').textContent = tier1a;
+            document.getElementById('tier1b-count').textContent = tier1b;
+            document.getElementById('tier1c-count').textContent = tier1c;
+        }
+
+        function applyFilters() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const tierFilter = document.getElementById('tierFilter').value;
+            const industryFilter = document.getElementById('industryFilter').value;
+            const statusFilter = document.getElementById('statusFilter').value;
+
+            filteredData = clientData.filter(client => {
+                const matchesSearch = !searchTerm || 
+                    client.name.toLowerCase().includes(searchTerm) ||
+                    client.company.toLowerCase().includes(searchTerm) ||
+                    client.industry.toLowerCase().includes(searchTerm);
+
+                const matchesTier = !tierFilter || client.tier === tierFilter;
+                const matchesIndustry = !industryFilter || client.industry === industryFilter;
+                const matchesStatus = !statusFilter || client.status === statusFilter;
+
+                return matchesSearch && matchesTier && matchesIndustry && matchesStatus;
+            });
+
+            renderTable();
+            updateStats();
+        }
+
+        function applyPURESFilter() {
+            const p = parseFloat(document.getElementById('profitability').value);
+            const u = parseFloat(document.getElementById('urgency').value);
+            const r = parseFloat(document.getElementById('reachability').value);
+            const e = parseFloat(document.getElementById('engagement').value);
+            const s = parseFloat(document.getElementById('sustainability').value);
+
+            const minScore = (p + u + r + e + s) / 5;
+
+            filteredData = clientData.filter(client => client.puresScore >= minScore);
+            renderTable();
+            updateStats();
+        }
+
+        function sortTable(columnIndex) {
+            const columns = ['name', 'company', 'email', 'phone', 'address', 'puresScore', 'tier', 'industry', 'revenue', 'status'];
+            const column = columns[columnIndex];
+            
+            if (!sortDirection[column]) sortDirection[column] = 'asc';
+            else sortDirection[column] = sortDirection[column] === 'asc' ? 'desc' : 'asc';
+
+            filteredData.sort((a, b) => {
+                let aVal = a[column];
+                let bVal = b[column];
+
+                if (column === 'puresScore') {
+                    aVal = parseFloat(aVal);
+                    bVal = parseFloat(bVal);
+                } else if (column === 'revenue') {
+                    aVal = parseFloat(aVal.replace(/[\$,MK]/g, ''));
+                    bVal = parseFloat(bVal.replace(/[\$,MK]/g, ''));
+                }
+
+                if (sortDirection[column] === 'asc') {
+                    return aVal > bVal ? 1 : -1;
+                } else {
+                    return aVal < bVal ? 1 : -1;
+                }
+            });
+
+            renderTable();
+        }
+
+        function openEmailModal(clientIndex) {
+            const client = clientData[clientIndex];
+            document.getElementById('emailClientName').textContent = client.name;
+            document.getElementById('emailSubject').textContent = `Transform Your Business with Professional Design Services`;
+            
+            const emailContent = `
+                <p>Dear ${client.name},</p>
+                <p>I hope this message finds you well. I'm Brian Donnelly from ZZYZX Imaging, a leading design agency specializing in helping businesses like ${client.company} create compelling visual identities that drive results.</p>
+                
+                <p><strong>Why Choose ZZYZX Imaging for ${client.company}?</strong></p>
+                <ul>
+                    <li><strong>Industry Expertise:</strong> We understand the unique design challenges facing ${client.industry.toLowerCase()} businesses</li>
+                    <li><strong>Proven Results:</strong> Our designs have helped similar companies increase brand recognition by 40% and customer engagement by 65%</li>
+                    <li><strong>Local Advantage:</strong> Based in San Diego, we understand your local market and can meet in person</li>
+                    <li><strong>Full-Service Solutions:</strong> From logo design to marketing materials, we handle all your visual needs</li>
+                </ul>
+
+                <p><strong>What We Can Do for ${client.company}:</strong></p>
+                <ul>
+                    <li>Brand Identity Design & Strategy</li>
+                    <li>Marketing Collateral (Brochures, Flyers, Business Cards)</li>
+                    <li>Digital Design (Website Graphics, Social Media)</li>
+                    <li>Print Design (Signage, Vehicle Wraps, Banners)</li>
+                    <li>Packaging & Product Design</li>
+                </ul>
+
+                <p>I'd love to discuss how we can help ${client.company} achieve its design goals. Would you be available for a complimentary consultation next week? I can show you examples of our work with other ${client.industry.toLowerCase()} businesses and provide a customized proposal.</p>
+
+                <p>Best regards,<br>
+                Brian Donnelly<br>
+                Owner, ZZYZX Imaging<br>
+                Phone: 619-320-8094<br>
+                Email: brian@zzyzximaging.com<br>
+                Website: www.zzyzximaging.com</p>
+            `;
+            
+            document.getElementById('emailContent').innerHTML = emailContent;
+            document.getElementById('emailModal').style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('emailModal').style.display = 'none';
+        }
+
+        function sendEmail() {
+            const clientName = document.getElementById('emailClientName').textContent;
+            const subject = document.getElementById('emailSubject').textContent;
+            const content = document.getElementById('emailContent').innerHTML;
+            
+            // In a real application, this would send the email via an API
+            alert(`Email sent successfully to ${clientName}!`);
+            closeModal();
+        }
+
+        function callClient(phone) {
+            // In a real application, this would integrate with a phone system
+            if (confirm(`Call ${phone}?`)) {
+                window.open(`tel:${phone}`);
+            }
+        }
+
+        function exportCSV() {
+            let csv = 'Name,Company,Email,Phone,Address,P.U.R.E.S. Score,Tier,Industry,Revenue,Status\n';
+            
+            filteredData.forEach(client => {
+                csv += `"${client.name}","${client.company}","${client.email}","${client.phone}","${client.address}",${client.puresScore},"Tier ${client.tier}","${client.industry}","${client.revenue}","${client.status}"\n`;
+            });
+
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'zzyzx_imaging_clients.csv';
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+
+        function generateReport() {
+            const report = {
+                totalProspects: filteredData.length,
+                tier1A: filteredData.filter(c => c.tier === '1A').length,
+                tier1B: filteredData.filter(c => c.tier === '1B').length,
+                tier1C: filteredData.filter(c => c.tier === '1C').length,
+                avgPURESScore: (filteredData.reduce((sum, c) => sum + c.puresScore, 0) / filteredData.length).toFixed(2),
+                topIndustries: [...new Set(filteredData.map(c => c.industry))].slice(0, 5)
+            };
+
+            alert(`S.A.L.E. System Report for ZZYZX Imaging:
+            
+Total Prospects: ${report.totalProspects}
+Tier 1A (Premium): ${report.tier1A}
+Tier 1B (High-Value): ${report.tier1B} 
+Tier 1C (Qualified): ${report.tier1C}
+Average P.U.R.E.S. Score: ${report.avgPURESScore}
+Top Industries: ${report.topIndustries.join(', ')}
+
+Recommendation: Focus initial outreach on Tier 1A prospects with P.U.R.E.S. scores above 4.0`);
+        }
+
+        // Close modal when clicking outside of it
+        window.onclick = function(event) {
+            const modal = document.getElementById('emailModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+    </script>
+</body>
+</html>

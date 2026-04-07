@@ -1,0 +1,970 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yadav Jewelry - S.A.L.E. Client Targeting System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #000000;
+            color: #ffffff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
+            padding: 1rem 0;
+            border-bottom: 2px solid #CF2030;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            height: 60px;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-item {
+            color: #CF2030;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .nav-item:hover {
+            color: #ffffff;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .card {
+            background: linear-gradient(145deg, #1a1a1a, #2a2a2a);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            border: 1px solid #CF2030;
+        }
+
+        .card h3 {
+            color: #CF2030;
+            margin-bottom: 1rem;
+            font-size: 1.4rem;
+        }
+
+        .search-controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .search-input, .filter-select {
+            padding: 0.75rem;
+            border: 2px solid #CF2030;
+            border-radius: 8px;
+            background: #1a1a1a;
+            color: #ffffff;
+            font-size: 1rem;
+        }
+
+        .search-input::placeholder {
+            color: #888;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #CF2030, #a01826);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn:hover {
+            background: linear-gradient(135deg, #a01826, #CF2030);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(207, 32, 48, 0.3);
+        }
+
+        .btn-small {
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+        }
+
+        .table-container {
+            background: #1a1a1a;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .data-table th {
+            background: #CF2030;
+            color: white;
+            padding: 1rem 0.75rem;
+            text-align: left;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .data-table th:hover {
+            background: #a01826;
+        }
+
+        .data-table td {
+            padding: 0.875rem 0.75rem;
+            border-bottom: 1px solid #333;
+            color: #ffffff;
+        }
+
+        .data-table tr:hover {
+            background: #2a2a2a;
+        }
+
+        .tier-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .tier-1a {
+            background: linear-gradient(135deg, #00ff00, #00cc00);
+            color: #000;
+        }
+
+        .tier-1b {
+            background: linear-gradient(135deg, #ffff00, #cccc00);
+            color: #000;
+        }
+
+        .tier-1c {
+            background: linear-gradient(135deg, #0066ff, #0044cc);
+            color: #fff;
+        }
+
+        .score-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .score-bar {
+            width: 60px;
+            height: 8px;
+            background: #333;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .score-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #CF2030, #ff6b7a);
+            transition: width 0.3s ease;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #1a1a1a;
+            border-radius: 12px;
+            padding: 2rem;
+            max-width: 600px;
+            width: 90%;
+            border: 2px solid #CF2030;
+        }
+
+        .modal h3 {
+            color: #CF2030;
+            margin-bottom: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #CF2030;
+            font-weight: 600;
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #CF2030;
+            border-radius: 8px;
+            background: #2a2a2a;
+            color: #ffffff;
+            font-size: 1rem;
+        }
+
+        .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .footer {
+            margin-top: 4rem;
+            text-align: center;
+            padding: 2rem;
+            border-top: 1px solid #333;
+        }
+
+        .footer-logo {
+            height: 40px;
+            margin-bottom: 1rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: linear-gradient(145deg, #2a2a2a, #1a1a1a);
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid #CF2030;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #CF2030;
+        }
+
+        .stat-label {
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        .marketing-calendar {
+            background: #1a1a1a;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 1px;
+            margin-top: 1rem;
+        }
+
+        .calendar-day {
+            background: #2a2a2a;
+            padding: 0.75rem 0.5rem;
+            text-align: center;
+            font-size: 0.9rem;
+            min-height: 80px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
+
+        .calendar-header {
+            background: #CF2030;
+            color: white;
+            font-weight: bold;
+            padding: 0.75rem 0.5rem;
+            text-align: center;
+        }
+
+        .calendar-event {
+            background: rgba(207, 32, 48, 0.2);
+            border: 1px solid #CF2030;
+            border-radius: 4px;
+            padding: 0.25rem;
+            margin-top: 0.25rem;
+            font-size: 0.7rem;
+            color: #CF2030;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .search-controls {
+                flex-direction: column;
+            }
+            
+            .data-table {
+                font-size: 0.9rem;
+            }
+            
+            .calendar-grid {
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="HigginsReports" class="logo">
+            <nav class="nav-menu">
+                <a href="#dashboard" class="nav-item">Dashboard</a>
+                <a href="#clients" class="nav-item">Clients</a>
+                <a href="#analytics" class="nav-item">Analytics</a>
+                <a href="#marketing" class="nav-item">Marketing</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Business Info Header -->
+        <div class="card">
+            <h2 style="color: #CF2030; margin-bottom: 1rem;">Yadav Diamonds & Jewelry - S.A.L.E. Client Targeting System</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; color: #ccc;">
+                <div><strong>Business:</strong> Yadav Diamonds & Jewelry</div>
+                <div><strong>Owner:</strong> Yair (Jim) Yachdav</div>
+                <div><strong>Location:</strong> San Francisco, CA</div>
+                <div><strong>Industry:</strong> Luxury Jewelry & Diamonds</div>
+                <div><strong>Since:</strong> 1983</div>
+                <div><strong>Phone:</strong> (888) 968-8810</div>
+            </div>
+        </div>
+
+        <!-- Stats Dashboard -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number" id="totalClients">50</div>
+                <div class="stat-label">Total Prospects</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="tier1aClients">12</div>
+                <div class="stat-label">Tier 1A (Premium)</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="avgScore">3.8</div>
+                <div class="stat-label">Avg P.U.R.E.S. Score</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="conversionRate">24%</div>
+                <div class="stat-label">Target Conversion</div>
+            </div>
+        </div>
+
+        <!-- Dashboard Grid -->
+        <div class="dashboard-grid">
+            <!-- P.U.R.E.S. Scoring System -->
+            <div class="card">
+                <h3>P.U.R.E.S. Client Scoring System</h3>
+                <div class="form-group">
+                    <label>Client Name</label>
+                    <select id="clientSelect">
+                        <option value="">Select a client to score...</option>
+                    </select>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div class="form-group">
+                        <label>Profitability (1-5)</label>
+                        <input type="range" id="profitability" min="1" max="5" value="3">
+                        <span id="profitabilityValue">3</span>
+                    </div>
+                    <div class="form-group">
+                        <label>Urgency (1-5)</label>
+                        <input type="range" id="urgency" min="1" max="5" value="3">
+                        <span id="urgencyValue">3</span>
+                    </div>
+                    <div class="form-group">
+                        <label>Reachability (1-5)</label>
+                        <input type="range" id="reachability" min="1" max="5" value="3">
+                        <span id="reachabilityValue">3</span>
+                    </div>
+                    <div class="form-group">
+                        <label>Engagement (1-5)</label>
+                        <input type="range" id="engagement" min="1" max="5" value="3">
+                        <span id="engagementValue">3</span>
+                    </div>
+                    <div class="form-group">
+                        <label>Sustainability (1-5)</label>
+                        <input type="range" id="sustainability" min="1" max="5" value="3">
+                        <span id="sustainabilityValue">3</span>
+                    </div>
+                </div>
+                <button class="btn" onclick="updateClientScore()">Update P.U.R.E.S. Score</button>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="card">
+                <h3>Quick Actions</h3>
+                <div style="display: flex; flex-direction: column; gap: 1rem;">
+                    <button class="btn" onclick="showEmailModal()">Send Marketing Email</button>
+                    <button class="btn" onclick="generateReport()">Generate Analytics Report</button>
+                    <button class="btn" onclick="scheduleFollowUp()">Schedule Follow-up</button>
+                    <button class="btn" onclick="exportData()">Export Client Data</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Search and Filter Controls -->
+        <div class="search-controls">
+            <input type="text" class="search-input" id="searchInput" placeholder="Search clients by name, email, or address...">
+            <select class="filter-select" id="tierFilter">
+                <option value="">All Tiers</option>
+                <option value="1A">Tier 1A (Premium)</option>
+                <option value="1B">Tier 1B (High-Value)</option>
+                <option value="1C">Tier 1C (Qualified)</option>
+            </select>
+            <select class="filter-select" id="statusFilter">
+                <option value="">All Status</option>
+                <option value="New">New Prospect</option>
+                <option value="Contacted">Contacted</option>
+                <option value="Qualified">Qualified</option>
+                <option value="Proposal">Proposal Sent</option>
+            </select>
+            <button class="btn btn-small" onclick="resetFilters()">Reset Filters</button>
+        </div>
+
+        <!-- Client Table -->
+        <div class="table-container">
+            <table class="data-table" id="clientTable">
+                <thead>
+                    <tr>
+                        <th onclick="sortTable(0)">Client Name ↕</th>
+                        <th onclick="sortTable(1)">Email ↕</th>
+                        <th onclick="sortTable(2)">Phone ↕</th>
+                        <th onclick="sortTable(3)">Address ↕</th>
+                        <th onclick="sortTable(4)">P.U.R.E.S. Score ↕</th>
+                        <th onclick="sortTable(5)">Tier ↕</th>
+                        <th onclick="sortTable(6)">Status ↕</th>
+                        <th onclick="sortTable(7)">Revenue Est. ↕</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="clientTableBody">
+                    <!-- Data will be populated by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Marketing Calendar -->
+        <div class="marketing-calendar">
+            <h3 style="color: #CF2030; margin-bottom: 1rem;">Marketing Campaign Calendar - March 2026</h3>
+            <div class="calendar-grid">
+                <div class="calendar-header">Sun</div>
+                <div class="calendar-header">Mon</div>
+                <div class="calendar-header">Tue</div>
+                <div class="calendar-header">Wed</div>
+                <div class="calendar-header">Thu</div>
+                <div class="calendar-header">Fri</div>
+                <div class="calendar-header">Sat</div>
+                
+                <!-- Calendar Days -->
+                <div class="calendar-day">1</div>
+                <div class="calendar-day">2<div class="calendar-event">Email Campaign</div></div>
+                <div class="calendar-day">3</div>
+                <div class="calendar-day">4</div>
+                <div class="calendar-day">5<div class="calendar-event">Follow-ups</div></div>
+                <div class="calendar-day">6</div>
+                <div class="calendar-day">7</div>
+                <div class="calendar-day">8</div>
+                <div class="calendar-day">9<div class="calendar-event">Valentine's Follow-up</div></div>
+                <div class="calendar-day">10</div>
+                <div class="calendar-day">11</div>
+                <div class="calendar-day">12<div class="calendar-event">Tier 1A Outreach</div></div>
+                <div class="calendar-day">13</div>
+                <div class="calendar-day">14</div>
+                <div class="calendar-day">15</div>
+                <div class="calendar-day">16<div class="calendar-event">Proposal Reviews</div></div>
+                <div class="calendar-day">17</div>
+                <div class="calendar-day">18</div>
+                <div class="calendar-day">19<div class="calendar-event">Spring Collection Launch</div></div>
+                <div class="calendar-day">20</div>
+                <div class="calendar-day">21</div>
+                <div class="calendar-day">22</div>
+                <div class="calendar-day">23<div class="calendar-event">Client Appreciation</div></div>
+                <div class="calendar-day">24</div>
+                <div class="calendar-day">25</div>
+                <div class="calendar-day">26<div class="calendar-event">Monthly Review</div></div>
+                <div class="calendar-day">27</div>
+                <div class="calendar-day">28</div>
+                <div class="calendar-day">29</div>
+                <div class="calendar-day">30<div class="calendar-event">Easter Campaign</div></div>
+                <div class="calendar-day">31</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Email Modal -->
+    <div id="emailModal" class="modal">
+        <div class="modal-content">
+            <h3>Send Marketing Email</h3>
+            <div class="form-group">
+                <label>Recipient</label>
+                <input type="email" id="emailRecipient" readonly>
+            </div>
+            <div class="form-group">
+                <label>Subject</label>
+                <input type="text" id="emailSubject" value="Discover Timeless Elegance at Yadav Diamonds & Jewelry">
+            </div>
+            <div class="form-group">
+                <label>Message</label>
+                <textarea id="emailMessage" readonly></textarea>
+            </div>
+            <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+                <button class="btn" onclick="closeModal()">Cancel</button>
+                <button class="btn" onclick="sendEmail()">Send Email</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="HigginsReports" class="footer-logo">
+        <p style="color: #888;">&copy; 2026 HigginsReports. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Sample client data for San Francisco area luxury jewelry prospects
+        const clientData = [
+            {name: "Alexandra Chen", email: "alexandra.chen@techcorp.com", phone: "(415) 555-0101", address: "2847 Pacific Heights Blvd, San Francisco, CA", pures: 4.6, tier: "1A", status: "Qualified", revenue: "$250K", notes: "Tech executive, engagement ring prospect"},
+            {name: "Michael Rodriguez", email: "m.rodriguez@investment.com", phone: "(415) 555-0102", address: "1823 Russian Hill Ave, San Francisco, CA", pures: 4.2, tier: "1A", status: "Contacted", revenue: "$180K", notes: "Investment banker, anniversary gift"},
+            {name: "Sarah Williams", email: "sarah.w@design.studio", phone: "(415) 555-0103", address: "4567 Nob Hill St, San Francisco, CA", pures: 4.8, tier: "1A", status: "Proposal", revenue: "$320K", notes: "Interior designer, custom wedding set"},
+            {name: "David Kim", email: "dkim@startup.io", phone: "(415) 555-0104", address: "891 SOMA District Way, San Francisco, CA", pures: 4.4, tier: "1A", status: "New", revenue: "$275K", notes: "Startup founder, proposal planning"},
+            {name: "Jennifer Thompson", email: "jen.thompson@medical.group", phone: "(415) 555-0105", address: "3245 Hayes Valley Rd, San Francisco, CA", pures: 4.7, tier: "1A", status: "Qualified", revenue: "$290K", notes: "Surgeon, upgrading engagement ring"},
+            {name: "Robert Singh", email: "r.singh@consulting.com", phone: "(415) 555-0106", address: "1567 Financial District Ave, San Francisco, CA", pures: 4.3, tier: "1A", status: "Contacted", revenue: "$235K", notes: "Management consultant, wife's birthday"},
+            {name: "Emily Davis", email: "emily.davis@law.firm", phone: "(415) 555-0107", address: "2789 Marina District Blvd, San Francisco, CA", pures: 4.5, tier: "1A", status: "Proposal", revenue: "$310K", notes: "Attorney, milestone anniversary"},
+            {name: "James Wilson", email: "j.wilson@realestate.com", phone: "(415) 555-0108", address: "4123 Castro District St, San Francisco, CA", pures: 4.1, tier: "1A", status: "New", revenue: "$195K", notes: "Real estate agent, client referral"},
+            {name: "Lisa Anderson", email: "lisa@fashion.boutique", phone: "(415) 555-0109", address: "3456 Union Square Way, San Francisco, CA", pures: 4.6, tier: "1A", status: "Qualified", revenue: "$285K", notes: "Fashion boutique owner, personal collection"},
+            {name: "Thomas Miller", email: "tmiller@hedge.fund", phone: "(415) 555-0110", address: "5678 Telegraph Hill Rd, San Francisco, CA", pures: 4.9, tier: "1A", status: "Contacted", revenue: "$450K", notes: "Hedge fund manager, luxury investment"},
+            {name: "Ashley Garcia", email: "a.garcia@pharmaceutical.com", phone: "(415) 555-0111", address: "2134 Chinatown Ave, San Francisco, CA", pures: 4.2, tier: "1A", status: "New", revenue: "$220K", notes: "Pharmaceutical exec, daughter's wedding"},
+            {name: "Christopher Lee", email: "c.lee@architecture.studio", phone: "(415) 555-0112", address: "6789 Presidio Heights Dr, San Francisco, CA", pures: 4.4, tier: "1A", status: "Proposal", revenue: "$265K", notes: "Architect, modern design preference"},
+            {name: "Maria Gonzalez", email: "maria@marketing.agency", phone: "(415) 555-0113", address: "1234 Mission District St, San Francisco, CA", pures: 3.8, tier: "1B", status: "Contacted", revenue: "$145K", notes: "Marketing agency owner, brand conscious"},
+            {name: "Daniel Brown", email: "d.brown@finance.corp", phone: "(415) 555-0114", address: "3678 Richmond District Ave, San Francisco, CA", pures: 3.9, tier: "1B", status: "Qualified", revenue: "$165K", notes: "Financial advisor, client appreciation"},
+            {name: "Nicole Martinez", email: "nicole@wellness.center", phone: "(415) 555-0115", address: "4567 Sunset District Blvd, San Francisco, CA", pures: 3.6, tier: "1B", status: "New", revenue: "$125K", notes: "Wellness center owner, holistic approach"},
+            {name: "Kevin Taylor", email: "k.taylor@software.dev", phone: "(415) 555-0116", address: "7890 Potrero Hill Way, San Francisco, CA", pures: 3.7, tier: "1B", status: "Contacted", revenue: "$135K", notes: "Software developer, tech-savvy"},
+            {name: "Rachel Adams", email: "rachel@nonprofit.org", phone: "(415) 555-0117", address: "2345 Bernal Heights St, San Francisco, CA", pures: 3.4, tier: "1B", status: "New", revenue: "$95K", notes: "Nonprofit director, ethical sourcing important"},
+            {name: "Jonathan Clark", email: "j.clark@restaurant.group", phone: "(415) 555-0118", address: "5432 Dogpatch District Rd, San Francisco, CA", pures: 3.8, tier: "1B", status: "Qualified", revenue: "$155K", notes: "Restaurant owner, hospitality background"},
+            {name: "Stephanie White", email: "s.white@publishing.com", phone: "(415) 555-0119", address: "6543 Glen Park Ave, San Francisco, CA", pures: 3.5, tier: "1B", status: "Contacted", revenue: "$115K", notes: "Publishing exec, literary interests"},
+            {name: "Matthew Johnson", email: "matt@construction.llc", phone: "(415) 555-0120", address: "1876 Excelsior District Dr, San Francisco, CA", pures: 3.9, tier: "1B", status: "New", revenue: "$175K", notes: "Construction company owner, practical approach"},
+            {name: "Amy Robinson", email: "amy@creative.agency", phone: "(415) 555-0121", address: "3245 Inner Richmond St, San Francisco, CA", pures: 3.6, tier: "1B", status: "Contacted", revenue: "$128K", notes: "Creative agency founder, artistic taste"},
+            {name: "Brian Lewis", email: "b.lewis@insurance.com", phone: "(415) 555-0122", address: "4321 Outer Sunset Blvd, San Francisco, CA", pures: 3.7, tier: "1B", status: "Qualified", revenue: "$142K", notes: "Insurance broker, risk-aware"},
+            {name: "Jessica Hall", email: "jessica@education.org", phone: "(415) 555-0123", address: "5678 Inner Sunset Way, San Francisco, CA", pures: 3.3, tier: "1B", status: "New", revenue: "$88K", notes: "Education administrator, value-conscious"},
+            {name: "Ryan Walker", email: "r.walker@logistics.corp", phone: "(415) 555-0124", address: "6789 Visitacion Valley Rd, San Francisco, CA", pures: 3.8, tier: "1B", status: "Contacted", revenue: "$158K", notes: "Logistics manager, efficiency-focused"},
+            {name: "Lindsay Young", email: "lindsay@healthcare.group", phone: "(415) 555-0125", address: "7654 Bayview District Ave, San Francisco, CA", pures: 3.4, tier: "1B", status: "New", revenue: "$105K", notes: "Healthcare administrator, caring profession"},
+            {name: "Steven King", email: "s.king@retail.chain", phone: "(415) 555-0126", address: "2987 Crocker Amazon Dr, San Francisco, CA", pures: 3.5, tier: "1B", status: "Qualified", revenue: "$118K", notes: "Retail manager, brand awareness"},
+            {name: "Michelle Wright", email: "michelle@beauty.salon", phone: "(415) 555-0127", address: "3456 Ingleside Terrace St, San Francisco, CA", pures: 3.2, tier: "1C", status: "New", revenue: "$75K", notes: "Beauty salon owner, style-conscious"},
+            {name: "Gary Green", email: "g.green@auto.dealership", phone: "(415) 555-0128", address: "4567 Lakeshore District Rd, San Francisco, CA", pures: 3.4, tier: "1C", status: "Contacted", revenue: "$95K", notes: "Auto dealership manager, practical buyer"},
+            {name: "Kimberly Hill", email: "kim@fitness.studio", phone: "(415) 555-0129", address: "5432 Merced Heights Ave, San Francisco, CA", pures: 3.1, tier: "1C", status: "New", revenue: "$68K", notes: "Fitness studio owner, health-focused"},
+            {name: "Timothy Scott", email: "t.scott@accounting.firm", phone: "(415) 555-0130", address: "6543 Oceanview District Blvd, San Francisco, CA", pures: 3.3, tier: "1C", status: "Contacted", revenue: "$82K", notes: "Accountant, detail-oriented"},
+            {name: "Angela Torres", email: "angela@travel.agency", phone: "(415) 555-0131", address: "7654 Outer Mission Way, San Francisco, CA", pures: 3.2, tier: "1C", status: "Qualified", revenue: "$78K", notes: "Travel agent, experience-focused"},
+            {name: "Mark Phillips", email: "m.phillips@electronics.store", phone: "(415) 555-0132", address: "8765 Parkside District St, San Francisco, CA", pures: 3.0, tier: "1C", status: "New", revenue: "$65K", notes: "Electronics retailer, tech-oriented"},
+            {name: "Deborah Campbell", email: "deborah@catering.biz", phone: "(415) 555-0133", address: "9876 Forest Hill Dr, San Francisco, CA", pures: 3.4, tier: "1C", status: "Contacted", revenue: "$92K", notes: "Catering business owner, event-focused"},
+            {name: "Jason Mitchell", email: "j.mitchell@landscaping.co", phone: "(415) 555-0134", address: "1357 West Portal Ave, San Francisco, CA", pures: 3.1, tier: "1C", status: "New", revenue: "$71K", notes: "Landscaping contractor, outdoor lifestyle"},
+            {name: "Carol Parker", email: "carol@bookstore.com", phone: "(415) 555-0135", address: "2468 Diamond Heights St, San Francisco, CA", pures: 3.0, tier: "1C", status: "Qualified", revenue: "$63K", notes: "Bookstore owner, intellectual interests"},
+            {name: "Anthony Evans", email: "anthony@plumbing.services", phone: "(415) 555-0136", address: "3579 Noe Valley Rd, San Francisco, CA", pures: 3.2, tier: "1C", status: "Contacted", revenue: "$76K", notes: "Plumbing contractor, practical approach"},
+            {name: "Cynthia Edwards", email: "cynthia@dental.practice", phone: "(415) 555-0137", address: "4680 Corona Heights Ave, San Francisco, CA", pures: 3.5, tier: "1C", status: "New", revenue: "$98K", notes: "Dental hygienist, healthcare professional"},
+            {name: "William Collins", email: "w.collins@appliance.repair", phone: "(415) 555-0138", address: "5791 Twin Peaks Blvd, San Francisco, CA", pures: 2.9, tier: "1C", status: "Contacted", revenue: "$59K", notes: "Appliance repair, hands-on work"},
+            {name: "Donna Stewart", email: "donna@flower.shop", phone: "(415) 555-0139", address: "6802 Eureka Valley Way, San Francisco, CA", pures: 3.3, tier: "1C", status: "Qualified", revenue: "$85K", notes: "Florist, aesthetic appreciation"},
+            {name: "Frank Morris", email: "f.morris@security.firm", phone: "(415) 555-0140", address: "7913 Duboce Triangle St, San Francisco, CA", pures: 3.1, tier: "1C", status: "New", revenue: "$74K", notes: "Security services, protection-focused"},
+            {name: "Helen Rogers", email: "helen@alterations.studio", phone: "(415) 555-0141", address: "8024 Lower Haight Dr, San Francisco, CA", pures: 3.0, tier: "1C", status: "Contacted", revenue: "$61K", notes: "Alterations specialist, attention to detail"},
+            {name: "Gregory Cook", email: "g.cook@handyman.services", phone: "(415) 555-0142", address: "9135 Ashbury Heights Ave, San Francisco, CA", pures: 2.8, tier: "1C", status: "New", revenue: "$55K", notes: "Handyman services, practical skills"},
+            {name: "Patricia Ward", email: "patricia@pet.grooming", phone: "(415) 555-0143", address: "1246 Cole Valley Rd, San Francisco, CA", pures: 3.2, tier: "1C", status: "Qualified", revenue: "$79K", notes: "Pet grooming, animal lover"},
+            {name: "Kenneth Bailey", email: "k.bailey@cleaning.co", phone: "(415) 555-0144", address: "2357 Parnassus Heights Blvd, San Francisco, CA", pures: 2.9, tier: "1C", status: "Contacted", revenue: "$57K", notes: "Cleaning services, detail-oriented"},
+            {name: "Sandra Rivera", email: "sandra@massage.therapy", phone: "(415) 555-0145", address: "3468 Clarendon Heights St, San Francisco, CA", pures: 3.1, tier: "1C", status: "New", revenue: "$73K", notes: "Massage therapist, wellness focus"},
+            {name: "Charles Cooper", email: "c.cooper@locksmith.pro", phone: "(415) 555-0146", address: "4579 Mount Olympus Way, San Francisco, CA", pures: 2.7, tier: "1C", status: "Contacted", revenue: "$52K", notes: "Locksmith, security-minded"},
+            {name: "Margaret Peterson", email: "margaret@nail.salon", phone: "(415) 555-0147", address: "5680 Buena Vista Heights Dr, San Francisco, CA", pures: 3.0, tier: "1C", status: "Qualified", revenue: "$64K", notes: "Nail salon owner, beauty services"},
+            {name: "Eric Reed", email: "e.reed@bike.shop", phone: "(415) 555-0148", address: "6791 Tank Hill Ave, San Francisco, CA", pures: 2.8, tier: "1C", status: "New", revenue: "$56K", notes: "Bike shop owner, outdoor lifestyle"},
+            {name: "Ruth Cox", email: "ruth@bakery.local", phone: "(415) 555-0149", address: "7802 Sutro Heights Blvd, San Francisco, CA", pures: 3.2, tier: "1C", status: "Contacted", revenue: "$77K", notes: "Bakery owner, artisanal products"},
+            {name: "Harold Ward", email: "harold@moving.company", phone: "(415) 555-0150", address: "8913 Golden Gate Heights St, San Francisco, CA", pures: 2.9, tier: "1C", status: "New", revenue: "$58K", notes: "Moving company, logistics focus"}
+        ];
+
+        let filteredData = [...clientData];
+        let currentSortColumn = -1;
+        let sortDirection = 'asc';
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            populateClientSelect();
+            renderClientTable();
+            setupEventListeners();
+            updateStats();
+        });
+
+        function populateClientSelect() {
+            const select = document.getElementById('clientSelect');
+            clientData.forEach((client, index) => {
+                const option = document.createElement('option');
+                option.value = index;
+                option.textContent = client.name;
+                select.appendChild(option);
+            });
+        }
+
+        function setupEventListeners() {
+            // P.U.R.E.S. score sliders
+            ['profitability', 'urgency', 'reachability', 'engagement', 'sustainability'].forEach(field => {
+                const slider = document.getElementById(field);
+                const display = document.getElementById(field + 'Value');
+                slider.addEventListener('input', function() {
+                    display.textContent = this.value;
+                });
+            });
+
+            // Search and filter
+            document.getElementById('searchInput').addEventListener('input', applyFilters);
+            document.getElementById('tierFilter').addEventListener('change', applyFilters);
+            document.getElementById('statusFilter').addEventListener('change', applyFilters);
+
+            // Modal close on background click
+            document.getElementById('emailModal').addEventListener('click', function(e) {
+                if (e.target === this) closeModal();
+            });
+        }
+
+        function renderClientTable() {
+            const tbody = document.getElementById('clientTableBody');
+            tbody.innerHTML = '';
+
+            filteredData.forEach((client, index) => {
+                const row = tbody.insertRow();
+                row.innerHTML = `
+                    <td style="font-weight: 600;">${client.name}</td>
+                    <td style="color: #CF2030;">${client.email}</td>
+                    <td>${client.phone}</td>
+                    <td style="font-size: 0.9rem;">${client.address}</td>
+                    <td>
+                        <div class="score-indicator">
+                            ${client.pures}
+                            <div class="score-bar">
+                                <div class="score-fill" style="width: ${(client.pures/5)*100}%"></div>
+                            </div>
+                        </div>
+                    </td>
+                    <td><span class="tier-badge tier-${client.tier.toLowerCase()}">${client.tier}</span></td>
+                    <td>${client.status}</td>
+                    <td style="font-weight: 600; color: #00ff00;">${client.revenue}</td>
+                    <td>
+                        <button class="btn btn-small" onclick="contactClient('${client.email}', '${client.name}')" style="margin-right: 0.5rem;">Email</button>
+                        <button class="btn btn-small" onclick="callClient('${client.phone}')">Call</button>
+                    </td>
+                `;
+            });
+        }
+
+        function sortTable(columnIndex) {
+            if (currentSortColumn === columnIndex) {
+                sortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
+            } else {
+                sortDirection = 'asc';
+                currentSortColumn = columnIndex;
+            }
+
+            const sortKeys = ['name', 'email', 'phone', 'address', 'pures', 'tier', 'status', 'revenue'];
+            const sortKey = sortKeys[columnIndex];
+
+            filteredData.sort((a, b) => {
+                let aVal = a[sortKey];
+                let bVal = b[sortKey];
+
+                // Handle revenue sorting
+                if (sortKey === 'revenue') {
+                    aVal = parseInt(aVal.replace(/[$K,]/g, ''));
+                    bVal = parseInt(bVal.replace(/[$K,]/g, ''));
+                }
+
+                if (typeof aVal === 'string') {
+                    return sortDirection === 'asc' 
+                        ? aVal.localeCompare(bVal)
+                        : bVal.localeCompare(aVal);
+                } else {
+                    return sortDirection === 'asc' ? aVal - bVal : bVal - aVal;
+                }
+            });
+
+            renderClientTable();
+        }
+
+        function applyFilters() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const tierFilter = document.getElementById('tierFilter').value;
+            const statusFilter = document.getElementById('statusFilter').value;
+
+            filteredData = clientData.filter(client => {
+                const matchesSearch = !searchTerm || 
+                    client.name.toLowerCase().includes(searchTerm) ||
+                    client.email.toLowerCase().includes(searchTerm) ||
+                    client.address.toLowerCase().includes(searchTerm);
+
+                const matchesTier = !tierFilter || client.tier === tierFilter;
+                const matchesStatus = !statusFilter || client.status === statusFilter;
+
+                return matchesSearch && matchesTier && matchesStatus;
+            });
+
+            renderClientTable();
+            updateStats();
+        }
+
+        function resetFilters() {
+            document.getElementById('searchInput').value = '';
+            document.getElementById('tierFilter').value = '';
+            document.getElementById('statusFilter').value = '';
+            filteredData = [...clientData];
+            renderClientTable();
+            updateStats();
+        }
+
+        function updateStats() {
+            document.getElementById('totalClients').textContent = filteredData.length;
+            document.getElementById('tier1aClients').textContent = 
+                filteredData.filter(c => c.tier === '1A').length;
+            
+            const avgScore = filteredData.reduce((sum, c) => sum + c.pures, 0) / filteredData.length;
+            document.getElementById('avgScore').textContent = avgScore.toFixed(1);
+        }
+
+        function contactClient(email, name) {
+            showEmailModal(email, name);
+        }
+
+        function callClient(phone) {
+            window.open(`tel:${phone}`);
+        }
+
+        function showEmailModal(email = '', name = '') {
+            const modal = document.getElementById('emailModal');
+            const recipientField = document.getElementById('emailRecipient');
+            const messageField = document.getElementById('emailMessage');
+
+            recipientField.value = email;
+
+            // Generate personalized marketing message for jewelry store
+            const jewelryMessage = `Dear ${name || 'Valued Customer'},
+
+Discover the timeless elegance that has made Yadav Diamonds & Jewelry San Francisco's premier destination for luxury jewelry since 1983.
+
+✨ Why Choose Yadav Jewelry?
+• Family-owned legacy business with San Francisco Legacy Business Award
+• Exquisite collection of natural and lab-grown diamonds
+• Custom engagement ring design and consultation services
+• Competitive pricing with lifetime upgrades and 30-day returns
+• Located in the heart of Union Square (170 Grant Ave, Suite 500)
+
+🎯 Special Offerings for You:
+• Complimentary one-on-one consultation with our diamond experts
+• Access to our exclusive fine jewelry collection
+• Professional guidance through the 4 C's of diamond selection
+• Personalized design services for unique pieces
+
+Whether you're searching for the perfect engagement ring, celebrating a milestone anniversary, or adding to your jewelry collection, our expert craftspeople ensure every piece reflects enduring beauty and exceptional quality.
+
+Book your private appointment today and experience why discerning San Francisco clients have trusted the Yadav family for over 40 years.
+
+Schedule Your Consultation: https://www.yadavjewelry.com/
+Phone: (888) 968-8810
+
+Warm regards,
+The Yadav Family
+Yadav Diamonds & Jewelry
+
+P.S. Ask about our current promotions and lifetime upgrade program!`;
+
+            messageField.value = jewelryMessage;
+            modal.style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('emailModal').style.display = 'none';
+        }
+
+        function sendEmail() {
+            const recipient = document.getElementById('emailRecipient').value;
+            const subject = document.getElementById('emailSubject').value;
+            const message = document.getElementById('emailMessage').value;
+
+            // Create mailto link
+            const mailto = `mailto:${recipient}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(message)}`;
+            window.open(mailto);
+
+            // Update client status to "Contacted"
+            const client = clientData.find(c => c.email === recipient);
+            if (client && client.status === 'New') {
+                client.status = 'Contacted';
+                renderClientTable();
+            }
+
+            closeModal();
+            alert('Email client opened. Client status updated to "Contacted".');
+        }
+
+        function updateClientScore() {
+            const clientIndex = document.getElementById('clientSelect').value;
+            if (clientIndex === '') {
+                alert('Please select a client to score.');
+                return;
+            }
+
+            const client = clientData[clientIndex];
+            const scores = {
+                profitability: parseInt(document.getElementById('profitability').value),
+                urgency: parseInt(document.getElementById('urgency').value),
+                reachability: parseInt(document.getElementById('reachability').value),
+                engagement: parseInt(document.getElementById('engagement').value),
+                sustainability: parseInt(document.getElementById('sustainability').value)
+            };
+
+            // Calculate new P.U.R.E.S. score
+            const newScore = (scores.profitability + scores.urgency + scores.reachability + 
+                            scores.engagement + scores.sustainability) / 5;
+            
+            client.pures = newScore;
+
+            // Update tier based on score
+            if (newScore >= 4.0) client.tier = '1A';
+            else if (newScore >= 3.0) client.tier = '1B';
+            else client.tier = '1C';
+
+            renderClientTable();
+            updateStats();
+            alert(`P.U.R.E.S. score updated for ${client.name}: ${newScore.toFixed(1)} (Tier ${client.tier})`);
+        }
+
+        function generateReport() {
+            const report = {
+                totalClients: clientData.length,
+                tier1A: clientData.filter(c => c.tier === '1A').length,
+                tier1B: clientData.filter(c => c.tier === '1B').length,
+                tier1C: clientData.filter(c => c.tier === '1C').length,
+                avgScore: (clientData.reduce((sum, c) => sum + c.pures, 0) / clientData.length).toFixed(2),
+                statusBreakdown: {
+                    new: clientData.filter(c => c.status === 'New').length,
+                    contacted: clientData.filter(c => c.status === 'Contacted').length,
+                    qualified: clientData.filter(c => c.status === 'Qualified').length,
+                    proposal: clientData.filter(c => c.status === 'Proposal').length
+                }
+            };
+
+            alert(`Analytics Report Generated:
+            
+Total Prospects: ${report.totalClients}
+Tier 1A (Premium): ${report.tier1A}
+Tier 1B (High-Value): ${report.tier1B}  
+Tier 1C (Qualified): ${report.tier1C}
+Average P.U.R.E.S. Score: ${report.avgScore}
+
+Status Breakdown:
+New: ${report.statusBreakdown.new}
+Contacted: ${report.statusBreakdown.contacted}
+Qualified: ${report.statusBreakdown.qualified}
+Proposal Sent: ${report.statusBreakdown.proposal}`);
+        }
+
+        function scheduleFollowUp() {
+            const message = `Follow-up Schedule Recommendations:
+
+📅 IMMEDIATE (Next 3 Days):
+• Contact all Tier 1A prospects with "New" status (${clientData.filter(c => c.tier === '1A' && c.status === 'New').length} clients)
+• Follow up on "Proposal" status clients (${clientData.filter(c => c.status === 'Proposal').length} clients)
+
+📅 THIS WEEK:
+• Engagement ring consultation campaign for high-value prospects
+• Spring collection launch announcement
+• Easter jewelry gift promotion setup
+
+📅 THIS MONTH:
+• Mother's Day marketing campaign preparation
+• Wedding season outreach to engaged couples
+• Graduated jewelry collection showcase events
+
+⚡ Priority Actions:
+1. Schedule consultations for Tier 1A prospects
+2. Send personalized Spring collection previews
+3. Book showroom appointments for qualified leads
+4. Launch social media campaigns featuring custom pieces`;
+
+            alert(message);
+        }
+
+        function exportData() {
+            // Create CSV content
+            let csv = 'Client Name,Email,Phone,Address,P.U.R.E.S Score,Tier,Status,Revenue Estimate,Notes\n';
+            
+            clientData.forEach(client => {
+                csv += `"${client.name}","${client.email}","${client.phone}","${client.address}","${client.pures}","${client.tier}","${client.status}","${client.revenue}","${client.notes}"\n`;
+            });
+
+            // Download CSV
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'yadav_jewelry_prospects.csv';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+        }
+    </script>
+</body>
+</html>

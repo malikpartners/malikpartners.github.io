@@ -1,0 +1,876 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>S.A.L.E. System Client Dashboard - Eco Now</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #000000;
+            color: #ffffff;
+            line-height: 1.6;
+        }
+
+        .header {
+            background-color: #CF2030;
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 10px rgba(207, 32, 48, 0.3);
+        }
+
+        .header img {
+            height: 60px;
+        }
+
+        .header h1 {
+            color: #ffffff;
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .business-info {
+            background: linear-gradient(135deg, #CF2030, #a01828);
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(207, 32, 48, 0.2);
+        }
+
+        .business-info h2 {
+            color: #ffffff;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+
+        .info-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1rem;
+            border-radius: 8px;
+            backdrop-filter: blur(10px);
+        }
+
+        .controls {
+            background: #1a1a1a;
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            border: 2px solid #CF2030;
+        }
+
+        .controls-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .search-input, .filter-select {
+            padding: 0.75rem;
+            border: 2px solid #CF2030;
+            border-radius: 6px;
+            background: #000000;
+            color: #ffffff;
+            font-size: 14px;
+        }
+
+        .search-input:focus, .filter-select:focus {
+            outline: none;
+            border-color: #ff4757;
+            box-shadow: 0 0 0 3px rgba(207, 32, 48, 0.2);
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #CF2030, #a01828);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #ff4757, #CF2030);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(207, 32, 48, 0.3);
+        }
+
+        .btn-secondary {
+            background: #333;
+            color: white;
+            border: 1px solid #CF2030;
+        }
+
+        .btn-secondary:hover {
+            background: #CF2030;
+        }
+
+        .btn-small {
+            padding: 0.4rem 0.8rem;
+            font-size: 12px;
+        }
+
+        .table-container {
+            background: #1a1a1a;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            border: 2px solid #CF2030;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        .table th {
+            background: linear-gradient(135deg, #CF2030, #a01828);
+            color: white;
+            padding: 1rem 0.75rem;
+            text-align: left;
+            font-weight: bold;
+            cursor: pointer;
+            user-select: none;
+            position: relative;
+        }
+
+        .table th:hover {
+            background: linear-gradient(135deg, #ff4757, #CF2030);
+        }
+
+        .table th::after {
+            content: ' ↕';
+            position: absolute;
+            right: 8px;
+            opacity: 0.7;
+        }
+
+        .table td {
+            padding: 0.75rem;
+            border-bottom: 1px solid #333;
+            vertical-align: middle;
+        }
+
+        .table tr:nth-child(even) {
+            background: rgba(207, 32, 48, 0.05);
+        }
+
+        .table tr:hover {
+            background: rgba(207, 32, 48, 0.1);
+            cursor: pointer;
+        }
+
+        .tier-1a {
+            background: linear-gradient(135deg, #2ecc71, #27ae60) !important;
+        }
+
+        .tier-1b {
+            background: linear-gradient(135deg, #f39c12, #e67e22) !important;
+        }
+
+        .tier-1c {
+            background: linear-gradient(135deg, #3498db, #2980b9) !important;
+        }
+
+        .tier-badge {
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            color: white;
+            font-weight: bold;
+            font-size: 12px;
+        }
+
+        .pure-score {
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .score-5 { color: #2ecc71; }
+        .score-4 { color: #f39c12; }
+        .score-3 { color: #3498db; }
+        .score-2 { color: #e74c3c; }
+        .score-1 { color: #95a5a6; }
+
+        .actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+
+        .modal-content {
+            background-color: #1a1a1a;
+            margin: 5% auto;
+            padding: 2rem;
+            border: 2px solid #CF2030;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 600px;
+            color: white;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: #CF2030;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #CF2030;
+            font-weight: bold;
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #CF2030;
+            border-radius: 6px;
+            background: #000000;
+            color: #ffffff;
+        }
+
+        .form-group textarea {
+            height: 120px;
+            resize: vertical;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #CF2030, #a01828);
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+            color: white;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .footer {
+            background-color: #1a1a1a;
+            padding: 2rem;
+            text-align: center;
+            border-top: 2px solid #CF2030;
+            margin-top: 3rem;
+        }
+
+        .footer img {
+            height: 40px;
+            opacity: 0.7;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .table-container {
+                overflow-x: auto;
+            }
+            
+            .controls-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports">
+        <h1>S.A.L.E. System Client Dashboard</h1>
+    </header>
+
+    <div class="container">
+        <!-- Business Information -->
+        <div class="business-info">
+            <h2>Eco Now - Retail Health and Personal Care Products</h2>
+            <div class="info-grid">
+                <div class="info-item">
+                    <strong>Location:</strong> Costa Mesa, California
+                </div>
+                <div class="info-item">
+                    <strong>Industry:</strong> Retail Health & Personal Care
+                </div>
+                <div class="info-item">
+                    <strong>Contact:</strong> contact@econowca.com
+                </div>
+                <div class="info-item">
+                    <strong>Phone:</strong> (657) 201-8172
+                </div>
+            </div>
+        </div>
+
+        <!-- Statistics Dashboard -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number" id="totalClients">50</div>
+                <div>Total Prospects</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="tier1aCount">12</div>
+                <div>Tier 1A Premium</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="tier1bCount">23</div>
+                <div>Tier 1B High-Value</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="tier1cCount">15</div>
+                <div>Tier 1C Qualified</div>
+            </div>
+        </div>
+
+        <!-- Search and Filter Controls -->
+        <div class="controls">
+            <div class="controls-row">
+                <input type="text" id="searchInput" class="search-input" placeholder="Search clients...">
+                <select id="tierFilter" class="filter-select">
+                    <option value="">All Tiers</option>
+                    <option value="1A">Tier 1A - Premium</option>
+                    <option value="1B">Tier 1B - High Value</option>
+                    <option value="1C">Tier 1C - Qualified</option>
+                </select>
+                <select id="industryFilter" class="filter-select">
+                    <option value="">All Industries</option>
+                    <option value="Healthcare">Healthcare</option>
+                    <option value="Fitness">Fitness</option>
+                    <option value="Wellness">Wellness</option>
+                    <option value="Beauty">Beauty</option>
+                    <option value="Nutrition">Nutrition</option>
+                </select>
+                <button class="btn btn-secondary" onclick="exportData()">Export CSV</button>
+            </div>
+        </div>
+
+        <!-- Client Database Table -->
+        <div class="table-container">
+            <table class="table" id="clientTable">
+                <thead>
+                    <tr>
+                        <th onclick="sortTable(0)">Client Name</th>
+                        <th onclick="sortTable(1)">Email</th>
+                        <th onclick="sortTable(2)">Phone</th>
+                        <th onclick="sortTable(3)">Address</th>
+                        <th onclick="sortTable(4)">P.U.R.E.S. Score</th>
+                        <th onclick="sortTable(5)">Tier</th>
+                        <th onclick="sortTable(6)">Industry</th>
+                        <th onclick="sortTable(7)">Revenue Est.</th>
+                        <th onclick="sortTable(8)">Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="clientTableBody">
+                    <!-- Client data will be populated by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Email Modal -->
+    <div id="emailModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h3 style="color: #CF2030; margin-bottom: 1rem;">Send Email to Client</h3>
+            <form id="emailForm">
+                <div class="form-group">
+                    <label>To:</label>
+                    <input type="email" id="emailTo" readonly>
+                </div>
+                <div class="form-group">
+                    <label>Subject:</label>
+                    <input type="text" id="emailSubject" value="Discover Premium Health & Personal Care at Eco Now">
+                </div>
+                <div class="form-group">
+                    <label>Message:</label>
+                    <textarea id="emailMessage"></textarea>
+                </div>
+                <button type="button" class="btn btn-primary" onclick="sendEmail()">Send Email</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- P.U.R.E.S. Scoring Modal -->
+    <div id="puresModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closePuresModal()">&times;</span>
+            <h3 style="color: #CF2030; margin-bottom: 1rem;">P.U.R.E.S. Client Scoring</h3>
+            <form id="puresForm">
+                <div class="form-group">
+                    <label>Client Name:</label>
+                    <input type="text" id="puresClientName" readonly>
+                </div>
+                <div class="form-group">
+                    <label>Profitability (1-5):</label>
+                    <select id="profitability">
+                        <option value="1">1 - Low budget capacity</option>
+                        <option value="2">2 - Limited budget</option>
+                        <option value="3">3 - Moderate budget</option>
+                        <option value="4">4 - Good budget capacity</option>
+                        <option value="5">5 - High budget capacity</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Urgency (1-5):</label>
+                    <select id="urgency">
+                        <option value="1">1 - No immediate needs</option>
+                        <option value="2">2 - Future consideration</option>
+                        <option value="3">3 - Some urgency</option>
+                        <option value="4">4 - High urgency</option>
+                        <option value="5">5 - Immediate need</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Reachability (1-5):</label>
+                    <select id="reachability">
+                        <option value="1">1 - Very difficult to reach</option>
+                        <option value="2">2 - Limited access</option>
+                        <option value="3">3 - Moderate accessibility</option>
+                        <option value="4">4 - Easy to reach</option>
+                        <option value="5">5 - Highly accessible</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Engagement (1-5):</label>
+                    <select id="engagement">
+                        <option value="1">1 - Not interested</option>
+                        <option value="2">2 - Low engagement</option>
+                        <option value="3">3 - Moderate interest</option>
+                        <option value="4">4 - High engagement</option>
+                        <option value="5">5 - Very engaged</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Sustainability (1-5):</label>
+                    <select id="sustainability">
+                        <option value="1">1 - One-time purchase</option>
+                        <option value="2">2 - Short-term relationship</option>
+                        <option value="3">3 - Moderate loyalty</option>
+                        <option value="4">4 - Long-term potential</option>
+                        <option value="5">5 - Lifetime value</option>
+                    </select>
+                </div>
+                <button type="button" class="btn btn-primary" onclick="updatePuresScore()">Update Score</button>
+            </form>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports">
+        <p>&copy; 2024 Higgins Reports. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Sample client data for Costa Mesa area (within 10 miles)
+        let clientData = [
+            {
+                name: "Sarah Johnson",
+                email: "sarah.johnson@healthylife.com",
+                phone: "(714) 555-0101",
+                address: "1234 Harbor Blvd, Costa Mesa, CA",
+                pures: 4.6,
+                tier: "1A",
+                industry: "Healthcare",
+                revenue: "$150K",
+                status: "New Lead",
+                profitability: 5,
+                urgency: 4,
+                reachability: 5,
+                engagement: 4,
+                sustainability: 5
+            },
+            {
+                name: "Michael Chen",
+                email: "mchen@fitnessfirst.com",
+                phone: "(949) 555-0102",
+                address: "5678 Newport Blvd, Newport Beach, CA",
+                pures: 4.2,
+                tier: "1A",
+                industry: "Fitness",
+                revenue: "$200K",
+                status: "Contacted",
+                profitability: 4,
+                urgency: 4,
+                reachability: 4,
+                engagement: 5,
+                sustainability: 4
+            },
+            {
+                name: "Emily Rodriguez",
+                email: "emily.r@wellnesscenter.org",
+                phone: "(714) 555-0103",
+                address: "910 Bristol St, Costa Mesa, CA",
+                pures: 3.8,
+                tier: "1B",
+                industry: "Wellness",
+                revenue: "$85K",
+                status: "Qualified",
+                profitability: 4,
+                urgency: 3,
+                reachability: 4,
+                engagement: 4,
+                sustainability: 4
+            },
+            {
+                name: "David Wilson",
+                email: "dwilson@beautyexperts.com",
+                phone: "(714) 555-0104",
+                address: "1122 Baker St, Costa Mesa, CA",
+                pures: 3.6,
+                tier: "1B",
+                industry: "Beauty",
+                revenue: "$120K",
+                status: "Follow-up",
+                profitability: 3,
+                urgency: 4,
+                reachability: 3,
+                engagement: 4,
+                sustainability: 4
+            },
+            {
+                name: "Lisa Martinez",
+                email: "lisa.martinez@nutritionplus.com",
+                phone: "(949) 555-0105",
+                address: "3344 PCH, Newport Beach, CA",
+                pures: 4.4,
+                tier: "1A",
+                industry: "Nutrition",
+                revenue: "$180K",
+                status: "Proposal Sent",
+                profitability: 5,
+                urgency: 4,
+                reachability: 4,
+                engagement: 4,
+                sustainability: 5
+            }
+        ];
+
+        // Generate additional sample data to reach 50 clients
+        const firstNames = ["Amanda", "Robert", "Jennifer", "Christopher", "Michelle", "James", "Jessica", "William", "Ashley", "Daniel", "Stephanie", "Matthew", "Nicole", "Anthony", "Elizabeth", "Joshua", "Kimberly", "Andrew", "Amy", "Kevin", "Angela", "Brian", "Heather", "Ryan", "Rebecca", "Jason", "Melissa", "Justin", "Tiffany", "Mark", "Andrea", "Scott", "Rachel", "Steven", "Laura", "Paul", "Crystal", "Adam", "Maria", "Nathan", "Samantha", "Jonathan", "Vanessa", "Brandon", "Catherine"];
+        const lastNames = ["Smith", "Johnson", "Williams", "Brown", "Jones", "Garcia", "Miller", "Davis", "Rodriguez", "Martinez", "Hernandez", "Lopez", "Gonzalez", "Wilson", "Anderson", "Thomas", "Taylor", "Moore", "Jackson", "Martin", "Lee", "Perez", "Thompson", "White", "Harris", "Sanchez", "Clark", "Ramirez", "Lewis", "Robinson", "Walker", "Young", "Allen", "King", "Wright", "Scott", "Torres", "Nguyen", "Hill", "Flores", "Green", "Adams", "Nelson", "Baker", "Hall"];
+        const industries = ["Healthcare", "Fitness", "Wellness", "Beauty", "Nutrition"];
+        const streets = ["Harbor Blvd", "Newport Blvd", "Bristol St", "Baker St", "PCH", "Fairview Rd", "Brookhurst St", "Bear St", "Mesa Verde Dr", "Placentia Ave"];
+        const cities = ["Costa Mesa", "Newport Beach", "Huntington Beach", "Fountain Valley", "Santa Ana"];
+
+        // Generate remaining clients
+        for (let i = 5; i < 50; i++) {
+            const firstName = firstNames[Math.floor(Math.random() * firstNames.length)];
+            const lastName = lastNames[Math.floor(Math.random() * lastNames.length)];
+            const industry = industries[Math.floor(Math.random() * industries.length)];
+            const street = streets[Math.floor(Math.random() * streets.length)];
+            const city = cities[Math.floor(Math.random() * cities.length)];
+            
+            const profitability = Math.floor(Math.random() * 5) + 1;
+            const urgency = Math.floor(Math.random() * 5) + 1;
+            const reachability = Math.floor(Math.random() * 5) + 1;
+            const engagement = Math.floor(Math.random() * 5) + 1;
+            const sustainability = Math.floor(Math.random() * 5) + 1;
+            
+            const pures = ((profitability + urgency + reachability + engagement + sustainability) / 5).toFixed(1);
+            let tier;
+            if (pures >= 4.0) tier = "1A";
+            else if (pures >= 3.0) tier = "1B";
+            else tier = "1C";
+
+            clientData.push({
+                name: `${firstName} ${lastName}`,
+                email: `${firstName.toLowerCase()}.${lastName.toLowerCase()}@${industry.toLowerCase()}.com`,
+                phone: `(${Math.floor(Math.random() * 900) + 100}) 555-${String(Math.floor(Math.random() * 10000)).padStart(4, '0')}`,
+                address: `${Math.floor(Math.random() * 9999) + 1000} ${street}, ${city}, CA`,
+                pures: parseFloat(pures),
+                tier: tier,
+                industry: industry,
+                revenue: `$${Math.floor(Math.random() * 200) + 50}K`,
+                status: ["New Lead", "Contacted", "Qualified", "Follow-up", "Proposal Sent"][Math.floor(Math.random() * 5)],
+                profitability: profitability,
+                urgency: urgency,
+                reachability: reachability,
+                engagement: engagement,
+                sustainability: sustainability
+            });
+        }
+
+        let filteredData = [...clientData];
+        let currentClient = null;
+
+        function renderTable() {
+            const tbody = document.getElementById('clientTableBody');
+            tbody.innerHTML = '';
+
+            filteredData.forEach((client, index) => {
+                const row = document.createElement('tr');
+                row.className = `tier-${client.tier.toLowerCase()}`;
+                
+                row.innerHTML = `
+                    <td><strong>${client.name}</strong></td>
+                    <td>${client.email}</td>
+                    <td>${client.phone}</td>
+                    <td>${client.address}</td>
+                    <td><span class="pure-score score-${Math.floor(client.pures)}">${client.pures}</span></td>
+                    <td><span class="tier-badge">${client.tier}</span></td>
+                    <td>${client.industry}</td>
+                    <td>${client.revenue}</td>
+                    <td>${client.status}</td>
+                    <td class="actions">
+                        <button class="btn btn-primary btn-small" onclick="sendEmailToClient('${client.email}', '${client.name}', '${client.industry}')">Email</button>
+                        <button class="btn btn-secondary btn-small" onclick="callClient('${client.phone}')">Call</button>
+                        <button class="btn btn-secondary btn-small" onclick="editPures('${client.name}', ${index})">Score</button>
+                    </td>
+                `;
+                
+                tbody.appendChild(row);
+            });
+
+            updateStats();
+        }
+
+        function updateStats() {
+            const tier1a = filteredData.filter(c => c.tier === '1A').length;
+            const tier1b = filteredData.filter(c => c.tier === '1B').length;
+            const tier1c = filteredData.filter(c => c.tier === '1C').length;
+            
+            document.getElementById('totalClients').textContent = filteredData.length;
+            document.getElementById('tier1aCount').textContent = tier1a;
+            document.getElementById('tier1bCount').textContent = tier1b;
+            document.getElementById('tier1cCount').textContent = tier1c;
+        }
+
+        function filterData() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const tierFilter = document.getElementById('tierFilter').value;
+            const industryFilter = document.getElementById('industryFilter').value;
+
+            filteredData = clientData.filter(client => {
+                const matchesSearch = client.name.toLowerCase().includes(searchTerm) ||
+                                    client.email.toLowerCase().includes(searchTerm) ||
+                                    client.address.toLowerCase().includes(searchTerm);
+                const matchesTier = !tierFilter || client.tier === tierFilter;
+                const matchesIndustry = !industryFilter || client.industry === industryFilter;
+
+                return matchesSearch && matchesTier && matchesIndustry;
+            });
+
+            renderTable();
+        }
+
+        function sortTable(columnIndex) {
+            const table = document.getElementById('clientTable');
+            const tbody = table.querySelector('tbody');
+            const rows = Array.from(tbody.querySelectorAll('tr'));
+
+            // Determine sort direction
+            const isAscending = table.dataset.sortDirection !== 'asc';
+            table.dataset.sortDirection = isAscending ? 'asc' : 'desc';
+
+            rows.sort((a, b) => {
+                const aValue = a.cells[columnIndex].textContent.trim();
+                const bValue = b.cells[columnIndex].textContent.trim();
+
+                // Handle numeric values
+                if (columnIndex === 4) { // P.U.R.E.S. Score
+                    return isAscending ? 
+                        parseFloat(aValue) - parseFloat(bValue) : 
+                        parseFloat(bValue) - parseFloat(aValue);
+                }
+
+                // Handle text values
+                return isAscending ? 
+                    aValue.localeCompare(bValue) : 
+                    bValue.localeCompare(aValue);
+            });
+
+            rows.forEach(row => tbody.appendChild(row));
+        }
+
+        function sendEmailToClient(email, name, industry) {
+            document.getElementById('emailTo').value = email;
+            
+            const emailTemplate = `Dear ${name},
+
+I hope this email finds you well! I'm reaching out from Eco Now, Costa Mesa's premier destination for health and personal care products.
+
+As someone in the ${industry} industry, you understand the importance of quality products that promote wellness and sustainability. At Eco Now, we specialize in:
+
+🌿 Premium organic and natural health products
+💚 Eco-friendly personal care items
+🌱 Sustainable beauty and wellness solutions
+✨ Expert guidance and personalized recommendations
+
+Why visit Eco Now?
+• Curated selection of the highest quality products
+• Knowledgeable staff to help you find exactly what you need
+• Competitive pricing on premium brands
+• Commitment to environmental sustainability
+• Local Costa Mesa business supporting our community
+
+We'd love to welcome you to our store and show you how our products can enhance your wellness routine. Visit us at our Costa Mesa location or call us at (657) 201-8172 to learn more.
+
+Thank you for supporting local, sustainable business!
+
+Best regards,
+The Eco Now Team
+Costa Mesa, CA
+contact@econowca.com
+(657) 201-8172`;
+
+            document.getElementById('emailMessage').value = emailTemplate;
+            document.getElementById('emailModal').style.display = 'block';
+        }
+
+        function callClient(phone) {
+            alert(`Calling ${phone}...\n\nThis would initiate a phone call in a real system.`);
+        }
+
+        function editPures(clientName, index) {
+            currentClient = index;
+            const client = clientData[index];
+            
+            document.getElementById('puresClientName').value = clientName;
+            document.getElementById('profitability').value = client.profitability;
+            document.getElementById('urgency').value = client.urgency;
+            document.getElementById('reachability').value = client.reachability;
+            document.getElementById('engagement').value = client.engagement;
+            document.getElementById('sustainability').value = client.sustainability;
+            
+            document.getElementById('puresModal').style.display = 'block';
+        }
+
+        function updatePuresScore() {
+            if (currentClient === null) return;
+
+            const client = clientData[currentClient];
+            client.profitability = parseInt(document.getElementById('profitability').value);
+            client.urgency = parseInt(document.getElementById('urgency').value);
+            client.reachability = parseInt(document.getElementById('reachability').value);
+            client.engagement = parseInt(document.getElementById('engagement').value);
+            client.sustainability = parseInt(document.getElementById('sustainability').value);
+
+            const newScore = ((client.profitability + client.urgency + client.reachability + client.engagement + client.sustainability) / 5).toFixed(1);
+            client.pures = parseFloat(newScore);
+
+            // Update tier based on new score
+            if (client.pures >= 4.0) client.tier = "1A";
+            else if (client.pures >= 3.0) client.tier = "1B";
+            else client.tier = "1C";
+
+            closePuresModal();
+            filterData(); // Refresh the table
+        }
+
+        function sendEmail() {
+            const email = document.getElementById('emailTo').value;
+            const subject = document.getElementById('emailSubject').value;
+            const message = document.getElementById('emailMessage').value;
+            
+            const mailtoLink = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(message)}`;
+            window.location.href = mailtoLink;
+            
+            closeModal();
+        }
+
+        function exportData() {
+            let csv = 'Name,Email,Phone,Address,P.U.R.E.S. Score,Tier,Industry,Revenue,Status\n';
+            
+            filteredData.forEach(client => {
+                csv += `"${client.name}","${client.email}","${client.phone}","${client.address}",${client.pures},"${client.tier}","${client.industry}","${client.revenue}","${client.status}"\n`;
+            });
+
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.setAttribute('href', url);
+            a.setAttribute('download', 'eco-now-clients.csv');
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+
+        function closeModal() {
+            document.getElementById('emailModal').style.display = 'none';
+        }
+
+        function closePuresModal() {
+            document.getElementById('puresModal').style.display = 'none';
+            currentClient = null;
+        }
+
+        // Event listeners
+        document.getElementById('searchInput').addEventListener('input', filterData);
+        document.getElementById('tierFilter').addEventListener('change', filterData);
+        document.getElementById('industryFilter').addEventListener('change', filterData);
+
+        // Close modals when clicking outside
+        window.onclick = function(event) {
+            const emailModal = document.getElementById('emailModal');
+            const puresModal = document.getElementById('puresModal');
+            if (event.target === emailModal) {
+                closeModal();
+            }
+            if (event.target === puresModal) {
+                closePuresModal();
+            }
+        }
+
+        // Initialize the table
+        renderTable();
+    </script>
+</body>
+</html>

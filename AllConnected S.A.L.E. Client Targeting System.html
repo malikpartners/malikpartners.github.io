@@ -1,0 +1,845 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AllConnected - S.A.L.E. Client Targeting System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #000000;
+            color: #ffffff;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background-color: #CF2030;
+            padding: 20px 0;
+            margin-bottom: 30px;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+        }
+
+        .logo {
+            height: 60px;
+        }
+
+        .header-info {
+            text-align: right;
+            color: white;
+        }
+
+        .tabs {
+            display: flex;
+            background-color: #333;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 15px 20px;
+            background-color: #333;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-size: 16px;
+        }
+
+        .tab.active {
+            background-color: #CF2030;
+        }
+
+        .tab:hover {
+            background-color: #555;
+        }
+
+        .tab.active:hover {
+            background-color: #CF2030;
+        }
+
+        .tab-content {
+            display: none;
+            background-color: #1a1a1a;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .search-filter {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .search-filter input,
+        .search-filter select {
+            padding: 10px;
+            border: 1px solid #555;
+            border-radius: 5px;
+            background-color: #333;
+            color: white;
+            font-size: 14px;
+        }
+
+        .search-filter input::placeholder {
+            color: #aaa;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #2a2a2a;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #555;
+        }
+
+        th {
+            background-color: #CF2030;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        th:hover {
+            background-color: #b01828;
+        }
+
+        tr:hover {
+            background-color: #333;
+        }
+
+        .tier-1a { color: #00ff00; font-weight: bold; }
+        .tier-1b { color: #ffff00; font-weight: bold; }
+        .tier-1c { color: #0099ff; font-weight: bold; }
+
+        .contact-btn {
+            padding: 6px 12px;
+            background-color: #CF2030;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            margin-right: 5px;
+        }
+
+        .contact-btn:hover {
+            background-color: #b01828;
+        }
+
+        .pures-form {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            background-color: #333;
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        .form-group h3 {
+            color: #CF2030;
+            margin-bottom: 10px;
+        }
+
+        .score-input {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 10px 0;
+        }
+
+        .score-input label {
+            flex: 1;
+        }
+
+        .score-input input[type="range"] {
+            flex: 2;
+            margin: 0 10px;
+        }
+
+        .score-display {
+            background-color: #CF2030;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            min-width: 30px;
+            text-align: center;
+        }
+
+        .total-score {
+            font-size: 24px;
+            color: #CF2030;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .export-btn {
+            background-color: #28a745;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+
+        .export-btn:hover {
+            background-color: #218838;
+        }
+
+        footer {
+            background-color: #333;
+            text-align: center;
+            padding: 20px 0;
+            margin-top: 50px;
+        }
+
+        .footer-logo {
+            height: 30px;
+            margin-bottom: 10px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+
+        .modal-content {
+            background-color: #1a1a1a;
+            margin: 5% auto;
+            padding: 30px;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 600px;
+            color: white;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: #CF2030;
+        }
+
+        .feedback-form {
+            display: grid;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .feedback-form input,
+        .feedback-form textarea,
+        .feedback-form select {
+            padding: 10px;
+            border: 1px solid #555;
+            border-radius: 5px;
+            background-color: #333;
+            color: white;
+        }
+
+        .analytics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .metric-card {
+            background-color: #333;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .metric-number {
+            font-size: 2em;
+            color: #CF2030;
+            font-weight: bold;
+        }
+
+        .metric-label {
+            color: #aaa;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports" class="logo">
+            <div class="header-info">
+                <h1>AllConnected S.A.L.E. System</h1>
+                <p>Strategic Client Targeting & Outreach Platform</p>
+                <p>Simi Valley, CA | IT Managed Services</p>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('sourcing')">S.OURCING</button>
+            <button class="tab" onclick="showTab('assessing')">A.SSESSING</button>
+            <button class="tab" onclick="showTab('listening')">L.ISTENING</button>
+            <button class="tab" onclick="showTab('empowering')">E.MPOWERING</button>
+            <button class="tab" onclick="showTab('analytics')">Analytics</button>
+        </div>
+
+        <!-- SOURCING TAB -->
+        <div id="sourcing" class="tab-content active">
+            <h2>S.A.L.E. SOURCING Module - P.U.R.E.S. Client Database</h2>
+            
+            <div class="search-filter">
+                <input type="text" id="searchInput" placeholder="Search clients..." onkeyup="filterTable()">
+                <select id="tierFilter" onchange="filterTable()">
+                    <option value="">All Tiers</option>
+                    <option value="Tier 1A">Tier 1A (Premium)</option>
+                    <option value="Tier 1B">Tier 1B (High-Value)</option>
+                    <option value="Tier 1C">Tier 1C (Qualified)</option>
+                </select>
+                <select id="industryFilter" onchange="filterTable()">
+                    <option value="">All Industries</option>
+                    <option value="Finance">Finance</option>
+                    <option value="Healthcare">Healthcare</option>
+                    <option value="Manufacturing">Manufacturing</option>
+                    <option value="Education">Education</option>
+                    <option value="Legal">Legal</option>
+                    <option value="Real Estate">Real Estate</option>
+                    <option value="Retail">Retail</option>
+                </select>
+                <button class="export-btn" onclick="exportToCSV()">Export to CSV</button>
+            </div>
+
+            <table id="clientTable">
+                <thead>
+                    <tr>
+                        <th onclick="sortTable(0)">Client Name</th>
+                        <th onclick="sortTable(1)">Email</th>
+                        <th onclick="sortTable(2)">Phone</th>
+                        <th onclick="sortTable(3)">Address</th>
+                        <th onclick="sortTable(4)">P.U.R.E.S Score</th>
+                        <th onclick="sortTable(5)">Tier Level</th>
+                        <th onclick="sortTable(6)">Industry</th>
+                        <th onclick="sortTable(7)">Revenue Est.</th>
+                        <th onclick="sortTable(8)">Distance (mi)</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="clientTableBody">
+                    <!-- Client data will be populated here -->
+                </tbody>
+            </table>
+
+            <div class="pures-form">
+                <div class="form-group">
+                    <h3>P.U.R.E.S. Client Scoring</h3>
+                    <div class="score-input">
+                        <label>Profitability:</label>
+                        <input type="range" id="profitability" min="1" max="5" value="3" oninput="updateScore()">
+                        <span class="score-display" id="profitabilityScore">3</span>
+                    </div>
+                    <div class="score-input">
+                        <label>Urgency:</label>
+                        <input type="range" id="urgency" min="1" max="5" value="3" oninput="updateScore()">
+                        <span class="score-display" id="urgencyScore">3</span>
+                    </div>
+                    <div class="score-input">
+                        <label>Reachability:</label>
+                        <input type="range" id="reachability" min="1" max="5" value="3" oninput="updateScore()">
+                        <span class="score-display" id="reachabilityScore">3</span>
+                    </div>
+                    <div class="score-input">
+                        <label>Engagement:</label>
+                        <input type="range" id="engagement" min="1" max="5" value="3" oninput="updateScore()">
+                        <span class="score-display" id="engagementScore">3</span>
+                    </div>
+                    <div class="score-input">
+                        <label>Sustainability:</label>
+                        <input type="range" id="sustainability" min="1" max="5" value="3" oninput="updateScore()">
+                        <span class="score-display" id="sustainabilityScore">3</span>
+                    </div>
+                    <div class="total-score">
+                        Total Score: <span id="totalScore">15</span>/25
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ASSESSING TAB -->
+        <div id="assessing" class="tab-content">
+            <h2>A.SSESSING Module - Buying Pattern Analysis</h2>
+            <div class="analytics-grid">
+                <div class="metric-card">
+                    <div class="metric-number">15</div>
+                    <div class="metric-label">Analytical Buyers</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">18</div>
+                    <div class="metric-label">Relationship Buyers</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">12</div>
+                    <div class="metric-label">Efficiency Buyers</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">5</div>
+                    <div class="metric-label">Innovation Buyers</div>
+                </div>
+            </div>
+            <h3>Value Proposition Alignment Matrix</h3>
+            <p>Our IT managed services align with client buying patterns:</p>
+            <ul>
+                <li><strong>Analytical Buyers:</strong> Detailed ROI reports, security compliance metrics</li>
+                <li><strong>Relationship Buyers:</strong> Local presence, long-term partnerships</li>
+                <li><strong>Efficiency Buyers:</strong> 24/7 monitoring, automated solutions</li>
+                <li><strong>Innovation Buyers:</strong> Latest cybersecurity technologies</li>
+            </ul>
+        </div>
+
+        <!-- LISTENING TAB -->
+        <div id="listening" class="tab-content">
+            <h2>L.ISTENING Module - Feedback Integration</h2>
+            <button class="contact-btn" onclick="openFeedbackModal()">Collect Client Feedback</button>
+            
+            <h3>Feedback Summary</h3>
+            <div class="analytics-grid">
+                <div class="metric-card">
+                    <div class="metric-number">4.8</div>
+                    <div class="metric-label">Avg. Satisfaction Score</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">92%</div>
+                    <div class="metric-label">Response Rate</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">3</div>
+                    <div class="metric-label">Active Issues</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">15</div>
+                    <div class="metric-label">Resolved This Week</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- EMPOWERING TAB -->
+        <div id="empowering" class="tab-content">
+            <h2>E.MPOWERING Module - Referral Strategy</h2>
+            <div class="analytics-grid">
+                <div class="metric-card">
+                    <div class="metric-number">28</div>
+                    <div class="metric-label">Active Referral Partners</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">12</div>
+                    <div class="metric-label">Referrals This Month</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">$45K</div>
+                    <div class="metric-label">Referral Revenue</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">85%</div>
+                    <div class="metric-label">Conversion Rate</div>
+                </div>
+            </div>
+            
+            <h3>Success Stories</h3>
+            <div class="form-group">
+                <p><strong>Entertainment Communications Network:</strong> "8 years of trusted partnership, understanding both technology and business needs."</p>
+                <p><strong>Simi Surgery Center:</strong> "Knowledgeable, respectful staff with high-tech facility and multiple security layers."</p>
+                <p><strong>Bel-Air Investment Advisors:</strong> "Outstanding execution of detailed project plan for virtual infrastructure transition."</p>
+            </div>
+        </div>
+
+        <!-- ANALYTICS TAB -->
+        <div id="analytics" class="tab-content">
+            <h2>S.A.L.E. Performance Analytics</h2>
+            <div class="analytics-grid">
+                <div class="metric-card">
+                    <div class="metric-number">50</div>
+                    <div class="metric-label">Total Prospects</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">8</div>
+                    <div class="metric-label">Tier 1A Prospects</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">22</div>
+                    <div class="metric-label">Tier 1B Prospects</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">20</div>
+                    <div class="metric-label">Tier 1C Prospects</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">$2.4M</div>
+                    <div class="metric-label">Pipeline Value</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">24%</div>
+                    <div class="metric-label">Conversion Rate</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Feedback Modal -->
+    <div id="feedbackModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeFeedbackModal()">&times;</span>
+            <h2>Client Feedback Collection</h2>
+            <form class="feedback-form">
+                <input type="text" placeholder="Client Name" required>
+                <select required>
+                    <option value="">Select Feedback Type</option>
+                    <option value="pre-sale">Pre-Sale Inquiry</option>
+                    <option value="during-sale">During Implementation</option>
+                    <option value="post-sale">Post-Sale Satisfaction</option>
+                    <option value="complaint">Issue Resolution</option>
+                </select>
+                <textarea placeholder="Feedback Details" rows="4" required></textarea>
+                <select required>
+                    <option value="">Satisfaction Rating</option>
+                    <option value="5">Excellent (5/5)</option>
+                    <option value="4">Good (4/5)</option>
+                    <option value="3">Average (3/5)</option>
+                    <option value="2">Poor (2/5)</option>
+                    <option value="1">Very Poor (1/5)</option>
+                </select>
+                <button type="submit" class="contact-btn">Submit Feedback</button>
+            </form>
+        </div>
+    </div>
+
+    <footer>
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports" class="footer-logo">
+        <p>&copy; 2024 AllConnected S.A.L.E. System. All rights reserved.</p>
+        <p>Powered by Higgins Reports | IT Managed Services Excellence</p>
+    </footer>
+
+    <script>
+        // Sample client data for Simi Valley area
+        const clientData = [
+            {name: "Precision Manufacturing Inc", email: "contact@precisionmfg.com", phone: "(805) 555-0101", address: "1234 Industrial Way, Simi Valley, CA", puresScore: "4.8", tier: "Tier 1A", industry: "Manufacturing", revenue: "$2.5M", distance: "2.1"},
+            {name: "Valley Medical Group", email: "admin@valleymed.com", phone: "(805) 555-0102", address: "5678 Healthcare Blvd, Thousand Oaks, CA", puresScore: "4.6", tier: "Tier 1A", industry: "Healthcare", revenue: "$3.2M", distance: "4.5"},
+            {name: "Coastal Financial Services", email: "info@coastalfs.com", phone: "(805) 555-0103", address: "9012 Finance St, Westlake Village, CA", puresScore: "4.4", tier: "Tier 1B", industry: "Finance", revenue: "$1.8M", distance: "6.2"},
+            {name: "Tech Solutions Academy", email: "contact@techsolutions.edu", phone: "(805) 555-0104", address: "3456 Education Ave, Moorpark, CA", puresScore: "4.2", tier: "Tier 1B", industry: "Education", revenue: "$950K", distance: "3.8"},
+            {name: "Premier Legal Associates", email: "partners@premierlaw.com", phone: "(805) 555-0105", address: "7890 Justice Way, Camarillo, CA", puresScore: "4.0", tier: "Tier 1C", industry: "Legal", revenue: "$1.2M", distance: "8.1"},
+            {name: "Golden State Realty", email: "sales@goldenrealty.com", phone: "(805) 555-0106", address: "2468 Property Lane, Newbury Park, CA", puresScore: "3.8", tier: "Tier 1C", industry: "Real Estate", revenue: "$850K", distance: "5.7"},
+            {name: "Innovative Design Studio", email: "hello@innovativedesign.com", phone: "(805) 555-0107", address: "1357 Creative Blvd, Agoura Hills, CA", puresScore: "4.7", tier: "Tier 1A", industry: "Manufacturing", revenue: "$1.9M", distance: "7.3"},
+            {name: "Community Bank of Ventura", email: "business@cbventura.com", phone: "(805) 555-0108", address: "9753 Banking Center, Oxnard, CA", puresScore: "4.5", tier: "Tier 1B", industry: "Finance", revenue: "$2.1M", distance: "9.2"},
+            {name: "Advanced Healthcare Partners", email: "admin@advhealthcare.com", phone: "(805) 555-0109", address: "8642 Medical Plaza, Simi Valley, CA", puresScore: "4.3", tier: "Tier 1B", industry: "Healthcare", revenue: "$1.6M", distance: "1.9"},
+            {name: "Sunrise Elementary District", email: "it@sunriseschools.edu", phone: "(805) 555-0110", address: "5317 School District Rd, Simi Valley, CA", puresScore: "3.9", tier: "Tier 1C", industry: "Education", revenue: "$750K", distance: "3.2"},
+            {name: "Dynamic Manufacturing Co", email: "ops@dynamicmfg.com", phone: "(805) 555-0111", address: "4826 Factory Ave, Moorpark, CA", puresScore: "4.1", tier: "Tier 1C", industry: "Manufacturing", revenue: "$1.3M", distance: "4.1"},
+            {name: "Cornerstone Law Firm", email: "info@cornerstonelaw.com", phone: "(805) 555-0112", address: "6195 Legal Center, Thousand Oaks, CA", puresScore: "4.4", tier: "Tier 1B", industry: "Legal", revenue: "$1.7M", distance: "4.8"},
+            {name: "Pacific Properties Group", email: "leasing@pacificprop.com", phone: "(805) 555-0113", address: "7384 Development Way, Westlake Village, CA", puresScore: "3.7", tier: "Tier 1C", industry: "Real Estate", revenue: "$920K", distance: "6.5"},
+            {name: "Elite Dental Practice", email: "office@elitedental.com", phone: "(805) 555-0114", address: "2951 Dental Plaza, Camarillo, CA", puresScore: "4.2", tier: "Tier 1B", industry: "Healthcare", revenue: "$1.1M", distance: "8.7"},
+            {name: "Regional Credit Union", email: "business@regionalcu.org", phone: "(805) 555-0115", address: "8507 Financial Blvd, Simi Valley, CA", puresScore: "4.0", tier: "Tier 1C", industry: "Finance", revenue: "$1.4M", distance: "2.3"},
+            {name: "Specialty Medical Devices", email: "sales@specialtymed.com", phone: "(805) 555-0116", address: "3629 Technology Dr, Thousand Oaks, CA", puresScore: "4.6", tier: "Tier 1A", industry: "Manufacturing", revenue: "$2.8M", distance: "5.1"},
+            {name: "Valley View High School", email: "tech@vvhs.edu", phone: "(805) 555-0117", address: "1742 Education Blvd, Moorpark, CA", puresScore: "3.8", tier: "Tier 1C", industry: "Education", revenue: "$680K", distance: "3.9"},
+            {name: "Premier Insurance Group", email: "agents@premierinsurance.com", phone: "(805) 555-0118", address: "9168 Insurance Plaza, Newbury Park, CA", puresScore: "4.1", tier: "Tier 1C", industry: "Finance", revenue: "$1.0M", distance: "6.1"},
+            {name: "Advanced Orthopedics", email: "reception@advortho.com", phone: "(805) 555-0119", address: "5284 Medical Center, Camarillo, CA", puresScore: "4.3", tier: "Tier 1B", industry: "Healthcare", revenue: "$1.8M", distance: "8.3"},
+            {name: "Summit Legal Services", email: "contact@summitlegal.com", phone: "(805) 555-0120", address: "6751 Law Office Way, Agoura Hills, CA", puresScore: "3.9", tier: "Tier 1C", industry: "Legal", revenue: "$870K", distance: "7.6"},
+            {name: "Precision Engineering", email: "projects@precisioneng.com", phone: "(805) 555-0121", address: "4173 Engineering Ave, Simi Valley, CA", puresScore: "4.5", tier: "Tier 1B", industry: "Manufacturing", revenue: "$2.0M", distance: "1.7"},
+            {name: "Community College District", email: "it@ccdventura.edu", phone: "(805) 555-0122", address: "8296 Campus Dr, Oxnard, CA", puresScore: "4.0", tier: "Tier 1C", industry: "Education", revenue: "$1.2M", distance: "9.5"},
+            {name: "Coastal Realty Partners", email: "team@coastalrealty.com", phone: "(805) 555-0123", address: "3518 Coastal Blvd, Westlake Village, CA", puresScore: "3.6", tier: "Tier 1C", industry: "Real Estate", revenue: "$760K", distance: "6.8"},
+            {name: "Family Medicine Associates", email: "staff@familymed.com", phone: "(805) 555-0124", address: "7942 Healthcare Way, Thousand Oaks, CA", puresScore: "4.2", tier: "Tier 1B", industry: "Healthcare", revenue: "$1.3M", distance: "4.2"},
+            {name: "Regional Manufacturing", email: "admin@regionalmfg.com", phone: "(805) 555-0125", address: "2685 Industrial Pkwy, Moorpark, CA", puresScore: "4.1", tier: "Tier 1C", industry: "Manufacturing", revenue: "$1.5M", distance: "4.4"},
+            {name: "Heritage Bank", email: "commercial@heritagebank.com", phone: "(805) 555-0126", address: "9307 Banking St, Simi Valley, CA", puresScore: "4.4", tier: "Tier 1B", industry: "Finance", revenue: "$1.9M", distance: "2.8"},
+            {name: "Elite Education Center", email: "admin@eliteedu.com", phone: "(805) 555-0127", address: "6154 Learning Lane, Camarillo, CA", puresScore: "3.7", tier: "Tier 1C", industry: "Education", revenue: "$640K", distance: "8.9"},
+            {name: "Advanced Legal Group", email: "lawyers@advlegal.com", phone: "(805) 555-0128", address: "1863 Justice Blvd, Newbury Park, CA", puresScore: "4.2", tier: "Tier 1B", industry: "Legal", revenue: "$1.4M", distance: "5.9"},
+            {name: "Specialty Care Clinic", email: "appointments@specialtycare.com", phone: "(805) 555-0129", address: "4721 Medical Blvd, Agoura Hills, CA", puresScore: "4.3", tier: "Tier 1B", industry: "Healthcare", revenue: "$1.6M", distance: "7.1"},
+            {name: "Industrial Solutions Inc", email: "sales@industrialsolutions.com", phone: "(805) 555-0130", address: "8390 Manufacturing Way, Simi Valley, CA", puresScore: "4.0", tier: "Tier 1C", industry: "Manufacturing", revenue: "$1.1M", distance: "3.0"},
+            {name: "Gateway Properties", email: "info@gatewayprops.com", phone: "(805) 555-0131", address: "5607 Property Plaza, Westlake Village, CA", puresScore: "3.8", tier: "Tier 1C", industry: "Real Estate", revenue: "$890K", distance: "6.3"},
+            {name: "United Credit Services", email: "business@unitedcredit.com", phone: "(805) 555-0132", address: "2174 Financial Center, Thousand Oaks, CA", puresScore: "4.1", tier: "Tier 1C", industry: "Finance", revenue: "$1.0M", distance: "4.7"},
+            {name: "Comprehensive Healthcare", email: "admin@comprehensivehealth.com", phone: "(805) 555-0133", address: "7538 Health Plaza, Moorpark, CA", puresScore: "4.4", tier: "Tier 1B", industry: "Healthcare", revenue: "$1.7M", distance: "3.6"},
+            {name: "Metro School District", email: "technology@metroschools.edu", phone: "(805) 555-0134", address: "3265 District Office, Oxnard, CA", puresScore: "3.9", tier: "Tier 1C", industry: "Education", revenue: "$820K", distance: "9.8"},
+            {name: "Professional Services LLC", email: "contact@professionalservices.com", phone: "(805) 555-0135", address: "9451 Business Center, Camarillo, CA", puresScore: "4.2", tier: "Tier 1B", industry: "Legal", revenue: "$1.3M", distance: "8.4"},
+            {name: "Advanced Manufacturing", email: "operations@advancedmfg.com", phone: "(805) 555-0136", address: "6823 Production Ave, Simi Valley, CA", puresScore: "4.6", tier: "Tier 1A", industry: "Manufacturing", revenue: "$2.3M", distance: "2.4"},
+            {name: "Community Health Partners", email: "info@communityhealth.com", phone: "(805) 555-0137", address: "1496 Wellness Way, Newbury Park, CA", puresScore: "4.1", tier: "Tier 1C", industry: "Healthcare", revenue: "$1.2M", distance: "6.0"},
+            {name: "Regional Finance Group", email: "advisors@regionalfinance.com", phone: "(805) 555-0138", address: "8037 Investment Blvd, Agoura Hills, CA", puresScore: "4.3", tier: "Tier 1B", industry: "Finance", revenue: "$1.8M", distance: "7.4"},
+            {name: "Innovation Academy", email: "tech@innovationacademy.edu", phone: "(805) 555-0139", address: "4682 Innovation Dr, Westlake Village, CA", puresScore: "3.8", tier: "Tier 1C", industry: "Education", revenue: "$720K", distance: "6.7"},
+            {name: "Premier Real Estate", email: "agents@premierrealestate.com", phone: "(805) 555-0140", address: "2914 Estate Ave, Thousand Oaks, CA", puresScore: "3.7", tier: "Tier 1C", industry: "Real Estate", revenue: "$810K", distance: "4.9"},
+            {name: "Elite Manufacturing", email: "quality@elitemfg.com", phone: "(805) 555-0141", address: "7159 Quality Blvd, Moorpark, CA", puresScore: "4.5", tier: "Tier 1B", industry: "Manufacturing", revenue: "$2.1M", distance: "4.0"},
+            {name: "Integrated Health Systems", email: "admin@integratedhealth.com", phone: "(805) 555-0142", address: "5346 Systems Way, Simi Valley, CA", puresScore: "4.4", tier: "Tier 1B", industry: "Healthcare", revenue: "$1.9M", distance: "1.8"},
+            {name: "Capital Investment Firm", email: "partners@capitalinvestment.com", phone: "(805) 555-0143", address: "8721 Capital Blvd, Camarillo, CA", puresScore: "4.7", tier: "Tier 1A", industry: "Finance", revenue: "$2.6M", distance: "8.6"},
+            {name: "Technical Education Institute", email: "admin@techedinstitute.edu", phone: "(805) 555-0144", address: "3084 Technical Way, Oxnard, CA", puresScore: "4.0", tier: "Tier 1C", industry: "Education", revenue: "$950K", distance: "9.1"},
+            {name: "Corporate Legal Solutions", email: "counsel@corplegal.com", phone: "(805) 555-0145", address: "6578 Corporate Plaza, Newbury Park, CA", puresScore: "4.2", tier: "Tier 1B", industry: "Legal", revenue: "$1.5M", distance: "5.8"},
+            {name: "Specialized Medical Center", email: "referrals@specmedcenter.com", phone: "(805) 555-0146", address: "1927 Specialty Dr, Agoura Hills, CA", puresScore: "4.5", tier: "Tier 1B", industry: "Healthcare", revenue: "$2.0M", distance: "7.2"},
+            {name: "Precision Property Management", email: "leasing@precisionpm.com", phone: "(805) 555-0147", address: "4253 Management Ave, Westlake Village, CA", puresScore: "3.9", tier: "Tier 1C", industry: "Real Estate", revenue: "$970K", distance: "6.4"},
+            {name: "Global Manufacturing Solutions", email: "sales@globalmfgsolutions.com", phone: "(805) 555-0148", address: "7816 Global Way, Thousand Oaks, CA", puresScore: "4.6", tier: "Tier 1A", industry: "Manufacturing", revenue: "$2.4M", distance: "4.6"},
+            {name: "Excellence in Education", email: "district@excellenceedu.org", phone: "(805) 555-0149", address: "9042 Excellence Blvd, Simi Valley, CA", puresScore: "3.8", tier: "Tier 1C", industry: "Education", revenue: "$690K", distance: "2.9"},
+            {name: "Strategic Financial Partners", email: "planning@strategicfp.com", phone: "(805) 555-0150", address: "2365 Strategy St, Moorpark, CA", puresScore: "4.3", tier: "Tier 1B", industry: "Finance", revenue: "$1.6M", distance: "3.7"}
+        ];
+
+        let currentData = [...clientData];
+
+        // Initialize table
+        function initializeTable() {
+            populateTable(currentData);
+        }
+
+        // Populate table with data
+        function populateTable(data) {
+            const tbody = document.getElementById('clientTableBody');
+            tbody.innerHTML = '';
+            
+            data.forEach(client => {
+                const row = tbody.insertRow();
+                const tierClass = client.tier.replace(' ', '').toLowerCase();
+                
+                row.innerHTML = `
+                    <td>${client.name}</td>
+                    <td>${client.email}</td>
+                    <td>${client.phone}</td>
+                    <td>${client.address}</td>
+                    <td>${client.puresScore}</td>
+                    <td class="${tierClass}">${client.tier}</td>
+                    <td>${client.industry}</td>
+                    <td>${client.revenue}</td>
+                    <td>${client.distance}</td>
+                    <td>
+                        <button class="contact-btn" onclick="sendEmail('${client.email}', '${client.name}', '${client.industry}')">Email</button>
+                        <button class="contact-btn" onclick="callClient('${client.phone}')">Call</button>
+                    </td>
+                `;
+            });
+        }
+
+        // Filter table based on search and filters
+        function filterTable() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const tierFilter = document.getElementById('tierFilter').value;
+            const industryFilter = document.getElementById('industryFilter').value;
+
+            const filteredData = clientData.filter(client => {
+                const matchesSearch = client.name.toLowerCase().includes(searchTerm) ||
+                                    client.email.toLowerCase().includes(searchTerm) ||
+                                    client.industry.toLowerCase().includes(searchTerm);
+                const matchesTier = !tierFilter || client.tier === tierFilter;
+                const matchesIndustry = !industryFilter || client.industry === industryFilter;
+                
+                return matchesSearch && matchesTier && matchesIndustry;
+            });
+
+            populateTable(filteredData);
+        }
+
+        // Sort table by column
+        function sortTable(columnIndex) {
+            const table = document.getElementById('clientTable');
+            const tbody = table.getElementsByTagName('tbody')[0];
+            const rows = Array.from(tbody.getElementsByTagName('tr'));
+
+            rows.sort((a, b) => {
+                const cellA = a.getElementsByTagName('td')[columnIndex].textContent.trim();
+                const cellB = b.getElementsByTagName('td')[columnIndex].textContent.trim();
+                
+                // Handle numeric values
+                if (columnIndex === 4 || columnIndex === 8) { // P.U.R.E.S Score or Distance
+                    return parseFloat(cellA) - parseFloat(cellB);
+                }
+                
+                return cellA.localeCompare(cellB);
+            });
+
+            // Clear tbody and append sorted rows
+            tbody.innerHTML = '';
+            rows.forEach(row => tbody.appendChild(row));
+        }
+
+        // Send email function
+        function sendEmail(email, name, industry) {
+            const subject = `AllConnected IT Solutions - Tailored for ${industry} Excellence`;
+            const body = `Dear ${name} team,
+
+I hope this message finds you well. As a premier IT managed service provider specializing in ${industry.toLowerCase()} solutions, AllConnected is uniquely positioned to address your organization's technology challenges.
+
+Our comprehensive services include:
+
+🔒 Advanced Cybersecurity & Compliance
+- NIST 800-171 framework implementation
+- Industry-specific regulatory compliance (${industry === 'Finance' ? 'FINRA/SEC' : industry === 'Healthcare' ? 'HIPAA' : industry === 'Education' ? 'FERPA' : 'SOX/PCI DSS'})
+- 24/7 threat monitoring and response
+
+☁️ Scalable Cloud Infrastructure
+- Business continuity planning & testing
+- Disaster recovery solutions (DRaaS)
+- Backup and data protection
+
+🛠️ Proactive IT Management
+- 24x7 monitoring and support
+- Dedicated technical account manager
+- Predictable fixed-cost agreements
+
+Why AllConnected for ${industry}?
+• 20+ years serving LA and Ventura Counties
+• Premier Cisco-certified MSP & Veeam Gold Provider
+• Industry-specific expertise with proven compliance track record
+• Local ownership means lower costs and faster response times
+
+I'd welcome the opportunity to discuss how our proven ${industry.toLowerCase()} IT solutions can enhance your operations while reducing costs and risks.
+
+Would you be available for a brief 15-minute conversation this week to explore how we can support your technology goals?
+
+Best regards,
+
+Richard Pressler
+CTO & Architect
+AllConnected
+4514 Ish Dr, Simi Valley, CA 93063
+(805) 526-1455
+richardp@allconnected.com
+https://allconnected.com
+
+P.S. We offer complimentary IT assessments to identify potential vulnerabilities and optimization opportunities.`;
+
+            const mailtoLink = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+            window.location.href = mailtoLink;
+        }
+
+        // Call client function
+        function callClient(phone) {
+            window.location.href = `tel:${phone}`;
+        }
+
+        // Tab switching
+        function showTab(tabName) {
+            // Hide all tab contents
+            const tabContents = document.getElementsByClassName('tab-content');
+            for (let i = 0; i < tabContents.length; i++) {
+                tabContents[i].classList.remove('active');
+            }
+
+            // Remove active class from all tabs
+            const tabs = document.getElementsByClassName('tab');
+            for (let i = 0; i < tabs.length; i++) {
+                tabs[i].classList.remove('active');
+            }
+
+            // Show selected tab content
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+        }
+
+        // Update P.U.R.E.S. score
+        function updateScore() {
+            const profitability = document.getElementById('profitability').value;
+            const urgency = document.getElementById('urgency').value;
+            const reachability = document.getElementById('reachability').value;
+            const engagement = document.getElementById('engagement').value;
+            const sustainability = document.getElementById('sustainability').value;
+
+            document.getElementById('profitabilityScore').textContent = profitability;
+            document.getElementById('urgencyScore').textContent = urgency;
+            document.getElementById('reachabilityScore').textContent = reachability;
+            document.getElementById('engagementScore').textContent = engagement;
+            document.getElementById('sustainabilityScore').textContent = sustainability;
+
+            const total = parseInt(profitability) + parseInt(urgency) + parseInt(reachability) + parseInt(engagement) + parseInt(sustainability);
+            document.getElementById('totalScore').textContent = total;
+        }
+
+        // Export to CSV
+        function exportToCSV() {
+            const headers = ['Client Name', 'Email', 'Phone', 'Address', 'P.U.R.E.S Score', 'Tier Level', 'Industry', 'Revenue Est.', 'Distance (mi)'];
+            const csvContent = [
+                headers.join(','),
+                ...currentData.map(client => [
+                    `"${client.name}"`,
+                    `"${client.email}"`,
+                    `"${client.phone}"`,
+                    `"${client.address}"`,
+                    client.puresScore,
+                    `"${client.tier}"`,
+                    `"${client.industry}"`,
+                    `"${client.revenue}"`,
+                    client.distance
+                ].join(','))
+            ].join('\n');
+
+            const blob = new Blob([csvContent], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'allconnected_prospects.csv';
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+
+        // Feedback modal functions
+        function openFeedbackModal() {
+            document.getElementById('feedbackModal').style.display = 'block';
+        }
+
+        function closeFeedbackModal() {
+            document.getElementById('feedbackModal').style.display = 'none';
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('feedbackModal');
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        }
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeTable();
+        });
+    </script>
+</body>
+</html>

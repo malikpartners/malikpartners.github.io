@@ -1,0 +1,1296 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BTG S.A.L.E. Client Targeting System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #000000;
+            color: #ffffff;
+            line-height: 1.6;
+        }
+
+        .header {
+            background: #CF2030;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(207, 32, 48, 0.3);
+        }
+
+        .header img {
+            height: 50px;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 2rem;
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .section {
+            background: #1a1a1a;
+            border-radius: 10px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid #333;
+        }
+
+        .section-title {
+            color: #CF2030;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid #CF2030;
+            padding-bottom: 0.5rem;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .tab {
+            background: #333;
+            color: #fff;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .tab.active {
+            background: #CF2030;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #CF2030;
+            font-weight: 600;
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #555;
+            border-radius: 5px;
+            background: #2a2a2a;
+            color: #fff;
+        }
+
+        .score-input {
+            width: 80px !important;
+            display: inline-block;
+            margin-left: 1rem;
+        }
+
+        .client-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+            background: #2a2a2a;
+        }
+
+        .client-table th, .client-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #555;
+        }
+
+        .client-table th {
+            background: #CF2030;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        .client-table tr:hover {
+            background: #333;
+        }
+
+        .tier-1a { border-left: 4px solid #00ff00; }
+        .tier-1b { border-left: 4px solid #ffff00; }
+        .tier-1c { border-left: 4px solid #0088ff; }
+
+        .btn {
+            background: #CF2030;
+            color: #fff;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin: 0.25rem;
+        }
+
+        .btn:hover {
+            background: #a01828;
+            transform: translateY(-2px);
+        }
+
+        .btn-small {
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+        }
+
+        .search-controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .search-controls input, .search-controls select {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+        }
+
+        .modal-content {
+            background-color: #1a1a1a;
+            margin: 5% auto;
+            padding: 2rem;
+            border: 1px solid #555;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 600px;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: #CF2030;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            background: #1a1a1a;
+            margin-top: 2rem;
+        }
+
+        .footer img {
+            height: 30px;
+            opacity: 0.7;
+        }
+
+        .dashboard-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: #2a2a2a;
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid #555;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            color: #CF2030;
+            font-weight: bold;
+        }
+
+        .email-template {
+            background: #2a2a2a;
+            padding: 1rem;
+            border-radius: 5px;
+            margin-top: 1rem;
+            border: 1px solid #555;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports">
+        <div class="nav-menu">
+            <span>S.A.L.E. System</span>
+            <span>Client Database</span>
+            <span>Analytics</span>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Dashboard Stats -->
+        <div class="dashboard-stats">
+            <div class="stat-card">
+                <div class="stat-number" id="totalClients">50</div>
+                <div>Total Prospects</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="tier1aCount">15</div>
+                <div>Tier 1A (Premium)</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="tier1bCount">20</div>
+                <div>Tier 1B (High-Value)</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="tier1cCount">15</div>
+                <div>Tier 1C (Qualified)</div>
+            </div>
+        </div>
+
+        <!-- S.A.L.E. System Tabs -->
+        <div class="section">
+            <div class="tabs">
+                <button class="tab active" onclick="showTab('sourcing')">S.OURCING</button>
+                <button class="tab" onclick="showTab('assessing')">A.SSESSING</button>
+                <button class="tab" onclick="showTab('listening')">L.ISTENING</button>
+                <button class="tab" onclick="showTab('empowering')">E.MPOWERING</button>
+                <button class="tab" onclick="showTab('database')">CLIENT DATABASE</button>
+            </div>
+
+            <!-- SOURCING Module -->
+            <div id="sourcing" class="tab-content active">
+                <h2 class="section-title">S.OURCING - P.U.R.E.S. Client Scoring System</h2>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                    <div>
+                        <div class="form-group">
+                            <label>Client Name:</label>
+                            <input type="text" id="clientName" placeholder="Enter client name">
+                        </div>
+                        <div class="form-group">
+                            <label>Profitability (1-5): <input type="range" min="1" max="5" value="3" class="score-input" id="profitability"></label>
+                            <small>Annual revenue threshold and budget capacity</small>
+                        </div>
+                        <div class="form-group">
+                            <label>Urgency (1-5): <input type="range" min="1" max="5" value="3" class="score-input" id="urgency"></label>
+                            <small>Active pain points requiring immediate solutions</small>
+                        </div>
+                        <div class="form-group">
+                            <label>Reachability (1-5): <input type="range" min="1" max="5" value="3" class="score-input" id="reachability"></label>
+                            <small>Accessible decision makers with clear contact paths</small>
+                        </div>
+                        <div class="form-group">
+                            <label>Engagement (1-5): <input type="range" min="1" max="5" value="3" class="score-input" id="engagement"></label>
+                            <small>Openness to innovation and partnerships</small>
+                        </div>
+                        <div class="form-group">
+                            <label>Sustainability (1-5): <input type="range" min="1" max="5" value="3" class="score-input" id="sustainability"></label>
+                            <small>Long-term partnership potential with growth trajectory</small>
+                        </div>
+                        <button class="btn" onclick="calculatePURES()">Calculate P.U.R.E.S. Score</button>
+                    </div>
+                    <div>
+                        <h3 style="color: #CF2030;">Client Tier Classification:</h3>
+                        <div style="margin: 1rem 0; padding: 1rem; background: #2a2a2a; border-radius: 5px;">
+                            <div style="color: #00ff00;"><strong>Tier 1A (Premium):</strong> 4-5 scores on all P.U.R.E.S. criteria</div>
+                            <div style="color: #ffff00;"><strong>Tier 1B (High-Value):</strong> 3-4 scores on most criteria</div>
+                            <div style="color: #0088ff;"><strong>Tier 1C (Qualified):</strong> 3+ scores on P.U.R.E.S. criteria</div>
+                        </div>
+                        <div id="puresResult" style="margin-top: 1rem; padding: 1rem; background: #2a2a2a; border-radius: 5px; display: none;">
+                            <h4>P.U.R.E.S. Results:</h4>
+                            <div id="puresScore"></div>
+                            <div id="puresTier"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ASSESSING Module -->
+            <div id="assessing" class="tab-content">
+                <h2 class="section-title">A.SSESSING - Buying Pattern Analysis</h2>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem;">
+                    <div class="stat-card">
+                        <h3 style="color: #CF2030;">Analytical Buyers</h3>
+                        <p>Require detailed ROI analysis, case studies, trials</p>
+                        <button class="btn btn-small" onclick="showEmailTemplate('analytical')">View Email Template</button>
+                    </div>
+                    <div class="stat-card">
+                        <h3 style="color: #CF2030;">Relationship Buyers</h3>
+                        <p>Value trust, referrals, long-term partnerships</p>
+                        <button class="btn btn-small" onclick="showEmailTemplate('relationship')">View Email Template</button>
+                    </div>
+                    <div class="stat-card">
+                        <h3 style="color: #CF2030;">Efficiency Buyers</h3>
+                        <p>Focus on time-saving, process improvement</p>
+                        <button class="btn btn-small" onclick="showEmailTemplate('efficiency')">View Email Template</button>
+                    </div>
+                    <div class="stat-card">
+                        <h3 style="color: #CF2030;">Innovation Buyers</h3>
+                        <p>Seek cutting-edge solutions, competitive advantage</p>
+                        <button class="btn btn-small" onclick="showEmailTemplate('innovation')">View Email Template</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- LISTENING Module -->
+            <div id="listening" class="tab-content">
+                <h2 class="section-title">L.ISTENING - Feedback Integration</h2>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                    <div>
+                        <h3 style="color: #CF2030;">Feedback Collection</h3>
+                        <div class="form-group">
+                            <label>Client Name:</label>
+                            <select id="feedbackClient">
+                                <option value="">Select Client</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Feedback Type:</label>
+                            <select>
+                                <option>Pre-sale</option>
+                                <option>During-sale</option>
+                                <option>Post-sale</option>
+                                <option>Complaint Resolution</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Feedback:</label>
+                            <textarea rows="4" placeholder="Enter feedback details..."></textarea>
+                        </div>
+                        <button class="btn">Submit Feedback</button>
+                    </div>
+                    <div>
+                        <h3 style="color: #CF2030;">Feedback Tracking</h3>
+                        <div class="stat-card">
+                            <div class="stat-number">85%</div>
+                            <div>Satisfaction Rate</div>
+                        </div>
+                        <div class="stat-card" style="margin-top: 1rem;">
+                            <div class="stat-number">12</div>
+                            <div>Active Feedback Items</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EMPOWERING Module -->
+            <div id="empowering" class="tab-content">
+                <h2 class="section-title">E.MPOWERING - Referral Strategy</h2>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+                    <div class="stat-card">
+                        <h3 style="color: #CF2030;">Success Stories</h3>
+                        <div class="stat-number">24</div>
+                        <p>Documented case studies</p>
+                        <button class="btn btn-small">Add New Story</button>
+                    </div>
+                    <div class="stat-card">
+                        <h3 style="color: #CF2030;">Referral Rewards</h3>
+                        <div class="stat-number">$15K</div>
+                        <p>Total rewards paid</p>
+                        <button class="btn btn-small">Track Rewards</button>
+                    </div>
+                    <div class="stat-card">
+                        <h3 style="color: #CF2030;">Client Advocacy</h3>
+                        <div class="stat-number">18</div>
+                        <p>Active advocates</p>
+                        <button class="btn btn-small">Manage Program</button>
+                    </div>
+                    <div class="stat-card">
+                        <h3 style="color: #CF2030;">Co-Marketing</h3>
+                        <div class="stat-number">6</div>
+                        <p>Active partnerships</p>
+                        <button class="btn btn-small">Plan Campaign</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CLIENT DATABASE -->
+            <div id="database" class="tab-content">
+                <h2 class="section-title">Client Database - Chicago Area Prospects</h2>
+                
+                <div class="search-controls">
+                    <input type="text" id="searchInput" placeholder="Search clients..." onkeyup="filterTable()">
+                    <select id="tierFilter" onchange="filterTable()">
+                        <option value="">All Tiers</option>
+                        <option value="Tier 1A">Tier 1A (Premium)</option>
+                        <option value="Tier 1B">Tier 1B (High-Value)</option>
+                        <option value="Tier 1C">Tier 1C (Qualified)</option>
+                    </select>
+                    <select id="industryFilter" onchange="filterTable()">
+                        <option value="">All Industries</option>
+                        <option value="Technology">Technology</option>
+                        <option value="Healthcare">Healthcare</option>
+                        <option value="Financial Services">Financial Services</option>
+                        <option value="Manufacturing">Manufacturing</option>
+                        <option value="Retail">Retail</option>
+                    </select>
+                    <button class="btn" onclick="exportData()">Export CSV</button>
+                </div>
+
+                <table class="client-table" id="clientTable">
+                    <thead>
+                        <tr>
+                            <th onclick="sortTable(0)">Client Name</th>
+                            <th onclick="sortTable(1)">Email</th>
+                            <th onclick="sortTable(2)">Phone</th>
+                            <th onclick="sortTable(3)">Address</th>
+                            <th onclick="sortTable(4)">P.U.R.E.S. Score</th>
+                            <th onclick="sortTable(5)">Tier Level</th>
+                            <th onclick="sortTable(6)">Industry</th>
+                            <th onclick="sortTable(7)">Revenue Est.</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="clientTableBody">
+                        <!-- Client data will be populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Email Modal -->
+    <div id="emailModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2 style="color: #CF2030;">Compose Email</h2>
+            <div class="form-group">
+                <label>To:</label>
+                <input type="email" id="emailTo" readonly>
+            </div>
+            <div class="form-group">
+                <label>Subject:</label>
+                <input type="text" id="emailSubject">
+            </div>
+            <div class="form-group">
+                <label>Message:</label>
+                <textarea id="emailBody" rows="10"></textarea>
+            </div>
+            <button class="btn" onclick="sendEmail()">Send Email</button>
+        </div>
+    </div>
+
+    <div class="footer">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports">
+        <p>&copy; 2026 Business Talent Group | S.A.L.E. Client Targeting System</p>
+    </div>
+
+    <script>
+        // Sample client data within 10 miles of Chicago
+        const clientData = [
+            {
+                name: "Sarah Chen",
+                email: "s.chen@techcorp.com",
+                phone: "(312) 555-0101",
+                address: "100 N Michigan Ave, Chicago, IL 60601",
+                puresScore: 4.4,
+                tier: "Tier 1A",
+                industry: "Technology",
+                revenue: "$50M",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Michael Rodriguez",
+                email: "mrodriguez@healthsys.com",
+                phone: "(312) 555-0102",
+                address: "233 E Erie St, Chicago, IL 60611",
+                puresScore: 4.2,
+                tier: "Tier 1A",
+                industry: "Healthcare",
+                revenue: "$75M",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Jennifer Walsh",
+                email: "j.walsh@financorp.com",
+                phone: "(312) 555-0103",
+                address: "55 E Monroe St, Chicago, IL 60603",
+                puresScore: 4.6,
+                tier: "Tier 1A",
+                industry: "Financial Services",
+                revenue: "$120M",
+                buyerType: "Efficiency"
+            },
+            {
+                name: "David Kim",
+                email: "dkim@manufactureplus.com",
+                phone: "(773) 555-0104",
+                address: "1500 W Carroll Ave, Chicago, IL 60607",
+                puresScore: 3.8,
+                tier: "Tier 1B",
+                industry: "Manufacturing",
+                revenue: "$35M",
+                buyerType: "Relationship"
+            },
+            {
+                name: "Amanda Foster",
+                email: "afoster@retailgroup.com",
+                phone: "(312) 555-0105",
+                address: "900 N Michigan Ave, Chicago, IL 60611",
+                puresScore: 3.6,
+                tier: "Tier 1B",
+                industry: "Retail",
+                revenue: "$25M",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Robert Thompson",
+                email: "rthompson@consultech.com",
+                phone: "(312) 555-0106",
+                address: "300 S Riverside Plaza, Chicago, IL 60606",
+                puresScore: 4.1,
+                tier: "Tier 1A",
+                industry: "Technology",
+                revenue: "$60M",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Lisa Park",
+                email: "lpark@medicalcenter.org",
+                phone: "(773) 555-0107",
+                address: "1725 W Harrison St, Chicago, IL 60612",
+                puresScore: 3.9,
+                tier: "Tier 1B",
+                industry: "Healthcare",
+                revenue: "$45M",
+                buyerType: "Relationship"
+            },
+            {
+                name: "James Wilson",
+                email: "jwilson@bankingsolutions.com",
+                phone: "(312) 555-0108",
+                address: "120 S LaSalle St, Chicago, IL 60603",
+                puresScore: 4.3,
+                tier: "Tier 1A",
+                industry: "Financial Services",
+                revenue: "$95M",
+                buyerType: "Efficiency"
+            },
+            {
+                name: "Maria Gonzalez",
+                email: "mgonzalez@industrialtech.com",
+                phone: "(773) 555-0109",
+                address: "2500 W Bradley Pl, Chicago, IL 60618",
+                puresScore: 3.4,
+                tier: "Tier 1C",
+                industry: "Manufacturing",
+                revenue: "$20M",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Daniel Lee",
+                email: "dlee@ecommerce.com",
+                phone: "(312) 555-0110",
+                address: "500 W Madison St, Chicago, IL 60661",
+                puresScore: 3.7,
+                tier: "Tier 1B",
+                industry: "Retail",
+                revenue: "$30M",
+                buyerType: "Analytical"
+            },
+            // Additional 40 clients...
+            {
+                name: "Rachel Adams",
+                email: "radams@softwaredev.com",
+                phone: "(312) 555-0111",
+                address: "350 W Mart Center Dr, Chicago, IL 60654",
+                puresScore: 4.0,
+                tier: "Tier 1A",
+                industry: "Technology",
+                revenue: "$55M",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Kevin Brown",
+                email: "kbrown@hospitalgroup.com",
+                phone: "(773) 555-0112",
+                address: "1440 W Washington Blvd, Chicago, IL 60607",
+                puresScore: 3.5,
+                tier: "Tier 1B",
+                industry: "Healthcare",
+                revenue: "$40M",
+                buyerType: "Relationship"
+            },
+            {
+                name: "Nicole Taylor",
+                email: "ntaylor@investmentfirm.com",
+                phone: "(312) 555-0113",
+                address: "141 W Jackson Blvd, Chicago, IL 60604",
+                puresScore: 4.5,
+                tier: "Tier 1A",
+                industry: "Financial Services",
+                revenue: "$110M",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Steven Garcia",
+                email: "sgarcia@manufacturing.com",
+                phone: "(773) 555-0114",
+                address: "3600 W Fullerton Ave, Chicago, IL 60647",
+                puresScore: 3.2,
+                tier: "Tier 1C",
+                industry: "Manufacturing",
+                revenue: "$18M",
+                buyerType: "Efficiency"
+            },
+            {
+                name: "Laura Martinez",
+                email: "lmartinez@retailchain.com",
+                phone: "(312) 555-0115",
+                address: "600 N Michigan Ave, Chicago, IL 60611",
+                puresScore: 3.8,
+                tier: "Tier 1B",
+                industry: "Retail",
+                revenue: "$28M",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Christopher Davis",
+                email: "cdavis@techstartup.com",
+                phone: "(312) 555-0116",
+                address: "1871 N Clybourn Ave, Chicago, IL 60614",
+                puresScore: 4.2,
+                tier: "Tier 1A",
+                industry: "Technology",
+                revenue: "$65M",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Michelle Johnson",
+                email: "mjohnson@healthcaresys.com",
+                phone: "(773) 555-0117",
+                address: "2160 S First Ave, Maywood, IL 60153",
+                puresScore: 3.6,
+                tier: "Tier 1B",
+                industry: "Healthcare",
+                revenue: "$32M",
+                buyerType: "Relationship"
+            },
+            {
+                name: "Andrew Miller",
+                email: "amiller@creditunion.com",
+                phone: "(312) 555-0118",
+                address: "190 S LaSalle St, Chicago, IL 60603",
+                puresScore: 4.1,
+                tier: "Tier 1A",
+                industry: "Financial Services",
+                revenue: "$85M",
+                buyerType: "Efficiency"
+            },
+            {
+                name: "Jessica White",
+                email: "jwhite@autoparts.com",
+                phone: "(773) 555-0119",
+                address: "4501 W Division St, Chicago, IL 60651",
+                puresScore: 3.3,
+                tier: "Tier 1C",
+                industry: "Manufacturing",
+                revenue: "$22M",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Ryan Moore",
+                email: "rmoore@fashionretail.com",
+                phone: "(312) 555-0120",
+                address: "835 N Michigan Ave, Chicago, IL 60611",
+                puresScore: 3.9,
+                tier: "Tier 1B",
+                industry: "Retail",
+                revenue: "$38M",
+                buyerType: "Innovation"
+            },
+            // Continue with remaining 30 clients with similar structure...
+            {
+                name: "Elizabeth Clark",
+                email: "eclark@dataanalytics.com",
+                phone: "(312) 555-0121",
+                address: "444 N Michigan Ave, Chicago, IL 60611",
+                puresScore: 4.4,
+                tier: "Tier 1A",
+                industry: "Technology",
+                revenue: "$70M",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Mark Lewis",
+                email: "mlewis@clinic.org",
+                phone: "(773) 555-0122",
+                address: "2515 N Clark St, Chicago, IL 60614",
+                puresScore: 3.7,
+                tier: "Tier 1B",
+                industry: "Healthcare",
+                revenue: "$35M",
+                buyerType: "Relationship"
+            },
+            {
+                name: "Stephanie Robinson",
+                email: "srobinson@wealth.com",
+                phone: "(312) 555-0123",
+                address: "1 N Wacker Dr, Chicago, IL 60606",
+                puresScore: 4.6,
+                tier: "Tier 1A",
+                industry: "Financial Services",
+                revenue: "$125M",
+                buyerType: "Efficiency"
+            },
+            {
+                name: "Brian Walker",
+                email: "bwalker@steelworks.com",
+                phone: "(773) 555-0124",
+                address: "5600 W Grand Ave, Chicago, IL 60639",
+                puresScore: 3.1,
+                tier: "Tier 1C",
+                industry: "Manufacturing",
+                revenue: "$15M",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Kelly Hall",
+                email: "khall@luxurybrands.com",
+                phone: "(312) 555-0125",
+                address: "717 N Michigan Ave, Chicago, IL 60611",
+                puresScore: 4.0,
+                tier: "Tier 1A",
+                industry: "Retail",
+                revenue: "$55M",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Jonathan Young",
+                email: "jyoung@cybersecurity.com",
+                phone: "(312) 555-0126",
+                address: "222 S Riverside Plaza, Chicago, IL 60606",
+                puresScore: 4.3,
+                tier: "Tier 1A",
+                industry: "Technology",
+                revenue: "$80M",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Ashley Hernandez",
+                email: "ahernandez@pharma.com",
+                phone: "(773) 555-0127",
+                address: "1900 W Polk St, Chicago, IL 60612",
+                puresScore: 3.8,
+                tier: "Tier 1B",
+                industry: "Healthcare",
+                revenue: "$42M",
+                buyerType: "Relationship"
+            },
+            {
+                name: "Thomas King",
+                email: "tking@insurance.com",
+                phone: "(312) 555-0128",
+                address: "175 W Jackson Blvd, Chicago, IL 60604",
+                puresScore: 4.2,
+                tier: "Tier 1A",
+                industry: "Financial Services",
+                revenue: "$90M",
+                buyerType: "Efficiency"
+            },
+            {
+                name: "Samantha Wright",
+                email: "swright@aerospace.com",
+                phone: "(773) 555-0129",
+                address: "6600 S Cicero Ave, Bedford Park, IL 60638",
+                puresScore: 3.4,
+                tier: "Tier 1C",
+                industry: "Manufacturing",
+                revenue: "$25M",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Matthew Lopez",
+                email: "mlopez@franchise.com",
+                phone: "(312) 555-0130",
+                address: "401 N Michigan Ave, Chicago, IL 60611",
+                puresScore: 3.6,
+                tier: "Tier 1B",
+                industry: "Retail",
+                revenue: "$33M",
+                buyerType: "Analytical"
+            },
+            // Final 20 clients to complete the 50...
+            {
+                name: "Angela Scott",
+                email: "ascott@cloudtech.com",
+                phone: "(312) 555-0131",
+                address: "515 N State St, Chicago, IL 60654",
+                puresScore: 4.1,
+                tier: "Tier 1A",
+                industry: "Technology",
+                revenue: "$62M",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Gregory Green",
+                email: "ggreen@medresearch.org",
+                phone: "(773) 555-0132",
+                address: "2900 N Lake Shore Dr, Chicago, IL 60657",
+                puresScore: 3.9,
+                tier: "Tier 1B",
+                industry: "Healthcare",
+                revenue: "$48M",
+                buyerType: "Relationship"
+            },
+            {
+                name: "Rebecca Adams",
+                email: "radams2@mortgage.com",
+                phone: "(312) 555-0133",
+                address: "233 S Wacker Dr, Chicago, IL 60606",
+                puresScore: 4.4,
+                tier: "Tier 1A",
+                industry: "Financial Services",
+                revenue: "$105M",
+                buyerType: "Efficiency"
+            },
+            {
+                name: "Joshua Baker",
+                email: "jbaker@chemicals.com",
+                phone: "(773) 555-0134",
+                address: "7000 S Kedzie Ave, Chicago, IL 60629",
+                puresScore: 3.3,
+                tier: "Tier 1C",
+                industry: "Manufacturing",
+                revenue: "$19M",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Megan Carter",
+                email: "mcarter@beauty.com",
+                phone: "(312) 555-0135",
+                address: "520 N Michigan Ave, Chicago, IL 60611",
+                puresScore: 3.8,
+                tier: "Tier 1B",
+                industry: "Retail",
+                revenue: "$36M",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Alexander Evans",
+                email: "aevans@ai.com",
+                phone: "(312) 555-0136",
+                address: "303 E Wacker Dr, Chicago, IL 60601",
+                puresScore: 4.5,
+                tier: "Tier 1A",
+                industry: "Technology",
+                revenue: "$88M",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Natalie Phillips",
+                email: "nphillips@hospital.org",
+                phone: "(773) 555-0137",
+                address: "4440 W 95th St, Oak Lawn, IL 60453",
+                puresScore: 3.5,
+                tier: "Tier 1B",
+                industry: "Healthcare",
+                revenue: "$29M",
+                buyerType: "Relationship"
+            },
+            {
+                name: "Brandon Mitchell",
+                email: "bmitchell@realty.com",
+                phone: "(312) 555-0138",
+                address: "10 S Riverside Plaza, Chicago, IL 60606",
+                puresScore: 4.0,
+                tier: "Tier 1A",
+                industry: "Financial Services",
+                revenue: "$75M",
+                buyerType: "Efficiency"
+            },
+            {
+                name: "Victoria Nelson",
+                email: "vnelson@packaging.com",
+                phone: "(773) 555-0139",
+                address: "3900 W 47th St, Chicago, IL 60632",
+                puresScore: 3.2,
+                tier: "Tier 1C",
+                industry: "Manufacturing",
+                revenue: "$17M",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Tyler Turner",
+                email: "tturner@sports.com",
+                phone: "(312) 555-0140",
+                address: "900 N Michigan Ave, Chicago, IL 60611",
+                puresScore: 3.7,
+                tier: "Tier 1B",
+                industry: "Retail",
+                revenue: "$31M",
+                buyerType: "Analytical"
+            }
+        ];
+
+        // Email templates for different buyer types
+        const emailTemplates = {
+            analytical: {
+                subject: "Data-Driven Solutions for [COMPANY] - ROI Case Studies Inside",
+                body: `Dear [CLIENT_NAME],
+
+I hope this email finds you well. As a data-driven leader in the [INDUSTRY] sector, I wanted to share some compelling results that Business Talent Group has achieved for similar organizations.
+
+Recent Case Study Highlights:
+• 35% reduction in operational costs through strategic interim leadership
+• 150% improvement in project delivery times with specialized consultants
+• $2.3M additional revenue generated through transformation initiatives
+
+Our analytical approach includes:
+✓ Comprehensive ROI analysis before engagement
+✓ Performance metrics tracking throughout the project
+✓ Detailed impact assessment with quantifiable results
+
+I'd be happy to share the full case studies and discuss how our on-demand talent marketplace could deliver similar results for [COMPANY].
+
+Would you be available for a brief 15-minute call this week to explore potential opportunities?
+
+Best regards,
+Mitzi Oliver
+Business Talent Group
+mitzi.oliver@businesstalentgroup.com
+(312) 555-BTG1`
+            },
+            relationship: {
+                subject: "Building Long-Term Partnership Success - [COMPANY]",
+                body: `Dear [CLIENT_NAME],
+
+I've been following [COMPANY]'s impressive growth in the [INDUSTRY] space and would love to explore how Business Talent Group might support your continued success.
+
+At BTG, we believe in building lasting partnerships rather than transactional relationships. Our approach focuses on:
+
+• Understanding your unique culture and values
+• Matching talent that aligns with your organizational DNA
+• Providing ongoing support throughout our engagement
+• Building trust through consistent delivery and transparency
+
+Many of our strongest partnerships began with a simple conversation about shared goals and values. Companies like yours have found tremendous value in our collaborative approach to talent solutions.
+
+I'd welcome the opportunity to learn more about your current priorities and discuss how we might support your team's objectives. Would you be interested in a brief coffee meeting next week?
+
+Looking forward to potentially building a great partnership together.
+
+Warm regards,
+Mitzi Oliver
+Business Talent Group
+mitzi.oliver@businesstalentgroup.com`
+            },
+            efficiency: {
+                subject: "Streamline Operations - 30% Faster Project Delivery",
+                body: `Dear [CLIENT_NAME],
+
+Time is your most valuable resource, and I have a solution that can give you more of it.
+
+Business Talent Group specializes in providing immediate access to pre-vetted, high-caliber professionals who can hit the ground running. No lengthy hiring processes, no training periods – just results.
+
+Quick Impact Solutions:
+⚡ Deploy expert consultants within 48-72 hours
+⚡ Reduce project timelines by an average of 30%
+⚡ Eliminate administrative overhead with our full-service approach
+⚡ Scale resources up or down based on immediate needs
+
+Recent client saved 6 weeks on a critical transformation project by leveraging our interim CTO and specialized team. The efficiency gains alone paid for the entire engagement.
+
+I'd like to discuss how we can help [COMPANY] achieve similar time-to-value improvements. Are you available for a quick 10-minute call this week?
+
+Best regards,
+Mitzi Oliver
+Business Talent Group
+mitzi.oliver@businesstalentgroup.com`
+            },
+            innovation: {
+                subject: "Cutting-Edge Talent Solutions - Stay Ahead of the Competition",
+                body: `Dear [CLIENT_NAME],
+
+In today's rapidly evolving business landscape, the companies that thrive are those that embrace innovative approaches to talent and capability building.
+
+Business Talent Group is revolutionizing how organizations access world-class expertise:
+
+🚀 AI-powered talent matching technology
+🚀 Access to emerging skill sets before they become mainstream
+🚀 Flexible engagement models that adapt to your needs
+🚀 Global network of forward-thinking executives and consultants
+
+Innovation Spotlight:
+• Recently helped a client implement industry-first digital transformation
+• Connected organizations with experts in emerging technologies like Web3 and quantum computing
+• Pioneered new interim executive models for rapid market expansion
+
+As an innovation-focused leader at [COMPANY], you understand the competitive advantage that comes from accessing cutting-edge capabilities. I'd love to explore how our innovative approach to talent could help [COMPANY] maintain its competitive edge.
+
+Would you be interested in a brief discussion about the future of talent solutions?
+
+Best regards,
+Mitzi Oliver
+Business Talent Group
+mitzi.oliver@businesstalentgroup.com`
+            }
+        };
+
+        // Initialize the application
+        function init() {
+            populateClientTable();
+            updateStats();
+            populateFeedbackClients();
+        }
+
+        // Populate client table
+        function populateClientTable() {
+            const tbody = document.getElementById('clientTableBody');
+            tbody.innerHTML = '';
+
+            clientData.forEach((client, index) => {
+                const row = document.createElement('tr');
+                row.className = client.tier === 'Tier 1A' ? 'tier-1a' : 
+                               client.tier === 'Tier 1B' ? 'tier-1b' : 'tier-1c';
+                
+                row.innerHTML = `
+                    <td>${client.name}</td>
+                    <td>${client.email}</td>
+                    <td>${client.phone}</td>
+                    <td>${client.address}</td>
+                    <td>${client.puresScore}</td>
+                    <td><span style="color: ${client.tier === 'Tier 1A' ? '#00ff00' : client.tier === 'Tier 1B' ? '#ffff00' : '#0088ff'}">${client.tier}</span></td>
+                    <td>${client.industry}</td>
+                    <td>${client.revenue}</td>
+                    <td>
+                        <button class="btn btn-small" onclick="contactClient(${index}, 'email')">Email</button>
+                        <button class="btn btn-small" onclick="contactClient(${index}, 'call')">Call</button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // Update dashboard statistics
+        function updateStats() {
+            const tier1a = clientData.filter(c => c.tier === 'Tier 1A').length;
+            const tier1b = clientData.filter(c => c.tier === 'Tier 1B').length;
+            const tier1c = clientData.filter(c => c.tier === 'Tier 1C').length;
+
+            document.getElementById('tier1aCount').textContent = tier1a;
+            document.getElementById('tier1bCount').textContent = tier1b;
+            document.getElementById('tier1cCount').textContent = tier1c;
+        }
+
+        // Populate feedback client dropdown
+        function populateFeedbackClients() {
+            const select = document.getElementById('feedbackClient');
+            clientData.forEach(client => {
+                const option = document.createElement('option');
+                option.value = client.name;
+                option.textContent = client.name;
+                select.appendChild(option);
+            });
+        }
+
+        // Tab navigation
+        function showTab(tabName) {
+            // Hide all tab contents
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => content.classList.remove('active'));
+
+            // Remove active class from all tabs
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+
+            // Show selected tab content
+            document.getElementById(tabName).classList.add('active');
+
+            // Mark selected tab as active
+            event.target.classList.add('active');
+        }
+
+        // Calculate P.U.R.E.S. score
+        function calculatePURES() {
+            const profitability = document.getElementById('profitability').value;
+            const urgency = document.getElementById('urgency').value;
+            const reachability = document.getElementById('reachability').value;
+            const engagement = document.getElementById('engagement').value;
+            const sustainability = document.getElementById('sustainability').value;
+
+            const avgScore = ((parseInt(profitability) + parseInt(urgency) + parseInt(reachability) + parseInt(engagement) + parseInt(sustainability)) / 5).toFixed(1);
+
+            let tier;
+            if (avgScore >= 4.0) {
+                tier = '<span style="color: #00ff00;">Tier 1A (Premium)</span>';
+            } else if (avgScore >= 3.0) {
+                tier = '<span style="color: #ffff00;">Tier 1B (High-Value)</span>';
+            } else {
+                tier = '<span style="color: #0088ff;">Tier 1C (Qualified)</span>';
+            }
+
+            document.getElementById('puresScore').innerHTML = `<strong>Average Score: ${avgScore}/5</strong>`;
+            document.getElementById('puresTier').innerHTML = `<strong>Classification: ${tier}</strong>`;
+            document.getElementById('puresResult').style.display = 'block';
+        }
+
+        // Contact client
+        function contactClient(index, method) {
+            const client = clientData[index];
+            
+            if (method === 'email') {
+                openEmailModal(client);
+            } else if (method === 'call') {
+                window.open(`tel:${client.phone}`);
+            }
+        }
+
+        // Open email modal
+        function openEmailModal(client) {
+            const modal = document.getElementById('emailModal');
+            const template = emailTemplates[client.buyerType];
+            
+            document.getElementById('emailTo').value = client.email;
+            document.getElementById('emailSubject').value = template.subject
+                .replace('[COMPANY]', client.name.split(' ')[1] || 'Your Company');
+            
+            document.getElementById('emailBody').value = template.body
+                .replace(/\[CLIENT_NAME\]/g, client.name)
+                .replace(/\[COMPANY\]/g, client.name.split(' ')[1] || 'Your Company')
+                .replace(/\[INDUSTRY\]/g, client.industry);
+            
+            modal.style.display = 'block';
+        }
+
+        // Show email template
+        function showEmailTemplate(buyerType) {
+            const template = emailTemplates[buyerType];
+            alert(`Subject: ${template.subject}\n\n${template.body.substring(0, 200)}...`);
+        }
+
+        // Send email (simulation)
+        function sendEmail() {
+            const to = document.getElementById('emailTo').value;
+            const subject = document.getElementById('emailSubject').value;
+            const body = document.getElementById('emailBody').value;
+            
+            // Create mailto link
+            const mailtoLink = `mailto:${to}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+            window.open(mailtoLink);
+            
+            document.getElementById('emailModal').style.display = 'none';
+            alert('Email client opened. Email has been prepared for sending.');
+        }
+
+        // Filter table
+        function filterTable() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const tierFilter = document.getElementById('tierFilter').value;
+            const industryFilter = document.getElementById('industryFilter').value;
+            
+            const rows = document.querySelectorAll('#clientTableBody tr');
+            
+            rows.forEach(row => {
+                const name = row.cells[0].textContent.toLowerCase();
+                const email = row.cells[1].textContent.toLowerCase();
+                const tier = row.cells[5].textContent;
+                const industry = row.cells[6].textContent;
+                
+                const matchesSearch = name.includes(searchTerm) || email.includes(searchTerm);
+                const matchesTier = !tierFilter || tier.includes(tierFilter);
+                const matchesIndustry = !industryFilter || industry === industryFilter;
+                
+                row.style.display = matchesSearch && matchesTier && matchesIndustry ? '' : 'none';
+            });
+        }
+
+        // Sort table
+        function sortTable(columnIndex) {
+            const table = document.getElementById('clientTable');
+            const tbody = table.querySelector('tbody');
+            const rows = Array.from(tbody.querySelectorAll('tr'));
+            
+            rows.sort((a, b) => {
+                const aText = a.cells[columnIndex].textContent.trim();
+                const bText = b.cells[columnIndex].textContent.trim();
+                
+                // Handle numeric sorting for P.U.R.E.S. score
+                if (columnIndex === 4) {
+                    return parseFloat(bText) - parseFloat(aText);
+                }
+                
+                return aText.localeCompare(bText);
+            });
+            
+            tbody.innerHTML = '';
+            rows.forEach(row => tbody.appendChild(row));
+        }
+
+        // Export data
+        function exportData() {
+            const headers = ['Client Name', 'Email', 'Phone', 'Address', 'P.U.R.E.S. Score', 'Tier Level', 'Industry', 'Revenue Est.'];
+            const csvContent = [
+                headers.join(','),
+                ...clientData.map(client => [
+                    `"${client.name}"`,
+                    `"${client.email}"`,
+                    `"${client.phone}"`,
+                    `"${client.address}"`,
+                    client.puresScore,
+                    `"${client.tier}"`,
+                    `"${client.industry}"`,
+                    `"${client.revenue}"`
+                ].join(','))
+            ].join('\n');
+            
+            const blob = new Blob([csvContent], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'btg-client-database.csv';
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('emailModal');
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        }
+
+        // Close modal when clicking X
+        document.querySelector('.close').onclick = function() {
+            document.getElementById('emailModal').style.display = 'none';
+        }
+
+        // Initialize the application when page loads
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>

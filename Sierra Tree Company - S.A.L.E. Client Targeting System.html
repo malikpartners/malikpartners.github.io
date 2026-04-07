@@ -1,0 +1,1169 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sierra Tree Company - S.A.L.E. Client Targeting System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #000000;
+            color: #ffffff;
+            line-height: 1.6;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #CF2030 0%, #8B1520 100%);
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+        
+        .logo {
+            max-height: 80px;
+            width: auto;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .card {
+            background: #1a1a1a;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            border: 1px solid #333;
+        }
+        
+        .card h3 {
+            color: #CF2030;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #CF2030;
+            padding-bottom: 5px;
+        }
+        
+        .search-filters {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .search-filters input, .search-filters select {
+            padding: 10px;
+            border: 1px solid #444;
+            border-radius: 5px;
+            background: #2a2a2a;
+            color: #fff;
+        }
+        
+        .search-filters input:focus, .search-filters select:focus {
+            outline: none;
+            border-color: #CF2030;
+        }
+        
+        .tier-legend {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .tier-badge {
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .tier-1a { background: #28a745; color: white; }
+        .tier-1b { background: #ffc107; color: black; }
+        .tier-1c { background: #17a2b8; color: white; }
+        
+        .client-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #1a1a1a;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .client-table th, .client-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #444;
+        }
+        
+        .client-table th {
+            background: #CF2030;
+            font-weight: bold;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .client-table th:hover {
+            background: #8B1520;
+        }
+        
+        .client-table tr:hover {
+            background: #2a2a2a;
+        }
+        
+        .contact-btn {
+            background: #CF2030;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        
+        .contact-btn:hover {
+            background: #8B1520;
+        }
+        
+        .pures-score {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .score-item {
+            width: 20px;
+            height: 20px;
+            border-radius: 3px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: bold;
+        }
+        
+        .score-5 { background: #28a745; }
+        .score-4 { background: #17a2b8; }
+        .score-3 { background: #ffc107; color: black; }
+        .score-2 { background: #fd7e14; }
+        .score-1 { background: #dc3545; }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+        }
+        
+        .modal-content {
+            background: #1a1a1a;
+            margin: 5% auto;
+            padding: 20px;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 800px;
+            border: 1px solid #CF2030;
+        }
+        
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .close:hover {
+            color: #CF2030;
+        }
+        
+        .email-template {
+            background: #2a2a2a;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 4px solid #CF2030;
+        }
+        
+        .analytics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .metric-card {
+            background: linear-gradient(135deg, #CF2030 0%, #8B1520 100%);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .metric-value {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .metric-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+        
+        .footer {
+            margin-top: 50px;
+            padding: 20px;
+            text-align: center;
+            border-top: 1px solid #444;
+        }
+        
+        .footer-logo {
+            max-height: 40px;
+            width: auto;
+            margin-bottom: 10px;
+        }
+        
+        @media (max-width: 768px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .client-table {
+                font-size: 12px;
+            }
+            
+            .client-table th, .client-table td {
+                padding: 8px 4px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports" class="logo">
+        <h1 style="margin-top: 15px;">Sierra Tree Company - S.A.L.E. Client Targeting System</h1>
+    </header>
+
+    <div class="container">
+        <div class="analytics-grid">
+            <div class="metric-card">
+                <div class="metric-value">50</div>
+                <div class="metric-label">Total Prospects</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value">12</div>
+                <div class="metric-label">Tier 1A Prospects</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value">23</div>
+                <div class="metric-label">Tier 1B Prospects</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value">15</div>
+                <div class="metric-label">Tier 1C Prospects</div>
+            </div>
+        </div>
+
+        <div class="dashboard-grid">
+            <div class="card">
+                <h3>Client Database & Outreach</h3>
+                <div class="search-filters">
+                    <input type="text" id="searchName" placeholder="Search by name..." onkeyup="filterTable()">
+                    <input type="text" id="searchLocation" placeholder="Search by location..." onkeyup="filterTable()">
+                    <select id="tierFilter" onchange="filterTable()">
+                        <option value="">All Tiers</option>
+                        <option value="1A">Tier 1A (Premium)</option>
+                        <option value="1B">Tier 1B (High-Value)</option>
+                        <option value="1C">Tier 1C (Qualified)</option>
+                    </select>
+                    <select id="industryFilter" onchange="filterTable()">
+                        <option value="">All Industries</option>
+                        <option value="Property Management">Property Management</option>
+                        <option value="Residential">Residential</option>
+                        <option value="Commercial">Commercial</option>
+                        <option value="Municipal">Municipal</option>
+                        <option value="HOA">HOA</option>
+                    </select>
+                </div>
+                
+                <div class="tier-legend">
+                    <span class="tier-badge tier-1a">Tier 1A - Premium (4-5 P.U.R.E.S.)</span>
+                    <span class="tier-badge tier-1b">Tier 1B - High-Value (3-4 P.U.R.E.S.)</span>
+                    <span class="tier-badge tier-1c">Tier 1C - Qualified (3+ P.U.R.E.S.)</span>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>P.U.R.E.S. Scoring System</h3>
+                <p><strong>P</strong>rofitability - Budget capacity</p>
+                <p><strong>U</strong>rgency - Immediate needs</p>
+                <p><strong>R</strong>eachability - Decision maker access</p>
+                <p><strong>E</strong>ngagement - Partnership openness</p>
+                <p><strong>S</strong>ustainability - Long-term potential</p>
+                <br>
+                <h4>Marketing Schedule</h4>
+                <div style="font-size: 14px;">
+                    <p>📅 Weekly: Tier 1A outreach</p>
+                    <p>📅 Bi-weekly: Tier 1B follow-ups</p>
+                    <p>📅 Monthly: Tier 1C nurturing</p>
+                    <p>📅 Quarterly: Database updates</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <table class="client-table" id="clientTable">
+                <thead>
+                    <tr>
+                        <th onclick="sortTable(0)">Client Name</th>
+                        <th onclick="sortTable(1)">Email</th>
+                        <th onclick="sortTable(2)">Phone</th>
+                        <th onclick="sortTable(3)">Address</th>
+                        <th onclick="sortTable(4)">P.U.R.E.S. Score</th>
+                        <th onclick="sortTable(5)">Tier</th>
+                        <th onclick="sortTable(6)">Industry</th>
+                        <th onclick="sortTable(7)">Revenue Est.</th>
+                        <th onclick="sortTable(8)">Contact Status</th>
+                        <th onclick="sortTable(9)">Last Contact</th>
+                        <th onclick="sortTable(10)">Next Action</th>
+                        <th>Contact</th>
+                    </tr>
+                </thead>
+                <tbody id="clientTableBody">
+                    <!-- Client data will be inserted here by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Contact Modal -->
+    <div id="contactModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2 style="color: #CF2030;">Contact Client</h2>
+            <div id="contactDetails"></div>
+            <div class="email-template">
+                <h4>Suggested Email Template:</h4>
+                <div id="emailTemplate"></div>
+                <button onclick="sendEmail()" class="contact-btn" style="margin-top: 15px; padding: 10px 20px;">Send Email</button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports" class="footer-logo">
+        <p>&copy; 2024 Sierra Tree Company S.A.L.E. System | Powered by Higgins Reports</p>
+        <p>License #: 1076576 | (707) 495-0597 | Rohnert Park, CA</p>
+    </footer>
+
+    <script>
+        // Sample client data for Sierra Tree Company (50 prospects within 10 miles of Rohnert Park, CA)
+        const clientData = [
+            {
+                name: "Robert Henderson",
+                email: "r.henderson@oakwoodproperties.com",
+                phone: "(707) 555-0101",
+                address: "1245 Vine St, Santa Rosa, CA 95404",
+                pures: [5,4,5,4,5],
+                tier: "1A",
+                industry: "Property Management",
+                revenue: "$2.5M",
+                status: "New",
+                lastContact: "2024-01-15",
+                nextAction: "Initial Presentation"
+            },
+            {
+                name: "Maria Rodriguez",
+                email: "maria.rodriguez@gmail.com",
+                phone: "(707) 555-0102",
+                address: "567 Maple Ave, Rohnert Park, CA 94928",
+                pures: [4,5,4,4,4],
+                tier: "1A",
+                industry: "Residential",
+                revenue: "$150K",
+                status: "Contacted",
+                lastContact: "2024-01-18",
+                nextAction: "Site Visit"
+            },
+            {
+                name: "David Kim",
+                email: "dkim@petalumacommercial.com",
+                phone: "(707) 555-0103",
+                address: "2134 Commercial Blvd, Petaluma, CA 94952",
+                pures: [5,4,4,5,5],
+                tier: "1A",
+                industry: "Commercial",
+                revenue: "$3.2M",
+                status: "Proposal Sent",
+                lastContact: "2024-01-20",
+                nextAction: "Follow-up Call"
+            },
+            {
+                name: "Jennifer Park",
+                email: "jpark@cityofcotati.org",
+                phone: "(707) 555-0104",
+                address: "201 West Sierra Ave, Cotati, CA 94931",
+                pures: [4,5,5,4,4],
+                tier: "1A",
+                industry: "Municipal",
+                revenue: "$5M",
+                status: "Meeting Scheduled",
+                lastContact: "2024-01-22",
+                nextAction: "City Council Presentation"
+            },
+            {
+                name: "Michael Thompson",
+                email: "mthompson@willowcreekhoa.org",
+                phone: "(707) 555-0105",
+                address: "456 Willow Creek Dr, Santa Rosa, CA 95403",
+                pures: [4,4,5,4,4],
+                tier: "1A",
+                industry: "HOA",
+                revenue: "$800K",
+                status: "Quoted",
+                lastContact: "2024-01-25",
+                nextAction: "Board Presentation"
+            },
+            {
+                name: "Sarah Mitchell",
+                email: "sarah.mitchell@gmail.com",
+                phone: "(707) 555-0106",
+                address: "789 Oak Ridge Rd, Rohnert Park, CA 94928",
+                pures: [4,4,4,5,4],
+                tier: "1A",
+                industry: "Residential",
+                revenue: "$180K",
+                status: "New",
+                lastContact: "2024-01-28",
+                nextAction: "Property Assessment"
+            },
+            {
+                name: "James Wilson",
+                email: "jwilson@redwoodenterprises.com",
+                phone: "(707) 555-0107",
+                address: "345 Redwood Ave, Healdsburg, CA 95448",
+                pures: [5,4,4,4,5],
+                tier: "1A",
+                industry: "Commercial",
+                revenue: "$2.8M",
+                status: "Interested",
+                lastContact: "2024-01-30",
+                nextAction: "Contract Review"
+            },
+            {
+                name: "Lisa Chen",
+                email: "lchen@valleyviewproperties.com",
+                phone: "(707) 555-0108",
+                address: "678 Valley View Dr, Windsor, CA 95492",
+                pures: [4,5,4,4,4],
+                tier: "1A",
+                industry: "Property Management",
+                revenue: "$3.5M",
+                status: "Negotiating",
+                lastContact: "2024-02-02",
+                nextAction: "Final Proposal"
+            },
+            {
+                name: "Brian Foster",
+                email: "bfoster@sebastopolgolf.com",
+                phone: "(707) 555-0109",
+                address: "910 Golf Course Rd, Sebastopol, CA 95472",
+                pures: [4,4,5,4,5],
+                tier: "1A",
+                industry: "Commercial",
+                revenue: "$1.2M",
+                status: "Under Review",
+                lastContact: "2024-02-05",
+                nextAction: "Golf Course Walk"
+            },
+            {
+                name: "Amanda Torres",
+                email: "atorres@sonomacountyschools.org",
+                phone: "(707) 555-0110",
+                address: "1122 Education Way, Santa Rosa, CA 95404",
+                pures: [4,5,4,4,4],
+                tier: "1A",
+                industry: "Municipal",
+                revenue: "$12M",
+                status: "RFP Submitted",
+                lastContact: "2024-02-08",
+                nextAction: "Bid Presentation"
+            },
+            {
+                name: "Carlos Ramirez",
+                email: "cramirez@hillsidevilla.com",
+                phone: "(707) 555-0111",
+                address: "234 Hillside Dr, Rohnert Park, CA 94928",
+                pures: [5,4,4,4,4],
+                tier: "1A",
+                industry: "HOA",
+                revenue: "$600K",
+                status: "Waiting Approval",
+                lastContact: "2024-02-10",
+                nextAction: "HOA Meeting"
+            },
+            {
+                name: "Rachel Adams",
+                email: "radams@nortbaylogistics.com",
+                phone: "(707) 555-0112",
+                address: "567 Industrial Pkwy, Petaluma, CA 94954",
+                pures: [4,4,5,4,4],
+                tier: "1A",
+                industry: "Commercial",
+                revenue: "$4.1M",
+                status: "Contract Signed",
+                lastContact: "2024-02-12",
+                nextAction: "Project Planning"
+            },
+            {
+                name: "Thomas Brown",
+                email: "tbrown@gmail.com",
+                phone: "(707) 555-0113",
+                address: "890 Forest Lane, Santa Rosa, CA 95405",
+                pures: [3,4,4,4,3],
+                tier: "1B",
+                industry: "Residential",
+                revenue: "$120K",
+                status: "New",
+                lastContact: "2024-02-15",
+                nextAction: "Initial Call"
+            },
+            {
+                name: "Nicole Johnson",
+                email: "njohnson@sonomavineyards.com",
+                phone: "(707) 555-0114",
+                address: "1234 Vineyard Rd, Sonoma, CA 95476",
+                pures: [4,3,4,4,4],
+                tier: "1B",
+                industry: "Commercial",
+                revenue: "$1.8M",
+                status: "Contacted",
+                lastContact: "2024-02-18",
+                nextAction: "Vineyard Tour"
+            },
+            {
+                name: "Kevin Miller",
+                email: "kmiller@rohnertparkapts.com",
+                phone: "(707) 555-0115",
+                address: "456 Apartment Way, Rohnert Park, CA 94928",
+                pures: [4,4,3,4,4],
+                tier: "1B",
+                industry: "Property Management",
+                revenue: "$1.5M",
+                status: "Quote Requested",
+                lastContact: "2024-02-20",
+                nextAction: "Property Inspection"
+            },
+            {
+                name: "Patricia Davis",
+                email: "pdavis@gmail.com",
+                phone: "(707) 555-0116",
+                address: "789 Sunset Blvd, Windsor, CA 95492",
+                pures: [3,4,4,3,4],
+                tier: "1B",
+                industry: "Residential",
+                revenue: "$95K",
+                status: "Interested",
+                lastContact: "2024-02-22",
+                nextAction: "Home Visit"
+            },
+            {
+                name: "Steven Garcia",
+                email: "sgarcia@petalumapark.org",
+                phone: "(707) 555-0117",
+                address: "345 Park Ave, Petaluma, CA 94952",
+                pures: [4,4,4,3,4],
+                tier: "1B",
+                industry: "Municipal",
+                revenue: "$2.2M",
+                status: "Proposal Review",
+                lastContact: "2024-02-25",
+                nextAction: "Parks Department Meeting"
+            },
+            {
+                name: "Laura Martinez",
+                email: "lmartinez@cotaticommerce.com",
+                phone: "(707) 555-0118",
+                address: "678 Commerce St, Cotati, CA 94931",
+                pures: [3,4,4,4,3],
+                tier: "1B",
+                industry: "Commercial",
+                revenue: "$900K",
+                status: "Follow-up",
+                lastContact: "2024-02-28",
+                nextAction: "Site Assessment"
+            },
+            {
+                name: "Gregory Lee",
+                email: "glee@valleyhomeowners.org",
+                phone: "(707) 555-0119",
+                address: "901 Valley Oaks Dr, Santa Rosa, CA 95403",
+                pures: [4,3,4,4,4],
+                tier: "1B",
+                industry: "HOA",
+                revenue: "$450K",
+                status: "Waiting Quote",
+                lastContact: "2024-03-02",
+                nextAction: "Cost Estimate"
+            },
+            {
+                name: "Michelle White",
+                email: "mwhite@gmail.com",
+                phone: "(707) 555-0120",
+                address: "123 Cedar St, Rohnert Park, CA 94928",
+                pures: [3,3,4,4,4],
+                tier: "1B",
+                industry: "Residential",
+                revenue: "$110K",
+                status: "New",
+                lastContact: "2024-03-05",
+                nextAction: "Tree Assessment"
+            },
+            {
+                name: "Daniel Wilson",
+                email: "dwilson@sebastopolbiz.com",
+                phone: "(707) 555-0121",
+                address: "234 Main St, Sebastopol, CA 95472",
+                pures: [4,4,3,3,4],
+                tier: "1B",
+                industry: "Commercial",
+                revenue: "$1.1M",
+                status: "Contacted",
+                lastContact: "2024-03-08",
+                nextAction: "Business Meeting"
+            },
+            {
+                name: "Jennifer Anderson",
+                email: "janderson@healdsburgresort.com",
+                phone: "(707) 555-0122",
+                address: "567 Resort Dr, Healdsburg, CA 95448",
+                pures: [4,4,4,3,3],
+                tier: "1B",
+                industry: "Commercial",
+                revenue: "$2.3M",
+                status: "Interested",
+                lastContact: "2024-03-10",
+                nextAction: "Resort Grounds Tour"
+            },
+            {
+                name: "Christopher Taylor",
+                email: "ctaylor@gmail.com",
+                phone: "(707) 555-0123",
+                address: "890 Pine Ridge Rd, Windsor, CA 95492",
+                pures: [3,4,3,4,4],
+                tier: "1B",
+                industry: "Residential",
+                revenue: "$140K",
+                status: "Quote Provided",
+                lastContact: "2024-03-12",
+                nextAction: "Decision Follow-up"
+            },
+            {
+                name: "Angela Rodriguez",
+                email: "arodriguez@sonomahealthcare.org",
+                phone: "(707) 555-0124",
+                address: "345 Medical Center Dr, Santa Rosa, CA 95404",
+                pures: [4,3,4,3,4],
+                tier: "1B",
+                industry: "Municipal",
+                revenue: "$8.5M",
+                status: "RFQ Response",
+                lastContact: "2024-03-15",
+                nextAction: "Healthcare Facility Tour"
+            },
+            {
+                name: "Matthew Jackson",
+                email: "mjackson@creekviewhoa.org",
+                phone: "(707) 555-0125",
+                address: "678 Creekview Ln, Rohnert Park, CA 94928",
+                pures: [3,3,4,4,3],
+                tier: "1B",
+                industry: "HOA",
+                revenue: "$380K",
+                status: "Board Review",
+                lastContact: "2024-03-18",
+                nextAction: "Community Walk"
+            },
+            {
+                name: "Susan Williams",
+                email: "swilliams@gmail.com",
+                phone: "(707) 555-0126",
+                address: "901 Elmwood Ave, Petaluma, CA 94952",
+                pures: [3,4,3,3,4],
+                tier: "1B",
+                industry: "Residential",
+                revenue: "$85K",
+                status: "New",
+                lastContact: "2024-03-20",
+                nextAction: "Property Visit"
+            },
+            {
+                name: "Joseph Harris",
+                email: "jharris@windsorcommercial.com",
+                phone: "(707) 555-0127",
+                address: "123 Business Park Dr, Windsor, CA 95492",
+                pures: [4,3,3,4,4],
+                tier: "1B",
+                industry: "Commercial",
+                revenue: "$1.7M",
+                status: "Proposal Pending",
+                lastContact: "2024-03-22",
+                nextAction: "Contract Discussion"
+            },
+            {
+                name: "Kimberly Moore",
+                email: "kmoore@cotatiparks.org",
+                phone: "(707) 555-0128",
+                address: "456 Park Boulevard, Cotati, CA 94931",
+                pures: [3,4,4,3,3],
+                tier: "1B",
+                industry: "Municipal",
+                revenue: "$1.8M",
+                status: "Initial Contact",
+                lastContact: "2024-03-25",
+                nextAction: "Parks Assessment"
+            },
+            {
+                name: "Robert Young",
+                email: "ryoung@meadowviewhomes.org",
+                phone: "(707) 555-0129",
+                address: "789 Meadow View Dr, Santa Rosa, CA 95405",
+                pures: [3,3,4,3,4],
+                tier: "1B",
+                industry: "HOA",
+                revenue: "$520K",
+                status: "Quote Review",
+                lastContact: "2024-03-28",
+                nextAction: "Homeowner Meeting"
+            },
+            {
+                name: "Linda Clark",
+                email: "lclark@gmail.com",
+                phone: "(707) 555-0130",
+                address: "234 Redwood Dr, Sebastopol, CA 95472",
+                pures: [3,3,3,4,4],
+                tier: "1B",
+                industry: "Residential",
+                revenue: "$75K",
+                status: "Contacted",
+                lastContact: "2024-03-30",
+                nextAction: "Tree Evaluation"
+            },
+            {
+                name: "Charles Walker",
+                email: "cwalker@petalumabusiness.com",
+                phone: "(707) 555-0131",
+                address: "567 Industrial Way, Petaluma, CA 94954",
+                pures: [4,3,3,3,4],
+                tier: "1B",
+                industry: "Commercial",
+                revenue: "$1.3M",
+                status: "Quote Requested",
+                lastContact: "2024-04-02",
+                nextAction: "Facility Inspection"
+            },
+            {
+                name: "Barbara Lewis",
+                email: "blewis@healdsburgschools.org",
+                phone: "(707) 555-0132",
+                address: "890 School District Rd, Healdsburg, CA 95448",
+                pures: [3,4,3,3,3],
+                tier: "1B",
+                industry: "Municipal",
+                revenue: "$5.2M",
+                status: "Bid Submitted",
+                lastContact: "2024-04-05",
+                nextAction: "School Board Presentation"
+            },
+            {
+                name: "William Allen",
+                email: "wallen@rohnertparkhoa.org",
+                phone: "(707) 555-0133",
+                address: "345 Community Center Dr, Rohnert Park, CA 94928",
+                pures: [3,3,3,4,3],
+                tier: "1C",
+                industry: "HOA",
+                revenue: "$320K",
+                status: "New",
+                lastContact: "2024-04-08",
+                nextAction: "Community Tour"
+            },
+            {
+                name: "Mary Hall",
+                email: "mhall@gmail.com",
+                phone: "(707) 555-0134",
+                address: "678 Oak Street, Windsor, CA 95492",
+                pures: [3,3,4,3,3],
+                tier: "1C",
+                industry: "Residential",
+                revenue: "$65K",
+                status: "Interested",
+                lastContact: "2024-04-10",
+                nextAction: "Home Assessment"
+            },
+            {
+                name: "David Turner",
+                email: "dturner@sebastopolwine.com",
+                phone: "(707) 555-0135",
+                address: "901 Winery Rd, Sebastopol, CA 95472",
+                pures: [3,3,3,3,4],
+                tier: "1C",
+                industry: "Commercial",
+                revenue: "$800K",
+                status: "Follow-up",
+                lastContact: "2024-04-12",
+                nextAction: "Vineyard Visit"
+            },
+            {
+                name: "Carol Green",
+                email: "cgreen@sonomaparks.org",
+                phone: "(707) 555-0136",
+                address: "123 Recreation Dr, Sonoma, CA 95476",
+                pures: [3,3,3,4,3],
+                tier: "1C",
+                industry: "Municipal",
+                revenue: "$1.4M",
+                status: "Proposal Review",
+                lastContact: "2024-04-15",
+                nextAction: "Parks Meeting"
+            },
+            {
+                name: "Paul Baker",
+                email: "pbaker@valleyoakshoa.org",
+                phone: "(707) 555-0137",
+                address: "456 Valley Oaks Way, Santa Rosa, CA 95403",
+                pures: [3,3,3,3,4],
+                tier: "1C",
+                industry: "HOA",
+                revenue: "$280K",
+                status: "Waiting Response",
+                lastContact: "2024-04-18",
+                nextAction: "Board Follow-up"
+            },
+            {
+                name: "Donna Nelson",
+                email: "dnelson@gmail.com",
+                phone: "(707) 555-0138",
+                address: "789 Maple Lane, Cotati, CA 94931",
+                pures: [3,3,3,3,3],
+                tier: "1C",
+                industry: "Residential",
+                revenue: "$55K",
+                status: "New",
+                lastContact: "2024-04-20",
+                nextAction: "Initial Consultation"
+            },
+            {
+                name: "Kenneth Roberts",
+                email: "kroberts@petalumalogistics.com",
+                phone: "(707) 555-0139",
+                address: "234 Shipping Dr, Petaluma, CA 94954",
+                pures: [3,3,3,3,4],
+                tier: "1C",
+                industry: "Commercial",
+                revenue: "$950K",
+                status: "Quote Pending",
+                lastContact: "2024-04-22",
+                nextAction: "Warehouse Tour"
+            },
+            {
+                name: "Helen Phillips",
+                email: "hphillips@healdsburgparks.org",
+                phone: "(707) 555-0140",
+                address: "567 City Park Ave, Healdsburg, CA 95448",
+                pures: [3,3,4,3,3],
+                tier: "1C",
+                industry: "Municipal",
+                revenue: "$1.1M",
+                status: "Initial Meeting",
+                lastContact: "2024-04-25",
+                nextAction: "Site Survey"
+            },
+            {
+                name: "Edward Campbell",
+                email: "ecampbell@creeksidehoa.org",
+                phone: "(707) 555-0141",
+                address: "890 Creekside Dr, Rohnert Park, CA 94928",
+                pures: [3,3,3,3,3],
+                tier: "1C",
+                industry: "HOA",
+                revenue: "$190K",
+                status: "Quote Review",
+                lastContact: "2024-04-28",
+                nextAction: "Resident Meeting"
+            },
+            {
+                name: "Betty Parker",
+                email: "bparker@gmail.com",
+                phone: "(707) 555-0142",
+                address: "345 Birch Ave, Windsor, CA 95492",
+                pures: [3,3,3,3,3],
+                tier: "1C",
+                industry: "Residential",
+                revenue: "$45K",
+                status: "Contacted",
+                lastContact: "2024-05-01",
+                nextAction: "Property Check"
+            },
+            {
+                name: "George Evans",
+                email: "gevans@sebastopolbusiness.com",
+                phone: "(707) 555-0143",
+                address: "678 Commerce Ave, Sebastopol, CA 95472",
+                pures: [3,3,3,4,3],
+                tier: "1C",
+                industry: "Commercial",
+                revenue: "$720K",
+                status: "Interested",
+                lastContact: "2024-05-03",
+                nextAction: "Business Tour"
+            },
+            {
+                name: "Nancy Edwards",
+                email: "nedwards@sonomacounty.org",
+                phone: "(707) 555-0144",
+                address: "901 County Complex Dr, Santa Rosa, CA 95404",
+                pures: [3,4,3,3,3],
+                tier: "1C",
+                industry: "Municipal",
+                revenue: "$15M",
+                status: "RFP Response",
+                lastContact: "2024-05-05",
+                nextAction: "County Presentation"
+            },
+            {
+                name: "Frank Collins",
+                email: "fcollins@hillviewhoa.org",
+                phone: "(707) 555-0145",
+                address: "123 Hillview Ct, Petaluma, CA 94952",
+                pures: [3,3,3,3,3],
+                tier: "1C",
+                industry: "HOA",
+                revenue: "$240K",
+                status: "Board Review",
+                lastContact: "2024-05-08",
+                nextAction: "Community Assessment"
+            },
+            {
+                name: "Ruth Stewart",
+                email: "rstewart@gmail.com",
+                phone: "(707) 555-0146",
+                address: "456 Cherry St, Cotati, CA 94931",
+                pures: [3,3,3,3,3],
+                tier: "1C",
+                industry: "Residential",
+                revenue: "$38K",
+                status: "New",
+                lastContact: "2024-05-10",
+                nextAction: "Tree Survey"
+            },
+            {
+                name: "Raymond Morris",
+                email: "rmorris@healdsburgcommerce.com",
+                phone: "(707) 555-0147",
+                address: "789 Business Center Dr, Healdsburg, CA 95448",
+                pures: [3,3,3,3,4],
+                tier: "1C",
+                industry: "Commercial",
+                revenue: "$640K",
+                status: "Follow-up",
+                lastContact: "2024-05-12",
+                nextAction: "Proposal Discussion"
+            }
+        ];
+
+        let filteredData = [...clientData];
+        let sortDirection = 1;
+
+        function loadClientData() {
+            const tableBody = document.getElementById('clientTableBody');
+            tableBody.innerHTML = '';
+
+            filteredData.forEach((client, index) => {
+                const row = document.createElement('tr');
+                
+                const puresScoreHtml = client.pures.map((score, i) => 
+                    `<span class="score-item score-${score}" title="${['P','U','R','E','S'][i]}">${score}</span>`
+                ).join('');
+
+                row.innerHTML = `
+                    <td>${client.name}</td>
+                    <td>${client.email}</td>
+                    <td>${client.phone}</td>
+                    <td>${client.address}</td>
+                    <td><div class="pures-score">${puresScoreHtml}</div></td>
+                    <td><span class="tier-badge tier-${client.tier.toLowerCase()}">${client.tier}</span></td>
+                    <td>${client.industry}</td>
+                    <td>${client.revenue}</td>
+                    <td>${client.status}</td>
+                    <td>${client.lastContact}</td>
+                    <td>${client.nextAction}</td>
+                    <td><button class="contact-btn" onclick="openContactModal(${index})">Contact</button></td>
+                `;
+                
+                tableBody.appendChild(row);
+            });
+        }
+
+        function filterTable() {
+            const nameFilter = document.getElementById('searchName').value.toLowerCase();
+            const locationFilter = document.getElementById('searchLocation').value.toLowerCase();
+            const tierFilter = document.getElementById('tierFilter').value;
+            const industryFilter = document.getElementById('industryFilter').value;
+
+            filteredData = clientData.filter(client => {
+                const nameMatch = client.name.toLowerCase().includes(nameFilter);
+                const locationMatch = client.address.toLowerCase().includes(locationFilter);
+                const tierMatch = !tierFilter || client.tier === tierFilter;
+                const industryMatch = !industryFilter || client.industry === industryFilter;
+
+                return nameMatch && locationMatch && tierMatch && industryMatch;
+            });
+
+            loadClientData();
+        }
+
+        function sortTable(columnIndex) {
+            const columns = ['name', 'email', 'phone', 'address', 'pures', 'tier', 'industry', 'revenue', 'status', 'lastContact', 'nextAction'];
+            const column = columns[columnIndex];
+
+            filteredData.sort((a, b) => {
+                let valueA, valueB;
+                
+                if (column === 'pures') {
+                    valueA = a.pures.reduce((sum, score) => sum + score, 0);
+                    valueB = b.pures.reduce((sum, score) => sum + score, 0);
+                } else {
+                    valueA = a[column];
+                    valueB = b[column];
+                }
+
+                if (typeof valueA === 'string') {
+                    return sortDirection * valueA.localeCompare(valueB);
+                }
+                return sortDirection * (valueA - valueB);
+            });
+
+            sortDirection *= -1;
+            loadClientData();
+        }
+
+        function openContactModal(index) {
+            const client = filteredData[index];
+            const modal = document.getElementById('contactModal');
+            const contactDetails = document.getElementById('contactDetails');
+            const emailTemplate = document.getElementById('emailTemplate');
+
+            contactDetails.innerHTML = `
+                <h3>${client.name}</h3>
+                <p><strong>Email:</strong> ${client.email}</p>
+                <p><strong>Phone:</strong> ${client.phone}</p>
+                <p><strong>Address:</strong> ${client.address}</p>
+                <p><strong>Industry:</strong> ${client.industry}</p>
+                <p><strong>Tier:</strong> ${client.tier}</p>
+                <p><strong>Status:</strong> ${client.status}</p>
+            `;
+
+            const emailContent = generateEmailTemplate(client);
+            emailTemplate.innerHTML = emailContent;
+
+            modal.style.display = 'block';
+            window.currentClient = client;
+        }
+
+        function generateEmailTemplate(client) {
+            const tierMessages = {
+                '1A': `As a premium client in the ${client.industry} sector, you deserve the highest level of tree care services.`,
+                '1B': `Your ${client.industry} operation would greatly benefit from our professional tree management solutions.`,
+                '1C': `We'd like to introduce you to our comprehensive tree services that can enhance your property's value and safety.`
+            };
+
+            return `
+                <strong>Subject:</strong> Professional Tree Services for ${client.name} - Sierra Tree Company<br><br>
+                
+                <strong>Body:</strong><br>
+                Dear ${client.name},<br><br>
+                
+                ${tierMessages[client.tier]}<br><br>
+                
+                Sierra Tree Company has been serving the Rohnert Park area and surrounding communities with exceptional tree care services including:
+                
+                <ul>
+                    <li>🌲 <strong>Tree Removal</strong> - Safe removal of hazardous or unwanted trees</li>
+                    <li>✂️ <strong>Tree Pruning</strong> - Expert pruning to maintain tree health and appearance</li>
+                    <li>🔌 <strong>Utility Line Clearance</strong> - Professional power line maintenance</li>
+                    <li>🪓 <strong>Stump Grinding</strong> - Complete stump removal and cleanup</li>
+                    <li>🌿 <strong>Plant Healthcare</strong> - ISA-certified arborist services</li>
+                    <li>🚨 <strong>Emergency Services</strong> - 24/7 rapid response team</li>
+                </ul>
+                
+                <strong>Why Choose Sierra Tree Company?</strong>
+                ✅ Licensed & Insured (License #1076576)<br>
+                ✅ ISA-Certified Arborists<br>
+                ✅ 24/7 Emergency Response<br>
+                ✅ Local Family-Owned Business<br>
+                ✅ Comprehensive Property Protection<br><br>
+                
+                We would love to provide you with a FREE estimate for your tree care needs. Our team can assess your property and provide expert recommendations to maintain the safety, health, and beauty of your trees.<br><br>
+                
+                Please reply to this email or call us at (707) 495-0597 to schedule your complimentary consultation.<br><br>
+                
+                Best regards,<br>
+                Arnoldo Gonzalez<br>
+                Sierra Tree Company<br>
+                (707) 495-0597<br>
+                arnoldo.gonzalez@sierratreecompany.com<br>
+                Rohnert Park, CA<br>
+                License #: 1076576
+            `;
+        }
+
+        function sendEmail() {
+            const client = window.currentClient;
+            const subject = encodeURIComponent(`Professional Tree Services for ${client.name} - Sierra Tree Company`);
+            const body = encodeURIComponent(document.getElementById('emailTemplate').innerText);
+            
+            const mailtoLink = `mailto:${client.email}?subject=${subject}&body=${body}`;
+            window.location.href = mailtoLink;
+            
+            document.getElementById('contactModal').style.display = 'none';
+        }
+
+        // Modal functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const modal = document.getElementById('contactModal');
+            const closeBtn = document.querySelector('.close');
+
+            closeBtn.onclick = function() {
+                modal.style.display = 'none';
+            }
+
+            window.onclick = function(event) {
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                }
+            }
+
+            loadClientData();
+        });
+    </script>
+</body>
+</html>

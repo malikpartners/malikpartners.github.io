@@ -1,0 +1,767 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orloff Jewelers - S.A.L.E. Client Targeting System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #000000, #1a1a1a);
+            color: white;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: #CF2030;
+            padding: 1rem;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(207, 32, 48, 0.3);
+        }
+
+        .header img {
+            max-height: 60px;
+            margin-bottom: 10px;
+        }
+
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .tab-button {
+            background: #CF2030;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            cursor: pointer;
+            border-radius: 6px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .tab-button:hover, .tab-button.active {
+            background: #a01828;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .tab-content {
+            display: none;
+            background: rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .search-filter {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .search-filter input, .search-filter select {
+            padding: 10px;
+            border: 2px solid #CF2030;
+            border-radius: 6px;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            font-size: 14px;
+        }
+
+        .search-filter input::placeholder {
+            color: #ccc;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: rgba(0,0,0,0.4);
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #333;
+        }
+
+        th {
+            background: #CF2030;
+            font-weight: bold;
+            cursor: pointer;
+            position: relative;
+        }
+
+        th:hover {
+            background: #a01828;
+        }
+
+        tr:hover {
+            background: rgba(207, 32, 48, 0.1);
+        }
+
+        .tier-1a { border-left: 5px solid #00ff00; }
+        .tier-1b { border-left: 5px solid #ffff00; }
+        .tier-1c { border-left: 5px solid #0088ff; }
+
+        .btn {
+            padding: 8px 16px;
+            background: #CF2030;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            margin: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            background: #a01828;
+            transform: translateY(-1px);
+        }
+
+        .btn-email { background: #2196F3; }
+        .btn-email:hover { background: #1976D2; }
+
+        .scoring-form {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .score-item {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 8px;
+            border: 2px solid #CF2030;
+        }
+
+        .score-item h3 {
+            color: #CF2030;
+            margin-bottom: 10px;
+        }
+
+        .score-slider {
+            width: 100%;
+            margin: 10px 0;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+        }
+
+        .modal-content {
+            background: #1a1a1a;
+            margin: 10% auto;
+            padding: 30px;
+            border: 2px solid #CF2030;
+            border-radius: 12px;
+            width: 70%;
+            max-width: 600px;
+            color: white;
+        }
+
+        .close {
+            color: #CF2030;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: #a01828;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 200px;
+            padding: 15px;
+            background: rgba(255,255,255,0.1);
+            border: 2px solid #CF2030;
+            border-radius: 6px;
+            color: white;
+            font-family: inherit;
+            resize: vertical;
+        }
+
+        .footer {
+            background: #333;
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+        }
+
+        .footer img {
+            max-height: 30px;
+            opacity: 0.7;
+        }
+
+        .statistics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: rgba(207, 32, 48, 0.2);
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            border: 2px solid #CF2030;
+        }
+
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            color: #CF2030;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="HigginsReports Logo">
+        <h1>Orloff Jewelers - S.A.L.E. Client Targeting System</h1>
+        <p>Luxury Jewelry Excellence in Fresno, California</p>
+    </header>
+
+    <div class="container">
+        <div class="nav-tabs">
+            <button class="tab-button active" onclick="openTab(event, 'sourcing')">S.OURCING</button>
+            <button class="tab-button" onclick="openTab(event, 'assessing')">A.SSESSING</button>
+            <button class="tab-button" onclick="openTab(event, 'listening')">L.ISTENING</button>
+            <button class="tab-button" onclick="openTab(event, 'empowering')">E.MPOWERING</button>
+            <button class="tab-button" onclick="openTab(event, 'dashboard')">DASHBOARD</button>
+        </div>
+
+        <!-- SOURCING Module -->
+        <div id="sourcing" class="tab-content active">
+            <h2>S.OURCING - P.U.R.E.S. Client Scoring System</h2>
+            
+            <div class="statistics">
+                <div class="stat-card">
+                    <div class="stat-number" id="tier1a-count">12</div>
+                    <div>Tier 1A Premium</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="tier1b-count">18</div>
+                    <div>Tier 1B High-Value</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="tier1c-count">20</div>
+                    <div>Tier 1C Qualified</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">$2.3M</div>
+                    <div>Potential Revenue</div>
+                </div>
+            </div>
+
+            <div class="search-filter">
+                <input type="text" id="searchInput" placeholder="Search clients..." onkeyup="filterTable()">
+                <select id="tierFilter" onchange="filterTable()">
+                    <option value="">All Tiers</option>
+                    <option value="1A">Tier 1A Premium</option>
+                    <option value="1B">Tier 1B High-Value</option>
+                    <option value="1C">Tier 1C Qualified</option>
+                </select>
+                <select id="industryFilter" onchange="filterTable()">
+                    <option value="">All Industries</option>
+                    <option value="Healthcare">Healthcare</option>
+                    <option value="Finance">Finance</option>
+                    <option value="Real Estate">Real Estate</option>
+                    <option value="Technology">Technology</option>
+                    <option value="Legal">Legal</option>
+                </select>
+            </div>
+
+            <table id="clientTable">
+                <thead>
+                    <tr>
+                        <th onclick="sortTable(0)">Client Name ↕</th>
+                        <th onclick="sortTable(1)">Email ↕</th>
+                        <th onclick="sortTable(2)">Phone ↕</th>
+                        <th onclick="sortTable(3)">Address ↕</th>
+                        <th onclick="sortTable(4)">P.U.R.E.S. Score ↕</th>
+                        <th onclick="sortTable(5)">Tier Level ↕</th>
+                        <th onclick="sortTable(6)">Industry ↕</th>
+                        <th onclick="sortTable(7)">Revenue Est. ↕</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="clientTableBody">
+                    <!-- Client data will be populated by JavaScript -->
+                </tbody>
+            </table>
+
+            <div class="scoring-form">
+                <div class="score-item">
+                    <h3>Profitability Assessment</h3>
+                    <p>Annual revenue threshold and budget capacity for luxury jewelry purchases</p>
+                    <input type="range" min="1" max="5" value="3" class="score-slider" id="profitability">
+                    <span id="profitability-value">3</span>
+                </div>
+                <div class="score-item">
+                    <h3>Urgency Analysis</h3>
+                    <p>Active need for jewelry for special occasions, gifts, or collection building</p>
+                    <input type="range" min="1" max="5" value="3" class="score-slider" id="urgency">
+                    <span id="urgency-value">3</span>
+                </div>
+                <div class="score-item">
+                    <h3>Reachability Factor</h3>
+                    <p>Accessible decision makers with clear contact paths and luxury purchasing authority</p>
+                    <input type="range" min="1" max="5" value="3" class="score-slider" id="reachability">
+                    <span id="reachability-value">3</span>
+                </div>
+                <div class="score-item">
+                    <h3>Engagement Potential</h3>
+                    <p>Openness to personalized jewelry consultations and custom design services</p>
+                    <input type="range" min="1" max="5" value="3" class="score-slider" id="engagement">
+                    <span id="engagement-value">3</span>
+                </div>
+                <div class="score-item">
+                    <h3>Sustainability Outlook</h3>
+                    <p>Long-term relationship potential for repeat purchases and referrals</p>
+                    <input type="range" min="1" max="5" value="3" class="score-slider" id="sustainability">
+                    <span id="sustainability-value">3</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ASSESSING Module -->
+        <div id="assessing" class="tab-content">
+            <h2>A.SSESSING - Buying Pattern Analysis</h2>
+            <div class="scoring-form">
+                <div class="score-item">
+                    <h3>Analytical Buyers</h3>
+                    <p>Require detailed information about gemstone quality, certifications, and investment value</p>
+                    <ul>
+                        <li>GIA certification details</li>
+                        <li>Appraisal documentation</li>
+                        <li>Market value analysis</li>
+                        <li>Insurance recommendations</li>
+                    </ul>
+                </div>
+                <div class="score-item">
+                    <h3>Relationship Buyers</h3>
+                    <p>Value trust, personal service, and long-term relationships with jewelers</p>
+                    <ul>
+                        <li>Personal consultation sessions</li>
+                        <li>Family jewelry history</li>
+                        <li>Referral programs</li>
+                        <li>VIP customer events</li>
+                    </ul>
+                </div>
+                <div class="score-item">
+                    <h3>Efficiency Buyers</h3>
+                    <p>Focus on convenience, quick decisions, and streamlined purchasing process</p>
+                    <ul>
+                        <li>Online catalog access</li>
+                        <li>Virtual consultations</li>
+                        <li>Express setting services</li>
+                        <li>Home delivery options</li>
+                    </ul>
+                </div>
+                <div class="score-item">
+                    <h3>Innovation Buyers</h3>
+                    <p>Seek cutting-edge designs, unique pieces, and latest jewelry trends</p>
+                    <ul>
+                        <li>Custom design services</li>
+                        <li>Latest setting techniques</li>
+                        <li>Exclusive designer pieces</li>
+                        <li>Technology integration</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- LISTENING Module -->
+        <div id="listening" class="tab-content">
+            <h2>L.ISTENING - Feedback Integration</h2>
+            <div class="scoring-form">
+                <div class="score-item">
+                    <h3>Pre-Sale Feedback Collection</h3>
+                    <p>Understanding client preferences before the consultation</p>
+                    <textarea placeholder="Client style preferences, occasion details, budget range, inspiration photos..."></textarea>
+                </div>
+                <div class="score-item">
+                    <h3>During-Sale Progress Tracking</h3>
+                    <p>Real-time feedback during the selection and customization process</p>
+                    <textarea placeholder="Design modifications, comfort preferences, timeline adjustments..."></textarea>
+                </div>
+                <div class="score-item">
+                    <h3>Post-Sale Satisfaction Monitoring</h3>
+                    <p>Follow-up feedback after purchase and delivery</p>
+                    <textarea placeholder="Satisfaction ratings, care instructions feedback, service quality assessment..."></textarea>
+                </div>
+                <div class="score-item">
+                    <h3>Complaint Resolution Protocols</h3>
+                    <p>Immediate response system for any client concerns</p>
+                    <textarea placeholder="Issue description, resolution steps, client satisfaction outcome..."></textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- EMPOWERING Module -->
+        <div id="empowering" class="tab-content">
+            <h2>E.MPOWERING - Referral Strategy</h2>
+            <div class="scoring-form">
+                <div class="score-item">
+                    <h3>Success Story Documentation</h3>
+                    <p>Capture and share exceptional client experiences</p>
+                    <textarea placeholder="Engagement ring stories, anniversary surprises, custom design successes..."></textarea>
+                </div>
+                <div class="score-item">
+                    <h3>Referral Reward Tracking</h3>
+                    <p>Monitor and manage referral incentives</p>
+                    <ul>
+                        <li>10% credit for successful referrals</li>
+                        <li>VIP event invitations</li>
+                        <li>Exclusive preview access</li>
+                        <li>Complimentary cleaning services</li>
+                    </ul>
+                </div>
+                <div class="score-item">
+                    <h3>Client Advocacy Program</h3>
+                    <p>Transform satisfied clients into brand ambassadors</p>
+                    <ul>
+                        <li>Client testimonial videos</li>
+                        <li>Social media features</li>
+                        <li>Exclusive ambassador events</li>
+                        <li>Co-creation opportunities</li>
+                    </ul>
+                </div>
+                <div class="score-item">
+                    <h3>Co-Marketing Opportunities</h3>
+                    <p>Partner with clients for mutual marketing benefits</p>
+                    <ul>
+                        <li>Wedding vendor partnerships</li>
+                        <li>Corporate gift programs</li>
+                        <li>Charity event sponsorships</li>
+                        <li>Professional photography collaborations</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- DASHBOARD Module -->
+        <div id="dashboard" class="tab-content">
+            <h2>DASHBOARD - Performance Analytics</h2>
+            <div class="statistics">
+                <div class="stat-card">
+                    <div class="stat-number">85%</div>
+                    <div>P.U.R.E.S. Accuracy</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">92%</div>
+                    <div>Assessment Accuracy</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">78%</div>
+                    <div>Feedback Collection Rate</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">2.4</div>
+                    <div>Referrals per Client</div>
+                </div>
+            </div>
+            
+            <div class="scoring-form">
+                <div class="score-item">
+                    <h3>Monthly Marketing Calendar</h3>
+                    <ul>
+                        <li>Week 1: Valentine's Day Campaign</li>
+                        <li>Week 2: Spring Collection Launch</li>
+                        <li>Week 3: Mother's Day Preparation</li>
+                        <li>Week 4: Client Appreciation Events</li>
+                    </ul>
+                </div>
+                <div class="score-item">
+                    <h3>Outreach Strategy Timeline</h3>
+                    <ul>
+                        <li>Monday: Tier 1A Premium Clients</li>
+                        <li>Wednesday: Tier 1B High-Value Clients</li>
+                        <li>Friday: Tier 1C Qualified Clients</li>
+                        <li>Sunday: Follow-up and Planning</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Email Modal -->
+    <div id="emailModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Email Client</h2>
+            <p><strong>To:</strong> <span id="emailTo"></span></p>
+            <p><strong>Subject:</strong> Exclusive Luxury Jewelry Experience at Orloff Jewelers</p>
+            <textarea id="emailContent" readonly>Dear [Client Name],
+
+We hope this message finds you well. As one of Fresno's premier destinations for luxury jewelry, Orloff Jewelers would like to invite you to experience our exceptional collection and personalized service.
+
+Why choose Orloff Jewelers?
+
+✨ Exclusive Designer Collections: Featuring the finest diamonds, precious gemstones, and luxury timepieces from renowned designers worldwide.
+
+💍 Custom Design Services: Our master jewelers can bring your unique vision to life with bespoke engagement rings, anniversary pieces, and custom jewelry.
+
+🏆 Expert Craftsmanship: With decades of experience, our team provides unmatched quality and attention to detail in every piece.
+
+💎 GIA Certified Diamonds: We offer only the highest quality, certified diamonds with complete transparency in grading and pricing.
+
+🛡️ Lifetime Services: Complimentary cleaning, inspection, and maintenance for all purchases, ensuring your jewelry maintains its brilliance.
+
+🎁 Special Occasions: Whether it's an engagement, anniversary, birthday, or just because, we help you find the perfect piece to mark life's special moments.
+
+We would love to schedule a private consultation to show you our latest collections and discuss how we can help you find or create the perfect piece. Our showroom offers a comfortable, pressure-free environment where you can explore our extensive selection.
+
+Please reply to this email or call us at (559) 221-6622 to schedule your personalized appointment.
+
+Looking forward to serving you.
+
+Warmest regards,
+
+James Orloff
+Owner, Orloff Jewelers
+http://www.orloffjewelers.com
+(559) 221-6622
+
+P.S. Mention this email and receive a complimentary jewelry cleaning and inspection for any pieces you currently own.</textarea>
+            <br><br>
+            <button class="btn btn-email" onclick="sendEmail()">Send Email</button>
+            <button class="btn" onclick="closeModal()">Close</button>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="HigginsReports Logo">
+        <p>&copy; 2024 HigginsReports - Powered by AI Intelligence</p>
+    </footer>
+
+    <script>
+        // Sample client data for Orloff Jewelers (50 entries within 10 miles of Fresno, CA)
+        const clientData = [
+            ["Dr. Sarah Martinez", "sarah.martinez@email.com", "(559) 555-0101", "1234 Maple Ave, Fresno, CA", "4.8", "1A", "Healthcare", "$850K", "New", "2024-01-15", "Email Follow-up"],
+            ["Michael Chen", "m.chen@email.com", "(559) 555-0102", "5678 Oak St, Fresno, CA", "4.6", "1A", "Technology", "$920K", "Warm", "2024-01-20", "Schedule Consultation"],
+            ["Jennifer Williams", "j.williams@email.com", "(559) 555-0103", "910 Pine Dr, Clovis, CA", "4.2", "1B", "Finance", "$680K", "Cold", "", "Initial Contact"],
+            ["Robert Johnson", "r.johnson@email.com", "(559) 555-0104", "2468 Elm Way, Fresno, CA", "4.7", "1A", "Real Estate", "$1.2M", "Hot", "2024-01-25", "Present Proposal"],
+            ["Lisa Rodriguez", "l.rodriguez@email.com", "(559) 555-0105", "1357 Cedar Ln, Fresno, CA", "4.0", "1B", "Legal", "$750K", "Warm", "2024-01-18", "Send Catalog"],
+            ["David Kim", "d.kim@email.com", "(559) 555-0106", "8642 Birch Ct, Clovis, CA", "4.5", "1A", "Technology", "$890K", "New", "", "Research Background"],
+            ["Amanda Thompson", "a.thompson@email.com", "(559) 555-0107", "7531 Walnut St, Fresno, CA", "3.9", "1C", "Healthcare", "$420K", "Cold", "", "Initial Outreach"],
+            ["Christopher Lee", "c.lee@email.com", "(559) 555-0108", "9642 Aspen Ave, Fresno, CA", "4.3", "1B", "Finance", "$710K", "Warm", "2024-01-22", "Follow-up Call"],
+            ["Michelle Garcia", "m.garcia@email.com", "(559) 555-0109", "3579 Spruce Dr, Clovis, CA", "4.8", "1A", "Legal", "$950K", "Hot", "2024-01-28", "Closing Meeting"],
+            ["James Wilson", "j.wilson@email.com", "(559) 555-0110", "1468 Poplar Way, Fresno, CA", "4.1", "1B", "Real Estate", "$650K", "New", "", "Send Information"],
+            ["Karen Brown", "k.brown@email.com", "(559) 555-0111", "2591 Hickory Ln, Fresno, CA", "3.8", "1C", "Healthcare", "$380K", "Cold", "", "Nurture Campaign"],
+            ["Steven Davis", "s.davis@email.com", "(559) 555-0112", "7410 Magnolia St, Clovis, CA", "4.6", "1A", "Technology", "$880K", "Warm", "2024-01-24", "Demo Scheduling"],
+            ["Nicole Miller", "n.miller@email.com", "(559) 555-0113", "8523 Sycamore Ave, Fresno, CA", "4.2", "1B", "Finance", "$690K", "New", "", "Introduction Email"],
+            ["Kevin Anderson", "k.anderson@email.com", "(559) 555-0114", "9634 Willow Dr, Fresno, CA", "4.4", "1B", "Legal", "$730K", "Warm", "2024-01-26", "Proposal Review"],
+            ["Rachel Taylor", "r.taylor@email.com", "(559) 555-0115", "4567 Cherry Ct, Clovis, CA", "4.9", "1A", "Healthcare", "$1.1M", "Hot", "2024-01-30", "Contract Discussion"],
+            ["Mark Thomas", "m.thomas@email.com", "(559) 555-0116", "6789 Peach Way, Fresno, CA", "3.7", "1C", "Real Estate", "$350K", "Cold", "", "Market Research"],
+            ["Stephanie Jackson", "s.jackson@email.com", "(559) 555-0117", "1234 Plum St, Fresno, CA", "4.3", "1B", "Technology", "$720K", "New", "", "Cold Outreach"],
+            ["Daniel White", "d.white@email.com", "(559) 555-0118", "5678 Grape Ave, Clovis, CA", "4.5", "1A", "Finance", "$860K", "Warm", "2024-01-21", "Needs Assessment"],
+            ["Laura Harris", "l.harris@email.com", "(559) 555-0119", "910 Orange Dr, Fresno, CA", "4.0", "1B", "Legal", "$.", "New", "", "LinkedIn Connect"],
+            ["Ryan Clark", "r.clark@email.com", "(559) 555-0120", "2468 Lemon Ln, Fresno, CA", "4.7", "1A", "Healthcare", "$940K", "Hot", "2024-01-27", "Final Presentation"],
+            ["Jessica Lewis", "j.lewis@email.com", "(559) 555-0121", "1357 Lime Way, Clovis, CA", "3.9", "1C", "Real Estate", "$410K", "Cold", "", "Newsletter Signup"],
+            ["Anthony Walker", "a.walker@email.com", "(559) 555-0122", "8642 Fig Ct, Fresno, CA", "4.2", "1B", "Technology", "$680K", "Warm", "2024-01-23", "Technical Demo"],
+            ["Melissa Hall", "m.hall@email.com", "(559) 555-0123", "7531 Date St, Fresno, CA", "4.6", "1A", "Finance", "$870K", "New", "", "Warm Introduction"],
+            ["Joshua Allen", "j.allen@email.com", "(559) 555-0124", "9642 Almond Ave, Clovis, CA", "4.1", "1B", "Legal", "$660K", "Cold", "", "Educational Content"],
+            ["Ashley Young", "a.young@email.com", "(559) 555-0125", "3579 Pecan Dr, Fresno, CA", "4.8", "1A", "Healthcare", "$980K", "Hot", "2024-01-29", "Partnership Discussion"],
+            ["Brandon Hernandez", "b.hernandez@email.com", "(559) 555-0126", "1468 Walnut Way, Fresno, CA", "3.6", "1C", "Real Estate", "$320K", "New", "", "Market Education"],
+            ["Brittany King", "b.king@email.com", "(559) 555-0127", "2591 Cashew Ln, Clovis, CA", "4.4", "1B", "Technology", "$740K", "Warm", "2024-01-25", "ROI Analysis"],
+            ["Tyler Wright", "t.wright@email.com", "(559) 555-0128", "7410 Pistachio St, Fresno, CA", "4.3", "1B", "Finance", "$700K", "New", "", "Case Study Share"],
+            ["Samantha Lopez", "s.lopez@email.com", "(559) 555-0129", "8523 Hazelnut Ave, Fresno, CA", "4.9", "1A", "Legal", "$1.05M", "Hot", "2024-01-31", "Decision Meeting"],
+            ["Justin Hill", "j.hill@email.com", "(559) 555-0130", "9634 Coconut Dr, Clovis, CA", "4.0", "1B", "Healthcare", "$630K", "Cold", "", "Soft Touch"],
+            ["Christina Scott", "c.scott@email.com", "(559) 555-0131", "4567 Macadamia Ct, Fresno, CA", "4.5", "1A", "Real Estate", "$850K", "Warm", "2024-01-26", "Solution Design"],
+            ["Eric Green", "e.green@email.com", "(559) 555-0132", "6789 Brazil Way, Fresno, CA", "3.8", "1C", "Technology", "$390K", "New", "", "Industry Report"],
+            ["Megan Adams", "m.adams@email.com", "(559) 555-0133", "1234 Peanut St, Clovis, CA", "4.2", "1B", "Finance", "$690K", "Cold", "", "Value Proposition"],
+            ["Jacob Baker", "j.baker@email.com", "(559) 555-0134", "5678 Sunflower Ave, Fresno, CA", "4.7", "1A", "Legal", "$910K", "Hot", "2024-01-28", "Implementation Planning"],
+            ["Heather Gonzalez", "h.gonzalez@email.com", "(559) 555-0135", "910 Sesame Dr, Fresno, CA", "4.1", "1B", "Healthcare", "$670K", "Warm", "2024-01-24", "Stakeholder Meeting"],
+            ["Nathan Nelson", "n.nelson@email.com", "(559) 555-0136", "2468 Flax Ln, Clovis, CA", "3.9", "1C", "Real Estate", "$430K", "New", "", "Educational Webinar"],
+            ["Kimberly Carter", "k.carter@email.com", "(559) 555-0137", "1357 Chia Way, Fresno, CA", "4.6", "1A", "Technology", "$890K", "Warm", "2024-01-27", "Pilot Program"],
+            ["Andrew Mitchell", "a.mitchell@email.com", "(559) 555-0138", "8642 Quinoa Ct, Fresno, CA", "4.3", "1B", "Finance", "$720K", "Cold", "", "Competitive Analysis"],
+            ["Vanessa Perez", "v.perez@email.com", "(559) 555-0139", "7531 Barley St, Clovis, CA", "4.8", "1A", "Legal", "$970K", "Hot", "2024-01-30", "Contract Negotiation"],
+            ["Gregory Roberts", "g.roberts@email.com", "(559) 555-0140", "9642 Wheat Ave, Fresno, CA", "4.0", "1B", "Healthcare", "$640K", "New", "", "Discovery Call"],
+            ["Danielle Turner", "d.turner@email.com", "(559) 555-0141", "3579 Oat Dr, Fresno, CA", "4.4", "1B", "Real Estate", "$750K", "Warm", "2024-01-25", "Business Case"],
+            ["Sean Phillips", "s.phillips@email.com", "(559) 555-0142", "1468 Rice Way, Clovis, CA", "3.7", "1C", "Technology", "$360K", "Cold", "", "Pain Point Analysis"],
+            ["Crystal Campbell", "c.campbell@email.com", "(559) 555-0143", "2591 Corn Ln, Fresno, CA", "4.5", "1A", "Finance", "$840K", "New", "", "Executive Brief"],
+            ["Victor Parker", "v.parker@email.com", "(559) 555-0144", "7410 Millet St, Fresno, CA", "4.2", "1B", "Legal", "$680K", "Warm", "2024-01-23", "Legal Review"],
+            ["Monica Evans", "m.evans@email.com", "(559) 555-0145", "8523 Sorghum Ave, Clovis, CA", "4.9", "1A", "Healthcare", "$1.15M", "Hot", "2024-01-31", "Budget Approval"],
+            ["Carlos Edwards", "c.edwards@email.com", "(559) 555-0146", "9634 Buckwheat Dr, Fresno, CA", "3.8", "1C", "Real Estate", "$400K", "New", "", "Market Trends"],
+            ["Tiffany Collins", "t.collins@email.com", "(559) 555-0147", "4567 Rye Ct, Fresno, CA", "4.3", "1B", "Technology", "$710K", "Cold", "", "Innovation Workshop"],
+            ["Aaron Stewart", "a.stewart@email.com", "(559) 555-0148", "6789 Amaranth Way, Clovis, CA", "4.6", "1A", "Finance", "$880K", "Warm", "2024-01-26", "Financial Modeling"],
+            ["Kristen Sanchez", "k.sanchez@email.com", "(559) 555-0149", "1234 Teff St, Fresno, CA", "4.1", "1B", "Legal", "$650K", "New", "", "Compliance Review"],
+            ["Patrick Morris", "p.morris@email.com", "(559) 555-0150", "5678 Spelt Ave, Fresno, CA", "4.7", "1A", "Healthcare", "$920K", "Hot", "2024-01-29", "Strategic Planning"]
+        ];
+
+        let sortDirection = {};
+        let filteredData = [...clientData];
+
+        function populateTable() {
+            const tbody = document.getElementById('clientTableBody');
+            tbody.innerHTML = '';
+            
+            filteredData.forEach(client => {
+                const row = document.createElement('tr');
+                const tierClass = `tier-${client[5].toLowerCase()}`;
+                row.className = tierClass;
+                
+                row.innerHTML = `
+                    <td>${client[0]}</td>
+                    <td>${client[1]}</td>
+                    <td>${client[2]}</td>
+                    <td>${client[3]}</td>
+                    <td>${client[4]}</td>
+                    <td><span class="tier-badge tier-${client[5].toLowerCase()}">${client[5]}</span></td>
+                    <td>${client[6]}</td>
+                    <td>${client[7]}</td>
+                    <td>
+                        <button class="btn" onclick="makeCall('${client[2]}')">📞 Call</button>
+                        <button class="btn btn-email" onclick="openEmailModal('${client[0]}', '${client[1]}')">📧 Email</button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function filterTable() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const tierFilter = document.getElementById('tierFilter').value;
+            const industryFilter = document.getElementById('industryFilter').value;
+
+            filteredData = clientData.filter(client => {
+                const matchesSearch = client[0].toLowerCase().includes(searchTerm) ||
+                                    client[1].toLowerCase().includes(searchTerm) ||
+                                    client[3].toLowerCase().includes(searchTerm);
+                const matchesTier = !tierFilter || client[5] === tierFilter;
+                const matchesIndustry = !industryFilter || client[6] === industryFilter;
+                
+                return matchesSearch && matchesTier && matchesIndustry;
+            });
+
+            populateTable();
+        }
+
+        function sortTable(columnIndex) {
+            const isAscending = sortDirection[columnIndex] !== true;
+            sortDirection[columnIndex] = isAscending;
+
+            filteredData.sort((a, b) => {
+                let aVal = a[columnIndex];
+                let bVal = b[columnIndex];
+
+                // Handle numeric columns
+                if (columnIndex === 4) { // P.U.R.E.S. Score
+                    aVal = parseFloat(aVal);
+                    bVal = parseFloat(bVal);
+                }
+
+                if (aVal < bVal) return isAscending ? -1 : 1;
+                if (aVal > bVal) return isAscending ? 1 : -1;
+                return 0;
+            });
+
+            populateTable();
+        }
+
+        function openTab(evt, tabName) {
+            const tabContents = document.querySelectorAll('.tab-content');
+            const tabButtons = document.querySelectorAll('.tab-button');
+
+            tabContents.forEach(content => content.classList.remove('active'));
+            tabButtons.forEach(button => button.classList.remove('active'));
+
+            document.getElementById(tabName).classList.add('active');
+            evt.currentTarget.classList.add('active');
+        }
+
+        function openEmailModal(clientName, clientEmail) {
+            document.getElementById('emailTo').textContent = clientEmail;
+            document.getElementById('emailContent').value = document.getElementById('emailContent').value.replace('[Client Name]', clientName);
+            document.getElementById('emailModal').style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('emailModal').style.display = 'none';
+        }
+
+        function sendEmail() {
+            const email = document.getElementById('emailTo').textContent;
+            const subject = encodeURIComponent('Exclusive Luxury Jewelry Experience at Orloff Jewelers');
+            const body = encodeURIComponent(document.getElementById('emailContent').value);
+            
+            window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
+            closeModal();
+        }
+
+        function makeCall(phoneNumber) {
+            window.location.href = `tel:${phoneNumber}`;
+        }
+
+        // Initialize scoring sliders
+        function initializeSliders() {
+            const sliders = ['profitability', 'urgency', 'reachability', 'engagement', 'sustainability'];
+            
+            sliders.forEach(sliderId => {
+                const slider = document.getElementById(sliderId);
+                const valueSpan = document.getElementById(sliderId + '-value');
+                
+                slider.addEventListener('input', function() {
+                    valueSpan.textContent = this.value;
+                });
+            });
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('emailModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+
+        // Close modal with close button
+        document.querySelector('.close').onclick = closeModal;
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            populateTable();
+            initializeSliders();
+        });
+    </script>
+</body>
+</html>

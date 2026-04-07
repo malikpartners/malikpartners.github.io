@@ -1,0 +1,1372 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>S.A.L.E. Client Targeting System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #000000;
+            color: #ffffff;
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #CF2030, #8B0000);
+            padding: 20px 0;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+
+        .logo {
+            max-height: 80px;
+            margin-bottom: 10px;
+        }
+
+        .header h1 {
+            color: #ffffff;
+            font-size: 2.5em;
+            margin-bottom: 5px;
+        }
+
+        .header p {
+            color: #ffffff;
+            opacity: 0.9;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .module {
+            background: rgba(207, 32, 48, 0.1);
+            border: 1px solid #CF2030;
+            border-radius: 10px;
+            margin: 20px 0;
+            padding: 20px;
+        }
+
+        .module h2 {
+            color: #CF2030;
+            margin-bottom: 15px;
+            font-size: 1.8em;
+            border-bottom: 2px solid #CF2030;
+            padding-bottom: 10px;
+        }
+
+        .tabs {
+            display: flex;
+            background: rgba(139, 0, 0, 0.3);
+            border-radius: 10px 10px 0 0;
+            margin-bottom: 20px;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 15px;
+            text-align: center;
+            background: rgba(207, 32, 48, 0.2);
+            border: none;
+            color: #ffffff;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .tab.active, .tab:hover {
+            background: #CF2030;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 0 0 10px 10px;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .pures-form {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .pures-item {
+            background: rgba(207, 32, 48, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #CF2030;
+        }
+
+        .pures-item h4 {
+            color: #CF2030;
+            margin-bottom: 10px;
+        }
+
+        .rating {
+            display: flex;
+            gap: 5px;
+            margin: 10px 0;
+        }
+
+        .rating input[type="radio"] {
+            display: none;
+        }
+
+        .rating label {
+            color: #666;
+            font-size: 30px;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .rating label:hover,
+        .rating label.active {
+            color: #CF2030;
+        }
+
+        .client-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: rgba(0, 0, 0, 0.7);
+            margin: 20px 0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .client-table th,
+        .client-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #CF2030;
+        }
+
+        .client-table th {
+            background: #CF2030;
+            color: #ffffff;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .client-table th:hover {
+            background: #8B0000;
+        }
+
+        .client-table tr:nth-child(even) {
+            background: rgba(207, 32, 48, 0.05);
+        }
+
+        .client-table tr:hover {
+            background: rgba(207, 32, 48, 0.15);
+        }
+
+        .tier-1a { color: #00ff00; }
+        .tier-1b { color: #ffff00; }
+        .tier-1c { color: #00bfff; }
+
+        .btn {
+            background: #CF2030;
+            color: #ffffff;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 2px;
+            font-size: 12px;
+            transition: background 0.3s;
+        }
+
+        .btn:hover {
+            background: #8B0000;
+        }
+
+        .search-filter {
+            display: flex;
+            gap: 15px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .search-filter input,
+        .search-filter select {
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px solid #CF2030;
+            color: #ffffff;
+            border-radius: 5px;
+        }
+
+        .search-filter input::placeholder {
+            color: #cccccc;
+        }
+
+        .email-template {
+            background: rgba(207, 32, 48, 0.1);
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            border: 1px solid #CF2030;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .stat-card {
+            background: rgba(207, 32, 48, 0.1);
+            padding: 20px;
+            text-align: center;
+            border-radius: 10px;
+            border: 1px solid #CF2030;
+        }
+
+        .stat-value {
+            font-size: 2em;
+            color: #CF2030;
+            font-weight: bold;
+        }
+
+        .footer {
+            background: rgba(139, 0, 0, 0.3);
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+        }
+
+        .footer img {
+            max-height: 40px;
+            opacity: 0.7;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+        }
+
+        .modal-content {
+            background: #000000;
+            margin: 5% auto;
+            padding: 30px;
+            border: 2px solid #CF2030;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 600px;
+            color: #ffffff;
+        }
+
+        .close {
+            color: #CF2030;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: #ffffff;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #CF2030, #ff4060);
+            transition: width 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="HigginsReports Logo" class="logo">
+        <h1>S.A.L.E. Client Targeting System</h1>
+        <p>Strategic Client Acquisition & Long-term Engagement Platform for Retail Excellence</p>
+    </div>
+
+    <div class="container">
+        <!-- Business Overview -->
+        <div class="module">
+            <h2>Business Profile - Lucas Robinson Retail</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value">50</div>
+                    <div>Targeted Clients</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">10</div>
+                    <div>Mile Radius</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">85%</div>
+                    <div>P.U.R.E.S. Accuracy</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">$2.5M</div>
+                    <div>Revenue Target</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- S.A.L.E. System Tabs -->
+        <div class="module">
+            <div class="tabs">
+                <button class="tab active" onclick="openTab(event, 'sourcing')">S - Sourcing</button>
+                <button class="tab" onclick="openTab(event, 'assessing')">A - Assessing</button>
+                <button class="tab" onclick="openTab(event, 'listening')">L - Listening</button>
+                <button class="tab" onclick="openTab(event, 'empowering')">E - Empowering</button>
+            </div>
+
+            <!-- SOURCING Tab -->
+            <div id="sourcing" class="tab-content active">
+                <h2>P.U.R.E.S. Client Scoring System</h2>
+                <div class="pures-form">
+                    <div class="pures-item">
+                        <h4>Profitability</h4>
+                        <p>Annual revenue threshold and budget capacity</p>
+                        <div class="rating" data-category="profitability">
+                            <label for="prof-1">★</label><input type="radio" id="prof-1" name="profitability" value="1">
+                            <label for="prof-2">★</label><input type="radio" id="prof-2" name="profitability" value="2">
+                            <label for="prof-3">★</label><input type="radio" id="prof-3" name="profitability" value="3">
+                            <label for="prof-4">★</label><input type="radio" id="prof-4" name="profitability" value="4">
+                            <label for="prof-5">★</label><input type="radio" id="prof-5" name="profitability" value="5">
+                        </div>
+                    </div>
+                    <div class="pures-item">
+                        <h4>Urgency</h4>
+                        <p>Active pain points requiring immediate solutions</p>
+                        <div class="rating" data-category="urgency">
+                            <label for="urg-1">★</label><input type="radio" id="urg-1" name="urgency" value="1">
+                            <label for="urg-2">★</label><input type="radio" id="urg-2" name="urgency" value="2">
+                            <label for="urg-3">★</label><input type="radio" id="urg-3" name="urgency" value="3">
+                            <label for="urg-4">★</label><input type="radio" id="urg-4" name="urgency" value="4">
+                            <label for="urg-5">★</label><input type="radio" id="urg-5" name="urgency" value="5">
+                        </div>
+                    </div>
+                    <div class="pures-item">
+                        <h4>Reachability</h4>
+                        <p>Accessible decision makers with clear contact paths</p>
+                        <div class="rating" data-category="reachability">
+                            <label for="reach-1">★</label><input type="radio" id="reach-1" name="reachability" value="1">
+                            <label for="reach-2">★</label><input type="radio" id="reach-2" name="reachability" value="2">
+                            <label for="reach-3">★</label><input type="radio" id="reach-3" name="reachability" value="3">
+                            <label for="reach-4">★</label><input type="radio" id="reach-4" name="reachability" value="4">
+                            <label for="reach-5">★</label><input type="radio" id="reach-5" name="reachability" value="5">
+                        </div>
+                    </div>
+                    <div class="pures-item">
+                        <h4>Engagement</h4>
+                        <p>Openness to innovation and partnerships</p>
+                        <div class="rating" data-category="engagement">
+                            <label for="eng-1">★</label><input type="radio" id="eng-1" name="engagement" value="1">
+                            <label for="eng-2">★</label><input type="radio" id="eng-2" name="engagement" value="2">
+                            <label for="eng-3">★</label><input type="radio" id="eng-3" name="engagement" value="3">
+                            <label for="eng-4">★</label><input type="radio" id="eng-4" name="engagement" value="4">
+                            <label for="eng-5">★</label><input type="radio" id="eng-5" name="engagement" value="5">
+                        </div>
+                    </div>
+                    <div class="pures-item">
+                        <h4>Sustainability</h4>
+                        <p>Long-term partnership potential with growth trajectory</p>
+                        <div class="rating" data-category="sustainability">
+                            <label for="sust-1">★</label><input type="radio" id="sust-1" name="sustainability" value="1">
+                            <label for="sust-2">★</label><input type="radio" id="sust-2" name="sustainability" value="2">
+                            <label for="sust-3">★</label><input type="radio" id="sust-3" name="sustainability" value="3">
+                            <label for="sust-4">★</label><input type="radio" id="sust-4" name="sustainability" value="4">
+                            <label for="sust-5">★</label><input type="radio" id="sust-5" name="sustainability" value="5">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ASSESSING Tab -->
+            <div id="assessing" class="tab-content">
+                <h2>Client Database & Buying Pattern Analysis</h2>
+                <div class="search-filter">
+                    <input type="text" id="searchInput" placeholder="Search clients..." onkeyup="filterTable()">
+                    <select id="tierFilter" onchange="filterTable()">
+                        <option value="">All Tiers</option>
+                        <option value="Tier 1A">Tier 1A (Premium)</option>
+                        <option value="Tier 1B">Tier 1B (High-Value)</option>
+                        <option value="Tier 1C">Tier 1C (Qualified)</option>
+                    </select>
+                    <select id="industryFilter" onchange="filterTable()">
+                        <option value="">All Industries</option>
+                        <option value="Technology">Technology</option>
+                        <option value="Healthcare">Healthcare</option>
+                        <option value="Finance">Finance</option>
+                        <option value="Retail">Retail</option>
+                        <option value="Manufacturing">Manufacturing</option>
+                    </select>
+                </div>
+
+                <table class="client-table" id="clientTable">
+                    <thead>
+                        <tr>
+                            <th onclick="sortTable(0)">Client Name</th>
+                            <th onclick="sortTable(1)">Email</th>
+                            <th onclick="sortTable(2)">Phone</th>
+                            <th onclick="sortTable(3)">Address</th>
+                            <th onclick="sortTable(4)">P.U.R.E.S. Score</th>
+                            <th onclick="sortTable(5)">Tier Level</th>
+                            <th onclick="sortTable(6)">Industry</th>
+                            <th onclick="sortTable(7)">Revenue Est.</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="clientTableBody">
+                        <!-- Client data will be populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- LISTENING Tab -->
+            <div id="listening" class="tab-content">
+                <h2>Feedback Integration System</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value">92%</div>
+                        <div>Feedback Collection Rate</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">4.7/5</div>
+                        <div>Avg. Satisfaction Score</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">24h</div>
+                        <div>Avg. Response Time</div>
+                    </div>
+                </div>
+                <div class="module">
+                    <h3>Recent Feedback</h3>
+                    <div id="feedbackList">
+                        <!-- Feedback items will be populated here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- EMPOWERING Tab -->
+            <div id="empowering" class="tab-content">
+                <h2>Referral Strategy & Success Tracking</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value">23</div>
+                        <div>Active Referrals</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">$125K</div>
+                        <div>Referral Revenue</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">2.3</div>
+                        <div>Avg. Referrals/Client</div>
+                    </div>
+                </div>
+                <div class="module">
+                    <h3>Referral Rewards Program</h3>
+                    <p>Track and manage client advocacy programs with automated reward distribution.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Email Modal -->
+    <div id="emailModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2>Email Outreach</h2>
+            <div class="email-template">
+                <h3>Subject: Exclusive Retail Experience Awaits You!</h3>
+                <div id="emailContent">
+                    <!-- Email content will be populated here -->
+                </div>
+                <button class="btn" onclick="sendEmail()">Send Email</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="HigginsReports">
+        <p>© 2026 HigginsReports - Strategic Business Intelligence Platform</p>
+    </div>
+
+    <script>
+        // Sample client data for El Dorado Hills area
+        const clients = [
+            {
+                name: "Sarah Mitchell", 
+                email: "sarah@techsolutions.com", 
+                phone: "(916) 555-0123", 
+                address: "1234 Oak Valley Dr, El Dorado Hills, CA",
+                puresScore: 4.8, 
+                tier: "Tier 1A", 
+                industry: "Technology", 
+                revenue: "$2.5M",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Michael Johnson", 
+                email: "mjohnson@healthcarepro.com", 
+                phone: "(916) 555-0124", 
+                address: "5678 Pine Ridge Rd, El Dorado Hills, CA",
+                puresScore: 4.5, 
+                tier: "Tier 1A", 
+                industry: "Healthcare", 
+                revenue: "$3.1M",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Jennifer Davis", 
+                email: "j.davis@financefirst.com", 
+                phone: "(916) 555-0125", 
+                address: "9012 Sunset Blvd, Cameron Park, CA",
+                puresScore: 4.2, 
+                tier: "Tier 1B", 
+                industry: "Finance", 
+                revenue: "$1.8M",
+                buyerType: "Relationship"
+            },
+            {
+                name: "Robert Thompson", 
+                email: "rthompson@retailking.com", 
+                phone: "(916) 555-0126", 
+                address: "3456 Golden Hills Dr, El Dorado Hills, CA",
+                puresScore: 4.0, 
+                tier: "Tier 1B", 
+                industry: "Retail", 
+                revenue: "$1.2M",
+                buyerType: "Efficiency"
+            },
+            {
+                name: "Amanda Wilson", 
+                email: "awilson@manufacture.com", 
+                phone: "(916) 555-0127", 
+                address: "7890 Country Club Dr, Shingle Springs, CA",
+                puresScore: 3.8, 
+                tier: "Tier 1C", 
+                industry: "Manufacturing", 
+                revenue: "$950K",
+                buyerType: "Analytical"
+            },
+            {
+                name: "David Martinez", 
+                email: "dmartinez@innovatetech.com", 
+                phone: "(916) 555-0128", 
+                address: "2468 Meadow View Ln, El Dorado Hills, CA",
+                puresScore: 4.6, 
+                tier: "Tier 1A", 
+                industry: "Technology", 
+                revenue: "$2.8M",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Lisa Anderson", 
+                email: "landerson@healthplus.com", 
+                phone: "(916) 555-0129", 
+                address: "1357 Valley Vista Ct, Cameron Park, CA",
+                puresScore: 4.1, 
+                tier: "Tier 1B", 
+                industry: "Healthcare", 
+                revenue: "$1.6M",
+                buyerType: "Relationship"
+            },
+            {
+                name: "James Brown", 
+                email: "jbrown@financepro.com", 
+                phone: "(916) 555-0130", 
+                address: "9753 Rolling Hills Dr, El Dorado Hills, CA",
+                puresScore: 3.9, 
+                tier: "Tier 1C", 
+                industry: "Finance", 
+                revenue: "$1.1M",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Karen White", 
+                email: "kwhite@retailexpert.com", 
+                phone: "(916) 555-0131", 
+                address: "4682 Green Valley Rd, Rescue, CA",
+                puresScore: 3.7, 
+                tier: "Tier 1C", 
+                industry: "Retail", 
+                revenue: "$890K",
+                buyerType: "Efficiency"
+            },
+            {
+                name: "Christopher Lee", 
+                email: "clee@manufacturing.com", 
+                phone: "(916) 555-0132", 
+                address: "8024 Blue Mountain Rd, Pollock Pines, CA",
+                puresScore: 4.3, 
+                tier: "Tier 1B", 
+                industry: "Manufacturing", 
+                revenue: "$1.9M",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Michelle Garcia", 
+                email: "mgarcia@techadvanced.com", 
+                phone: "(916) 555-0133", 
+                address: "5791 Summit Drive, El Dorado Hills, CA",
+                puresScore: 4.7, 
+                tier: "Tier 1A", 
+                industry: "Technology", 
+                revenue: "$3.2M",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Steven Taylor", 
+                email: "staylor@healthcare360.com", 
+                phone: "(916) 555-0134", 
+                address: "3159 Forest Hill Dr, Placerville, CA",
+                puresScore: 4.0, 
+                tier: "Tier 1B", 
+                industry: "Healthcare", 
+                revenue: "$1.5M",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Nancy Rodriguez", 
+                email: "nrodriguez@financesmart.com", 
+                phone: "(916) 555-0135", 
+                address: "7531 Cedar Ridge Ct, El Dorado Hills, CA",
+                puresScore: 3.8, 
+                tier: "Tier 1C", 
+                industry: "Finance", 
+                revenue: "$980K",
+                buyerType: "Relationship"
+            },
+            {
+                name: "Daniel Johnson", 
+                email: "djohnson@retailsolutions.com", 
+                phone: "(916) 555-0136", 
+                address: "9246 Autumn Leaf Way, Cameron Park, CA",
+                puresScore: 4.4, 
+                tier: "Tier 1A", 
+                industry: "Retail", 
+                revenue: "$2.1M",
+                buyerType: "Efficiency"
+            },
+            {
+                name: "Patricia Smith", 
+                email: "psmith@manufacture360.com", 
+                phone: "(916) 555-0137", 
+                address: "6408 Wildflower Ln, Shingle Springs, CA",
+                puresScore: 3.6, 
+                tier: "Tier 1C", 
+                industry: "Manufacturing", 
+                revenue: "$750K",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Mark Wilson", 
+                email: "mwilson@techleader.com", 
+                phone: "(916) 555-0138", 
+                address: "1827 Heritage Dr, El Dorado Hills, CA",
+                puresScore: 4.5, 
+                tier: "Tier 1A", 
+                industry: "Technology", 
+                revenue: "$2.6M",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Barbara Davis", 
+                email: "bdavis@healthcarepremier.com", 
+                phone: "(916) 555-0139", 
+                address: "4930 Country Lane, Diamond Springs, CA",
+                puresScore: 4.2, 
+                tier: "Tier 1B", 
+                industry: "Healthcare", 
+                revenue: "$1.7M",
+                buyerType: "Relationship"
+            },
+            {
+                name: "Thomas Miller", 
+                email: "tmiller@financeleader.com", 
+                phone: "(916) 555-0140", 
+                address: "8375 Mountain View Rd, Coloma, CA",
+                puresScore: 3.9, 
+                tier: "Tier 1C", 
+                industry: "Finance", 
+                revenue: "$1.0M",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Susan Martinez", 
+                email: "smartinez@retailpro.com", 
+                phone: "(916) 555-0141", 
+                address: "5264 Riverside Dr, Cool, CA",
+                puresScore: 4.1, 
+                tier: "Tier 1B", 
+                industry: "Retail", 
+                revenue: "$1.4M",
+                buyerType: "Efficiency"
+            },
+            {
+                name: "Joseph Anderson", 
+                email: "janderson@manufacturepro.com", 
+                phone: "(916) 555-0142", 
+                address: "2693 Apple Valley Rd, Placerville, CA",
+                puresScore: 4.0, 
+                tier: "Tier 1B", 
+                industry: "Manufacturing", 
+                revenue: "$1.3M",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Elizabeth Brown", 
+                email: "ebrown@techexpert.com", 
+                phone: "(916) 555-0143", 
+                address: "7146 Sunrise Blvd, Citrus Heights, CA",
+                puresScore: 4.3, 
+                tier: "Tier 1B", 
+                industry: "Technology", 
+                revenue: "$1.8M",
+                buyerType: "Innovation"
+            },
+            {
+                name: "William Garcia", 
+                email: "wgarcia@healthsolutions.com", 
+                phone: "(916) 555-0144", 
+                address: "3582 Oak Tree Ln, Fair Oaks, CA",
+                puresScore: 3.7, 
+                tier: "Tier 1C", 
+                industry: "Healthcare", 
+                revenue: "$850K",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Maria Thompson", 
+                email: "mthompson@financeexpert.com", 
+                phone: "(916) 555-0145", 
+                address: "9817 Granite Bay Dr, Granite Bay, CA",
+                puresScore: 4.6, 
+                tier: "Tier 1A", 
+                industry: "Finance", 
+                revenue: "$2.7M",
+                buyerType: "Relationship"
+            },
+            {
+                name: "Charles White", 
+                email: "cwhite@retailleader.com", 
+                phone: "(916) 555-0146", 
+                address: "6259 Folsom Auburn Rd, Folsom, CA",
+                puresScore: 4.4, 
+                tier: "Tier 1A", 
+                industry: "Retail", 
+                revenue: "$2.3M",
+                buyerType: "Efficiency"
+            },
+            {
+                name: "Linda Lee", 
+                email: "llee@manufactureplus.com", 
+                phone: "(916) 555-0147", 
+                address: "1748 Douglas Blvd, Roseville, CA",
+                puresScore: 3.8, 
+                tier: "Tier 1C", 
+                industry: "Manufacturing", 
+                revenue: "$920K",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Richard Rodriguez", 
+                email: "rrodriguez@techinnovate.com", 
+                phone: "(916) 555-0148", 
+                address: "4506 Madison Ave, Fair Oaks, CA",
+                puresScore: 4.5, 
+                tier: "Tier 1A", 
+                industry: "Technology", 
+                revenue: "$2.4M",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Helen Taylor", 
+                email: "htaylor@healthpremier.com", 
+                phone: "(916) 555-0149", 
+                address: "8973 American River Dr, Sacramento, CA",
+                puresScore: 4.1, 
+                tier: "Tier 1B", 
+                industry: "Healthcare", 
+                revenue: "$1.5M",
+                buyerType: "Relationship"
+            },
+            {
+                name: "George Johnson", 
+                email: "gjohnson@financeplus.com", 
+                phone: "(916) 555-0150", 
+                address: "2135 Hazel Ave, Orangevale, CA",
+                puresScore: 3.9, 
+                tier: "Tier 1C", 
+                industry: "Finance", 
+                revenue: "$1.1M",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Dorothy Smith", 
+                email: "dsmith@retailadvanced.com", 
+                phone: "(916) 555-0151", 
+                address: "5627 San Juan Ave, Citrus Heights, CA",
+                puresScore: 4.2, 
+                tier: "Tier 1B", 
+                industry: "Retail", 
+                revenue: "$1.6M",
+                buyerType: "Efficiency"
+            },
+            {
+                name: "Jason Wilson", 
+                email: "jwilson@manufacturelead.com", 
+                phone: "(916) 555-0152", 
+                address: "7894 Elkhorn Blvd, North Highlands, CA",
+                puresScore: 4.0, 
+                tier: "Tier 1B", 
+                industry: "Manufacturing", 
+                revenue: "$1.2M",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Betty Davis", 
+                email: "bdavis@techadvance.com", 
+                phone: "(916) 555-0153", 
+                address: "3301 Power Inn Rd, Sacramento, CA",
+                puresScore: 4.3, 
+                tier: "Tier 1B", 
+                industry: "Technology", 
+                revenue: "$1.9M",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Edward Miller", 
+                email: "emiller@healthleader.com", 
+                phone: "(916) 555-0154", 
+                address: "9568 Fair Oaks Blvd, Fair Oaks, CA",
+                puresScore: 3.6, 
+                tier: "Tier 1C", 
+                industry: "Healthcare", 
+                revenue: "$780K",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Sandra Martinez", 
+                email: "smartinez@financeleader.com", 
+                phone: "(916) 555-0155", 
+                address: "1472 Watt Ave, Sacramento, CA",
+                puresScore: 4.4, 
+                tier: "Tier 1A", 
+                industry: "Finance", 
+                revenue: "$2.2M",
+                buyerType: "Relationship"
+            },
+            {
+                name: "Kenneth Anderson", 
+                email: "kanderson@retailexpert.com", 
+                phone: "(916) 555-0156", 
+                address: "6785 Greenback Ln, Citrus Heights, CA",
+                puresScore: 4.1, 
+                tier: "Tier 1B", 
+                industry: "Retail", 
+                revenue: "$1.3M",
+                buyerType: "Efficiency"
+            },
+            {
+                name: "Donna Brown", 
+                email: "dbrown@manufacturepro.com", 
+                phone: "(916) 555-0157", 
+                address: "2947 Sunrise Blvd, Rancho Cordova, CA",
+                puresScore: 3.8, 
+                tier: "Tier 1C", 
+                industry: "Manufacturing", 
+                revenue: "$890K",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Paul Garcia", 
+                email: "pgarcia@techsolutions.com", 
+                phone: "(916) 555-0158", 
+                address: "8216 Folsom Blvd, Sacramento, CA",
+                puresScore: 4.7, 
+                tier: "Tier 1A", 
+                industry: "Technology", 
+                revenue: "$3.0M",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Carol Thompson", 
+                email: "cthompson@healthsolutions.com", 
+                phone: "(916) 555-0159", 
+                address: "4593 Manzanita Ave, Carmichael, CA",
+                puresScore: 4.0, 
+                tier: "Tier 1B", 
+                industry: "Healthcare", 
+                revenue: "$1.4M",
+                buyerType: "Relationship"
+            },
+            {
+                name: "Kevin White", 
+                email: "kwhite@financeadvanced.com", 
+                phone: "(916) 555-0160", 
+                address: "7039 Marconi Ave, Carmichael, CA",
+                puresScore: 3.9, 
+                tier: "Tier 1C", 
+                industry: "Finance", 
+                revenue: "$1.0M",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Ruth Lee", 
+                email: "rlee@retailplus.com", 
+                phone: "(916) 555-0161", 
+                address: "1864 Arden Way, Sacramento, CA",
+                puresScore: 4.2, 
+                tier: "Tier 1B", 
+                industry: "Retail", 
+                revenue: "$1.7M",
+                buyerType: "Efficiency"
+            },
+            {
+                name: "Frank Rodriguez", 
+                email: "frodriguez@manufacturelead.com", 
+                phone: "(916) 555-0162", 
+                address: "5727 Stockton Blvd, Sacramento, CA",
+                puresScore: 4.1, 
+                tier: "Tier 1B", 
+                industry: "Manufacturing", 
+                revenue: "$1.5M",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Sharon Taylor", 
+                email: "staylor@techleader.com", 
+                phone: "(916) 555-0163", 
+                address: "3418 Bradshaw Rd, Sacramento, CA",
+                puresScore: 4.4, 
+                tier: "Tier 1A", 
+                industry: "Technology", 
+                revenue: "$2.1M",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Gary Johnson", 
+                email: "gjohnson@healthpremier.com", 
+                phone: "(916) 555-0164", 
+                address: "9652 Kiefer Blvd, Sacramento, CA",
+                puresScore: 3.7, 
+                tier: "Tier 1C", 
+                industry: "Healthcare", 
+                revenue: "$820K",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Michelle Smith", 
+                email: "msmith@financepro.com", 
+                phone: "(916) 555-0165", 
+                address: "2583 Fulton Ave, Sacramento, CA",
+                puresScore: 4.5, 
+                tier: "Tier 1A", 
+                industry: "Finance", 
+                revenue: "$2.5M",
+                buyerType: "Relationship"
+            },
+            {
+                name: "Larry Wilson", 
+                email: "lwilson@retailsolutions.com", 
+                phone: "(916) 555-0166", 
+                address: "6974 Florin Rd, Sacramento, CA",
+                puresScore: 4.0, 
+                tier: "Tier 1B", 
+                industry: "Retail", 
+                revenue: "$1.2M",
+                buyerType: "Efficiency"
+            },
+            {
+                name: "Cynthia Davis", 
+                email: "cdavis@manufacturepro.com", 
+                phone: "(916) 555-0167", 
+                address: "4137 Del Paso Blvd, Sacramento, CA",
+                puresScore: 3.8, 
+                tier: "Tier 1C", 
+                industry: "Manufacturing", 
+                revenue: "$950K",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Scott Miller", 
+                email: "smiller@techexpert.com", 
+                phone: "(916) 555-0168", 
+                address: "7821 Antelope Rd, Antelope, CA",
+                puresScore: 4.3, 
+                tier: "Tier 1B", 
+                industry: "Technology", 
+                revenue: "$1.8M",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Angela Martinez", 
+                email: "amartinez@healthadvanced.com", 
+                phone: "(916) 555-0169", 
+                address: "1596 Challenge Way, Sacramento, CA",
+                puresScore: 4.1, 
+                tier: "Tier 1B", 
+                industry: "Healthcare", 
+                revenue: "$1.6M",
+                buyerType: "Relationship"
+            },
+            {
+                name: "Gregory Anderson", 
+                email: "ganderson@financeleader.com", 
+                phone: "(916) 555-0170", 
+                address: "8405 Jackson Rd, Sacramento, CA",
+                puresScore: 3.9, 
+                tier: "Tier 1C", 
+                industry: "Finance", 
+                revenue: "$1.1M",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Deborah Brown", 
+                email: "dbrown@retailadvanced.com", 
+                phone: "(916) 555-0171", 
+                address: "2759 Northgate Blvd, Sacramento, CA",
+                puresScore: 4.6, 
+                tier: "Tier 1A", 
+                industry: "Retail", 
+                revenue: "$2.8M",
+                buyerType: "Efficiency"
+            },
+            {
+                name: "Raymond Garcia", 
+                email: "rgarcia@manufacturelead.com", 
+                phone: "(916) 555-0172", 
+                address: "5384 Power Inn Rd, Sacramento, CA",
+                puresScore: 4.2, 
+                tier: "Tier 1B", 
+                industry: "Manufacturing", 
+                revenue: "$1.7M",
+                buyerType: "Innovation"
+            }
+        ];
+
+        function populateTable() {
+            const tableBody = document.getElementById('clientTableBody');
+            tableBody.innerHTML = '';
+            
+            clients.forEach(client => {
+                const row = tableBody.insertRow();
+                const tierClass = client.tier.replace(' ', '').toLowerCase();
+                
+                row.innerHTML = `
+                    <td>${client.name}</td>
+                    <td>${client.email}</td>
+                    <td>${client.phone}</td>
+                    <td>${client.address}</td>
+                    <td>${client.puresScore}</td>
+                    <td class="${tierClass}">${client.tier}</td>
+                    <td>${client.industry}</td>
+                    <td>${client.revenue}</td>
+                    <td>
+                        <button class="btn" onclick="contactClient('phone', '${client.name}', '${client.phone}')">Call</button>
+                        <button class="btn" onclick="contactClient('email', '${client.name}', '${client.email}', '${client.buyerType}')">Email</button>
+                        <button class="btn" onclick="viewProfile('${client.name}')">Profile</button>
+                    </td>
+                `;
+            });
+        }
+
+        function contactClient(type, name, contact, buyerType = '') {
+            if (type === 'phone') {
+                window.open(`tel:${contact}`);
+            } else if (type === 'email') {
+                openEmailModal(name, contact, buyerType);
+            }
+        }
+
+        function openEmailModal(name, email, buyerType) {
+            const modal = document.getElementById('emailModal');
+            const emailContent = document.getElementById('emailContent');
+            
+            let emailBody = '';
+            
+            switch(buyerType) {
+                case 'Innovation':
+                    emailBody = `Dear ${name},
+
+I hope this email finds you well. As someone who values cutting-edge solutions and innovation, I wanted to personally invite you to discover what makes Lucas Robinson's retail experience truly exceptional.
+
+Our El Dorado Hills location features:
+✅ The latest in retail technology and smart shopping solutions
+✅ Exclusive access to innovative products before they hit mainstream markets  
+✅ AI-powered personal shopping consultations
+✅ Cutting-edge payment and checkout technologies
+✅ First-to-market product launches and beta testing opportunities
+
+Based on your profile as an innovation-focused leader in the ${email.includes('tech') ? 'technology' : 'business'} sector, I believe you'll appreciate our forward-thinking approach to retail excellence.
+
+Would you be available for a brief 15-minute call this week to discuss how our innovative retail solutions align with your preferences?
+
+Best regards,
+Lucas Robinson
+Framework Friday & Weblife Stores`;
+                    break;
+                case 'Analytical':
+                    emailBody = `Dear ${name},
+
+I hope this email finds you well. As a detail-oriented professional who appreciates data-driven decisions, I wanted to share some compelling metrics about Lucas Robinson's retail experience.
+
+Our Performance Metrics:
+• 98% customer satisfaction rate (verified reviews)
+• Average 35% cost savings vs. competitors
+• ROI-focused product curation with detailed analytics
+• Comprehensive product comparisons and case studies
+• 30-day performance guarantees on all premium items
+
+Data Points That Matter:
+✅ Over 2,500 successful customer implementations
+✅ Average 4.8/5 star rating across all platforms
+✅ Documented case studies showing measurable results
+✅ Transparent pricing with detailed cost breakdowns
+
+I'd be happy to provide detailed analytics, customer testimonials, and ROI case studies specific to your industry needs.
+
+Best regards,
+Lucas Robinson
+Framework Friday & Weblife Stores`;
+                    break;
+                case 'Relationship':
+                    emailBody = `Dear ${name},
+
+I hope you're doing well. I'm reaching out personally because building meaningful, long-term relationships with valued community members like yourself is what Lucas Robinson's retail experience is truly about.
+
+What Sets Us Apart:
+🤝 Personal, one-on-one consultation with every client
+🤝 Long-term partnership approach - we're here for years, not just transactions
+🤝 Referral from mutual connections in the El Dorado Hills business community
+🤝 Family-owned values with enterprise-level service
+🤝 Customized solutions based on your unique needs and preferences
+
+Our clients often tell us that the trust and personal attention they receive makes all the difference. Many of our relationships span decades, and we'd be honored to earn that same trust with you.
+
+Would you be interested in a no-pressure, get-acquainted coffee meeting this week?
+
+Warm regards,
+Lucas Robinson
+Framework Friday & Weblife Stores`;
+                    break;
+                case 'Efficiency':
+                    emailBody = `Dear ${name},
+
+I know your time is valuable, so I'll be direct. Lucas Robinson's retail solutions are designed specifically for busy professionals who need maximum results with minimum time investment.
+
+Time-Saving Benefits:
+⚡ One-stop shopping for all your needs
+⚡ Express checkout with VIP priority service
+⚡ Personal shopping service - we handle the research
+⚡ Same-day delivery within El Dorado Hills
+⚡ Streamlined processes that eliminate multiple vendor relationships
+
+Efficiency Metrics:
+• Average 60% time reduction in shopping/procurement
+• Single point of contact for all needs
+• Consolidated billing and reporting
+• Mobile app for instant reorders
+• 24/7 support for urgent requests
+
+This isn't about selling you more - it's about giving you back your most precious resource: time.
+
+5-minute call to discuss? I promise it will save you hours.
+
+Best regards,
+Lucas Robinson
+Framework Friday & Weblife Stores`;
+                    break;
+                default:
+                    emailBody = `Dear ${name},
+
+I hope this email finds you well. I wanted to personally reach out to introduce you to the exceptional retail experience at Lucas Robinson's stores in the El Dorado Hills area.
+
+Why Our Clients Choose Us:
+🌟 Personalized service tailored to your unique needs
+🌟 Premium quality products with guaranteed satisfaction
+🌟 Local expertise with global reach
+🌟 Community-focused approach with lasting relationships
+🌟 Innovative solutions that save time and money
+
+As a respected member of our local business community, I believe you'll appreciate our commitment to excellence and customer success.
+
+Would you be interested in a brief conversation about how we might serve your needs?
+
+Best regards,
+Lucas Robinson
+Framework Friday & Weblife Stores`;
+            }
+            
+            emailContent.innerHTML = `<pre style="white-space: pre-wrap; font-family: Arial, sans-serif;">${emailBody}</pre>`;
+            modal.style.display = 'block';
+            
+            // Store email for sending
+            window.currentEmail = { to: email, subject: 'Exclusive Retail Experience Awaits You!', body: emailBody };
+        }
+
+        function closeModal() {
+            document.getElementById('emailModal').style.display = 'none';
+        }
+
+        function sendEmail() {
+            if (window.currentEmail) {
+                const emailUrl = `mailto:${window.currentEmail.to}?subject=${encodeURIComponent(window.currentEmail.subject)}&body=${encodeURIComponent(window.currentEmail.body)}`;
+                window.location.href = emailUrl;
+                closeModal();
+            }
+        }
+
+        function filterTable() {
+            const searchInput = document.getElementById('searchInput').value.toLowerCase();
+            const tierFilter = document.getElementById('tierFilter').value;
+            const industryFilter = document.getElementById('industryFilter').value;
+            const table = document.getElementById('clientTable');
+            const rows = table.getElementsByTagName('tr');
+
+            for (let i = 1; i < rows.length; i++) {
+                const row = rows[i];
+                const cells = row.getElementsByTagName('td');
+                let showRow = true;
+
+                // Search filter
+                if (searchInput) {
+                    let found = false;
+                    for (let j = 0; j < cells.length - 1; j++) {
+                        if (cells[j].textContent.toLowerCase().includes(searchInput)) {
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (!found) showRow = false;
+                }
+
+                // Tier filter
+                if (tierFilter && cells[5].textContent !== tierFilter) {
+                    showRow = false;
+                }
+
+                // Industry filter
+                if (industryFilter && cells[6].textContent !== industryFilter) {
+                    showRow = false;
+                }
+
+                row.style.display = showRow ? '' : 'none';
+            }
+        }
+
+        function sortTable(column) {
+            const table = document.getElementById('clientTable');
+            const tbody = table.getElementsByTagName('tbody')[0];
+            const rows = Array.from(tbody.getElementsByTagName('tr'));
+
+            rows.sort((a, b) => {
+                const aText = a.getElementsByTagName('td')[column].textContent.trim();
+                const bText = b.getElementsByTagName('td')[column].textContent.trim();
+
+                // Handle numeric columns
+                if (column === 4) { // P.U.R.E.S. Score
+                    return parseFloat(bText) - parseFloat(aText);
+                }
+
+                return aText.localeCompare(bText);
+            });
+
+            rows.forEach(row => tbody.appendChild(row));
+        }
+
+        function openTab(evt, tabName) {
+            const tabContents = document.getElementsByClassName('tab-content');
+            const tabs = document.getElementsByClassName('tab');
+
+            for (let i = 0; i < tabContents.length; i++) {
+                tabContents[i].classList.remove('active');
+            }
+
+            for (let i = 0; i < tabs.length; i++) {
+                tabs[i].classList.remove('active');
+            }
+
+            document.getElementById(tabName).classList.add('active');
+            evt.currentTarget.classList.add('active');
+        }
+
+        function viewProfile(name) {
+            alert(`Viewing detailed profile for ${name}\n\nThis would open a comprehensive client profile with:\n• Complete interaction history\n• P.U.R.E.S. scoring details\n• Buying pattern analysis\n• Referral tracking\n• Success metrics`);
+        }
+
+        // Initialize rating systems
+        document.addEventListener('DOMContentLoaded', function() {
+            populateTable();
+
+            // Rating system functionality
+            const ratings = document.querySelectorAll('.rating');
+            ratings.forEach(rating => {
+                const labels = rating.querySelectorAll('label');
+                const inputs = rating.querySelectorAll('input[type="radio"]');
+
+                labels.forEach((label, index) => {
+                    label.addEventListener('click', () => {
+                        // Clear all active states
+                        labels.forEach(l => l.classList.remove('active'));
+                        // Set active states up to clicked star
+                        for (let i = 0; i <= index; i++) {
+                            labels[i].classList.add('active');
+                        }
+                    });
+                });
+            });
+
+            // Populate sample feedback
+            const feedbackList = document.getElementById('feedbackList');
+            const sampleFeedback = [
+                { client: "Sarah Mitchell", rating: 5, comment: "Exceptional service and innovative solutions!" },
+                { client: "Michael Johnson", rating: 4, comment: "Great ROI and detailed analytics provided." },
+                { client: "Jennifer Davis", rating: 5, comment: "Outstanding relationship-building approach." }
+            ];
+
+            feedbackList.innerHTML = sampleFeedback.map(feedback => 
+                `<div style="padding: 10px; margin: 10px 0; background: rgba(207, 32, 48, 0.1); border-radius: 5px;">
+                    <strong>${feedback.client}</strong> - ${'★'.repeat(feedback.rating)}${'☆'.repeat(5-feedback.rating)}<br>
+                    "${feedback.comment}"
+                </div>`
+            ).join('');
+        });
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('emailModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+    </script>
+</body>
+</html>

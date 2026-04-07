@@ -1,0 +1,760 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bodyceuticals S.A.L.E. Client Targeting System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #000000;
+            color: #ffffff;
+            line-height: 1.6;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #CF2030, #a01825);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(207, 32, 48, 0.3);
+        }
+
+        .logo {
+            height: 60px;
+        }
+
+        .header-title {
+            color: white;
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .panel {
+            background: #1a1a1a;
+            border: 1px solid #CF2030;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 15px rgba(207, 32, 48, 0.2);
+        }
+
+        .panel h2 {
+            color: #CF2030;
+            margin-bottom: 1rem;
+            font-size: 1.4rem;
+            border-bottom: 2px solid #CF2030;
+            padding-bottom: 0.5rem;
+        }
+
+        .pures-form {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-group label {
+            color: #CF2030;
+            font-weight: bold;
+        }
+
+        .score-input {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .score-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .score-btn {
+            width: 40px;
+            height: 40px;
+            border: 2px solid #CF2030;
+            background: transparent;
+            color: #CF2030;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        .score-btn:hover {
+            background: #CF2030;
+            color: white;
+        }
+
+        .score-btn.active {
+            background: #CF2030;
+            color: white;
+        }
+
+        .tier-display {
+            background: #CF2030;
+            color: white;
+            padding: 1rem;
+            border-radius: 5px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .client-table-container {
+            background: #1a1a1a;
+            border: 1px solid #CF2030;
+            border-radius: 10px;
+            padding: 1.5rem;
+            overflow-x: auto;
+        }
+
+        .search-filter {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .search-input, .filter-select {
+            padding: 0.5rem;
+            border: 1px solid #CF2030;
+            background: #000;
+            color: white;
+            border-radius: 5px;
+            min-width: 200px;
+        }
+
+        .client-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .client-table th {
+            background: #CF2030;
+            color: white;
+            padding: 1rem 0.5rem;
+            text-align: left;
+            cursor: pointer;
+            user-select: none;
+            position: relative;
+        }
+
+        .client-table th:hover {
+            background: #a01825;
+        }
+
+        .client-table td {
+            padding: 0.8rem 0.5rem;
+            border-bottom: 1px solid #333;
+        }
+
+        .client-table tr:hover {
+            background: #2a2a2a;
+        }
+
+        .tier-1a { background-color: #00ff00 !important; color: #000; }
+        .tier-1b { background-color: #ffff00 !important; color: #000; }
+        .tier-1c { background-color: #0080ff !important; color: #fff; }
+
+        .contact-btn {
+            background: #CF2030;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .contact-btn:hover {
+            background: #a01825;
+        }
+
+        .email-template {
+            background: #1a1a1a;
+            border: 1px solid #CF2030;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            background: #1a1a1a;
+            border-top: 1px solid #CF2030;
+            margin-top: 2rem;
+        }
+
+        .footer-logo {
+            height: 30px;
+            margin-bottom: 1rem;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .metric-card {
+            background: #1a1a1a;
+            border: 1px solid #CF2030;
+            border-radius: 10px;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .metric-value {
+            font-size: 2rem;
+            color: #CF2030;
+            font-weight: bold;
+        }
+
+        .sort-arrow {
+            position: absolute;
+            right: 5px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .search-filter {
+                flex-direction: column;
+            }
+            
+            .container {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="HigginsReports" class="logo">
+        <h1 class="header-title">Bodyceuticals S.A.L.E. Client Targeting System</h1>
+    </header>
+
+    <div class="container">
+        <!-- Metrics Dashboard -->
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-value">50</div>
+                <div>Total Prospects</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value">15</div>
+                <div>Tier 1A Premium</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value">20</div>
+                <div>Tier 1B High-Value</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value">15</div>
+                <div>Tier 1C Qualified</div>
+            </div>
+        </div>
+
+        <!-- Main Dashboard -->
+        <div class="dashboard-grid">
+            <!-- P.U.R.E.S. Scoring System -->
+            <div class="panel">
+                <h2>P.U.R.E.S. Client Scoring System</h2>
+                <div class="pures-form">
+                    <div class="form-group">
+                        <label>Profitability (Budget Capacity):</label>
+                        <div class="score-input">
+                            <div class="score-buttons" data-category="profitability">
+                                <button class="score-btn" data-score="1">1</button>
+                                <button class="score-btn" data-score="2">2</button>
+                                <button class="score-btn" data-score="3">3</button>
+                                <button class="score-btn" data-score="4">4</button>
+                                <button class="score-btn" data-score="5">5</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Urgency (Pain Points):</label>
+                        <div class="score-input">
+                            <div class="score-buttons" data-category="urgency">
+                                <button class="score-btn" data-score="1">1</button>
+                                <button class="score-btn" data-score="2">2</button>
+                                <button class="score-btn" data-score="3">3</button>
+                                <button class="score-btn" data-score="4">4</button>
+                                <button class="score-btn" data-score="5">5</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Reachability (Decision Makers):</label>
+                        <div class="score-input">
+                            <div class="score-buttons" data-category="reachability">
+                                <button class="score-btn" data-score="1">1</button>
+                                <button class="score-btn" data-score="2">2</button>
+                                <button class="score-btn" data-score="3">3</button>
+                                <button class="score-btn" data-score="4">4</button>
+                                <button class="score-btn" data-score="5">5</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Engagement (Innovation Openness):</label>
+                        <div class="score-input">
+                            <div class="score-buttons" data-category="engagement">
+                                <button class="score-btn" data-score="1">1</button>
+                                <button class="score-btn" data-score="2">2</button>
+                                <button class="score-btn" data-score="3">3</button>
+                                <button class="score-btn" data-score="4">4</button>
+                                <button class="score-btn" data-score="5">5</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Sustainability (Long-term Potential):</label>
+                        <div class="score-input">
+                            <div class="score-buttons" data-category="sustainability">
+                                <button class="score-btn" data-score="1">1</button>
+                                <button class="score-btn" data-score="2">2</button>
+                                <button class="score-btn" data-score="3">3</button>
+                                <button class="score-btn" data-score="4">4</button>
+                                <button class="score-btn" data-score="5">5</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="tier-display" id="tierDisplay">
+                        Calculate P.U.R.E.S. Score
+                    </div>
+                </div>
+            </div>
+
+            <!-- Buying Pattern Analysis -->
+            <div class="panel">
+                <h2>A.SSESSING - Buying Pattern Analysis</h2>
+                <div style="display: grid; gap: 1rem;">
+                    <div style="border: 1px solid #CF2030; padding: 1rem; border-radius: 5px;">
+                        <h3 style="color: #CF2030;">Analytical Buyers</h3>
+                        <p>Require detailed ROI analysis, ingredient studies, before/after results</p>
+                    </div>
+                    <div style="border: 1px solid #CF2030; padding: 1rem; border-radius: 5px;">
+                        <h3 style="color: #CF2030;">Relationship Buyers</h3>
+                        <p>Value trust, referrals, long-term wellness partnerships</p>
+                    </div>
+                    <div style="border: 1px solid #CF2030; padding: 1rem; border-radius: 5px;">
+                        <h3 style="color: #CF2030;">Efficiency Buyers</h3>
+                        <p>Focus on quick solutions, multi-purpose products, convenience</p>
+                    </div>
+                    <div style="border: 1px solid #CF2030; padding: 1rem; border-radius: 5px;">
+                        <h3 style="color: #CF2030;">Innovation Buyers</h3>
+                        <p>Seek cutting-edge organic formulations, exclusive products</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Client Database -->
+        <div class="client-table-container">
+            <h2>Client Database - Santa Barbara Area Prospects</h2>
+            <div class="search-filter">
+                <input type="text" class="search-input" id="searchInput" placeholder="Search clients...">
+                <select class="filter-select" id="tierFilter">
+                    <option value="">All Tiers</option>
+                    <option value="1A">Tier 1A - Premium</option>
+                    <option value="1B">Tier 1B - High-Value</option>
+                    <option value="1C">Tier 1C - Qualified</option>
+                </select>
+                <select class="filter-select" id="buyerTypeFilter">
+                    <option value="">All Buyer Types</option>
+                    <option value="Analytical">Analytical</option>
+                    <option value="Relationship">Relationship</option>
+                    <option value="Efficiency">Efficiency</option>
+                    <option value="Innovation">Innovation</option>
+                </select>
+            </div>
+            
+            <table class="client-table" id="clientTable">
+                <thead>
+                    <tr>
+                        <th onclick="sortTable(0)">Client Name <span class="sort-arrow">↕</span></th>
+                        <th onclick="sortTable(1)">Email <span class="sort-arrow">↕</span></th>
+                        <th onclick="sortTable(2)">Phone <span class="sort-arrow">↕</span></th>
+                        <th onclick="sortTable(3)">Address <span class="sort-arrow">↕</span></th>
+                        <th onclick="sortTable(4)">P.U.R.E.S. Score <span class="sort-arrow">↕</span></th>
+                        <th onclick="sortTable(5)">Tier <span class="sort-arrow">↕</span></th>
+                        <th onclick="sortTable(6)">Buyer Type <span class="sort-arrow">↕</span></th>
+                        <th onclick="sortTable(7)">Est. Value <span class="sort-arrow">↕</span></th>
+                        <th>Contact</th>
+                    </tr>
+                </thead>
+                <tbody id="clientTableBody">
+                    <!-- Client data will be inserted here -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Email Template -->
+        <div class="email-template" id="emailTemplate" style="display:none;">
+            <h2>Email Template</h2>
+            <div id="emailContent"></div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="HigginsReports" class="footer-logo">
+        <p>&copy; 2026 Bodyceuticals S.A.L.E. System | Powered by HigginsReports</p>
+    </footer>
+
+    <script>
+        // Sample client data for Santa Barbara/Orcutt area
+        const clientData = [
+            {name: "Sarah Williams", email: "sarah.williams@gmail.com", phone: "(805) 555-0101", address: "1245 Main St, Santa Barbara, CA", pures: 4.8, tier: "1A", buyerType: "Innovation", value: "$2,500"},
+            {name: "Michael Chen", email: "m.chen@wellness.com", phone: "(805) 555-0102", address: "892 State St, Santa Barbara, CA", pures: 4.6, tier: "1A", buyerType: "Analytical", value: "$2,200"},
+            {name: "Jennifer Martinez", email: "jen.martinez@spa.com", phone: "(805) 555-0103", address: "567 Coast Village Rd, Montecito, CA", pures: 4.7, tier: "1A", buyerType: "Relationship", value: "$2,800"},
+            {name: "Robert Thompson", email: "rob.thompson@dermat.com", phone: "(805) 555-0104", address: "334 Chapala St, Santa Barbara, CA", pures: 4.5, tier: "1A", buyerType: "Innovation", value: "$2,100"},
+            {name: "Lisa Anderson", email: "lisa.a@healthstore.com", phone: "(805) 555-0105", address: "789 De la Guerra St, Santa Barbara, CA", pures: 4.4, tier: "1A", buyerType: "Efficiency", value: "$1,900"},
+            {name: "David Rodriguez", email: "d.rodriguez@yoga.com", phone: "(805) 555-0106", address: "456 Milpas St, Santa Barbara, CA", pures: 4.3, tier: "1A", buyerType: "Relationship", value: "$1,800"},
+            {name: "Amanda Foster", email: "amanda.f@beauty.com", phone: "(805) 555-0107", address: "123 Garden St, Santa Barbara, CA", pures: 4.2, tier: "1A", buyerType: "Innovation", value: "$1,700"},
+            {name: "James Wilson", email: "james.w@wellness.org", phone: "(805) 555-0108", address: "987 Anacapa St, Santa Barbara, CA", pures: 4.1, tier: "1A", buyerType: "Analytical", value: "$1,600"},
+            {name: "Maria Garcia", email: "maria.g@natural.com", phone: "(805) 555-0109", address: "654 Canon Perdido St, Santa Barbara, CA", pures: 4.0, tier: "1A", buyerType: "Relationship", value: "$1,500"},
+            {name: "Kevin Lee", email: "kevin.lee@holistic.com", phone: "(805) 555-0110", address: "321 Carrillo St, Santa Barbara, CA", pures: 3.9, tier: "1A", buyerType: "Efficiency", value: "$1,400"},
+            {name: "Rachel Brown", email: "rachel.b@skincare.com", phone: "(805) 555-0111", address: "888 Haley St, Santa Barbara, CA", pures: 3.8, tier: "1A", buyerType: "Innovation", value: "$1,300"},
+            {name: "Steven Clark", email: "steven.c@medispa.com", phone: "(805) 555-0112", address: "777 Gutierrez St, Santa Barbara, CA", pures: 3.7, tier: "1A", buyerType: "Analytical", value: "$1,200"},
+            {name: "Nicole White", email: "nicole.w@organic.com", phone: "(805) 555-0113", address: "555 Victoria St, Santa Barbara, CA", pures: 3.6, tier: "1A", buyerType: "Relationship", value: "$1,100"},
+            {name: "Daniel Harris", email: "daniel.h@wellness.net", phone: "(805) 555-0114", address: "444 Cota St, Santa Barbara, CA", pures: 3.5, tier: "1A", buyerType: "Efficiency", value: "$1,000"},
+            {name: "Christina Miller", email: "christina.m@health.com", phone: "(805) 555-0115", address: "333 Ortega St, Santa Barbara, CA", pures: 3.4, tier: "1A", buyerType: "Innovation", value: "$950"},
+            {name: "Thomas Davis", email: "thomas.d@natural.org", phone: "(805) 555-0116", address: "222 Santa Barbara St, Santa Barbara, CA", pures: 3.8, tier: "1B", buyerType: "Analytical", value: "$850"},
+            {name: "Ashley Johnson", email: "ashley.j@beauty.org", phone: "(805) 555-0117", address: "111 Anapamu St, Santa Barbara, CA", pures: 3.7, tier: "1B", buyerType: "Relationship", value: "$800"},
+            {name: "Christopher Moore", email: "chris.m@spa.org", phone: "(805) 555-0118", address: "999 Mason St, Santa Barbara, CA", pures: 3.6, tier: "1B", buyerType: "Efficiency", value: "$750"},
+            {name: "Jessica Taylor", email: "jessica.t@wellness.co", phone: "(805) 555-0119", address: "888 Olive St, Santa Barbara, CA", pures: 3.5, tier: "1B", buyerType: "Innovation", value: "$700"},
+            {name: "Matthew Jackson", email: "matt.j@holistic.org", phone: "(805) 555-0120", address: "777 Figueroa St, Santa Barbara, CA", pures: 3.4, tier: "1B", buyerType: "Analytical", value: "$650"},
+            {name: "Emily Robinson", email: "emily.r@skincare.org", phone: "(805) 555-0121", address: "666 De la Vina St, Santa Barbara, CA", pures: 3.3, tier: "1B", buyerType: "Relationship", value: "$600"},
+            {name: "Ryan Lewis", email: "ryan.l@natural.co", phone: "(805) 555-0122", address: "555 Laguna St, Santa Barbara, CA", pures: 3.2, tier: "1B", buyerType: "Efficiency", value: "$550"},
+            {name: "Stephanie Walker", email: "stephanie.w@beauty.co", phone: "(805) 555-0123", address: "444 Bath St, Santa Barbara, CA", pures: 3.1, tier: "1B", buyerType: "Innovation", value: "$500"},
+            {name: "Brandon Hall", email: "brandon.h@wellness.biz", phone: "(805) 555-0124", address: "333 Sola St, Santa Barbara, CA", pures: 3.0, tier: "1B", buyerType: "Analytical", value: "$475"},
+            {name: "Lauren Young", email: "lauren.y@spa.biz", phone: "(805) 555-0125", address: "222 Canon Perdido St, Santa Barbara, CA", pures: 2.9, tier: "1B", buyerType: "Relationship", value: "$450"},
+            {name: "Jason King", email: "jason.k@holistic.biz", phone: "(805) 555-0126", address: "111 Yanonali St, Santa Barbara, CA", pures: 2.8, tier: "1B", buyerType: "Efficiency", value: "$425"},
+            {name: "Megan Wright", email: "megan.w@skincare.biz", phone: "(805) 555-0127", address: "999 Montecito St, Santa Barbara, CA", pures: 2.7, tier: "1B", buyerType: "Innovation", value: "$400"},
+            {name: "Justin Scott", email: "justin.s@natural.biz", phone: "(805) 555-0128", address: "888 Rancheria St, Santa Barbara, CA", pures: 2.6, tier: "1B", buyerType: "Analytical", value: "$375"},
+            {name: "Samantha Green", email: "sam.g@beauty.biz", phone: "(805) 555-0129", address: "777 Cacique St, Santa Barbara, CA", pures: 2.5, tier: "1B", buyerType: "Relationship", value: "$350"},
+            {name: "Tyler Adams", email: "tyler.a@wellness.info", phone: "(805) 555-0130", address: "666 Quinientos St, Santa Barbara, CA", pures: 2.4, tier: "1B", buyerType: "Efficiency", value: "$325"},
+            {name: "Alexis Baker", email: "alexis.b@spa.info", phone: "(805) 555-0131", address: "555 Indio Muerto St, Santa Barbara, CA", pures: 2.3, tier: "1B", buyerType: "Innovation", value: "$300"},
+            {name: "Jonathan Nelson", email: "jon.n@holistic.info", phone: "(805) 555-0132", address: "444 Pedregosa St, Santa Barbara, CA", pures: 2.2, tier: "1B", buyerType: "Analytical", value: "$275"},
+            {name: "Brittany Carter", email: "brittany.c@skincare.info", phone: "(805) 555-0133", address: "333 Las Positas Rd, Santa Barbara, CA", pures: 2.1, tier: "1B", buyerType: "Relationship", value: "$250"},
+            {name: "Gregory Mitchell", email: "greg.m@natural.info", phone: "(805) 555-0134", address: "222 Mission Ridge Rd, Santa Barbara, CA", pures: 2.0, tier: "1B", buyerType: "Efficiency", value: "$225"},
+            {name: "Courtney Perez", email: "courtney.p@beauty.info", phone: "(805) 555-0135", address: "111 Cliff Dr, Santa Barbara, CA", pures: 3.2, tier: "1C", buyerType: "Innovation", value: "$400"},
+            {name: "Nathan Roberts", email: "nathan.r@wellness.net", phone: "(805) 555-0136", address: "999 Shoreline Dr, Santa Barbara, CA", pures: 3.1, tier: "1C", buyerType: "Analytical", value: "$375"},
+            {name: "Danielle Turner", email: "danielle.t@spa.net", phone: "(805) 555-0137", address: "888 Cabrillo Blvd, Santa Barbara, CA", pures: 3.0, tier: "1C", buyerType: "Relationship", value: "$350"},
+            {name: "Jacob Phillips", email: "jacob.p@holistic.net", phone: "(805) 555-0138", address: "777 East Beach, Santa Barbara, CA", pures: 2.9, tier: "1C", buyerType: "Efficiency", value: "$325"},
+            {name: "Kimberly Campbell", email: "kim.c@skincare.net", phone: "(805) 555-0139", address: "666 West Beach, Santa Barbara, CA", pures: 2.8, tier: "1C", buyerType: "Innovation", value: "$300"},
+            {name: "Eric Parker", email: "eric.p@natural.net", phone: "(805) 555-0140", address: "555 Leadbetter Beach, Santa Barbara, CA", pures: 2.7, tier: "1C", buyerType: "Analytical", value: "$275"},
+            {name: "Melissa Evans", email: "melissa.e@beauty.net", phone: "(805) 555-0141", address: "444 Arroyo Burro Beach, Santa Barbara, CA", pures: 2.6, tier: "1C", buyerType: "Relationship", value: "$250"},
+            {name: "Kyle Edwards", email: "kyle.e@wellness.us", phone: "(805) 555-0142", address: "333 Hendry's Beach, Santa Barbara, CA", pures: 2.5, tier: "1C", buyerType: "Efficiency", value: "$225"},
+            {name: "Tiffany Collins", email: "tiffany.c@spa.us", phone: "(805) 555-0143", address: "222 Hope Ranch, Santa Barbara, CA", pures: 2.4, tier: "1C", buyerType: "Innovation", value: "$200"},
+            {name: "Sean Stewart", email: "sean.s@holistic.us", phone: "(805) 555-0144", address: "111 Goleta Beach, Goleta, CA", pures: 2.3, tier: "1C", buyerType: "Analytical", value: "$175"},
+            {name: "Crystal Sanchez", email: "crystal.s@skincare.us", phone: "(805) 555-0145", address: "999 Ellwood Beach, Goleta, CA", pures: 2.2, tier: "1C", buyerType: "Relationship", value: "$150"},
+            {name: "Marcus Morris", email: "marcus.m@natural.us", phone: "(805) 555-0146", address: "888 Refugio Beach, Goleta, CA", pures: 2.1, tier: "1C", buyerType: "Efficiency", value: "$125"},
+            {name: "Vanessa Rogers", email: "vanessa.r@beauty.us", phone: "(805) 555-0147", address: "777 El Capitan Beach, Goleta, CA", pures: 2.0, tier: "1C", buyerType: "Innovation", value: "$100"},
+            {name: "Alexander Reed", email: "alex.r@wellness.co", phone: "(805) 555-0148", address: "666 Gaviota Beach, Goleta, CA", pures: 1.9, tier: "1C", buyerType: "Analytical", value: "$75"},
+            {name: "Heather Cook", email: "heather.c@spa.co", phone: "(805) 555-0149", address: "555 Jalama Beach, Lompoc, CA", pures: 1.8, tier: "1C", buyerType: "Relationship", value: "$50"}
+        ];
+
+        let sortDirection = {};
+        let currentData = [...clientData];
+
+        // Initialize the table
+        function initializeTable() {
+            renderTable(currentData);
+        }
+
+        // Render table with data
+        function renderTable(data) {
+            const tbody = document.getElementById('clientTableBody');
+            tbody.innerHTML = '';
+            
+            data.forEach(client => {
+                const row = document.createElement('tr');
+                row.className = `tier-${client.tier.toLowerCase()}`;
+                row.innerHTML = `
+                    <td>${client.name}</td>
+                    <td>${client.email}</td>
+                    <td>${client.phone}</td>
+                    <td>${client.address}</td>
+                    <td>${client.pures}</td>
+                    <td>${client.tier}</td>
+                    <td>${client.buyerType}</td>
+                    <td>${client.value}</td>
+                    <td>
+                        <button class="contact-btn" onclick="sendEmail('${client.name}', '${client.email}', '${client.buyerType}')">
+                            Email
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // Search functionality
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            filterTable();
+        });
+
+        // Filter functionality
+        document.getElementById('tierFilter').addEventListener('change', filterTable);
+        document.getElementById('buyerTypeFilter').addEventListener('change', filterTable);
+
+        function filterTable() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const tierFilter = document.getElementById('tierFilter').value;
+            const buyerTypeFilter = document.getElementById('buyerTypeFilter').value;
+
+            currentData = clientData.filter(client => {
+                const matchesSearch = client.name.toLowerCase().includes(searchTerm) || 
+                                    client.email.toLowerCase().includes(searchTerm) ||
+                                    client.address.toLowerCase().includes(searchTerm);
+                const matchesTier = !tierFilter || client.tier === tierFilter;
+                const matchesBuyerType = !buyerTypeFilter || client.buyerType === buyerTypeFilter;
+                
+                return matchesSearch && matchesTier && matchesBuyerType;
+            });
+
+            renderTable(currentData);
+        }
+
+        // Sort table
+        function sortTable(columnIndex) {
+            const column = ['name', 'email', 'phone', 'address', 'pures', 'tier', 'buyerType', 'value'][columnIndex];
+            const isNumeric = column === 'pures';
+            
+            if (!sortDirection[column]) {
+                sortDirection[column] = 'asc';
+            } else {
+                sortDirection[column] = sortDirection[column] === 'asc' ? 'desc' : 'asc';
+            }
+
+            currentData.sort((a, b) => {
+                let aVal = a[column];
+                let bVal = b[column];
+                
+                if (isNumeric) {
+                    aVal = parseFloat(aVal);
+                    bVal = parseFloat(bVal);
+                }
+                
+                if (sortDirection[column] === 'asc') {
+                    return aVal > bVal ? 1 : -1;
+                } else {
+                    return aVal < bVal ? 1 : -1;
+                }
+            });
+
+            renderTable(currentData);
+        }
+
+        // P.U.R.E.S. Scoring System
+        let puresScores = {
+            profitability: 0,
+            urgency: 0,
+            reachability: 0,
+            engagement: 0,
+            sustainability: 0
+        };
+
+        // Handle score button clicks
+        document.querySelectorAll('.score-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const category = this.parentElement.dataset.category;
+                const score = parseInt(this.dataset.score);
+                
+                // Remove active class from siblings
+                this.parentElement.querySelectorAll('.score-btn').forEach(sibling => {
+                    sibling.classList.remove('active');
+                });
+                
+                // Add active class to clicked button
+                this.classList.add('active');
+                
+                // Update score
+                puresScores[category] = score;
+                
+                // Calculate tier
+                updateTierDisplay();
+            });
+        });
+
+        function updateTierDisplay() {
+            const totalScore = Object.values(puresScores).reduce((sum, score) => sum + score, 0) / 5;
+            const tierDisplay = document.getElementById('tierDisplay');
+            
+            let tier, tierClass;
+            if (totalScore >= 4.0) {
+                tier = "Tier 1A - Premium";
+                tierClass = "tier-1a";
+            } else if (totalScore >= 3.0) {
+                tier = "Tier 1B - High-Value";
+                tierClass = "tier-1b";
+            } else if (totalScore >= 2.0) {
+                tier = "Tier 1C - Qualified";
+                tierClass = "tier-1c";
+            } else {
+                tier = "Below Qualification Threshold";
+                tierClass = "";
+            }
+            
+            tierDisplay.textContent = `Score: ${totalScore.toFixed(1)} - ${tier}`;
+            tierDisplay.className = `tier-display ${tierClass}`;
+        }
+
+        // Email functionality
+        function sendEmail(name, email, buyerType) {
+            const emailTemplate = getEmailTemplate(name, buyerType);
+            const emailContent = document.getElementById('emailContent');
+            const emailTemplateDiv = document.getElementById('emailTemplate');
+            
+            emailContent.innerHTML = `
+                <p><strong>To:</strong> ${email}</p>
+                <p><strong>Subject:</strong> Transform Your Skin with Calendula - Nature's Healing Miracle</p>
+                <div style="border: 1px solid #CF2030; padding: 1rem; border-radius: 5px; margin-top: 1rem; background: #2a2a2a;">
+                    ${emailTemplate}
+                </div>
+                <button class="contact-btn" style="margin-top: 1rem;" onclick="copyToClipboard()">Copy Email</button>
+                <button class="contact-btn" style="margin-top: 1rem; margin-left: 1rem;" onclick="window.open('mailto:${email}?subject=Transform Your Skin with Calendula - Nature\\'s Healing Miracle&body=${encodeURIComponent(emailTemplate.replace(/<[^>]*>/g, ''))}')">Open Email Client</button>
+            `;
+            
+            emailTemplateDiv.style.display = 'block';
+            emailTemplateDiv.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function getEmailTemplate(name, buyerType) {
+            const baseMessage = `
+                <p>Dear ${name},</p>
+                
+                <p>I hope this message finds you well. I'm Paula Herrera from Bodyceuticals Calendula Skincare, and I wanted to personally reach out to share something remarkable with you.</p>
+                
+                <p><strong>Discover the "Flower of the Sun" - Calendula officinalis</strong></p>
+                
+                <p>For centuries across multiple continents, Calendula has been nature's most versatile healing herb, earning its title as the "flower of the sun." What makes this extraordinary? Our certified organic Calendula products offer:</p>
+                
+                <ul>
+                    <li><strong>Five-Stage Skin Healing:</strong> From infection prevention to tissue regeneration</li>
+                    <li><strong>Powerful Phytonutrients:</strong> Flavonoids, carotenoids, and essential fatty acids</li>
+                    <li><strong>Zero Side Effects:</strong> No known drug interactions or adverse effects</li>
+                    <li><strong>Proven Results:</strong> Reduced scarring and enhanced skin restoration</li>
+                </ul>
+            `;
+
+            let buyerSpecificMessage = '';
+            
+            switch(buyerType) {
+                case 'Analytical':
+                    buyerSpecificMessage = `
+                        <p><strong>Scientific Backing for Your Peace of Mind:</strong></p>
+                        <p>According to the International Herb Association's research, Calendula contains documented healing compounds including:</p>
+                        <ul>
+                            <li>Beta-carotene and lutein for cellular protection</li>
+                            <li>Quercetin with anti-inflammatory properties</li>
+                            <li>CoQ10 (ubiquinone) for tissue regeneration</li>
+                            <li>Clinical studies showing 40% faster healing times</li>
+                        </ul>
+                    `;
+                    break;
+                case 'Relationship':
+                    buyerSpecificMessage = `
+                        <p><strong>A Personal Journey of Wellness:</strong></p>
+                        <p>As someone who has witnessed incredible transformations through flower power, I personally invite you to experience what our Bodyceuticals family has discovered. Our customers consistently share success stories of renewed confidence and radiant skin.</p>
+                        <p>We're not just about products - we're about building lasting relationships and supporting your wellness journey every step of the way.</p>
+                    `;
+                    break;
+                case 'Efficiency':
+                    buyerSpecificMessage = `
+                        <p><strong>Simplify Your Skincare Routine:</strong></p>
+                        <p>Why complicate your routine with multiple products when Calendula delivers comprehensive results? Our multi-purpose formulations:</p>
+                        <ul>
+                            <li>Address multiple skin concerns simultaneously</li>
+                            <li>Save time with proven, fast-acting results</li>
+                            <li>Eliminate guesswork with our 15+ years of proven formulations</li>
+                            <li>Offer long-lasting benefits - a little goes a long way</li>
+                        </ul>
+                    `;
+                    break;
+                case 'Innovation':
+                    buyerSpecificMessage = `
+                        <p><strong>Pioneering Organic Excellence:</strong></p>
+                        <p>Be among the first to experience our cutting-edge organic formulations that combine ancient wisdom with modern innovation:</p>
+                        <ul>
+                            <li>Exclusive small-batch artisan production</li>
+                            <li>No electromagnetic disruption of energetic properties</li>
+                            <li>Advanced extraction methods preserving maximum potency</li>
+                            <li>Sustainable, carbon-neutral manufacturing processes</li>
+                        </ul>
+                    `;
+                    break;
+            }
+
+            const closingMessage = `
+                <p><strong>Special Invitation:</strong></p>
+                <p>I would love to invite you to visit our wellness center at 1108 East Clark Ave #180, Orcutt, CA, or explore our complete collection at bodyceuticals.net. As a valued member of our Santa Barbara community, you deserve to experience the transformative power of authentic Calendula skincare.</p>
+                
+                <p>Feel free to call me directly at (805) 555-SKIN for a personalized consultation. Let's discover how Calendula can revolutionize your skincare routine.</p>
+                
+                <p>To your radiant health,</p>
+                <p><strong>Paula Herrera, Dip, CN</strong><br>
+                Founder & Wellness Specialist<br>
+                Bodyceuticals Calendula Skincare<br>
+                paula@bodyceuticals.net</p>
+                
+                <p><em>P.S. Free shipping on orders $75+ and we now ship worldwide!</em></p>
+            `;
+
+            return baseMessage + buyerSpecificMessage + closingMessage;
+        }
+
+        function copyToClipboard() {
+            const emailContent = document.getElementById('emailContent').innerText;
+            navigator.clipboard.writeText(emailContent).then(() => {
+                alert('Email content copied to clipboard!');
+            });
+        }
+
+        // Initialize the application
+        initializeTable();
+    </script>
+</body>
+</html>

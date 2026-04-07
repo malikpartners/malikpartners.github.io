@@ -1,0 +1,973 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>S.A.L.E. Report — Seller Universe</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #000; color: #e0e0e0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+  
+  /* Header */
+  .header {
+    background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+    border-bottom: 3px solid #CF2030;
+    padding: 15px 30px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  }
+  .header img { height: 50px; }
+  .header-title { color: #CF2030; font-size: 1.1rem; font-weight: 700; letter-spacing: 1px; }
+
+  /* Navigation */
+  .nav {
+    background: #111;
+    border-bottom: 1px solid #222;
+    padding: 0 30px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0;
+    position: sticky;
+    top: 83px;
+    z-index: 999;
+    overflow-x: auto;
+  }
+  .nav a {
+    color: #CF2030;
+    text-decoration: none;
+    padding: 12px 18px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+    transition: all 0.3s;
+    border-bottom: 2px solid transparent;
+  }
+  .nav a:hover, .nav a.active {
+    background: rgba(207,32,48,0.1);
+    border-bottom: 2px solid #CF2030;
+    color: #fff;
+  }
+
+  /* Main Container */
+  .container { max-width: 1300px; margin: 0 auto; padding: 30px 20px; }
+
+  /* Section */
+  .section {
+    background: #111;
+    border: 1px solid #222;
+    border-radius: 12px;
+    margin-bottom: 30px;
+    overflow: hidden;
+  }
+  .section-header {
+    background: linear-gradient(135deg, #CF2030 0%, #a01020 100%);
+    padding: 18px 25px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .section-header h2 { color: #fff; font-size: 1.2rem; font-weight: 700; }
+  .section-header .num {
+    background: rgba(255,255,255,0.2);
+    color: #fff;
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: 0.85rem;
+  }
+  .section-body { padding: 25px; }
+
+  /* Global Search */
+  .global-search {
+    background: #111;
+    border: 1px solid #222;
+    border-radius: 12px;
+    padding: 20px 25px;
+    margin-bottom: 30px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
+  .global-search input {
+    flex: 1;
+    background: #1a1a1a;
+    border: 1px solid #333;
+    color: #fff;
+    padding: 12px 18px;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    outline: none;
+  }
+  .global-search input:focus { border-color: #CF2030; }
+  .global-search label { color: #CF2030; font-weight: 700; font-size: 0.9rem; white-space: nowrap; }
+
+  /* Tables */
+  .table-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; }
+  th {
+    background: #1a1a1a;
+    color: #CF2030;
+    padding: 12px 16px;
+    text-align: left;
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    user-select: none;
+    white-space: nowrap;
+    border-bottom: 2px solid #CF2030;
+    position: relative;
+  }
+  th:hover { background: #222; }
+  th .sort-arrow { margin-left: 6px; font-size: 0.7rem; opacity: 0.5; }
+  th.sorted .sort-arrow { opacity: 1; color: #fff; }
+  td {
+    padding: 11px 16px;
+    border-bottom: 1px solid #1a1a1a;
+    font-size: 0.88rem;
+    color: #ccc;
+  }
+  tr:hover td { background: rgba(207,32,48,0.05); }
+  tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+  tr:nth-child(even):hover td { background: rgba(207,32,48,0.07); }
+
+  /* Contact Buttons */
+  .btn-contact {
+    background: linear-gradient(135deg, #CF2030, #a01020);
+    color: #fff;
+    border: none;
+    padding: 7px 16px;
+    border-radius: 6px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    white-space: nowrap;
+  }
+  .btn-contact:hover { transform: translateY(-1px); box-shadow: 0 4px 15px rgba(207,32,48,0.4); }
+  .btn-contact.linkedin { background: linear-gradient(135deg, #0077B5, #005582); }
+  .btn-contact.linkedin:hover { box-shadow: 0 4px 15px rgba(0,119,181,0.4); }
+
+  /* Tags / Badges */
+  .tag {
+    display: inline-block;
+    background: rgba(207,32,48,0.15);
+    color: #CF2030;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    margin: 3px 4px 3px 0;
+  }
+  .tag.green { background: rgba(46,204,113,0.15); color: #2ecc71; }
+  .tag.blue { background: rgba(52,152,219,0.15); color: #3498db; }
+  .tag.gold { background: rgba(241,196,15,0.15); color: #f1c40f; }
+
+  /* Metric Cards */
+  .metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 18px;
+    margin-bottom: 20px;
+  }
+  .metric-card {
+    background: #1a1a1a;
+    border: 1px solid #222;
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    transition: all 0.3s;
+  }
+  .metric-card:hover { border-color: #CF2030; transform: translateY(-2px); }
+  .metric-card .value { font-size: 2rem; font-weight: 800; color: #CF2030; }
+  .metric-card .label { font-size: 0.8rem; color: #888; margin-top: 6px; font-weight: 600; letter-spacing: 0.5px; }
+
+  /* Charts */
+  .chart-container {
+    background: #1a1a1a;
+    border-radius: 10px;
+    padding: 20px;
+    margin-top: 15px;
+    max-height: 400px;
+    position: relative;
+  }
+  .charts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+    gap: 20px;
+  }
+
+  /* Culture Values */
+  .values-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 15px;
+  }
+  .value-card {
+    background: #1a1a1a;
+    border: 1px solid #222;
+    border-radius: 10px;
+    padding: 18px;
+    transition: all 0.3s;
+  }
+  .value-card:hover { border-color: #CF2030; }
+  .value-card h4 { color: #CF2030; margin-bottom: 6px; font-size: 0.9rem; }
+  .value-card p { color: #999; font-size: 0.82rem; line-height: 1.5; }
+
+  /* Triggers */
+  .trigger-list { list-style: none; }
+  .trigger-list li {
+    background: #1a1a1a;
+    border-left: 3px solid #CF2030;
+    padding: 14px 18px;
+    margin-bottom: 10px;
+    border-radius: 0 8px 8px 0;
+    font-size: 0.88rem;
+    color: #ccc;
+    font-style: italic;
+    transition: all 0.3s;
+  }
+  .trigger-list li:hover { background: #222; border-left-color: #fff; }
+  .trigger-list li .trigger-num {
+    color: #CF2030;
+    font-weight: 800;
+    font-style: normal;
+    margin-right: 10px;
+  }
+
+  /* Reasons */
+  .reason-card {
+    background: #1a1a1a;
+    border: 1px solid #222;
+    border-radius: 10px;
+    padding: 22px;
+    margin-bottom: 15px;
+    transition: all 0.3s;
+  }
+  .reason-card:hover { border-color: #CF2030; }
+  .reason-card h4 { color: #CF2030; margin-bottom: 8px; }
+  .reason-card p { color: #999; font-size: 0.88rem; line-height: 1.6; }
+
+  /* Differentiators */
+  .diff-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+  }
+  .diff-header {
+    padding: 12px 18px;
+    font-weight: 700;
+    font-size: 0.82rem;
+    letter-spacing: 0.5px;
+    border-bottom: 2px solid #333;
+  }
+  .diff-header.trad { background: #1a1a1a; color: #666; }
+  .diff-header.su { background: rgba(207,32,48,0.1); color: #CF2030; }
+  .diff-row { display: contents; }
+  .diff-cell {
+    padding: 11px 18px;
+    border-bottom: 1px solid #1a1a1a;
+    font-size: 0.85rem;
+  }
+  .diff-cell.trad { color: #666; background: #0d0d0d; }
+  .diff-cell.su { color: #2ecc71; background: rgba(46,204,113,0.03); }
+
+  /* Steps */
+  .steps-list { list-style: none; counter-reset: steps; }
+  .steps-list li {
+    counter-increment: steps;
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+    padding: 15px 0;
+    border-bottom: 1px solid #1a1a1a;
+  }
+  .steps-list li:last-child { border-bottom: none; }
+  .steps-list li::before {
+    content: counter(steps);
+    background: #CF2030;
+    color: #fff;
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800;
+    font-size: 0.85rem;
+    flex-shrink: 0;
+  }
+
+  /* Pillar */
+  .pillars-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 15px;
+    margin-top: 20px;
+  }
+  .pillar-card {
+    background: #1a1a1a;
+    border: 1px solid #222;
+    border-top: 3px solid #CF2030;
+    border-radius: 10px;
+    padding: 18px;
+    text-align: center;
+  }
+  .pillar-card .pillar-num { color: #CF2030; font-size: 1.5rem; font-weight: 800; }
+  .pillar-card h4 { color: #fff; margin: 8px 0 5px; font-size: 0.9rem; }
+  .pillar-card p { color: #888; font-size: 0.8rem; }
+
+  /* Quote */
+  .quote-card {
+    background: #1a1a1a;
+    border-left: 4px solid #CF2030;
+    border-radius: 0 10px 10px 0;
+    padding: 20px;
+    margin-bottom: 15px;
+  }
+  .quote-card .quote-text { color: #ccc; font-style: italic; font-size: 0.9rem; line-height: 1.6; margin-bottom: 10px; }
+  .quote-card .quote-author { color: #CF2030; font-weight: 700; font-size: 0.82rem; }
+  .quote-card .quote-role { color: #666; font-size: 0.78rem; }
+
+  /* Origin Story */
+  .origin-text { color: #bbb; font-size: 0.92rem; line-height: 1.8; }
+  .origin-text strong { color: #CF2030; }
+
+  /* Footer */
+  .footer {
+    background: #0a0a0a;
+    border-top: 2px solid #CF2030;
+    padding: 25px 30px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 15px;
+  }
+  .footer img { height: 30px; }
+  .footer-text { color: #555; font-size: 0.75rem; }
+  .footer a { color: #CF2030; text-decoration: none; }
+
+  /* Responsive */
+  @media(max-width: 768px) {
+    .header { padding: 10px 15px; }
+    .header img { height: 35px; }
+    .nav { padding: 0 10px; }
+    .nav a { padding: 10px 12px; font-size: 0.75rem; }
+    .container { padding: 15px 10px; }
+    .section-body { padding: 15px; }
+    .diff-grid { grid-template-columns: 1fr; }
+    .charts-grid { grid-template-columns: 1fr; }
+  }
+
+  /* Highlight search */
+  .highlight { background: rgba(207,32,48,0.3); color: #fff; border-radius: 3px; padding: 0 2px; }
+
+  /* Industry Tags container */
+  .industry-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports" />
+  <div class="header-title">S.A.L.E. CLIENT SEARCH &amp; STRATEGY REPORT</div>
+</div>
+
+<!-- NAV -->
+<div class="nav" id="mainNav">
+  <a href="#snapshot" class="active">Snapshot</a>
+  <a href="#leadership">Leadership</a>
+  <a href="#services">Services</a>
+  <a href="#industries">Industries</a>
+  <a href="#credibility">Credibility</a>
+  <a href="#origin">Origin Story</a>
+  <a href="#differentiators">Differentiators</a>
+  <a href="#culture">Culture</a>
+  <a href="#bni-strategy">BNI Strategy</a>
+  <a href="#outreach">Outreach</a>
+  <a href="#next-steps">Next Steps</a>
+</div>
+
+<!-- CONTAINER -->
+<div class="container">
+
+  <!-- GLOBAL SEARCH -->
+  <div class="global-search">
+    <label>🔍 SEARCH REPORT</label>
+    <input type="text" id="globalSearch" placeholder="Search across all tables and sections..." oninput="globalSearchHandler()" />
+  </div>
+
+  <!-- 1. COMPANY SNAPSHOT -->
+  <div class="section" id="snapshot">
+    <div class="section-header"><div class="num">1</div><h2>Company Snapshot</h2></div>
+    <div class="section-body">
+      <div class="table-wrap">
+        <table id="snapshotTable">
+          <thead><tr>
+            <th onclick="sortTable('snapshotTable',0)">Field <span class="sort-arrow">▲▼</span></th>
+            <th onclick="sortTable('snapshotTable',1)">Detail <span class="sort-arrow">▲▼</span></th>
+          </tr></thead>
+          <tbody>
+            <tr><td>Company Name</td><td>Seller Universe (d/b/a S Universe)</td></tr>
+            <tr><td>Contact</td><td>Seller Universe Ecommerce Group</td></tr>
+            <tr><td>Email</td><td><a href="mailto:seller@selleruniverse.io" style="color:#CF2030">seller@selleruniverse.io</a></td></tr>
+            <tr><td>Title</td><td>Business Owner</td></tr>
+            <tr><td>LinkedIn (Personal)</td><td><a href="https://www.linkedin.com/in/seller-universe-ecommerce-group-0a0561224" target="_blank" style="color:#3498db">View Profile ↗</a></td></tr>
+            <tr><td>LinkedIn (Company)</td><td><a href="https://www.linkedin.com/company/71010147" target="_blank" style="color:#3498db">View Page ↗</a></td></tr>
+            <tr><td>Website (Agency)</td><td><a href="https://www.selleruniverse.agency/" target="_blank" style="color:#CF2030">selleruniverse.agency ↗</a></td></tr>
+            <tr><td>Website (Primary)</td><td><a href="https://www.suniverse.io" target="_blank" style="color:#CF2030">suniverse.io ↗</a></td></tr>
+            <tr><td>Headquarters</td><td>Las Vegas, Nevada, United States</td></tr>
+            <tr><td>Additional Offices</td><td>San Francisco, Los Angeles, Salt Lake City, Austin, Boston, Toronto, Philippines, Singapore, Thailand</td></tr>
+            <tr><td>Company Size</td><td>51–200 employees</td></tr>
+            <tr><td>Industry</td><td>Marketing & Advertising / ERP Solutions / Technology Consulting</td></tr>
+            <tr><td>Date Added</td><td>March 26, 2026</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. LEADERSHIP TEAM -->
+  <div class="section" id="leadership">
+    <div class="section-header"><div class="num">2</div><h2>Leadership Team</h2></div>
+    <div class="section-body">
+      <div class="table-wrap">
+        <table id="leadershipTable">
+          <thead><tr>
+            <th onclick="sortTable('leadershipTable',0)">Name <span class="sort-arrow">▲▼</span></th>
+            <th onclick="sortTable('leadershipTable',1)">Title <span class="sort-arrow">▲▼</span></th>
+            <th>Contact</th>
+          </tr></thead>
+          <tbody>
+            <tr>
+              <td>Charles Lee</td>
+              <td>Chief Executive Officer (CEO)</td>
+              <td>
+                <button class="btn-contact" onclick="sendLeaderEmail('Charles Lee','CEO')">📧 Email Invite</button>
+                <button class="btn-contact linkedin" onclick="window.open('https://www.linkedin.com/company/71010147','_blank')">in LinkedIn</button>
+              </td>
+            </tr>
+            <tr>
+              <td>Vivian Ariño</td>
+              <td>Chief Operating Officer (COO)</td>
+              <td>
+                <button class="btn-contact" onclick="sendLeaderEmail('Vivian Ariño','COO')">📧 Email Invite</button>
+                <button class="btn-contact linkedin" onclick="window.open('https://www.linkedin.com/company/71010147','_blank')">in LinkedIn</button>
+              </td>
+            </tr>
+            <tr>
+              <td>Joshua Legier</td>
+              <td>Chief Delivery Officer (CDO)</td>
+              <td>
+                <button class="btn-contact" onclick="sendLeaderEmail('Joshua Legier','CDO')">📧 Email Invite</button>
+                <button class="btn-contact linkedin" onclick="window.open('https://www.linkedin.com/company/71010147','_blank')">in LinkedIn</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. SERVICES -->
+  <div class="section" id="services">
+    <div class="section-header"><div class="num">3</div><h2>Core Services</h2></div>
+    <div class="section-body">
+      <div class="table-wrap">
+        <table id="servicesTable">
+          <thead><tr>
+            <th onclick="sortTable('servicesTable',0)">Service <span class="sort-arrow">▲▼</span></th>
+            <th onclick="sortTable('servicesTable',1)">Description <span class="sort-arrow">▲▼</span></th>
+          </tr></thead>
+          <tbody>
+            <tr><td><strong style="color:#CF2030">NetSuite Implementation</strong></td><td>End-to-end or re-implementation — setup, deployment, system integration, customizations, and project management</td></tr>
+            <tr><td><strong style="color:#CF2030">NetSuite Managed Services</strong></td><td>Ongoing optimization, support, administration, and team training to ensure peak system performance</td></tr>
+            <tr><td><strong style="color:#CF2030">NetSuite Accounting</strong></td><td>Outsourced bookkeeping, compliance, accurate reporting, automated invoicing & payments</td></tr>
+            <tr><td><strong style="color:#CF2030">NetSuite Advisory Services</strong></td><td>Strategic consulting to align ERP with business goals</td></tr>
+            <tr><td><strong style="color:#CF2030">NetSuite Integration</strong></td><td>Connecting NetSuite with existing tools and platforms</td></tr>
+            <tr><td><strong style="color:#CF2030">NetSuite Optimization</strong></td><td>Improving existing configurations for better performance</td></tr>
+            <tr><td><strong style="color:#CF2030">NetSuite Support</strong></td><td>Responsive technical support for day-to-day issues</td></tr>
+            <tr><td><strong style="color:#CF2030">TS1 MFG (Manufacturing)</strong></td><td>Proprietary manufacturing solution inside NetSuite to streamline production, cut lead times, and boost profitability</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. INDUSTRIES -->
+  <div class="section" id="industries">
+    <div class="section-header"><div class="num">4</div><h2>Industries Served</h2></div>
+    <div class="section-body">
+      <div class="industry-tags">
+        <span class="tag">🏭 Manufacturing</span>
+        <span class="tag blue">🛒 Retail / eCommerce</span>
+        <span class="tag green">📦 Wholesale Distribution</span>
+        <span class="tag gold">🍕 Food & Beverage</span>
+        <span class="tag">💄 Health & Beauty</span>
+        <span class="tag blue">💻 Software & Technology</span>
+        <span class="tag green">📰 Media & Publishing</span>
+        <span class="tag gold">🏥 Healthcare Services</span>
+        <span class="tag">📢 Advertising Agency</span>
+        <span class="tag blue">👗 Apparel, Footwear & Accessories</span>
+        <span class="tag green">🌍 Social Impact / Non-Profits</span>
+        <span class="tag gold">🏢 General Business / Services</span>
+      </div>
+      <div class="chart-container" style="max-height:350px; margin-top:20px;">
+        <canvas id="industriesChart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. CREDIBILITY -->
+  <div class="section" id="credibility">
+    <div class="section-header"><div class="num">5</div><h2>Company Credibility & Social Proof</h2></div>
+    <div class="section-body">
+      <div class="metrics-grid">
+        <div class="metric-card"><div class="value">75+</div><div class="label">NETSUITE CONSULTANTS</div></div>
+        <div class="metric-card"><div class="value">200+</div><div class="label">NETSUITE CERTIFICATIONS</div></div>
+        <div class="metric-card"><div class="value">135+</div><div class="label">SUCCESSFUL IMPLEMENTATIONS</div></div>
+        <div class="metric-card"><div class="value">10+</div><div class="label">YEARS OF EXPERIENCE</div></div>
+        <div class="metric-card"><div class="value">10</div><div class="label">GLOBAL OFFICES</div></div>
+      </div>
+      <div class="charts-grid">
+        <div class="chart-container"><canvas id="metricsChart"></canvas></div>
+        <div class="chart-container"><canvas id="metricsRadar"></canvas></div>
+      </div>
+
+      <h3 style="color:#CF2030; margin:25px 0 15px; font-size:1rem;">Client Testimonials</h3>
+      <div class="table-wrap">
+        <table id="testimonialsTable">
+          <thead><tr>
+            <th onclick="sortTable('testimonialsTable',0)">Client <span class="sort-arrow">▲▼</span></th>
+            <th onclick="sortTable('testimonialsTable',1)">Contact <span class="sort-arrow">▲▼</span></th>
+            <th onclick="sortTable('testimonialsTable',2)">Quote Highlight <span class="sort-arrow">▲▼</span></th>
+          </tr></thead>
+          <tbody>
+            <tr><td>ICWHealth Ventures</td><td>Lucia Gonzalez, CFO</td><td>"Responsive, organized, and highly skilled… reliable, results-driven partner"</td></tr>
+            <tr><td>MAXCases</td><td>Jacqueline Pyle, VP Ops & Finance</td><td>"Amazing team… thankful for your dedication, professionalism, and knowledge"</td></tr>
+            <tr><td>HPtuners</td><td>Jerome Cababa, Sr. ERP Admin</td><td>"Goes beyond execution… thoughtful and collaborative approach"</td></tr>
+            <tr><td>House of Lashes</td><td>Breana Bui Nguyen, Sr. Ops Manager</td><td>"Crucial to making us operational in NetSuite… seamless and reliable support"</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. ORIGIN STORY -->
+  <div class="section" id="origin">
+    <div class="section-header"><div class="num">6</div><h2>Origin Story & DNA</h2></div>
+    <div class="section-body">
+      <p class="origin-text">
+        S Universe was <strong>built on helping product-based businesses—sellers—thrive</strong>, originally specializing in managing brands and scaling sales through <strong>Amazon and Shopify</strong>. NetSuite became their go-to ERP for back-end and financial management, which drove their expertise in the NetSuite space.
+      </p>
+      <br/>
+      <p class="origin-text">
+        Over time, they expanded from retail into a <strong>comprehensive NetSuite solutions provider</strong> serving manufacturing, healthcare, non-profits, and general business. While retail remains core to their DNA, their transformation into a <strong>full-service NetSuite partner</strong> is the heart of what they do today.
+      </p>
+    </div>
+  </div>
+
+  <!-- 7. DIFFERENTIATORS -->
+  <div class="section" id="differentiators">
+    <div class="section-header"><div class="num">7</div><h2>Competitive Differentiators</h2></div>
+    <div class="section-body">
+      <div class="table-wrap">
+        <table id="diffTable">
+          <thead><tr>
+            <th onclick="sortTable('diffTable',0)" style="color:#666;">Traditional Partner <span class="sort-arrow">▲▼</span></th>
+            <th onclick="sortTable('diffTable',1)">S Universe ✅ <span class="sort-arrow">▲▼</span></th>
+          </tr></thead>
+          <tbody>
+            <tr><td style="color:#666;">Long-term contracts</td><td style="color:#2ecc71;">✅ Flexible contracts</td></tr>
+            <tr><td style="color:#666;">Limited support hours</td><td style="color:#2ecc71;">✅ Your business hours</td></tr>
+            <tr><td style="color:#666;">Single consultant on projects</td><td style="color:#2ecc71;">✅ Dedicated Solutions Team</td></tr>
+            <tr><td style="color:#666;">Order-taking methodology</td><td style="color:#2ecc71;">✅ Proactive consulting</td></tr>
+            <tr><td style="color:#666;">No online chat</td><td style="color:#2ecc71;">✅ Online chat available</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="pillars-grid">
+        <div class="pillar-card"><div class="pillar-num">1</div><h4>NetSuite-First Practice</h4><p>Deep, specialized expertise</p></div>
+        <div class="pillar-card"><div class="pillar-num">2</div><h4>Proactive Consulting</h4><p>Identifying issues before they impact operations</p></div>
+        <div class="pillar-card"><div class="pillar-num">3</div><h4>Commitment to Clients</h4><p>People-centric, always-available approach</p></div>
+        <div class="pillar-card"><div class="pillar-num">4</div><h4>Win-Win Partnerships</h4><p>Collaborative, long-term growth focus</p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 8. CULTURE -->
+  <div class="section" id="culture">
+    <div class="section-header"><div class="num">8</div><h2>Company Culture & Values</h2></div>
+    <div class="section-body">
+      <div class="values-grid">
+        <div class="value-card"><h4>🔹 We Are Proactive</h4><p>Building a company they're excited about every day</p></div>
+        <div class="value-card"><h4>🔹 Never Stop Learning</h4><p>Growth mindset — aim to get better every time</p></div>
+        <div class="value-card"><h4>🔹 Team First</h4><p>Partners, not employees; win together passionately</p></div>
+        <div class="value-card"><h4>🔹 Extreme Ownership</h4><p>Act like the leader they wish they had</p></div>
+        <div class="value-card"><h4>🔹 Respect Is In Our DNA</h4><p>Value everyone's time, opinions, and contributions</p></div>
+        <div class="value-card"><h4>🔹 Agile & Action-Oriented</h4><p>Adapt and thrive in the face of challenges</p></div>
+        <div class="value-card"><h4>🔹 Communication Is Key</h4><p>Talk things out — no assumptions, no finger-pointing</p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 9. BNI STRATEGY -->
+  <div class="section" id="bni-strategy">
+    <div class="section-header"><div class="num">9</div><h2>BNI Strategy & Referral Opportunity Analysis</h2></div>
+    <div class="section-body">
+      <h3 style="color:#CF2030; margin-bottom:12px; font-size:0.95rem;">🎯 Ideal BNI Classification Fit</h3>
+      <div style="margin-bottom:20px;">
+        <span class="tag">Business Consultant – ERP/Technology</span>
+        <span class="tag blue">Software & Technology Consultant</span>
+        <span class="tag green">Business Consultant – Small Business</span>
+        <span class="tag gold">IT Services / Technology Solutions</span>
+      </div>
+
+      <h3 style="color:#CF2030; margin-bottom:12px; font-size:0.95rem;">🤝 High-Value Referral Partners</h3>
+      <div class="table-wrap">
+        <table id="referralTable">
+          <thead><tr>
+            <th onclick="sortTable('referralTable',0)">BNI Seat <span class="sort-arrow">▲▼</span></th>
+            <th onclick="sortTable('referralTable',1)">Why It's a Match <span class="sort-arrow">▲▼</span></th>
+          </tr></thead>
+          <tbody>
+            <tr><td><strong style="color:#CF2030">CPA / Accountant</strong></td><td>Businesses switching to NetSuite often need financial guidance; CPAs refer clients needing ERP solutions</td></tr>
+            <tr><td><strong style="color:#CF2030">Business Attorney</strong></td><td>Growing companies forming entities or doing M&A need ERP systems</td></tr>
+            <tr><td><strong style="color:#CF2030">Commercial Insurance Broker</strong></td><td>Growing businesses needing operational infrastructure</td></tr>
+            <tr><td><strong style="color:#CF2030">Residential/Commercial Realtor</strong></td><td>Business expansions trigger tech/ERP upgrades</td></tr>
+            <tr><td><strong style="color:#CF2030">Marketing Consultant</strong></td><td>eCommerce brands scaling sales need back-end ERP support</td></tr>
+            <tr><td><strong style="color:#CF2030">Financial Advisor / Wealth Manager</strong></td><td>High-revenue business owners need operational efficiency</td></tr>
+            <tr><td><strong style="color:#CF2030">HR / Recruiter</strong></td><td>Companies with 50–200 employees often hit the ERP tipping point</td></tr>
+            <tr><td><strong style="color:#CF2030">Business Financing / Lender</strong></td><td>Funded startups need ERP implementation</td></tr>
+            <tr><td><strong style="color:#CF2030">eCommerce Specialist</strong></td><td>Direct overlap — Amazon/Shopify sellers are their bread and butter</td></tr>
+            <tr><td><strong style="color:#CF2030">Manufacturing Consultant</strong></td><td>TS1 MFG is a flagship product — direct referral pipeline</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="chart-container" style="margin-top:20px;"><canvas id="referralChart"></canvas></div>
+
+      <h3 style="color:#CF2030; margin:25px 0 12px; font-size:0.95rem;">🔥 Key Referral Triggers to Listen For</h3>
+      <ul class="trigger-list">
+        <li><span class="trigger-num">#1</span> "We've outgrown QuickBooks" or "Our accounting system can't keep up"</li>
+        <li><span class="trigger-num">#2</span> "We're scaling from Shopify/Amazon and need better inventory management"</li>
+        <li><span class="trigger-num">#3</span> "Our current ERP implementation was a disaster"</li>
+        <li><span class="trigger-num">#4</span> "We need to automate our financial reporting"</li>
+        <li><span class="trigger-num">#5</span> "We're opening new locations / warehouses"</li>
+        <li><span class="trigger-num">#6</span> "We manufacture products and need production visibility"</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 10. OUTREACH -->
+  <div class="section" id="outreach">
+    <div class="section-header"><div class="num">10</div><h2>Outreach Strategy — 3 Compelling Reasons to Invite to BNI</h2></div>
+    <div class="section-body">
+      <div class="reason-card">
+        <h4>🎯 Reason 1: Built-In Referral Ecosystem</h4>
+        <p>S Universe serves 12+ industries, meaning nearly every BNI member's clients could be a potential match. Their services directly support the growth infrastructure that scaling businesses need — creating a natural referral exchange with accountants, attorneys, financial advisors, and more.</p>
+      </div>
+      <div class="reason-card">
+        <h4>🌎 Reason 2: Multi-Location, High-Revenue Client Base</h4>
+        <p>With 10 global offices and clients ranging from startups to enterprises (revenue tiers from $500K to $4B+), S Universe brings a high-value network to the chapter. Their C-level contacts (CFOs, VPs of Operations, Senior ERP Admins) are exactly the decision-makers BNI members want access to.</p>
+      </div>
+      <div class="reason-card">
+        <h4>🤝 Reason 3: Culture Alignment with BNI Values</h4>
+        <p>Their core values — proactive partnership, extreme ownership, continuous learning, and communication — mirror BNI's Givers Gain® philosophy. A company that believes in "Win-Win Partnerships" is primed to thrive in a structured referral network.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 11. NEXT STEPS -->
+  <div class="section" id="next-steps">
+    <div class="section-header"><div class="num">11</div><h2>Recommended Next Steps</h2></div>
+    <div class="section-body">
+      <ol class="steps-list">
+        <li><div><strong style="color:#fff;">Send a Personalized Visitor Invitation</strong><br/><span style="color:#999;">Highlighting their alignment with the chapter's Contact Sphere</span></div></li>
+        <li><div><strong style="color:#fff;">Prepare an Introduction for the Chapter</strong><br/><span style="color:#999;">Emphasizing the broad referral potential across 12+ industries</span></div></li>
+        <li><div><strong style="color:#fff;">Schedule a 1-2-1</strong><br/><span style="color:#999;">Explore mutual referral triggers and ideal client profiles</span></div></li>
+        <li><div><strong style="color:#fff;">Target Decision Maker</strong><br/><span style="color:#999;">Reach out via <a href="mailto:seller@selleruniverse.io" style="color:#CF2030">seller@selleruniverse.io</a> or <a href="https://www.linkedin.com/in/seller-universe-ecommerce-group-0a0561224" target="_blank" style="color:#3498db">LinkedIn</a></span>
+          <br/><br/>
+          <button class="btn-contact" onclick="sendMainInvite()">📧 Send Email Invitation</button>
+          <button class="btn-contact linkedin" onclick="window.open('https://www.linkedin.com/in/seller-universe-ecommerce-group-0a0561224','_blank')">in Connect on LinkedIn</button>
+        </div></li>
+      </ol>
+    </div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports" />
+  <div class="footer-text">
+    S.A.L.E. Client Simple Search & Strategy Report — Seller Universe | Powered by <a href="https://higgins.ai" target="_blank">Higgins AI</a> | 
+    <a href="tel:18883643924">1-888-364-3924</a> | <a href="mailto:support@higgins.ai">support@higgins.ai</a>
+  </div>
+</div>
+
+<script>
+// ===== TABLE SORTING =====
+const sortStates = {};
+function sortTable(tableId, colIndex) {
+  const table = document.getElementById(tableId);
+  const tbody = table.querySelector('tbody');
+  const rows = Array.from(tbody.querySelectorAll('tr'));
+  const key = tableId + '_' + colIndex;
+  sortStates[key] = !sortStates[key];
+  const dir = sortStates[key] ? 1 : -1;
+  
+  rows.sort((a, b) => {
+    const aText = a.cells[colIndex]?.textContent.trim().toLowerCase() || '';
+    const bText = b.cells[colIndex]?.textContent.trim().toLowerCase() || '';
+    return aText.localeCompare(bText) * dir;
+  });
+  
+  rows.forEach(r => tbody.appendChild(r));
+  
+  // Update sort arrows
+  const ths = table.querySelectorAll('th');
+  ths.forEach((th, i) => {
+    th.classList.remove('sorted');
+    if (i === colIndex) th.classList.add('sorted');
+  });
+}
+
+// ===== GLOBAL SEARCH =====
+function globalSearchHandler() {
+  const query = document.getElementById('globalSearch').value.toLowerCase().trim();
+  const tables = document.querySelectorAll('table tbody');
+  
+  tables.forEach(tbody => {
+    const rows = tbody.querySelectorAll('tr');
+    rows.forEach(row => {
+      const text = row.textContent.toLowerCase();
+      row.style.display = (!query || text.includes(query)) ? '' : 'none';
+    });
+  });
+
+  // Also search tags
+  document.querySelectorAll('.tag').forEach(tag => {
+    const text = tag.textContent.toLowerCase();
+    tag.style.opacity = (!query || text.includes(query)) ? '1' : '0.2';
+  });
+
+  // Search value cards
+  document.querySelectorAll('.value-card, .reason-card, .trigger-list li, .pillar-card').forEach(el => {
+    const text = el.textContent.toLowerCase();
+    el.style.opacity = (!query || text.includes(query)) ? '1' : '0.25';
+  });
+}
+
+// ===== NAV SCROLL =====
+document.querySelectorAll('.nav a').forEach(a => {
+  a.addEventListener('click', function(e) {
+    e.preventDefault();
+    const target = document.querySelector(this.getAttribute('href'));
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      document.querySelectorAll('.nav a').forEach(n => n.classList.remove('active'));
+      this.classList.add('active');
+    }
+  });
+});
+
+// Active nav on scroll
+window.addEventListener('scroll', () => {
+  const sections = document.querySelectorAll('.section');
+  let current = '';
+  sections.forEach(s => {
+    if (window.scrollY >= s.offsetTop - 160) current = s.id;
+  });
+  document.querySelectorAll('.nav a').forEach(a => {
+    a.classList.remove('active');
+    if (a.getAttribute('href') === '#' + current) a.classList.add('active');
+  });
+});
+
+// ===== EMAIL FUNCTIONS =====
+function sendMainInvite() {
+  const subject = encodeURIComponent('Invitation to Visit Our BNI Chapter — A Perfect Fit for S Universe');
+  const body = encodeURIComponent(
+`Dear Seller Universe Team,
+
+I recently came across S Universe and was truly impressed by what you've built — a NetSuite-first practice with 75+ consultants, 200+ certifications, and 135+ successful implementations across 12+ industries. Your commitment to proactive consulting and win-win partnerships stood out immediately.
+
+I'd love to invite you to visit our BNI (Business Network International) chapter meeting as a guest. Here's why I believe this could be a great fit:
+
+1. BUILT-IN REFERRAL ECOSYSTEM: Your services span manufacturing, eCommerce, healthcare, wholesale, and more — meaning nearly every member in our chapter could refer clients who need exactly what S Universe offers.
+
+2. HIGH-VALUE CONNECTIONS: Our chapter includes CPAs, business attorneys, financial advisors, marketing consultants, and other professionals whose clients regularly outgrow their current systems and need ERP solutions — a direct pipeline to your ideal prospects.
+
+3. CULTURE ALIGNMENT: S Universe's values — extreme ownership, continuous learning, team-first mentality — perfectly mirror BNI's Givers Gain philosophy. You'd thrive in our structured referral environment.
+
+To visit our chapter, simply complete this simple form to reserve your seat and begin accelerating your business: ***Visitor Invite***
+
+I'd welcome the chance to connect and discuss how we can create mutual referral opportunities. Looking forward to hearing from you!
+
+Warm regards`
+  );
+  window.open('mailto:seller@selleruniverse.io?subject=' + subject + '&body=' + body);
+}
+
+function sendLeaderEmail(name, title) {
+  const subject = encodeURIComponent('BNI Visitor Invitation for ' + name + ' — S Universe');
+  const body = encodeURIComponent(
+`Dear ${name},
+
+As the ${title} of S Universe, I believe you'd find immense value in visiting our BNI chapter. Your organization's expertise in NetSuite implementation, managed services, and your proprietary TS1 MFG solution positions S Universe as a high-value member of any professional referral network.
+
+Here's why a visit makes sense:
+
+• Your 12+ industry reach means our members' clients are your ideal prospects — from scaling eCommerce brands to manufacturers needing production visibility.
+
+• Our chapter includes CPAs, attorneys, financial advisors, and HR professionals who regularly encounter businesses outgrowing QuickBooks or struggling with failed ERP implementations — classic referral triggers for S Universe.
+
+• With 10 global offices and a client base spanning startups to enterprises, S Universe brings the kind of high-revenue network that BNI chapters thrive on.
+
+To visit our chapter, simply complete this form to reserve your seat: ***Visitor Invite***
+
+I'd love to schedule a quick conversation to explore the mutual opportunity.
+
+Best regards`
+  );
+  window.open('mailto:seller@selleruniverse.io?subject=' + subject + '&body=' + body);
+}
+
+// ===== CHARTS =====
+// Metrics Bar Chart
+const metricsCtx = document.getElementById('metricsChart').getContext('2d');
+new Chart(metricsCtx, {
+  type: 'bar',
+  data: {
+    labels: ['Consultants', 'Certifications', 'Implementations', 'Years Experience', 'Global Offices'],
+    datasets: [{
+      label: 'S Universe by the Numbers',
+      data: [75, 200, 135, 10, 10],
+      backgroundColor: [
+        'rgba(207,32,48,0.8)',
+        'rgba(207,32,48,0.65)',
+        'rgba(207,32,48,0.5)',
+        'rgba(207,32,48,0.35)',
+        'rgba(207,32,48,0.25)'
+      ],
+      borderColor: '#CF2030',
+      borderWidth: 1,
+      borderRadius: 6
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: true,
+    plugins: {
+      legend: { labels: { color: '#999', font: { size: 11 } } },
+      title: { display: true, text: 'Company Metrics Overview', color: '#CF2030', font: { size: 14, weight: 'bold' } }
+    },
+    scales: {
+      y: { ticks: { color: '#666' }, grid: { color: '#1a1a1a' } },
+      x: { ticks: { color: '#999', font: { size: 10 } }, grid: { display: false } }
+    }
+  }
+});
+
+// Metrics Radar
+const radarCtx = document.getElementById('metricsRadar').getContext('2d');
+new Chart(radarCtx, {
+  type: 'radar',
+  data: {
+    labels: ['Team Size', 'Certifications', 'Implementations', 'Experience', 'Global Reach'],
+    datasets: [{
+      label: 'S Universe Strength Profile',
+      data: [75, 95, 80, 70, 60],
+      backgroundColor: 'rgba(207,32,48,0.15)',
+      borderColor: '#CF2030',
+      borderWidth: 2,
+      pointBackgroundColor: '#CF2030',
+      pointRadius: 5
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: true,
+    plugins: {
+      legend: { labels: { color: '#999', font: { size: 11 } } },
+      title: { display: true, text: 'Strength Profile', color: '#CF2030', font: { size: 14, weight: 'bold' } }
+    },
+    scales: {
+      r: {
+        angleLines: { color: '#222' },
+        grid: { color: '#222' },
+        pointLabels: { color: '#999', font: { size: 10 } },
+        ticks: { display: false },
+        suggestedMin: 0,
+        suggestedMax: 100
+      }
+    }
+  }
+});
+
+// Industries Doughnut
+const indCtx = document.getElementById('industriesChart').getContext('2d');
+new Chart(indCtx, {
+  type: 'doughnut',
+  data: {
+    labels: ['Manufacturing', 'Retail/eCommerce', 'Wholesale', 'Food & Beverage', 'Health & Beauty', 'Software & Tech', 'Media & Publishing', 'Healthcare', 'Advertising', 'Apparel & Accessories', 'Non-Profits', 'General Business'],
+    datasets: [{
+      data: [12, 15, 8, 7, 8, 10, 5, 9, 6, 7, 5, 8],
+      backgroundColor: [
+        '#CF2030','#e74c3c','#c0392b','#f39c12','#f1c40f',
+        '#3498db','#2980b9','#2ecc71','#27ae60','#9b59b6',
+        '#8e44ad','#e67e22'
+      ],
+      borderColor: '#111',
+      borderWidth: 2
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: true,
+    plugins: {
+      legend: { position: 'right', labels: { color: '#999', font: { size: 10 }, padding: 8, boxWidth: 12 } },
+      title: { display: true, text: 'Industry Reach Distribution', color: '#CF2030', font: { size: 14, weight: 'bold' } }
+    }
+  }
+});
+
+// Referral Partners Chart
+const refCtx = document.getElementById('referralChart').getContext('2d');
+new Chart(refCtx, {
+  type: 'bar',
+  data: {
+    labels: ['CPA/Accountant', 'Business Attorney', 'Insurance Broker', 'Realtor', 'Marketing Consultant', 'Financial Advisor', 'HR/Recruiter', 'Business Lender', 'eCommerce Specialist', 'Manufacturing Consultant'],
+    datasets: [{
+      label: 'Referral Synergy Score (1-10)',
+      data: [9.5, 8.0, 7.0, 6.5, 8.5, 7.5, 7.0, 7.5, 10, 9.0],
+      backgroundColor: 'rgba(207,32,48,0.7)',
+      borderColor: '#CF2030',
+      borderWidth: 1,
+      borderRadius: 4
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true,
+    maintainAspectRatio: true,
+    plugins: {
+      legend: { labels: { color: '#999', font: { size: 11 } } },
+      title: { display: true, text: 'BNI Referral Partner Synergy Scores', color: '#CF2030', font: { size: 14, weight: 'bold' } }
+    },
+    scales: {
+      x: { ticks: { color: '#666' }, grid: { color: '#1a1a1a' }, max: 10 },
+      y: { ticks: { color: '#999', font: { size: 10 } }, grid: { display: false } }
+    }
+  }
+});
+</script>
+</body>
+</html>

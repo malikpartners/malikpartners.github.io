@@ -1,0 +1,1077 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Floor Coverings International - S.A.L.E. Client Management System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #000000;
+            color: #CF2030;
+            line-height: 1.6;
+        }
+        
+        .header {
+            background-color: #CF2030;
+            color: white;
+            padding: 1rem 0;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(207, 32, 48, 0.3);
+        }
+        
+        .header img {
+            max-height: 60px;
+            margin-bottom: 10px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .dashboard-header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: white;
+        }
+        
+        .tabs {
+            display: flex;
+            background-color: #333;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        
+        .tab {
+            flex: 1;
+            padding: 15px;
+            background-color: #333;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .tab.active {
+            background-color: #CF2030;
+        }
+        
+        .tab:hover {
+            background-color: #555;
+        }
+        
+        .tab.active:hover {
+            background-color: #CF2030;
+        }
+        
+        .tab-content {
+            display: none;
+            background-color: #222;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .search-filter {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .search-filter input, .search-filter select {
+            padding: 10px;
+            border: 1px solid #CF2030;
+            border-radius: 4px;
+            background-color: #333;
+            color: white;
+            min-width: 200px;
+        }
+        
+        .search-filter button {
+            padding: 10px 20px;
+            background-color: #CF2030;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .search-filter button:hover {
+            background-color: #a01828;
+        }
+        
+        .client-table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #333;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+        
+        .client-table th, .client-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #555;
+            color: white;
+        }
+        
+        .client-table th {
+            background-color: #CF2030;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .client-table th:hover {
+            background-color: #a01828;
+        }
+        
+        .client-table tr:nth-child(even) {
+            background-color: #404040;
+        }
+        
+        .client-table tr:hover {
+            background-color: #555;
+        }
+        
+        .tier-1a {
+            background-color: #28a745 !important;
+        }
+        
+        .tier-1b {
+            background-color: #ffc107 !important;
+            color: #000 !important;
+        }
+        
+        .tier-1c {
+            background-color: #007bff !important;
+        }
+        
+        .contact-btn {
+            background-color: #CF2030;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        
+        .contact-btn:hover {
+            background-color: #a01828;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+        
+        .modal-content {
+            background-color: #333;
+            margin: 5% auto;
+            padding: 30px;
+            border-radius: 8px;
+            width: 80%;
+            max-width: 800px;
+            color: white;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .close {
+            color: #CF2030;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .close:hover {
+            color: white;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #CF2030;
+        }
+        
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #CF2030;
+            border-radius: 4px;
+            background-color: #222;
+            color: white;
+        }
+        
+        .pures-scoring {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .score-item {
+            background-color: #404040;
+            padding: 15px;
+            border-radius: 8px;
+        }
+        
+        .score-slider {
+            width: 100%;
+            margin-top: 10px;
+        }
+        
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .metric-card {
+            background-color: #404040;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .metric-value {
+            font-size: 2em;
+            color: #CF2030;
+            font-weight: bold;
+        }
+        
+        .footer {
+            background-color: #333;
+            padding: 20px;
+            text-align: center;
+            margin-top: 40px;
+            border-radius: 8px;
+        }
+        
+        .footer img {
+            max-height: 30px;
+            opacity: 0.8;
+        }
+        
+        .email-template {
+            background-color: #404040;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+        
+        .btn-primary {
+            background-color: #CF2030;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        
+        .btn-primary:hover {
+            background-color: #a01828;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports" />
+        <h1>Floor Coverings International</h1>
+        <p>S.A.L.E. System Client Management Dashboard</p>
+    </header>
+
+    <div class="container">
+        <div class="dashboard-header">
+            <h2>Welcome, Jeremy Steiding</h2>
+            <p>Vista, California - Floor Coverings International</p>
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('sourcing')">S - Sourcing</button>
+            <button class="tab" onclick="showTab('assessing')">A - Assessing</button>
+            <button class="tab" onclick="showTab('listening')">L - Listening</button>
+            <button class="tab" onclick="showTab('empowering')">E - Empowering</button>
+        </div>
+
+        <!-- SOURCING Tab -->
+        <div id="sourcing" class="tab-content active">
+            <h3>P.U.R.E.S. Client Scoring & Database</h3>
+            
+            <div class="search-filter">
+                <input type="text" id="searchInput" placeholder="Search clients..." onkeyup="filterTable()">
+                <select id="tierFilter" onchange="filterTable()">
+                    <option value="">All Tiers</option>
+                    <option value="Tier 1A">Tier 1A (Premium)</option>
+                    <option value="Tier 1B">Tier 1B (High-Value)</option>
+                    <option value="Tier 1C">Tier 1C (Qualified)</option>
+                </select>
+                <select id="industryFilter" onchange="filterTable()">
+                    <option value="">All Industries</option>
+                    <option value="Real Estate">Real Estate</option>
+                    <option value="Home Renovation">Home Renovation</option>
+                    <option value="Interior Design">Interior Design</option>
+                    <option value="Property Management">Property Management</option>
+                </select>
+                <button onclick="addNewClient()">Add New Client</button>
+                <button onclick="exportData()">Export Data</button>
+            </div>
+
+            <table class="client-table" id="clientTable">
+                <thead>
+                    <tr>
+                        <th onclick="sortTable(0)">Client Name</th>
+                        <th onclick="sortTable(1)">Email</th>
+                        <th onclick="sortTable(2)">Phone</th>
+                        <th onclick="sortTable(3)">Address</th>
+                        <th onclick="sortTable(4)">P.U.R.E.S. Score</th>
+                        <th onclick="sortTable(5)">Tier Level</th>
+                        <th onclick="sortTable(6)">Industry</th>
+                        <th onclick="sortTable(7)">Revenue Est.</th>
+                        <th onclick="sortTable(8)">Contact Status</th>
+                        <th onclick="sortTable(9)">Last Contact</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="clientTableBody">
+                    <!-- Client data will be populated here -->
+                </tbody>
+            </table>
+
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <h4>Total Clients</h4>
+                    <div class="metric-value" id="totalClients">50</div>
+                </div>
+                <div class="metric-card">
+                    <h4>Tier 1A Premium</h4>
+                    <div class="metric-value" id="tier1ACount">8</div>
+                </div>
+                <div class="metric-card">
+                    <h4>Tier 1B High-Value</h4>
+                    <div class="metric-value" id="tier1BCount">22</div>
+                </div>
+                <div class="metric-card">
+                    <h4>Tier 1C Qualified</h4>
+                    <div class="metric-value" id="tier1CCount">20</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ASSESSING Tab -->
+        <div id="assessing" class="tab-content">
+            <h3>Buying Pattern Analysis</h3>
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <h4>Analytical Buyers</h4>
+                    <p>Require detailed ROI analysis and case studies</p>
+                    <div class="metric-value">18</div>
+                </div>
+                <div class="metric-card">
+                    <h4>Relationship Buyers</h4>
+                    <p>Value trust and long-term partnerships</p>
+                    <div class="metric-value">16</div>
+                </div>
+                <div class="metric-card">
+                    <h4>Efficiency Buyers</h4>
+                    <p>Focus on time-saving solutions</p>
+                    <div class="metric-value">10</div>
+                </div>
+                <div class="metric-card">
+                    <h4>Innovation Buyers</h4>
+                    <p>Seek cutting-edge flooring solutions</p>
+                    <div class="metric-value">6</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- LISTENING Tab -->
+        <div id="listening" class="tab-content">
+            <h3>Feedback Integration System</h3>
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <h4>Pre-Sale Feedback</h4>
+                    <div class="metric-value">85%</div>
+                    <p>Collection Rate</p>
+                </div>
+                <div class="metric-card">
+                    <h4>Installation Satisfaction</h4>
+                    <div class="metric-value">4.89</div>
+                    <p>Average Rating</p>
+                </div>
+                <div class="metric-card">
+                    <h4>Post-Sale Follow-up</h4>
+                    <div class="metric-value">92%</div>
+                    <p>Completion Rate</p>
+                </div>
+                <div class="metric-card">
+                    <h4>Issue Resolution</h4>
+                    <div class="metric-value">24hrs</div>
+                    <p>Average Response Time</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- EMPOWERING Tab -->
+        <div id="empowering" class="tab-content">
+            <h3>Referral Strategy Dashboard</h3>
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <h4>Client Referrals</h4>
+                    <div class="metric-value">47</div>
+                    <p>This Quarter</p>
+                </div>
+                <div class="metric-card">
+                    <h4>Success Stories</h4>
+                    <div class="metric-value">23</div>
+                    <p>Documented</p>
+                </div>
+                <div class="metric-card">
+                    <h4>Partner Network</h4>
+                    <div class="metric-value">12</div>
+                    <p>Active Partners</p>
+                </div>
+                <div class="metric-card">
+                    <h4>Referral Revenue</h4>
+                    <div class="metric-value">34%</div>
+                    <p>Of Total Sales</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Client Modal -->
+    <div id="clientModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h3 id="modalTitle">Add New Client</h3>
+            
+            <form id="clientForm">
+                <div class="form-group">
+                    <label>Client Name:</label>
+                    <input type="text" id="clientName" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Email:</label>
+                    <input type="email" id="clientEmail" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Phone:</label>
+                    <input type="tel" id="clientPhone" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Address:</label>
+                    <textarea id="clientAddress" rows="3" required></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label>Industry:</label>
+                    <select id="clientIndustry">
+                        <option value="Real Estate">Real Estate</option>
+                        <option value="Home Renovation">Home Renovation</option>
+                        <option value="Interior Design">Interior Design</option>
+                        <option value="Property Management">Property Management</option>
+                    </select>
+                </div>
+
+                <h4>P.U.R.E.S. Scoring (1-5 Scale)</h4>
+                <div class="pures-scoring">
+                    <div class="score-item">
+                        <label>Profitability: <span id="profitabilityValue">3</span></label>
+                        <input type="range" id="profitability" min="1" max="5" value="3" class="score-slider" onchange="updateScore('profitability')">
+                    </div>
+                    <div class="score-item">
+                        <label>Urgency: <span id="urgencyValue">3</span></label>
+                        <input type="range" id="urgency" min="1" max="5" value="3" class="score-slider" onchange="updateScore('urgency')">
+                    </div>
+                    <div class="score-item">
+                        <label>Reachability: <span id="reachabilityValue">3</span></label>
+                        <input type="range" id="reachability" min="1" max="5" value="3" class="score-slider" onchange="updateScore('reachability')">
+                    </div>
+                    <div class="score-item">
+                        <label>Engagement: <span id="engagementValue">3</span></label>
+                        <input type="range" id="engagement" min="1" max="5" value="3" class="score-slider" onchange="updateScore('engagement')">
+                    </div>
+                    <div class="score-item">
+                        <label>Sustainability: <span id="sustainabilityValue">3</span></label>
+                        <input type="range" id="sustainability" min="1" max="5" value="3" class="score-slider" onchange="updateScore('sustainability')">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Total P.U.R.E.S. Score:</label>
+                    <input type="text" id="totalScore" readonly>
+                </div>
+
+                <div class="form-group">
+                    <label>Tier Level:</label>
+                    <input type="text" id="tierLevel" readonly>
+                </div>
+
+                <button type="submit" class="btn-primary">Save Client</button>
+                <button type="button" class="btn-primary" onclick="closeModal()">Cancel</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Email Modal -->
+    <div id="emailModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeEmailModal()">&times;</span>
+            <h3>Send Email to <span id="emailClientName"></span></h3>
+            
+            <div class="form-group">
+                <label>To:</label>
+                <input type="email" id="emailTo" readonly>
+            </div>
+            
+            <div class="form-group">
+                <label>Subject:</label>
+                <input type="text" id="emailSubject" value="Transform Your Space with Premium Flooring Solutions">
+            </div>
+            
+            <div class="form-group">
+                <label>Message:</label>
+                <textarea id="emailMessage" rows="10"></textarea>
+            </div>
+            
+            <button class="btn-primary" onclick="sendEmail()">Send Email</button>
+            <button class="btn-primary" onclick="closeEmailModal()">Cancel</button>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports" />
+        <p>&copy; 2026 Floor Coverings International - S.A.L.E. System Dashboard</p>
+        <p>Powered by Higgins Reports AI</p>
+    </footer>
+
+    <script>
+        // Sample client data (50 clients within 10 miles of Vista, California)
+        let clientData = [
+            {
+                name: "Sarah Johnson",
+                email: "sarah.johnson@realestate.com",
+                phone: "(760) 555-0101",
+                address: "1234 Oak Street, Carlsbad, CA 92008",
+                puresScore: 23,
+                tierLevel: "Tier 1A",
+                industry: "Real Estate",
+                revenueEst: "$150K",
+                contactStatus: "Hot Lead",
+                lastContact: "2024-01-15",
+                notes: "Interested in luxury vinyl for new listings"
+            },
+            {
+                name: "Michael Chen",
+                email: "m.chen@designstudio.com",
+                phone: "(760) 555-0102",
+                address: "5678 Palm Avenue, Encinitas, CA 92024",
+                puresScore: 21,
+                tierLevel: "Tier 1A",
+                industry: "Interior Design",
+                revenueEst: "$200K",
+                contactStatus: "Follow-up Needed",
+                lastContact: "2024-01-10",
+                notes: "High-end residential projects"
+            },
+            {
+                name: "Jennifer Martinez",
+                email: "jennifer@homeremodel.com",
+                phone: "(760) 555-0103",
+                address: "9012 Coastal Drive, Del Mar, CA 92014",
+                puresScore: 19,
+                tierLevel: "Tier 1B",
+                industry: "Home Renovation",
+                revenueEst: "$75K",
+                contactStatus: "Quoted",
+                lastContact: "2024-01-20",
+                notes: "Kitchen and bathroom remodel"
+            },
+            {
+                name: "Robert Anderson",
+                email: "r.anderson@propmanage.com",
+                phone: "(760) 555-0104",
+                address: "3456 Mesa Road, Solana Beach, CA 92075",
+                puresScore: 20,
+                tierLevel: "Tier 1B",
+                industry: "Property Management",
+                revenueEst: "$100K",
+                contactStatus: "Proposal Sent",
+                lastContact: "2024-01-18",
+                notes: "Multiple rental properties"
+            },
+            {
+                name: "Lisa Thompson",
+                email: "lisa@interiorplus.com",
+                phone: "(760) 555-0105",
+                address: "7890 Garden Lane, Escondido, CA 92025",
+                puresScore: 18,
+                tierLevel: "Tier 1B",
+                industry: "Interior Design",
+                revenueEst: "$120K",
+                contactStatus: "New Lead",
+                lastContact: "2024-01-22",
+                notes: "Commercial space focus"
+            },
+            {
+                name: "David Wilson",
+                email: "david.wilson@constructco.com",
+                phone: "(760) 555-0106",
+                address: "2468 Valley View, Rancho Santa Fe, CA 92067",
+                puresScore: 22,
+                tierLevel: "Tier 1A",
+                industry: "Home Renovation",
+                revenueEst: "$300K",
+                contactStatus: "Hot Lead",
+                lastContact: "2024-01-25",
+                notes: "Custom home builder"
+            },
+            {
+                name: "Emily Davis",
+                email: "emily@coastalrealty.com",
+                phone: "(760) 555-0107",
+                address: "1357 Sunset Boulevard, Oceanside, CA 92054",
+                puresScore: 17,
+                tierLevel: "Tier 1B",
+                industry: "Real Estate",
+                revenueEst: "$85K",
+                contactStatus: "Follow-up Needed",
+                lastContact: "2024-01-12",
+                notes: "Staging services"
+            },
+            {
+                name: "James Garcia",
+                email: "james@innovatedesign.com",
+                phone: "(760) 555-0108",
+                address: "9753 Harbor Drive, Carlsbad, CA 92011",
+                puresScore: 16,
+                tierLevel: "Tier 1C",
+                industry: "Interior Design",
+                revenueEst: "$60K",
+                contactStatus: "Quoted",
+                lastContact: "2024-01-16",
+                notes: "Modern design specialist"
+            },
+            {
+                name: "Amanda Rodriguez",
+                email: "amanda@propertycare.com",
+                phone: "(760) 555-0109",
+                address: "4826 Mountain View, San Marcos, CA 92078",
+                puresScore: 15,
+                tierLevel: "Tier 1C",
+                industry: "Property Management",
+                revenueEst: "$45K",
+                contactStatus: "New Lead",
+                lastContact: "2024-01-19",
+                notes: "Apartment complexes"
+            },
+            {
+                name: "Christopher Lee",
+                email: "chris@homeimprove.com",
+                phone: "(760) 555-0110",
+                address: "8642 Parkway Drive, Vista, CA 92083",
+                puresScore: 19,
+                tierLevel: "Tier 1B",
+                industry: "Home Renovation",
+                revenueEst: "$95K",
+                contactStatus: "Proposal Sent",
+                lastContact: "2024-01-21",
+                notes: "Whole house renovations"
+            }
+        ];
+
+        // Generate additional 40 clients to reach 50 total
+        const additionalNames = [
+            "Patricia Brown", "Daniel Miller", "Michelle Taylor", "Kevin White", "Laura Jackson", "Steven Harris", "Rebecca Clark", "Brian Lewis", "Ashley Walker", "Mark Hall",
+            "Jessica Allen", "Thomas Young", "Elizabeth King", "Paul Wright", "Helen Lopez", "Gary Hill", "Sandra Green", "Jason Adams", "Nancy Baker", "Timothy Nelson",
+            "Betty Carter", "Jose Mitchell", "Deborah Perez", "Kenneth Roberts", "Donna Turner", "Frank Phillips", "Carol Campbell", "Anthony Parker", "Sharon Evans", "Ryan Edwards",
+            "Kimberly Collins", "Matthew Stewart", "Lisa Sanchez", "Edward Morris", "Karen Rogers", "Jacob Reed", "Susan Cook", "Nicholas Bailey", "Margaret Rivera", "Jonathan Cooper"
+        ];
+
+        const streets = ["Oak Street", "Pine Avenue", "Maple Drive", "Cedar Lane", "Elm Court", "Birch Way", "Willow Road", "Cherry Street", "Aspen Drive", "Palm Avenue"];
+        const cities = ["Vista", "Carlsbad", "Encinitas", "Oceanside", "San Marcos", "Escondido", "Solana Beach", "Del Mar"];
+        const industries = ["Real Estate", "Home Renovation", "Interior Design", "Property Management"];
+        const statuses = ["New Lead", "Follow-up Needed", "Quoted", "Proposal Sent", "Hot Lead"];
+
+        // Add remaining clients
+        for (let i = 10; i < 50; i++) {
+            const name = additionalNames[i - 10];
+            const industry = industries[Math.floor(Math.random() * industries.length)];
+            const city = cities[Math.floor(Math.random() * cities.length)];
+            const street = streets[Math.floor(Math.random() * streets.length)];
+            const puresScore = Math.floor(Math.random() * 10) + 12; // 12-22 range
+            
+            let tierLevel;
+            if (puresScore >= 20) tierLevel = "Tier 1A";
+            else if (puresScore >= 16) tierLevel = "Tier 1B";
+            else tierLevel = "Tier 1C";
+
+            clientData.push({
+                name: name,
+                email: name.toLowerCase().replace(" ", ".") + "@email.com",
+                phone: `(760) 555-${(i + 101).toString().padStart(4, '0')}`,
+                address: `${Math.floor(Math.random() * 9999) + 1000} ${street}, ${city}, CA 920${Math.floor(Math.random() * 90) + 10}`,
+                puresScore: puresScore,
+                tierLevel: tierLevel,
+                industry: industry,
+                revenueEst: `$${Math.floor(Math.random() * 200) + 50}K`,
+                contactStatus: statuses[Math.floor(Math.random() * statuses.length)],
+                lastContact: `2024-01-${Math.floor(Math.random() * 25) + 1}`,
+                notes: "Generated prospect"
+            });
+        }
+
+        let currentEditingIndex = -1;
+
+        function showTab(tabName) {
+            // Hide all tabs
+            const tabs = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            const tabButtons = document.querySelectorAll('.tab');
+            tabButtons.forEach(btn => btn.classList.remove('active'));
+            
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        function populateTable() {
+            const tbody = document.getElementById('clientTableBody');
+            tbody.innerHTML = '';
+
+            clientData.forEach((client, index) => {
+                const row = document.createElement('tr');
+                row.className = getTierClass(client.tierLevel);
+                
+                row.innerHTML = `
+                    <td>${client.name}</td>
+                    <td>${client.email}</td>
+                    <td>${client.phone}</td>
+                    <td>${client.address}</td>
+                    <td>${client.puresScore}/25</td>
+                    <td>${client.tierLevel}</td>
+                    <td>${client.industry}</td>
+                    <td>${client.revenueEst}</td>
+                    <td>${client.contactStatus}</td>
+                    <td>${client.lastContact}</td>
+                    <td>
+                        <button class="contact-btn" onclick="contactClient(${index}, 'email')">Email</button>
+                        <button class="contact-btn" onclick="contactClient(${index}, 'phone')">Call</button>
+                        <button class="contact-btn" onclick="editClient(${index})">Edit</button>
+                    </td>
+                `;
+                
+                tbody.appendChild(row);
+            });
+        }
+
+        function getTierClass(tier) {
+            switch(tier) {
+                case 'Tier 1A': return 'tier-1a';
+                case 'Tier 1B': return 'tier-1b';
+                case 'Tier 1C': return 'tier-1c';
+                default: return '';
+            }
+        }
+
+        function contactClient(index, method) {
+            const client = clientData[index];
+            
+            if (method === 'email') {
+                openEmailModal(client);
+            } else if (method === 'phone') {
+                // For demo purposes, show an alert with the phone number
+                alert(`Calling ${client.name} at ${client.phone}\n\nIn a real system, this would initiate a phone call or open your phone application.`);
+            }
+        }
+
+        function openEmailModal(client) {
+            const modal = document.getElementById('emailModal');
+            const emailTemplate = generateEmailTemplate(client);
+            
+            document.getElementById('emailClientName').textContent = client.name;
+            document.getElementById('emailTo').value = client.email;
+            document.getElementById('emailMessage').value = emailTemplate;
+            
+            modal.style.display = 'block';
+        }
+
+        function generateEmailTemplate(client) {
+            return `Dear ${client.name.split(' ')[0]},
+
+I hope this message finds you well. My name is Jeremy Steiding from Floor Coverings International, and I wanted to reach out because I believe we can help transform your ${client.industry.toLowerCase()} projects with our premium flooring solutions.
+
+At Floor Coverings International, we specialize in bringing the showroom directly to you with our Mobile Flooring Showroom. Here's what sets us apart:
+
+🏠 FREE In-Home Consultation: We come to you with hundreds of samples
+⭐ 4.89/5 Star Rating: 400,000+ satisfied customers nationwide
+🔧 Full-Service Installation: We handle everything from furniture moving to cleanup
+✅ 100% Satisfaction Guarantee: We return 7-10 days post-installation to ensure your happiness
+
+For ${client.industry} professionals like yourself, we offer:
+• Extensive selection of carpet, vinyl, hardwood, laminate, and tile options
+• Competitive pricing with transparent proposals (no hidden fees)
+• Expert guidance on trending and timeless styles
+• Professional installation by trusted local teams
+• Comprehensive warranty coverage on both products and installation
+
+Given your expertise in ${client.industry.toLowerCase()}, I'd love to discuss how we can support your upcoming projects with premium flooring solutions that will impress your clients and fit your timeline.
+
+Would you be available for a brief 15-minute call this week to explore how Floor Coverings International can become your trusted flooring partner? I'm confident we can provide exceptional value for your ${client.industry.toLowerCase()} business.
+
+Looking forward to the opportunity to earn your trust and exceed your expectations.
+
+Best regards,
+
+Jeremy Steiding
+Floor Coverings International - Vista, California
+Phone: (760) 555-FLOOR
+Email: jeremy.steiding@floorcoveringsinternational.com
+Website: www.floorcoveringsinternational.com
+
+P.S. Ask me about our special financing options and volume discounts for ${client.industry.toLowerCase()} professionals!`;
+        }
+
+        function sendEmail() {
+            const to = document.getElementById('emailTo').value;
+            const subject = document.getElementById('emailSubject').value;
+            const message = document.getElementById('emailMessage').value;
+            
+            // Create mailto link
+            const mailtoLink = `mailto:${to}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(message)}`;
+            window.location.href = mailtoLink;
+            
+            closeEmailModal();
+            alert(`Email template opened in your default email client for ${to}`);
+        }
+
+        function closeEmailModal() {
+            document.getElementById('emailModal').style.display = 'none';
+        }
+
+        function addNewClient() {
+            currentEditingIndex = -1;
+            document.getElementById('modalTitle').textContent = 'Add New Client';
+            document.getElementById('clientForm').reset();
+            resetScores();
+            document.getElementById('clientModal').style.display = 'block';
+        }
+
+        function editClient(index) {
+            currentEditingIndex = index;
+            const client = clientData[index];
+            
+            document.getElementById('modalTitle').textContent = 'Edit Client';
+            document.getElementById('clientName').value = client.name;
+            document.getElementById('clientEmail').value = client.email;
+            document.getElementById('clientPhone').value = client.phone;
+            document.getElementById('clientAddress').value = client.address;
+            document.getElementById('clientIndustry').value = client.industry;
+            
+            document.getElementById('clientModal').style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('clientModal').style.display = 'none';
+        }
+
+        function updateScore(scoreType) {
+            const value = document.getElementById(scoreType).value;
+            document.getElementById(scoreType + 'Value').textContent = value;
+            
+            // Calculate total score
+            const profitability = parseInt(document.getElementById('profitability').value);
+            const urgency = parseInt(document.getElementById('urgency').value);
+            const reachability = parseInt(document.getElementById('reachability').value);
+            const engagement = parseInt(document.getElementById('engagement').value);
+            const sustainability = parseInt(document.getElementById('sustainability').value);
+            
+            const total = profitability + urgency + reachability + engagement + sustainability;
+            document.getElementById('totalScore').value = total + '/25';
+            
+            // Determine tier
+            let tier;
+            if (total >= 20) tier = 'Tier 1A';
+            else if (total >= 16) tier = 'Tier 1B';
+            else tier = 'Tier 1C';
+            
+            document.getElementById('tierLevel').value = tier;
+        }
+
+        function resetScores() {
+            ['profitability', 'urgency', 'reachability', 'engagement', 'sustainability'].forEach(score => {
+                document.getElementById(score).value = 3;
+                document.getElementById(score + 'Value').textContent = 3;
+            });
+            updateScore('profitability');
+        }
+
+        function filterTable() {
+            const searchInput = document.getElementById('searchInput').value.toLowerCase();
+            const tierFilter = document.getElementById('tierFilter').value;
+            const industryFilter = document.getElementById('industryFilter').value;
+            
+            const tbody = document.getElementById('clientTableBody');
+            const rows = tbody.getElementsByTagName('tr');
+            
+            for (let i = 0; i < rows.length; i++) {
+                const row = rows[i];
+                const cells = row.getElementsByTagName('td');
+                
+                const name = cells[0].textContent.toLowerCase();
+                const email = cells[1].textContent.toLowerCase();
+                const tier = cells[5].textContent;
+                const industry = cells[6].textContent;
+                
+                const matchesSearch = name.includes(searchInput) || email.includes(searchInput);
+                const matchesTier = !tierFilter || tier === tierFilter;
+                const matchesIndustry = !industryFilter || industry === industryFilter;
+                
+                row.style.display = (matchesSearch && matchesTier && matchesIndustry) ? '' : 'none';
+            }
+        }
+
+        function sortTable(columnIndex) {
+            const table = document.getElementById('clientTable');
+            const tbody = table.querySelector('tbody');
+            const rows = Array.from(tbody.rows);
+            
+            // Toggle sort direction
+            const currentOrder = table.getAttribute('data-sort-order') || 'asc';
+            const newOrder = currentOrder === 'asc' ? 'desc' : 'asc';
+            table.setAttribute('data-sort-order', newOrder);
+            
+            rows.sort((a, b) => {
+                const aText = a.cells[columnIndex].textContent.trim();
+                const bText = b.cells[columnIndex].textContent.trim();
+                
+                // Handle numeric columns
+                if (columnIndex === 4 || columnIndex === 7) { // P.U.R.E.S. Score or Revenue
+                    const aNum = parseFloat(aText.replace(/[^0-9.-]/g, ''));
+                    const bNum = parseFloat(bText.replace(/[^0-9.-]/g, ''));
+                    return newOrder === 'asc' ? aNum - bNum : bNum - aNum;
+                }
+                
+                // Handle date columns
+                if (columnIndex === 9) { // Last Contact
+                    const aDate = new Date(aText);
+                    const bDate = new Date(bText);
+                    return newOrder === 'asc' ? aDate - bDate : bDate - aDate;
+                }
+                
+                // Handle text columns
+                return newOrder === 'asc' ? aText.localeCompare(bText) : bText.localeCompare(aText);
+            });
+            
+            // Reappend sorted rows
+            rows.forEach(row => tbody.appendChild(row));
+        }
+
+        function exportData() {
+            const csv = convertToCSV(clientData);
+            downloadCSV(csv, 'fci_clients_' + new Date().toISOString().split('T')[0] + '.csv');
+        }
+
+        function convertToCSV(data) {
+            const headers = ['Name', 'Email', 'Phone', 'Address', 'PURES Score', 'Tier Level', 'Industry', 'Revenue Est', 'Contact Status', 'Last Contact', 'Notes'];
+            const rows = data.map(client => [
+                client.name,
+                client.email,
+                client.phone,
+                client.address,
+                client.puresScore,
+                client.tierLevel,
+                client.industry,
+                client.revenueEst,
+                client.contactStatus,
+                client.lastContact,
+                client.notes || ''
+            ]);
+            
+            return [headers, ...rows].map(row => row.map(field => `"${field}"`).join(',')).join('\n');
+        }
+
+        function downloadCSV(csv, filename) {
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.setAttribute('hidden', '');
+            a.setAttribute('href', url);
+            a.setAttribute('download', filename);
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+
+        // Handle form submission
+        document.getElementById('clientForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = {
+                name: document.getElementById('clientName').value,
+                email: document.getElementById('clientEmail').value,
+                phone: document.getElementById('clientPhone').value,
+                address: document.getElementById('clientAddress').value,
+                industry: document.getElementById('clientIndustry').value,
+                puresScore: parseInt(document.getElementById('totalScore').value),
+                tierLevel: document.getElementById('tierLevel').value,
+                revenueEst: '$50K', // Default
+                contactStatus: 'New Lead',
+                lastContact: new Date().toISOString().split('T')[0],
+                notes: 'Added via dashboard'
+            };
+            
+            if (currentEditingIndex >= 0) {
+                clientData[currentEditingIndex] = formData;
+            } else {
+                clientData.push(formData);
+            }
+            
+            populateTable();
+            closeModal();
+        });
+
+        // Initialize the dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            populateTable();
+            resetScores();
+        });
+    </script>
+</body>
+</html>

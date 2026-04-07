@@ -1,0 +1,1524 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>S.A.L.E. System - Blackband Design Client Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #000000;
+            color: #ffffff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+        }
+
+        .header {
+            background-color: #000000;
+            padding: 20px 0;
+            border-bottom: 3px solid #CF2030;
+            text-align: center;
+        }
+
+        .header img {
+            max-height: 80px;
+            width: auto;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .module {
+            background-color: #1a1a1a;
+            margin: 20px 0;
+            padding: 25px;
+            border-radius: 8px;
+            border-left: 4px solid #CF2030;
+        }
+
+        .module h2 {
+            color: #CF2030;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+
+        .module h3 {
+            color: #ffffff;
+            margin: 15px 0 10px 0;
+            font-size: 1.2em;
+        }
+
+        .search-controls {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .search-controls input, .search-controls select {
+            padding: 10px;
+            border: 2px solid #CF2030;
+            border-radius: 5px;
+            background-color: #2a2a2a;
+            color: #ffffff;
+        }
+
+        .search-controls input::placeholder {
+            color: #cccccc;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #2a2a2a;
+            border-radius: 8px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #444;
+        }
+
+        th {
+            background-color: #CF2030;
+            color: #ffffff;
+            cursor: pointer;
+            font-weight: bold;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        th:hover {
+            background-color: #a01525;
+        }
+
+        tr:hover {
+            background-color: #333333;
+        }
+
+        .tier-1a {
+            background-color: rgba(76, 175, 80, 0.2);
+        }
+
+        .tier-1b {
+            background-color: rgba(255, 193, 7, 0.2);
+        }
+
+        .tier-1c {
+            background-color: rgba(33, 150, 243, 0.2);
+        }
+
+        .btn {
+            padding: 8px 15px;
+            margin: 2px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background-color: #CF2030;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #a01525;
+        }
+
+        .btn-secondary {
+            background-color: #666;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: #555;
+        }
+
+        .scoring-form {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .score-input {
+            background-color: #2a2a2a;
+            padding: 15px;
+            border-radius: 5px;
+            border: 1px solid #CF2030;
+        }
+
+        .score-input label {
+            display: block;
+            margin-bottom: 8px;
+            color: #CF2030;
+            font-weight: bold;
+        }
+
+        .score-input input[type="range"] {
+            width: 100%;
+            margin: 10px 0;
+        }
+
+        .score-value {
+            color: #ffffff;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        .analytics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .metric-card {
+            background-color: #2a2a2a;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid #CF2030;
+        }
+
+        .metric-value {
+            font-size: 2em;
+            color: #CF2030;
+            font-weight: bold;
+        }
+
+        .metric-label {
+            color: #cccccc;
+            margin-top: 10px;
+        }
+
+        .footer {
+            background-color: #000000;
+            padding: 20px 0;
+            border-top: 3px solid #CF2030;
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        .footer img {
+            max-height: 40px;
+            width: auto;
+            opacity: 0.7;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+
+        .modal-content {
+            background-color: #1a1a1a;
+            margin: 5% auto;
+            padding: 30px;
+            border: 2px solid #CF2030;
+            border-radius: 8px;
+            width: 80%;
+            max-width: 600px;
+            color: #ffffff;
+        }
+
+        .close {
+            color: #CF2030;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: #ffffff;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 200px;
+            background-color: #2a2a2a;
+            border: 2px solid #CF2030;
+            border-radius: 5px;
+            color: #ffffff;
+            padding: 15px;
+            font-family: inherit;
+            resize: vertical;
+        }
+
+        .export-btn {
+            background-color: #28a745;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px 5px;
+        }
+
+        .export-btn:hover {
+            background-color: #218838;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .search-controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .scoring-form {
+                grid-template-columns: 1fr;
+            }
+            
+            table {
+                font-size: 0.8em;
+            }
+            
+            .modal-content {
+                width: 95%;
+                margin: 10% auto;
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports" />
+    </div>
+
+    <div class="container">
+        <h1 style="text-align: center; color: #CF2030; margin-bottom: 30px;">S.A.L.E. System Client Targeting Dashboard</h1>
+        <h2 style="text-align: center; color: #ffffff; margin-bottom: 40px;">Blackband Design - Premium Interior Design Services</h2>
+
+        <!-- S.A.L.E. SOURCING Module -->
+        <div class="module">
+            <h2>🎯 SOURCING - P.U.R.E.S. Client Scoring System</h2>
+            
+            <div class="analytics-grid">
+                <div class="metric-card">
+                    <div class="metric-value" id="tier1a-count">12</div>
+                    <div class="metric-label">Tier 1A Premium</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value" id="tier1b-count">18</div>
+                    <div class="metric-label">Tier 1B High-Value</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value" id="tier1c-count">20</div>
+                    <div class="metric-label">Tier 1C Qualified</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value" id="avg-score">3.8</div>
+                    <div class="metric-label">Average P.U.R.E.S. Score</div>
+                </div>
+            </div>
+
+            <h3>P.U.R.E.S. Scoring Interface</h3>
+            <div class="scoring-form">
+                <div class="score-input">
+                    <label>Profitability (Budget Capacity)</label>
+                    <input type="range" id="profitability" min="1" max="5" value="3" oninput="updateScore(this)">
+                    <div class="score-value">Score: <span id="profitability-value">3</span></div>
+                </div>
+                <div class="score-input">
+                    <label>Urgency (Active Pain Points)</label>
+                    <input type="range" id="urgency" min="1" max="5" value="3" oninput="updateScore(this)">
+                    <div class="score-value">Score: <span id="urgency-value">3</span></div>
+                </div>
+                <div class="score-input">
+                    <label>Reachability (Decision Makers)</label>
+                    <input type="range" id="reachability" min="1" max="5" value="3" oninput="updateScore(this)">
+                    <div class="score-value">Score: <span id="reachability-value">3</span></div>
+                </div>
+                <div class="score-input">
+                    <label>Engagement (Partnership Potential)</label>
+                    <input type="range" id="engagement" min="1" max="5" value="3" oninput="updateScore(this)">
+                    <div class="score-value">Score: <span id="engagement-value">3</span></div>
+                </div>
+                <div class="score-input">
+                    <label>Sustainability (Long-term Growth)</label>
+                    <input type="range" id="sustainability" min="1" max="5" value="3" oninput="updateScore(this)">
+                    <div class="score-value">Score: <span id="sustainability-value">3</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Client Database -->
+        <div class="module">
+            <h2>📊 Client Database - Costa Mesa Area (10 Mile Radius)</h2>
+            
+            <div class="search-controls">
+                <input type="text" id="searchInput" placeholder="Search clients..." onkeyup="filterTable()">
+                <select id="tierFilter" onchange="filterTable()">
+                    <option value="">All Tiers</option>
+                    <option value="1A">Tier 1A - Premium</option>
+                    <option value="1B">Tier 1B - High-Value</option>
+                    <option value="1C">Tier 1C - Qualified</option>
+                </select>
+                <select id="industryFilter" onchange="filterTable()">
+                    <option value="">All Industries</option>
+                    <option value="Real Estate">Real Estate</option>
+                    <option value="Technology">Technology</option>
+                    <option value="Healthcare">Healthcare</option>
+                    <option value="Finance">Finance</option>
+                    <option value="Legal">Legal</option>
+                    <option value="Hospitality">Hospitality</option>
+                </select>
+                <button class="export-btn" onclick="exportToCSV()">Export CSV</button>
+                <button class="export-btn" onclick="exportToPDF()">Export PDF</button>
+            </div>
+
+            <div style="overflow-x: auto; max-height: 600px; overflow-y: auto;">
+                <table id="clientTable">
+                    <thead>
+                        <tr>
+                            <th onclick="sortTable(0)">Client Name ↕️</th>
+                            <th onclick="sortTable(1)">Email ↕️</th>
+                            <th onclick="sortTable(2)">Phone ↕️</th>
+                            <th onclick="sortTable(3)">Address ↕️</th>
+                            <th onclick="sortTable(4)">P.U.R.E.S. Score ↕️</th>
+                            <th onclick="sortTable(5)">Tier ↕️</th>
+                            <th onclick="sortTable(6)">Industry ↕️</th>
+                            <th onclick="sortTable(7)">Revenue Est. ↕️</th>
+                            <th onclick="sortTable(8)">Contact Status ↕️</th>
+                            <th onclick="sortTable(9)">Last Contact ↕️</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="clientTableBody">
+                        <!-- Client data will be populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- ASSESSING Module -->
+        <div class="module">
+            <h2>🔍 ASSESSING - Buying Pattern Analysis</h2>
+            <div class="analytics-grid">
+                <div class="metric-card">
+                    <div class="metric-value">28%</div>
+                    <div class="metric-label">Analytical Buyers</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">35%</div>
+                    <div class="metric-label">Relationship Buyers</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">22%</div>
+                    <div class="metric-label">Efficiency Buyers</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">15%</div>
+                    <div class="metric-label">Innovation Buyers</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- LISTENING Module -->
+        <div class="module">
+            <h2>👂 LISTENING - Feedback Integration</h2>
+            <div class="analytics-grid">
+                <div class="metric-card">
+                    <div class="metric-value">85%</div>
+                    <div class="metric-label">Feedback Collection Rate</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">4.7</div>
+                    <div class="metric-label">Average Satisfaction Score</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">12</div>
+                    <div class="metric-label">Active Projects</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">96%</div>
+                    <div class="metric-label">Client Retention Rate</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- EMPOWERING Module -->
+        <div class="module">
+            <h2>⚡ EMPOWERING - Referral Strategy</h2>
+            <div class="analytics-grid">
+                <div class="metric-card">
+                    <div class="metric-value">34</div>
+                    <div class="metric-label">Active Referrals</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">2.3</div>
+                    <div class="metric-label">Avg Referrals per Client</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">67%</div>
+                    <div class="metric-label">Referral Conversion Rate</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">$45K</div>
+                    <div class="metric-label">Avg Referral Value</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Email Modal -->
+    <div id="emailModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h3 style="color: #CF2030;">Compose Email</h3>
+            <div style="margin: 20px 0;">
+                <label>To: <span id="emailTo" style="color: #CF2030;"></span></label>
+            </div>
+            <div style="margin: 20px 0;">
+                <label>Subject:</label>
+                <input type="text" id="emailSubject" style="width: 100%; margin-top: 10px; padding: 10px; background-color: #2a2a2a; border: 2px solid #CF2030; border-radius: 5px; color: #ffffff;">
+            </div>
+            <div style="margin: 20px 0;">
+                <label>Message:</label>
+                <textarea id="emailBody" placeholder="Email content will be auto-populated..."></textarea>
+            </div>
+            <button class="btn btn-primary" onclick="sendEmail()">Send Email</button>
+            <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+        </div>
+    </div>
+
+    <div class="footer">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports" />
+        <p style="color: #666; margin-top: 10px;">Powered by Higgins Reports S.A.L.E. System</p>
+    </div>
+
+    <script>
+        // Sample client data for Costa Mesa area (10 mile radius)
+        const clientData = [
+            {
+                name: "Michael Rodriguez",
+                email: "michael.rodriguez@oceanviewrealty.com",
+                phone: "(714) 555-0123",
+                address: "1234 Newport Blvd, Newport Beach, CA 92660",
+                puresScore: 4.8,
+                tier: "1A",
+                industry: "Real Estate",
+                revenue: "$2.5M",
+                contactStatus: "New Lead",
+                lastContact: "2024-01-15",
+                notes: "Luxury home developer, multiple properties"
+            },
+            {
+                name: "Jennifer Chen",
+                email: "j.chen@techstartup.io",
+                phone: "(949) 555-0147",
+                address: "5678 Innovation Dr, Irvine, CA 92618",
+                puresScore: 4.5,
+                tier: "1A",
+                industry: "Technology",
+                revenue: "$1.8M",
+                contactStatus: "Qualified",
+                lastContact: "2024-01-20",
+                notes: "Tech executive, modern aesthetic preference"
+            },
+            {
+                name: "David Williams",
+                email: "dwilliams@huntingtonmed.com",
+                phone: "(714) 555-0289",
+                address: "9876 Medical Center Dr, Huntington Beach, CA 92648",
+                puresScore: 4.2,
+                tier: "1A",
+                industry: "Healthcare",
+                revenue: "$3.2M",
+                contactStatus: "In Progress",
+                lastContact: "2024-01-18",
+                notes: "Medical practice owner, expanding clinic"
+            },
+            {
+                name: "Sarah Thompson",
+                email: "sarah@wealthadvisors.com",
+                phone: "(949) 555-0356",
+                address: "2468 Financial Plaza, Costa Mesa, CA 92626",
+                puresScore: 4.7,
+                tier: "1A",
+                industry: "Finance",
+                revenue: "$2.1M",
+                contactStatus: "Hot Lead",
+                lastContact: "2024-01-22",
+                notes: "Financial advisor, high-end office renovation"
+            },
+            {
+                name: "Robert Kim",
+                email: "rkim@lawfirm.legal",
+                phone: "(714) 555-0478",
+                address: "1357 Legal Ave, Fountain Valley, CA 92708",
+                puresScore: 3.9,
+                tier: "1B",
+                industry: "Legal",
+                revenue: "$1.5M",
+                contactStatus: "Contacted",
+                lastContact: "2024-01-10",
+                notes: "Law firm partner, traditional style preference"
+            },
+            {
+                name: "Lisa Martinez",
+                email: "lisa.martinez@hospitalitygroup.com",
+                phone: "(949) 555-0521",
+                address: "8642 Resort Blvd, Laguna Beach, CA 92651",
+                puresScore: 4.3,
+                tier: "1A",
+                industry: "Hospitality",
+                revenue: "$4.1M",
+                contactStatus: "Proposal Sent",
+                lastContact: "2024-01-19",
+                notes: "Boutique hotel owner, coastal aesthetic"
+            },
+            {
+                name: "James Park",
+                email: "j.park@innovatetech.com",
+                phone: "(714) 555-0634",
+                address: "7531 Tech Park Dr, Santa Ana, CA 92705",
+                puresScore: 4.1,
+                tier: "1B",
+                industry: "Technology",
+                revenue: "$1.9M",
+                contactStatus: "Follow-up Needed",
+                lastContact: "2024-01-12",
+                notes: "Software company CEO, minimalist design preference"
+            },
+            {
+                name: "Amanda Foster",
+                email: "afoster@realtygroup.net",
+                phone: "(949) 555-0789",
+                address: "4629 Harbor View Dr, Newport Beach, CA 92660",
+                puresScore: 4.6,
+                tier: "1A",
+                industry: "Real Estate",
+                revenue: "$2.8M",
+                contactStatus: "Meeting Scheduled",
+                lastContact: "2024-01-21",
+                notes: "Real estate developer, luxury market focus"
+            },
+            {
+                name: "Christopher Lee",
+                email: "clee@medicalcenter.org",
+                phone: "(714) 555-0876",
+                address: "3951 Health Plaza, Orange, CA 92868",
+                puresScore: 3.8,
+                tier: "1B",
+                industry: "Healthcare",
+                revenue: "$1.6M",
+                contactStatus: "New Lead",
+                lastContact: "2024-01-16",
+                notes: "Medical center administrator"
+            },
+            {
+                name: "Michelle Anderson",
+                email: "manderson@investmentfirm.com",
+                phone: "(949) 555-0943",
+                address: "6174 Investment Blvd, Irvine, CA 92618",
+                puresScore: 4.4,
+                tier: "1A",
+                industry: "Finance",
+                revenue: "$2.3M",
+                contactStatus: "Qualified",
+                lastContact: "2024-01-17",
+                notes: "Investment firm partner, modern office design"
+            },
+            {
+                name: "Kevin Zhang",
+                email: "kzhang@legalpartners.com",
+                phone: "(714) 555-1052",
+                address: "8395 Justice Way, Westminster, CA 92683",
+                puresScore: 3.7,
+                tier: "1B",
+                industry: "Legal",
+                revenue: "$1.4M",
+                contactStatus: "In Discussion",
+                lastContact: "2024-01-13",
+                notes: "Corporate law specialist"
+            },
+            {
+                name: "Rachel Green",
+                email: "rgreen@hotelgroup.com",
+                phone: "(949) 555-1165",
+                address: "5728 Hospitality Dr, Dana Point, CA 92629",
+                puresScore: 4.0,
+                tier: "1B",
+                industry: "Hospitality",
+                revenue: "$3.5M",
+                contactStatus: "Proposal Review",
+                lastContact: "2024-01-14",
+                notes: "Hotel chain owner, beachfront properties"
+            },
+            {
+                name: "Daniel Wu",
+                email: "dwu@techsolutions.io",
+                phone: "(714) 555-1278",
+                address: "2847 Innovation Circle, Tustin, CA 92780",
+                puresScore: 3.9,
+                tier: "1B",
+                industry: "Technology",
+                revenue: "$1.7M",
+                contactStatus: "Cold Lead",
+                lastContact: "2024-01-08",
+                notes: "IT solutions provider"
+            },
+            {
+                name: "Stephanie Davis",
+                email: "sdavis@premierealty.net",
+                phone: "(949) 555-1381",
+                address: "7162 Luxury Lane, Mission Viejo, CA 92691",
+                puresScore: 4.5,
+                tier: "1A",
+                industry: "Real Estate",
+                revenue: "$2.6M",
+                contactStatus: "Contract Negotiation",
+                lastContact: "2024-01-23",
+                notes: "Luxury real estate broker"
+            },
+            {
+                name: "Mark Johnson",
+                email: "mjohnson@healthsystem.org",
+                phone: "(714) 555-1494",
+                address: "9513 Medical Dr, Garden Grove, CA 92840",
+                puresScore: 3.6,
+                tier: "1C",
+                industry: "Healthcare",
+                revenue: "$1.3M",
+                contactStatus: "Initial Contact",
+                lastContact: "2024-01-11",
+                notes: "Healthcare administrator"
+            },
+            {
+                name: "Nicole Taylor",
+                email: "ntaylor@wealthmgmt.com",
+                phone: "(949) 555-1507",
+                address: "4185 Finance St, Lake Forest, CA 92630",
+                puresScore: 4.1,
+                tier: "1B",
+                industry: "Finance",
+                revenue: "$1.8M",
+                contactStatus: "Interested",
+                lastContact: "2024-01-19",
+                notes: "Wealth management advisor"
+            },
+            {
+                name: "Thomas Chen",
+                email: "tchen@corporatelaw.legal",
+                phone: "(714) 555-1620",
+                address: "6739 Legal Plaza, Anaheim, CA 92805",
+                puresScore: 3.5,
+                tier: "1C",
+                industry: "Legal",
+                revenue: "$1.2M",
+                contactStatus: "Follow-up Scheduled",
+                lastContact: "2024-01-09",
+                notes: "Corporate attorney"
+            },
+            {
+                name: "Karen White",
+                email: "kwhite@luxuryresorts.com",
+                phone: "(949) 555-1733",
+                address: "1926 Resort Circle, Laguna Niguel, CA 92677",
+                puresScore: 4.2,
+                tier: "1A",
+                industry: "Hospitality",
+                revenue: "$3.8M",
+                contactStatus: "Site Visit Planned",
+                lastContact: "2024-01-20",
+                notes: "Resort owner, spa and wellness focus"
+            },
+            {
+                name: "Brian Liu",
+                email: "bliu@techventures.com",
+                phone: "(714) 555-1846",
+                address: "8274 Startup Blvd, Brea, CA 92821",
+                puresScore: 3.8,
+                tier: "1B",
+                industry: "Technology",
+                revenue: "$1.6M",
+                contactStatus: "Warm Lead",
+                lastContact: "2024-01-15",
+                notes: "Tech startup founder"
+            },
+            {
+                name: "Jessica Brown",
+                email: "jbrown@premiumrealty.com",
+                phone: "(949) 555-1959",
+                address: "5461 Estate Dr, Coto de Caza, CA 92679",
+                puresScore: 4.3,
+                tier: "1A",
+                industry: "Real Estate",
+                revenue: "$2.4M",
+                contactStatus: "Consultation Booked",
+                lastContact: "2024-01-22",
+                notes: "High-end residential specialist"
+            },
+            {
+                name: "Ryan Garcia",
+                email: "rgarcia@medgroup.org",
+                phone: "(714) 555-2062",
+                address: "3782 Healthcare Blvd, Yorba Linda, CA 92886",
+                puresScore: 3.4,
+                tier: "1C",
+                industry: "Healthcare",
+                revenue: "$1.1M",
+                contactStatus: "Information Sent",
+                lastContact: "2024-01-07",
+                notes: "Medical group practice manager"
+            },
+            {
+                name: "Melissa Wong",
+                email: "mwong@investmentbank.com",
+                phone: "(949) 555-2175",
+                address: "7895 Banking Center, San Juan Capistrano, CA 92675",
+                puresScore: 4.0,
+                tier: "1B",
+                industry: "Finance",
+                revenue: "$2.0M",
+                contactStatus: "Meeting Complete",
+                lastContact: "2024-01-18",
+                notes: "Investment banker, executive offices"
+            },
+            {
+                name: "Andrew Moore",
+                email: "amoore@legalcorp.net",
+                phone: "(714) 555-2288",
+                address: "2153 Law Center Dr, Fullerton, CA 92831",
+                puresScore: 3.3,
+                tier: "1C",
+                industry: "Legal",
+                revenue: "$1.0M",
+                contactStatus: "Prospect",
+                lastContact: "2024-01-06",
+                notes: "Legal corporation partner"
+            },
+            {
+                name: "Victoria Adams",
+                email: "vadams@boutique.hotels",
+                phone: "(949) 555-2391",
+                address: "9617 Boutique Ave, Crystal Cove, CA 92651",
+                puresScore: 4.4,
+                tier: "1A",
+                industry: "Hospitality",
+                revenue: "$4.2M",
+                contactStatus: "Design Phase",
+                lastContact: "2024-01-24",
+                notes: "Boutique hotel chain owner"
+            },
+            {
+                name: "Gregory Kim",
+                email: "gkim@digitalagency.com",
+                phone: "(714) 555-2504",
+                address: "4738 Digital Dr, Placentia, CA 92870",
+                puresScore: 3.7,
+                tier: "1B",
+                industry: "Technology",
+                revenue: "$1.5M",
+                contactStatus: "Quote Requested",
+                lastContact: "2024-01-12",
+                notes: "Digital marketing agency owner"
+            },
+            {
+                name: "Samantha Wilson",
+                email: "swilson@elite.realty",
+                phone: "(949) 555-2617",
+                address: "6284 Elite Circle, Rancho Santa Margarita, CA 92688",
+                puresScore: 4.1,
+                tier: "1B",
+                industry: "Real Estate",
+                revenue: "$2.2M",
+                contactStatus: "Needs Assessment",
+                lastContact: "2024-01-16",
+                notes: "Elite realty firm owner"
+            },
+            {
+                name: "Anthony Lee",
+                email: "alee@specialty.medical",
+                phone: "(714) 555-2730",
+                address: "8159 Specialty Dr, Cypress, CA 90630",
+                puresScore: 3.2,
+                tier: "1C",
+                industry: "Healthcare",
+                revenue: "$950K",
+                contactStatus: "Cold Contact",
+                lastContact: "2024-01-05",
+                notes: "Specialty medical practice"
+            },
+            {
+                name: "Christina Rodriguez",
+                email: "crodriguez@private.wealth",
+                phone: "(949) 555-2843",
+                address: "1573 Wealth Ave, Aliso Viejo, CA 92656",
+                puresScore: 3.9,
+                tier: "1B",
+                industry: "Finance",
+                revenue: "$1.9M",
+                contactStatus: "Referral Received",
+                lastContact: "2024-01-17",
+                notes: "Private wealth advisor"
+            },
+            {
+                name: "Steven Chang",
+                email: "schang@law.associates",
+                phone: "(714) 555-2956",
+                address: "7426 Associates Dr, La Habra, CA 90631",
+                puresScore: 3.1,
+                tier: "1C",
+                industry: "Legal",
+                revenue: "$900K",
+                contactStatus: "Initial Email",
+                lastContact: "2024-01-04",
+                notes: "Law associates partner"
+            },
+            {
+                name: "Jennifer Park",
+                email: "jpark@resort.management",
+                phone: "(949) 555-3069",
+                address: "5962 Management Blvd, Monarch Beach, CA 92629",
+                puresScore: 4.3,
+                tier: "1A",
+                industry: "Hospitality",
+                revenue: "$3.9M",
+                contactStatus: "Project Planning",
+                lastContact: "2024-01-23",
+                notes: "Resort management company"
+            },
+            {
+                name: "Matthew Davis",
+                email: "mdavis@cloud.solutions",
+                phone: "(714) 555-3172",
+                address: "3241 Cloud Dr, Buena Park, CA 90620",
+                puresScore: 3.6,
+                tier: "1C",
+                industry: "Technology",
+                revenue: "$1.3M",
+                contactStatus: "Discovery Call",
+                lastContact: "2024-01-10",
+                notes: "Cloud solutions provider"
+            },
+            {
+                name: "Rebecca Johnson",
+                email: "rjohnson@commercial.realty",
+                phone: "(949) 555-3285",
+                address: "8807 Commercial St, Laguna Hills, CA 92653",
+                puresScore: 4.0,
+                tier: "1B",
+                industry: "Real Estate",
+                revenue: "$2.1M",
+                contactStatus: "Portfolio Review",
+                lastContact: "2024-01-19",
+                notes: "Commercial real estate specialist"
+            },
+            {
+                name: "Joshua Martinez",
+                email: "jmartinez@urgent.care",
+                phone: "(714) 555-3398",
+                address: "2674 Urgent Dr, Stanton, CA 90680",
+                puresScore: 3.0,
+                tier: "1C",
+                industry: "Healthcare",
+                revenue: "$850K",
+                contactStatus: "Lead Generated",
+                lastContact: "2024-01-03",
+                notes: "Urgent care facility owner"
+            },
+            {
+                name: "Laura Thompson",
+                email: "lthompson@investment.advisory",
+                phone: "(949) 555-3411",
+                address: "6135 Advisory Way, Trabuco Canyon, CA 92679",
+                puresScore: 3.8,
+                tier: "1B",
+                industry: "Finance",
+                revenue: "$1.7M",
+                contactStatus: "Consultation Scheduled",
+                lastContact: "2024-01-14",
+                notes: "Investment advisory firm"
+            },
+            {
+                name: "Jonathan Wu",
+                email: "jwu@legal.services",
+                phone: "(714) 555-3524",
+                address: "9452 Services Blvd, La Mirada, CA 90638",
+                puresScore: 2.9,
+                tier: "1C",
+                industry: "Legal",
+                revenue: "$800K",
+                contactStatus: "Marketing Outreach",
+                lastContact: "2024-01-02",
+                notes: "Legal services firm"
+            },
+            {
+                name: "Ashley Green",
+                email: "agreen@executive.suites",
+                phone: "(949) 555-3637",
+                address: "4829 Executive Dr, San Clemente, CA 92672",
+                puresScore: 4.2,
+                tier: "1A",
+                industry: "Hospitality",
+                revenue: "$3.6M",
+                contactStatus: "Contract Review",
+                lastContact: "2024-01-21",
+                notes: "Executive suites owner"
+            },
+            {
+                name: "Kevin Anderson",
+                email: "kanderson@software.dev",
+                phone: "(714) 555-3740",
+                address: "1786 Development Ave, Cerritos, CA 90703",
+                puresScore: 3.5,
+                tier: "1C",
+                industry: "Technology",
+                revenue: "$1.2M",
+                contactStatus: "Technical Discussion",
+                lastContact: "2024-01-09",
+                notes: "Software development company"
+            },
+            {
+                name: "Michelle Taylor",
+                email: "mtaylor@luxury.properties",
+                phone: "(949) 555-3853",
+                address: "7193 Properties Ln, Dove Canyon, CA 92679",
+                puresScore: 3.9,
+                tier: "1B",
+                industry: "Real Estate",
+                revenue: "$2.0M",
+                contactStatus: "Site Survey",
+                lastContact: "2024-01-15",
+                notes: "Luxury properties specialist"
+            },
+            {
+                name: "Richard Clark",
+                email: "rclark@dental.group",
+                phone: "(714) 555-3966",
+                address: "5517 Dental Plaza, Hawaiian Gardens, CA 90716",
+                puresScore: 2.8,
+                tier: "1C",
+                industry: "Healthcare",
+                revenue: "$750K",
+                contactStatus: "Initial Interest",
+                lastContact: "2024-01-01",
+                notes: "Dental group practice"
+            },
+            {
+                name: "Diana Lewis",
+                email: "dlewis@portfolio.management",
+                phone: "(949) 555-4079",
+                address: "8364 Portfolio Dr, Foothill Ranch, CA 92610",
+                puresScore: 3.7,
+                tier: "1B",
+                industry: "Finance",
+                revenue: "$1.6M",
+                contactStatus: "Proposal Development",
+                lastContact: "2024-01-13",
+                notes: "Portfolio management firm"
+            },
+            {
+                name: "Christopher Hall",
+                email: "chall@ip.law",
+                phone: "(714) 555-4182",
+                address: "2931 IP Center, Los Alamitos, CA 90720",
+                puresScore: 2.7,
+                tier: "1C",
+                industry: "Legal",
+                revenue: "$700K",
+                contactStatus: "Networking Event",
+                lastContact: "2023-12-31",
+                notes: "Intellectual property law firm"
+            },
+            {
+                name: "Maria Garcia",
+                email: "mgarcia@spa.wellness",
+                phone: "(949) 555-4295",
+                address: "6748 Wellness Way, Ladera Ranch, CA 92694",
+                puresScore: 4.1,
+                tier: "1B",
+                industry: "Hospitality",
+                revenue: "$2.3M",
+                contactStatus: "Design Consultation",
+                lastContact: "2024-01-18",
+                notes: "Spa and wellness center owner"
+            },
+            {
+                name: "Eric Wang",
+                email: "ewang@mobile.apps",
+                phone: "(714) 555-4308",
+                address: "4085 Mobile Blvd, Seal Beach, CA 90740",
+                puresScore: 3.4,
+                tier: "1C",
+                industry: "Technology",
+                revenue: "$1.1M",
+                contactStatus: "App Demo",
+                lastContact: "2024-01-08",
+                notes: "Mobile app development company"
+            },
+            {
+                name: "Natalie Brown",
+                email: "nbrown@estate.sales",
+                phone: "(949) 555-4421",
+                address: "9176 Estate Blvd, Portola Hills, CA 92679",
+                puresScore: 3.8,
+                tier: "1B",
+                industry: "Real Estate",
+                revenue: "$1.8M",
+                contactStatus: "Market Analysis",
+                lastContact: "2024-01-12",
+                notes: "Estate sales specialist"
+            },
+            {
+                name: "Paul Wilson",
+                email: "pwilson@cosmetic.surgery",
+                phone: "(714) 555-4534",
+                address: "7529 Surgery Center, Rossmoor, CA 90720",
+                puresScore: 2.6,
+                tier: "1C",
+                industry: "Healthcare",
+                revenue: "$650K",
+                contactStatus: "Brochure Sent",
+                lastContact: "2023-12-30",
+                notes: "Cosmetic surgery practice"
+            },
+            {
+                name: "Sandra Martinez",
+                email: "smartinez@hedge.fund",
+                phone: "(949) 555-4647",
+                address: "3692 Fund Ave, Coto de Caza, CA 92679",
+                puresScore: 3.6,
+                tier: "1C",
+                industry: "Finance",
+                revenue: "$1.4M",
+                contactStatus: "Fund Overview",
+                lastContact: "2024-01-11",
+                notes: "Hedge fund manager"
+            },
+            {
+                name: "Timothy Lee",
+                email: "tlee@patent.law",
+                phone: "(714) 555-4750",
+                address: "8241 Patent Dr, Artesia, CA 90701",
+                puresScore: 2.5,
+                tier: "1C",
+                industry: "Legal",
+                revenue: "$600K",
+                contactStatus: "Cold Call",
+                lastContact: "2023-12-29",
+                notes: "Patent law specialist"
+            },
+            {
+                name: "Caroline Davis",
+                email: "cdavis@conference.center",
+                phone: "(949) 555-4863",
+                address: "5814 Conference Way, Mission Viejo, CA 92691",
+                puresScore: 4.0,
+                tier: "1B",
+                industry: "Hospitality",
+                revenue: "$2.7M",
+                contactStatus: "Venue Tour",
+                lastContact: "2024-01-17",
+                notes: "Conference center owner"
+            },
+            {
+                name: "Alexander Kim",
+                email: "akim@ai.research",
+                phone: "(714) 555-4976",
+                address: "1457 Research Dr, Lakewood, CA 90712",
+                puresScore: 3.3,
+                tier: "1C",
+                industry: "Technology",
+                revenue: "$1.0M",
+                contactStatus: "Research Discussion",
+                lastContact: "2024-01-07",
+                notes: "AI research company"
+            },
+            {
+                name: "Heather Johnson",
+                email: "hjohnson@investment.real.estate",
+                phone: "(949) 555-5089",
+                address: "6385 Investment Ct, Las Flores, CA 92688",
+                puresScore: 3.7,
+                tier: "1B",
+                industry: "Real Estate",
+                revenue: "$1.9M",
+                contactStatus: "Investment Analysis",
+                lastContact: "2024-01-14",
+                notes: "Investment real estate specialist"
+            },
+            {
+                name: "George Chen",
+                email: "gchen@veterinary.hospital",
+                phone: "(714) 555-5192",
+                address: "9738 Veterinary Blvd, Bellflower, CA 90706",
+                puresScore: 2.4,
+                tier: "1C",
+                industry: "Healthcare",
+                revenue: "$550K",
+                contactStatus: "Service Overview",
+                lastContact: "2023-12-28",
+                notes: "Veterinary hospital owner"
+            }
+        ];
+
+        let filteredData = [...clientData];
+        let sortDirection = {};
+
+        function populateTable() {
+            const tbody = document.getElementById('clientTableBody');
+            tbody.innerHTML = '';
+
+            filteredData.forEach((client, index) => {
+                const row = document.createElement('tr');
+                row.className = `tier-${client.tier.toLowerCase()}`;
+                
+                row.innerHTML = `
+                    <td>${client.name}</td>
+                    <td>${client.email}</td>
+                    <td>${client.phone}</td>
+                    <td>${client.address}</td>
+                    <td>${client.puresScore}</td>
+                    <td><span style="color: ${getTierColor(client.tier)}">${client.tier}</span></td>
+                    <td>${client.industry}</td>
+                    <td>${client.revenue}</td>
+                    <td>${client.contactStatus}</td>
+                    <td>${client.lastContact}</td>
+                    <td>
+                        <button class="btn btn-primary" onclick="openEmailModal('${client.email}', '${client.name}', '${client.industry}')">Email</button>
+                        <button class="btn btn-secondary" onclick="callClient('${client.phone}')">Call</button>
+                    </td>
+                `;
+                
+                tbody.appendChild(row);
+            });
+        }
+
+        function getTierColor(tier) {
+            switch(tier) {
+                case '1A': return '#4CAF50';
+                case '1B': return '#FFC107';
+                case '1C': return '#2196F3';
+                default: return '#ffffff';
+            }
+        }
+
+        function filterTable() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const tierFilter = document.getElementById('tierFilter').value;
+            const industryFilter = document.getElementById('industryFilter').value;
+
+            filteredData = clientData.filter(client => {
+                const matchesSearch = client.name.toLowerCase().includes(searchTerm) ||
+                                    client.email.toLowerCase().includes(searchTerm) ||
+                                    client.industry.toLowerCase().includes(searchTerm) ||
+                                    client.address.toLowerCase().includes(searchTerm);
+                
+                const matchesTier = !tierFilter || client.tier === tierFilter;
+                const matchesIndustry = !industryFilter || client.industry === industryFilter;
+
+                return matchesSearch && matchesTier && matchesIndustry;
+            });
+
+            populateTable();
+        }
+
+        function sortTable(columnIndex) {
+            const columns = ['name', 'email', 'phone', 'address', 'puresScore', 'tier', 'industry', 'revenue', 'contactStatus', 'lastContact'];
+            const column = columns[columnIndex];
+            
+            if (!sortDirection[column] || sortDirection[column] === 'desc') {
+                sortDirection[column] = 'asc';
+            } else {
+                sortDirection[column] = 'desc';
+            }
+
+            filteredData.sort((a, b) => {
+                let valueA = a[column];
+                let valueB = b[column];
+
+                if (column === 'puresScore') {
+                    valueA = parseFloat(valueA);
+                    valueB = parseFloat(valueB);
+                } else if (column === 'lastContact') {
+                    valueA = new Date(valueA);
+                    valueB = new Date(valueB);
+                } else {
+                    valueA = valueA.toString().toLowerCase();
+                    valueB = valueB.toString().toLowerCase();
+                }
+
+                if (sortDirection[column] === 'asc') {
+                    return valueA > valueB ? 1 : -1;
+                } else {
+                    return valueA < valueB ? 1 : -1;
+                }
+            });
+
+            populateTable();
+        }
+
+        function openEmailModal(email, name, industry) {
+            const modal = document.getElementById('emailModal');
+            const emailTo = document.getElementById('emailTo');
+            const emailSubject = document.getElementById('emailSubject');
+            const emailBody = document.getElementById('emailBody');
+
+            emailTo.textContent = email;
+            emailSubject.value = `Transform Your ${industry} Space with Blackband Design`;
+            
+            const emailTemplate = generateEmailTemplate(name, industry);
+            emailBody.value = emailTemplate;
+
+            modal.style.display = 'block';
+        }
+
+        function generateEmailTemplate(name, industry) {
+            const templates = {
+                'Real Estate': `Dear ${name},
+
+As a leader in the ${industry} industry, you understand the importance of creating spaces that not only impress but also drive business results. At Blackband Design, we specialize in transforming commercial and residential properties into stunning environments that enhance property values and attract premium clients.
+
+Our award-winning interior design services include:
+• Luxury residential staging that accelerates sales by up to 40%
+• Commercial space design that enhances client experience and employee productivity
+• Model home design that showcases properties in their best light
+• Investment property optimization for maximum ROI
+
+Recent projects in your area have resulted in:
+- Average 25% increase in property values
+- 60% faster sales cycles for staged homes
+- Enhanced market positioning for luxury developments
+
+I'd love to discuss how Blackband Design can elevate your properties and strengthen your competitive advantage in the Costa Mesa market.
+
+Would you be available for a brief consultation this week? I can show you our portfolio of recent transformations and discuss how we can enhance your current and future projects.
+
+Best regards,
+Wendy Blackband
+Owner & Lead Designer
+Blackband Design
+wendy@blackbanddesign.com
+www.blackbanddesign.com`,
+
+                'Technology': `Dear ${name},
+
+Forward-thinking technology companies like yours understand that workspace design directly impacts innovation, productivity, and talent retention. At Blackband Design, we create inspiring work environments that reflect your company's vision while fostering creativity and collaboration.
+
+Our corporate design expertise includes:
+• Modern office design that attracts top talent
+• Collaborative spaces that enhance team productivity
+• Executive areas that impress clients and investors
+• Flexible workspace solutions for evolving business needs
+
+Recent technology clients have experienced:
+- 35% improvement in employee satisfaction scores
+- Enhanced company culture and brand representation
+- Increased client confidence during office visits
+- Better recruitment and retention of key talent
+
+Your innovative approach to technology deserves an equally innovative workspace. Let's discuss how Blackband Design can create an environment that supports your company's growth and success.
+
+I'd be happy to arrange a consultation where we can explore design concepts that align with your corporate culture and business objectives.
+
+Best regards,
+Wendy Blackband
+Owner & Lead Designer
+Blackband Design
+wendy@blackbanddesign.com
+www.blackbanddesign.com`,
+
+                'Healthcare': `Dear ${name},
+
+In the healthcare industry, environment plays a crucial role in patient comfort, staff efficiency, and overall treatment outcomes. Blackband Design specializes in creating healing environments that enhance the patient experience while supporting your medical practice's operational excellence.
+
+Our healthcare design services include:
+• Patient-centered waiting areas that reduce anxiety
+• Efficient clinical spaces optimized for workflow
+• Calming treatment rooms that promote healing
+• Professional administrative areas that inspire confidence
+
+Healthcare facilities we've designed report:
+- Improved patient satisfaction scores
+- Enhanced staff productivity and morale
+- Reduced patient stress and anxiety levels
+- Strengthened professional image and patient trust
+
+Your commitment to exceptional patient care deserves an equally exceptional environment. Let's explore how thoughtful design can support your practice's mission and enhance patient outcomes.
+
+I'd welcome the opportunity to discuss your facility's unique needs and show you how design can positively impact your practice.
+
+Best regards,
+Wendy Blackband
+Owner & Lead Designer
+Blackband Design
+wendy@blackbanddesign.com
+www.blackbanddesign.com`,
+
+                'Finance': `Dear ${name},
+
+In the competitive financial services industry, your office environment is a powerful tool for building client trust and confidence. Blackband Design creates sophisticated, professional spaces that reflect your expertise while providing the comfort and privacy your clients expect.
+
+Our financial services design expertise includes:
+• Executive offices that command respect and confidence
+• Client meeting rooms designed for important conversations
+• Sophisticated reception areas that make powerful first impressions
+• Secure, private spaces for confidential discussions
+
+Financial firms we've designed have seen:
+- Increased client confidence and trust
+- Enhanced professional image and market positioning
+- Improved client retention and referral rates
+- Better staff morale and productivity
+
+Your clients' financial future is in your hands – shouldn't your workspace reflect that level of importance? Let's create an environment that reinforces your commitment to excellence and client success.
+
+I'd be delighted to discuss how strategic design can strengthen your client relationships and support your business growth.
+
+Best regards,
+Wendy Blackband
+Owner & Lead Designer
+Blackband Design
+wendy@blackbanddesign.com
+www.blackbanddesign.com`,
+
+                'Legal': `Dear ${name},
+
+Law firms that invest in thoughtful office design send a clear message about their attention to detail, professionalism, and commitment to client success. Blackband Design understands the unique needs of legal practices and creates environments that inspire confidence while maintaining the dignity your profession deserves.
+
+Our legal industry expertise includes:
+• Impressive conference rooms for client meetings and depositions
+• Professional law libraries that support research and strategy
+• Secure offices designed for confidential client conversations
+• Sophisticated reception areas that establish immediate credibility
+
+Legal practices we've designed report:
+- Enhanced client confidence and trust
+- Improved ability to attract high-value clients
+- Better staff recruitment and retention
+- Increased referrals from impressed clients and colleagues
+
+Your legal expertise deserves a setting that reinforces your professionalism and success. Let's discuss how strategic design can strengthen your practice and support your client relationships.
+
+I would welcome the opportunity to show you our portfolio of legal office transformations and discuss your specific needs.
+
+Best regards,
+Wendy Blackband
+Owner & Lead Designer
+Blackband Design
+wendy@blackbanddesign.com
+www.blackbanddesign.com`,
+
+                'Hospitality': `Dear ${name},
+
+In the hospitality industry, exceptional design isn't just important – it's essential for creating memorable experiences that keep guests returning and recommending your establishment. Blackband Design specializes in creating distinctive environments that enhance guest satisfaction while optimizing operational efficiency.
+
+Our hospitality design services include:
+• Guest room design that exceeds expectations
+• Common areas that encourage gathering and relaxation
+• Dining spaces that enhance the culinary experience
+• Reception and lobby areas that create lasting first impressions
+
+Hospitality projects we've completed have achieved:
+- Increased guest satisfaction scores and online reviews
+- Higher occupancy rates and revenue per room
+- Enhanced brand recognition and market differentiation
+- Improved operational efficiency and staff productivity
+
+Your guests deserve an experience that exceeds their expectations. Let's create an environment that not only impresses but also drives customer loyalty and business success.
+
+I'd love to discuss your vision and show you how thoughtful design can transform your hospitality business.
+
+Best regards,
+Wendy Blackband
+Owner & Lead Designer
+Blackband Design
+wendy@blackbanddesign.com
+www.blackbanddesign.com`
+            };
+
+            return templates[industry] || templates['Technology'];
+        }
+
+        function closeModal() {
+            document.getElementById('emailModal').style.display = 'none';
+        }
+
+        function sendEmail() {
+            const emailTo = document.getElementById('emailTo').textContent;
+            const emailSubject = document.getElementById('emailSubject').value;
+            const emailBody = document.getElementById('emailBody').value;
+
+            const mailtoLink = `mailto:${emailTo}?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
+            window.location.href = mailtoLink;
+
+            closeModal();
+        }
+
+        function callClient(phone) {
+            window.location.href = `tel:${phone}`;
+        }
+
+        function exportToCSV() {
+            let csv = 'Client Name,Email,Phone,Address,PURES Score,Tier,Industry,Revenue,Contact Status,Last Contact\n';
+            
+            filteredData.forEach(client => {
+                csv += `"${client.name}","${client.email}","${client.phone}","${client.address}",${client.puresScore},"${client.tier}","${client.industry}","${client.revenue}","${client.contactStatus}","${client.lastContact}"\n`;
+            });
+
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.setAttribute('hidden', '');
+            a.setAttribute('href', url);
+            a.setAttribute('download', 'blackband_design_clients.csv');
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+
+        function exportToPDF() {
+            window.print();
+        }
+
+        function updateScore(element) {
+            const scoreId = element.id + '-value';
+            document.getElementById(scoreId).textContent = element.value;
+        }
+
+        // Initialize the table when the page loads
+        window.onload = function() {
+            populateTable();
+        };
+
+        // Close modal when clicking outside of it
+        window.onclick = function(event) {
+            const modal = document.getElementById('emailModal');
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        };
+    </script>
+</body>
+</html>

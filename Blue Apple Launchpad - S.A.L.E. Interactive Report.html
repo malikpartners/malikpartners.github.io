@@ -1,0 +1,497 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>S.A.L.E. Report - Blue Apple Launchpad</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:#000;color:#e0e0e0;font-family:'Segoe UI',Arial,sans-serif;min-height:100vh}
+  ::-webkit-scrollbar{width:8px}
+  ::-webkit-scrollbar-track{background:#111}
+  ::-webkit-scrollbar-thumb{background:#CF2030;border-radius:4px}
+  a{color:#CF2030;text-decoration:none}
+  a:hover{text-decoration:underline;color:#ff4555}
+
+  /* HEADER */
+  .header{background:linear-gradient(135deg,#0a0a0a,#1a1a1a);padding:18px 30px;display:flex;align-items:center;justify-content:space-between;border-bottom:3px solid #CF2030;position:sticky;top:0;z-index:100}
+  .header img{height:52px}
+  .header-title{color:#fff;font-size:14px;letter-spacing:1px;text-transform:uppercase;opacity:.7}
+
+  /* NAV */
+  .nav{background:#0d0d0d;border-bottom:1px solid #222;padding:0 30px;position:sticky;top:91px;z-index:99;display:flex;flex-wrap:wrap;gap:0}
+  .nav a{color:#CF2030;padding:13px 20px;font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:.8px;border-bottom:3px solid transparent;transition:.2s}
+  .nav a:hover,.nav a.active{background:#1a0a0c;border-bottom-color:#CF2030;text-decoration:none;color:#ff4555}
+
+  /* MAIN */
+  .main{max-width:1280px;margin:0 auto;padding:30px 20px 60px}
+
+  /* SECTION */
+  .section{margin-bottom:40px;background:#111;border-radius:12px;border:1px solid #222;overflow:hidden}
+  .section-header{background:linear-gradient(135deg,#CF2030,#a01828);padding:16px 24px;display:flex;align-items:center;gap:12px}
+  .section-header h2{color:#fff;font-size:18px;font-weight:700}
+  .section-header .icon{font-size:22px}
+  .section-body{padding:24px}
+
+  /* SEARCH */
+  .search-bar{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap}
+  .search-bar input{background:#1a1a1a;border:1px solid #333;color:#fff;padding:10px 16px;border-radius:8px;font-size:14px;flex:1;min-width:200px;outline:none;transition:.2s}
+  .search-bar input:focus{border-color:#CF2030;box-shadow:0 0 0 2px rgba(207,32,48,.25)}
+
+  /* TABLES */
+  table{width:100%;border-collapse:collapse;font-size:14px}
+  thead th{background:#1a1a1a;color:#CF2030;padding:12px 16px;text-align:left;cursor:pointer;user-select:none;position:relative;border-bottom:2px solid #CF2030;white-space:nowrap}
+  thead th:hover{background:#222}
+  thead th .sort-arrow{margin-left:6px;font-size:10px;opacity:.5}
+  thead th.sorted .sort-arrow{opacity:1}
+  tbody td{padding:12px 16px;border-bottom:1px solid #1e1e1e}
+  tbody tr:hover{background:#1a1a1a}
+  tbody tr:nth-child(even){background:#0d0d0d}
+  tbody tr:nth-child(even):hover{background:#1a1a1a}
+
+  /* CARDS */
+  .card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-bottom:20px}
+  .card{background:linear-gradient(145deg,#1a1a1a,#111);border:1px solid #222;border-radius:10px;padding:20px;text-align:center;transition:.2s}
+  .card:hover{border-color:#CF2030;transform:translateY(-2px);box-shadow:0 8px 24px rgba(207,32,48,.15)}
+  .card .card-value{font-size:32px;font-weight:800;color:#CF2030;margin:8px 0}
+  .card .card-label{font-size:12px;text-transform:uppercase;letter-spacing:1px;opacity:.6}
+
+  /* TAGS */
+  .tag{display:inline-block;background:#1e0a0c;color:#CF2030;padding:5px 12px;border-radius:20px;font-size:12px;margin:3px;border:1px solid #3a1118}
+
+  /* BUTTONS */
+  .btn{display:inline-flex;align-items:center;gap:8px;padding:12px 24px;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;border:none;transition:.2s;text-decoration:none}
+  .btn-primary{background:#CF2030;color:#fff}
+  .btn-primary:hover{background:#e0253a;transform:translateY(-1px);box-shadow:0 4px 16px rgba(207,32,48,.3);color:#fff;text-decoration:none}
+  .btn-outline{background:transparent;color:#CF2030;border:2px solid #CF2030}
+  .btn-outline:hover{background:#CF2030;color:#fff;text-decoration:none}
+  .btn-sm{padding:8px 16px;font-size:12px}
+
+  /* CHART CONTAINER */
+  .chart-wrap{position:relative;padding:20px 0}
+  .bar-chart{display:flex;align-items:flex-end;gap:12px;height:220px;padding:0 10px;border-bottom:2px solid #333}
+  .bar-col{display:flex;flex-direction:column;align-items:center;flex:1;gap:6px}
+  .bar{background:linear-gradient(180deg,#CF2030,#8a1520);border-radius:6px 6px 0 0;width:100%;min-width:30px;transition:.4s;cursor:pointer;position:relative}
+  .bar:hover{background:linear-gradient(180deg,#e0253a,#CF2030);transform:scaleY(1.02)}
+  .bar-label{font-size:10px;text-align:center;color:#999;margin-top:6px;word-break:break-word}
+  .bar-value{font-size:11px;font-weight:700;color:#CF2030}
+  .donut-container{display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:30px}
+  .donut-legend{display:flex;flex-direction:column;gap:8px}
+  .donut-legend-item{display:flex;align-items:center;gap:8px;font-size:13px}
+  .donut-legend-color{width:14px;height:14px;border-radius:3px}
+
+  /* PRIORITY BADGES */
+  .badge-gold{background:#ffd700;color:#000;padding:4px 10px;border-radius:4px;font-size:11px;font-weight:700}
+  .badge-silver{background:#c0c0c0;color:#000;padding:4px 10px;border-radius:4px;font-size:11px;font-weight:700}
+  .badge-bronze{background:#cd7f32;color:#000;padding:4px 10px;border-radius:4px;font-size:11px;font-weight:700}
+
+  /* OBSERVATIONS */
+  .obs-list{list-style:none;counter-reset:obs}
+  .obs-list li{counter-increment:obs;padding:14px 14px 14px 54px;position:relative;border-bottom:1px solid #1e1e1e}
+  .obs-list li:last-child{border-bottom:none}
+  .obs-list li::before{content:counter(obs);position:absolute;left:14px;top:14px;background:#CF2030;color:#fff;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700}
+  .obs-list li strong{color:#CF2030}
+
+  /* VALUES GRID */
+  .values-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+  .value-card{background:#0d0d0d;border:1px solid #222;border-radius:10px;padding:20px;border-left:4px solid #CF2030}
+  .value-card h4{color:#CF2030;margin-bottom:6px;font-size:14px;text-transform:uppercase;letter-spacing:.5px}
+  .value-card p{font-size:13px;opacity:.8;line-height:1.5}
+
+  /* FOOTER */
+  .footer{background:#0a0a0a;border-top:2px solid #CF2030;padding:24px 30px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px}
+  .footer img{height:32px;opacity:.7}
+  .footer-text{font-size:11px;opacity:.4}
+
+  /* MODAL */
+  .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:200;align-items:center;justify-content:center}
+  .modal-overlay.active{display:flex}
+  .modal{background:#1a1a1a;border:1px solid #333;border-radius:12px;padding:30px;max-width:560px;width:90%;max-height:80vh;overflow-y:auto}
+  .modal h3{color:#CF2030;margin-bottom:16px}
+  .modal textarea,.modal input[type=text],.modal input[type=email]{width:100%;background:#0d0d0d;border:1px solid #333;color:#fff;padding:10px 14px;border-radius:6px;font-size:14px;margin-bottom:12px;font-family:inherit;resize:vertical}
+  .modal textarea{min-height:160px}
+  .modal label{font-size:12px;color:#999;display:block;margin-bottom:4px}
+  .modal-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:16px}
+  .close-modal{position:absolute;top:10px;right:14px;background:none;border:none;color:#999;font-size:24px;cursor:pointer}
+
+  /* RESPONSIVE */
+  @media(max-width:768px){
+    .header{padding:12px 16px}
+    .header img{height:36px}
+    .nav{padding:0 10px}
+    .nav a{padding:10px 12px;font-size:11px}
+    .main{padding:16px 10px 40px}
+    .section-body{padding:16px}
+    .card .card-value{font-size:24px}
+    .bar-chart{height:160px}
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports">
+  <span class="header-title">S.A.L.E. Client Strategy Report</span>
+</div>
+
+<!-- NAV -->
+<div class="nav" id="mainNav">
+  <a href="#snapshot" class="active" onclick="scrollToSection(event,'snapshot')">Snapshot</a>
+  <a href="#services" onclick="scrollToSection(event,'services')">Services</a>
+  <a href="#metrics" onclick="scrollToSection(event,'metrics')">Metrics</a>
+  <a href="#values" onclick="scrollToSection(event,'values')">Values</a>
+  <a href="#observations" onclick="scrollToSection(event,'observations')">Observations</a>
+  <a href="#classification" onclick="scrollToSection(event,'classification')">Classification</a>
+  <a href="#contact" onclick="scrollToSection(event,'contact')">Contact</a>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="main">
+
+  <!-- CLIENT SNAPSHOT -->
+  <div class="section" id="snapshot">
+    <div class="section-header"><span class="icon">📋</span><h2>Client Snapshot — Blue Apple Launchpad</h2></div>
+    <div class="section-body">
+      <div class="search-bar"><input type="text" id="snapshotSearch" placeholder="🔍 Search snapshot fields..." oninput="filterTable('snapshotTable',this.value)"></div>
+      <table id="snapshotTable">
+        <thead><tr><th onclick="sortTable('snapshotTable',0)">Field <span class="sort-arrow">▲▼</span></th><th onclick="sortTable('snapshotTable',1)">Details <span class="sort-arrow">▲▼</span></th></tr></thead>
+        <tbody>
+          <tr><td>Contact Name</td><td>Austin Gwaltney</td></tr>
+          <tr><td>Email</td><td><a href="mailto:austin.gwaltney@blueapplelaunchpad.com">austin.gwaltney@blueapplelaunchpad.com</a></td></tr>
+          <tr><td>Title</td><td>Business Owner</td></tr>
+          <tr><td>Company</td><td>Blue Apple Launchpad (Blue Apple Marketing, LLC)</td></tr>
+          <tr><td>Website</td><td><a href="https://blueapplelaunchpad.com" target="_blank">blueapplelaunchpad.com</a></td></tr>
+          <tr><td>LinkedIn (Personal)</td><td><a href="https://www.linkedin.com/in/austin-gwaltney-161200103" target="_blank">Austin Gwaltney</a></td></tr>
+          <tr><td>LinkedIn (Company)</td><td><a href="https://www.linkedin.com/company/104394612" target="_blank">Blue Apple Launchpad</a></td></tr>
+          <tr><td>Location</td><td>Sacramento, California, United States</td></tr>
+          <tr><td>Company Size</td><td>11–50 employees</td></tr>
+          <tr><td>Industry</td><td>Marketing & Advertising / Marketing Services</td></tr>
+          <tr><td>Lead Date</td><td>March 26, 2026</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- SERVICES -->
+  <div class="section" id="services">
+    <div class="section-header"><span class="icon">🛠️</span><h2>Services Offered</h2></div>
+    <div class="section-body">
+      <p style="margin-bottom:6px;opacity:.6;font-size:13px;">Offices: <span class="tag">Atlanta, GA</span> <span class="tag">Sacramento, CA</span></p>
+      <div class="search-bar" style="margin-top:12px"><input type="text" id="servicesSearch" placeholder="🔍 Search services..." oninput="filterTable('servicesTable',this.value)"></div>
+      <table id="servicesTable">
+        <thead><tr>
+          <th onclick="sortTable('servicesTable',0)">Service <span class="sort-arrow">▲▼</span></th>
+          <th onclick="sortTable('servicesTable',1)">Description <span class="sort-arrow">▲▼</span></th>
+        </tr></thead>
+        <tbody>
+          <tr><td>SEO</td><td>Improves search engine ranking to drive organic traffic and visibility</td></tr>
+          <tr><td>Facebook Ads</td><td>Targeted ad campaigns to reach ideal audiences and drive sales</td></tr>
+          <tr><td>Google Ads</td><td>Google Ads Partner — high-quality traffic through paid search</td></tr>
+          <tr><td>Influencer Marketing</td><td>621+ influencers booked; specializes in local business influencer marketing</td></tr>
+          <tr><td>Email Marketing</td><td>Personalized campaigns driving conversions (240%+ conversion improvements documented)</td></tr>
+          <tr><td>CRO</td><td>Website UX and design improvements to increase paying customers</td></tr>
+          <tr><td>Social Media Marketing</td><td>Brand-building and customer engagement across platforms</td></tr>
+          <tr><td>Web Design & Development</td><td>Mobile-optimized, user-friendly websites</td></tr>
+          <tr><td>Call Center Support</td><td>Customer inquiry management to build trust and loyalty</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- METRICS / KPIs -->
+  <div class="section" id="metrics">
+    <div class="section-header"><span class="icon">🏆</span><h2>Key Metrics & Differentiators</h2></div>
+    <div class="section-body">
+
+      <!-- KPI Cards -->
+      <div class="card-grid">
+        <div class="card"><div class="card-label">Businesses Owned</div><div class="card-value">15</div><div class="card-label">Across 5 States</div></div>
+        <div class="card"><div class="card-label">Influencers Booked</div><div class="card-value">621+</div><div class="card-label">Local Business Focus</div></div>
+        <div class="card"><div class="card-label">Avg Revenue Increase</div><div class="card-value">$42K+</div><div class="card-label">Per Client</div></div>
+        <div class="card"><div class="card-label">Email Conversion Lift</div><div class="card-value">240%</div><div class="card-label">Documented Improvement</div></div>
+        <div class="card"><div class="card-label">Booking Increase</div><div class="card-value">22–47%</div><div class="card-label">For Clients</div></div>
+        <div class="card"><div class="card-label">Growth Guarantee</div><div class="card-value">20%+</div><div class="card-label">In 90 Days</div></div>
+      </div>
+
+      <!-- Searchable Table -->
+      <div class="search-bar"><input type="text" id="metricsSearch" placeholder="🔍 Search metrics..." oninput="filterTable('metricsTable',this.value)"></div>
+      <table id="metricsTable">
+        <thead><tr>
+          <th onclick="sortTable('metricsTable',0)">Metric <span class="sort-arrow">▲▼</span></th>
+          <th onclick="sortTable('metricsTable',1)">Value <span class="sort-arrow">▲▼</span></th>
+        </tr></thead>
+        <tbody>
+          <tr><td>Businesses Personally Owned</td><td>15 locations across 5 states</td></tr>
+          <tr><td>Influencers Booked</td><td>621+</td></tr>
+          <tr><td>Average Revenue Increase</td><td>$42K+</td></tr>
+          <tr><td>Google Ads Partner</td><td>✅ Certified</td></tr>
+          <tr><td>Growth Guarantee</td><td>20%+ growth in 90 days</td></tr>
+          <tr><td>Booking Increase for Clients</td><td>22–47% increase documented</td></tr>
+          <tr><td>Email Conversion Improvement</td><td>240%+</td></tr>
+          <tr><td>Crowdsourced Strategies</td><td>15+ owned locations & client locations</td></tr>
+          <tr><td>States of Operation</td><td>5</td></tr>
+          <tr><td>Company Size</td><td>11–50 employees</td></tr>
+        </tbody>
+      </table>
+
+      <!-- BAR CHART -->
+      <h3 style="color:#CF2030;margin:30px 0 14px;font-size:15px">📊 Key Performance Metrics (Visual)</h3>
+      <div class="chart-wrap">
+        <div class="bar-chart" id="barChart"></div>
+      </div>
+
+      <!-- DONUT CHART — Service Distribution -->
+      <h3 style="color:#CF2030;margin:30px 0 14px;font-size:15px">🍩 Service Portfolio Distribution</h3>
+      <div class="donut-container">
+        <svg width="200" height="200" viewBox="0 0 42 42" id="donutChart">
+          <circle cx="21" cy="21" r="15.9" fill="transparent" stroke="#CF2030" stroke-width="4" stroke-dasharray="11.1 88.9" stroke-dashoffset="25" />
+          <circle cx="21" cy="21" r="15.9" fill="transparent" stroke="#e05560" stroke-width="4" stroke-dasharray="11.1 88.9" stroke-dashoffset="13.9" />
+          <circle cx="21" cy="21" r="15.9" fill="transparent" stroke="#ff8a94" stroke-width="4" stroke-dasharray="11.1 88.9" stroke-dashoffset="2.8" />
+          <circle cx="21" cy="21" r="15.9" fill="transparent" stroke="#8a1520" stroke-width="4" stroke-dasharray="11.1 88.9" stroke-dashoffset="91.7" />
+          <circle cx="21" cy="21" r="15.9" fill="transparent" stroke="#ff4555" stroke-width="4" stroke-dasharray="11.1 88.9" stroke-dashoffset="80.6" />
+          <circle cx="21" cy="21" r="15.9" fill="transparent" stroke="#b22030" stroke-width="4" stroke-dasharray="11.1 88.9" stroke-dashoffset="69.5" />
+          <circle cx="21" cy="21" r="15.9" fill="transparent" stroke="#d44050" stroke-width="4" stroke-dasharray="11.1 88.9" stroke-dashoffset="58.4" />
+          <circle cx="21" cy="21" r="15.9" fill="transparent" stroke="#661018" stroke-width="4" stroke-dasharray="11.1 88.9" stroke-dashoffset="47.3" />
+          <circle cx="21" cy="21" r="15.9" fill="transparent" stroke="#ff6a78" stroke-width="4" stroke-dasharray="11.1 88.9" stroke-dashoffset="36.2" />
+          <text x="21" y="22" text-anchor="middle" font-size="3.6" fill="#fff" font-weight="700">9</text>
+          <text x="21" y="25" text-anchor="middle" font-size="2" fill="#999">Services</text>
+        </svg>
+        <div class="donut-legend">
+          <div class="donut-legend-item"><div class="donut-legend-color" style="background:#CF2030"></div>SEO</div>
+          <div class="donut-legend-item"><div class="donut-legend-color" style="background:#e05560"></div>Facebook Ads</div>
+          <div class="donut-legend-item"><div class="donut-legend-color" style="background:#ff8a94"></div>Google Ads</div>
+          <div class="donut-legend-item"><div class="donut-legend-color" style="background:#8a1520"></div>Influencer Marketing</div>
+          <div class="donut-legend-item"><div class="donut-legend-color" style="background:#ff4555"></div>Email Marketing</div>
+          <div class="donut-legend-item"><div class="donut-legend-color" style="background:#b22030"></div>CRO</div>
+          <div class="donut-legend-item"><div class="donut-legend-color" style="background:#d44050"></div>Social Media Marketing</div>
+          <div class="donut-legend-item"><div class="donut-legend-color" style="background:#661018"></div>Web Design & Dev</div>
+          <div class="donut-legend-item"><div class="donut-legend-color" style="background:#ff6a78"></div>Call Center Support</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CORE VALUES -->
+  <div class="section" id="values">
+    <div class="section-header"><span class="icon">🎯</span><h2>Core Values</h2></div>
+    <div class="section-body">
+      <div class="values-grid">
+        <div class="value-card"><h4>💡 Innovation</h4><p>Constantly exploring new ideas and technologies to deliver cutting-edge solutions.</p></div>
+        <div class="value-card"><h4>🤝 Integrity</h4><p>Highest standards of honesty and transparency in all client relationships.</p></div>
+        <div class="value-card"><h4>❤️ Customer Focus</h4><p>Understanding needs and exceeding expectations with every interaction.</p></div>
+        <div class="value-card"><h4>🌱 Sustainability</h4><p>Minimizing environmental footprint and promoting sustainable practices.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STRATEGIC OBSERVATIONS -->
+  <div class="section" id="observations">
+    <div class="section-header"><span class="icon">🔍</span><h2>Strategic Observations for BNI Engagement</h2></div>
+    <div class="section-body">
+      <h3 style="color:#CF2030;margin-bottom:16px;font-size:15px">Why Austin Gwaltney Is a High-Value BNI Prospect</h3>
+      <ol class="obs-list">
+        <li><strong>Multi-Business Owner</strong> — Austin isn't just a marketer; he owns 15+ local businesses. He understands the referral pipeline from both sides — as a service provider AND a business needing referrals.</li>
+        <li><strong>Local Business Focus</strong> — Blue Apple's entire model is built around helping local businesses grow — perfectly aligned with BNI's referral-based ecosystem of local service professionals.</li>
+        <li><strong>Proven Results & Credibility</strong> — With documented case studies (fitness studios, med spas, axe-throwing venues, escape rooms), Austin brings a track record that builds trust quickly in a chapter.</li>
+        <li><strong>Wide Contact Sphere Potential</strong> — Serving multiple industries (fitness, entertainment, hospitality, health/wellness), Austin would naturally connect with dozens of BNI classifications: web designers, graphic designers, business consultants, event planners, CPAs, commercial insurance agents, and more.</li>
+        <li><strong>Sacramento & Atlanta Presence</strong> — Dual-market presence means potential involvement in BNI chapters in two major metro areas.</li>
+      </ol>
+
+      <!-- Businesses Owned -->
+      <h3 style="color:#CF2030;margin:28px 0 12px;font-size:15px">🏢 Businesses Owned by Austin Gwaltney</h3>
+      <div class="search-bar"><input type="text" id="bizSearch" placeholder="🔍 Search businesses..." oninput="filterTable('bizTable',this.value)"></div>
+      <table id="bizTable">
+        <thead><tr>
+          <th onclick="sortTable('bizTable',0)">Business Name <span class="sort-arrow">▲▼</span></th>
+          <th onclick="sortTable('bizTable',1)">Industry <span class="sort-arrow">▲▼</span></th>
+        </tr></thead>
+        <tbody>
+          <tr><td>Axemaster Axe Throwing Experience</td><td>Entertainment</td></tr>
+          <tr><td>Fitness Achievement Center Gym Space</td><td>Fitness</td></tr>
+          <tr><td>Total Body Tone Project Fitness Brand</td><td>Fitness</td></tr>
+          <tr><td>Paranoia Quest Escape Rooms</td><td>Entertainment</td></tr>
+          <tr><td>Spin Art Entertainment Franchise</td><td>Entertainment / Franchise</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- CLASSIFICATION FIT -->
+  <div class="section" id="classification">
+    <div class="section-header"><span class="icon">📌</span><h2>Recommended BNI Classification Fit</h2></div>
+    <div class="section-body">
+      <div class="search-bar"><input type="text" id="classSearch" placeholder="🔍 Search classifications..." oninput="filterTable('classTable',this.value)"></div>
+      <table id="classTable">
+        <thead><tr>
+          <th onclick="sortTable('classTable',0)">Priority <span class="sort-arrow">▲▼</span></th>
+          <th onclick="sortTable('classTable',1)">Classification <span class="sort-arrow">▲▼</span></th>
+          <th onclick="sortTable('classTable',2)">Rationale <span class="sort-arrow">▲▼</span></th>
+        </tr></thead>
+        <tbody>
+          <tr><td><span class="badge-gold">🥇 PRIMARY</span></td><td>Digital Marketing</td><td>Core service offering — SEO, ads, social media</td></tr>
+          <tr><td><span class="badge-silver">🥈 ALTERNATE</span></td><td>Marketing Consultant</td><td>Strategy-focused positioning leveraging owned businesses</td></tr>
+          <tr><td><span class="badge-bronze">🥉 ALTERNATE</span></td><td>Social Media</td><td>If Digital Marketing seat is filled</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- CONTACT SECTION -->
+  <div class="section" id="contact">
+    <div class="section-header"><span class="icon">📬</span><h2>Contact Austin Gwaltney</h2></div>
+    <div class="section-body" style="text-align:center">
+      <p style="margin-bottom:20px;opacity:.7;font-size:14px">Reach out to Austin about visiting a BNI chapter or exploring partnership opportunities.</p>
+      <div style="display:flex;flex-wrap:wrap;gap:12px;justify-content:center">
+        <a class="btn btn-primary" id="emailBtn" onclick="openEmailModal()" style="cursor:pointer">📧 Send Email Invitation</a>
+        <a class="btn btn-outline" href="https://www.linkedin.com/in/austin-gwaltney-161200103" target="_blank">🔗 LinkedIn Profile</a>
+        <a class="btn btn-outline" href="https://blueapplelaunchpad.com" target="_blank">🌐 Visit Website</a>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- EMAIL MODAL -->
+<div class="modal-overlay" id="emailModal">
+  <div class="modal" style="position:relative">
+    <button class="close-modal" onclick="closeEmailModal()">✕</button>
+    <h3>📧 Email Austin Gwaltney — BNI Visitor Invitation</h3>
+    <label>To</label>
+    <input type="email" id="emailTo" value="austin.gwaltney@blueapplelaunchpad.com" readonly style="opacity:.7">
+    <label>Subject</label>
+    <input type="text" id="emailSubject" value="Austin — Exclusive Invitation to Visit a BNI Chapter Meeting">
+    <label>Message</label>
+    <textarea id="emailBody">Hi Austin,
+
+I hope this message finds you well! I came across Blue Apple Launchpad and was genuinely impressed by what you and your team have built — a digital marketing agency backed by the real-world experience of owning and operating 15 brick-and-mortar businesses across 5 states. That kind of "in the trenches" expertise is rare and incredibly valuable.
+
+I'd love to personally invite you to visit an upcoming BNI chapter meeting as our guest. Here are three compelling reasons why I think BNI would be a powerful fit for Blue Apple Launchpad:
+
+1. Referral-Rich Environment — BNI chapters are filled with local business owners actively looking for trusted marketing partners. With your proven track record (621+ influencer partnerships, 42K+ average revenue increases, and a 20%+ growth guarantee), you'd quickly become the go-to digital marketing resource in the room.
+
+2. Expand Your Contact Sphere — Your agency serves fitness, entertainment, hospitality, and wellness businesses. A BNI chapter connects you with CPAs, commercial insurance agents, business consultants, real estate professionals, and event planners — all of whom regularly refer clients who need exactly what Blue Apple provides.
+
+3. Grow Locally, Strategically — As a multi-business owner with presence in Sacramento and Atlanta, BNI's structured networking model would create a consistent referral pipeline for both your agency and your other ventures.
+
+BNI is the world's largest business referral organization, and I believe your expertise would bring tremendous value to our chapter while opening new doors for Blue Apple Launchpad.
+
+To visit a chapter, just complete this (***Visitor Invite***) simple form to reserve your seat and begin accelerating your business.
+
+I'd love to answer any questions you may have. Looking forward to connecting!
+
+Warm regards</textarea>
+    <div class="modal-actions">
+      <button class="btn btn-outline btn-sm" onclick="closeEmailModal()">Cancel</button>
+      <button class="btn btn-primary btn-sm" onclick="sendEmail()">Open in Email Client</button>
+      <button class="btn btn-primary btn-sm" onclick="copyEmail()">📋 Copy to Clipboard</button>
+    </div>
+    <p id="copyConfirm" style="display:none;color:#4caf50;font-size:12px;margin-top:8px;text-align:center">✅ Copied to clipboard!</p>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports">
+  <span class="footer-text">© 2026 Higgins Reports — S.A.L.E. Client Strategy Report — Blue Apple Launchpad | Generated by Higgins AI</span>
+</div>
+
+<script>
+// ---- TABLE SORT ----
+const sortState = {};
+function sortTable(tableId, colIdx) {
+  const table = document.getElementById(tableId);
+  const tbody = table.querySelector('tbody');
+  const rows = Array.from(tbody.querySelectorAll('tr'));
+  const key = tableId + '_' + colIdx;
+  sortState[key] = !sortState[key];
+  const dir = sortState[key] ? 1 : -1;
+  rows.sort((a, b) => {
+    const aT = a.cells[colIdx]?.textContent.trim().toLowerCase() || '';
+    const bT = b.cells[colIdx]?.textContent.trim().toLowerCase() || '';
+    const aNum = parseFloat(aT.replace(/[^0-9.]/g, ''));
+    const bNum = parseFloat(bT.replace(/[^0-9.]/g, ''));
+    if (!isNaN(aNum) && !isNaN(bNum)) return (aNum - bNum) * dir;
+    return aT.localeCompare(bT) * dir;
+  });
+  rows.forEach(r => tbody.appendChild(r));
+}
+
+// ---- TABLE FILTER ----
+function filterTable(tableId, query) {
+  const table = document.getElementById(tableId);
+  const rows = table.querySelectorAll('tbody tr');
+  const q = query.toLowerCase();
+  rows.forEach(r => {
+    r.style.display = r.textContent.toLowerCase().includes(q) ? '' : 'none';
+  });
+}
+
+// ---- BAR CHART ----
+function renderBarChart() {
+  const data = [
+    { label: 'Businesses Owned', value: 15, max: 650 },
+    { label: 'States', value: 5, max: 650 },
+    { label: 'Influencers Booked', value: 621, max: 650 },
+    { label: 'Avg Revenue Increase ($K)', value: 42, max: 650 },
+    { label: 'Email Conv. Lift (%)', value: 240, max: 650 },
+    { label: 'Booking Increase (%)', value: 47, max: 650 },
+    { label: 'Growth Guarantee (%)', value: 20, max: 650 },
+    { label: 'Employees (max)', value: 50, max: 650 }
+  ];
+  const maxVal = Math.max(...data.map(d => d.value));
+  const container = document.getElementById('barChart');
+  container.innerHTML = '';
+  data.forEach((d, i) => {
+    const col = document.createElement('div');
+    col.className = 'bar-col';
+    const pct = (d.value / maxVal) * 100;
+    col.innerHTML = `
+      <span class="bar-value">${d.value.toLocaleString()}</span>
+      <div class="bar" style="height:${Math.max(pct, 4)}%;animation:growBar .6s ease ${i * .08}s both"></div>
+      <span class="bar-label">${d.label}</span>`;
+    container.appendChild(col);
+  });
+}
+
+// ---- EMAIL MODAL ----
+function openEmailModal() {
+  document.getElementById('emailModal').classList.add('active');
+}
+function closeEmailModal() {
+  document.getElementById('emailModal').classList.remove('active');
+  document.getElementById('copyConfirm').style.display = 'none';
+}
+function sendEmail() {
+  const to = document.getElementById('emailTo').value;
+  const subject = encodeURIComponent(document.getElementById('emailSubject').value);
+  const body = encodeURIComponent(document.getElementById('emailBody').value);
+  window.open(`mailto:${to}?subject=${subject}&body=${body}`, '_self');
+}
+function copyEmail() {
+  const text = `To: ${document.getElementById('emailTo').value}\nSubject: ${document.getElementById('emailSubject').value}\n\n${document.getElementById('emailBody').value}`;
+  navigator.clipboard.writeText(text).then(() => {
+    document.getElementById('copyConfirm').style.display = 'block';
+    setTimeout(() => { document.getElementById('copyConfirm').style.display = 'none'; }, 3000);
+  });
+}
+
+// ---- NAV SCROLL ----
+function scrollToSection(e, id) {
+  e.preventDefault();
+  document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  document.querySelectorAll('.nav a').forEach(a => a.classList.remove('active'));
+  e.target.classList.add('active');
+}
+
+// ---- GROW ANIMATION ----
+const style = document.createElement('style');
+style.textContent = `@keyframes growBar{from{height:0}to{height:var(--h,100%)}}`;
+document.head.appendChild(style);
+
+// ---- INIT ----
+renderBarChart();
+</script>
+</body>
+</html>

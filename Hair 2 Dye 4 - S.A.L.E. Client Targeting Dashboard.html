@@ -1,0 +1,1193 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hair 2 Dye 4 - S.A.L.E. Client Targeting Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #000000;
+            color: #ffffff;
+            line-height: 1.6;
+        }
+
+        .header {
+            background: #CF2030;
+            padding: 1rem 2rem;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(207, 32, 48, 0.3);
+        }
+
+        .header img {
+            max-height: 60px;
+            margin-bottom: 0.5rem;
+        }
+
+        .header h1 {
+            color: #ffffff;
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            color: #ffffff;
+            opacity: 0.9;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .dashboard-nav {
+            background: #1a1a1a;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            border: 1px solid #CF2030;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            background: #CF2030;
+            color: #ffffff;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            background: #a81826;
+            transform: translateY(-2px);
+        }
+
+        .nav-btn.active {
+            background: #ffffff;
+            color: #CF2030;
+        }
+
+        .module {
+            display: none;
+            background: #1a1a1a;
+            padding: 2rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            border: 1px solid #333;
+        }
+
+        .module.active {
+            display: block;
+        }
+
+        .module h2 {
+            color: #CF2030;
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+        }
+
+        .search-filters {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .search-input {
+            background: #2a2a2a;
+            border: 1px solid #CF2030;
+            color: #ffffff;
+            padding: 0.75rem;
+            border-radius: 5px;
+            min-width: 200px;
+        }
+
+        .search-input::placeholder {
+            color: #999;
+        }
+
+        .tier-filter {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .tier-btn {
+            background: #2a2a2a;
+            color: #ffffff;
+            border: 1px solid #555;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .tier-btn.active {
+            background: #CF2030;
+            border-color: #CF2030;
+        }
+
+        .client-table {
+            background: #2a2a2a;
+            border-radius: 8px;
+            overflow-x: auto;
+            border: 1px solid #CF2030;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+
+        th {
+            background: #CF2030;
+            color: #ffffff;
+            padding: 1rem 0.75rem;
+            text-align: left;
+            font-weight: bold;
+            border-bottom: 1px solid #333;
+            cursor: pointer;
+            position: relative;
+        }
+
+        th:hover {
+            background: #a81826;
+        }
+
+        td {
+            padding: 0.75rem;
+            border-bottom: 1px solid #333;
+            color: #ffffff;
+        }
+
+        tr:nth-child(even) {
+            background: rgba(207, 32, 48, 0.1);
+        }
+
+        tr:hover {
+            background: rgba(207, 32, 48, 0.2);
+        }
+
+        .tier-1a {
+            border-left: 4px solid #00ff00;
+        }
+
+        .tier-1b {
+            border-left: 4px solid #ffff00;
+        }
+
+        .tier-1c {
+            border-left: 4px solid #0099ff;
+        }
+
+        .contact-btn {
+            background: #CF2030;
+            color: #ffffff;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            margin-right: 0.5rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .contact-btn:hover {
+            background: #a81826;
+        }
+
+        .pures-form {
+            background: #2a2a2a;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            border: 1px solid #CF2030;
+        }
+
+        .pures-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .pures-item {
+            background: #1a1a1a;
+            padding: 1rem;
+            border-radius: 6px;
+            border: 1px solid #555;
+        }
+
+        .pures-item h4 {
+            color: #CF2030;
+            margin-bottom: 0.5rem;
+        }
+
+        .rating-scale {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .rating-btn {
+            background: #333;
+            color: #ffffff;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .rating-btn:hover,
+        .rating-btn.active {
+            background: #CF2030;
+            transform: scale(1.1);
+        }
+
+        .export-btn {
+            background: #CF2030;
+            color: #ffffff;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-right: 1rem;
+        }
+
+        .footer {
+            background: #1a1a1a;
+            text-align: center;
+            padding: 2rem;
+            border-top: 1px solid #333;
+            margin-top: 3rem;
+        }
+
+        .footer img {
+            max-height: 30px;
+            opacity: 0.7;
+            margin-bottom: 1rem;
+        }
+
+        .footer p {
+            color: #999;
+            font-size: 0.9rem;
+        }
+
+        .email-template {
+            background: #2a2a2a;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            border: 1px solid #CF2030;
+        }
+
+        .template-content {
+            background: #1a1a1a;
+            padding: 1rem;
+            border-radius: 6px;
+            white-space: pre-wrap;
+            font-family: monospace;
+            color: #ffffff;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .metric-card {
+            background: #2a2a2a;
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid #CF2030;
+        }
+
+        .metric-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #CF2030;
+            display: block;
+        }
+
+        .metric-label {
+            color: #999;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="HigginsReports Logo">
+        <h1>Hair 2 Dye 4 - S.A.L.E. Client Targeting Dashboard</h1>
+        <p>Advanced Client Acquisition & Relationship Management System</p>
+    </header>
+
+    <div class="container">
+        <div class="dashboard-nav">
+            <div class="nav-buttons">
+                <button class="nav-btn active" onclick="showModule('sourcing')">S.OURCING</button>
+                <button class="nav-btn" onclick="showModule('assessing')">A.SSESSING</button>
+                <button class="nav-btn" onclick="showModule('listening')">L.ISTENING</button>
+                <button class="nav-btn" onclick="showModule('empowering')">E.MPOWERING</button>
+                <button class="nav-btn" onclick="showModule('analytics')">ANALYTICS</button>
+            </div>
+        </div>
+
+        <!-- SOURCING Module -->
+        <div id="sourcing" class="module active">
+            <h2>S.OURCING - Client Database & P.U.R.E.S. Scoring</h2>
+            
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <span class="metric-number" id="totalClients">50</span>
+                    <div class="metric-label">Total Prospects</div>
+                </div>
+                <div class="metric-card">
+                    <span class="metric-number" id="tier1aCount">12</span>
+                    <div class="metric-label">Tier 1A Clients</div>
+                </div>
+                <div class="metric-card">
+                    <span class="metric-number" id="tier1bCount">18</span>
+                    <div class="metric-label">Tier 1B Clients</div>
+                </div>
+                <div class="metric-card">
+                    <span class="metric-number" id="tier1cCount">20</span>
+                    <div class="metric-label">Tier 1C Clients</div>
+                </div>
+            </div>
+
+            <div class="search-filters">
+                <input type="text" class="search-input" id="searchInput" placeholder="Search clients by name, email, or industry...">
+                <div class="tier-filter">
+                    <button class="tier-btn active" onclick="filterTier('all')">All</button>
+                    <button class="tier-btn" onclick="filterTier('1A')">Tier 1A</button>
+                    <button class="tier-btn" onclick="filterTier('1B')">Tier 1B</button>
+                    <button class="tier-btn" onclick="filterTier('1C')">Tier 1C</button>
+                </div>
+                <button class="export-btn" onclick="exportData()">Export CSV</button>
+            </div>
+
+            <div class="client-table">
+                <table id="clientTable">
+                    <thead>
+                        <tr>
+                            <th onclick="sortTable(0)">Client Name</th>
+                            <th onclick="sortTable(1)">Email</th>
+                            <th onclick="sortTable(2)">Phone</th>
+                            <th onclick="sortTable(3)">Address</th>
+                            <th onclick="sortTable(4)">P.U.R.E.S. Score</th>
+                            <th onclick="sortTable(5)">Tier</th>
+                            <th onclick="sortTable(6)">Industry</th>
+                            <th onclick="sortTable(7)">Revenue Est.</th>
+                            <th onclick="sortTable(8)">Contact Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="clientTableBody">
+                        <!-- Client data will be populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="pures-form">
+                <h3 style="color: #CF2030; margin-bottom: 1rem;">P.U.R.E.S. Client Evaluation Form</h3>
+                <div class="pures-grid">
+                    <div class="pures-item">
+                        <h4>Profitability</h4>
+                        <p>Annual budget capacity for beauty services</p>
+                        <div class="rating-scale">
+                            <button class="rating-btn" onclick="setRating('profitability', 1)">1</button>
+                            <button class="rating-btn" onclick="setRating('profitability', 2)">2</button>
+                            <button class="rating-btn" onclick="setRating('profitability', 3)">3</button>
+                            <button class="rating-btn" onclick="setRating('profitability', 4)">4</button>
+                            <button class="rating-btn" onclick="setRating('profitability', 5)">5</button>
+                        </div>
+                    </div>
+                    <div class="pures-item">
+                        <h4>Urgency</h4>
+                        <p>Active hair/beauty needs requiring immediate solutions</p>
+                        <div class="rating-scale">
+                            <button class="rating-btn" onclick="setRating('urgency', 1)">1</button>
+                            <button class="rating-btn" onclick="setRating('urgency', 2)">2</button>
+                            <button class="rating-btn" onclick="setRating('urgency', 3)">3</button>
+                            <button class="rating-btn" onclick="setRating('urgency', 4)">4</button>
+                            <button class="rating-btn" onclick="setRating('urgency', 5)">5</button>
+                        </div>
+                    </div>
+                    <div class="pures-item">
+                        <h4>Reachability</h4>
+                        <p>Accessible via social media, referrals, or direct contact</p>
+                        <div class="rating-scale">
+                            <button class="rating-btn" onclick="setRating('reachability', 1)">1</button>
+                            <button class="rating-btn" onclick="setRating('reachability', 2)">2</button>
+                            <button class="rating-btn" onclick="setRating('reachability', 3)">3</button>
+                            <button class="rating-btn" onclick="setRating('reachability', 4)">4</button>
+                            <button class="rating-btn" onclick="setRating('reachability', 5)">5</button>
+                        </div>
+                    </div>
+                    <div class="pures-item">
+                        <h4>Engagement</h4>
+                        <p>Openness to new styles and beauty trends</p>
+                        <div class="rating-scale">
+                            <button class="rating-btn" onclick="setRating('engagement', 1)">1</button>
+                            <button class="rating-btn" onclick="setRating('engagement', 2)">2</button>
+                            <button class="rating-btn" onclick="setRating('engagement', 3)">3</button>
+                            <button class="rating-btn" onclick="setRating('engagement', 4)">4</button>
+                            <button class="rating-btn" onclick="setRating('engagement', 5)">5</button>
+                        </div>
+                    </div>
+                    <div class="pures-item">
+                        <h4>Sustainability</h4>
+                        <p>Long-term client potential and referral capability</p>
+                        <div class="rating-scale">
+                            <button class="rating-btn" onclick="setRating('sustainability', 1)">1</button>
+                            <button class="rating-btn" onclick="setRating('sustainability', 2)">2</button>
+                            <button class="rating-btn" onclick="setRating('sustainability', 3)">3</button>
+                            <button class="rating-btn" onclick="setRating('sustainability', 4)">4</button>
+                            <button class="rating-btn" onclick="setRating('sustainability', 5)">5</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="email-template">
+                <h3 style="color: #CF2030; margin-bottom: 1rem;">Email Template Generator</h3>
+                <p>Customized email templates based on client tier and services needed:</p>
+                <div class="template-content" id="emailTemplate">
+Select a client from the table above to generate a personalized email template.
+                </div>
+            </div>
+        </div>
+
+        <!-- ASSESSING Module -->
+        <div id="assessing" class="module">
+            <h2>A.SSESSING - Buying Pattern Analysis</h2>
+            
+            <div class="pures-grid">
+                <div class="pures-item">
+                    <h4>Analytical Buyers (20%)</h4>
+                    <p>Require detailed service descriptions, before/after photos, pricing breakdowns</p>
+                    <ul style="color: #ccc; margin-top: 0.5rem; padding-left: 1.5rem;">
+                        <li>Professional portfolio showcasing</li>
+                        <li>Detailed consultation process</li>
+                        <li>Service guarantee information</li>
+                    </ul>
+                </div>
+                <div class="pures-item">
+                    <h4>Relationship Buyers (35%)</h4>
+                    <p>Value trust, referrals, and long-term stylist relationships</p>
+                    <ul style="color: #ccc; margin-top: 0.5rem; padding-left: 1.5rem;">
+                        <li>Client testimonials and reviews</li>
+                        <li>Referral program benefits</li>
+                        <li>Personal consultation approach</li>
+                    </ul>
+                </div>
+                <div class="pures-item">
+                    <h4>Efficiency Buyers (30%)</h4>
+                    <p>Focus on convenience, time-saving, and quick results</p>
+                    <ul style="color: #ccc; margin-top: 0.5rem; padding-left: 1.5rem;">
+                        <li>Online booking system</li>
+                        <li>Express service options</li>
+                        <li>Flexible scheduling</li>
+                    </ul>
+                </div>
+                <div class="pures-item">
+                    <h4>Innovation Buyers (15%)</h4>
+                    <p>Seek cutting-edge trends, latest techniques, unique styles</p>
+                    <ul style="color: #ccc; margin-top: 0.5rem; padding-left: 1.5rem;">
+                        <li>Latest color techniques</li>
+                        <li>Trend-setting styles</li>
+                        <li>Premium treatments</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div style="background: #2a2a2a; padding: 1.5rem; border-radius: 8px; margin-top: 2rem; border: 1px solid #CF2030;">
+                <h3 style="color: #CF2030; margin-bottom: 1rem;">Value Proposition Alignment</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+                    <div style="background: #1a1a1a; padding: 1rem; border-radius: 6px;">
+                        <h4 style="color: #CF2030;">Hair Services</h4>
+                        <p style="color: #ccc;">Cuts, colors, styling for all hair types</p>
+                    </div>
+                    <div style="background: #1a1a1a; padding: 1rem; border-radius: 6px;">
+                        <h4 style="color: #CF2030;">Specialized Treatments</h4>
+                        <p style="color: #ccc;">Keratin, Olaplex, perms, texture services</p>
+                    </div>
+                    <div style="background: #1a1a1a; padding: 1rem; border-radius: 6px;">
+                        <h4 style="color: #CF2030;">Beauty Services</h4>
+                        <p style="color: #ccc;">Eyebrow waxing, facial waxing, tinting</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- LISTENING Module -->
+        <div id="listening" class="module">
+            <h2>L.ISTENING - Feedback Integration</h2>
+            
+            <div style="background: #2a2a2a; padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem; border: 1px solid #CF2030;">
+                <h3 style="color: #CF2030; margin-bottom: 1rem;">Feedback Collection System</h3>
+                <div class="pures-grid">
+                    <div class="pures-item">
+                        <h4>Pre-Service Feedback</h4>
+                        <p>Consultation forms and style preferences</p>
+                        <button class="contact-btn" onclick="alert('Pre-service form template ready!')">Generate Form</button>
+                    </div>
+                    <div class="pures-item">
+                        <h4>During Service Tracking</h4>
+                        <p>Real-time satisfaction monitoring</p>
+                        <button class="contact-btn" onclick="alert('Service tracking initiated!')">Start Tracking</button>
+                    </div>
+                    <div class="pures-item">
+                        <h4>Post-Service Satisfaction</h4>
+                        <p>Follow-up surveys and review requests</p>
+                        <button class="contact-btn" onclick="alert('Follow-up sequence activated!')">Send Follow-up</button>
+                    </div>
+                    <div class="pures-item">
+                        <h4>Complaint Resolution</h4>
+                        <p>Immediate response protocols</p>
+                        <button class="contact-btn" onclick="alert('Resolution protocol activated!')">Resolve Issue</button>
+                    </div>
+                </div>
+            </div>
+
+            <div style="background: #2a2a2a; padding: 1.5rem; border-radius: 8px; border: 1px solid #CF2030;">
+                <h3 style="color: #CF2030; margin-bottom: 1rem;">Feedback Analytics Dashboard</h3>
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <span class="metric-number">4.8</span>
+                        <div class="metric-label">Average Rating</div>
+                    </div>
+                    <div class="metric-card">
+                        <span class="metric-number">92%</span>
+                        <div class="metric-label">Client Satisfaction</div>
+                    </div>
+                    <div class="metric-card">
+                        <span class="metric-number">85%</span>
+                        <div class="metric-label">Return Rate</div>
+                    </div>
+                    <div class="metric-card">
+                        <span class="metric-number">78%</span>
+                        <div class="metric-label">Referral Rate</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- EMPOWERING Module -->
+        <div id="empowering" class="module">
+            <h2>E.MPOWERING - Referral Strategy</h2>
+            
+            <div class="pures-grid">
+                <div class="pures-item">
+                    <h4>Success Stories</h4>
+                    <p>Document and share client transformations</p>
+                    <button class="contact-btn" onclick="alert('Success story template ready!')">Add Story</button>
+                </div>
+                <div class="pures-item">
+                    <h4>Referral Rewards</h4>
+                    <p>$10 credit for each successful referral</p>
+                    <button class="contact-btn" onclick="alert('Referral program activated!')">Track Referrals</button>
+                </div>
+                <div class="pures-item">
+                    <h4>Client Advocacy</h4>
+                    <p>VIP client program with exclusive benefits</p>
+                    <button class="contact-btn" onclick="alert('Advocacy program initiated!')">Enroll Advocate</button>
+                </div>
+                <div class="pures-item">
+                    <h4>Co-Marketing</h4>
+                    <p>Partner with local businesses for cross-promotion</p>
+                    <button class="contact-btn" onclick="alert('Co-marketing opportunity identified!')">Plan Campaign</button>
+                </div>
+            </div>
+
+            <div style="background: #2a2a2a; padding: 1.5rem; border-radius: 8px; margin-top: 2rem; border: 1px solid #CF2030;">
+                <h3 style="color: #CF2030; margin-bottom: 1rem;">Referral Marketing Calendar</h3>
+                <div style="background: #1a1a1a; padding: 1rem; border-radius: 6px;">
+                    <h4 style="color: #CF2030;">Monthly Campaigns</h4>
+                    <ul style="color: #ccc; padding-left: 1.5rem;">
+                        <li><strong>April:</strong> "Spring Hair Refresh" - Mother/Daughter specials</li>
+                        <li><strong>May:</strong> "Bridal Season" - Wedding party packages</li>
+                        <li><strong>June:</strong> "Summer Styles" - Color and cut combos</li>
+                        <li><strong>July:</strong> "Beat the Heat" - Quick styling solutions</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- ANALYTICS Module -->
+        <div id="analytics" class="module">
+            <h2>ANALYTICS - Performance Metrics</h2>
+            
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <span class="metric-number">85%</span>
+                    <div class="metric-label">P.U.R.E.S. Score Accuracy</div>
+                </div>
+                <div class="metric-card">
+                    <span class="metric-number">78%</span>
+                    <div class="metric-label">Conversion Rate</div>
+                </div>
+                <div class="metric-card">
+                    <span class="metric-number">92%</span>
+                    <div class="metric-label">Client Retention</div>
+                </div>
+                <div class="metric-card">
+                    <span class="metric-number">$125</span>
+                    <div class="metric-label">Average Service Value</div>
+                </div>
+            </div>
+
+            <div style="background: #2a2a2a; padding: 1.5rem; border-radius: 8px; margin-top: 2rem; border: 1px solid #CF2030;">
+                <h3 style="color: #CF2030; margin-bottom: 1rem;">Marketing ROI Analysis</h3>
+                <div class="pures-grid">
+                    <div class="pures-item">
+                        <h4>Email Campaigns</h4>
+                        <p>25% open rate, 8% click-through</p>
+                    </div>
+                    <div class="pures-item">
+                        <h4>Social Media</h4>
+                        <p>1,200 local followers, 15% engagement</p>
+                    </div>
+                    <div class="pures-item">
+                        <h4>Referral Program</h4>
+                        <p>35% of new clients from referrals</p>
+                    </div>
+                    <div class="pures-item">
+                        <h4>Special Offers</h4>
+                        <p>$50 first-time client savings drive 60% bookings</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="HigginsReports">
+        <p>&copy; 2024 HigginsReports. All rights reserved. | Advanced AI Business Intelligence</p>
+    </footer>
+
+    <script>
+        // Sample client data for Hair 2 Dye 4 salon
+        const clientData = [
+            {name: "Maria Rodriguez", email: "maria.rodriguez@email.com", phone: "(239) 555-0101", address: "1245 Del Prado Blvd, Cape Coral, FL", score: 4.8, tier: "1A", industry: "Healthcare Professional", revenue: "$85K", status: "New Lead", buyerType: "Relationship"},
+            {name: "Jennifer Wilson", email: "j.wilson@email.com", phone: "(239) 555-0102", address: "856 Veterans Pkwy, Cape Coral, FL", score: 4.6, tier: "1A", industry: "Education", revenue: "$65K", status: "Contacted", buyerType: "Analytical"},
+            {name: "Ashley Martinez", email: "ashley.m@email.com", phone: "(239) 555-0103", address: "2341 Pine Island Rd, Cape Coral, FL", score: 4.7, tier: "1A", industry: "Real Estate", revenue: "$95K", status: "Scheduled", buyerType: "Innovation"},
+            {name: "Sarah Johnson", email: "sarah.johnson@email.com", phone: "(239) 555-0104", address: "1789 SW 15th Ave, Cape Coral, FL", score: 4.5, tier: "1A", industry: "Finance", revenue: "$78K", status: "New Lead", buyerType: "Efficiency"},
+            {name: "Nicole Thompson", email: "n.thompson@email.com", phone: "(239) 555-0105", address: "945 SE 47th St, Cape Coral, FL", score: 4.9, tier: "1A", industry: "Marketing", revenue: "$88K", status: "Converted", buyerType: "Relationship"},
+            {name: "Amanda Garcia", email: "amanda.garcia@email.com", phone: "(239) 555-0106", address: "1567 Coronado Pkwy, Cape Coral, FL", score: 4.4, tier: "1A", industry: "Retail Manager", revenue: "$72K", status: "Follow-up", buyerType: "Innovation"},
+            {name: "Jessica Brown", email: "jessica.brown@email.com", phone: "(239) 555-0107", address: "2890 Santa Barbara Blvd, Cape Coral, FL", score: 4.6, tier: "1A", industry: "Hospitality", revenue: "$68K", status: "Interested", buyerType: "Analytical"},
+            {name: "Michelle Davis", email: "m.davis@email.com", phone: "(239) 555-0108", address: "1234 Skyline Blvd, Cape Coral, FL", score: 4.8, tier: "1A", industry: "Legal Professional", revenue: "$105K", status: "New Lead", buyerType: "Efficiency"},
+            {name: "Stephanie Miller", email: "stephanie.miller@email.com", phone: "(239) 555-0109", address: "3456 Chiquita Blvd, Cape Coral, FL", score: 4.7, tier: "1A", industry: "Entrepreneur", revenue: "$92K", status: "Contacted", buyerType: "Relationship"},
+            {name: "Kimberly Anderson", email: "kim.anderson@email.com", phone: "(239) 555-0110", address: "789 Country Club Blvd, Cape Coral, FL", score: 4.5, tier: "1A", industry: "Insurance", revenue: "$75K", status: "Scheduled", buyerType: "Innovation"},
+            {name: "Rachel Taylor", email: "rachel.taylor@email.com", phone: "(239) 555-0111", address: "2156 Embers Pkwy, Cape Coral, FL", score: 4.3, tier: "1A", industry: "Technology", revenue: "$85K", status: "New Lead", buyerType: "Analytical"},
+            {name: "Melissa White", email: "melissa.white@email.com", phone: "(239) 555-0112", address: "1678 Cultural Park Blvd, Cape Coral, FL", score: 4.6, tier: "1A", industry: "Non-Profit", revenue: "$58K", status: "Interested", buyerType: "Relationship"},
+            
+            {name: "Lisa Harris", email: "lisa.harris@email.com", phone: "(239) 555-0113", address: "3421 Hancock Bridge Pkwy, Cape Coral, FL", score: 4.2, tier: "1B", industry: "Administrative", revenue: "$55K", status: "New Lead", buyerType: "Efficiency"},
+            {name: "Kelly Clark", email: "kelly.clark@email.com", phone: "(239) 555-0114", address: "1897 NE Pine Island Rd, Cape Coral, FL", score: 4.1, tier: "1B", industry: "Customer Service", revenue: "$48K", status: "Contacted", buyerType: "Relationship"},
+            {name: "Christina Lewis", email: "christina.lewis@email.com", phone: "(239) 555-0115", address: "2654 SW Pine Island Rd, Cape Coral, FL", score: 4.0, tier: "1B", industry: "Retail", revenue: "$42K", status: "Follow-up", buyerType: "Innovation"},
+            {name: "Angela Robinson", email: "angela.robinson@email.com", phone: "(239) 555-0116", address: "1123 SE 46th Ln, Cape Coral, FL", score: 4.3, tier: "1B", industry: "Beauty Industry", revenue: "$52K", status: "Interested", buyerType: "Analytical"},
+            {name: "Heather Walker", email: "heather.walker@email.com", phone: "(239) 555-0117", address: "3789 Veterans Memorial Pkwy, Cape Coral, FL", score: 4.2, tier: "1B", industry: "Freelancer", revenue: "$45K", status: "New Lead", buyerType: "Efficiency"},
+            {name: "Samantha Hall", email: "samantha.hall@email.com", phone: "(239) 555-0118", address: "987 Tropicana Pkwy, Cape Coral, FL", score: 4.1, tier: "1B", industry: "Food Service", revenue: "$38K", status: "Scheduled", buyerType: "Relationship"},
+            {name: "Laura Allen", email: "laura.allen@email.com", phone: "(239) 555-0119", address: "2345 El Dorado Pkwy, Cape Coral, FL", score: 4.0, tier: "1B", industry: "Government", revenue: "$58K", status: "Contacted", buyerType: "Innovation"},
+            {name: "Tiffany Young", email: "tiffany.young@email.com", phone: "(239) 555-0120", address: "1567 SE 15th St, Cape Coral, FL", score: 4.4, tier: "1B", industry: "Fitness Trainer", revenue: "$46K", status: "Interested", buyerType: "Analytical"},
+            {name: "Danielle King", email: "danielle.king@email.com", phone: "(239) 555-0121", address: "4321 Burnt Store Rd, Cape Coral, FL", score: 4.2, tier: "1B", industry: "Sales", revenue: "$62K", status: "New Lead", buyerType: "Efficiency"},
+            {name: "Brittany Wright", email: "brittany.wright@email.com", phone: "(239) 555-0122", address: "876 NW 15th St, Cape Coral, FL", score: 4.1, tier: "1B", industry: "Transportation", revenue: "$43K", status: "Follow-up", buyerType: "Relationship"},
+            {name: "Courtney Lopez", email: "courtney.lopez@email.com", phone: "(239) 555-0123", address: "2987 Diplomat Pkwy, Cape Coral, FL", score: 4.0, tier: "1B", industry: "Communications", revenue: "$51K", status: "Contacted", buyerType: "Innovation"},
+            {name: "Crystal Hill", email: "crystal.hill@email.com", phone: "(239) 555-0124", address: "1654 SW 3rd Pl, Cape Coral, FL", score: 4.3, tier: "1B", industry: "Property Management", revenue: "$56K", status: "Scheduled", buyerType: "Analytical"},
+            {name: "Rebecca Green", email: "rebecca.green@email.com", phone: "(239) 555-0125", address: "3210 Surfside Blvd, Cape Coral, FL", score: 4.2, tier: "1B", industry: "Travel Industry", revenue: "$49K", status: "Interested", buyerType: "Efficiency"},
+            {name: "Megan Adams", email: "megan.adams@email.com", phone: "(239) 555-0126", address: "789 SW 39th St, Cape Coral, FL", score: 4.0, tier: "1B", industry: "Interior Design", revenue: "$54K", status: "New Lead", buyerType: "Relationship"},
+            {name: "Katie Baker", email: "katie.baker@email.com", phone: "(239) 555-0127", address: "4567 Cape Coral Pkwy, Cape Coral, FL", score: 4.1, tier: "1B", industry: "Social Work", revenue: "$41K", status: "Contacted", buyerType: "Innovation"},
+            {name: "Vanessa Carter", email: "vanessa.carter@email.com", phone: "(239) 555-0128", address: "2143 NE 8th Ave, Cape Coral, FL", score: 4.2, tier: "1B", industry: "Event Planning", revenue: "$47K", status: "Follow-up", buyerType: "Analytical"},
+            {name: "Amber Mitchell", email: "amber.mitchell@email.com", phone: "(239) 555-0129", address: "1876 SE 22nd Ave, Cape Coral, FL", score: 4.1, tier: "1B", industry: "Photography", revenue: "$44K", status: "Interested", buyerType: "Efficiency"},
+            {name: "Natalie Perez", email: "natalie.perez@email.com", phone: "(239) 555-0130", address: "3654 SE 3rd Ave, Cape Coral, FL", score: 4.0, tier: "1B", industry: "Consulting", revenue: "$59K", status: "Scheduled", buyerType: "Relationship"},
+            
+            {name: "Monica Roberts", email: "monica.roberts@email.com", phone: "(239) 555-0131", address: "987 NE 7th Ave, Cape Coral, FL", score: 3.8, tier: "1C", industry: "Student", revenue: "$25K", status: "New Lead", buyerType: "Innovation"},
+            {name: "Jacqueline Turner", email: "jackie.turner@email.com", phone: "(239) 555-0132", address: "2345 SW 14th Ter, Cape Coral, FL", score: 3.9, tier: "1C", industry: "Part-time", revenue: "$28K", status: "Contacted", buyerType: "Analytical"},
+            {name: "Cynthia Phillips", email: "cynthia.phillips@email.com", phone: "(239) 555-0133", address: "1654 NE 24th Ave, Cape Coral, FL", score: 3.7, tier: "1C", industry: "Retired", revenue: "$35K", status: "Interested", buyerType: "Efficiency"},
+            {name: "Diana Campbell", email: "diana.campbell@email.com", phone: "(239) 555-0134", address: "4321 SE 5th Ave, Cape Coral, FL", score: 3.8, tier: "1C", industry: "Homemaker", revenue: "$40K", status: "Follow-up", buyerType: "Relationship"},
+            {name: "Leslie Parker", email: "leslie.parker@email.com", phone: "(239) 555-0135", address: "876 NE 15th Pl, Cape Coral, FL", score: 3.9, tier: "1C", industry: "Entry Level", revenue: "$32K", status: "New Lead", buyerType: "Innovation"},
+            {name: "Alicia Evans", email: "alicia.evans@email.com", phone: "(239) 555-0136", address: "2987 SW 25th Ave, Cape Coral, FL", score: 3.6, tier: "1C", industry: "Seasonal Worker", revenue: "$24K", status: "Contacted", buyerType: "Analytical"},
+            {name: "Shannon Edwards", email: "shannon.edwards@email.com", phone: "(239) 555-0137", address: "1234 NE 11th Ave, Cape Coral, FL", score: 3.8, tier: "1C", industry: "Temporary", revenue: "$29K", status: "Scheduled", buyerType: "Efficiency"},
+            {name: "Patricia Collins", email: "patricia.collins@email.com", phone: "(239) 555-0138", address: "3456 SE 17th Ave, Cape Coral, FL", score: 3.7, tier: "1C", industry: "Apprentice", revenue: "$31K", status: "Interested", buyerType: "Relationship"},
+            {name: "Robin Stewart", email: "robin.stewart@email.com", phone: "(239) 555-0139", address: "789 SW 19th Ave, Cape Coral, FL", score: 3.9, tier: "1C", industry: "Contract", revenue: "$36K", status: "New Lead", buyerType: "Innovation"},
+            {name: "Julie Sanchez", email: "julie.sanchez@email.com", phone: "(239) 555-0140", address: "2143 NE 18th St, Cape Coral, FL", score: 3.8, tier: "1C", industry: "Gig Economy", revenue: "$33K", status: "Follow-up", buyerType: "Analytical"},
+            {name: "Catherine Morris", email: "catherine.morris@email.com", phone: "(239) 555-0141", address: "4567 SE 12th Ave, Cape Coral, FL", score: 3.6, tier: "1C", industry: "Online Work", revenue: "$27K", status: "Contacted", buyerType: "Efficiency"},
+            {name: "Karen Rogers", email: "karen.rogers@email.com", phone: "(239) 555-0142", address: "1876 NW 23rd Ave, Cape Coral, FL", score: 3.7, tier: "1C", industry: "Support Staff", revenue: "$34K", status: "Interested", buyerType: "Relationship"},
+            {name: "Teresa Reed", email: "teresa.reed@email.com", phone: "(239) 555-0143", address: "3654 SW 8th St, Cape Coral, FL", score: 3.8, tier: "1C", industry: "Service Industry", revenue: "$30K", status: "Scheduled", buyerType: "Innovation"},
+            {name: "Pamela Cook", email: "pamela.cook@email.com", phone: "(239) 555-0144", address: "987 SE 28th Ave, Cape Coral, FL", score: 3.9, tier: "1C", industry: "Assistant", revenue: "$37K", status: "New Lead", buyerType: "Analytical"},
+            {name: "Debra Bailey", email: "debra.bailey@email.com", phone: "(239) 555-0145", address: "2345 NE 3rd St, Cape Coral, FL", score: 3.7, tier: "1C", industry: "Trainee", revenue: "$26K", status: "Contacted", buyerType: "Efficiency"},
+            {name: "Cheryl Rivera", email: "cheryl.rivera@email.com", phone: "(239) 555-0146", address: "1654 SW 33rd St, Cape Coral, FL", score: 3.8, tier: "1C", industry: "Intern", revenue: "$22K", status: "Follow-up", buyerType: "Relationship"},
+            {name: "Gloria Cooper", email: "gloria.cooper@email.com", phone: "(239) 555-0147", address: "4321 NE 6th Ave, Cape Coral, FL", score: 3.6, tier: "1C", industry: "Volunteer", revenue: "$38K", status: "Interested", buyerType: "Innovation"},
+            {name: "Marie Richardson", email: "marie.richardson@email.com", phone: "(239) 555-0148", address: "876 SE 41st St, Cape Coral, FL", score: 3.9, tier: "1C", industry: "Caregiver", revenue: "$35K", status: "Scheduled", buyerType: "Analytical"},
+            {name: "Janice Cox", email: "janice.cox@email.com", phone: "(239) 555-0149", address: "2987 SW 47th Ave, Cape Coral, FL", score: 3.7, tier: "1C", industry: "Babysitter", revenue: "$23K", status: "New Lead", buyerType: "Efficiency"},
+            {name: "Janet Ward", email: "janet.ward@email.com", phone: "(239) 555-0150", address: "1234 NE 35th St, Cape Coral, FL", score: 3.8, tier: "1C", industry: "House Cleaner", revenue: "$28K", status: "Contacted", buyerType: "Relationship"}
+        ];
+
+        let currentClients = [...clientData];
+        let currentRatings = {profitability: 0, urgency: 0, reachability: 0, engagement: 0, sustainability: 0};
+
+        function showModule(moduleId) {
+            // Hide all modules
+            document.querySelectorAll('.module').forEach(module => {
+                module.classList.remove('active');
+            });
+            
+            // Remove active class from all nav buttons
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected module
+            document.getElementById(moduleId).classList.add('active');
+            
+            // Add active class to clicked button
+            event.target.classList.add('active');
+        }
+
+        function populateTable(data = currentClients) {
+            const tbody = document.getElementById('clientTableBody');
+            tbody.innerHTML = '';
+            
+            data.forEach((client, index) => {
+                const row = document.createElement('tr');
+                row.className = `tier-${client.tier.toLowerCase()}`;
+                row.innerHTML = `
+                    <td>${client.name}</td>
+                    <td>${client.email}</td>
+                    <td>${client.phone}</td>
+                    <td>${client.address}</td>
+                    <td>${client.score}</td>
+                    <td>${client.tier}</td>
+                    <td>${client.industry}</td>
+                    <td>${client.revenue}</td>
+                    <td>${client.status}</td>
+                    <td>
+                        <button class="contact-btn" onclick="sendEmail('${client.email}', '${client.name}', '${client.tier}', '${client.buyerType}')">Email</button>
+                        <button class="contact-btn" onclick="callClient('${client.phone}')">Call</button>
+                        <button class="contact-btn" onclick="scheduleAppointment('${client.name}')">Schedule</button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function sendEmail(email, name, tier, buyerType) {
+            const templates = {
+                '1A': {
+                    'Relationship': `Subject: Transform Your Look at Cape Coral's Premier Hair Salon
+
+Dear ${name},
+
+I hope this message finds you well. As Cape Coral's premier hair destination, Hair 2 Dye 4 would love to welcome you to our salon family.
+
+Based on your professional background and style preferences, I believe our personalized approach would be perfect for you. Here's what makes us special:
+
+✨ PERSONALIZED CONSULTATION: Every appointment starts with understanding YOUR unique style and lifestyle needs
+✨ EXPERT COLORISTS: Specializing in color transformations that enhance your natural beauty
+✨ RELAXING EXPERIENCE: Unwind in our comfortable salon while we create your perfect look
+
+Special offer for new clients like you:
+• FREE Mini Halo Highlights (normally $55) - first-time clients with Danielle
+• $50 savings on premium treatments
+• Complimentary style consultation
+
+Our clients love that we take the time to understand their busy schedules and create looks that are both stunning and manageable.
+
+Would you like to schedule a complimentary consultation this week? 
+
+Call us at (239) 673-8214 or reply to this email.
+
+Looking forward to creating your signature look!
+
+Best regards,
+Hair 2 Dye 4 Team
+130 Del Prado Blvd STE 5, Cape Coral, FL`,
+
+                    'Analytical': `Subject: Professional Hair Services - Portfolio & Pricing Details
+
+Dear ${name},
+
+Thank you for your interest in Hair 2 Dye 4. I understand you appreciate detailed information before making decisions, so here's a comprehensive overview:
+
+OUR EXPERTISE:
+• 15+ years combined experience in color and cutting techniques
+• Certified in Olaplex treatments and Keratin services
+• Before/after portfolio available for review
+
+PRICING TRANSPARENCY:
+• Cuts: $26-$42 (length dependent)
+• Color Services: $40-$180 (technique dependent)
+• Treatments: $15-$199 (Olaplex, Keratin)
+• Full service menu at hair2dye4239.com/services
+
+QUALITY GUARANTEES:
+✓ Free touch-ups within 2 weeks if not completely satisfied
+✓ Color-safe product recommendations included
+✓ Detailed maintenance instructions provided
+
+CLIENT SUCCESS METRICS:
+• 4.8/5 average rating
+• 92% client retention rate
+• 78% referral rate
+
+NEW CLIENT OFFER:
+$50 savings on first visit + free consultation (normally $25)
+
+Schedule your consultation to review our portfolio and discuss your specific needs.
+
+Professional regards,
+Hair 2 Dye 4 Team
+(239) 673-8214`,
+
+                    'Innovation': `Subject: Cutting-Edge Hair Trends at Cape Coral's Most Creative Salon
+
+Dear ${name},
+
+Ready to make a statement with your style? Hair 2 Dye 4 is where Cape Coral's trendsetters come for the latest techniques and cutting-edge looks.
+
+TRENDING NOW:
+🎨 Balayage & Ombré Color Techniques
+🎨 City Beats Fashion Colors
+🎨 Keratin Smoothing Treatments
+🎨 Specialty Texture Services
+
+EXCLUSIVE TECHNIQUES:
+• Hand-painted color for natural dimension
+• Break The Base color corrections
+• Spiral and specialty perms
+• Advanced cutting methods
+
+WHAT'S NEW:
+We're constantly updating our skills with the latest trends from New York and LA. Our stylists attend advanced training quarterly to bring you tomorrow's trends today.
+
+LIMITED TIME: First-time innovation clients get 20% off any advanced color technique + free Olaplex treatment.
+
+Ready to be Cape Coral's next trendsetter?
+
+Book your transformation: (239) 673-8214
+
+Creatively yours,
+Hair 2 Dye 4 Team`,
+
+                    'Efficiency': `Subject: Quick, Professional Hair Services That Fit Your Schedule
+
+Dear ${name},
+
+I know your time is valuable, so I'll keep this brief. Hair 2 Dye 4 offers efficient, professional hair services designed for busy Cape Coral professionals like you.
+
+TIME-SAVING SERVICES:
+⏰ Express cuts: 30 minutes
+⏰ Color touch-ups: 45 minutes
+⏰ Quick styling: 25 minutes
+⏰ Same-day appointments often available
+
+CONVENIENT FEATURES:
+• Online booking system
+• Text appointment reminders
+• Flexible scheduling (including early/late)
+• Efficient, no-wait service
+
+STREAMLINED PROCESS:
+1. Quick consultation (5 mins)
+2. Service delivery
+3. Styling tips for easy maintenance
+
+NEW CLIENT SPECIAL:
+$20 off any service + express lane priority booking
+
+Ready to save time while looking great?
+
+Quick booking: (239) 673-8214
+Online: hair2dye4239.com
+
+Efficiently yours,
+Hair 2 Dye 4 Team`
+                },
+                '1B': {
+                    'Relationship': `Subject: Welcome to the Hair 2 Dye 4 Family!
+
+Dear ${name},
+
+We'd love to welcome you to our Cape Coral salon family! At Hair 2 Dye 4, we believe great hair comes from great relationships.
+
+WHY OUR CLIENTS LOVE US:
+💕 Personal attention from caring stylists
+💕 Relaxing, friendly atmosphere
+💕 Long-term relationships (many clients for 5+ years)
+💕 Mother-daughter specials available
+
+NEW CLIENT PERKS:
+• $30 off first visit
+• Referral rewards program
+• Birthday month discounts
+
+Join our salon family today!
+
+Warmly,
+Hair 2 Dye 4 Team
+(239) 673-8214`,
+
+                    'Analytical': `Subject: Hair 2 Dye 4 - Service Details & Pricing
+
+Dear ${name},
+
+Here are the details about our hair services:
+
+POPULAR PACKAGES:
+• Cut & Style: $26-$42
+• Color & Cut: $106-$192
+• Treatment Package: $60-$244
+
+SATISFACTION GUARANTEE: 100% satisfaction or we'll make it right.
+
+NEW CLIENT DISCOUNT: 25% off first service
+
+Review full pricing: hair2dye4239.com/services
+Book consultation: (239) 673-8214
+
+Best regards,
+Hair 2 Dye 4 Team`,
+
+                    'Innovation': `Subject: Creative Hair Solutions at Hair 2 Dye 4
+
+Dear ${name},
+
+Explore creative possibilities at Cape Coral's most innovative salon!
+
+CREATIVE SERVICES:
+🎨 Custom color designs
+🎨 Unique cutting techniques
+🎨 Texture transformations
+
+NEW CLIENT SPECIAL:
+Free creative consultation + 15% off any innovative service
+
+Let's create something amazing!
+
+Hair 2 Dye 4 Team
+(239) 673-8214`,
+
+                    'Efficiency': `Subject: Quick Quality Hair Services
+
+Dear ${name},
+
+Professional hair services that respect your time:
+
+⏰ Efficient appointments
+⏰ Quality results
+⏰ Flexible scheduling
+
+NEW CLIENT: $25 off + priority booking
+
+Book now: (239) 673-8214
+
+Hair 2 Dye 4 Team`
+                },
+                '1C': {
+                    'Relationship': `Subject: Affordable Hair Care at Hair 2 Dye 4
+
+Dear ${name},
+
+Looking for quality hair care that fits your budget? We'd love to help!
+
+BUDGET-FRIENDLY OPTIONS:
+💰 Student discounts available
+💰 Package deals save money
+💰 Loyalty rewards program
+
+STARTER SPECIAL:
+$15 off any service for first-time clients
+
+We believe everyone deserves to feel beautiful!
+
+Hair 2 Dye 4 Team
+(239) 673-8214`,
+
+                    'Analytical': `Subject: Affordable Hair Services - Pricing Breakdown
+
+Dear ${name},
+
+Budget-conscious hair care options:
+
+BASIC SERVICES:
+• Men's cuts: $20
+• Basic styling: $25-$30
+• Simple color: $40-$70
+
+SAVINGS OPPORTUNITIES:
+• Student rates available
+• Package deals
+• Off-peak discounts
+
+NEW CLIENT: $15 off first service
+
+Hair 2 Dye 4 Team
+(239) 673-8214`,
+
+                    'Innovation': `Subject: Try Something New - Budget-Friendly Style
+
+Dear ${name},
+
+Express your creativity without breaking the bank!
+
+AFFORDABLE CREATIVITY:
+🎨 Color highlights from $40
+🎨 Fun fashion accents
+🎨 Trendy cuts that grow out well
+
+FIRST-TIME SPECIAL:
+$15 off + free style consultation
+
+Hair 2 Dye 4 Team
+(239) 673-8214`,
+
+                    'Efficiency': `Subject: Quick & Affordable Hair Services
+
+Dear ${name},
+
+Fast, affordable, quality hair care:
+
+⏰ Quick services
+💰 Fair pricing  
+✨ Great results
+
+NEW CLIENT: $15 off
+
+Book: (239) 673-8214
+
+Hair 2 Dye 4`
+                }
+            };
+
+            const template = templates[tier][buyerType];
+            const emailTemplate = document.getElementById('emailTemplate');
+            emailTemplate.textContent = template;
+            
+            // Create mailto link
+            const subject = template.split('\n')[0].replace('Subject: ', '');
+            const body = template.split('\n').slice(2).join('\n');
+            const mailtoLink = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+            
+            // Open email client
+            window.open(mailtoLink);
+        }
+
+        function callClient(phone) {
+            alert(`Calling ${phone}...\n\nRemember to mention:\n• New client specials\n• Hair transformation possibilities\n• Convenient Cape Coral location\n• Experienced stylists`);
+        }
+
+        function scheduleAppointment(name) {
+            alert(`Scheduling appointment for ${name}...\n\nAvailable times:\n• Tuesday 2:00 PM\n• Wednesday 10:00 AM\n• Thursday 4:00 PM\n• Friday 11:00 AM\n\nCall (239) 673-8214 to confirm.`);
+        }
+
+        function setRating(category, value) {
+            currentRatings[category] = value;
+            
+            // Update button states
+            const buttons = event.target.parentElement.querySelectorAll('.rating-btn');
+            buttons.forEach((btn, index) => {
+                btn.classList.toggle('active', index < value);
+            });
+            
+            // Calculate total score
+            const total = Object.values(currentRatings).reduce((sum, rating) => sum + rating, 0);
+            const average = total / 5;
+            
+            console.log(`Current P.U.R.E.S. Score: ${average.toFixed(1)}`);
+        }
+
+        function filterTier(tier) {
+            // Update button states
+            document.querySelectorAll('.tier-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            if (tier === 'all') {
+                currentClients = [...clientData];
+            } else {
+                currentClients = clientData.filter(client => client.tier === tier);
+            }
+            
+            populateTable(currentClients);
+        }
+
+        function sortTable(columnIndex) {
+            const table = document.getElementById('clientTable');
+            const rows = Array.from(table.rows).slice(1);
+            
+            rows.sort((a, b) => {
+                const aVal = a.cells[columnIndex].textContent;
+                const bVal = b.cells[columnIndex].textContent;
+                
+                // Check if values are numbers
+                if (!isNaN(aVal) && !isNaN(bVal)) {
+                    return parseFloat(bVal) - parseFloat(aVal);
+                }
+                
+                return aVal.localeCompare(bVal);
+            });
+            
+            const tbody = table.querySelector('tbody');
+            tbody.innerHTML = '';
+            rows.forEach(row => tbody.appendChild(row));
+        }
+
+        function exportData() {
+            const csvContent = [
+                'Client Name,Email,Phone,Address,P.U.R.E.S. Score,Tier,Industry,Revenue,Status,Buyer Type',
+                ...currentClients.map(client => 
+                    `"${client.name}","${client.email}","${client.phone}","${client.address}","${client.score}","${client.tier}","${client.industry}","${client.revenue}","${client.status}","${client.buyerType}"`
+                )
+            ].join('\n');
+            
+            const blob = new Blob([csvContent], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'hair2dye4-client-database.csv';
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+
+        // Search functionality
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const filteredClients = currentClients.filter(client => 
+                client.name.toLowerCase().includes(searchTerm) ||
+                client.email.toLowerCase().includes(searchTerm) ||
+                client.industry.toLowerCase().includes(searchTerm)
+            );
+            populateTable(filteredClients);
+        });
+
+        // Initialize the table
+        populateTable();
+    </script>
+</body>
+</html>

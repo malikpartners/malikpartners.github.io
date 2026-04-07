@@ -1,0 +1,1638 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>S.A.L.E. System Dashboard - Gemini G.E.L.</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background-color: #000000;
+            color: #ffffff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+        }
+        
+        .header {
+            background-color: #CF2030;
+            padding: 1rem;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(207, 32, 48, 0.3);
+        }
+        
+        .logo {
+            max-height: 60px;
+            width: auto;
+        }
+        
+        .business-info {
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .dashboard-tabs {
+            display: flex;
+            background-color: #CF2030;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+        
+        .tab-button {
+            flex: 1;
+            padding: 1rem;
+            background-color: #CF2030;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+        }
+        
+        .tab-button:hover, .tab-button.active {
+            background-color: #A01826;
+        }
+        
+        .tab-content {
+            display: none;
+            background-color: #1a1a1a;
+            padding: 2rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .section-title {
+            color: #CF2030;
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid #CF2030;
+            padding-bottom: 0.5rem;
+        }
+        
+        .pures-scoring {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .score-card {
+            background-color: #2a2a2a;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid #CF2030;
+        }
+        
+        .score-input {
+            width: 100%;
+            padding: 0.5rem;
+            margin-top: 0.5rem;
+            border: 1px solid #444;
+            background-color: #333;
+            color: white;
+            border-radius: 4px;
+        }
+        
+        .client-controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .search-box, .filter-select {
+            padding: 0.75rem;
+            border: 1px solid #CF2030;
+            background-color: #2a2a2a;
+            color: white;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        
+        .search-box {
+            flex-grow: 1;
+            min-width: 300px;
+        }
+        
+        .btn {
+            padding: 0.75rem 1.5rem;
+            background-color: #CF2030;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+        }
+        
+        .btn:hover {
+            background-color: #A01826;
+        }
+        
+        .btn-small {
+            padding: 0.4rem 0.8rem;
+            font-size: 0.8rem;
+        }
+        
+        .client-table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #2a2a2a;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+        
+        .client-table th {
+            background-color: #CF2030;
+            padding: 1rem;
+            text-align: left;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .client-table th:hover {
+            background-color: #A01826;
+        }
+        
+        .client-table td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid #444;
+        }
+        
+        .client-table tr:hover {
+            background-color: #3a3a3a;
+        }
+        
+        .tier-badge {
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        
+        .tier-1a {
+            background-color: #22c55e;
+            color: #000;
+        }
+        
+        .tier-1b {
+            background-color: #eab308;
+            color: #000;
+        }
+        
+        .tier-1c {
+            background-color: #3b82f6;
+            color: #fff;
+        }
+        
+        .contact-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .marketing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+        }
+        
+        .marketing-card {
+            background-color: #2a2a2a;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-top: 4px solid #CF2030;
+        }
+        
+        .email-template {
+            background-color: #2a2a2a;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            white-space: pre-line;
+            font-family: monospace;
+            border: 1px solid #444;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            background-color: #1a1a1a;
+            margin-top: 3rem;
+        }
+        
+        .footer-logo {
+            max-height: 30px;
+            width: auto;
+            opacity: 0.7;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background-color: #2a2a2a;
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+            border-left: 4px solid #CF2030;
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #CF2030;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        @media (max-width: 768px) {
+            .dashboard-tabs {
+                flex-direction: column;
+            }
+            
+            .client-controls {
+                flex-direction: column;
+            }
+            
+            .search-box {
+                min-width: auto;
+                width: 100%;
+            }
+            
+            .client-table {
+                font-size: 0.8rem;
+            }
+            
+            .marketing-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="HigginsReports" class="logo">
+        <div class="business-info">
+            <strong>Gemini G.E.L.</strong> | 8365 Melrose Avenue, Los Angeles, CA | Fine Art Retail | S.A.L.E. System Dashboard
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="dashboard-tabs">
+            <button class="tab-button active" onclick="showTab('sourcing')">SOURCING</button>
+            <button class="tab-button" onclick="showTab('assessing')">ASSESSING</button>
+            <button class="tab-button" onclick="showTab('listening')">LISTENING</button>
+            <button class="tab-button" onclick="showTab('empowering')">EMPOWERING</button>
+            <button class="tab-button" onclick="showTab('analytics')">ANALYTICS</button>
+        </div>
+
+        <!-- SOURCING TAB -->
+        <div id="sourcing" class="tab-content active">
+            <h2 class="section-title">S.A.L.E. SOURCING - P.U.R.E.S. Client Database</h2>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number" id="totalClients">50</div>
+                    <div>Total Prospects</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="tier1aCount">12</div>
+                    <div>Tier 1A Premium</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="tier1bCount">23</div>
+                    <div>Tier 1B High-Value</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="tier1cCount">15</div>
+                    <div>Tier 1C Qualified</div>
+                </div>
+            </div>
+
+            <div class="client-controls">
+                <input type="text" id="searchInput" class="search-box" placeholder="Search clients by name, industry, or location...">
+                <select id="tierFilter" class="filter-select">
+                    <option value="">All Tiers</option>
+                    <option value="1A">Tier 1A - Premium</option>
+                    <option value="1B">Tier 1B - High-Value</option>
+                    <option value="1C">Tier 1C - Qualified</option>
+                </select>
+                <button class="btn" onclick="exportClients()">Export CSV</button>
+                <button class="btn" onclick="addNewClient()">Add Client</button>
+            </div>
+
+            <table class="client-table" id="clientTable">
+                <thead>
+                    <tr>
+                        <th onclick="sortTable(0)">Client Name ↕</th>
+                        <th onclick="sortTable(1)">Email ↕</th>
+                        <th onclick="sortTable(2)">Phone ↕</th>
+                        <th onclick="sortTable(3)">Address ↕</th>
+                        <th onclick="sortTable(4)">P.U.R.E.S. Score ↕</th>
+                        <th onclick="sortTable(5)">Tier ↕</th>
+                        <th onclick="sortTable(6)">Industry ↕</th>
+                        <th onclick="sortTable(7)">Revenue Est. ↕</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="clientTableBody">
+                    <!-- Client data will be populated by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- ASSESSING TAB -->
+        <div id="assessing" class="tab-content">
+            <h2 class="section-title">A.SSESSING - Buying Pattern Analysis</h2>
+            
+            <div class="pures-scoring">
+                <div class="score-card">
+                    <h3>Profitability Assessment</h3>
+                    <p>Annual revenue threshold and budget capacity</p>
+                    <select class="score-input" id="profitabilityScore">
+                        <option value="">Select Score (1-5)</option>
+                        <option value="5">5 - Excellent ($500K+ annual art budget)</option>
+                        <option value="4">4 - High ($200-500K annual art budget)</option>
+                        <option value="3">3 - Moderate ($50-200K annual art budget)</option>
+                        <option value="2">2 - Low ($10-50K annual art budget)</option>
+                        <option value="1">1 - Very Low (Under $10K annual art budget)</option>
+                    </select>
+                </div>
+                
+                <div class="score-card">
+                    <h3>Urgency Assessment</h3>
+                    <p>Active pain points requiring immediate solutions</p>
+                    <select class="score-input" id="urgencyScore">
+                        <option value="">Select Score (1-5)</option>
+                        <option value="5">5 - Immediate need (new space, event deadline)</option>
+                        <option value="4">4 - Urgent (3-6 months)</option>
+                        <option value="3">3 - Moderate urgency (6-12 months)</option>
+                        <option value="2">2 - Planned purchase (1-2 years)</option>
+                        <option value="1">1 - Future consideration (2+ years)</option>
+                    </select>
+                </div>
+                
+                <div class="score-card">
+                    <h3>Reachability Assessment</h3>
+                    <p>Accessible decision makers with clear contact paths</p>
+                    <select class="score-input" id="reachabilityScore">
+                        <option value="">Select Score (1-5)</option>
+                        <option value="5">5 - Direct contact with decision maker</option>
+                        <option value="4">4 - Easy access through referral</option>
+                        <option value="3">3 - Moderate barriers to contact</option>
+                        <option value="2">2 - Significant barriers</option>
+                        <option value="1">1 - Very difficult to reach</option>
+                    </select>
+                </div>
+                
+                <div class="score-card">
+                    <h3>Engagement Assessment</h3>
+                    <p>Openness to innovation and partnerships</p>
+                    <select class="score-input" id="engagementScore">
+                        <option value="">Select Score (1-5)</option>
+                        <option value="5">5 - Highly engaged art enthusiast</option>
+                        <option value="4">4 - Active collector/buyer</option>
+                        <option value="3">3 - Occasional purchaser</option>
+                        <option value="2">2 - Skeptical but interested</option>
+                        <option value="1">1 - Resistant to new sources</option>
+                    </select>
+                </div>
+                
+                <div class="score-card">
+                    <h3>Sustainability Assessment</h3>
+                    <p>Long-term partnership potential with growth trajectory</p>
+                    <select class="score-input" id="sustainabilityScore">
+                        <option value="">Select Score (1-5)</option>
+                        <option value="5">5 - High repeat purchase potential</option>
+                        <option value="4">4 - Good long-term value</option>
+                        <option value="3">3 - Moderate repeat business</option>
+                        <option value="2">2 - Limited future potential</option>
+                        <option value="1">1 - One-time purchase only</option>
+                    </select>
+                </div>
+            </div>
+            
+            <button class="btn" onclick="calculatePURESScore()">Calculate P.U.R.E.S. Score</button>
+            <div id="puresResult" class="email-template hidden"></div>
+            
+            <div class="marketing-grid">
+                <div class="marketing-card">
+                    <h3>Analytical Buyers</h3>
+                    <p>Require detailed provenance, investment analysis, and historical performance data</p>
+                    <ul>
+                        <li>Provide certificate of authenticity</li>
+                        <li>Share comparable sales data</li>
+                        <li>Offer detailed artist biography</li>
+                    </ul>
+                </div>
+                
+                <div class="marketing-card">
+                    <h3>Relationship Buyers</h3>
+                    <p>Value trust, referrals, and long-term partnerships</p>
+                    <ul>
+                        <li>Leverage collector testimonials</li>
+                        <li>Provide curator recommendations</li>
+                        <li>Offer exclusive previews</li>
+                    </ul>
+                </div>
+                
+                <div class="marketing-card">
+                    <h3>Efficiency Buyers</h3>
+                    <p>Focus on convenience, curation services, and streamlined acquisition</p>
+                    <ul>
+                        <li>Offer concierge art services</li>
+                        <li>Provide home viewing appointments</li>
+                        <li>Streamline purchase process</li>
+                    </ul>
+                </div>
+                
+                <div class="marketing-card">
+                    <h3>Innovation Buyers</h3>
+                    <p>Seek cutting-edge artists, emerging talents, and unique opportunities</p>
+                    <ul>
+                        <li>Highlight emerging artists</li>
+                        <li>Offer limited editions</li>
+                        <li>Provide early access to new works</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- LISTENING TAB -->
+        <div id="listening" class="tab-content">
+            <h2 class="section-title">L.ISTENING - Feedback Integration System</h2>
+            
+            <div class="marketing-grid">
+                <div class="marketing-card">
+                    <h3>Pre-Sale Feedback Collection</h3>
+                    <textarea class="score-input" placeholder="Record client preferences, style interests, budget discussions..." rows="4"></textarea>
+                    <button class="btn btn-small" style="margin-top: 1rem;">Save Feedback</button>
+                </div>
+                
+                <div class="marketing-card">
+                    <h3>During-Sale Progress Tracking</h3>
+                    <textarea class="score-input" placeholder="Note presentation reactions, questions asked, concerns raised..." rows="4"></textarea>
+                    <button class="btn btn-small" style="margin-top: 1rem;">Update Progress</button>
+                </div>
+                
+                <div class="marketing-card">
+                    <h3>Post-Sale Satisfaction Monitoring</h3>
+                    <textarea class="score-input" placeholder="Record satisfaction levels, referral potential, future interests..." rows="4"></textarea>
+                    <button class="btn btn-small" style="margin-top: 1rem;">Log Satisfaction</button>
+                </div>
+                
+                <div class="marketing-card">
+                    <h3>Real-Time Complaint Resolution</h3>
+                    <textarea class="score-input" placeholder="Document any issues, resolution steps taken, outcome..." rows="4"></textarea>
+                    <button class="btn btn-small" style="margin-top: 1rem;">Record Resolution</button>
+                </div>
+            </div>
+            
+            <div class="email-template">
+Client Feedback Summary Template:
+
+Date: [Current Date]
+Client: [Selected Client Name]
+Interaction Type: [Phone/Email/In-Person/Virtual]
+Duration: [Time Spent]
+
+Key Insights:
+• Art preferences: [Modern, Contemporary, Classical, etc.]
+• Budget range: [Confirmed budget parameters]
+• Decision timeline: [Urgency level and key dates]
+• Influencers: [Spouse, advisor, decorator involved]
+
+Action Items:
+• Follow-up date: [Scheduled next contact]
+• Materials to send: [Catalogues, price lists, artist info]
+• Special requests: [Home viewing, expert consultation]
+
+Notes:
+[Additional observations and strategic notes]
+            </div>
+        </div>
+
+        <!-- EMPOWERING TAB -->
+        <div id="empowering" class="tab-content">
+            <h2 class="section-title">E.MPOWERING - Referral Strategy Dashboard</h2>
+            
+            <div class="marketing-grid">
+                <div class="marketing-card">
+                    <h3>Success Story Documentation</h3>
+                    <textarea class="score-input" placeholder="Document successful sales, client transformations, exceptional experiences..." rows="4"></textarea>
+                    <button class="btn btn-small" style="margin-top: 1rem;">Save Success Story</button>
+                </div>
+                
+                <div class="marketing-card">
+                    <h3>Referral Reward Tracking</h3>
+                    <p>Current Referral Program:</p>
+                    <ul style="margin: 1rem 0;">
+                        <li>10% commission on referred sales</li>
+                        <li>Exclusive curator dinner invitations</li>
+                        <li>First access to new collections</li>
+                    </ul>
+                    <button class="btn btn-small">Track New Referral</button>
+                </div>
+                
+                <div class="marketing-card">
+                    <h3>Client Advocacy Program</h3>
+                    <select class="score-input" style="margin-bottom: 1rem;">
+                        <option value="">Select Client for Advocacy</option>
+                        <option value="collector">Active Collector</option>
+                        <option value="decorator">Interior Designer</option>
+                        <option value="advisor">Art Advisor</option>
+                    </select>
+                    <button class="btn btn-small">Enroll in Program</button>
+                </div>
+                
+                <div class="marketing-card">
+                    <h3>Co-Marketing Opportunities</h3>
+                    <p>Partnership Ideas:</p>
+                    <ul style="margin: 1rem 0;">
+                        <li>Gallery exhibition partnerships</li>
+                        <li>Designer showroom collaborations</li>
+                        <li>Art fair joint presentations</li>
+                    </ul>
+                    <button class="btn btn-small">Plan Co-Marketing</button>
+                </div>
+            </div>
+            
+            <div class="email-template">
+Referral Outreach Template:
+
+Subject: Thank You + Exclusive Art Preview for [Client Name]
+
+Dear [Client Name],
+
+Thank you for your continued patronage of Gemini G.E.L. Your recent acquisition of [Artwork] has been perfectly placed, and we're thrilled to be part of your collection's evolution.
+
+As one of our valued collectors, you have an eye for exceptional art that we deeply respect. We'd love to extend our referral program benefits to you:
+
+🎨 10% commission on any successful referrals
+🥂 Invitations to exclusive curator dinners  
+⭐ First access to new artist releases
+
+If you know anyone seeking museum-quality prints or unique artistic pieces, we'd be honored to serve them with the same personalized attention you've experienced.
+
+Your next viewing: We have several new [Artist Name] works that align perfectly with your collection's direction. May we schedule a private showing?
+
+Best regards,
+Ellen Grinstein
+Gemini G.E.L.
+8365 Melrose Avenue, Los Angeles
+ellen@geminigel.com
+            </div>
+        </div>
+
+        <!-- ANALYTICS TAB -->
+        <div id="analytics" class="tab-content">
+            <h2 class="section-title">Marketing Analytics & Strategy</h2>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">18%</div>
+                    <div>Conversion Rate</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">$85K</div>
+                    <div>Average Sale Value</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">4.2</div>
+                    <div>Average P.U.R.E.S. Score</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">32</div>
+                    <div>Active Prospects</div>
+                </div>
+            </div>
+            
+            <div class="marketing-grid">
+                <div class="marketing-card">
+                    <h3>Weekly Action Plan</h3>
+                    <ul>
+                        <li><strong>Monday:</strong> Follow up with Tier 1A prospects</li>
+                        <li><strong>Tuesday:</strong> Send new arrival notifications</li>
+                        <li><strong>Wednesday:</strong> Schedule private viewings</li>
+                        <li><strong>Thursday:</strong> Artist studio visits with collectors</li>
+                        <li><strong>Friday:</strong> Referral program outreach</li>
+                    </ul>
+                </div>
+                
+                <div class="marketing-card">
+                    <h3>Monthly Campaigns</h3>
+                    <ul>
+                        <li><strong>Week 1:</strong> New artist introduction campaign</li>
+                        <li><strong>Week 2:</strong> Collector appreciation events</li>
+                        <li><strong>Week 3:</strong> Educational content (art history)</li>
+                        <li><strong>Week 4:</strong> Exclusive preview invitations</li>
+                    </ul>
+                </div>
+                
+                <div class="marketing-card">
+                    <h3>Seasonal Strategy</h3>
+                    <ul>
+                        <li><strong>Q1:</strong> New year collection refresh</li>
+                        <li><strong>Q2:</strong> Spring gallery partnerships</li>
+                        <li><strong>Q3:</strong> Art fair season preparations</li>
+                        <li><strong>Q4:</strong> Holiday gift art campaigns</li>
+                    </ul>
+                </div>
+                
+                <div class="marketing-card">
+                    <h3>Success Metrics</h3>
+                    <ul>
+                        <li>Monthly sales targets: $300K</li>
+                        <li>New client acquisition: 8 per month</li>
+                        <li>Referral rate: 25% of new clients</li>
+                        <li>Client retention: 85% annual</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="HigginsReports" class="footer-logo">
+        <p style="margin-top: 1rem; opacity: 0.7;">© 2024 HigginsReports - Advanced Business Intelligence for Gemini G.E.L.</p>
+    </footer>
+
+    <script>
+        // Sample client data for Los Angeles area art collectors
+        const clientData = [
+            {
+                name: "Victoria Steinberg",
+                email: "victoria.steinberg@gmail.com", 
+                phone: "(310) 555-0142",
+                address: "912 N Beverly Dr, Beverly Hills, CA 90210",
+                puresScore: 4.8,
+                tier: "1A",
+                industry: "Private Collector",
+                revenue: "$2.5M",
+                status: "Active",
+                lastContact: "2024-01-15",
+                notes: "Contemporary art focus, major Basquiat collector"
+            },
+            {
+                name: "Michael Chen",
+                email: "mchen@chendesign.com",
+                phone: "(323) 555-0198",
+                address: "1547 N Fairfax Ave, West Hollywood, CA 90046", 
+                puresScore: 4.6,
+                tier: "1A",
+                industry: "Interior Designer",
+                revenue: "$1.8M",
+                status: "Prospect",
+                lastContact: "2024-01-20",
+                notes: "High-end residential projects, needs large scale pieces"
+            },
+            {
+                name: "Sarah Goldman",
+                email: "sarah.goldman@goldmanfamily.org",
+                phone: "(310) 555-0223",
+                address: "714 N Canon Dr, Beverly Hills, CA 90210",
+                puresScore: 4.7,
+                tier: "1A", 
+                industry: "Family Foundation",
+                revenue: "$3.2M",
+                status: "Active",
+                lastContact: "2024-01-10",
+                notes: "Museum-quality pieces, focuses on emerging artists"
+            },
+            {
+                name: "David Rodriguez",
+                email: "david@rodriguezgallery.com",
+                phone: "(213) 555-0187",
+                address: "943 Chung King Rd, Los Angeles, CA 90012",
+                puresScore: 4.5,
+                tier: "1A",
+                industry: "Gallery Owner", 
+                revenue: "$1.2M",
+                status: "Partner",
+                lastContact: "2024-01-18",
+                notes: "Gallery partnerships, co-exhibitions potential"
+            },
+            {
+                name: "Jennifer Walsh",
+                email: "jennifer.walsh@walshinteriors.com",
+                phone: "(310) 555-0165",
+                address: "8687 Melrose Ave, West Hollywood, CA 90069",
+                puresScore: 4.3,
+                tier: "1B",
+                industry: "Interior Designer",
+                revenue: "$950K",
+                status: "Active",
+                lastContact: "2024-01-22",
+                notes: "Celebrity clients, needs statement pieces"
+            },
+            {
+                name: "Robert Kim",
+                email: "rkim@kimcollection.com",
+                phone: "(323) 555-0201",
+                address: "1234 S Robertson Blvd, Los Angeles, CA 90035",
+                puresScore: 4.4,
+                tier: "1A",
+                industry: "Art Advisor",
+                revenue: "$2.1M", 
+                status: "Active",
+                lastContact: "2024-01-12",
+                notes: "Advises tech executives, contemporary focus"
+            },
+            {
+                name: "Lisa Hoffman",
+                email: "lisa.hoffman@hoffmanstudios.com",
+                phone: "(310) 555-0189",
+                address: "456 N Rodeo Dr, Beverly Hills, CA 90210",
+                puresScore: 4.2,
+                tier: "1B",
+                industry: "Art Consultant",
+                revenue: "$1.1M",
+                status: "Prospect",
+                lastContact: "2024-01-25",
+                notes: "Corporate art programs, volume purchases"
+            },
+            {
+                name: "Thomas Anderson",
+                email: "tanderson@andersonestate.com",
+                phone: "(310) 555-0134",
+                address: "2847 Benedict Canyon Dr, Beverly Hills, CA 90210", 
+                puresScore: 4.6,
+                tier: "1A",
+                industry: "Private Collector",
+                revenue: "$1.7M",
+                status: "Active",
+                lastContact: "2024-01-08",
+                notes: "Minimalist aesthetic, Judd and Andre collector"
+            },
+            {
+                name: "Maria Santos",
+                email: "maria@santosart.com",
+                phone: "(213) 555-0167",
+                address: "634 Mateo St, Los Angeles, CA 90021",
+                puresScore: 4.1,
+                tier: "1B",
+                industry: "Curator",
+                revenue: "$750K",
+                status: "Network",
+                lastContact: "2024-01-14",
+                notes: "LACMA connections, Latin American art specialist"
+            },
+            {
+                name: "James Mitchell",
+                email: "james.mitchell@mitchellproperties.com",
+                phone: "(310) 555-0156",
+                address: "9876 Sunset Blvd, West Hollywood, CA 90069",
+                puresScore: 4.3,
+                tier: "1B", 
+                industry: "Real Estate Developer",
+                revenue: "$1.3M",
+                status: "Prospect",
+                lastContact: "2024-01-21",
+                notes: "Luxury developments, needs architectural-scale pieces"
+            },
+            {
+                name: "Catherine Lee",
+                email: "catherine@leeassociates.com",
+                phone: "(323) 555-0143",
+                address: "1456 N Highland Ave, Hollywood, CA 90028",
+                puresScore: 3.9,
+                tier: "1B",
+                industry: "Entertainment Lawyer",
+                revenue: "$650K",
+                status: "Active",
+                lastContact: "2024-01-16",
+                notes: "Celebrity clients, photography and prints preference"
+            },
+            {
+                name: "Daniel Park",
+                email: "dpark@parkcapital.com", 
+                phone: "(310) 555-0178",
+                address: "2121 Avenue of the Stars, Los Angeles, CA 90067",
+                puresScore: 4.5,
+                tier: "1A",
+                industry: "Investment Manager",
+                revenue: "$2.0M",
+                status: "Active",
+                lastContact: "2024-01-11",
+                notes: "Art as investment focus, blue-chip artists only"
+            },
+            {
+                name: "Isabella Martinez",
+                email: "isabella@martinezcollection.com",
+                phone: "(323) 555-0192",
+                address: "3456 W 3rd St, Los Angeles, CA 90020",
+                puresScore: 4.0,
+                tier: "1B",
+                industry: "Private Collector",
+                revenue: "$800K",
+                status: "Prospect", 
+                lastContact: "2024-01-19",
+                notes: "Contemporary Latin artists, emerging market focus"
+            },
+            {
+                name: "Richard Stone",
+                email: "rstone@stoneinteriors.com",
+                phone: "(310) 555-0154",
+                address: "8765 Melrose Ave, West Hollywood, CA 90069",
+                puresScore: 4.2,
+                tier: "1B",
+                industry: "Interior Designer",
+                revenue: "$950K",
+                status: "Active",
+                lastContact: "2024-01-13",
+                notes: "High-end residential, prefers established artists"
+            },
+            {
+                name: "Amanda Thompson",
+                email: "amanda.thompson@thompsonart.com",
+                phone: "(213) 555-0186",
+                address: "555 S Hope St, Los Angeles, CA 90013",
+                puresScore: 3.8,
+                tier: "1C",
+                industry: "Art Dealer",
+                revenue: "$500K",
+                status: "Network",
+                lastContact: "2024-01-17",
+                notes: "Secondary market specialist, consignment potential"
+            },
+            {
+                name: "Stephen Wu",
+                email: "swu@wuenterprises.com",
+                phone: "(310) 555-0171",
+                address: "9999 Wilshire Blvd, Beverly Hills, CA 90210",
+                puresScore: 4.4,
+                tier: "1A",
+                industry: "Tech Executive", 
+                revenue: "$1.9M",
+                status: "Prospect",
+                lastContact: "2024-01-23",
+                notes: "Digital art interest, NFT collector transitioning to physical"
+            },
+            {
+                name: "Nicole Brown",
+                email: "nicole@browndesigns.com",
+                phone: "(323) 555-0145",
+                address: "1789 N Western Ave, Los Angeles, CA 90027",
+                puresScore: 3.7,
+                tier: "1C",
+                industry: "Interior Designer",
+                revenue: "$400K",
+                status: "Active",
+                lastContact: "2024-01-24",
+                notes: "Mid-century modern focus, prints and multiples"
+            },
+            {
+                name: "Alexander Petrov",
+                email: "apetrov@petrovcollection.com",
+                phone: "(310) 555-0198",
+                address: "12345 Mulholland Dr, Beverly Hills, CA 90210",
+                puresScore: 4.7,
+                tier: "1A",
+                industry: "Private Collector",
+                revenue: "$2.8M",
+                status: "Active",
+                lastContact: "2024-01-09",
+                notes: "Russian avant-garde specialist, major collection"
+            },
+            {
+                name: "Grace Chang",
+                email: "grace.chang@changfoundation.org",
+                phone: "(213) 555-0164",
+                address: "678 S Park View St, Los Angeles, CA 90057",
+                puresScore: 4.1,
+                tier: "1B",
+                industry: "Foundation Director",
+                revenue: "$1.0M",
+                status: "Prospect",
+                lastContact: "2024-01-26",
+                notes: "Asian contemporary art, museum donation potential"
+            },
+            {
+                name: "Marcus Johnson",
+                email: "marcus@johnsonarchitects.com",
+                phone: "(323) 555-0173",
+                address: "2468 Sunset Blvd, Los Angeles, CA 90026",
+                puresScore: 3.9,
+                tier: "1B",
+                industry: "Architect",
+                revenue: "$650K",
+                status: "Active",
+                lastContact: "2024-01-15",
+                notes: "Architectural photography, site-specific installations"
+            },
+            {
+                name: "Sophia Reyes",
+                email: "sophia.reyes@reyesart.com",
+                phone: "(310) 555-0191",
+                address: "3690 Wilshire Blvd, Los Angeles, CA 90010",
+                puresScore: 3.6,
+                tier: "1C",
+                industry: "Art Therapist",
+                revenue: "$300K",
+                status: "Network",
+                lastContact: "2024-01-20",
+                notes: "Therapeutic art programs, volume educator pricing"
+            },
+            {
+                name: "Benjamin Clark",
+                email: "bclark@clarkgalleries.com",
+                phone: "(213) 555-0157",
+                address: "1357 S Broadway, Los Angeles, CA 90015",
+                puresScore: 4.3,
+                tier: "1B",
+                industry: "Gallery Owner",
+                revenue: "$1.1M",
+                status: "Partner",
+                lastContact: "2024-01-12",
+                notes: "Pop art specialist, Warhol and Lichtenstein focus"
+            },
+            {
+                name: "Emma Davis",
+                email: "emma@davisinteriors.com",
+                phone: "(310) 555-0168",
+                address: "4567 Beverly Dr, Beverly Hills, CA 90210",
+                puresScore: 4.0,
+                tier: "1B",
+                industry: "Interior Designer",
+                revenue: "$750K",
+                status: "Active",
+                lastContact: "2024-01-18",
+                notes: "Hotel and restaurant projects, large format prints"
+            },
+            {
+                name: "Jonathan Miller",
+                email: "jonathan.miller@millercorp.com",
+                phone: "(323) 555-0182",
+                address: "5678 Melrose Ave, Los Angeles, CA 90038",
+                puresScore: 4.2,
+                tier: "1B",
+                industry: "Corporate Executive",
+                revenue: "$900K",
+                status: "Prospect",
+                lastContact: "2024-01-21",
+                notes: "Corporate art collection, quarterly budget cycles"
+            },
+            {
+                name: "Rachel Green",
+                email: "rachel@greenspaces.com",
+                phone: "(310) 555-0174",
+                address: "7890 Santa Monica Blvd, West Hollywood, CA 90046",
+                puresScore: 3.8,
+                tier: "1C", 
+                industry: "Landscape Architect",
+                revenue: "$450K",
+                status: "Network",
+                lastContact: "2024-01-25",
+                notes: "Outdoor installations, weather-resistant pieces"
+            },
+            {
+                name: "Kevin Zhang",
+                email: "kzhang@zhangventures.com",
+                phone: "(213) 555-0195",
+                address: "9012 Wilshire Blvd, Beverly Hills, CA 90211",
+                puresScore: 4.6,
+                tier: "1A",
+                industry: "Venture Capitalist",
+                revenue: "$2.2M",
+                status: "Active",
+                lastContact: "2024-01-14",
+                notes: "Tech startup art, modern and contemporary focus"
+            },
+            {
+                name: "Lauren White",
+                email: "lauren.white@whiteproductions.com",
+                phone: "(323) 555-0159",
+                address: "1234 Vine St, Hollywood, CA 90028",
+                puresScore: 3.9,
+                tier: "1B",
+                industry: "Film Producer",
+                revenue: "$700K",
+                status: "Prospect",
+                lastContact: "2024-01-22",
+                notes: "Entertainment industry art, photography preference"
+            },
+            {
+                name: "Andrew Taylor",
+                email: "ataylor@taylorlaw.com",
+                phone: "(310) 555-0166",
+                address: "5432 Century Park E, Los Angeles, CA 90067",
+                puresScore: 4.1,
+                tier: "1B",
+                industry: "Attorney",
+                revenue: "$850K",
+                status: "Active",
+                lastContact: "2024-01-16",
+                notes: "Office art program, conservative taste, blue chip"
+            },
+            {
+                name: "Melissa Lopez",
+                email: "melissa@lopezdesign.com",
+                phone: "(323) 555-0183",
+                address: "6789 Fountain Ave, Hollywood, CA 90028",
+                puresScore: 3.5,
+                tier: "1C",
+                industry: "Graphic Designer",
+                revenue: "$250K",
+                status: "Network",
+                lastContact: "2024-01-19",
+                notes: "Design inspiration purchases, limited budget"
+            },
+            {
+                name: "Christopher Adams",
+                email: "chris.adams@adamsrealty.com",
+                phone: "(310) 555-0176",
+                address: "8901 Sunset Strip, West Hollywood, CA 90069",
+                puresScore: 4.0,
+                tier: "1B",
+                industry: "Real Estate Agent",
+                revenue: "$600K",
+                status: "Prospect",
+                lastContact: "2024-01-23",
+                notes: "Staging properties, rental pieces for luxury homes"
+            },
+            {
+                name: "Samantha Moore",
+                email: "samantha@moorecollection.com",
+                phone: "(213) 555-0188",
+                address: "2345 Grand Ave, Los Angeles, CA 90012",
+                puresScore: 4.3,
+                tier: "1B",
+                industry: "Private Collector",
+                revenue: "$1.0M",
+                status: "Active",
+                lastContact: "2024-01-10",
+                notes: "Abstract expressionism, post-war American art"
+            },
+            {
+                name: "Paul Wilson",
+                email: "pwilson@wilsonmuseum.org",
+                phone: "(323) 555-0163",
+                address: "3456 Museum Row, Los Angeles, CA 90036",
+                puresScore: 3.7,
+                tier: "1C",
+                industry: "Museum Curator",
+                revenue: "$400K",
+                status: "Network",
+                lastContact: "2024-01-17",
+                notes: "Museum shop, educational programs, limited budget"
+            },
+            {
+                name: "Diana Ross",
+                email: "diana.ross@rossinteriors.com",
+                phone: "(310) 555-0172",
+                address: "4567 Rodeo Dr, Beverly Hills, CA 90210",
+                puresScore: 4.4,
+                tier: "1A",
+                industry: "Interior Designer",
+                revenue: "$1.5M",
+                status: "Active",
+                lastContact: "2024-01-11",
+                notes: "A-list celebrity clients, no budget constraints"
+            },
+            {
+                name: "Eric Thompson",
+                email: "eric@thompsonhotels.com",
+                phone: "(213) 555-0194",
+                address: "5678 Downtown LA, Los Angeles, CA 90014",
+                puresScore: 4.2,
+                tier: "1B",
+                industry: "Hospitality",
+                revenue: "$1.2M",
+                status: "Prospect",
+                lastContact: "2024-01-24",
+                notes: "Boutique hotel chain, public space art needs"
+            },
+            {
+                name: "Natalie Garcia",
+                email: "natalie.garcia@garciaart.com",
+                phone: "(323) 555-0161",
+                address: "6789 Melrose Ave, Los Angeles, CA 90038",
+                puresScore: 3.8,
+                tier: "1C",
+                industry: "Art Teacher",
+                revenue: "$350K",
+                status: "Network",
+                lastContact: "2024-01-26",
+                notes: "Educational discounts, student programs"
+            },
+            {
+                name: "Robert Brown",
+                email: "rbrown@brownarchitects.com",
+                phone: "(310) 555-0179",
+                address: "7890 Wilshire Blvd, Los Angeles, CA 90036",
+                puresScore: 4.1,
+                tier: "1B",
+                industry: "Architect",
+                revenue: "$800K",
+                status: "Active",
+                lastContact: "2024-01-15",
+                notes: "Commercial projects, large scale architectural pieces"
+            },
+            {
+                name: "Jessica Chen",
+                email: "jessica@chenfoundation.org",
+                phone: "(213) 555-0185",
+                address: "8901 Bunker Hill, Los Angeles, CA 90017",
+                puresScore: 4.5,
+                tier: "1A",
+                industry: "Foundation",
+                revenue: "$1.8M",
+                status: "Prospect",
+                lastContact: "2024-01-13",
+                notes: "Asian art focus, public art donations"
+            },
+            {
+                name: "Michael Davis",
+                email: "michael.davis@davisventures.com",
+                phone: "(310) 555-0167",
+                address: "9012 Beverly Hills, Los Angeles, CA 90212",
+                puresScore: 4.3,
+                tier: "1B",
+                industry: "Investor",
+                revenue: "$1.1M",
+                status: "Active",
+                lastContact: "2024-01-21",
+                notes: "Art investment fund, diversified portfolio approach"
+            },
+            {
+                name: "Ashley Martinez",
+                email: "ashley@martinezstudios.com",
+                phone: "(323) 555-0177",
+                address: "1234 Arts District, Los Angeles, CA 90021",
+                puresScore: 3.6,
+                tier: "1C",
+                industry: "Artist/Collector",
+                revenue: "$300K",
+                status: "Network",
+                lastContact: "2024-01-18",
+                notes: "Artist trades, emerging collector, studio visits"
+            },
+            {
+                name: "William Johnson",
+                email: "william@johnsonlaw.com",
+                phone: "(310) 555-0181",
+                address: "2345 Century City, Los Angeles, CA 90067",
+                puresScore: 4.0,
+                tier: "1B",
+                industry: "Attorney",
+                revenue: "$750K",
+                status: "Prospect",
+                lastContact: "2024-01-20",
+                notes: "Corporate law firm, conservative investment approach"
+            },
+            {
+                name: "Elizabeth Taylor",
+                email: "elizabeth@taylordesigns.com", 
+                phone: "(213) 555-0169",
+                address: "3456 Sunset Blvd, Los Angeles, CA 90027",
+                puresScore: 3.9,
+                tier: "1B",
+                industry: "Interior Designer",
+                revenue: "$650K",
+                status: "Active",
+                lastContact: "2024-01-22",
+                notes: "Residential focus, traditional and contemporary mix"
+            },
+            {
+                name: "Mark Rodriguez",
+                email: "mark.rodriguez@rodriguezgallery.com",
+                phone: "(323) 555-0190",
+                address: "4567 Gallery Row, Los Angeles, CA 90013",
+                puresScore: 4.2,
+                tier: "1B",
+                industry: "Gallery Director",
+                revenue: "$900K",
+                status: "Partner",
+                lastContact: "2024-01-12",
+                notes: "Contemporary gallery, exhibition partnerships"
+            },
+            {
+                name: "Jennifer Kim",
+                email: "jennifer.kim@kimcorp.com",
+                phone: "(310) 555-0175",
+                address: "5678 Koreatown, Los Angeles, CA 90020",
+                puresScore: 4.4,
+                tier: "1A",
+                industry: "Business Owner",
+                revenue: "$1.6M",
+                status: "Active",
+                lastContact: "2024-01-09",
+                notes: "Korean contemporary art, cultural bridge building"
+            },
+            {
+                name: "David Wilson",
+                email: "david@wilsoncollection.com",
+                phone: "(213) 555-0196",
+                address: "6789 Downtown Arts, Los Angeles, CA 90015",
+                puresScore: 3.7,
+                tier: "1C",
+                industry: "Art Consultant",
+                revenue: "$450K",
+                status: "Network",
+                lastContact: "2024-01-25",
+                notes: "Corporate consulting, medium budget projects"
+            },
+            {
+                name: "Michelle Lee",
+                email: "michelle@leehomes.com",
+                phone: "(310) 555-0158",
+                address: "7890 Manhattan Beach, Los Angeles, CA 90266",
+                puresScore: 4.1,
+                tier: "1B",
+                industry: "Real Estate Developer",
+                revenue: "$800K",
+                status: "Prospect", 
+                lastContact: "2024-01-16",
+                notes: "Luxury condos, model home staging needs"
+            },
+            {
+                name: "James Park",
+                email: "james.park@parkinvestments.com",
+                phone: "(323) 555-0184",
+                address: "8901 Miracle Mile, Los Angeles, CA 90036",
+                puresScore: 4.6,
+                tier: "1A",
+                industry: "Investment Advisor",
+                revenue: "$2.1M",
+                status: "Active",
+                lastContact: "2024-01-14",
+                notes: "High net worth clients, art investment advisory"
+            },
+            {
+                name: "Sarah Johnson",
+                email: "sarah.johnson@johnsoninteriors.com",
+                phone: "(310) 555-0162",
+                address: "9012 Pacific Palisades, Los Angeles, CA 90272",
+                puresScore: 3.8,
+                tier: "1C",
+                industry: "Interior Designer", 
+                revenue: "$500K",
+                status: "Active",
+                lastContact: "2024-01-19",
+                notes: "Beach house projects, coastal contemporary style"
+            },
+            {
+                name: "Alex Chen",
+                email: "alex@chentech.com",
+                phone: "(213) 555-0170",
+                address: "1357 Silicon Beach, Los Angeles, CA 90291",
+                puresScore: 4.5,
+                tier: "1A",
+                industry: "Tech Entrepreneur",
+                revenue: "$1.9M",
+                status: "Prospect",
+                lastContact: "2024-01-23",
+                notes: "Digital native, cross-media art interests"
+            }
+        ];
+
+        let filteredData = [...clientData];
+        let sortDirection = 1;
+        let lastSortColumn = -1;
+
+        // Initialize the application
+        function initializeApp() {
+            populateTable();
+            updateStats();
+        }
+
+        // Tab switching functionality
+        function showTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.tab-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // Populate the client table
+        function populateTable() {
+            const tbody = document.getElementById('clientTableBody');
+            tbody.innerHTML = '';
+
+            filteredData.forEach((client, index) => {
+                const row = tbody.insertRow();
+                row.innerHTML = `
+                    <td><strong>${client.name}</strong></td>
+                    <td><a href="mailto:${client.email}" style="color: #CF2030;">${client.email}</a></td>
+                    <td>${client.phone}</td>
+                    <td>${client.address}</td>
+                    <td><strong>${client.puresScore}</strong></td>
+                    <td><span class="tier-badge tier-${client.tier.toLowerCase()}">${client.tier}</span></td>
+                    <td>${client.industry}</td>
+                    <td><strong>${client.revenue}</strong></td>
+                    <td class="contact-buttons">
+                        <button class="btn btn-small" onclick="contactClient('${client.email}', '${client.name}', '${client.industry}')">Email</button>
+                        <button class="btn btn-small" onclick="callClient('${client.phone}', '${client.name}')">Call</button>
+                    </td>
+                `;
+            });
+        }
+
+        // Contact client via email
+        function contactClient(email, name, industry) {
+            const subject = `Exclusive Art Preview - Gemini G.E.L. Collection for ${name}`;
+            const body = generateEmailTemplate(name, industry);
+            
+            // Show email preview
+            const emailPreview = document.createElement('div');
+            emailPreview.className = 'email-template';
+            emailPreview.style.position = 'fixed';
+            emailPreview.style.top = '10%';
+            emailPreview.style.left = '10%';
+            emailPreview.style.right = '10%';
+            emailPreview.style.zIndex = '1000';
+            emailPreview.style.backgroundColor = '#1a1a1a';
+            emailPreview.style.border = '2px solid #CF2030';
+            emailPreview.style.borderRadius = '8px';
+            emailPreview.style.padding = '2rem';
+            emailPreview.style.maxHeight = '70vh';
+            emailPreview.style.overflowY = 'auto';
+
+            emailPreview.innerHTML = `
+                <h3 style="color: #CF2030; margin-bottom: 1rem;">Email Preview - ${name}</h3>
+                <p><strong>To:</strong> ${email}</p>
+                <p><strong>Subject:</strong> ${subject}</p>
+                <div style="border: 1px solid #444; padding: 1rem; margin: 1rem 0; background-color: #2a2a2a;">
+                    ${body.replace(/\n/g, '<br>')}
+                </div>
+                <div style="text-align: right; margin-top: 1rem;">
+                    <button class="btn" onclick="sendEmail('${email}', '${subject}', '${body.replace(/'/g, "\\'")}')">Send Email</button>
+                    <button class="btn" style="background-color: #666; margin-left: 1rem;" onclick="closeEmailPreview()">Close</button>
+                </div>
+            `;
+
+            document.body.appendChild(emailPreview);
+        }
+
+        // Generate personalized email template
+        function generateEmailTemplate(name, industry) {
+            let specificContent = '';
+            
+            switch(industry) {
+                case 'Interior Designer':
+                    specificContent = `As an interior designer, you understand how the right artwork transforms spaces. Our current collection includes stunning large-format pieces perfect for your high-end residential projects, including works by established contemporary masters and emerging talents that will elevate any interior.`;
+                    break;
+                case 'Private Collector':
+                    specificContent = `Your reputation as a discerning collector precedes you. We have several museum-quality pieces that would complement sophisticated collections like yours, including rare prints and unique works from internationally recognized artists.`;
+                    break;
+                case 'Gallery Owner':
+                case 'Gallery Director':
+                    specificContent = `We'd love to explore partnership opportunities that could benefit both our establishments. Our inventory includes exceptional pieces that could enhance your upcoming exhibitions, and we're always open to collaborative ventures.`;
+                    break;
+                case 'Art Advisor':
+                case 'Art Consultant':
+                    specificContent = `Your clients deserve access to the finest contemporary prints and multiples. We can provide detailed provenance, investment analysis, and flexible viewing arrangements to support your advisory services.`;
+                    break;
+                case 'Foundation':
+                case 'Foundation Director':
+                    specificContent = `We share your commitment to advancing arts education and cultural preservation. Several pieces in our collection would be perfect for public programs or donation consideration, with full documentation for tax benefits.`;
+                    break;
+                default:
+                    specificContent = `Our carefully curated selection of contemporary prints, multiples, and unique works offers something special for art enthusiasts with refined taste. Each piece comes with full provenance and authenticity documentation.`;
+            }
+
+            return `Dear ${name},
+
+I hope this message finds you well. Ellen Grinstein here from Gemini G.E.L. on Melrose Avenue.
+
+${specificContent}
+
+What sets Gemini G.E.L. apart:
+🎨 Museum-quality prints and multiples from renowned artists
+📜 Complete provenance and authenticity documentation  
+🏛️ 50+ years of excellence in fine art publishing
+🤝 Personalized service and private viewing appointments
+💎 Exclusive access to limited editions and artist collaborations
+
+I'd love to schedule a private viewing at your convenience, either at our Melrose Avenue location or arrange a home consultation. We also offer flexible payment terms for qualifying collectors.
+
+Our current highlights include works by major contemporary artists, with pieces ranging from $5,000 to $500,000+. I believe several would align perfectly with your aesthetic and collecting goals.
+
+Would you be available for a brief call this week to discuss how Gemini G.E.L. can serve your art acquisition needs?
+
+Best regards,
+
+Ellen Grinstein
+Owner, Gemini G.E.L.
+8365 Melrose Avenue, Los Angeles, CA 90069
+ellen@geminigel.com | (323) 651-2668
+www.geminigel.com
+
+P.S. As a token of our appreciation for your time, I'd be happy to provide a complimentary consultation on any pieces you're currently considering.`;
+        }
+
+        // Send email (opens default email client)
+        function sendEmail(email, subject, body) {
+            const mailtoLink = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+            window.location.href = mailtoLink;
+            closeEmailPreview();
+        }
+
+        // Close email preview
+        function closeEmailPreview() {
+            const preview = document.querySelector('.email-template[style*="position: fixed"]');
+            if (preview) {
+                preview.remove();
+            }
+        }
+
+        // Call client (opens phone app on mobile or shows number)
+        function callClient(phone, name) {
+            if (confirm(`Call ${name} at ${phone}?`)) {
+                window.location.href = `tel:${phone}`;
+            }
+        }
+
+        // Search functionality
+        document.getElementById('searchInput').addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            filteredData = clientData.filter(client => 
+                client.name.toLowerCase().includes(searchTerm) ||
+                client.industry.toLowerCase().includes(searchTerm) ||
+                client.address.toLowerCase().includes(searchTerm) ||
+                client.email.toLowerCase().includes(searchTerm)
+            );
+            populateTable();
+            updateStats();
+        });
+
+        // Filter by tier
+        document.getElementById('tierFilter').addEventListener('change', function() {
+            const tierFilter = this.value;
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            
+            filteredData = clientData.filter(client => {
+                const matchesSearch = client.name.toLowerCase().includes(searchTerm) ||
+                                    client.industry.toLowerCase().includes(searchTerm) ||
+                                    client.address.toLowerCase().includes(searchTerm);
+                const matchesTier = tierFilter === '' || client.tier === tierFilter;
+                return matchesSearch && matchesTier;
+            });
+            populateTable();
+            updateStats();
+        });
+
+        // Sort table
+        function sortTable(columnIndex) {
+            if (lastSortColumn === columnIndex) {
+                sortDirection *= -1;
+            } else {
+                sortDirection = 1;
+                lastSortColumn = columnIndex;
+            }
+
+            const columns = ['name', 'email', 'phone', 'address', 'puresScore', 'tier', 'industry', 'revenue'];
+            const sortKey = columns[columnIndex];
+
+            filteredData.sort((a, b) => {
+                let aVal = a[sortKey];
+                let bVal = b[sortKey];
+                
+                if (sortKey === 'puresScore') {
+                    aVal = parseFloat(aVal);
+                    bVal = parseFloat(bVal);
+                } else if (sortKey === 'revenue') {
+                    aVal = parseFloat(aVal.replace(/[$M,K]/g, ''));
+                    bVal = parseFloat(bVal.replace(/[$M,K]/g, ''));
+                }
+                
+                if (aVal < bVal) return -1 * sortDirection;
+                if (aVal > bVal) return 1 * sortDirection;
+                return 0;
+            });
+
+            populateTable();
+        }
+
+        // Update statistics
+        function updateStats() {
+            const tier1A = filteredData.filter(client => client.tier === '1A').length;
+            const tier1B = filteredData.filter(client => client.tier === '1B').length;  
+            const tier1C = filteredData.filter(client => client.tier === '1C').length;
+
+            document.getElementById('totalClients').textContent = filteredData.length;
+            document.getElementById('tier1aCount').textContent = tier1A;
+            document.getElementById('tier1bCount').textContent = tier1B;
+            document.getElementById('tier1cCount').textContent = tier1C;
+        }
+
+        // Calculate P.U.R.E.S. score
+        function calculatePURESScore() {
+            const profitability = parseInt(document.getElementById('profitabilityScore').value) || 0;
+            const urgency = parseInt(document.getElementById('urgencyScore').value) || 0;
+            const reachability = parseInt(document.getElementById('reachabilityScore').value) || 0;
+            const engagement = parseInt(document.getElementById('engagementScore').value) || 0;
+            const sustainability = parseInt(document.getElementById('sustainabilityScore').value) || 0;
+
+            if (profitability && urgency && reachability && engagement && sustainability) {
+                const averageScore = (profitability + urgency + reachability + engagement + sustainability) / 5;
+                let tier = '';
+                
+                if (averageScore >= 4.5) tier = '1A - Premium';
+                else if (averageScore >= 3.5) tier = '1B - High-Value';
+                else tier = '1C - Qualified';
+
+                const result = document.getElementById('puresResult');
+                result.innerHTML = `
+P.U.R.E.S. Score Analysis:
+
+Profitability: ${profitability}/5
+Urgency: ${urgency}/5  
+Reachability: ${reachability}/5
+Engagement: ${engagement}/5
+Sustainability: ${sustainability}/5
+
+AVERAGE SCORE: ${averageScore.toFixed(1)}/5
+TIER CLASSIFICATION: ${tier}
+
+Recommended Actions:
+${getRecommendations(averageScore, profitability, urgency, reachability, engagement, sustainability)}
+                `;
+                result.classList.remove('hidden');
+            } else {
+                alert('Please complete all P.U.R.E.S. assessments before calculating the score.');
+            }
+        }
+
+        // Get recommendations based on P.U.R.E.S. scores
+        function getRecommendations(avg, p, u, r, e, s) {
+            let recommendations = [];
+            
+            if (p >= 4) recommendations.push('• High-value prospect - prioritize premium pieces and exclusive previews');
+            if (u >= 4) recommendations.push('• Urgent timeline - schedule immediate consultation and fast-track proposals');
+            if (r >= 4) recommendations.push('• Easily accessible - proceed with direct outreach and personal meetings');
+            if (e >= 4) recommendations.push('• Highly engaged - share educational content and artist stories');
+            if (s >= 4) recommendations.push('• Strong long-term potential - invest in relationship building and referral programs');
+            
+            if (avg >= 4.5) {
+                recommendations.push('• TIER 1A: Deploy premium service protocol with white-glove treatment');
+                recommendations.push('• Assign dedicated account management and VIP status');
+            } else if (avg >= 3.5) {
+                recommendations.push('• TIER 1B: Standard high-value approach with personalized service');
+                recommendations.push('• Schedule quarterly follow-ups and collection reviews');
+            } else {
+                recommendations.push('• TIER 1C: Nurture prospect with educational content and group events');
+                recommendations.push('• Focus on building trust and demonstrating value over time');
+            }
+
+            return recommendations.join('\n');
+        }
+
+        // Export clients to CSV
+        function exportClients() {
+            const csvContent = "data:text/csv;charset=utf-8," + 
+                "Name,Email,Phone,Address,PURES Score,Tier,Industry,Revenue,Status,Last Contact\n" +
+                filteredData.map(client => 
+                    `"${client.name}","${client.email}","${client.phone}","${client.address}",${client.puresScore},"${client.tier}","${client.industry}","${client.revenue}","${client.status}","${client.lastContact}"`
+                ).join("\n");
+
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "gemini_gel_clients.csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        // Add new client (placeholder function)
+        function addNewClient() {
+            alert('Add New Client functionality would open a form to input new client details and calculate their P.U.R.E.S. score.');
+        }
+
+        // Initialize the application when page loads
+        document.addEventListener('DOMContentLoaded', initializeApp);
+    </script>
+</body>
+</html>

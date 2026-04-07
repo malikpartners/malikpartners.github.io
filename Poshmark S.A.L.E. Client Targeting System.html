@@ -1,0 +1,1144 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Poshmark S.A.L.E. Client Targeting System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #000000;
+            color: #ffffff;
+            line-height: 1.6;
+        }
+        
+        .header {
+            background: #CF2030;
+            padding: 1rem 0;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(207, 32, 48, 0.3);
+        }
+        
+        .header img {
+            max-height: 60px;
+            width: auto;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .business-info {
+            background: #1a1a1a;
+            padding: 2rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            border: 2px solid #CF2030;
+        }
+        
+        .tabs {
+            display: flex;
+            background: #333;
+            border-radius: 10px 10px 0 0;
+            overflow: hidden;
+            margin-bottom: 0;
+        }
+        
+        .tab {
+            background: #CF2030;
+            color: white;
+            padding: 1rem 2rem;
+            cursor: pointer;
+            border: none;
+            flex: 1;
+            transition: all 0.3s ease;
+        }
+        
+        .tab:hover {
+            background: #a81a28;
+        }
+        
+        .tab.active {
+            background: #ffffff;
+            color: #CF2030;
+        }
+        
+        .tab-content {
+            display: none;
+            background: #1a1a1a;
+            padding: 2rem;
+            border-radius: 0 0 10px 10px;
+            border: 2px solid #CF2030;
+            border-top: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .section {
+            background: #222;
+            margin: 1.5rem 0;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid #444;
+        }
+        
+        .section h3 {
+            color: #CF2030;
+            margin-bottom: 1rem;
+            font-size: 1.4rem;
+        }
+        
+        .pures-form {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .pures-item {
+            background: #333;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid #555;
+        }
+        
+        .pures-item h4 {
+            color: #CF2030;
+            margin-bottom: 1rem;
+        }
+        
+        .rating-input {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+        
+        .rating-input input[type="radio"] {
+            display: none;
+        }
+        
+        .rating-input label {
+            width: 30px;
+            height: 30px;
+            background: #555;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: white;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .rating-input input[type="radio"]:checked + label {
+            background: #CF2030;
+            transform: scale(1.2);
+        }
+        
+        .search-controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .search-controls input,
+        .search-controls select {
+            padding: 0.75rem;
+            border: 1px solid #555;
+            border-radius: 5px;
+            background: #333;
+            color: white;
+        }
+        
+        .search-controls input {
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #222;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #444;
+        }
+        
+        th {
+            background: #CF2030;
+            color: white;
+            cursor: pointer;
+            user-select: none;
+            position: relative;
+        }
+        
+        th:hover {
+            background: #a81a28;
+        }
+        
+        th::after {
+            content: ' ↕';
+            opacity: 0.5;
+        }
+        
+        .tier-1a {
+            background: linear-gradient(135deg, #2d5a27, #4a8c3d);
+        }
+        
+        .tier-1b {
+            background: linear-gradient(135deg, #5a5027, #8c7b3d);
+        }
+        
+        .tier-1c {
+            background: linear-gradient(135deg, #27425a, #3d6b8c);
+        }
+        
+        .contact-btn {
+            background: #CF2030;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+        
+        .contact-btn:hover {
+            background: #a81a28;
+            transform: translateY(-2px);
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+        }
+        
+        .modal-content {
+            background: #222;
+            margin: 5% auto;
+            padding: 2rem;
+            border: 2px solid #CF2030;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 600px;
+            color: white;
+        }
+        
+        .close {
+            color: #CF2030;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .close:hover {
+            color: #a81a28;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #CF2030;
+            font-weight: bold;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #555;
+            border-radius: 5px;
+            background: #333;
+            color: white;
+        }
+        
+        .form-group textarea {
+            height: 150px;
+            resize: vertical;
+        }
+        
+        .btn {
+            background: #CF2030;
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover {
+            background: #a81a28;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: #333;
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid #555;
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #CF2030;
+            display: block;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            background: #111;
+            border-top: 1px solid #333;
+            margin-top: 3rem;
+        }
+        
+        .footer img {
+            max-height: 30px;
+            opacity: 0.7;
+        }
+        
+        .email-template {
+            background: #333;
+            padding: 1rem;
+            border-radius: 5px;
+            border: 1px solid #555;
+            margin-top: 1rem;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .search-controls {
+                flex-direction: column;
+            }
+            
+            .search-controls input {
+                min-width: 100%;
+            }
+            
+            .tabs {
+                flex-direction: column;
+            }
+            
+            table {
+                font-size: 0.9rem;
+            }
+            
+            th, td {
+                padding: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="HigginsReports" onerror="this.style.display='none'">
+    </header>
+
+    <div class="container">
+        <div class="business-info">
+            <h1>🛍️ Poshmark S.A.L.E. Client Targeting System</h1>
+            <p><strong>Business:</strong> Poshmark Fashion Marketplace | <strong>Owner:</strong> Andrea DeMarcus | <strong>Location:</strong> Riverside, California</p>
+            <p><strong>Industry:</strong> Fashion Resale & Marketplace | <strong>Email:</strong> andrea@poshmark.com | <strong>Service Area:</strong> 10-mile radius</p>
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="showTab(event, 'sourcing')">S - Sourcing</button>
+            <button class="tab" onclick="showTab(event, 'assessing')">A - Assessing</button>
+            <button class="tab" onclick="showTab(event, 'listening')">L - Listening</button>
+            <button class="tab" onclick="showTab(event, 'empowering')">E - Empowering</button>
+            <button class="tab" onclick="showTab(event, 'database')">Client Database</button>
+        </div>
+
+        <div id="sourcing" class="tab-content active">
+            <h2>🎯 S.A.L.E. SOURCING Module</h2>
+            
+            <div class="section">
+                <h3>P.U.R.E.S. Client Scoring System</h3>
+                <p>Evaluate potential fashion industry clients using our 5-point scoring system:</p>
+                
+                <div class="pures-form">
+                    <div class="pures-item">
+                        <h4>💰 Profitability</h4>
+                        <p>Fashion budget capacity & annual spending</p>
+                        <div class="rating-input">
+                            <input type="radio" id="p1" name="profitability" value="1">
+                            <label for="p1">1</label>
+                            <input type="radio" id="p2" name="profitability" value="2">
+                            <label for="p2">2</label>
+                            <input type="radio" id="p3" name="profitability" value="3">
+                            <label for="p3">3</label>
+                            <input type="radio" id="p4" name="profitability" value="4">
+                            <label for="p4">4</label>
+                            <input type="radio" id="p5" name="profitability" value="5">
+                            <label for="p5">5</label>
+                        </div>
+                    </div>
+                    
+                    <div class="pures-item">
+                        <h4>⚡ Urgency</h4>
+                        <p>Active fashion/wardrobe needs requiring solutions</p>
+                        <div class="rating-input">
+                            <input type="radio" id="u1" name="urgency" value="1">
+                            <label for="u1">1</label>
+                            <input type="radio" id="u2" name="urgency" value="2">
+                            <label for="u2">2</label>
+                            <input type="radio" id="u3" name="urgency" value="3">
+                            <label for="u3">3</label>
+                            <input type="radio" id="u4" name="urgency" value="4">
+                            <label for="u4">4</label>
+                            <input type="radio" id="u5" name="urgency" value="5">
+                            <label for="u5">5</label>
+                        </div>
+                    </div>
+                    
+                    <div class="pures-item">
+                        <h4>📱 Reachability</h4>
+                        <p>Accessible through social media & digital channels</p>
+                        <div class="rating-input">
+                            <input type="radio" id="r1" name="reachability" value="1">
+                            <label for="r1">1</label>
+                            <input type="radio" id="r2" name="reachability" value="2">
+                            <label for="r2">2</label>
+                            <input type="radio" id="r3" name="reachability" value="3">
+                            <label for="r3">3</label>
+                            <input type="radio" id="r4" name="reachability" value="4">
+                            <label for="r4">4</label>
+                            <input type="radio" id="r5" name="reachability" value="5">
+                            <label for="r5">5</label>
+                        </div>
+                    </div>
+                    
+                    <div class="pures-item">
+                        <h4>🤝 Engagement</h4>
+                        <p>Openness to fashion trends & community participation</p>
+                        <div class="rating-input">
+                            <input type="radio" id="e1" name="engagement" value="1">
+                            <label for="e1">1</label>
+                            <input type="radio" id="e2" name="engagement" value="2">
+                            <label for="e2">2</label>
+                            <input type="radio" id="e3" name="engagement" value="3">
+                            <label for="e3">3</label>
+                            <input type="radio" id="e4" name="engagement" value="4">
+                            <label for="e4">4</label>
+                            <input type="radio" id="e5" name="engagement" value="5">
+                            <label for="e5">5</label>
+                        </div>
+                    </div>
+                    
+                    <div class="pures-item">
+                        <h4>🌱 Sustainability</h4>
+                        <p>Long-term fashion relationship potential</p>
+                        <div class="rating-input">
+                            <input type="radio" id="s1" name="sustainability" value="1">
+                            <label for="s1">1</label>
+                            <input type="radio" id="s2" name="sustainability" value="2">
+                            <label for="s2">2</label>
+                            <input type="radio" id="s3" name="sustainability" value="3">
+                            <label for="s3">3</label>
+                            <input type="radio" id="s4" name="sustainability" value="4">
+                            <label for="s4">4</label>
+                            <input type="radio" id="s5" name="sustainability" value="5">
+                            <label for="s5">5</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="btn" onclick="calculatePUREScore()">Calculate P.U.R.E.S. Score</button>
+                <div id="pureResult" style="margin-top: 1rem; padding: 1rem; background: #333; border-radius: 5px; display: none;"></div>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <span class="stat-number">50</span>
+                    <span>Total Prospects</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number">15</span>
+                    <span>Tier 1A (Premium)</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number">20</span>
+                    <span>Tier 1B (High-Value)</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number">15</span>
+                    <span>Tier 1C (Qualified)</span>
+                </div>
+            </div>
+        </div>
+
+        <div id="assessing" class="tab-content">
+            <h2>📊 A.SSESSING Module - Fashion Buyer Analysis</h2>
+            
+            <div class="section">
+                <h3>Fashion Buyer Profile Categories</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+                    <div class="stat-card">
+                        <h4>🔍 Analytical Buyers</h4>
+                        <p>Require detailed product reviews, size guides, return policies</p>
+                    </div>
+                    <div class="stat-card">
+                        <h4>❤️ Relationship Buyers</h4>
+                        <p>Value brand trust, influencer recommendations, community reviews</p>
+                    </div>
+                    <div class="stat-card">
+                        <h4>⚡ Efficiency Buyers</h4>
+                        <p>Focus on quick delivery, easy returns, streamlined checkout</p>
+                    </div>
+                    <div class="stat-card">
+                        <h4>✨ Innovation Buyers</h4>
+                        <p>Seek trending styles, limited editions, exclusive collections</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h3>Assessment Tools</h3>
+                <ul style="list-style: none; padding: 0;">
+                    <li style="padding: 0.5rem 0; border-bottom: 1px solid #444;">🕒 <strong>Decision Timeline Analyzer:</strong> Track seasonal fashion buying patterns</li>
+                    <li style="padding: 0.5rem 0; border-bottom: 1px solid #444;">👥 <strong>Stakeholder Mapping:</strong> Identify fashion influencers and decision makers</li>
+                    <li style="padding: 0.5rem 0;">💎 <strong>Value Proposition Matrix:</strong> Match style preferences with Poshmark offerings</li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="listening" class="tab-content">
+            <h2>👂 L.ISTENING Module - Fashion Community Feedback</h2>
+            
+            <div class="section">
+                <h3>Feedback Tracking System</h3>
+                <div style="display: grid; gap: 1rem;">
+                    <div class="stat-card">
+                        <h4>📝 Pre-Sale Feedback</h4>
+                        <p>Style preference surveys, size consultations, trend interests</p>
+                        <button class="btn" onclick="openModal('feedback-modal')">Collect Feedback</button>
+                    </div>
+                    <div class="stat-card">
+                        <h4>📈 During-Sale Tracking</h4>
+                        <p>Browse behavior, cart abandonment, style engagement metrics</p>
+                    </div>
+                    <div class="stat-card">
+                        <h4>⭐ Post-Sale Monitoring</h4>
+                        <p>Purchase satisfaction, sizing accuracy, repeat purchase likelihood</p>
+                    </div>
+                    <div class="stat-card">
+                        <h4>🆘 Complaint Resolution</h4>
+                        <p>Real-time support for sizing, quality, delivery issues</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="empowering" class="tab-content">
+            <h2>🚀 E.MPOWERING Module - Fashion Community Growth</h2>
+            
+            <div class="section">
+                <h3>Referral Management Dashboard</h3>
+                <div style="display: grid; gap: 1rem;">
+                    <div class="stat-card">
+                        <h4>📖 Success Stories</h4>
+                        <p>Document style transformations, wardrobe makeovers, fashion wins</p>
+                    </div>
+                    <div class="stat-card">
+                        <h4>🎁 Referral Rewards</h4>
+                        <p>Track friend referrals, closet credits, exclusive access rewards</p>
+                    </div>
+                    <div class="stat-card">
+                        <h4>🌟 Client Advocacy</h4>
+                        <p>Manage brand ambassadors, style influencers, community leaders</p>
+                    </div>
+                    <div class="stat-card">
+                        <h4>🤝 Co-Marketing</h4>
+                        <p>Plan style challenges, fashion shows, collaborative campaigns</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="database" class="tab-content">
+            <h2>📋 Riverside Fashion Community Database</h2>
+            
+            <div class="search-controls">
+                <input type="text" id="searchInput" placeholder="Search clients..." onkeyup="filterTable()">
+                <select id="tierFilter" onchange="filterTable()">
+                    <option value="">All Tiers</option>
+                    <option value="1A">Tier 1A</option>
+                    <option value="1B">Tier 1B</option>
+                    <option value="1C">Tier 1C</option>
+                </select>
+                <select id="industryFilter" onchange="filterTable()">
+                    <option value="">All Industries</option>
+                    <option value="Fashion">Fashion</option>
+                    <option value="Beauty">Beauty</option>
+                    <option value="Retail">Retail</option>
+                    <option value="Entertainment">Entertainment</option>
+                    <option value="Professional">Professional</option>
+                    <option value="Education">Education</option>
+                    <option value="Healthcare">Healthcare</option>
+                </select>
+                <button class="btn" onclick="exportData()">Export CSV</button>
+            </div>
+
+            <table id="clientTable">
+                <thead>
+                    <tr>
+                        <th onclick="sortTable(0)">Client Name</th>
+                        <th onclick="sortTable(1)">Email</th>
+                        <th onclick="sortTable(2)">Phone</th>
+                        <th onclick="sortTable(3)">Address</th>
+                        <th onclick="sortTable(4)">P.U.R.E.S Score</th>
+                        <th onclick="sortTable(5)">Tier</th>
+                        <th onclick="sortTable(6)">Industry</th>
+                        <th onclick="sortTable(7)">Fashion Budget</th>
+                        <th onclick="sortTable(8)">Contact Status</th>
+                        <th onclick="sortTable(9)">Last Contact</th>
+                        <th onclick="sortTable(10)">Next Action</th>
+                        <th onclick="sortTable(11)">Notes</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="clientTableBody">
+                    <!-- Client data will be populated by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Contact Modal -->
+    <div id="contact-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('contact-modal')">&times;</span>
+            <h2>Contact Client</h2>
+            <div class="form-group">
+                <label for="contactMethod">Contact Method:</label>
+                <select id="contactMethod" onchange="updateContactForm()">
+                    <option value="email">Email</option>
+                    <option value="phone">Phone</option>
+                    <option value="linkedin">LinkedIn</option>
+                </select>
+            </div>
+            <div id="emailForm">
+                <div class="form-group">
+                    <label for="emailSubject">Subject:</label>
+                    <input type="text" id="emailSubject" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="emailBody">Message:</label>
+                    <textarea id="emailBody" readonly></textarea>
+                </div>
+                <button class="btn" onclick="sendEmail()">Open Email Client</button>
+            </div>
+            <div id="phoneForm" style="display: none;">
+                <div class="form-group">
+                    <p id="phoneScript"></p>
+                </div>
+                <button class="btn" onclick="makeCall()">Call Client</button>
+            </div>
+            <div id="linkedinForm" style="display: none;">
+                <div class="form-group">
+                    <label for="linkedinMessage">LinkedIn Message:</label>
+                    <textarea id="linkedinMessage" readonly></textarea>
+                </div>
+                <button class="btn" onclick="openLinkedIn()">Open LinkedIn</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Feedback Modal -->
+    <div id="feedback-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('feedback-modal')">&times;</span>
+            <h2>Collect Client Feedback</h2>
+            <div class="form-group">
+                <label for="feedbackClient">Client Name:</label>
+                <input type="text" id="feedbackClient">
+            </div>
+            <div class="form-group">
+                <label for="feedbackType">Feedback Type:</label>
+                <select id="feedbackType">
+                    <option value="style-preference">Style Preference</option>
+                    <option value="sizing-feedback">Sizing Feedback</option>
+                    <option value="quality-review">Quality Review</option>
+                    <option value="service-experience">Service Experience</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="feedbackRating">Rating (1-5):</label>
+                <select id="feedbackRating">
+                    <option value="5">5 - Excellent</option>
+                    <option value="4">4 - Good</option>
+                    <option value="3">3 - Average</option>
+                    <option value="2">2 - Poor</option>
+                    <option value="1">1 - Very Poor</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="feedbackNotes">Additional Notes:</label>
+                <textarea id="feedbackNotes" placeholder="Enter feedback details..."></textarea>
+            </div>
+            <button class="btn" onclick="saveFeedback()">Save Feedback</button>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="HigginsReports" onerror="this.style.display='none'">
+        <p>&copy; 2026 HigginsReports. Empowering Fashion Communities through Data-Driven Insights.</p>
+    </footer>
+
+    <script>
+        // Sample client data for Riverside, California fashion community
+        const clients = [
+            {name: "Sofia Martinez", email: "sofia.martinez@gmail.com", phone: "(951) 555-0123", address: "1234 Fashion Ave, Riverside, CA 92501", pures: 4.8, tier: "1A", industry: "Fashion", budget: "$2,000", status: "New Lead", lastContact: "2026-01-15", nextAction: "Style Consultation", notes: "Interested in designer bags"},
+            {name: "Emma Thompson", email: "emma.thompson@yahoo.com", phone: "(951) 555-0124", address: "5678 Style Blvd, Riverside, CA 92502", pures: 4.6, tier: "1A", industry: "Beauty", budget: "$1,500", status: "Active", lastContact: "2026-01-20", nextAction: "Follow-up Call", notes: "Loves vintage pieces"},
+            {name: "Isabella Chen", email: "isabella.chen@outlook.com", phone: "(951) 555-0125", address: "9012 Trend St, Riverside, CA 92503", pures: 4.4, tier: "1A", industry: "Fashion", budget: "$1,800", status: "Prospect", lastContact: "2026-01-18", nextAction: "Send Catalog", notes: "Professional wardrobe focus"},
+            {name: "Olivia Rodriguez", email: "olivia.rodriguez@gmail.com", phone: "(951) 555-0126", address: "3456 Boutique Ln, Riverside, CA 92504", pures: 4.2, tier: "1A", industry: "Entertainment", budget: "$2,500", status: "Hot Lead", lastContact: "2026-01-22", nextAction: "Schedule Fitting", notes: "Red carpet events"},
+            {name: "Ava Johnson", email: "ava.johnson@gmail.com", phone: "(951) 555-0127", address: "7890 Chic Dr, Riverside, CA 92505", pures: 4.0, tier: "1A", industry: "Professional", budget: "$1,200", status: "Contacted", lastContact: "2026-01-19", nextAction: "Product Demo", notes: "Business casual needs"},
+            {name: "Mia Davis", email: "mia.davis@yahoo.com", phone: "(951) 555-0128", address: "2345 Glam Way, Riverside, CA 92506", pures: 4.7, tier: "1A", industry: "Fashion", budget: "$2,200", status: "Engaged", lastContact: "2026-01-21", nextAction: "Contract Signing", notes: "Sustainable fashion advocate"},
+            {name: "Charlotte Wilson", email: "charlotte.wilson@gmail.com", phone: "(951) 555-0129", address: "6789 Vogue St, Riverside, CA 92507", pures: 4.3, tier: "1A", industry: "Retail", budget: "$1,600", status: "New Lead", lastContact: "2026-01-16", nextAction: "Initial Meeting", notes: "Store buyer"},
+            {name: "Amelia Brown", email: "amelia.brown@outlook.com", phone: "(951) 555-0130", address: "1357 Couture Ave, Riverside, CA 92508", pures: 4.5, tier: "1A", industry: "Beauty", budget: "$1,900", status: "Qualified", lastContact: "2026-01-23", nextAction: "Proposal Review", notes: "Influencer with 50K followers"},
+            {name: "Harper Anderson", email: "harper.anderson@gmail.com", phone: "(951) 555-0131", address: "4680 Designer Rd, Riverside, CA 92509", pures: 4.1, tier: "1A", industry: "Fashion", budget: "$1,700", status: "Active", lastContact: "2026-01-17", nextAction: "Trend Briefing", notes: "Fashion blogger"},
+            {name: "Luna Garcia", email: "luna.garcia@yahoo.com", phone: "(951) 555-0132", address: "8024 Style Plaza, Riverside, CA 92501", pures: 4.6, tier: "1A", industry: "Entertainment", budget: "$2,100", status: "Prospect", lastContact: "2026-01-20", nextAction: "Portfolio Review", notes: "Stylist for celebrities"},
+            {name: "Evelyn Miller", email: "evelyn.miller@gmail.com", phone: "(951) 555-0133", address: "1468 Fashion Center, Riverside, CA 92502", pures: 4.2, tier: "1A", industry: "Professional", budget: "$1,400", status: "Hot Lead", lastContact: "2026-01-24", nextAction: "Wardrobe Consultation", notes: "Executive looking for upgrade"},
+            {name: "Abigail Jones", email: "abigail.jones@outlook.com", phone: "(951) 555-0134", address: "5702 Trend Ave, Riverside, CA 92503", pures: 4.4, tier: "1A", industry: "Fashion", budget: "$1,800", status: "Contacted", lastContact: "2026-01-19", nextAction: "Style Assessment", notes: "Personal shopper"},
+            {name: "Emily Taylor", email: "emily.taylor@gmail.com", phone: "(951) 555-0135", address: "9136 Boutique St, Riverside, CA 92504", pures: 4.0, tier: "1A", industry: "Beauty", budget: "$1,300", status: "New Lead", lastContact: "2026-01-22", nextAction: "Introduction Call", notes: "Makeup artist"},
+            {name: "Elizabeth Thomas", email: "elizabeth.thomas@yahoo.com", phone: "(951) 555-0136", address: "2570 Glam Blvd, Riverside, CA 92505", pures: 4.5, tier: "1A", industry: "Entertainment", budget: "$2,000", status: "Engaged", lastContact: "2026-01-25", nextAction: "Contract Finalization", notes: "Fashion photographer"},
+            {name: "Camila White", email: "camila.white@gmail.com", phone: "(951) 555-0137", address: "6814 Chic Lane, Riverside, CA 92506", pures: 4.3, tier: "1A", industry: "Retail", budget: "$1,600", status: "Qualified", lastContact: "2026-01-21", nextAction: "Site Visit", notes: "Boutique owner"},
+            
+            // Tier 1B clients
+            {name: "Sofia Lee", email: "sofia.lee@gmail.com", phone: "(951) 555-0138", address: "1590 Style Dr, Riverside, CA 92507", pures: 3.8, tier: "1B", industry: "Professional", budget: "$1,100", status: "New Lead", lastContact: "2026-01-16", nextAction: "Needs Assessment", notes: "Corporate lawyer"},
+            {name: "Madison Harris", email: "madison.harris@yahoo.com", phone: "(951) 555-0139", address: "4826 Fashion Way, Riverside, CA 92508", pures: 3.6, tier: "1B", industry: "Education", budget: "$800", status: "Active", lastContact: "2026-01-18", nextAction: "Budget Discussion", notes: "College professor"},
+            {name: "Lily Clark", email: "lily.clark@outlook.com", phone: "(951) 555-0140", address: "8152 Trend Plaza, Riverside, CA 92509", pures: 3.9, tier: "1B", industry: "Healthcare", budget: "$950", status: "Prospect", lastContact: "2026-01-20", nextAction: "Service Overview", notes: "Nurse manager"},
+            {name: "Grace Lewis", email: "grace.lewis@gmail.com", phone: "(951) 555-0141", address: "2486 Boutique Ave, Riverside, CA 92501", pures: 3.7, tier: "1B", industry: "Professional", budget: "$1,000", status: "Hot Lead", lastContact: "2026-01-22", nextAction: "Proposal Presentation", notes: "Marketing director"},
+            {name: "Chloe Walker", email: "chloe.walker@yahoo.com", phone: "(951) 555-0142", address: "6720 Style Center, Riverside, CA 92502", pures: 3.5, tier: "1B", industry: "Beauty", budget: "$750", status: "Contacted", lastContact: "2026-01-19", nextAction: "Product Sampling", notes: "Beauty therapist"},
+            {name: "Victoria Hall", email: "victoria.hall@gmail.com", phone: "(951) 555-0143", address: "1064 Fashion Ln, Riverside, CA 92503", pures: 3.8, tier: "1B", industry: "Entertainment", budget: "$1,200", status: "Engaged", lastContact: "2026-01-24", nextAction: "Creative Collaboration", notes: "Dance instructor"},
+            {name: "Penelope Allen", email: "penelope.allen@outlook.com", phone: "(951) 555-0144", address: "5398 Trend St, Riverside, CA 92504", pures: 3.6, tier: "1B", industry: "Retail", budget: "$850", status: "New Lead", lastContact: "2026-01-17", nextAction: "Store Visit", notes: "Sales manager"},
+            {name: "Layla Young", email: "layla.young@gmail.com", phone: "(951) 555-0145", address: "9632 Chic Way, Riverside, CA 92505", pures: 3.9, tier: "1B", industry: "Professional", budget: "$1,150", status: "Qualified", lastContact: "2026-01-23", nextAction: "Contract Review", notes: "Real estate agent"},
+            {name: "Nora King", email: "nora.king@yahoo.com", phone: "(951) 555-0146", address: "3276 Glam Dr, Riverside, CA 92506", pures: 3.7, tier: "1B", industry: "Fashion", budget: "$900", status: "Active", lastContact: "2026-01-21", nextAction: "Style Workshop", notes: "Fashion student"},
+            {name: "Hazel Wright", email: "hazel.wright@gmail.com", phone: "(951) 555-0147", address: "7510 Boutique Rd, Riverside, CA 92507", pures: 3.5, tier: "1B", industry: "Education", budget: "$700", status: "Prospect", lastContact: "2026-01-18", nextAction: "Educational Discount", notes: "High school teacher"},
+            {name: "Violet Lopez", email: "violet.lopez@outlook.com", phone: "(951) 555-0148", address: "1844 Style Blvd, Riverside, CA 92508", pures: 3.8, tier: "1B", industry: "Healthcare", budget: "$1,050", status: "Hot Lead", lastContact: "2026-01-25", nextAction: "Professional Package", notes: "Physical therapist"},
+            {name: "Aurora Hill", email: "aurora.hill@gmail.com", phone: "(951) 555-0149", address: "6078 Fashion Plaza, Riverside, CA 92509", pures: 3.6, tier: "1B", industry: "Beauty", budget: "$800", status: "Contacted", lastContact: "2026-01-20", nextAction: "Beauty Consultation", notes: "Hair stylist"},
+            {name: "Savannah Green", email: "savannah.green@yahoo.com", phone: "(951) 555-0150", address: "2412 Trend Center, Riverside, CA 92501", pures: 3.9, tier: "1B", industry: "Professional", budget: "$1,100", status: "Engaged", lastContact: "2026-01-22", nextAction: "Business Wardrobe", notes: "Financial advisor"},
+            {name: "Brooklyn Adams", email: "brooklyn.adams@gmail.com", phone: "(951) 555-0151", address: "8746 Chic Plaza, Riverside, CA 92502", pures: 3.7, tier: "1B", industry: "Entertainment", budget: "$950", status: "New Lead", lastContact: "2026-01-19", nextAction: "Portfolio Review", notes: "Graphic designer"},
+            {name: "Bella Baker", email: "bella.baker@outlook.com", phone: "(951) 555-0152", address: "4180 Style Ave, Riverside, CA 92503", pures: 3.5, tier: "1B", industry: "Retail", budget: "$750", status: "Qualified", lastContact: "2026-01-24", nextAction: "Retail Partnership", notes: "Store owner"},
+            {name: "Claire Nelson", email: "claire.nelson@gmail.com", phone: "(951) 555-0153", address: "7024 Fashion Dr, Riverside, CA 92504", pures: 3.8, tier: "1B", industry: "Professional", budget: "$1,000", status: "Active", lastContact: "2026-01-21", nextAction: "Professional Styling", notes: "Consultant"},
+            {name: "Skylar Carter", email: "skylar.carter@yahoo.com", phone: "(951) 555-0154", address: "1358 Boutique Way, Riverside, CA 92505", pures: 3.6, tier: "1B", industry: "Education", budget: "$800", status: "Prospect", lastContact: "2026-01-17", nextAction: "Academic Discount", notes: "University administrator"},
+            {name: "Lucy Mitchell", email: "lucy.mitchell@gmail.com", phone: "(951) 555-0155", address: "5692 Glam St, Riverside, CA 92506", pures: 3.9, tier: "1B", industry: "Healthcare", budget: "$1,150", status: "Hot Lead", lastContact: "2026-01-26", nextAction: "Healthcare Package", notes: "Physician"},
+            {name: "Anna Perez", email: "anna.perez@outlook.com", phone: "(951) 555-0156", address: "9026 Trend Ln, Riverside, CA 92507", pures: 3.7, tier: "1B", industry: "Beauty", budget: "$900", status: "Contacted", lastContact: "2026-01-23", nextAction: "Beauty Workshop", notes: "Esthetician"},
+            {name: "Caroline Roberts", email: "caroline.roberts@gmail.com", phone: "(951) 555-0157", address: "2650 Chic Ave, Riverside, CA 92508", pures: 3.5, tier: "1B", industry: "Professional", budget: "$700", status: "Engaged", lastContact: "2026-01-20", nextAction: "Wardrobe Planning", notes: "Accountant"},
+            
+            // Tier 1C clients
+            {name: "Genesis Turner", email: "genesis.turner@gmail.com", phone: "(951) 555-0158", address: "6984 Style Plaza, Riverside, CA 92509", pures: 3.4, tier: "1C", industry: "Education", budget: "$650", status: "New Lead", lastContact: "2026-01-18", nextAction: "Introduction Package", notes: "Elementary teacher"},
+            {name: "Aaliyah Phillips", email: "aaliyah.phillips@yahoo.com", phone: "(951) 555-0159", address: "1418 Fashion Center, Riverside, CA 92501", pures: 3.2, tier: "1C", industry: "Healthcare", budget: "$500", status: "Active", lastContact: "2026-01-19", nextAction: "Basic Consultation", notes: "Medical assistant"},
+            {name: "Kennedy Campbell", email: "kennedy.campbell@outlook.com", phone: "(951) 555-0160", address: "5752 Boutique Blvd, Riverside, CA 92502", pures: 3.3, tier: "1C", industry: "Professional", budget: "$600", status: "Prospect", lastContact: "2026-01-21", nextAction: "Entry Package", notes: "Administrative assistant"},
+            {name: "Kinsley Parker", email: "kinsley.parker@gmail.com", phone: "(951) 555-0161", address: "9086 Trend Way, Riverside, CA 92503", pures: 3.1, tier: "1C", industry: "Retail", budget: "$450", status: "Hot Lead", lastContact: "2026-01-22", nextAction: "Starter Kit", notes: "Retail associate"},
+            {name: "Allison Evans", email: "allison.evans@yahoo.com", phone: "(951) 555-0162", address: "3420 Chic Dr, Riverside, CA 92504", pures: 3.4, tier: "1C", industry: "Beauty", budget: "$700", status: "Contacted", lastContact: "2026-01-20", nextAction: "Beauty Basics", notes: "Nail technician"},
+            {name: "Gabriella Edwards", email: "gabriella.edwards@gmail.com", phone: "(951) 555-0163", address: "7864 Glam Lane, Riverside, CA 92505", pures: 3.2, tier: "1C", industry: "Education", budget: "$550", status: "Engaged", lastContact: "2026-01-24", nextAction: "Student Discount", notes: "Graduate student"},
+            {name: "Alice Collins", email: "alice.collins@outlook.com", phone: "(951) 555-0164", address: "2198 Style St, Riverside, CA 92506", pures: 3.3, tier: "1C", industry: "Professional", budget: "$600", status: "New Lead", lastContact: "2026-01-17", nextAction: "Career Package", notes: "Junior analyst"},
+            {name: "Madelyn Stewart", email: "madelyn.stewart@gmail.com", phone: "(951) 555-0165", address: "6532 Fashion Ave, Riverside, CA 92507", pures: 3.1, tier: "1C", industry: "Healthcare", budget: "$500", status: "Qualified", lastContact: "2026-01-25", nextAction: "Healthcare Basics", notes: "Dental hygienist"},
+            {name: "Julia Sanchez", email: "julia.sanchez@yahoo.com", phone: "(951) 555-0166", address: "1076 Boutique Dr, Riverside, CA 92508", pures: 3.4, tier: "1C", industry: "Entertainment", budget: "$650", status: "Active", lastContact: "2026-01-23", nextAction: "Creative Package", notes: "Art teacher"},
+            {name: "Maya Morris", email: "maya.morris@gmail.com", phone: "(951) 555-0167", address: "5410 Trend Plaza, Riverside, CA 92509", pures: 3.2, tier: "1C", industry: "Retail", budget: "$550", status: "Prospect", lastContact: "2026-01-19", nextAction: "Retail Basics", notes: "Customer service"},
+            {name: "Gianna Rogers", email: "gianna.rogers@outlook.com", phone: "(951) 555-0168", address: "9744 Chic Center, Riverside, CA 92501", pures: 3.3, tier: "1C", industry: "Professional", budget: "$600", status: "Hot Lead", lastContact: "2026-01-26", nextAction: "Professional Basics", notes: "HR coordinator"},
+            {name: "Rose Reed", email: "rose.reed@gmail.com", phone: "(951) 555-0169", address: "4078 Glam Way, Riverside, CA 92502", pures: 3.1, tier: "1C", industry: "Education", budget: "$500", status: "Contacted", lastContact: "2026-01-21", nextAction: "Education Package", notes: "Substitute teacher"},
+            {name: "Elena Cook", email: "elena.cook@yahoo.com", phone: "(951) 555-0170", address: "8312 Style Ln, Riverside, CA 92503", pures: 3.4, tier: "1C", industry: "Beauty", budget: "$700", status: "Engaged", lastContact: "2026-01-22", nextAction: "Beauty Starter", notes: "Massage therapist"},
+            {name: "Ariana Morgan", email: "ariana.morgan@gmail.com", phone: "(951) 555-0171", address: "2646 Fashion Way, Riverside, CA 92504", pures: 3.2, tier: "1C", industry: "Healthcare", budget: "$550", status: "New Lead", lastContact: "2026-01-18", nextAction: "Health Package", notes: "Pharmacy technician"},
+            {name: "Athena Bailey", email: "athena.bailey@outlook.com", phone: "(951) 555-0172", address: "6980 Boutique Plaza, Riverside, CA 92505", pures: 3.3, tier: "1C", industry: "Professional", budget: "$600", status: "Qualified", lastContact: "2026-01-27", nextAction: "Career Starter", notes: "Sales coordinator"}
+        ];
+
+        let currentSortColumn = -1;
+        let currentSortDirection = 'asc';
+        let selectedClient = null;
+
+        // Initialize the application
+        window.onload = function() {
+            populateTable();
+        };
+
+        // Tab switching functionality
+        function showTab(evt, tabName) {
+            const tabcontents = document.getElementsByClassName("tab-content");
+            for (let i = 0; i < tabcontents.length; i++) {
+                tabcontents[i].classList.remove("active");
+            }
+            
+            const tabs = document.getElementsByClassName("tab");
+            for (let i = 0; i < tabs.length; i++) {
+                tabs[i].classList.remove("active");
+            }
+            
+            document.getElementById(tabName).classList.add("active");
+            evt.currentTarget.classList.add("active");
+        }
+
+        // Populate the client table
+        function populateTable() {
+            const tbody = document.getElementById('clientTableBody');
+            tbody.innerHTML = '';
+            
+            clients.forEach((client, index) => {
+                const row = tbody.insertRow();
+                const tierClass = `tier-${client.tier.toLowerCase()}`;
+                row.className = tierClass;
+                
+                row.innerHTML = `
+                    <td>${client.name}</td>
+                    <td>${client.email}</td>
+                    <td>${client.phone}</td>
+                    <td>${client.address}</td>
+                    <td>${client.pures}</td>
+                    <td>${client.tier}</td>
+                    <td>${client.industry}</td>
+                    <td>${client.budget}</td>
+                    <td>${client.status}</td>
+                    <td>${client.lastContact}</td>
+                    <td>${client.nextAction}</td>
+                    <td>${client.notes}</td>
+                    <td>
+                        <button class="contact-btn" onclick="openContactModal(${index})">Contact</button>
+                    </td>
+                `;
+            });
+        }
+
+        // Filter table based on search and filters
+        function filterTable() {
+            const searchInput = document.getElementById('searchInput').value.toLowerCase();
+            const tierFilter = document.getElementById('tierFilter').value;
+            const industryFilter = document.getElementById('industryFilter').value;
+            const rows = document.querySelectorAll('#clientTableBody tr');
+            
+            rows.forEach(row => {
+                const name = row.cells[0].textContent.toLowerCase();
+                const email = row.cells[1].textContent.toLowerCase();
+                const tier = row.cells[5].textContent;
+                const industry = row.cells[6].textContent;
+                
+                const matchesSearch = name.includes(searchInput) || email.includes(searchInput);
+                const matchesTier = !tierFilter || tier === tierFilter;
+                const matchesIndustry = !industryFilter || industry === industryFilter;
+                
+                if (matchesSearch && matchesTier && matchesIndustry) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+
+        // Sort table functionality
+        function sortTable(columnIndex) {
+            const table = document.getElementById('clientTable');
+            const tbody = table.tBodies[0];
+            const rows = Array.from(tbody.rows);
+            
+            if (currentSortColumn === columnIndex) {
+                currentSortDirection = currentSortDirection === 'asc' ? 'desc' : 'asc';
+            } else {
+                currentSortDirection = 'asc';
+                currentSortColumn = columnIndex;
+            }
+            
+            rows.sort((a, b) => {
+                let aVal = a.cells[columnIndex].textContent.trim();
+                let bVal = b.cells[columnIndex].textContent.trim();
+                
+                // Handle numeric columns
+                if (columnIndex === 4) { // P.U.R.E.S Score
+                    aVal = parseFloat(aVal);
+                    bVal = parseFloat(bVal);
+                }
+                
+                if (aVal < bVal) return currentSortDirection === 'asc' ? -1 : 1;
+                if (aVal > bVal) return currentSortDirection === 'asc' ? 1 : -1;
+                return 0;
+            });
+            
+            rows.forEach(row => tbody.appendChild(row));
+        }
+
+        // Open contact modal
+        function openContactModal(clientIndex) {
+            selectedClient = clients[clientIndex];
+            openModal('contact-modal');
+            updateContactForm();
+        }
+
+        // Update contact form based on selected method
+        function updateContactForm() {
+            if (!selectedClient) return;
+            
+            const method = document.getElementById('contactMethod').value;
+            const emailForm = document.getElementById('emailForm');
+            const phoneForm = document.getElementById('phoneForm');
+            const linkedinForm = document.getElementById('linkedinForm');
+            
+            // Hide all forms
+            emailForm.style.display = 'none';
+            phoneForm.style.display = 'none';
+            linkedinForm.style.display = 'none';
+            
+            if (method === 'email') {
+                emailForm.style.display = 'block';
+                generateEmailContent();
+            } else if (method === 'phone') {
+                phoneForm.style.display = 'block';
+                generatePhoneScript();
+            } else if (method === 'linkedin') {
+                linkedinForm.style.display = 'block';
+                generateLinkedInMessage();
+            }
+        }
+
+        // Generate email content
+        function generateEmailContent() {
+            const subject = `Transform Your Style with Poshmark - Exclusive ${selectedClient.tier} Member Benefits`;
+            const body = `Hi ${selectedClient.name.split(' ')[0]},
+
+I hope this email finds you well! I'm Andrea DeMarcus from Poshmark, and I'm excited to reach out because you're exactly the type of fashion-forward individual who would love what we offer.
+
+As someone in the ${selectedClient.industry} industry with a passion for style, I believe Poshmark's fashion marketplace could be perfect for you. Here's why:
+
+🌟 PERSONALIZED FOR YOU:
+• Curated fashion selections matching your ${selectedClient.budget} budget range
+• Access to designer pieces at up to 70% off retail prices
+• Sustainable fashion choices that align with modern values
+
+✨ EXCLUSIVE TIER ${selectedClient.tier} BENEFITS:
+• Priority access to limited-edition collections
+• Personal styling consultations with our fashion experts
+• VIP invitations to exclusive Posh Shows and fashion events
+• Enhanced authentication services for luxury purchases
+
+🎯 PERFECT FOR YOUR LIFESTYLE:
+• ${selectedClient.tier === '1A' ? 'Premium designer collections for your sophisticated taste' : 
+     selectedClient.tier === '1B' ? 'High-quality fashion that fits your active lifestyle' : 
+     'Trendy, affordable pieces to build your perfect wardrobe'}
+• Mobile-first shopping experience that fits your busy schedule
+• Community of fashion lovers who share your passion for style
+
+I'd love to schedule a brief 15-minute style consultation to show you how Poshmark can elevate your wardrobe while saving you time and money.
+
+Would you be available for a quick call this week? I'm confident we can find some amazing pieces that match your unique style!
+
+Best regards,
+Andrea DeMarcus
+Fashion Consultant | Poshmark
+andrea@poshmark.com
+Riverside, California
+
+P.S. Mention this email and receive a $25 credit towards your first purchase!`;
+
+            document.getElementById('emailSubject').value = subject;
+            document.getElementById('emailBody').value = body;
+        }
+
+        // Generate phone script
+        function generatePhoneScript() {
+            const script = `Hi ${selectedClient.name}, this is Andrea DeMarcus calling from Poshmark. 
+
+I'm reaching out because you're part of our exclusive ${selectedClient.tier} fashion community in Riverside. I have some exciting news about our latest designer collections that would be perfect for someone with your sophisticated style in the ${selectedClient.industry} industry.
+
+We're offering special access to authenticated designer pieces with up to 70% savings, plus personalized styling services that fit within your ${selectedClient.budget} fashion budget.
+
+Do you have just 2-3 minutes for me to share how this could transform your wardrobe while saving you time and money?
+
+[Listen for response and adjust accordingly]
+
+Key points to mention:
+- Tier ${selectedClient.tier} exclusive benefits
+- Sustainable fashion focus
+- Personal styling consultation
+- Community of fashion enthusiasts
+- Mobile convenience`;
+
+            document.getElementById('phoneScript').innerHTML = `<pre style="white-space: pre-wrap; font-family: inherit;">${script}</pre>`;
+        }
+
+        // Generate LinkedIn message
+        function generateLinkedInMessage() {
+            const message = `Hi ${selectedClient.name},
+
+I noticed your background in ${selectedClient.industry} and wanted to connect! I'm Andrea DeMarcus from Poshmark here in Riverside.
+
+We're building an exclusive fashion community for professionals like yourself, offering authenticated designer pieces at significant savings. Given your expertise in ${selectedClient.industry}, I thought you might appreciate our approach to sustainable, high-quality fashion.
+
+Would love to connect and share how our Tier ${selectedClient.tier} membership could enhance your professional wardrobe while supporting sustainable fashion practices.
+
+Best,
+Andrea`;
+
+            document.getElementById('linkedinMessage').value = message;
+        }
+
+        // Send email function
+        function sendEmail() {
+            const subject = encodeURIComponent(document.getElementById('emailSubject').value);
+            const body = encodeURIComponent(document.getElementById('emailBody').value);
+            window.open(`mailto:${selectedClient.email}?subject=${subject}&body=${body}`);
+        }
+
+        // Make call function
+        function makeCall() {
+            window.open(`tel:${selectedClient.phone}`);
+        }
+
+        // Open LinkedIn function
+        function openLinkedIn() {
+            window.open('https://linkedin.com/messaging/', '_blank');
+        }
+
+        // Modal functions
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = 'block';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = 'none';
+            }
+        }
+
+        // Calculate P.U.R.E.S. Score
+        function calculatePUREScore() {
+            const profitability = document.querySelector('input[name="profitability"]:checked');
+            const urgency = document.querySelector('input[name="urgency"]:checked');
+            const reachability = document.querySelector('input[name="reachability"]:checked');
+            const engagement = document.querySelector('input[name="engagement"]:checked');
+            const sustainability = document.querySelector('input[name="sustainability"]:checked');
+            
+            if (!profitability || !urgency || !reachability || !engagement || !sustainability) {
+                alert('Please rate all P.U.R.E.S. criteria before calculating the score.');
+                return;
+            }
+            
+            const score = (
+                parseInt(profitability.value) +
+                parseInt(urgency.value) +
+                parseInt(reachability.value) +
+                parseInt(engagement.value) +
+                parseInt(sustainability.value)
+            ) / 5;
+            
+            let tier = '';
+            if (score >= 4.0) tier = '1A (Premium)';
+            else if (score >= 3.0) tier = '1B (High-Value)';
+            else tier = '1C (Qualified)';
+            
+            const resultDiv = document.getElementById('pureResult');
+            resultDiv.style.display = 'block';
+            resultDiv.innerHTML = `
+                <h4>P.U.R.E.S. Score Results</h4>
+                <p><strong>Overall Score:</strong> ${score.toFixed(1)}/5.0</p>
+                <p><strong>Client Tier:</strong> ${tier}</p>
+                <p><strong>Recommendation:</strong> ${
+                    score >= 4.0 ? 'High priority - Schedule immediate consultation' :
+                    score >= 3.0 ? 'Good prospect - Follow up within 48 hours' :
+                    'Qualified lead - Add to nurture campaign'
+                }</p>
+            `;
+        }
+
+        // Save feedback function
+        function saveFeedback() {
+            const client = document.getElementById('feedbackClient').value;
+            const type = document.getElementById('feedbackType').value;
+            const rating = document.getElementById('feedbackRating').value;
+            const notes = document.getElementById('feedbackNotes').value;
+            
+            if (!client || !notes) {
+                alert('Please fill in all required fields.');
+                return;
+            }
+            
+            // In a real application, this would save to a database
+            alert(`Feedback saved successfully!\n\nClient: ${client}\nType: ${type}\nRating: ${rating}\nNotes: ${notes}`);
+            closeModal('feedback-modal');
+            
+            // Clear form
+            document.getElementById('feedbackClient').value = '';
+            document.getElementById('feedbackNotes').value = '';
+        }
+
+        // Export data function
+        function exportData() {
+            const headers = ['Client Name', 'Email', 'Phone', 'Address', 'P.U.R.E.S Score', 'Tier', 'Industry', 'Fashion Budget', 'Contact Status', 'Last Contact', 'Next Action', 'Notes'];
+            const csvContent = [headers.join(',')];
+            
+            clients.forEach(client => {
+                const row = [
+                    client.name,
+                    client.email,
+                    client.phone,
+                    `"${client.address}"`,
+                    client.pures,
+                    client.tier,
+                    client.industry,
+                    client.budget,
+                    client.status,
+                    client.lastContact,
+                    client.nextAction,
+                    `"${client.notes}"`
+                ];
+                csvContent.push(row.join(','));
+            });
+            
+            const blob = new Blob([csvContent.join('\n')], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'poshmark-clients-export.csv';
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+    </script>
+</body>
+</html>

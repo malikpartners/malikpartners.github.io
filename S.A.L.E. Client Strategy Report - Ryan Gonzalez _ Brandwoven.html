@@ -1,0 +1,659 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>S.A.L.E. Report - Ryan Gonzalez | Brandwoven</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:#000; color:#e0e0e0; font-family:'Inter',sans-serif; min-height:100vh; }
+  
+  /* Header */
+  .header { background:linear-gradient(135deg,#0a0a0a,#1a1a1a); border-bottom:3px solid #CF2030; padding:16px 30px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:100; }
+  .header img { height:52px; }
+  .header-right { display:flex; align-items:center; gap:14px; }
+  .header-badge { background:#CF2030; color:#fff; font-size:11px; font-weight:700; padding:5px 12px; border-radius:20px; letter-spacing:1px; }
+  .header-date { color:#888; font-size:12px; }
+
+  /* Navigation */
+  .nav { background:#111; border-bottom:1px solid #222; padding:0 30px; display:flex; gap:0; overflow-x:auto; position:sticky; top:87px; z-index:99; }
+  .nav-item { padding:14px 20px; color:#999; font-size:13px; font-weight:600; cursor:pointer; border-bottom:3px solid transparent; transition:all .3s; white-space:nowrap; letter-spacing:0.5px; }
+  .nav-item:hover { color:#CF2030; background:#1a1a1a; }
+  .nav-item.active { color:#CF2030; border-bottom-color:#CF2030; background:#1a0a0c; }
+
+  /* Main */
+  .main { max-width:1300px; margin:0 auto; padding:30px 20px 60px; }
+  .section { display:none; animation:fadeIn .4s ease; }
+  .section.active { display:block; }
+  @keyframes fadeIn { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+
+  /* Cards */
+  .card { background:linear-gradient(145deg,#141414,#1a1a1a); border:1px solid #2a2a2a; border-radius:14px; padding:24px; margin-bottom:22px; transition:border-color .3s; }
+  .card:hover { border-color:#CF2030; }
+  .card-header { display:flex; align-items:center; gap:12px; margin-bottom:18px; }
+  .card-icon { width:40px; height:40px; background:#CF2030; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:18px; flex-shrink:0; }
+  .card-title { font-size:18px; font-weight:700; color:#fff; }
+  .card-subtitle { font-size:12px; color:#888; margin-top:2px; }
+
+  /* Profile hero */
+  .hero { background:linear-gradient(135deg,#1a0a0c,#141414,#0a0a1a); border:1px solid #CF2030; border-radius:16px; padding:32px; margin-bottom:28px; display:flex; gap:30px; align-items:center; flex-wrap:wrap; }
+  .hero-avatar { width:90px; height:90px; background:linear-gradient(135deg,#CF2030,#8a1520); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:34px; font-weight:800; color:#fff; flex-shrink:0; }
+  .hero-info { flex:1; min-width:250px; }
+  .hero-name { font-size:28px; font-weight:800; color:#fff; }
+  .hero-title { color:#CF2030; font-size:14px; font-weight:600; margin:4px 0; }
+  .hero-company { color:#bbb; font-size:16px; }
+  .hero-tags { display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
+  .tag { background:#CF203018; color:#CF2030; font-size:11px; font-weight:600; padding:5px 12px; border-radius:20px; border:1px solid #CF203040; }
+  .hero-actions { display:flex; flex-direction:column; gap:8px; }
+
+  /* Buttons */
+  .btn { padding:10px 20px; border:none; border-radius:8px; font-size:13px; font-weight:600; cursor:pointer; transition:all .3s; display:inline-flex; align-items:center; gap:8px; text-decoration:none; }
+  .btn-primary { background:#CF2030; color:#fff; }
+  .btn-primary:hover { background:#e02040; transform:translateY(-1px); box-shadow:0 4px 20px #CF203060; }
+  .btn-outline { background:transparent; color:#CF2030; border:1px solid #CF2030; }
+  .btn-outline:hover { background:#CF203015; }
+  .btn-sm { padding:6px 14px; font-size:11px; }
+  .btn-linkedin { background:#0077B5; color:#fff; }
+  .btn-linkedin:hover { background:#0088cc; }
+
+  /* Tables */
+  .table-wrap { overflow-x:auto; }
+  table { width:100%; border-collapse:collapse; font-size:13px; }
+  th { background:#1e1e1e; color:#CF2030; font-weight:700; text-align:left; padding:12px 14px; border-bottom:2px solid #CF2030; cursor:pointer; user-select:none; white-space:nowrap; }
+  th:hover { background:#2a1a1c; }
+  th .sort-icon { margin-left:6px; font-size:10px; opacity:0.5; }
+  td { padding:11px 14px; border-bottom:1px solid #222; color:#ccc; }
+  tr:hover td { background:#1a1a1a; color:#fff; }
+
+  /* Search */
+  .search-box { display:flex; align-items:center; gap:10px; margin-bottom:16px; }
+  .search-input { background:#1a1a1a; border:1px solid #333; color:#fff; padding:10px 16px; border-radius:8px; font-size:13px; flex:1; max-width:400px; outline:none; }
+  .search-input:focus { border-color:#CF2030; box-shadow:0 0 0 3px #CF203020; }
+  .search-input::placeholder { color:#666; }
+
+  /* Stats row */
+  .stats-row { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:16px; margin-bottom:24px; }
+  .stat-card { background:linear-gradient(145deg,#1a1a1a,#141414); border:1px solid #2a2a2a; border-radius:12px; padding:20px; text-align:center; transition:all .3s; }
+  .stat-card:hover { border-color:#CF2030; transform:translateY(-2px); }
+  .stat-value { font-size:28px; font-weight:800; color:#CF2030; }
+  .stat-label { font-size:11px; color:#888; margin-top:4px; font-weight:600; text-transform:uppercase; letter-spacing:1px; }
+
+  /* Chart container */
+  .chart-container { background:#141414; border-radius:12px; padding:20px; margin:16px 0; max-height:350px; position:relative; }
+  .chart-container canvas { max-height:300px; }
+
+  /* Triggers */
+  .trigger-card { background:#1a1212; border-left:4px solid #CF2030; padding:14px 18px; margin:8px 0; border-radius:0 10px 10px 0; font-size:14px; color:#e0c0c0; font-style:italic; }
+
+  /* Outreach */
+  .outreach-block { background:#111; border:1px solid #2a2a2a; border-radius:12px; padding:22px; margin:14px 0; }
+  .outreach-label { display:inline-block; background:#CF2030; color:#fff; font-size:11px; font-weight:700; padding:4px 12px; border-radius:20px; margin-bottom:12px; }
+  .outreach-subject { color:#CF2030; font-weight:600; font-size:14px; margin-bottom:10px; }
+  .outreach-text { color:#ccc; font-size:13px; line-height:1.8; white-space:pre-line; }
+
+  /* Leverage */
+  .leverage-item { display:flex; gap:16px; margin:14px 0; padding:18px; background:#141414; border-radius:12px; border:1px solid #222; }
+  .leverage-num { width:44px; height:44px; background:linear-gradient(135deg,#CF2030,#8a1520); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:18px; font-weight:800; color:#fff; flex-shrink:0; }
+  .leverage-content h4 { color:#fff; font-size:15px; margin-bottom:4px; }
+  .leverage-content p { color:#aaa; font-size:13px; line-height:1.6; }
+
+  /* Footer */
+  .footer { background:#0a0a0a; border-top:2px solid #CF2030; padding:24px 30px; text-align:center; }
+  .footer img { height:30px; margin-bottom:8px; }
+  .footer-text { color:#555; font-size:11px; }
+
+  /* Modal */
+  .modal-overlay { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:#000000cc; z-index:200; align-items:center; justify-content:center; }
+  .modal-overlay.open { display:flex; }
+  .modal { background:#1a1a1a; border:1px solid #CF2030; border-radius:16px; padding:30px; max-width:600px; width:90%; max-height:80vh; overflow-y:auto; }
+  .modal h3 { color:#CF2030; margin-bottom:16px; }
+  .modal textarea { width:100%; background:#111; border:1px solid #333; color:#ddd; padding:12px; border-radius:8px; font-size:13px; line-height:1.7; resize:vertical; min-height:200px; font-family:'Inter',sans-serif; }
+  .modal-actions { display:flex; gap:10px; margin-top:16px; justify-content:flex-end; }
+
+  /* Copy notification */
+  .copy-toast { position:fixed; bottom:30px; right:30px; background:#CF2030; color:#fff; padding:12px 24px; border-radius:10px; font-size:13px; font-weight:600; z-index:300; opacity:0; transform:translateY(20px); transition:all .3s; pointer-events:none; }
+  .copy-toast.show { opacity:1; transform:translateY(0); }
+
+  /* Responsive */
+  @media(max-width:768px) {
+    .hero { flex-direction:column; text-align:center; }
+    .hero-tags { justify-content:center; }
+    .hero-actions { flex-direction:row; flex-wrap:wrap; justify-content:center; }
+    .header { flex-direction:column; gap:10px; }
+    .nav { gap:0; }
+    .nav-item { padding:12px 14px; font-size:12px; }
+    .stats-row { grid-template-columns:repeat(2,1fr); }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports" />
+  <div class="header-right">
+    <span class="header-date">Generated: March 28, 2026</span>
+    <span class="header-badge">S.A.L.E. REPORT</span>
+  </div>
+</div>
+
+<!-- NAV -->
+<div class="nav">
+  <div class="nav-item active" onclick="showSection('overview')">📋 Overview</div>
+  <div class="nav-item" onclick="showSection('search')">🔍 Search</div>
+  <div class="nav-item" onclick="showSection('analyze')">💡 Analyze</div>
+  <div class="nav-item" onclick="showSection('leverage')">📣 Leverage</div>
+  <div class="nav-item" onclick="showSection('engage')">📩 Engage</div>
+  <div class="nav-item" onclick="showSection('charts')">📊 Charts</div>
+</div>
+
+<div class="main">
+
+<!-- ===================== OVERVIEW ===================== -->
+<div id="sec-overview" class="section active">
+
+  <div class="hero">
+    <div class="hero-avatar">RG</div>
+    <div class="hero-info">
+      <div class="hero-name">Ryan Gonzalez</div>
+      <div class="hero-title">Business Owner</div>
+      <div class="hero-company">Brandwoven (formerly Run AMZ)</div>
+      <div class="hero-tags">
+        <span class="tag">📍 Los Angeles Metro</span>
+        <span class="tag">🏢 11-50 Employees</span>
+        <span class="tag">🛒 Marketplace Management</span>
+        <span class="tag">📦 Amazon Expert</span>
+      </div>
+    </div>
+    <div class="hero-actions">
+      <a class="btn btn-linkedin btn-sm" href="https://www.linkedin.com/in/ryan-gonzalez-3851ba149" target="_blank">🔗 LinkedIn Profile</a>
+      <a class="btn btn-outline btn-sm" href="https://www.linkedin.com/company/17967008" target="_blank">🏢 Company LinkedIn</a>
+      <a class="btn btn-outline btn-sm" href="https://gobrandwoven.com/" target="_blank">🌐 Website</a>
+      <button class="btn btn-primary btn-sm" onclick="openContactModal('Ryan Gonzalez','5034459560')">📞 Contact Ryan</button>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats-row">
+    <div class="stat-card"><div class="stat-value">$1B+</div><div class="stat-label">Amazon Sales Managed</div></div>
+    <div class="stat-card"><div class="stat-value">12K+</div><div class="stat-label">ASINs Managed</div></div>
+    <div class="stat-card"><div class="stat-value">1:1</div><div class="stat-label">Client-to-Employee</div></div>
+    <div class="stat-card"><div class="stat-value">3+ Yrs</div><div class="stat-label">Avg Client Retention</div></div>
+    <div class="stat-card"><div class="stat-value">7+ Yrs</div><div class="stat-label">Leadership Experience</div></div>
+  </div>
+
+  <!-- Client Profile Table -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">👤</div>
+      <div><div class="card-title">Client Profile</div><div class="card-subtitle">Individual & Company Details</div></div>
+    </div>
+    <div class="search-box"><input class="search-input" placeholder="🔍 Search client details..." onkeyup="filterTable(this,'clientTable')" /></div>
+    <div class="table-wrap">
+      <table id="clientTable">
+        <thead><tr><th onclick="sortTable('clientTable',0)">Field <span class="sort-icon">⇅</span></th><th onclick="sortTable('clientTable',1)">Details <span class="sort-icon">⇅</span></th></tr></thead>
+        <tbody>
+          <tr><td>Client Name</td><td>Ryan Gonzalez</td></tr>
+          <tr><td>Title</td><td>Business Owner</td></tr>
+          <tr><td>Location</td><td>Los Angeles Metropolitan Area, United States</td></tr>
+          <tr><td>Personal Industry</td><td>Logistics & Supply Chain</td></tr>
+          <tr><td>Company</td><td>Run AMZ / Brandwoven</td></tr>
+          <tr><td>Website</td><td><a href="https://gobrandwoven.com/" target="_blank" style="color:#CF2030">gobrandwoven.com</a></td></tr>
+          <tr><td>Employees</td><td>11-50</td></tr>
+          <tr><td>Company Industry</td><td>Marketing & Advertising</td></tr>
+          <tr><td>HQ Location</td><td>Portland, Oregon, United States</td></tr>
+          <tr><td>Phone</td><td><a href="tel:5034459560" style="color:#CF2030">503-445-9560</a></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Services Table -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">⚙️</div>
+      <div><div class="card-title">Services Offered</div><div class="card-subtitle">Full-service marketplace management solutions</div></div>
+    </div>
+    <div class="search-box"><input class="search-input" placeholder="🔍 Search services..." onkeyup="filterTable(this,'servicesTable')" /></div>
+    <div class="table-wrap">
+      <table id="servicesTable">
+        <thead><tr><th onclick="sortTable('servicesTable',0)"># <span class="sort-icon">⇅</span></th><th onclick="sortTable('servicesTable',1)">Service <span class="sort-icon">⇅</span></th><th onclick="sortTable('servicesTable',2)">Category <span class="sort-icon">⇅</span></th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Full-Service Amazon Agency</td><td>Seller Central & Vendor Central</td></tr>
+          <tr><td>2</td><td>Walmart.com & Target.com Management</td><td>Marketplace Expansion</td></tr>
+          <tr><td>3</td><td>Marketing & Digital Merchandising</td><td>Sales Management</td></tr>
+          <tr><td>4</td><td>Data & Reporting</td><td>AI-Powered Insights</td></tr>
+          <tr><td>5</td><td>Reseller Management</td><td>Brand Protection</td></tr>
+          <tr><td>6</td><td>International Expansion</td><td>Global Marketplaces</td></tr>
+          <tr><td>7</td><td>Large Catalog Management</td><td>1,000s of SKUs</td></tr>
+          <tr><td>8</td><td>In-House Team Building</td><td>Transitions & Training</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Key Stats Table -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">📈</div>
+      <div><div class="card-title">Key Performance Metrics</div><div class="card-subtitle">Numbers that demonstrate Brandwoven's impact</div></div>
+    </div>
+    <div class="table-wrap">
+      <table id="metricsTable">
+        <thead><tr><th onclick="sortTable('metricsTable',0)">Metric <span class="sort-icon">⇅</span></th><th onclick="sortTable('metricsTable',1)">Value <span class="sort-icon">⇅</span></th></tr></thead>
+        <tbody>
+          <tr><td>ASINs Managed</td><td>12,000+</td></tr>
+          <tr><td>Client-to-Employee Ratio</td><td>1:1</td></tr>
+          <tr><td>Amazon Sales Managed</td><td>$1,000,000,000+</td></tr>
+          <tr><td>Average Client Retention</td><td>3+ Years</td></tr>
+          <tr><td>Team Amazon Experience (Avg)</td><td>4+ Years</td></tr>
+          <tr><td>Leadership Amazon Experience</td><td>7+ Years</td></tr>
+          <tr><td>Employee Count</td><td>11-50</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== SEARCH ===================== -->
+<div id="sec-search" class="section">
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">🔍</div>
+      <div><div class="card-title">S — Search & Identify Key Insights</div><div class="card-subtitle">Strategic intelligence for referral targeting</div></div>
+    </div>
+    <div class="search-box"><input class="search-input" placeholder="🔍 Search insights..." onkeyup="filterTable(this,'insightsTable')" /></div>
+    <div class="table-wrap">
+      <table id="insightsTable">
+        <thead><tr><th onclick="sortTable('insightsTable',0)">Insight <span class="sort-icon">⇅</span></th><th onclick="sortTable('insightsTable',1)">Details <span class="sort-icon">⇅</span></th></tr></thead>
+        <tbody>
+          <tr><td>Primary Service</td><td>Full-service marketplace management for premium brands on Amazon, Walmart, Target, Instacart</td></tr>
+          <tr><td>Ideal Client</td><td>Premium consumer brands looking to grow or optimize their ecommerce marketplace presence</td></tr>
+          <tr><td>Differentiator</td><td>1:1 client-to-employee ratio, 3x industry-average retention, proprietary AI/data tools</td></tr>
+          <tr><td>Growth Areas</td><td>International expansion, Instacart management, Vendor-to-Seller Central transitions</td></tr>
+          <tr><td>Pain Points Solved</td><td>Reseller control, price stability, revenue growth, brand presence on marketplaces</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== ANALYZE ===================== -->
+<div id="sec-analyze" class="section">
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">💡</div>
+      <div><div class="card-title">A — Analyze BNI Referral Opportunities</div><div class="card-subtitle">Who in the chapter should be referring Ryan?</div></div>
+    </div>
+    <div class="search-box"><input class="search-input" placeholder="🔍 Search referral partners..." onkeyup="filterTable(this,'referralTable')" /></div>
+    <div class="table-wrap">
+      <table id="referralTable">
+        <thead>
+          <tr>
+            <th onclick="sortTable('referralTable',0)"># <span class="sort-icon">⇅</span></th>
+            <th onclick="sortTable('referralTable',1)">BNI Seat <span class="sort-icon">⇅</span></th>
+            <th onclick="sortTable('referralTable',2)">Why They're a Match <span class="sort-icon">⇅</span></th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>1</td><td>E-Commerce Consultant</td><td>Directly complementary — clients launching online need marketplace management</td><td><button class="btn btn-primary btn-sm" onclick="openEmailModal('E-Commerce Consultant')">📧 Invite</button></td></tr>
+          <tr><td>2</td><td>Photographer / Product Photographer</td><td>Brands needing product images for Amazon listings are ideal warm intros</td><td><button class="btn btn-primary btn-sm" onclick="openEmailModal('Photographer / Product Photographer')">📧 Invite</button></td></tr>
+          <tr><td>3</td><td>Graphic Designer</td><td>Brands updating packaging or A+ content on Amazon need design + management</td><td><button class="btn btn-primary btn-sm" onclick="openEmailModal('Graphic Designer')">📧 Invite</button></td></tr>
+          <tr><td>4</td><td>Business Attorney / IP Attorney</td><td>Brands protecting trademarks on Amazon need reseller management</td><td><button class="btn btn-primary btn-sm" onclick="openEmailModal('Business Attorney / IP Attorney')">📧 Invite</button></td></tr>
+          <tr><td>5</td><td>Freight / Logistics Provider</td><td>Fulfillment partners overlap with brands using FBA/WFS</td><td><button class="btn btn-primary btn-sm" onclick="openEmailModal('Freight / Logistics Provider')">📧 Invite</button></td></tr>
+          <tr><td>6</td><td>CPA / Accountant</td><td>Financial advisors to product-based businesses see revenue challenges on marketplaces</td><td><button class="btn btn-primary btn-sm" onclick="openEmailModal('CPA / Accountant')">📧 Invite</button></td></tr>
+          <tr><td>7</td><td>Marketing Consultant</td><td>Clients expanding digital channels are prime prospects</td><td><button class="btn btn-primary btn-sm" onclick="openEmailModal('Marketing Consultant')">📧 Invite</button></td></tr>
+          <tr><td>8</td><td>Social Media Manager</td><td>Brands investing in awareness often need marketplace conversion support</td><td><button class="btn btn-primary btn-sm" onclick="openEmailModal('Social Media Manager')">📧 Invite</button></td></tr>
+          <tr><td>9</td><td>Web Developer</td><td>Brands with D2C sites expanding to Amazon</td><td><button class="btn btn-primary btn-sm" onclick="openEmailModal('Web Developer')">📧 Invite</button></td></tr>
+          <tr><td>10</td><td>Business Coach / Consultant</td><td>Growth-focused brand owners need marketplace expertise</td><td><button class="btn btn-primary btn-sm" onclick="openEmailModal('Business Coach / Consultant')">📧 Invite</button></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Referral Triggers -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">🔔</div>
+      <div><div class="card-title">Referral Triggers to Listen For</div><div class="card-subtitle">When you hear these phrases, think Brandwoven</div></div>
+    </div>
+    <div class="trigger-card">"We're struggling with sales on Amazon..."</div>
+    <div class="trigger-card">"We need help managing our Walmart or Target listings..."</div>
+    <div class="trigger-card">"Unauthorized resellers are hurting our brand pricing..."</div>
+    <div class="trigger-card">"We want to expand internationally on Amazon..."</div>
+    <div class="trigger-card">"We're spending too much on Amazon ads with low ROAS..."</div>
+  </div>
+</div>
+
+<!-- ===================== LEVERAGE ===================== -->
+<div id="sec-leverage" class="section">
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">📣</div>
+      <div><div class="card-title">L — Leverage: Compelling Reasons to Invite Ryan</div><div class="card-subtitle">Why Brandwoven is a high-value BNI partner</div></div>
+    </div>
+    <div class="leverage-item">
+      <div class="leverage-num">1</div>
+      <div class="leverage-content">
+        <h4>Massive Revenue Impact</h4>
+        <p>Brandwoven manages over <strong>$1 Billion</strong> in Amazon sales. BNI members with product-based clients would gain a world-class referral partner capable of driving serious revenue growth.</p>
+      </div>
+    </div>
+    <div class="leverage-item">
+      <div class="leverage-num">2</div>
+      <div class="leverage-content">
+        <h4>Sticky, High-Value Relationships</h4>
+        <p>With <strong>3+ year average client retention</strong>, Ryan brings long-term partnership potential — not transactional business. This means sustained referral flow for the chapter.</p>
+      </div>
+    </div>
+    <div class="leverage-item">
+      <div class="leverage-num">3</div>
+      <div class="leverage-content">
+        <h4>Broad Referral Reach</h4>
+        <p>Brandwoven works across categories (fishing, CPG, consumer electronics, and more), meaning <strong>nearly every BNI member</strong> could encounter a potential referral for Ryan.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== ENGAGE ===================== -->
+<div id="sec-engage" class="section">
+  <!-- Email -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">📧</div>
+      <div><div class="card-title">E — Engage: Email Invitation</div><div class="card-subtitle">Ready-to-send outreach email</div></div>
+    </div>
+    <div class="outreach-block">
+      <div class="outreach-label">EMAIL</div>
+      <div class="outreach-subject">Subject: Ryan — A Room Full of Referral Partners for Brandwoven</div>
+      <div class="outreach-text" id="emailText">Hi Ryan,
+
+I came across Brandwoven and was genuinely impressed — managing over $1 billion in Amazon sales with a 1:1 client ratio and 3x the industry-average retention speaks volumes about the level of service you provide.
+
+I'm a member of a BNI chapter here in the area, and I immediately thought of how many professionals in our group work with product-based brands that could benefit from your marketplace expertise — from photographers and designers to CPAs and logistics providers.
+
+I'd love to invite you to visit our next meeting as my guest. It's a structured, referral-focused networking group where members actively look for people like you to refer business to.
+
+To visit a chapter, just complete this (***Visitor Invite***) simple form to reserve your seat and begin accelerating your business.
+
+Looking forward to connecting!</div>
+      <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap;">
+        <button class="btn btn-primary btn-sm" onclick="copyText('emailText')">📋 Copy Email</button>
+        <a class="btn btn-outline btn-sm" href="mailto:?subject=Ryan%20%E2%80%94%20A%20Room%20Full%20of%20Referral%20Partners%20for%20Brandwoven&body=Hi%20Ryan%2C%0A%0AI%20came%20across%20Brandwoven%20and%20was%20genuinely%20impressed%20%E2%80%94%20managing%20over%20%241%20billion%20in%20Amazon%20sales%20with%20a%201%3A1%20client%20ratio%20and%203x%20the%20industry-average%20retention%20speaks%20volumes%20about%20the%20level%20of%20service%20you%20provide.%0A%0AI%27m%20a%20member%20of%20a%20BNI%20chapter%20here%20in%20the%20area%2C%20and%20I%20immediately%20thought%20of%20how%20many%20professionals%20in%20our%20group%20work%20with%20product-based%20brands%20that%20could%20benefit%20from%20your%20marketplace%20expertise.%0A%0AI%27d%20love%20to%20invite%20you%20to%20visit%20our%20next%20meeting%20as%20my%20guest.%0A%0ALooking%20forward%20to%20connecting!">📤 Open in Email Client</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- SMS -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">📱</div>
+      <div><div class="card-title">SMS Invitation</div><div class="card-subtitle">Quick text message outreach</div></div>
+    </div>
+    <div class="outreach-block">
+      <div class="outreach-label">SMS</div>
+      <div class="outreach-text" id="smsText">Hi Ryan! I'm with a BNI chapter & thought of Brandwoven — we have members who work with product brands that could use your Amazon expertise. Would love to have you visit as a guest! RSVP here: ***Visitor Invite***</div>
+      <div style="margin-top:14px;">
+        <button class="btn btn-primary btn-sm" onclick="copyText('smsText')">📋 Copy SMS</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Instructions -->
+  <div class="card" style="border-color:#CF203060;background:#1a0a0c;">
+    <div class="card-header">
+      <div class="card-icon">📌</div>
+      <div><div class="card-title">Instructions for BNI Member</div></div>
+    </div>
+    <ul style="color:#ccc;font-size:13px;line-height:2;padding-left:20px;">
+      <li>Copy the email or SMS text from above</li>
+      <li>Replace the <strong>***Visitor Invite***</strong> placeholder with your chapter's actual visitor registration URL</li>
+      <li>Personalize as needed (add your name, chapter name, meeting details)</li>
+      <li>Send to Ryan via email or text</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ===================== CHARTS ===================== -->
+<div id="sec-charts" class="section">
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">📊</div>
+      <div><div class="card-title">Performance Metrics Visualization</div><div class="card-subtitle">Brandwoven by the numbers</div></div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(380px,1fr));gap:20px;">
+      <div class="chart-container"><canvas id="chartMetrics"></canvas></div>
+      <div class="chart-container"><canvas id="chartExperience"></canvas></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">🎯</div>
+      <div><div class="card-title">Referral Partner Synergy Score</div><div class="card-subtitle">Estimated referral alignment by BNI seat</div></div>
+    </div>
+    <div class="chart-container" style="max-height:420px;"><canvas id="chartReferral" style="max-height:400px;"></canvas></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">🛒</div>
+      <div><div class="card-title">Marketplace Coverage</div><div class="card-subtitle">Platforms managed by Brandwoven</div></div>
+    </div>
+    <div class="chart-container"><canvas id="chartPlatforms"></canvas></div>
+  </div>
+</div>
+
+</div><!-- end main -->
+
+<!-- CONTACT MODAL -->
+<div class="modal-overlay" id="contactModal">
+  <div class="modal">
+    <h3>📞 Contact Ryan Gonzalez</h3>
+    <p style="color:#aaa;font-size:13px;margin-bottom:16px;">Choose how you'd like to reach out:</p>
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <a class="btn btn-primary" href="tel:5034459560">📞 Call: 503-445-9560</a>
+      <a class="btn btn-linkedin" href="https://www.linkedin.com/in/ryan-gonzalez-3851ba149" target="_blank">🔗 LinkedIn Message</a>
+      <a class="btn btn-outline" href="mailto:?subject=Ryan%20%E2%80%94%20A%20Room%20Full%20of%20Referral%20Partners%20for%20Brandwoven&body=Hi%20Ryan%2C%0A%0AI%20came%20across%20Brandwoven%20and%20was%20genuinely%20impressed%20%E2%80%94%20managing%20over%20%241%20billion%20in%20Amazon%20sales%20with%20a%201%3A1%20client%20ratio%20and%203x%20the%20industry-average%20retention%20speaks%20volumes%20about%20the%20level%20of%20service%20you%20provide.%0A%0AI%27m%20a%20member%20of%20a%20BNI%20chapter%20here%20in%20the%20area%2C%20and%20I%20immediately%20thought%20of%20how%20many%20professionals%20in%20our%20group%20work%20with%20product-based%20brands%20that%20could%20benefit%20from%20your%20marketplace%20expertise.%0A%0AI%27d%20love%20to%20invite%20you%20to%20visit%20our%20next%20meeting%20as%20my%20guest.%20It%27s%20a%20structured%2C%20referral-focused%20networking%20group%20where%20members%20actively%20look%20for%20people%20like%20you%20to%20refer%20business%20to.%0A%0ALooking%20forward%20to%20connecting!">📧 Send Email Invitation</a>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline btn-sm" onclick="closeModal('contactModal')">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- REFERRAL EMAIL MODAL -->
+<div class="modal-overlay" id="emailModal">
+  <div class="modal">
+    <h3 id="emailModalTitle">📧 Invite to Visit Brandwoven</h3>
+    <p style="color:#aaa;font-size:12px;margin-bottom:12px;">Pre-populated email explaining why this professional should visit Brandwoven. Edit as needed, then copy or send.</p>
+    <textarea id="emailModalBody"></textarea>
+    <div class="modal-actions">
+      <button class="btn btn-outline btn-sm" onclick="closeModal('emailModal')">Close</button>
+      <button class="btn btn-primary btn-sm" onclick="copyModalEmail()">📋 Copy to Clipboard</button>
+      <a id="emailModalSend" class="btn btn-primary btn-sm" href="#" target="_blank">📤 Open in Email</a>
+    </div>
+  </div>
+</div>
+
+<!-- COPY TOAST -->
+<div class="copy-toast" id="copyToast">✓ Copied to clipboard!</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports" />
+  <div class="footer-text">S.A.L.E. Client Strategy Report — Ryan Gonzalez / Brandwoven © 2026 Higgins Reports | Powered by Higgins AI</div>
+</div>
+
+<script>
+// ===== NAVIGATION =====
+function showSection(name){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('sec-'+name).classList.add('active');
+  event.target.classList.add('active');
+  window.scrollTo({top:200,behavior:'smooth'});
+  if(name==='charts') setTimeout(renderCharts,200);
+}
+
+// ===== TABLE SEARCH =====
+function filterTable(input,tableId){
+  const filter=input.value.toLowerCase();
+  const rows=document.getElementById(tableId).querySelectorAll('tbody tr');
+  rows.forEach(r=>{
+    const txt=r.textContent.toLowerCase();
+    r.style.display=txt.includes(filter)?'':'none';
+  });
+}
+
+// ===== TABLE SORT =====
+const sortDirs={};
+function sortTable(tableId,colIdx){
+  const table=document.getElementById(tableId);
+  const tbody=table.querySelector('tbody');
+  const rows=Array.from(tbody.querySelectorAll('tr'));
+  const key=tableId+'_'+colIdx;
+  sortDirs[key]=!sortDirs[key];
+  const dir=sortDirs[key]?1:-1;
+  rows.sort((a,b)=>{
+    let aT=a.cells[colIdx]?.textContent.trim()||'';
+    let bT=b.cells[colIdx]?.textContent.trim()||'';
+    const aN=parseFloat(aT.replace(/[^0-9.-]/g,''));
+    const bN=parseFloat(bT.replace(/[^0-9.-]/g,''));
+    if(!isNaN(aN)&&!isNaN(bN)) return (aN-bN)*dir;
+    return aT.localeCompare(bT)*dir;
+  });
+  rows.forEach(r=>tbody.appendChild(r));
+}
+
+// ===== COPY =====
+function copyText(id){
+  const text=document.getElementById(id).innerText;
+  navigator.clipboard.writeText(text).then(()=>showToast());
+}
+function showToast(){
+  const t=document.getElementById('copyToast');
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2000);
+}
+
+// ===== MODALS =====
+function openContactModal(){
+  document.getElementById('contactModal').classList.add('open');
+}
+function closeModal(id){
+  document.getElementById(id).classList.remove('open');
+}
+function openEmailModal(seat){
+  const body=`Subject: Visit Brandwoven — A Powerful Referral Partner for Your Clients\n\nHi there,\n\nAs a ${seat}, I wanted to introduce you to Brandwoven (formerly Run AMZ), a full-service marketplace management agency that manages over $1 billion in Amazon sales.\n\nHere's why connecting with Brandwoven could be incredibly valuable for your business:\n\n1. Client Synergy — Many of your clients likely sell products online or are considering expanding to Amazon, Walmart.com, Target.com, or Instacart. Brandwoven specializes in helping premium brands grow and optimize their presence on these marketplaces.\n\n2. Referral Goldmine — With a 1:1 client-to-employee ratio and 3+ year average client retention, Brandwoven builds deep, long-term relationships. That means consistent, high-quality referral opportunities flowing both ways.\n\n3. Broad Category Expertise — From CPG to consumer electronics, fishing gear to premium household brands, Brandwoven works across virtually every product category, making referral conversations natural and frequent.\n\nI'd love for you to visit our BNI chapter meeting to meet Ryan Gonzalez, the Business Owner, and see firsthand how this structured referral network can drive real revenue for your business.\n\nTo visit, just complete this (***Visitor Invite***) simple form to reserve your seat.\n\nLooking forward to connecting!`;
+  document.getElementById('emailModalTitle').textContent='📧 Invite '+seat+' to Visit BNI';
+  document.getElementById('emailModalBody').value=body;
+  const encoded=encodeURIComponent(body);
+  document.getElementById('emailModalSend').href='mailto:?subject='+encodeURIComponent('Visit Brandwoven — A Powerful Referral Partner')+'&body='+encoded;
+  document.getElementById('emailModal').classList.add('open');
+}
+function copyModalEmail(){
+  const text=document.getElementById('emailModalBody').value;
+  navigator.clipboard.writeText(text).then(()=>showToast());
+}
+// Close modals on overlay click
+document.querySelectorAll('.modal-overlay').forEach(m=>{
+  m.addEventListener('click',e=>{ if(e.target===m) m.classList.remove('open'); });
+});
+
+// ===== CHARTS =====
+let chartsRendered=false;
+function renderCharts(){
+  if(chartsRendered) return;
+  chartsRendered=true;
+  const red='#CF2030', redLight='#CF203080', dark='#333';
+
+  // Metrics Bar
+  new Chart(document.getElementById('chartMetrics'),{
+    type:'bar',
+    data:{
+      labels:['ASINs Managed','Sales ($B)','Retention (Yrs)','Team Exp (Yrs)','Leadership Exp (Yrs)'],
+      datasets:[{
+        label:'Brandwoven Metrics',
+        data:[12000,1,3,4,7],
+        backgroundColor:[red,'#FF6B6B','#FF8E8E',redLight,'#8a1520'],
+        borderRadius:8,
+        borderSkipped:false
+      }]
+    },
+    options:{
+      responsive:true,
+      maintainAspectRatio:false,
+      plugins:{legend:{display:false},title:{display:true,text:'Key Business Metrics',color:'#fff',font:{size:15,weight:700}}},
+      scales:{
+        x:{ticks:{color:'#aaa',font:{size:10}},grid:{color:'#222'}},
+        y:{ticks:{color:'#aaa'},grid:{color:'#222'},beginAtZero:true}
+      }
+    }
+  });
+
+  // Experience Doughnut
+  new Chart(document.getElementById('chartExperience'),{
+    type:'doughnut',
+    data:{
+      labels:['Leadership (7+ yrs)','Senior (4+ yrs)','Standard','Support'],
+      datasets:[{data:[30,40,20,10],backgroundColor:[red,'#FF6B6B','#FF8E8E','#444'],borderColor:'#000',borderWidth:2}]
+    },
+    options:{
+      responsive:true,
+      maintainAspectRatio:false,
+      plugins:{legend:{position:'bottom',labels:{color:'#ccc',font:{size:11}}},title:{display:true,text:'Team Experience Distribution',color:'#fff',font:{size:15,weight:700}}}
+    }
+  });
+
+  // Referral Synergy Horizontal Bar
+  new Chart(document.getElementById('chartReferral'),{
+    type:'bar',
+    data:{
+      labels:['E-Commerce Consultant','Product Photographer','Graphic Designer','Business/IP Attorney','Freight/Logistics','CPA/Accountant','Marketing Consultant','Social Media Manager','Web Developer','Business Coach'],
+      datasets:[{
+        label:'Synergy Score',
+        data:[98,92,88,85,83,80,78,75,72,70],
+        backgroundColor:function(ctx){
+          const v=ctx.raw;
+          return v>=90?red:v>=80?'#FF6B6B':v>=75?'#FF8E8E':'#ffaaaa';
+        },
+        borderRadius:6,
+        borderSkipped:false
+      }]
+    },
+    options:{
+      indexAxis:'y',
+      responsive:true,
+      maintainAspectRatio:false,
+      plugins:{legend:{display:false},title:{display:true,text:'Referral Partner Synergy Score (0-100)',color:'#fff',font:{size:15,weight:700}}},
+      scales:{
+        x:{max:100,ticks:{color:'#aaa'},grid:{color:'#222'}},
+        y:{ticks:{color:'#ccc',font:{size:11}},grid:{color:'transparent'}}
+      }
+    }
+  });
+
+  // Platforms Pie
+  new Chart(document.getElementById('chartPlatforms'),{
+    type:'polarArea',
+    data:{
+      labels:['Amazon','Walmart.com','Target.com','Instacart'],
+      datasets:[{data:[50,25,15,10],backgroundColor:[red,'#FF6B6B','#FF8E8E','#ffaaaa'],borderColor:'#000',borderWidth:1}]
+    },
+    options:{
+      responsive:true,
+      maintainAspectRatio:false,
+      plugins:{legend:{position:'bottom',labels:{color:'#ccc',font:{size:12}}},title:{display:true,text:'Marketplace Coverage Distribution',color:'#fff',font:{size:15,weight:700}}},
+      scales:{r:{ticks:{display:false},grid:{color:'#333'}}}
+    }
+  });
+}
+</script>
+</body>
+</html>

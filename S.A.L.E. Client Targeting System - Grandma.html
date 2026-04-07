@@ -1,0 +1,1219 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>S.A.L.E. Client Targeting System - Grandma's Kitchen</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .business-info {
+            background: #f8f9fa;
+            padding: 20px;
+            border-bottom: 3px solid #ee5a24;
+        }
+        
+        .business-card {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .info-section {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #ff6b6b;
+        }
+        
+        .tabs {
+            display: flex;
+            background: #f1f3f4;
+            margin: 0;
+        }
+        
+        .tab {
+            flex: 1;
+            padding: 15px 20px;
+            border: none;
+            background: #f1f3f4;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            border-bottom: 3px solid transparent;
+        }
+        
+        .tab.active {
+            background: white;
+            color: #ee5a24;
+            border-bottom-color: #ee5a24;
+        }
+        
+        .tab-content {
+            display: none;
+            padding: 30px;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .search-filter {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .search-input, .filter-select {
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+        
+        .search-input:focus, .filter-select:focus {
+            outline: none;
+            border-color: #ee5a24;
+        }
+        
+        .search-input {
+            flex: 2;
+            min-width: 300px;
+        }
+        
+        .filter-select {
+            flex: 1;
+            min-width: 150px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        th {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: white;
+            padding: 15px 10px;
+            text-align: left;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        
+        th:hover {
+            background: linear-gradient(135deg, #ee5a24, #d63031);
+        }
+        
+        td {
+            padding: 12px 10px;
+            border-bottom: 1px solid #eee;
+            transition: background 0.3s;
+        }
+        
+        tr:hover td {
+            background: #f8f9fa;
+        }
+        
+        .tier-1a { background-color: #d4edda !important; border-left: 4px solid #28a745; }
+        .tier-1b { background-color: #fff3cd !important; border-left: 4px solid #ffc107; }
+        .tier-1c { background-color: #cce5ff !important; border-left: 4px solid #007bff; }
+        
+        .pures-score {
+            font-weight: bold;
+            padding: 5px 10px;
+            border-radius: 20px;
+            color: white;
+            display: inline-block;
+            min-width: 40px;
+            text-align: center;
+        }
+        
+        .score-high { background: #28a745; }
+        .score-medium { background: #ffc107; color: #333; }
+        .score-low { background: #dc3545; }
+        
+        .contact-btn {
+            padding: 8px 15px;
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+            margin: 2px;
+        }
+        
+        .contact-btn:hover {
+            background: linear-gradient(135deg, #ee5a24, #d63031);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(238, 90, 36, 0.4);
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+        }
+        
+        .modal-content {
+            background: white;
+            margin: 5% auto;
+            padding: 0;
+            width: 90%;
+            max-width: 800px;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+        
+        .modal-header {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .modal-body {
+            padding: 30px;
+        }
+        
+        .close {
+            color: white;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            opacity: 0.8;
+        }
+        
+        .close:hover {
+            opacity: 1;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+        
+        .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+            outline: none;
+            border-color: #ee5a24;
+        }
+        
+        .form-group textarea {
+            height: 120px;
+            resize: vertical;
+        }
+        
+        .pures-form {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .pures-item {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #ee5a24;
+        }
+        
+        .slider {
+            width: 100%;
+            margin-top: 10px;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            border-left: 4px solid #ee5a24;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #ee5a24;
+            display: block;
+        }
+        
+        .marketing-calendar {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 1px;
+            margin-top: 20px;
+        }
+        
+        .calendar-day {
+            background: #f8f9fa;
+            padding: 10px;
+            min-height: 80px;
+            border: 1px solid #ddd;
+        }
+        
+        .calendar-day.has-activity {
+            background: #fff3cd;
+            border-color: #ffc107;
+        }
+        
+        .activity-item {
+            background: #ee5a24;
+            color: white;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-size: 11px;
+            margin: 1px 0;
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .search-filter {
+                flex-direction: column;
+            }
+            
+            .search-input, .filter-select {
+                width: 100%;
+            }
+            
+            table {
+                font-size: 12px;
+            }
+            
+            th, td {
+                padding: 8px 5px;
+            }
+            
+            .modal-content {
+                width: 95%;
+                margin: 10% auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🥡 Grandma's Kitchen S.A.L.E. Client Targeting System</h1>
+            <p>Authentic Chinese Cuisine | Cupertino, CA | Strategic Customer Acquisition Platform</p>
+        </div>
+
+        <!-- Business Information -->
+        <div class="business-info">
+            <div class="business-card">
+                <div class="info-section">
+                    <h3>📍 Restaurant Details</h3>
+                    <p><strong>Address:</strong> 19541 Richwood Dr, Cupertino, CA 95014</p>
+                    <p><strong>Phone:</strong> (408) 352-5052</p>
+                    <p><strong>Cuisine:</strong> Authentic Chinese & Sichuan</p>
+                    <p><strong>Service:</strong> Pickup, Delivery, Dine-in</p>
+                </div>
+                <div class="info-section">
+                    <h3>🎯 Target Market</h3>
+                    <p><strong>Primary:</strong> Asian food enthusiasts, Tech professionals</p>
+                    <p><strong>Secondary:</strong> Families, Food adventurers</p>
+                    <p><strong>Radius:</strong> 10-mile service area</p>
+                    <p><strong>Specialties:</strong> Grandma's Specials, Stone Bowl dishes</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation Tabs -->
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('sourcing')">📊 S - SOURCING</button>
+            <button class="tab" onclick="showTab('assessing')">🔍 A - ASSESSING</button>
+            <button class="tab" onclick="showTab('listening')">👂 L - LISTENING</button>
+            <button class="tab" onclick="showTab('empowering')">⚡ E - EMPOWERING</button>
+        </div>
+
+        <!-- SOURCING Tab -->
+        <div id="sourcing" class="tab-content active">
+            <h2>📊 SOURCING - P.U.R.E.S. Client Database</h2>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <span class="stat-number" id="totalClients">50</span>
+                    <span>Total Prospects</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number" id="tier1aCount">15</span>
+                    <span>Tier 1A (Premium)</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number" id="tier1bCount">20</span>
+                    <span>Tier 1B (High Value)</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number" id="tier1cCount">15</span>
+                    <span>Tier 1C (Qualified)</span>
+                </div>
+            </div>
+
+            <div class="search-filter">
+                <input type="text" id="searchInput" class="search-input" placeholder="🔍 Search clients by name, email, industry...">
+                <select id="tierFilter" class="filter-select">
+                    <option value="">All Tiers</option>
+                    <option value="Tier 1A">Tier 1A - Premium</option>
+                    <option value="Tier 1B">Tier 1B - High Value</option>
+                    <option value="Tier 1C">Tier 1C - Qualified</option>
+                </select>
+                <select id="industryFilter" class="filter-select">
+                    <option value="">All Industries</option>
+                    <option value="Tech">Technology</option>
+                    <option value="Healthcare">Healthcare</option>
+                    <option value="Finance">Finance</option>
+                    <option value="Education">Education</option>
+                    <option value="Retail">Retail</option>
+                </select>
+            </div>
+
+            <div style="overflow-x: auto;">
+                <table id="clientTable">
+                    <thead>
+                        <tr>
+                            <th onclick="sortTable(0)">Client Name ⚡</th>
+                            <th onclick="sortTable(1)">Email 📧</th>
+                            <th onclick="sortTable(2)">Phone 📞</th>
+                            <th onclick="sortTable(3)">Address 📍</th>
+                            <th onclick="sortTable(4)">P.U.R.E.S Score 📊</th>
+                            <th onclick="sortTable(5)">Tier Level 🏆</th>
+                            <th onclick="sortTable(6)">Industry 🏢</th>
+                            <th onclick="sortTable(7)">Revenue Est. 💰</th>
+                            <th>Actions 🚀</th>
+                        </tr>
+                    </thead>
+                    <tbody id="clientTableBody">
+                        <!-- Client data will be populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- ASSESSING Tab -->
+        <div id="assessing" class="tab-content">
+            <h2>🔍 ASSESSING - Buying Pattern Analysis</h2>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <span class="stat-number">35%</span>
+                    <span>Relationship Buyers</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number">25%</span>
+                    <span>Efficiency Buyers</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number">25%</span>
+                    <span>Innovation Buyers</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number">15%</span>
+                    <span>Analytical Buyers</span>
+                </div>
+            </div>
+
+            <div class="info-section">
+                <h3>🧠 Buyer Profile Categories for Restaurant Industry</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-top: 20px;">
+                    <div class="info-section">
+                        <h4>🤝 Relationship Buyers (35%)</h4>
+                        <p><strong>Characteristics:</strong> Value personal connections, word-of-mouth recommendations, loyalty programs</p>
+                        <p><strong>Approach:</strong> Personal invitations, family-style dining experiences, regular customer perks</p>
+                        <p><strong>Timeline:</strong> 2-3 weeks relationship building</p>
+                    </div>
+                    <div class="info-section">
+                        <h4>⚡ Efficiency Buyers (25%)</h4>
+                        <p><strong>Characteristics:</strong> Busy professionals, value convenience, quick service, online ordering</p>
+                        <p><strong>Approach:</strong> Express lunch menus, delivery guarantees, mobile app promotions</p>
+                        <p><strong>Timeline:</strong> Immediate conversion focused</p>
+                    </div>
+                    <div class="info-section">
+                        <h4>🚀 Innovation Buyers (25%)</h4>
+                        <p><strong>Characteristics:</strong> Food adventurers, social media influencers, try new cuisines</p>
+                        <p><strong>Approach:</strong> Unique dishes, Instagram-worthy presentations, limited-time specials</p>
+                        <p><strong>Timeline:</strong> 1-2 weeks with social proof</p>
+                    </div>
+                    <div class="info-section">
+                        <h4>📊 Analytical Buyers (15%)</h4>
+                        <p><strong>Characteristics:</strong> Research reviews, compare prices, nutritional information</p>
+                        <p><strong>Approach:</strong> Detailed menus, health benefits, customer testimonials</p>
+                        <p><strong>Timeline:</strong> 3-4 weeks research phase</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- LISTENING Tab -->
+        <div id="listening" class="tab-content">
+            <h2>👂 LISTENING - Feedback Integration</h2>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <span class="stat-number">4.2/5</span>
+                    <span>Average Rating</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number">87%</span>
+                    <span>Satisfaction Rate</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number">12</span>
+                    <span>Reviews This Month</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number">3.2hrs</span>
+                    <span>Avg Response Time</span>
+                </div>
+            </div>
+
+            <div class="info-section">
+                <h3>📝 Feedback Collection Strategy</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 20px;">
+                    <div class="info-section">
+                        <h4>📋 Pre-Sale Feedback</h4>
+                        <ul>
+                            <li>Welcome surveys for new customers</li>
+                            <li>Dietary preference collection</li>
+                            <li>Spice tolerance assessment</li>
+                            <li>Preferred communication channels</li>
+                        </ul>
+                    </div>
+                    <div class="info-section">
+                        <h4>🍽️ During-Sale Tracking</h4>
+                        <ul>
+                            <li>Table service quality monitoring</li>
+                            <li>Order accuracy tracking</li>
+                            <li>Wait time measurements</li>
+                            <li>Real-time issue resolution</li>
+                        </ul>
+                    </div>
+                    <div class="info-section">
+                        <h4>⭐ Post-Sale Monitoring</h4>
+                        <ul>
+                            <li>Follow-up satisfaction calls</li>
+                            <li>Online review management</li>
+                            <li>Social media monitoring</li>
+                            <li>Repeat visit incentives</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- EMPOWERING Tab -->
+        <div id="empowering" class="tab-content">
+            <h2>⚡ EMPOWERING - Referral Strategy & Marketing Calendar</h2>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <span class="stat-number">23</span>
+                    <span>Active Referrers</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number">$15</span>
+                    <span>Avg Referral Value</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number">31%</span>
+                    <span>Referral Rate</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number">4.6x</span>
+                    <span>Customer Lifetime Value</span>
+                </div>
+            </div>
+
+            <div class="marketing-calendar">
+                <h3>📅 Monthly Marketing & Outreach Schedule</h3>
+                <div class="calendar-grid">
+                    <div class="calendar-day"><strong>Mon</strong></div>
+                    <div class="calendar-day"><strong>Tue</strong></div>
+                    <div class="calendar-day"><strong>Wed</strong></div>
+                    <div class="calendar-day"><strong>Thu</strong></div>
+                    <div class="calendar-day"><strong>Fri</strong></div>
+                    <div class="calendar-day"><strong>Sat</strong></div>
+                    <div class="calendar-day"><strong>Sun</strong></div>
+                    
+                    <div class="calendar-day">1</div>
+                    <div class="calendar-day has-activity">2<br><span class="activity-item">Email Campaign</span></div>
+                    <div class="calendar-day">3</div>
+                    <div class="calendar-day has-activity">4<br><span class="activity-item">Social Media</span></div>
+                    <div class="calendar-day">5</div>
+                    <div class="calendar-day has-activity">6<br><span class="activity-item">Weekend Special</span></div>
+                    <div class="calendar-day has-activity">7<br><span class="activity-item">Family Day</span></div>
+                    
+                    <div class="calendar-day">8</div>
+                    <div class="calendar-day has-activity">9<br><span class="activity-item">Referral Program</span></div>
+                    <div class="calendar-day">10</div>
+                    <div class="calendar-day has-activity">11<br><span class="activity-item">Loyalty Rewards</span></div>
+                    <div class="calendar-day">12</div>
+                    <div class="calendar-day has-activity">13<br><span class="activity-item">Influencer Event</span></div>
+                    <div class="calendar-day">14</div>
+                    
+                    <div class="calendar-day has-activity">15<br><span class="activity-item">New Menu Launch</span></div>
+                    <div class="calendar-day has-activity">16<br><span class="activity-item">Email Follow-up</span></div>
+                    <div class="calendar-day">17</div>
+                    <div class="calendar-day has-activity">18<br><span class="activity-item">Community Event</span></div>
+                    <div class="calendar-day">19</div>
+                    <div class="calendar-day has-activity">20<br><span class="activity-item">Weekend Promo</span></div>
+                    <div class="calendar-day">21</div>
+                    
+                    <div class="calendar-day">22</div>
+                    <div class="calendar-day has-activity">23<br><span class="activity-item">Customer Survey</span></div>
+                    <div class="calendar-day">24</div>
+                    <div class="calendar-day has-activity">25<br><span class="activity-item">Social Contest</span></div>
+                    <div class="calendar-day">26</div>
+                    <div class="calendar-day has-activity">27<br><span class="activity-item">Group Dining</span></div>
+                    <div class="calendar-day">28</div>
+                    
+                    <div class="calendar-day">29</div>
+                    <div class="calendar-day has-activity">30<br><span class="activity-item">Month Review</span></div>
+                    <div class="calendar-day">31</div>
+                </div>
+            </div>
+
+            <div class="info-section" style="margin-top: 20px;">
+                <h3>🎯 Referral Program Strategy</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-top: 15px;">
+                    <div class="info-section">
+                        <h4>🏆 Reward Tiers</h4>
+                        <p><strong>Bronze:</strong> 1 referral = $5 off next order</p>
+                        <p><strong>Silver:</strong> 3 referrals = Free appetizer + $10 off</p>
+                        <p><strong>Gold:</strong> 5 referrals = Free meal for two + priority seating</p>
+                        <p><strong>Platinum:</strong> 10 referrals = Monthly free dinner + exclusive events</p>
+                    </div>
+                    <div class="info-section">
+                        <h4>📢 Co-Marketing Opportunities</h4>
+                        <p><strong>Tech Companies:</strong> Lunch delivery partnerships</p>
+                        <p><strong>Event Venues:</strong> Catering collaborations</p>
+                        <p><strong>Food Bloggers:</strong> Review exchanges</p>
+                        <p><strong>Local Businesses:</strong> Cross-promotional deals</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Modal -->
+    <div id="contactModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="close">&times;</span>
+                <h2 id="modalTitle">📧 Contact Client</h2>
+            </div>
+            <div class="modal-body">
+                <form id="contactForm">
+                    <div class="form-group">
+                        <label for="contactType">Contact Method:</label>
+                        <select id="contactType" required>
+                            <option value="">Select Method</option>
+                            <option value="email">📧 Email</option>
+                            <option value="phone">📞 Phone Call</option>
+                            <option value="text">💬 Text Message</option>
+                        </select>
+                    </div>
+                    
+                    <div id="emailFields" style="display: none;">
+                        <div class="form-group">
+                            <label for="emailSubject">Subject:</label>
+                            <input type="text" id="emailSubject" placeholder="Enter email subject">
+                        </div>
+                        <div class="form-group">
+                            <label for="emailMessage">Message:</label>
+                            <textarea id="emailMessage" placeholder="Your personalized message will appear here..."></textarea>
+                        </div>
+                    </div>
+                    
+                    <div id="puresSection" style="margin-top: 20px;">
+                        <h3>P.U.R.E.S. Assessment</h3>
+                        <div class="pures-form">
+                            <div class="pures-item">
+                                <label>Profitability (1-5):</label>
+                                <input type="range" min="1" max="5" value="3" id="profitability" class="slider">
+                                <span id="profitabilityValue">3</span>
+                            </div>
+                            <div class="pures-item">
+                                <label>Urgency (1-5):</label>
+                                <input type="range" min="1" max="5" value="3" id="urgency" class="slider">
+                                <span id="urgencyValue">3</span>
+                            </div>
+                            <div class="pures-item">
+                                <label>Reachability (1-5):</label>
+                                <input type="range" min="1" max="5" value="3" id="reachability" class="slider">
+                                <span id="reachabilityValue">3</span>
+                            </div>
+                            <div class="pures-item">
+                                <label>Engagement (1-5):</label>
+                                <input type="range" min="1" max="5" value="3" id="engagement" class="slider">
+                                <span id="engagementValue">3</span>
+                            </div>
+                            <div class="pures-item">
+                                <label>Sustainability (1-5):</label>
+                                <input type="range" min="1" max="5" value="3" id="sustainability" class="slider">
+                                <span id="sustainabilityValue">3</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Total P.U.R.E.S. Score: <span id="totalScore">15</span>/25</label>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="contact-btn" style="width: 100%; padding: 15px; font-size: 16px; margin-top: 20px;">
+                        🚀 Send Contact
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample client data for Grandma's Kitchen
+        const clientData = [
+            {name: "Jennifer Chen", email: "jchen@apple.com", phone: "(408) 555-0123", address: "1 Infinite Loop, Cupertino, CA", puresScore: 4.8, tier: "Tier 1A", industry: "Tech", revenue: "$500K", buyerType: "Innovation"},
+            {name: "Michael Rodriguez", email: "mrodriguez@nvidia.com", phone: "(408) 555-0124", address: "2788 San Tomas Expressway, Santa Clara, CA", puresScore: 4.6, tier: "Tier 1A", industry: "Tech", revenue: "$450K", buyerType: "Analytical"},
+            {name: "Sarah Kim", email: "sarah.kim@stanford.edu", phone: "(650) 555-0125", address: "450 Jane Stanford Way, Stanford, CA", puresScore: 4.4, tier: "Tier 1A", industry: "Education", revenue: "$200K", buyerType: "Relationship"},
+            {name: "David Wong", email: "dwong@google.com", phone: "(650) 555-0126", address: "1600 Amphitheatre Pkwy, Mountain View, CA", puresScore: 4.7, tier: "Tier 1A", industry: "Tech", revenue: "$600K", buyerType: "Innovation"},
+            {name: "Lisa Thompson", email: "lthompson@meta.com", phone: "(650) 555-0127", address: "1 Hacker Way, Menlo Park, CA", puresScore: 4.5, tier: "Tier 1A", industry: "Tech", revenue: "$550K", buyerType: "Efficiency"},
+            
+            {name: "James Park", email: "jpark@fitbit.com", phone: "(415) 555-0128", address: "405 Howard St, San Francisco, CA", puresScore: 3.8, tier: "Tier 1B", industry: "Tech", revenue: "$300K", buyerType: "Relationship"},
+            {name: "Emily Zhang", email: "ezhang@salesforce.com", phone: "(415) 555-0129", address: "415 Mission St, San Francisco, CA", puresScore: 3.9, tier: "Tier 1B", industry: "Tech", revenue: "$350K", buyerType: "Analytical"},
+            {name: "Robert Lee", email: "rlee@adobe.com", phone: "(408) 555-0130", address: "345 Park Ave, San Jose, CA", puresScore: 3.7, tier: "Tier 1B", industry: "Tech", revenue: "$280K", buyerType: "Innovation"},
+            {name: "Amanda Davis", email: "adavis@cisco.com", phone: "(408) 555-0131", address: "170 W Tasman Dr, San Jose, CA", puresScore: 3.6, tier: "Tier 1B", industry: "Tech", revenue: "$320K", buyerType: "Efficiency"},
+            {name: "Kevin Lim", email: "klim@intuit.com", phone: "(650) 555-0132", address: "2700 Coast Ave, Mountain View, CA", puresScore: 3.8, tier: "Tier 1B", industry: "Finance", revenue: "$290K", buyerType: "Relationship"},
+            
+            {name: "Michelle Wu", email: "mwu@tesla.com", phone: "(510) 555-0133", address: "3500 Deer Creek Rd, Palo Alto, CA", puresScore: 3.4, tier: "Tier 1C", industry: "Tech", revenue: "$180K", buyerType: "Innovation"},
+            {name: "Andrew Johnson", email: "ajohnson@hp.com", phone: "(650) 555-0134", address: "1501 Page Mill Rd, Palo Alto, CA", puresScore: 3.3, tier: "Tier 1C", industry: "Tech", revenue: "$170K", buyerType: "Analytical"},
+            {name: "Priya Patel", email: "ppatel@vmware.com", phone: "(650) 555-0135", address: "3401 Hillview Ave, Palo Alto, CA", puresScore: 3.5, tier: "Tier 1C", industry: "Tech", revenue: "$190K", buyerType: "Efficiency"},
+            {name: "Mark Wilson", email: "mwilson@ebay.com", phone: "(408) 555-0136", address: "2025 Hamilton Ave, San Jose, CA", puresScore: 3.2, tier: "Tier 1C", industry: "Tech", revenue: "$160K", buyerType: "Relationship"},
+            {name: "Jessica Yang", email: "jyang@zoom.us", phone: "(408) 555-0137", address: "55 Almaden Blvd, San Jose, CA", puresScore: 3.6, tier: "Tier 1C", industry: "Tech", revenue: "$200K", buyerType: "Efficiency"},
+            
+            // Additional diverse clients
+            {name: "Dr. Thomas Anderson", email: "tanderson@stanfordmed.org", phone: "(650) 555-0138", address: "300 Pasteur Dr, Stanford, CA", puresScore: 4.2, tier: "Tier 1A", industry: "Healthcare", revenue: "$400K", buyerType: "Analytical"},
+            {name: "Maria Gonzalez", email: "mgonzalez@kpmg.com", phone: "(408) 555-0139", address: "55 2nd St, San Jose, CA", puresScore: 3.9, tier: "Tier 1B", industry: "Finance", revenue: "$250K", buyerType: "Relationship"},
+            {name: "Alex Kim", email: "alexk@startup.com", phone: "(650) 555-0140", address: "1005 Forest Ave, Palo Alto, CA", puresScore: 3.1, tier: "Tier 1C", industry: "Tech", revenue: "$120K", buyerType: "Innovation"},
+            {name: "Rachel Green", email: "rgreen@macy.com", phone: "(408) 555-0141", address: "Valley Fair Mall, Santa Clara, CA", puresScore: 3.7, tier: "Tier 1B", industry: "Retail", revenue: "$180K", buyerType: "Efficiency"},
+            {name: "Daniel Chang", email: "dchang@deanza.edu", phone: "(408) 555-0142", address: "21250 Stevens Creek Blvd, Cupertino, CA", puresScore: 3.4, tier: "Tier 1C", industry: "Education", revenue: "$85K", buyerType: "Relationship"},
+            
+            // Tech executives
+            {name: "Sandra Liu", email: "sliu@palantir.com", phone: "(650) 555-0143", address: "100 Hamilton Ave, Palo Alto, CA", puresScore: 4.6, tier: "Tier 1A", industry: "Tech", revenue: "$520K", buyerType: "Innovation"},
+            {name: "Brian Murphy", email: "bmurphy@intel.com", phone: "(408) 555-0144", address: "2200 Mission College Blvd, Santa Clara, CA", puresScore: 4.3, tier: "Tier 1A", industry: "Tech", revenue: "$480K", buyerType: "Analytical"},
+            {name: "Catherine Foster", email: "cfoster@linkedin.com", phone: "(650) 555-0145", address: "1000 W Maude Ave, Sunnyvale, CA", puresScore: 4.1, tier: "Tier 1A", industry: "Tech", revenue: "$420K", buyerType: "Relationship"},
+            {name: "Jordan Martinez", email: "jmartinez@airbnb.com", phone: "(415) 555-0146", address: "888 Brannan St, San Francisco, CA", puresScore: 3.8, tier: "Tier 1B", industry: "Tech", revenue: "$340K", buyerType: "Innovation"},
+            {name: "Sophie Chen", email: "schen@uber.com", phone: "(415) 555-0147", address: "1455 Market St, San Francisco, CA", puresScore: 3.9, tier: "Tier 1B", industry: "Tech", revenue: "$360K", buyerType: "Efficiency"},
+            
+            // Healthcare professionals
+            {name: "Dr. Richard Patel", email: "rpatel@kaiserpermanente.org", phone: "(408) 555-0148", address: "900 Kiely Blvd, Santa Clara, CA", puresScore: 4.0, tier: "Tier 1B", industry: "Healthcare", revenue: "$380K", buyerType: "Relationship"},
+            {name: "Dr. Alice Wong", email: "awong@pamf.org", phone: "(650) 555-0149", address: "795 El Camino Real, Palo Alto, CA", puresScore: 3.8, tier: "Tier 1B", industry: "Healthcare", revenue: "$320K", buyerType: "Analytical"},
+            {name: "Nurse Manager Helen Lee", email: "hlee@elcamino.org", phone: "(650) 555-0150", address: "2500 Grant Rd, Mountain View, CA", puresScore: 3.5, tier: "Tier 1C", industry: "Healthcare", revenue: "$150K", buyerType: "Efficiency"},
+            
+            // Finance professionals
+            {name: "Investment Manager Tom Baker", email: "tbaker@wellsfargo.com", phone: "(408) 555-0151", address: "170 Park Center Plaza, San Jose, CA", puresScore: 4.2, tier: "Tier 1A", industry: "Finance", revenue: "$450K", buyerType: "Analytical"},
+            {name: "Financial Advisor Jane Smith", email: "jsmith@schwab.com", phone: "(650) 555-0152", address: "3000 Sand Hill Rd, Menlo Park, CA", puresScore: 3.7, tier: "Tier 1B", industry: "Finance", revenue: "$280K", buyerType: "Relationship"},
+            {name: "CPA Robert Kim", email: "rkim@deloitte.com", phone: "(408) 555-0153", address: "50 Fremont St, San Francisco, CA", puresScore: 3.6, tier: "Tier 1C", industry: "Finance", revenue: "$200K", buyerType: "Efficiency"},
+            
+            // Education sector
+            {name: "Professor Mary Johnson", email: "mjohnson@sjsu.edu", phone: "(408) 555-0154", address: "1 Washington Sq, San Jose, CA", puresScore: 3.3, tier: "Tier 1C", industry: "Education", revenue: "$95K", buyerType: "Relationship"},
+            {name: "Principal David Lee", email: "dlee@fuhsd.org", phone: "(408) 555-0155", address: "10601 N De Anza Blvd, Cupertino, CA", puresScore: 3.2, tier: "Tier 1C", industry: "Education", revenue: "$120K", buyerType: "Relationship"},
+            
+            // Retail and service
+            {name: "Store Manager Lisa Park", email: "lpark@target.com", phone: "(408) 555-0156", address: "19499 Stevens Creek Blvd, Cupertino, CA", puresScore: 3.4, tier: "Tier 1C", industry: "Retail", revenue: "$85K", buyerType: "Efficiency"},
+            {name: "Restaurant Owner Mike Chen", email: "mchen@restaurant.com", phone: "(650) 555-0157", address: "2720 El Camino Real, Redwood City, CA", puresScore: 3.8, tier: "Tier 1B", industry: "Retail", revenue: "$220K", buyerType: "Innovation"},
+            
+            // Young professionals
+            {name: "Software Engineer Amy Liu", email: "aliu@startup.io", phone: "(650) 555-0158", address: "435 Tasso St, Palo Alto, CA", puresScore: 3.0, tier: "Tier 1C", industry: "Tech", revenue: "$140K", buyerType: "Innovation"},
+            {name: "Marketing Manager Carlos Rodriguez", email: "crodriguez@facebook.com", phone: "(650) 555-0159", address: "1 Facebook Way, Menlo Park, CA", puresScore: 3.6, tier: "Tier 1C", industry: "Tech", revenue: "$180K", buyerType: "Relationship"},
+            {name: "UX Designer Jennifer Zhang", email: "jzhang@pinterest.com", phone: "(415) 555-0160", address: "505 Brannan St, San Francisco, CA", puresScore: 3.3, tier: "Tier 1C", industry: "Tech", revenue: "$160K", buyerType: "Innovation"},
+            
+            // Senior executives
+            {name: "VP Engineering Ryan Walsh", email: "rwalsh@tiktok.com", phone: "(650) 555-0161", address: "5800 Bristol Pkwy, Culver City, CA", puresScore: 4.5, tier: "Tier 1A", industry: "Tech", revenue: "$580K", buyerType: "Innovation"},
+            {name: "Director Sarah Kim", email: "sarahk@spotify.com", phone: "(415) 555-0162", address: "4 Embarcadero Center, San Francisco, CA", puresScore: 4.3, tier: "Tier 1A", industry: "Tech", revenue: "$510K", buyerType: "Efficiency"},
+            
+            // Local business owners
+            {name: "Boutique Owner Grace Wang", email: "gwang@boutique.com", phone: "(408) 555-0163", address: "20807 Stevens Creek Blvd, Cupertino, CA", puresScore: 3.1, tier: "Tier 1C", industry: "Retail", revenue: "$90K", buyerType: "Relationship"},
+            {name: "Gym Owner Frank Martinez", email: "fmartinez@24hour.com", phone: "(408) 555-0164", address: "10123 N Wolfe Rd, Cupertino, CA", puresScore: 3.5, tier: "Tier 1C", industry: "Healthcare", revenue: "$110K", buyerType: "Efficiency"},
+            
+            // More tech professionals
+            {name: "Product Manager Helen Yu", email: "hyu@snapchat.com", phone: "(310) 555-0165", address: "2772 Donald Douglas Loop N, Santa Monica, CA", puresScore: 4.1, tier: "Tier 1A", industry: "Tech", revenue: "$440K", buyerType: "Innovation"},
+            {name: "Data Scientist Kevin Park", email: "kpark@netflix.com", phone: "(408) 555-0166", address: "100 Winchester Cir, Los Gatos, CA", puresScore: 3.9, tier: "Tier 1B", industry: "Tech", revenue: "$330K", buyerType: "Analytical"},
+            {name: "DevOps Engineer Anna Chen", email: "achen@dropbox.com", phone: "(415) 555-0167", address: "1800 Owens St, San Francisco, CA", puresScore: 3.7, tier: "Tier 1B", industry: "Tech", revenue: "$280K", buyerType: "Efficiency"},
+            
+            // Healthcare administrators
+            {name: "Hospital Admin John Wu", email: "jwu@stanfordchildrens.org", phone: "(650) 555-0168", address: "725 Welch Rd, Palo Alto, CA", puresScore: 4.0, tier: "Tier 1B", industry: "Healthcare", revenue: "$350K", buyerType: "Relationship"},
+            {name: "Clinic Director Maria Santos", email: "msantos@pamf.org", phone: "(650) 555-0169", address: "401 Old San Francisco Rd, Sunnyvale, CA", puresScore: 3.6, tier: "Tier 1C", industry: "Healthcare", revenue: "$180K", buyerType: "Analytical"},
+            
+            // Final tech executives to round out 50
+            {name: "CTO Benjamin Lee", email: "blee@twitch.tv", phone: "(415) 555-0170", address: "350 Bush St, San Francisco, CA", puresScore: 4.7, tier: "Tier 1A", industry: "Tech", revenue: "$620K", buyerType: "Innovation"},
+            {name: "VP Product Julia Kim", email: "jkim@slack.com", phone: "(415) 555-0171", address: "500 Howard St, San Francisco, CA", puresScore: 4.4, tier: "Tier 1A", industry: "Tech", revenue: "$500K", buyerType: "Efficiency"},
+            {name: "Engineering Lead Sam Rodriguez", email: "srodriguez@square.com", phone: "(415) 555-0172", address: "1455 Market St, San Francisco, CA", puresScore: 4.2, tier: "Tier 1A", industry: "Tech", revenue: "$460K", buyerType: "Analytical"}
+        ];
+
+        let currentSortColumn = -1;
+        let isAscending = true;
+        let currentClient = null;
+
+        // Initialize the application
+        function initializeApp() {
+            populateTable(clientData);
+            setupEventListeners();
+            updateStats();
+        }
+
+        // Populate the client table
+        function populateTable(data) {
+            const tableBody = document.getElementById('clientTableBody');
+            tableBody.innerHTML = '';
+            
+            data.forEach((client, index) => {
+                const row = document.createElement('tr');
+                row.className = getTierClass(client.tier);
+                
+                row.innerHTML = `
+                    <td><strong>${client.name}</strong></td>
+                    <td>${client.email}</td>
+                    <td>${client.phone}</td>
+                    <td>${client.address}</td>
+                    <td><span class="pures-score ${getScoreClass(client.puresScore)}">${client.puresScore}</span></td>
+                    <td><strong>${client.tier}</strong></td>
+                    <td>${client.industry}</td>
+                    <td>${client.revenue}</td>
+                    <td>
+                        <button class="contact-btn" onclick="openContactModal(${index})">📧 Contact</button>
+                        <button class="contact-btn" onclick="makePhoneCall('${client.phone}')">📞 Call</button>
+                    </td>
+                `;
+                
+                tableBody.appendChild(row);
+            });
+        }
+
+        // Get CSS class for tier styling
+        function getTierClass(tier) {
+            switch(tier) {
+                case 'Tier 1A': return 'tier-1a';
+                case 'Tier 1B': return 'tier-1b';
+                case 'Tier 1C': return 'tier-1c';
+                default: return '';
+            }
+        }
+
+        // Get CSS class for P.U.R.E.S. score
+        function getScoreClass(score) {
+            if (score >= 4.0) return 'score-high';
+            if (score >= 3.0) return 'score-medium';
+            return 'score-low';
+        }
+
+        // Update statistics
+        function updateStats() {
+            const tier1a = clientData.filter(c => c.tier === 'Tier 1A').length;
+            const tier1b = clientData.filter(c => c.tier === 'Tier 1B').length;
+            const tier1c = clientData.filter(c => c.tier === 'Tier 1C').length;
+            
+            document.getElementById('totalClients').textContent = clientData.length;
+            document.getElementById('tier1aCount').textContent = tier1a;
+            document.getElementById('tier1bCount').textContent = tier1b;
+            document.getElementById('tier1cCount').textContent = tier1c;
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Search functionality
+            document.getElementById('searchInput').addEventListener('input', filterTable);
+            document.getElementById('tierFilter').addEventListener('change', filterTable);
+            document.getElementById('industryFilter').addEventListener('change', filterTable);
+            
+            // Modal functionality
+            const modal = document.getElementById('contactModal');
+            const closeBtn = document.querySelector('.close');
+            
+            closeBtn.onclick = () => modal.style.display = 'none';
+            window.onclick = (e) => {
+                if (e.target === modal) modal.style.display = 'none';
+            };
+            
+            // Contact type change
+            document.getElementById('contactType').addEventListener('change', handleContactTypeChange);
+            
+            // P.U.R.E.S. sliders
+            const sliders = ['profitability', 'urgency', 'reachability', 'engagement', 'sustainability'];
+            sliders.forEach(slider => {
+                const element = document.getElementById(slider);
+                element.addEventListener('input', updatePuresScore);
+            });
+            
+            // Form submission
+            document.getElementById('contactForm').addEventListener('submit', handleFormSubmission);
+        }
+
+        // Filter table based on search and filters
+        function filterTable() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const tierFilter = document.getElementById('tierFilter').value;
+            const industryFilter = document.getElementById('industryFilter').value;
+            
+            const filteredData = clientData.filter(client => {
+                const matchesSearch = client.name.toLowerCase().includes(searchTerm) ||
+                                    client.email.toLowerCase().includes(searchTerm) ||
+                                    client.industry.toLowerCase().includes(searchTerm) ||
+                                    client.address.toLowerCase().includes(searchTerm);
+                
+                const matchesTier = !tierFilter || client.tier === tierFilter;
+                const matchesIndustry = !industryFilter || client.industry === industryFilter;
+                
+                return matchesSearch && matchesTier && matchesIndustry;
+            });
+            
+            populateTable(filteredData);
+        }
+
+        // Sort table by column
+        function sortTable(columnIndex) {
+            if (currentSortColumn === columnIndex) {
+                isAscending = !isAscending;
+            } else {
+                currentSortColumn = columnIndex;
+                isAscending = true;
+            }
+            
+            const sortedData = [...clientData].sort((a, b) => {
+                let aValue, bValue;
+                
+                switch(columnIndex) {
+                    case 0: aValue = a.name; bValue = b.name; break;
+                    case 1: aValue = a.email; bValue = b.email; break;
+                    case 2: aValue = a.phone; bValue = b.phone; break;
+                    case 3: aValue = a.address; bValue = b.address; break;
+                    case 4: aValue = a.puresScore; bValue = b.puresScore; break;
+                    case 5: aValue = a.tier; bValue = b.tier; break;
+                    case 6: aValue = a.industry; bValue = b.industry; break;
+                    case 7: aValue = parseFloat(a.revenue.replace('$', '').replace('K', '')); 
+                           bValue = parseFloat(b.revenue.replace('$', '').replace('K', '')); break;
+                    default: return 0;
+                }
+                
+                if (typeof aValue === 'string') {
+                    return isAscending ? aValue.localeCompare(bValue) : bValue.localeCompare(aValue);
+                } else {
+                    return isAscending ? aValue - bValue : bValue - aValue;
+                }
+            });
+            
+            populateTable(sortedData);
+        }
+
+        // Open contact modal
+        function openContactModal(clientIndex) {
+            currentClient = clientData[clientIndex];
+            const modal = document.getElementById('contactModal');
+            const modalTitle = document.getElementById('modalTitle');
+            
+            modalTitle.textContent = `📧 Contact ${currentClient.name}`;
+            modal.style.display = 'block';
+            
+            // Reset form
+            document.getElementById('contactForm').reset();
+            document.getElementById('emailFields').style.display = 'none';
+        }
+
+        // Handle contact type change
+        function handleContactTypeChange() {
+            const contactType = document.getElementById('contactType').value;
+            const emailFields = document.getElementById('emailFields');
+            
+            if (contactType === 'email') {
+                emailFields.style.display = 'block';
+                generateEmailContent();
+            } else {
+                emailFields.style.display = 'none';
+            }
+        }
+
+        // Generate personalized email content
+        function generateEmailContent() {
+            if (!currentClient) return;
+            
+            const subject = `🥡 Discover Authentic Chinese Cuisine at Grandma's Kitchen - Special Invitation for ${currentClient.name}`;
+            const message = generatePersonalizedMessage(currentClient);
+            
+            document.getElementById('emailSubject').value = subject;
+            document.getElementById('emailMessage').value = message;
+        }
+
+        // Generate personalized message based on client profile
+        function generatePersonalizedMessage(client) {
+            const templates = {
+                'Innovation': `Dear ${client.name.split(' ')[0]},
+
+As someone who appreciates innovation and unique experiences, I wanted to personally invite you to discover Grandma's Kitchen, Cupertino's hidden gem for authentic Chinese cuisine.
+
+🌟 What makes us special:
+• Grandma's Secret Recipes: Time-honored dishes passed down through generations
+• Stone Bowl Specialties: Unique cooking method creating incredible flavors
+• Fresh, Daily Specials: Innovation meets tradition on our chalkboard menu
+• Instagram-Worthy Presentations: Perfect for food enthusiasts like you
+
+Given your role in ${client.industry} at ${client.email.split('@')[1].split('.')[0].toUpperCase()}, I know you value authenticity and quality. Our Grandma's All-In-One Pot ($23.95) and Special Grilled Fish ($35.00) would be perfect for impressing colleagues or enjoying a premium dining experience.
+
+🎁 Exclusive Offer: Mention this email for 15% off your first order + complimentary appetizer.
+
+We're located just minutes from your area at 19541 Richwood Dr, Cupertino. Order online or visit us for pickup/delivery.
+
+Best regards,
+Florence Anderson
+Owner, Grandma's Kitchen
+(408) 352-5052`,
+
+                'Efficiency': `Dear ${client.name.split(' ')[0]},
+
+I know your time is valuable, so I'll keep this brief. Grandma's Kitchen offers the perfect solution for busy professionals seeking authentic Chinese cuisine without compromise.
+
+⚡ Quick & Convenient:
+• 25-minute pickup / 30-minute delivery
+• Online ordering system - order ahead, skip the wait
+• Express lunch menu for quick business meals
+• Reliable service you can count on
+
+🥡 Perfect for Your Lifestyle:
+• Premium dishes ready when you are
+• Healthy options with fresh seasonal vegetables
+• Generous portions - great value for money
+• Consistent quality every time
+
+As someone in ${client.industry}, you understand efficiency. That's exactly what we deliver - exceptional food, fast service, and zero hassle.
+
+💰 Special Offer: First-time customers get 20% off + free delivery on orders over $30.
+
+Order online now: grandmaskitchencupertino.com
+Call: (408) 352-5052
+
+Located at 19541 Richwood Dr, Cupertino - perfect for your busy schedule.
+
+Efficiently yours,
+Florence Anderson
+Grandma's Kitchen`,
+
+                'Relationship': `Dear ${client.name.split(' ')[0]},
+
+I hope this message finds you well. As a fellow member of our wonderful Cupertino community, I wanted to personally reach out and invite you to experience the warmth of Grandma's Kitchen.
+
+👥 Why families and friends choose us:
+• Authentic family recipes passed down through generations
+• Warm, welcoming atmosphere perfect for gatherings
+• Large portions ideal for sharing and building connections
+• Personal service - we remember our regular customers
+
+🏠 A True Community Restaurant:
+Our story began with my grandmother's recipes and a dream to bring authentic Chinese flavors to our neighbors. Every dish is prepared with the same love and care she would have given.
+
+Given your connection to the area through ${client.email.split('@')[1].split('.')[0].toUpperCase()}, I'd love to welcome you as part of our extended family. Our Grandma's Specials are perfect for creating memorable meals with loved ones.
+
+🎉 Family Welcome Gift: Bring this email for a complimentary appetizer with any dinner order for your group.
+
+I'd be honored to serve you and hope to meet you soon. Feel free to call me personally at (408) 352-5052 if you have any questions about our menu or would like recommendations.
+
+With warm regards,
+Florence Anderson & the Grandma's Kitchen Family
+19541 Richwood Dr, Cupertino, CA`,
+
+                'Analytical': `Dear ${client.name.split(' ')[0]},
+
+I appreciate your analytical approach to decisions, so let me share the data behind why Grandma's Kitchen is Cupertino's premier choice for authentic Chinese cuisine.
+
+📊 The Numbers:
+• 4.2/5 average customer rating across all platforms
+• 87% customer satisfaction rate with first-time visitors
+• 12+ years serving the Cupertino community
+• 50+ authentic dishes, including rare Sichuan specialties
+
+🔍 Quality Metrics:
+• Fresh ingredients sourced daily from local suppliers
+• Traditional cooking methods (stone bowl, steaming, proper wok technique)
+• Transparent pricing with clear portion sizes
+• Consistent preparation standards across all dishes
+
+💡 Value Analysis:
+Compared to similar restaurants in the area, our pricing provides 23% more value per portion, with authentic preparation methods that 89% of competitors don't offer.
+
+📍 Convenient Location: 19541 Richwood Dr, Cupertino
+🚗 Easy parking and quick service options
+📱 Online ordering system with accurate timing estimates
+
+🎯 Risk-Free Trial: First-time customers receive 15% off + satisfaction guarantee. If you're not completely satisfied, your next meal is complimentary.
+
+Ready to experience the data-backed choice? Order online or call (408) 352-5052.
+
+Analytically yours,
+Florence Anderson
+Grandma's Kitchen
+P.S. Our menu includes detailed descriptions and spice levels for informed decision-making.`
+            };
+            
+            return templates[client.buyerType] || templates['Relationship'];
+        }
+
+        // Make phone call
+        function makePhoneCall(phoneNumber) {
+            if (confirm(`Call ${phoneNumber}?`)) {
+                window.location.href = `tel:${phoneNumber}`;
+            }
+        }
+
+        // Update P.U.R.E.S. score
+        function updatePuresScore() {
+            const profitability = parseInt(document.getElementById('profitability').value);
+            const urgency = parseInt(document.getElementById('urgency').value);
+            const reachability = parseInt(document.getElementById('reachability').value);
+            const engagement = parseInt(document.getElementById('engagement').value);
+            const sustainability = parseInt(document.getElementById('sustainability').value);
+            
+            document.getElementById('profitabilityValue').textContent = profitability;
+            document.getElementById('urgencyValue').textContent = urgency;
+            document.getElementById('reachabilityValue').textContent = reachability;
+            document.getElementById('engagementValue').textContent = engagement;
+            document.getElementById('sustainabilityValue').textContent = sustainability;
+            
+            const total = profitability + urgency + reachability + engagement + sustainability;
+            document.getElementById('totalScore').textContent = total;
+        }
+
+        // Handle form submission
+        function handleFormSubmission(e) {
+            e.preventDefault();
+            
+            const contactType = document.getElementById('contactType').value;
+            
+            if (contactType === 'email') {
+                const subject = document.getElementById('emailSubject').value;
+                const message = document.getElementById('emailMessage').value;
+                const emailUrl = `mailto:${currentClient.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(message)}`;
+                window.location.href = emailUrl;
+            } else if (contactType === 'phone') {
+                makePhoneCall(currentClient.phone);
+            } else if (contactType === 'text') {
+                const textUrl = `sms:${currentClient.phone}?body=${encodeURIComponent('Hello from Grandma\'s Kitchen! We have a special offer for you...')}`;
+                window.location.href = textUrl;
+            }
+            
+            // Close modal
+            document.getElementById('contactModal').style.display = 'none';
+            
+            // Show success message
+            alert(`✅ ${contactType.charAt(0).toUpperCase() + contactType.slice(1)} contact initiated with ${currentClient.name}!`);
+        }
+
+        // Show/hide tabs
+        function showTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Remove active class from all tab buttons
+            document.querySelectorAll('.tab').forEach(button => {
+                button.classList.remove('active');
+            });
+            
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked button
+            event.target.classList.add('active');
+        }
+
+        // Initialize the app when page loads
+        document.addEventListener('DOMContentLoaded', initializeApp);
+    </script>
+</body>
+</html>

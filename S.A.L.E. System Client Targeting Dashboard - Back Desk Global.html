@@ -1,0 +1,1204 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>S.A.L.E. System Dashboard - Back Desk Global</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #000000;
+            color: #ffffff;
+            line-height: 1.6;
+        }
+
+        .header {
+            background: #CF2030;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(207, 32, 48, 0.3);
+        }
+
+        .logo {
+            height: 60px;
+        }
+
+        .header-info {
+            text-align: right;
+            color: white;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .module {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .module h2 {
+            color: #CF2030;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid #CF2030;
+            padding-bottom: 0.5rem;
+        }
+
+        .module h3 {
+            color: #ffffff;
+            margin: 1rem 0 0.5rem;
+        }
+
+        .pures-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #ccc;
+            font-weight: 500;
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            background: #2a2a2a;
+            border: 1px solid #444;
+            border-radius: 4px;
+            color: #fff;
+            font-size: 14px;
+        }
+
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: #CF2030;
+            box-shadow: 0 0 0 2px rgba(207, 32, 48, 0.2);
+        }
+
+        .btn {
+            background: #CF2030;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.3s;
+        }
+
+        .btn:hover {
+            background: #b01c29;
+        }
+
+        .btn-secondary {
+            background: #444;
+            margin-left: 0.5rem;
+        }
+
+        .btn-secondary:hover {
+            background: #555;
+        }
+
+        .client-table-container {
+            grid-column: 1 / -1;
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 1.5rem;
+            overflow-x: auto;
+        }
+
+        .search-filter {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .search-filter input {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .client-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+
+        .client-table th {
+            background: #CF2030;
+            color: white;
+            padding: 1rem 0.75rem;
+            text-align: left;
+            cursor: pointer;
+            user-select: none;
+            position: relative;
+        }
+
+        .client-table th:hover {
+            background: #b01c29;
+        }
+
+        .client-table th::after {
+            content: ' ⇅';
+            position: absolute;
+            right: 0.5rem;
+        }
+
+        .client-table td {
+            padding: 0.75rem;
+            border-bottom: 1px solid #333;
+            vertical-align: middle;
+        }
+
+        .client-table tr:hover {
+            background: #2a2a2a;
+        }
+
+        .tier-1a { background: rgba(34, 197, 94, 0.1) !important; }
+        .tier-1b { background: rgba(234, 179, 8, 0.1) !important; }
+        .tier-1c { background: rgba(59, 130, 246, 0.1) !important; }
+
+        .score-display {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 12px;
+            font-weight: bold;
+            font-size: 12px;
+        }
+
+        .score-5 { background: #059669; color: white; }
+        .score-4 { background: #0d9488; color: white; }
+        .score-3 { background: #0891b2; color: white; }
+        .score-2 { background: #0284c7; color: white; }
+        .score-1 { background: #dc2626; color: white; }
+
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-small {
+            padding: 0.25rem 0.5rem;
+            font-size: 11px;
+            border-radius: 3px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 2rem;
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #333;
+            padding-bottom: 1rem;
+        }
+
+        .close {
+            background: none;
+            border: none;
+            color: #ccc;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid #333;
+            margin-bottom: 1rem;
+        }
+
+        .tab {
+            background: #2a2a2a;
+            border: none;
+            color: #ccc;
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+            margin-right: 0.25rem;
+        }
+
+        .tab.active {
+            background: #CF2030;
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            border-top: 1px solid #333;
+            margin-top: 3rem;
+        }
+
+        .footer-logo {
+            height: 30px;
+            opacity: 0.7;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: #2a2a2a;
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #CF2030;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: #333;
+            border-radius: 5px;
+            overflow: hidden;
+            margin: 0.5rem 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #CF2030;
+            transition: width 0.3s ease;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .pures-form {
+                grid-template-columns: 1fr;
+            }
+            
+            .search-filter {
+                flex-direction: column;
+            }
+            
+            .header {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .logo {
+                margin-bottom: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="HigginsReports" class="logo">
+        <div class="header-info">
+            <h1>S.A.L.E. System Dashboard</h1>
+            <p>Back Desk Global - Virtual Assistant Services</p>
+            <p>Ponte Vedra Beach, FL | julian@bdglobal.com</p>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Performance Stats -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number" id="totalClients">50</div>
+                <div>Total Prospects</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="tier1aCount">15</div>
+                <div>Tier 1A (Premium)</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="tier1bCount">20</div>
+                <div>Tier 1B (High-Value)</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="tier1cCount">15</div>
+                <div>Tier 1C (Qualified)</div>
+            </div>
+        </div>
+
+        <div class="dashboard-grid">
+            <!-- S.A.L.E. SOURCING Module -->
+            <div class="module">
+                <h2>🎯 SOURCING - P.U.R.E.S. Client Scoring</h2>
+                <form id="puresForm" class="pures-form">
+                    <div class="form-group">
+                        <label for="clientName">Client Name:</label>
+                        <input type="text" id="clientName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="clientEmail">Email:</label>
+                        <input type="email" id="clientEmail" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="clientPhone">Phone:</label>
+                        <input type="tel" id="clientPhone" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="clientAddress">Address:</label>
+                        <input type="text" id="clientAddress" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="industry">Industry:</label>
+                        <select id="industry">
+                            <option value="">Select Industry</option>
+                            <option value="Insurance">Insurance</option>
+                            <option value="Real Estate">Real Estate</option>
+                            <option value="Healthcare">Healthcare</option>
+                            <option value="Legal">Legal</option>
+                            <option value="Finance">Finance</option>
+                            <option value="E-commerce">E-commerce</option>
+                            <option value="Technology">Technology</option>
+                            <option value="Marketing">Marketing</option>
+                            <option value="Consulting">Consulting</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="revenueEstimate">Est. Annual Revenue:</label>
+                        <select id="revenueEstimate">
+                            <option value="">Select Range</option>
+                            <option value="$100K-$500K">$100K-$500K</option>
+                            <option value="$500K-$1M">$500K-$1M</option>
+                            <option value="$1M-$5M">$1M-$5M</option>
+                            <option value="$5M-$10M">$5M-$10M</option>
+                            <option value="$10M+">$10M+</option>
+                        </select>
+                    </div>
+                    
+                    <h3>P.U.R.E.S. Scoring (1-5 Scale):</h3>
+                    <div class="form-group">
+                        <label for="profitability">Profitability (Budget Capacity):</label>
+                        <select id="profitability">
+                            <option value="5">5 - High budget, strong ROI focus</option>
+                            <option value="4">4 - Good budget, value-conscious</option>
+                            <option value="3">3 - Moderate budget, price-sensitive</option>
+                            <option value="2">2 - Limited budget, cost-focused</option>
+                            <option value="1">1 - Very limited budget</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="urgency">Urgency (Pain Points):</label>
+                        <select id="urgency">
+                            <option value="5">5 - Critical needs, immediate solution required</option>
+                            <option value="4">4 - Significant issues, quick resolution needed</option>
+                            <option value="3">3 - Moderate concerns, planned improvement</option>
+                            <option value="2">2 - Minor issues, future consideration</option>
+                            <option value="1">1 - No immediate pain points</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="reachability">Reachability (Decision Makers):</label>
+                        <select id="reachability">
+                            <option value="5">5 - Direct access to decision makers</option>
+                            <option value="4">4 - Easy access through referrals</option>
+                            <option value="3">3 - Moderate access, some gatekeeping</option>
+                            <option value="2">2 - Limited access, multiple gatekeepers</option>
+                            <option value="1">1 - Very difficult to reach decision makers</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="engagement">Engagement (Innovation Openness):</label>
+                        <select id="engagement">
+                            <option value="5">5 - Highly innovative, early adopters</option>
+                            <option value="4">4 - Open to innovation, calculated risks</option>
+                            <option value="3">3 - Moderate innovation acceptance</option>
+                            <option value="2">2 - Conservative, prefers proven solutions</option>
+                            <option value="1">1 - Resistant to change</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="sustainability">Sustainability (Long-term Potential):</label>
+                        <select id="sustainability">
+                            <option value="5">5 - High growth potential, expanding operations</option>
+                            <option value="4">4 - Steady growth, scaling business</option>
+                            <option value="3">3 - Stable business, moderate growth</option>
+                            <option value="2">2 - Slow growth, uncertain future</option>
+                            <option value="1">1 - Declining or unstable business</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="buyerType">Buyer Profile:</label>
+                        <select id="buyerType">
+                            <option value="Analytical">Analytical - Requires ROI analysis</option>
+                            <option value="Relationship">Relationship - Values trust & referrals</option>
+                            <option value="Efficiency">Efficiency - Focuses on time-saving</option>
+                            <option value="Innovation">Innovation - Seeks competitive advantage</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <button type="submit" class="btn">Add Prospect</button>
+                        <button type="button" class="btn btn-secondary" onclick="generateSampleData()">Generate Sample Data</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="module">
+                <h2>⚡ Quick Actions</h2>
+                <div style="display: flex; flex-direction: column; gap: 1rem;">
+                    <button class="btn" onclick="showEmailTemplates()">📧 Email Templates</button>
+                    <button class="btn" onclick="showAssessmentTools()">📊 Assessment Tools</button>
+                    <button class="btn" onclick="showListeningDashboard()">👂 Feedback Dashboard</button>
+                    <button class="btn" onclick="showReferralManager()">🤝 Referral Manager</button>
+                    <button class="btn" onclick="exportData()">📁 Export Data</button>
+                </div>
+                
+                <h3>Marketing Schedule</h3>
+                <div style="background: #2a2a2a; padding: 1rem; border-radius: 4px; margin-top: 1rem;">
+                    <p><strong>Week 1:</strong> Tier 1A Premium Outreach</p>
+                    <p><strong>Week 2:</strong> Tier 1B Follow-ups</p>
+                    <p><strong>Week 3:</strong> Tier 1C Nurturing Campaign</p>
+                    <p><strong>Week 4:</strong> Referral Program Launch</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Client Database -->
+        <div class="client-table-container">
+            <h2>🎯 Client Database & Outreach Management</h2>
+            
+            <div class="search-filter">
+                <input type="text" id="searchInput" placeholder="Search clients..." style="flex: 2;">
+                <select id="tierFilter" style="flex: 1;">
+                    <option value="">All Tiers</option>
+                    <option value="1A">Tier 1A (Premium)</option>
+                    <option value="1B">Tier 1B (High-Value)</option>
+                    <option value="1C">Tier 1C (Qualified)</option>
+                </select>
+                <select id="industryFilter" style="flex: 1;">
+                    <option value="">All Industries</option>
+                    <option value="Insurance">Insurance</option>
+                    <option value="Real Estate">Real Estate</option>
+                    <option value="Healthcare">Healthcare</option>
+                    <option value="Legal">Legal</option>
+                    <option value="Finance">Finance</option>
+                    <option value="E-commerce">E-commerce</option>
+                    <option value="Technology">Technology</option>
+                    <option value="Marketing">Marketing</option>
+                    <option value="Consulting">Consulting</option>
+                </select>
+            </div>
+            
+            <table class="client-table" id="clientTable">
+                <thead>
+                    <tr>
+                        <th onclick="sortTable(0)">Client Name</th>
+                        <th onclick="sortTable(1)">Email</th>
+                        <th onclick="sortTable(2)">Phone</th>
+                        <th onclick="sortTable(3)">Address</th>
+                        <th onclick="sortTable(4)">P.U.R.E.S. Score</th>
+                        <th onclick="sortTable(5)">Tier</th>
+                        <th onclick="sortTable(6)">Industry</th>
+                        <th onclick="sortTable(7)">Revenue Est.</th>
+                        <th onclick="sortTable(8)">Status</th>
+                        <th onclick="sortTable(9)">Last Contact</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="clientTableBody">
+                    <!-- Data will be populated by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <div id="emailModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Email Client</h3>
+                <button class="close" onclick="closeModal('emailModal')">&times;</button>
+            </div>
+            <form id="emailForm">
+                <div class="form-group">
+                    <label for="emailTo">To:</label>
+                    <input type="email" id="emailTo" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="emailSubject">Subject:</label>
+                    <input type="text" id="emailSubject" value="Transform Your Business with Professional Virtual Assistant Services">
+                </div>
+                <div class="form-group">
+                    <label for="emailBody">Message:</label>
+                    <textarea id="emailBody" rows="12" readonly></textarea>
+                </div>
+                <button type="button" class="btn" onclick="sendEmail()">Send Email</button>
+                <button type="button" class="btn btn-secondary" onclick="copyEmail()">Copy to Clipboard</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="toolsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>S.A.L.E. Management Tools</h3>
+                <button class="close" onclick="closeModal('toolsModal')">&times;</button>
+            </div>
+            <div class="tabs">
+                <button class="tab active" onclick="showTab('assess')">ASSESS</button>
+                <button class="tab" onclick="showTab('listen')">LISTEN</button>
+                <button class="tab" onclick="showTab('empower')">EMPOWER</button>
+            </div>
+            
+            <div id="assess" class="tab-content active">
+                <h3>Assessment Tools</h3>
+                <p>Decision Timeline Analyzer:</p>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 65%"></div>
+                </div>
+                <p>Average sales cycle: 4-6 weeks for virtual assistant services</p>
+                
+                <h4>Stakeholder Mapping</h4>
+                <ul>
+                    <li>Primary Decision Maker (CEO/Owner)</li>
+                    <li>Financial Approver (CFO/Office Manager)</li>
+                    <li>End Users (Current staff who will work with VA)</li>
+                    <li>IT Contact (for system integration)</li>
+                </ul>
+                
+                <h4>Value Proposition Alignment</h4>
+                <p><strong>Cost Savings:</strong> Up to 60% reduction in hiring costs</p>
+                <p><strong>Efficiency:</strong> Immediate productivity gain</p>
+                <p><strong>Scalability:</strong> Flexible team expansion</p>
+                <p><strong>Risk Reduction:</strong> No employment law compliance issues</p>
+            </div>
+            
+            <div id="listen" class="tab-content">
+                <h3>Feedback Integration</h3>
+                <h4>Pre-sale Feedback Collection:</h4>
+                <textarea placeholder="What are your current biggest operational challenges?" style="width: 100%; margin-bottom: 1rem;"></textarea>
+                
+                <h4>During-sale Progress Tracking:</h4>
+                <div class="form-group">
+                    <label>Proposal Status:</label>
+                    <select>
+                        <option>Preparing proposal</option>
+                        <option>Proposal sent</option>
+                        <option>Under review</option>
+                        <option>Negotiating terms</option>
+                        <option>Pending approval</option>
+                    </select>
+                </div>
+                
+                <h4>Post-sale Satisfaction Monitoring:</h4>
+                <p>Client satisfaction score: <span class="score-display score-5">4.8/5</span></p>
+            </div>
+            
+            <div id="empower" class="tab-content">
+                <h3>Referral Strategy</h3>
+                <h4>Success Story Documentation:</h4>
+                <textarea placeholder="Document client success story for case study..." style="width: 100%; margin-bottom: 1rem;"></textarea>
+                
+                <h4>Referral Reward Tracking:</h4>
+                <p>Active referral programs: <strong>3</strong></p>
+                <p>Pending referral rewards: <strong>$2,500</strong></p>
+                
+                <h4>Client Advocacy Program:</h4>
+                <ul>
+                    <li>LinkedIn recommendations: 12 pending</li>
+                    <li>Case study participants: 8 active</li>
+                    <li>Webinar co-hosts: 3 scheduled</li>
+                </ul>
+                
+                <h4>Co-marketing Opportunities:</h4>
+                <div class="form-group">
+                    <label>Partner Type:</label>
+                    <select>
+                        <option>CRM Software Companies</option>
+                        <option>Business Consultants</option>
+                        <option>Accounting Firms</option>
+                        <option>Marketing Agencies</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="HigginsReports" class="footer-logo">
+        <p>© 2024 HigginsReports. AI-Powered Business Intelligence.</p>
+        <p>Contact: julian@bdglobal.com | Back Desk Global Partnership</p>
+    </footer>
+
+    <script>
+        // Client data storage
+        let clientData = [];
+        let sortDirection = {};
+
+        // Email templates for different buyer types
+        const emailTemplates = {
+            'Analytical': `Dear {clientName},
+
+I hope this message finds you well. I'm reaching out because our analysis indicates that businesses like yours in the {industry} sector are achieving remarkable cost savings and operational efficiency improvements through strategic virtual assistant partnerships.
+
+Here are the compelling numbers that matter:
+• 60% reduction in traditional hiring and operational costs
+• 85% customer retention rate with our virtual assistant services
+• 99% on-time task completion rate
+• Average ROI of 340% within the first 6 months
+
+Back Desk Global specializes in providing elite-level virtual assistants who seamlessly integrate with your existing operations. Our assistants are college-educated, professionally trained, and equipped with cutting-edge AI tools to deliver exceptional results from day one.
+
+What sets us apart:
+✓ Rigorous 7-stage vetting process ensuring top 2% talent selection
+✓ Real-time performance tracking through advanced monitoring systems
+✓ Zero employment law compliance risks or workers' compensation concerns
+✓ Immediate scalability - from one assistant to entire departments
+✓ 24/7 operational support across multiple time zones
+
+I'd be happy to provide a detailed ROI analysis specific to your business model and discuss how other {industry} companies have transformed their operations through our services.
+
+Would you be available for a 15-minute call this week to explore how we can help you achieve similar results?
+
+Best regards,
+Julian Summers
+Founder & CEO, Back Desk Global
+julian@bdglobal.com | (575) 442-0233`,
+
+            'Relationship': `Dear {clientName},
+
+I hope you're doing well. As a fellow business owner, I understand the challenges of finding trustworthy, reliable support that truly understands your business needs and values.
+
+At Back Desk Global, we've built our reputation on long-term partnerships, not just transactions. Our approach is fundamentally different - we take the time to understand your unique business culture, work alongside your team, and become genuine extensions of your organization.
+
+Here's what our partners consistently tell us:
+"Our Back Desk virtual assistant feels like they've been part of our team for years, not months."
+"The level of care and attention they provide to our clients is exactly what we'd expect from our in-house staff."
+"We've built a relationship of trust that goes far beyond just completing tasks."
+
+What makes our partnerships special:
+✓ Personal onboarding process to align with your company values
+✓ Dedicated account management for ongoing relationship building
+✓ Regular check-ins and feedback sessions to ensure satisfaction
+✓ Collaborative approach to problem-solving and process improvement
+✓ Commitment to your long-term success, not just short-term gains
+
+Many of our strongest partnerships began with a simple conversation about shared values and business goals. I'd love to have that conversation with you and learn more about your vision for {clientName}.
+
+Would you be open to a brief, no-pressure discussion about how we might be able to support your growth journey?
+
+Warm regards,
+Julian Summers
+Founder & CEO, Back Desk Global
+julian@bdglobal.com | (575) 442-0233`,
+
+            'Efficiency': `Dear {clientName},
+
+Time is your most valuable asset, and I'm writing to show you how to get more of it back.
+
+As a {industry} professional, you're likely spending countless hours on administrative tasks that prevent you from focusing on what truly drives your business forward. Our virtual assistants eliminate this time drain while maintaining the high standards your business demands.
+
+Immediate time savings our clients experience:
+• 15-25 hours per week freed up for high-value activities
+• Same-day task completion for routine administrative work
+• Streamlined workflows that eliminate redundant processes
+• Automated systems integration for seamless operations
+
+Our efficiency advantage:
+✓ Plug-and-play integration - operational within 48 hours
+✓ Pre-trained specialists who require zero onboarding time
+✓ Advanced productivity tools and real-time monitoring systems
+✓ 24/7 availability ensures work continues even when you're offline
+✓ Scalable support that grows with your needs
+
+The math is simple: At $1,850/month, our virtual assistants cost less than what most businesses spend on coffee and office supplies, yet they deliver the productivity equivalent of a $60,000+ annual salary position.
+
+Stop trading your time for routine tasks. Let's discuss how we can give you back 20+ hours per week to focus on growing your business.
+
+I'm available for a quick 10-minute call this week to show you exactly how this works for {industry} businesses like yours.
+
+Best regards,
+Julian Summers
+Founder & CEO, Back Desk Global
+julian@bdglobal.com | (575) 442-0233`,
+
+            'Innovation': `Dear {clientName},
+
+In today's rapidly evolving business landscape, the companies that thrive are those that embrace innovative solutions to stay ahead of the competition.
+
+I'm reaching out because forward-thinking {industry} leaders like yourself are discovering how AI-enhanced virtual assistant services are revolutionizing operational efficiency and creating significant competitive advantages.
+
+Cutting-edge advantages we deliver:
+• AI-powered productivity tools that enhance human capability
+• Advanced project management and real-time performance analytics
+• Integration with latest business automation technologies
+• Global talent pool providing diverse perspectives and skills
+• Scalable infrastructure that adapts to changing business needs
+
+Innovation differentiators:
+✓ Hybrid AI-human approach delivering superior results
+✓ Advanced monitoring systems providing unprecedented transparency
+✓ Cloud-based collaboration tools for seamless integration
+✓ Continuous skill development ensuring cutting-edge capabilities
+✓ Flexible service models that evolve with your business
+
+While your competitors are still hiring traditional employees with lengthy onboarding periods and limited scalability, you could be leveraging our elite virtual assistant network to accelerate growth and innovation.
+
+Early adopters in your industry are already gaining market share through increased operational efficiency and the ability to focus entirely on strategic initiatives.
+
+I'd be excited to share how other innovative {industry} companies are using our services to disrupt their markets and achieve breakthrough results.
+
+Are you available for a strategic discussion about leveraging these competitive advantages for {clientName}?
+
+Best regards,
+Julian Summers
+Founder & CEO, Back Desk Global
+julian@bdglobal.com | (575) 442-0233`
+        };
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            setupEventListeners();
+            generateSampleData();
+        });
+
+        function setupEventListeners() {
+            document.getElementById('puresForm').addEventListener('submit', addClient);
+            document.getElementById('searchInput').addEventListener('input', filterTable);
+            document.getElementById('tierFilter').addEventListener('change', filterTable);
+            document.getElementById('industryFilter').addEventListener('change', filterTable);
+        }
+
+        function addClient(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const scores = {
+                profitability: parseInt(formData.get('profitability') || document.getElementById('profitability').value),
+                urgency: parseInt(formData.get('urgency') || document.getElementById('urgency').value),
+                reachability: parseInt(formData.get('reachability') || document.getElementById('reachability').value),
+                engagement: parseInt(formData.get('engagement') || document.getElementById('engagement').value),
+                sustainability: parseInt(formData.get('sustainability') || document.getElementById('sustainability').value)
+            };
+            
+            const totalScore = Object.values(scores).reduce((sum, score) => sum + score, 0);
+            const avgScore = totalScore / 5;
+            
+            let tier;
+            if (avgScore >= 4) tier = '1A';
+            else if (avgScore >= 3) tier = '1B';
+            else tier = '1C';
+            
+            const client = {
+                name: document.getElementById('clientName').value,
+                email: document.getElementById('clientEmail').value,
+                phone: document.getElementById('clientPhone').value,
+                address: document.getElementById('clientAddress').value,
+                puresScore: avgScore.toFixed(1),
+                tier: tier,
+                industry: document.getElementById('industry').value,
+                revenueEstimate: document.getElementById('revenueEstimate').value,
+                status: 'New Lead',
+                lastContact: new Date().toLocaleDateString(),
+                buyerType: document.getElementById('buyerType').value,
+                scores: scores
+            };
+            
+            clientData.push(client);
+            updateTable();
+            updateStats();
+            document.getElementById('puresForm').reset();
+        }
+
+        function generateSampleData() {
+            const sampleClients = [
+                {
+                    name: "Sarah Mitchell", email: "sarah@coastalinsurance.com", phone: "(904) 555-0123",
+                    address: "1234 Ocean Blvd, Neptune Beach, FL 32266", puresScore: "4.2", tier: "1A",
+                    industry: "Insurance", revenueEstimate: "$1M-$5M", status: "Qualified Lead",
+                    lastContact: "2024-01-15", buyerType: "Analytical",
+                    scores: {profitability: 4, urgency: 5, reachability: 4, engagement: 4, sustainability: 4}
+                },
+                {
+                    name: "Michael Rodriguez", email: "m.rodriguez@eliteproperties.com", phone: "(904) 555-0234",
+                    address: "5678 Atlantic Ave, Jacksonville Beach, FL 32250", puresScore: "4.6", tier: "1A",
+                    industry: "Real Estate", revenueEstimate: "$5M-$10M", status: "Hot Prospect",
+                    lastContact: "2024-01-18", buyerType: "Efficiency",
+                    scores: {profitability: 5, urgency: 4, reachability: 5, engagement: 4, sustainability: 5}
+                },
+                {
+                    name: "Dr. Jennifer Chen", email: "j.chen@healthcarefirst.com", phone: "(904) 555-0345",
+                    address: "9012 Medical Plaza Dr, Ponte Vedra, FL 32082", puresScore: "4.0", tier: "1A",
+                    industry: "Healthcare", revenueEstimate: "$1M-$5M", status: "Follow-up Scheduled",
+                    lastContact: "2024-01-20", buyerType: "Relationship",
+                    scores: {profitability: 4, urgency: 4, reachability: 4, engagement: 4, sustainability: 4}
+                },
+                {
+                    name: "Robert Thompson", email: "rthompson@legaladvocates.com", phone: "(904) 555-0456",
+                    address: "3456 Town Center Pkwy, Ponte Vedra Beach, FL 32082", puresScore: "3.8", tier: "1B",
+                    industry: "Legal", revenueEstimate: "$500K-$1M", status: "Proposal Sent",
+                    lastContact: "2024-01-12", buyerType: "Analytical",
+                    scores: {profitability: 3, urgency: 4, reachability: 4, engagement: 4, sustainability: 4}
+                },
+                {
+                    name: "Amanda Davis", email: "adavis@financialgroup.com", phone: "(904) 555-0567",
+                    address: "7890 Business Blvd, Jacksonville, FL 32256", puresScore: "4.4", tier: "1A",
+                    industry: "Finance", revenueEstimate: "$5M-$10M", status: "Demo Scheduled",
+                    lastContact: "2024-01-22", buyerType: "Innovation",
+                    scores: {profitability: 5, urgency: 4, reachability: 4, engagement: 4, sustainability: 5}
+                }
+            ];
+            
+            // Generate more sample data
+            const names = ["John Smith", "Lisa Johnson", "David Brown", "Maria Garcia", "James Wilson", "Ashley Miller", "Kevin Lee", "Nicole Taylor", "Brandon Clark", "Stephanie White"];
+            const companies = ["TechSolutions", "MarketPro", "ConsultCorp", "InnovateLLC", "GrowthPartners", "SuccessVentures", "PrimeBusiness", "EliteServices", "ProActive", "NextLevel"];
+            const industries = ["Technology", "Marketing", "Consulting", "E-commerce", "Healthcare", "Finance", "Legal", "Real Estate", "Insurance"];
+            const addresses = [
+                "123 Main St, Ponte Vedra, FL 32082", "456 Oak Ave, Jacksonville Beach, FL 32250",
+                "789 Pine Rd, Neptune Beach, FL 32266", "321 Palm Dr, Fernandina Beach, FL 32034",
+                "654 Beach Blvd, Atlantic Beach, FL 32233", "987 Coastal Hwy, St. Augustine, FL 32080",
+                "147 Marina Way, Amelia Island, FL 32034", "258 Sunset Dr, Ponte Vedra Beach, FL 32082",
+                "369 Ocean View, Jacksonville, FL 32250", "741 Island Dr, Fernandina, FL 32034"
+            ];
+            
+            for (let i = 0; i < 45; i++) {
+                const profitability = Math.floor(Math.random() * 5) + 1;
+                const urgency = Math.floor(Math.random() * 5) + 1;
+                const reachability = Math.floor(Math.random() * 5) + 1;
+                const engagement = Math.floor(Math.random() * 5) + 1;
+                const sustainability = Math.floor(Math.random() * 5) + 1;
+                const avgScore = (profitability + urgency + reachability + engagement + sustainability) / 5;
+                
+                let tier;
+                if (avgScore >= 4) tier = '1A';
+                else if (avgScore >= 3) tier = '1B';
+                else tier = '1C';
+                
+                const name = names[Math.floor(Math.random() * names.length)];
+                const company = companies[Math.floor(Math.random() * companies.length)];
+                const industry = industries[Math.floor(Math.random() * industries.length)];
+                const buyerTypes = ['Analytical', 'Relationship', 'Efficiency', 'Innovation'];
+                const statuses = ['New Lead', 'Qualified Lead', 'Hot Prospect', 'Proposal Sent', 'Follow-up Scheduled', 'Demo Scheduled'];
+                const revenues = ['$100K-$500K', '$500K-$1M', '$1M-$5M', '$5M-$10M', '$10M+'];
+                
+                sampleClients.push({
+                    name: name,
+                    email: `${name.toLowerCase().replace(' ', '.')}@${company.toLowerCase()}.com`,
+                    phone: `(904) 555-${String(Math.floor(Math.random() * 10000)).padStart(4, '0')}`,
+                    address: addresses[Math.floor(Math.random() * addresses.length)],
+                    puresScore: avgScore.toFixed(1),
+                    tier: tier,
+                    industry: industry,
+                    revenueEstimate: revenues[Math.floor(Math.random() * revenues.length)],
+                    status: statuses[Math.floor(Math.random() * statuses.length)],
+                    lastContact: new Date(2024, 0, Math.floor(Math.random() * 30) + 1).toLocaleDateString(),
+                    buyerType: buyerTypes[Math.floor(Math.random() * buyerTypes.length)],
+                    scores: {profitability, urgency, reachability, engagement, sustainability}
+                });
+            }
+            
+            clientData = sampleClients;
+            updateTable();
+            updateStats();
+        }
+
+        function updateTable() {
+            const tbody = document.getElementById('clientTableBody');
+            tbody.innerHTML = '';
+            
+            clientData.forEach((client, index) => {
+                const row = document.createElement('tr');
+                row.className = `tier-${client.tier.toLowerCase()}`;
+                row.innerHTML = `
+                    <td>${client.name}</td>
+                    <td>${client.email}</td>
+                    <td>${client.phone}</td>
+                    <td>${client.address}</td>
+                    <td><span class="score-display score-${Math.round(client.puresScore)}">${client.puresScore}</span></td>
+                    <td><strong>${client.tier}</strong></td>
+                    <td>${client.industry}</td>
+                    <td>${client.revenueEstimate}</td>
+                    <td>${client.status}</td>
+                    <td>${client.lastContact}</td>
+                    <td class="action-buttons">
+                        <button class="btn btn-small" onclick="emailClient(${index})">📧 Email</button>
+                        <button class="btn btn-small" onclick="callClient('${client.phone}')">📞 Call</button>
+                        <button class="btn btn-small" onclick="viewClient(${index})">👁️ View</button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function updateStats() {
+            const tier1a = clientData.filter(c => c.tier === '1A').length;
+            const tier1b = clientData.filter(c => c.tier === '1B').length;
+            const tier1c = clientData.filter(c => c.tier === '1C').length;
+            
+            document.getElementById('totalClients').textContent = clientData.length;
+            document.getElementById('tier1aCount').textContent = tier1a;
+            document.getElementById('tier1bCount').textContent = tier1b;
+            document.getElementById('tier1cCount').textContent = tier1c;
+        }
+
+        function filterTable() {
+            const search = document.getElementById('searchInput').value.toLowerCase();
+            const tierFilter = document.getElementById('tierFilter').value;
+            const industryFilter = document.getElementById('industryFilter').value;
+            
+            const filtered = clientData.filter(client => {
+                const matchesSearch = !search || 
+                    client.name.toLowerCase().includes(search) ||
+                    client.email.toLowerCase().includes(search) ||
+                    client.industry.toLowerCase().includes(search) ||
+                    client.address.toLowerCase().includes(search);
+                    
+                const matchesTier = !tierFilter || client.tier === tierFilter;
+                const matchesIndustry = !industryFilter || client.industry === industryFilter;
+                
+                return matchesSearch && matchesTier && matchesIndustry;
+            });
+            
+            displayFilteredData(filtered);
+        }
+
+        function displayFilteredData(data) {
+            const tbody = document.getElementById('clientTableBody');
+            tbody.innerHTML = '';
+            
+            data.forEach((client, index) => {
+                const originalIndex = clientData.indexOf(client);
+                const row = document.createElement('tr');
+                row.className = `tier-${client.tier.toLowerCase()}`;
+                row.innerHTML = `
+                    <td>${client.name}</td>
+                    <td>${client.email}</td>
+                    <td>${client.phone}</td>
+                    <td>${client.address}</td>
+                    <td><span class="score-display score-${Math.round(client.puresScore)}">${client.puresScore}</span></td>
+                    <td><strong>${client.tier}</strong></td>
+                    <td>${client.industry}</td>
+                    <td>${client.revenueEstimate}</td>
+                    <td>${client.status}</td>
+                    <td>${client.lastContact}</td>
+                    <td class="action-buttons">
+                        <button class="btn btn-small" onclick="emailClient(${originalIndex})">📧 Email</button>
+                        <button class="btn btn-small" onclick="callClient('${client.phone}')">📞 Call</button>
+                        <button class="btn btn-small" onclick="viewClient(${originalIndex})">👁️ View</button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function sortTable(column) {
+            const table = document.getElementById('clientTable');
+            const tbody = table.querySelector('tbody');
+            const rows = Array.from(tbody.querySelectorAll('tr'));
+            
+            const isAscending = sortDirection[column] !== 'asc';
+            sortDirection[column] = isAscending ? 'asc' : 'desc';
+            
+            rows.sort((a, b) => {
+                const aText = a.cells[column].textContent.trim();
+                const bText = b.cells[column].textContent.trim();
+                
+                // Handle numeric sorting for P.U.R.E.S. scores
+                if (column === 4) {
+                    const aNum = parseFloat(aText);
+                    const bNum = parseFloat(bText);
+                    return isAscending ? aNum - bNum : bNum - aNum;
+                }
+                
+                // Handle date sorting
+                if (column === 9) {
+                    const aDate = new Date(aText);
+                    const bDate = new Date(bText);
+                    return isAscending ? aDate - bDate : bDate - aDate;
+                }
+                
+                // Text sorting
+                return isAscending ? aText.localeCompare(bText) : bText.localeCompare(aText);
+            });
+            
+            tbody.innerHTML = '';
+            rows.forEach(row => tbody.appendChild(row));
+        }
+
+        function emailClient(index) {
+            const client = clientData[index];
+            const template = emailTemplates[client.buyerType] || emailTemplates['Relationship'];
+            
+            document.getElementById('emailTo').value = client.email;
+            document.getElementById('emailBody').value = template
+                .replace(/{clientName}/g, client.name.split(' ')[0])
+                .replace(/{industry}/g, client.industry);
+            
+            document.getElementById('emailModal').style.display = 'block';
+        }
+
+        function callClient(phone) {
+            if (navigator.userAgent.match(/iPhone|iPad|iPod|Android/i)) {
+                window.location.href = `tel:${phone}`;
+            } else {
+                alert(`Call client at: ${phone}`);
+            }
+        }
+
+        function viewClient(index) {
+            const client = clientData[index];
+            alert(`Client Details:\n\nName: ${client.name}\nEmail: ${client.email}\nPhone: ${client.phone}\nAddress: ${client.address}\nIndustry: ${client.industry}\nP.U.R.E.S. Score: ${client.puresScore}\nTier: ${client.tier}\nBuyer Type: ${client.buyerType}\nStatus: ${client.status}\nLast Contact: ${client.lastContact}\nRevenue Estimate: ${client.revenueEstimate}`);
+        }
+
+        function sendEmail() {
+            const to = document.getElementById('emailTo').value;
+            const subject = document.getElementById('emailSubject').value;
+            const body = document.getElementById('emailBody').value;
+            
+            const mailtoLink = `mailto:${to}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+            window.location.href = mailtoLink;
+        }
+
+        function copyEmail() {
+            const emailBody = document.getElementById('emailBody').value;
+            navigator.clipboard.writeText(emailBody).then(() => {
+                alert('Email template copied to clipboard!');
+            });
+        }
+
+        function showEmailTemplates() {
+            alert('Email templates are automatically customized based on the buyer type (Analytical, Relationship, Efficiency, Innovation) when you click the Email button for each client.');
+        }
+
+        function showAssessmentTools() {
+            document.getElementById('toolsModal').style.display = 'block';
+            showTab('assess');
+        }
+
+        function showListeningDashboard() {
+            document.getElementById('toolsModal').style.display = 'block';
+            showTab('listen');
+        }
+
+        function showReferralManager() {
+            document.getElementById('toolsModal').style.display = 'block';
+            showTab('empower');
+        }
+
+        function showTab(tabName) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // Remove active class from all tabs
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected tab content
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        function exportData() {
+            const csv = [
+                ['Client Name', 'Email', 'Phone', 'Address', 'P.U.R.E.S. Score', 'Tier', 'Industry', 'Revenue Estimate', 'Status', 'Last Contact', 'Buyer Type'],
+                ...clientData.map(client => [
+                    client.name, client.email, client.phone, client.address, client.puresScore,
+                    client.tier, client.industry, client.revenueEstimate, client.status, client.lastContact, client.buyerType
+                ])
+            ].map(row => row.map(field => `"${field}"`).join(',')).join('\n');
+            
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'back-desk-global-prospects.csv';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // Close modals when clicking outside
+        window.onclick = function(event) {
+            const modals = document.querySelectorAll('.modal');
+            modals.forEach(modal => {
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+        };
+    </script>
+</body>
+</html>

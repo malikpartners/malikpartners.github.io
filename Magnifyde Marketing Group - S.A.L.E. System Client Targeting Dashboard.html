@@ -1,0 +1,1068 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Magnifyde Marketing Group - S.A.L.E. System Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #000000;
+            color: #ffffff;
+            line-height: 1.6;
+        }
+        
+        .header {
+            background-color: #CF2030;
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 10px rgba(207, 32, 48, 0.3);
+        }
+        
+        .logo {
+            height: 60px;
+        }
+        
+        .header-text {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .dashboard-nav {
+            background-color: #CF2030;
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .nav-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .tab-btn {
+            background-color: rgba(255,255,255,0.1);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+        
+        .tab-btn:hover, .tab-btn.active {
+            background-color: rgba(255,255,255,0.2);
+            transform: translateY(-2px);
+        }
+        
+        .tab-content {
+            display: none;
+            background-color: #1a1a1a;
+            border-radius: 10px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .search-filters {
+            background-color: #2a2a2a;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            align-items: center;
+        }
+        
+        .search-input, .filter-select {
+            background-color: #3a3a3a;
+            color: white;
+            border: 1px solid #CF2030;
+            padding: 0.5rem;
+            border-radius: 5px;
+            min-width: 150px;
+        }
+        
+        .search-input:focus, .filter-select:focus {
+            outline: none;
+            border-color: #ff4060;
+            box-shadow: 0 0 5px rgba(207, 32, 48, 0.5);
+        }
+        
+        .client-table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #2a2a2a;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+        
+        .client-table th {
+            background-color: #CF2030;
+            color: white;
+            padding: 1rem;
+            text-align: left;
+            font-weight: bold;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .client-table th:hover {
+            background-color: #e02040;
+        }
+        
+        .client-table th::after {
+            content: '↕️';
+            position: absolute;
+            right: 10px;
+            opacity: 0.7;
+        }
+        
+        .client-table td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid #3a3a3a;
+        }
+        
+        .client-table tbody tr:hover {
+            background-color: #3a3a3a;
+        }
+        
+        .tier-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .tier-1a {
+            background-color: #28a745;
+            color: white;
+        }
+        
+        .tier-1b {
+            background-color: #ffc107;
+            color: black;
+        }
+        
+        .tier-1c {
+            background-color: #17a2b8;
+            color: white;
+        }
+        
+        .contact-btn {
+            background-color: #CF2030;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-right: 0.5rem;
+            transition: background-color 0.3s ease;
+        }
+        
+        .contact-btn:hover {
+            background-color: #e02040;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+        }
+        
+        .modal-content {
+            background-color: #2a2a2a;
+            margin: 5% auto;
+            padding: 2rem;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 600px;
+            color: white;
+        }
+        
+        .close {
+            color: #CF2030;
+            float: right;
+            font-size: 2rem;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .close:hover {
+            color: #ff4060;
+        }
+        
+        .pures-form {
+            background-color: #3a3a3a;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+        }
+        
+        .pures-category {
+            margin-bottom: 1rem;
+        }
+        
+        .pures-category label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            color: #CF2030;
+        }
+        
+        .rating-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .rating-btn {
+            background-color: #4a4a4a;
+            color: white;
+            border: none;
+            padding: 0.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            min-width: 40px;
+        }
+        
+        .rating-btn.active {
+            background-color: #CF2030;
+        }
+        
+        .email-template {
+            background-color: #3a3a3a;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-top: 1rem;
+        }
+        
+        .email-template textarea {
+            width: 100%;
+            height: 300px;
+            background-color: #4a4a4a;
+            color: white;
+            border: 1px solid #CF2030;
+            border-radius: 5px;
+            padding: 1rem;
+            resize: vertical;
+        }
+        
+        .marketing-schedule {
+            background-color: #2a2a2a;
+            padding: 1.5rem;
+            border-radius: 10px;
+        }
+        
+        .schedule-week {
+            margin-bottom: 1.5rem;
+            border-left: 4px solid #CF2030;
+            padding-left: 1rem;
+        }
+        
+        .footer {
+            background-color: #1a1a1a;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .footer-logo {
+            height: 30px;
+            margin-bottom: 1rem;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .client-table {
+                font-size: 0.8rem;
+            }
+            
+            .search-filters {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .nav-tabs {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="HigginsReports" class="logo">
+        <div class="header-text">Magnifyde Marketing Group - S.A.L.E. System Dashboard</div>
+    </header>
+
+    <div class="container">
+        <nav class="dashboard-nav">
+            <div class="nav-tabs">
+                <button class="tab-btn active" onclick="switchTab('sourcing')">S - Sourcing</button>
+                <button class="tab-btn" onclick="switchTab('assessing')">A - Assessing</button>
+                <button class="tab-btn" onclick="switchTab('listening')">L - Listening</button>
+                <button class="tab-btn" onclick="switchTab('empowering')">E - Empowering</button>
+                <button class="tab-btn" onclick="switchTab('marketing')">Marketing Plan</button>
+            </div>
+        </nav>
+
+        <!-- SOURCING Tab -->
+        <div id="sourcing" class="tab-content active">
+            <h2 style="color: #CF2030; margin-bottom: 1rem;">S.A.L.E. SOURCING - Client Database</h2>
+            
+            <div class="search-filters">
+                <input type="text" id="searchInput" class="search-input" placeholder="Search clients..." onkeyup="filterTable()">
+                <select id="tierFilter" class="filter-select" onchange="filterTable()">
+                    <option value="">All Tiers</option>
+                    <option value="Tier 1A">Tier 1A (Premium)</option>
+                    <option value="Tier 1B">Tier 1B (High-Value)</option>
+                    <option value="Tier 1C">Tier 1C (Qualified)</option>
+                </select>
+                <select id="industryFilter" class="filter-select" onchange="filterTable()">
+                    <option value="">All Industries</option>
+                    <option value="Retail">Retail</option>
+                    <option value="Healthcare">Healthcare</option>
+                    <option value="Technology">Technology</option>
+                    <option value="Food Service">Food Service</option>
+                    <option value="Professional Services">Professional Services</option>
+                    <option value="Real Estate">Real Estate</option>
+                </select>
+                <button class="contact-btn" onclick="exportData()">Export Data</button>
+            </div>
+
+            <table class="client-table" id="clientTable">
+                <thead>
+                    <tr>
+                        <th onclick="sortTable(0)">Client Name</th>
+                        <th onclick="sortTable(1)">Email</th>
+                        <th onclick="sortTable(2)">Phone</th>
+                        <th onclick="sortTable(3)">Address</th>
+                        <th onclick="sortTable(4)">P.U.R.E.S. Score</th>
+                        <th onclick="sortTable(5)">Tier Level</th>
+                        <th onclick="sortTable(6)">Industry</th>
+                        <th onclick="sortTable(7)">Revenue Est.</th>
+                        <th onclick="sortTable(8)">Contact Status</th>
+                        <th onclick="sortTable(9)">Last Contact</th>
+                        <th onclick="sortTable(10)">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="clientTableBody">
+                    <!-- Client data will be populated by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- ASSESSING Tab -->
+        <div id="assessing" class="tab-content">
+            <h2 style="color: #CF2030; margin-bottom: 1rem;">A.SSESSING - Buying Pattern Analysis</h2>
+            
+            <div class="pures-form">
+                <h3 style="color: #CF2030; margin-bottom: 1rem;">P.U.R.E.S. Client Scoring</h3>
+                <div class="pures-category">
+                    <label>Profitability - Annual revenue threshold and budget capacity</label>
+                    <div class="rating-buttons" id="profitability">
+                        <button class="rating-btn" onclick="setRating('profitability', 1)">1</button>
+                        <button class="rating-btn" onclick="setRating('profitability', 2)">2</button>
+                        <button class="rating-btn" onclick="setRating('profitability', 3)">3</button>
+                        <button class="rating-btn" onclick="setRating('profitability', 4)">4</button>
+                        <button class="rating-btn" onclick="setRating('profitability', 5)">5</button>
+                    </div>
+                </div>
+                <div class="pures-category">
+                    <label>Urgency - Active pain points requiring immediate solutions</label>
+                    <div class="rating-buttons" id="urgency">
+                        <button class="rating-btn" onclick="setRating('urgency', 1)">1</button>
+                        <button class="rating-btn" onclick="setRating('urgency', 2)">2</button>
+                        <button class="rating-btn" onclick="setRating('urgency', 3)">3</button>
+                        <button class="rating-btn" onclick="setRating('urgency', 4)">4</button>
+                        <button class="rating-btn" onclick="setRating('urgency', 5)">5</button>
+                    </div>
+                </div>
+                <div class="pures-category">
+                    <label>Reachability - Accessible decision makers with clear contact paths</label>
+                    <div class="rating-buttons" id="reachability">
+                        <button class="rating-btn" onclick="setRating('reachability', 1)">1</button>
+                        <button class="rating-btn" onclick="setRating('reachability', 2)">2</button>
+                        <button class="rating-btn" onclick="setRating('reachability', 3)">3</button>
+                        <button class="rating-btn" onclick="setRating('reachability', 4)">4</button>
+                        <button class="rating-btn" onclick="setRating('reachability', 5)">5</button>
+                    </div>
+                </div>
+                <div class="pures-category">
+                    <label>Engagement - Openness to innovation and partnerships</label>
+                    <div class="rating-buttons" id="engagement">
+                        <button class="rating-btn" onclick="setRating('engagement', 1)">1</button>
+                        <button class="rating-btn" onclick="setRating('engagement', 2)">2</button>
+                        <button class="rating-btn" onclick="setRating('engagement', 3)">3</button>
+                        <button class="rating-btn" onclick="setRating('engagement', 4)">4</button>
+                        <button class="rating-btn" onclick="setRating('engagement', 5)">5</button>
+                    </div>
+                </div>
+                <div class="pures-category">
+                    <label>Sustainability - Long-term partnership potential with growth trajectory</label>
+                    <div class="rating-buttons" id="sustainability">
+                        <button class="rating-btn" onclick="setRating('sustainability', 1)">1</button>
+                        <button class="rating-btn" onclick="setRating('sustainability', 2)">2</button>
+                        <button class="rating-btn" onclick="setRating('sustainability', 3)">3</button>
+                        <button class="rating-btn" onclick="setRating('sustainability', 4)">4</button>
+                        <button class="rating-btn" onclick="setRating('sustainability', 5)">5</button>
+                    </div>
+                </div>
+                <button class="contact-btn" onclick="calculatePURES()">Calculate P.U.R.E.S. Score</button>
+                <div id="puresResult" style="margin-top: 1rem; font-weight: bold; color: #CF2030;"></div>
+            </div>
+
+            <div style="background-color: #3a3a3a; padding: 1.5rem; border-radius: 10px; margin-top: 1rem;">
+                <h3 style="color: #CF2030; margin-bottom: 1rem;">Buyer Profile Categories</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem;">
+                    <div style="background-color: #4a4a4a; padding: 1rem; border-radius: 5px;">
+                        <h4 style="color: #CF2030;">Analytical Buyers</h4>
+                        <p>Require detailed ROI analysis, case studies, trials</p>
+                    </div>
+                    <div style="background-color: #4a4a4a; padding: 1rem; border-radius: 5px;">
+                        <h4 style="color: #CF2030;">Relationship Buyers</h4>
+                        <p>Value trust, referrals, long-term partnerships</p>
+                    </div>
+                    <div style="background-color: #4a4a4a; padding: 1rem; border-radius: 5px;">
+                        <h4 style="color: #CF2030;">Efficiency Buyers</h4>
+                        <p>Focus on time-saving, process improvement</p>
+                    </div>
+                    <div style="background-color: #4a4a4a; padding: 1rem; border-radius: 5px;">
+                        <h4 style="color: #CF2030;">Innovation Buyers</h4>
+                        <p>Seek cutting-edge solutions, competitive advantage</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- LISTENING Tab -->
+        <div id="listening" class="tab-content">
+            <h2 style="color: #CF2030; margin-bottom: 1rem;">L.ISTENING - Feedback Integration</h2>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+                <div class="pures-form">
+                    <h3 style="color: #CF2030;">Pre-Sale Feedback</h3>
+                    <textarea style="width: 100%; height: 120px; background-color: #4a4a4a; color: white; border: 1px solid #CF2030; border-radius: 5px; padding: 0.5rem;" placeholder="Enter pre-sale feedback..."></textarea>
+                </div>
+                
+                <div class="pures-form">
+                    <h3 style="color: #CF2030;">During-Sale Progress</h3>
+                    <textarea style="width: 100%; height: 120px; background-color: #4a4a4a; color: white; border: 1px solid #CF2030; border-radius: 5px; padding: 0.5rem;" placeholder="Track progress during sale..."></textarea>
+                </div>
+                
+                <div class="pures-form">
+                    <h3 style="color: #CF2030;">Post-Sale Satisfaction</h3>
+                    <textarea style="width: 100%; height: 120px; background-color: #4a4a4a; color: white; border: 1px solid #CF2030; border-radius: 5px; padding: 0.5rem;" placeholder="Monitor post-sale satisfaction..."></textarea>
+                </div>
+                
+                <div class="pures-form">
+                    <h3 style="color: #CF2030;">Complaint Resolution</h3>
+                    <textarea style="width: 100%; height: 120px; background-color: #4a4a4a; color: white; border: 1px solid #CF2030; border-radius: 5px; padding: 0.5rem;" placeholder="Document complaint resolution..."></textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- EMPOWERING Tab -->
+        <div id="empowering" class="tab-content">
+            <h2 style="color: #CF2030; margin-bottom: 1rem;">E.MPOWERING - Referral Strategy</h2>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+                <div class="pures-form">
+                    <h3 style="color: #CF2030;">Success Stories</h3>
+                    <textarea style="width: 100%; height: 120px; background-color: #4a4a4a; color: white; border: 1px solid #CF2030; border-radius: 5px; padding: 0.5rem;" placeholder="Document success stories..."></textarea>
+                    <button class="contact-btn" style="margin-top: 0.5rem;">Save Story</button>
+                </div>
+                
+                <div class="pures-form">
+                    <h3 style="color: #CF2030;">Referral Tracking</h3>
+                    <table style="width: 100%; color: white;">
+                        <tr style="background-color: #CF2030;">
+                            <th style="padding: 0.5rem;">Referrer</th>
+                            <th style="padding: 0.5rem;">Status</th>
+                        </tr>
+                        <tr>
+                            <td style="padding: 0.5rem;">John's Coffee Shop</td>
+                            <td style="padding: 0.5rem;">Active</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 0.5rem;">Tech Solutions Inc</td>
+                            <td style="padding: 0.5rem;">Pending</td>
+                        </tr>
+                    </table>
+                </div>
+                
+                <div class="pures-form">
+                    <h3 style="color: #CF2030;">Client Advocacy</h3>
+                    <div style="margin-bottom: 1rem;">
+                        <label>Advocate Level:</label>
+                        <select style="background-color: #4a4a4a; color: white; border: 1px solid #CF2030; padding: 0.5rem; width: 100%;">
+                            <option>Bronze Advocate</option>
+                            <option>Silver Advocate</option>
+                            <option>Gold Advocate</option>
+                            <option>Platinum Advocate</option>
+                        </select>
+                    </div>
+                    <button class="contact-btn">Manage Program</button>
+                </div>
+                
+                <div class="pures-form">
+                    <h3 style="color: #CF2030;">Co-Marketing</h3>
+                    <textarea style="width: 100%; height: 120px; background-color: #4a4a4a; color: white; border: 1px solid #CF2030; border-radius: 5px; padding: 0.5rem;" placeholder="Plan co-marketing opportunities..."></textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- MARKETING Tab -->
+        <div id="marketing" class="tab-content">
+            <h2 style="color: #CF2030; margin-bottom: 1rem;">Marketing Plan & Schedule</h2>
+            
+            <div class="marketing-schedule">
+                <div class="schedule-week">
+                    <h3 style="color: #CF2030;">Week 1: Initial Outreach</h3>
+                    <ul>
+                        <li><strong>Monday:</strong> Email campaign to Tier 1A prospects</li>
+                        <li><strong>Tuesday:</strong> Social media engagement with local businesses</li>
+                        <li><strong>Wednesday:</strong> Direct mail to top 10 prospects</li>
+                        <li><strong>Thursday:</strong> Follow-up calls to email recipients</li>
+                        <li><strong>Friday:</strong> LinkedIn outreach to decision makers</li>
+                    </ul>
+                </div>
+                
+                <div class="schedule-week">
+                    <h3 style="color: #CF2030;">Week 2: Relationship Building</h3>
+                    <ul>
+                        <li><strong>Monday:</strong> One-on-one meetings with Tier 1A prospects</li>
+                        <li><strong>Tuesday:</strong> Webinar for Tier 1B prospects</li>
+                        <li><strong>Wednesday:</strong> Content marketing push</li>
+                        <li><strong>Thursday:</strong> Referral partner meetings</li>
+                        <li><strong>Friday:</strong> Follow-up and schedule next actions</li>
+                    </ul>
+                </div>
+                
+                <div class="schedule-week">
+                    <h3 style="color: #CF2030;">Week 3: Value Demonstration</h3>
+                    <ul>
+                        <li><strong>Monday:</strong> Case study presentations</li>
+                        <li><strong>Tuesday:</strong> ROI analysis delivery</li>
+                        <li><strong>Wednesday:</strong> Proposal presentations</li>
+                        <li><strong>Thursday:</strong> Q&A sessions</li>
+                        <li><strong>Friday:</strong> Close follow-up</li>
+                    </ul>
+                </div>
+                
+                <div class="schedule-week">
+                    <h3 style="color: #CF2030;">Week 4: Conversion & Optimization</h3>
+                    <ul>
+                        <li><strong>Monday:</strong> Final proposals and contracts</li>
+                        <li><strong>Tuesday:</strong> Objection handling sessions</li>
+                        <li><strong>Wednesday:</strong> Contract negotiations</li>
+                        <li><strong>Thursday:</strong> Closing meetings</li>
+                        <li><strong>Friday:</strong> Campaign analysis and optimization</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Email Modal -->
+    <div id="emailModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2 style="color: #CF2030;">Email Template</h2>
+            <div class="email-template">
+                <div style="margin-bottom: 1rem;">
+                    <label><strong>To:</strong></label>
+                    <input type="email" id="emailTo" style="width: 100%; background-color: #4a4a4a; color: white; border: 1px solid #CF2030; padding: 0.5rem; border-radius: 5px;">
+                </div>
+                <div style="margin-bottom: 1rem;">
+                    <label><strong>Subject:</strong></label>
+                    <input type="text" id="emailSubject" style="width: 100%; background-color: #4a4a4a; color: white; border: 1px solid #CF2030; padding: 0.5rem; border-radius: 5px;" value="Transform Your Business with Strategic Marketing Solutions">
+                </div>
+                <div style="margin-bottom: 1rem;">
+                    <label><strong>Message:</strong></label>
+                    <textarea id="emailBody" style="width: 100%; height: 300px; background-color: #4a4a4a; color: white; border: 1px solid #CF2030; border-radius: 5px; padding: 1rem; resize: vertical;"></textarea>
+                </div>
+                <button class="contact-btn" onclick="sendEmail()">Send Email</button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="HigginsReports" class="footer-logo">
+        <p>&copy; 2024 HigginsReports. Powered by Magnifyde Marketing Group.</p>
+        <p>Contact: dan@magnifydemg.com | (408) 763-2502</p>
+    </footer>
+
+    <script>
+        // Sample client data for San Diego area businesses
+        const clientData = [
+            {
+                name: "La Jolla Boutique",
+                email: "owner@lajollaboutique.com",
+                phone: "(858) 555-0101",
+                address: "1234 Prospect St, La Jolla, CA 92037",
+                puresScore: 23,
+                tier: "Tier 1A",
+                industry: "Retail",
+                revenue: "$500K",
+                status: "New Lead",
+                lastContact: "2024-01-15",
+                buyerType: "Relationship"
+            },
+            {
+                name: "Pacific Dental Group",
+                email: "admin@pacificdental.com",
+                phone: "(619) 555-0102",
+                address: "5678 University Ave, San Diego, CA 92105",
+                puresScore: 21,
+                tier: "Tier 1A",
+                industry: "Healthcare",
+                revenue: "$750K",
+                status: "Qualified",
+                lastContact: "2024-01-12",
+                buyerType: "Analytical"
+            },
+            {
+                name: "TechStart Solutions",
+                email: "info@techstartsolutions.com",
+                phone: "(858) 555-0103",
+                address: "9101 Spectrum Center Blvd, San Diego, CA 92123",
+                puresScore: 22,
+                tier: "Tier 1A",
+                industry: "Technology",
+                revenue: "$1.2M",
+                status: "In Progress",
+                lastContact: "2024-01-10",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Seaside Cafe",
+                email: "manager@seasidecafe.com",
+                phone: "(619) 555-0104",
+                address: "3456 Mission Blvd, San Diego, CA 92109",
+                puresScore: 18,
+                tier: "Tier 1B",
+                industry: "Food Service",
+                revenue: "$350K",
+                status: "Follow-up",
+                lastContact: "2024-01-08",
+                buyerType: "Efficiency"
+            },
+            {
+                name: "Miller & Associates Law",
+                email: "contact@millerlaw.com",
+                phone: "(858) 555-0105",
+                address: "7890 Girard Ave, La Jolla, CA 92037",
+                puresScore: 20,
+                tier: "Tier 1B",
+                industry: "Professional Services",
+                revenue: "$900K",
+                status: "Proposal Sent",
+                lastContact: "2024-01-05",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Sunset Realty",
+                email: "info@sunsetrealty.com",
+                phone: "(619) 555-0106",
+                address: "2345 India St, San Diego, CA 92101",
+                puresScore: 19,
+                tier: "Tier 1B",
+                industry: "Real Estate",
+                revenue: "$650K",
+                status: "Negotiating",
+                lastContact: "2024-01-03",
+                buyerType: "Relationship"
+            },
+            {
+                name: "Elite Fitness Studio",
+                email: "owner@elitefitness.com",
+                phone: "(858) 555-0107",
+                address: "4567 Clairemont Dr, San Diego, CA 92117",
+                puresScore: 17,
+                tier: "Tier 1B",
+                industry: "Health & Fitness",
+                revenue: "$280K",
+                status: "New Lead",
+                lastContact: "2024-01-01",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Golden Hill Market",
+                email: "manager@goldenhillmarket.com",
+                phone: "(619) 555-0108",
+                address: "8901 25th St, San Diego, CA 92102",
+                puresScore: 16,
+                tier: "Tier 1C",
+                industry: "Retail",
+                revenue: "$420K",
+                status: "Cold Lead",
+                lastContact: "2023-12-28",
+                buyerType: "Efficiency"
+            },
+            {
+                name: "Coastal Construction",
+                email: "bids@coastalconstruction.com",
+                phone: "(858) 555-0109",
+                address: "5432 Convoy St, San Diego, CA 92111",
+                puresScore: 19,
+                tier: "Tier 1B",
+                industry: "Construction",
+                revenue: "$1.1M",
+                status: "Qualified",
+                lastContact: "2024-01-14",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Balboa Park Veterinary",
+                email: "info@balboavet.com",
+                phone: "(619) 555-0110",
+                address: "6543 Park Blvd, San Diego, CA 92116",
+                puresScore: 18,
+                tier: "Tier 1B",
+                industry: "Healthcare",
+                revenue: "$480K",
+                status: "Follow-up",
+                lastContact: "2024-01-11",
+                buyerType: "Relationship"
+            }
+        ];
+
+        // Add more clients to reach 50
+        const additionalClients = [
+            // Continue adding similar client entries...
+            {
+                name: "Ocean Beach Surf Shop",
+                email: "sales@obsurfshop.com",
+                phone: "(619) 555-0111",
+                address: "7654 Newport Ave, San Diego, CA 92107",
+                puresScore: 15,
+                tier: "Tier 1C",
+                industry: "Retail",
+                revenue: "$180K",
+                status: "New Lead",
+                lastContact: "2024-01-13",
+                buyerType: "Relationship"
+            },
+            {
+                name: "Downtown Auto Repair",
+                email: "service@downtownauto.com",
+                phone: "(619) 555-0112",
+                address: "8765 Broadway, San Diego, CA 92101",
+                puresScore: 17,
+                tier: "Tier 1C",
+                industry: "Automotive",
+                revenue: "$320K",
+                status: "Cold Lead",
+                lastContact: "2023-12-30",
+                buyerType: "Efficiency"
+            }
+            // ... Continue with more entries to reach 50 total
+        ];
+
+        // Combine arrays and add more clients programmatically
+        const allClients = [...clientData, ...additionalClients];
+
+        // Generate additional clients to reach 50
+        const businessNames = [
+            "Hillcrest Medical Center", "Gaslamp Restaurant", "Mission Valley Spa", "Chula Vista Auto", 
+            "Escondido Flowers", "Coronado Beach Hotel", "Carlsbad Yoga Studio", "Encinitas Surf Co",
+            "Point Loma Marina", "Kearny Mesa Office", "Mira Mesa Dental", "Scripps Ranch Fitness",
+            "Rancho Bernardo Golf", "Santee Hardware", "Spring Valley Pizza", "National City Tire",
+            "Bonita Bakery", "Paradise Hills Pharmacy", "Skyline Market", "Otay Ranch Salon"
+        ];
+
+        const industries = ["Retail", "Healthcare", "Technology", "Food Service", "Professional Services", "Real Estate"];
+        const tiers = ["Tier 1A", "Tier 1B", "Tier 1C"];
+        const statuses = ["New Lead", "Qualified", "In Progress", "Follow-up", "Proposal Sent", "Negotiating", "Cold Lead"];
+        const buyerTypes = ["Analytical", "Relationship", "Efficiency", "Innovation"];
+
+        // Generate remaining clients
+        for (let i = allClients.length; i < 50; i++) {
+            const business = businessNames[Math.floor(Math.random() * businessNames.length)];
+            const industry = industries[Math.floor(Math.random() * industries.length)];
+            const tier = tiers[Math.floor(Math.random() * tiers.length)];
+            const status = statuses[Math.floor(Math.random() * statuses.length)];
+            const buyerType = buyerTypes[Math.floor(Math.random() * buyerTypes.length)];
+            
+            allClients.push({
+                name: business,
+                email: `contact@${business.toLowerCase().replace(/\s+/g, '')}.com`,
+                phone: `(${Math.floor(Math.random() * 3) + 6}${Math.floor(Math.random() * 10)}${Math.floor(Math.random() * 10)}) 555-0${String(i).padStart(3, '0')}`,
+                address: `${Math.floor(Math.random() * 9999) + 1000} ${['Main St', 'Oak Ave', 'Pine Blvd', 'Cedar Dr'][Math.floor(Math.random() * 4)]}, San Diego, CA 921${String(Math.floor(Math.random() * 50) + 1).padStart(2, '0')}`,
+                puresScore: Math.floor(Math.random() * 10) + 15,
+                tier: tier,
+                industry: industry,
+                revenue: `$${Math.floor(Math.random() * 900) + 100}K`,
+                status: status,
+                lastContact: `2024-01-${String(Math.floor(Math.random() * 15) + 1).padStart(2, '0')}`,
+                buyerType: buyerType
+            });
+        }
+
+        // Initialize table
+        function initializeTable() {
+            const tbody = document.getElementById('clientTableBody');
+            tbody.innerHTML = '';
+            
+            allClients.forEach(client => {
+                const row = tbody.insertRow();
+                row.innerHTML = `
+                    <td>${client.name}</td>
+                    <td>${client.email}</td>
+                    <td>${client.phone}</td>
+                    <td>${client.address}</td>
+                    <td>${client.puresScore}/25</td>
+                    <td><span class="tier-badge ${client.tier.toLowerCase().replace(' ', '-')}">${client.tier}</span></td>
+                    <td>${client.industry}</td>
+                    <td>${client.revenue}</td>
+                    <td>${client.status}</td>
+                    <td>${client.lastContact}</td>
+                    <td>
+                        <button class="contact-btn" onclick="openEmailModal('${client.email}', '${client.name}', '${client.industry}')">Email</button>
+                        <button class="contact-btn" onclick="callClient('${client.phone}')">Call</button>
+                    </td>
+                `;
+            });
+        }
+
+        // Tab switching
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // Table filtering
+        function filterTable() {
+            const searchInput = document.getElementById('searchInput').value.toLowerCase();
+            const tierFilter = document.getElementById('tierFilter').value;
+            const industryFilter = document.getElementById('industryFilter').value;
+            const table = document.getElementById('clientTable');
+            const rows = table.getElementsByTagName('tr');
+
+            for (let i = 1; i < rows.length; i++) {
+                const row = rows[i];
+                const cells = row.getElementsByTagName('td');
+                let showRow = true;
+
+                // Search filter
+                if (searchInput) {
+                    const rowText = row.textContent.toLowerCase();
+                    showRow = rowText.includes(searchInput);
+                }
+
+                // Tier filter
+                if (showRow && tierFilter) {
+                    const tierCell = cells[5].textContent;
+                    showRow = tierCell.includes(tierFilter);
+                }
+
+                // Industry filter
+                if (showRow && industryFilter) {
+                    const industryCell = cells[6].textContent;
+                    showRow = industryCell === industryFilter;
+                }
+
+                row.style.display = showRow ? '' : 'none';
+            }
+        }
+
+        // Table sorting
+        function sortTable(columnIndex) {
+            const table = document.getElementById('clientTable');
+            const tbody = table.getElementsByTagName('tbody')[0];
+            const rows = Array.from(tbody.getElementsByTagName('tr'));
+            
+            rows.sort((a, b) => {
+                const aText = a.getElementsByTagName('td')[columnIndex].textContent.trim();
+                const bText = b.getElementsByTagName('td')[columnIndex].textContent.trim();
+                return aText.localeCompare(bText);
+            });
+            
+            rows.forEach(row => tbody.appendChild(row));
+        }
+
+        // Email modal functions
+        function openEmailModal(email, name, industry) {
+            document.getElementById('emailTo').value = email;
+            
+            const emailBody = generateEmailTemplate(name, industry);
+            document.getElementById('emailBody').value = emailBody;
+            
+            document.getElementById('emailModal').style.display = 'block';
+        }
+
+        function generateEmailTemplate(name, industry) {
+            return `Dear ${name} Team,
+
+I hope this email finds you well. I'm Dan Savory from Magnifyde Marketing Group, and I wanted to reach out because I believe we can significantly impact your ${industry.toLowerCase()} business growth.
+
+Based on my research of successful ${industry.toLowerCase()} businesses in San Diego, I've identified several key opportunities that could transform your marketing results:
+
+🎯 DIGITAL PRESENCE OPTIMIZATION
+• Enhanced local SEO to dominate search results in your area
+• Strategic social media campaigns that convert followers into customers
+• Website optimization for higher conversion rates
+
+📈 CUSTOMER ACQUISITION STRATEGIES
+• Targeted advertising campaigns with measurable ROI
+• Email marketing sequences that nurture leads automatically
+• Referral programs that turn customers into brand ambassadors
+
+💡 COMPETITIVE ADVANTAGE
+• Market analysis to identify untapped opportunities
+• Brand positioning that differentiates you from competitors
+• Content marketing that establishes you as the industry leader
+
+What sets Magnifyde Marketing Group apart:
+✓ Proven track record with ${industry.toLowerCase()} businesses in San Diego
+✓ Data-driven strategies with transparent reporting
+✓ Customized solutions that fit your budget and goals
+✓ Local market expertise and established vendor relationships
+
+I'd love to schedule a brief 15-minute call to discuss how we can help you achieve your business goals. Are you available for a quick conversation this week?
+
+Best regards,
+Dan Savory
+Magnifyde Marketing Group
+Phone: (408) 763-2502
+Email: dan@magnifydemg.com
+Website: www.magmg.com
+
+P.S. I have a few case studies from similar ${industry.toLowerCase()} businesses that I think you'd find valuable. I'd be happy to share them during our call.`;
+        }
+
+        function closeModal() {
+            document.getElementById('emailModal').style.display = 'none';
+        }
+
+        function sendEmail() {
+            const to = document.getElementById('emailTo').value;
+            const subject = document.getElementById('emailSubject').value;
+            const body = document.getElementById('emailBody').value;
+            
+            // Create mailto link
+            const mailtoLink = `mailto:${to}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+            window.location.href = mailtoLink;
+            
+            closeModal();
+        }
+
+        function callClient(phone) {
+            window.location.href = `tel:${phone}`;
+        }
+
+        // P.U.R.E.S. scoring functions
+        let puresRatings = {
+            profitability: 0,
+            urgency: 0,
+            reachability: 0,
+            engagement: 0,
+            sustainability: 0
+        };
+
+        function setRating(category, rating) {
+            puresRatings[category] = rating;
+            
+            // Update UI
+            const buttons = document.getElementById(category).getElementsByClassName('rating-btn');
+            for (let i = 0; i < buttons.length; i++) {
+                buttons[i].classList.remove('active');
+                if (i < rating) {
+                    buttons[i].classList.add('active');
+                }
+            }
+        }
+
+        function calculatePURES() {
+            const total = Object.values(puresRatings).reduce((sum, rating) => sum + rating, 0);
+            let tier = '';
+            let tierClass = '';
+            
+            if (total >= 20) {
+                tier = 'Tier 1A (Premium)';
+                tierClass = 'tier-1a';
+            } else if (total >= 15) {
+                tier = 'Tier 1B (High-Value)';
+                tierClass = 'tier-1b';
+            } else if (total >= 10) {
+                tier = 'Tier 1C (Qualified)';
+                tierClass = 'tier-1c';
+            } else {
+                tier = 'Below Threshold';
+                tierClass = '';
+            }
+            
+            document.getElementById('puresResult').innerHTML = 
+                `P.U.R.E.S. Score: ${total}/25<br><span class="tier-badge ${tierClass}">${tier}</span>`;
+        }
+
+        function exportData() {
+            // Create CSV content
+            let csvContent = "Client Name,Email,Phone,Address,P.U.R.E.S. Score,Tier Level,Industry,Revenue Est.,Contact Status,Last Contact\n";
+            
+            allClients.forEach(client => {
+                csvContent += `"${client.name}","${client.email}","${client.phone}","${client.address}","${client.puresScore}/25","${client.tier}","${client.industry}","${client.revenue}","${client.status}","${client.lastContact}"\n`;
+            });
+            
+            // Download CSV
+            const blob = new Blob([csvContent], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.style.display = 'none';
+            a.href = url;
+            a.download = 'magnifyde_clients.csv';
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeTable();
+        });
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('emailModal');
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>

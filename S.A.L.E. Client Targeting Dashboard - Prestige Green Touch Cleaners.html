@@ -1,0 +1,1082 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>S.A.L.E. Client Targeting Dashboard - Prestige Green Touch Cleaners</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #000000;
+            color: #CF2030;
+            line-height: 1.6;
+        }
+
+        .header {
+            background: #CF2030;
+            color: white;
+            padding: 1rem 0;
+            text-align: center;
+        }
+
+        .header img {
+            max-height: 80px;
+            margin-bottom: 10px;
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .dashboard-tabs {
+            display: flex;
+            background: #1a1a1a;
+            border-radius: 10px 10px 0 0;
+            overflow: hidden;
+            margin-top: 20px;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 15px;
+            text-align: center;
+            background: #333;
+            color: #CF2030;
+            cursor: pointer;
+            border: none;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .tab.active {
+            background: #CF2030;
+            color: white;
+        }
+
+        .tab:hover {
+            background: #555;
+        }
+
+        .tab.active:hover {
+            background: #CF2030;
+        }
+
+        .tab-content {
+            background: #1a1a1a;
+            padding: 20px;
+            border-radius: 0 0 10px 10px;
+            min-height: 600px;
+        }
+
+        .tab-panel {
+            display: none;
+        }
+
+        .tab-panel.active {
+            display: block;
+        }
+
+        .search-controls {
+            background: #333;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .search-row {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .search-controls input, .search-controls select {
+            padding: 10px;
+            border: 2px solid #CF2030;
+            border-radius: 5px;
+            background: #000;
+            color: #CF2030;
+            font-size: 1rem;
+        }
+
+        .search-controls input:focus, .search-controls select:focus {
+            outline: none;
+            border-color: #fff;
+            box-shadow: 0 0 10px rgba(207, 32, 48, 0.3);
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: #CF2030;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #a01825;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: #666;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #888;
+        }
+
+        .btn-small {
+            padding: 5px 10px;
+            font-size: 0.9rem;
+        }
+
+        .table-container {
+            background: #333;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #555;
+        }
+
+        th {
+            background: #CF2030;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            position: relative;
+        }
+
+        th:hover {
+            background: #a01825;
+        }
+
+        th::after {
+            content: " ↕";
+            opacity: 0.5;
+        }
+
+        th.sort-asc::after {
+            content: " ↑";
+            opacity: 1;
+        }
+
+        th.sort-desc::after {
+            content: " ↓";
+            opacity: 1;
+        }
+
+        tr:nth-child(even) {
+            background: #2a2a2a;
+        }
+
+        tr:hover {
+            background: #444;
+        }
+
+        .tier-1a {
+            border-left: 4px solid #00ff00;
+        }
+
+        .tier-1b {
+            border-left: 4px solid #ffff00;
+        }
+
+        .tier-1c {
+            border-left: 4px solid #0088ff;
+        }
+
+        .score-badge {
+            padding: 4px 8px;
+            border-radius: 15px;
+            font-weight: bold;
+            font-size: 0.8rem;
+        }
+
+        .score-high {
+            background: #00ff00;
+            color: #000;
+        }
+
+        .score-medium {
+            background: #ffff00;
+            color: #000;
+        }
+
+        .score-low {
+            background: #ff6666;
+            color: #fff;
+        }
+
+        .pures-form {
+            background: #333;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .form-group input[type="range"] {
+            width: 100%;
+            margin: 10px 0;
+        }
+
+        .range-value {
+            font-weight: bold;
+            color: #CF2030;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+        }
+
+        .modal-content {
+            background-color: #1a1a1a;
+            margin: 5% auto;
+            padding: 20px;
+            border: 2px solid #CF2030;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 600px;
+            color: #CF2030;
+        }
+
+        .close {
+            color: #CF2030;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: white;
+        }
+
+        .footer {
+            background: #1a1a1a;
+            color: #CF2030;
+            text-align: center;
+            padding: 20px 0;
+            margin-top: 40px;
+        }
+
+        .footer img {
+            max-height: 40px;
+            margin-bottom: 10px;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .metric-card {
+            background: #333;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            border: 2px solid #CF2030;
+        }
+
+        .metric-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #CF2030;
+        }
+
+        .metric-label {
+            font-size: 0.9rem;
+            color: #ccc;
+            margin-top: 5px;
+        }
+
+        .strategy-section {
+            background: #333;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .strategy-section h3 {
+            color: #CF2030;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #CF2030;
+            padding-bottom: 10px;
+        }
+
+        .email-template {
+            background: #2a2a2a;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #CF2030;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+        }
+
+        @media (max-width: 768px) {
+            .search-row {
+                flex-direction: column;
+            }
+            
+            .search-row > * {
+                width: 100%;
+            }
+            
+            table {
+                font-size: 0.8rem;
+            }
+            
+            .modal-content {
+                width: 95%;
+                margin: 10% auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports Logo">
+        <h1>S.A.L.E. Client Targeting Dashboard</h1>
+        <p>Prestige Green Touch Cleaners - Los Angeles, CA</p>
+    </div>
+
+    <div class="container">
+        <div class="dashboard-tabs">
+            <button class="tab active" onclick="showTab('sourcing')">S.OURCING</button>
+            <button class="tab" onclick="showTab('assessing')">A.SSESSING</button>
+            <button class="tab" onclick="showTab('listening')">L.ISTENING</button>
+            <button class="tab" onclick="showTab('empowering')">E.MPOWERING</button>
+        </div>
+
+        <div class="tab-content">
+            <!-- SOURCING Tab -->
+            <div id="sourcing" class="tab-panel active">
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-value" id="totalProspects">50</div>
+                        <div class="metric-label">Total Prospects</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value" id="tier1aCount">15</div>
+                        <div class="metric-label">Tier 1A Premium</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value" id="tier1bCount">20</div>
+                        <div class="metric-label">Tier 1B High-Value</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value" id="tier1cCount">15</div>
+                        <div class="metric-label">Tier 1C Qualified</div>
+                    </div>
+                </div>
+
+                <div class="search-controls">
+                    <div class="search-row">
+                        <input type="text" id="searchInput" placeholder="Search clients..." style="flex: 2;">
+                        <select id="tierFilter" style="flex: 1;">
+                            <option value="">All Tiers</option>
+                            <option value="1A">Tier 1A Premium</option>
+                            <option value="1B">Tier 1B High-Value</option>
+                            <option value="1C">Tier 1C Qualified</option>
+                        </select>
+                        <select id="industryFilter" style="flex: 1;">
+                            <option value="">All Industries</option>
+                            <option value="Restaurant">Restaurant</option>
+                            <option value="Hotel">Hotel</option>
+                            <option value="Medical">Medical</option>
+                            <option value="Corporate">Corporate</option>
+                            <option value="Retail">Retail</option>
+                        </select>
+                        <button class="btn btn-primary" onclick="exportData()">Export CSV</button>
+                    </div>
+                </div>
+
+                <div class="table-container">
+                    <table id="clientsTable">
+                        <thead>
+                            <tr>
+                                <th onclick="sortTable(0)">Client Name</th>
+                                <th onclick="sortTable(1)">Email</th>
+                                <th onclick="sortTable(2)">Phone</th>
+                                <th onclick="sortTable(3)">Address</th>
+                                <th onclick="sortTable(4)">P.U.R.E.S Score</th>
+                                <th onclick="sortTable(5)">Tier Level</th>
+                                <th onclick="sortTable(6)">Industry</th>
+                                <th onclick="sortTable(7)">Revenue Est.</th>
+                                <th onclick="sortTable(8)">Contact Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="clientsTableBody">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- ASSESSING Tab -->
+            <div id="assessing" class="tab-panel">
+                <div class="strategy-section">
+                    <h3>P.U.R.E.S. Client Scoring System</h3>
+                    <div class="pures-form">
+                        <div class="form-group">
+                            <label>Profitability (Annual revenue threshold and budget capacity)</label>
+                            <input type="range" min="1" max="5" value="3" id="profitability" oninput="updateScore()">
+                            <span class="range-value" id="profitabilityValue">3</span>
+                        </div>
+                        <div class="form-group">
+                            <label>Urgency (Active pain points requiring immediate solutions)</label>
+                            <input type="range" min="1" max="5" value="3" id="urgency" oninput="updateScore()">
+                            <span class="range-value" id="urgencyValue">3</span>
+                        </div>
+                        <div class="form-group">
+                            <label>Reachability (Accessible decision makers with clear contact paths)</label>
+                            <input type="range" min="1" max="5" value="3" id="reachability" oninput="updateScore()">
+                            <span class="range-value" id="reachabilityValue">3</span>
+                        </div>
+                        <div class="form-group">
+                            <label>Engagement (Openness to innovation and partnerships)</label>
+                            <input type="range" min="1" max="5" value="3" id="engagement" oninput="updateScore()">
+                            <span class="range-value" id="engagementValue">3</span>
+                        </div>
+                        <div class="form-group">
+                            <label>Sustainability (Long-term partnership potential with growth trajectory)</label>
+                            <input type="range" min="1" max="5" value="3" id="sustainability" oninput="updateScore()">
+                            <span class="range-value" id="sustainabilityValue">3</span>
+                        </div>
+                        <div class="form-group">
+                            <strong>Total P.U.R.E.S. Score: <span id="totalScore" class="range-value">15</span>/25</strong>
+                            <div id="tierClassification" style="margin-top: 10px; font-weight: bold;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="strategy-section">
+                    <h3>Buying Pattern Analysis</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
+                        <div style="background: #2a2a2a; padding: 15px; border-radius: 5px;">
+                            <h4>Analytical Buyers</h4>
+                            <p>Require detailed ROI analysis, case studies, trials</p>
+                        </div>
+                        <div style="background: #2a2a2a; padding: 15px; border-radius: 5px;">
+                            <h4>Relationship Buyers</h4>
+                            <p>Value trust, referrals, long-term partnerships</p>
+                        </div>
+                        <div style="background: #2a2a2a; padding: 15px; border-radius: 5px;">
+                            <h4>Efficiency Buyers</h4>
+                            <p>Focus on time-saving, process improvement</p>
+                        </div>
+                        <div style="background: #2a2a2a; padding: 15px; border-radius: 5px;">
+                            <h4>Innovation Buyers</h4>
+                            <p>Seek cutting-edge solutions, competitive advantage</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- LISTENING Tab -->
+            <div id="listening" class="tab-panel">
+                <div class="strategy-section">
+                    <h3>Feedback Tracking System</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+                        <div style="background: #2a2a2a; padding: 20px; border-radius: 5px;">
+                            <h4>Pre-Sale Feedback</h4>
+                            <ul style="margin-left: 20px; margin-top: 10px;">
+                                <li>Initial consultation forms</li>
+                                <li>Service requirement assessment</li>
+                                <li>Pricing sensitivity analysis</li>
+                                <li>Competitor comparison feedback</li>
+                            </ul>
+                        </div>
+                        <div style="background: #2a2a2a; padding: 20px; border-radius: 5px;">
+                            <h4>During-Sale Progress</h4>
+                            <ul style="margin-left: 20px; margin-top: 10px;">
+                                <li>Service delivery tracking</li>
+                                <li>Quality checkpoints</li>
+                                <li>Timeline satisfaction</li>
+                                <li>Communication effectiveness</li>
+                            </ul>
+                        </div>
+                        <div style="background: #2a2a2a; padding: 20px; border-radius: 5px;">
+                            <h4>Post-Sale Satisfaction</h4>
+                            <ul style="margin-left: 20px; margin-top: 10px;">
+                                <li>Service quality rating</li>
+                                <li>Value for money assessment</li>
+                                <li>Likelihood to recommend</li>
+                                <li>Future service needs</li>
+                            </ul>
+                        </div>
+                        <div style="background: #2a2a2a; padding: 20px; border-radius: 5px;">
+                            <h4>Complaint Resolution</h4>
+                            <ul style="margin-left: 20px; margin-top: 10px;">
+                                <li>Real-time issue tracking</li>
+                                <li>Resolution time monitoring</li>
+                                <li>Customer satisfaction recovery</li>
+                                <li>Process improvement identification</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EMPOWERING Tab -->
+            <div id="empowering" class="tab-panel">
+                <div class="strategy-section">
+                    <h3>Email Templates for Dry Cleaning Services</h3>
+                    
+                    <div class="email-template">
+                        <strong>Template 1: Premium Business Outreach</strong><br>
+                        Subject: Elevate Your Professional Image with Premium Garment Care<br><br>
+                        Dear [CLIENT_NAME],<br><br>
+                        As a leading business professional in Los Angeles, your image matters. At Prestige Green Touch Cleaners, we understand that impeccable presentation is crucial to your success.<br><br>
+                        Our eco-friendly cleaning process ensures your finest garments receive the care they deserve while supporting environmental sustainability. We offer:<br>
+                        • Same-day service for urgent needs<br>
+                        • Pickup and delivery to your office<br>
+                        • Specialized care for luxury fabrics<br>
+                        • Environmentally responsible cleaning methods<br><br>
+                        Schedule a consultation today and discover why Los Angeles professionals trust us with their most important garments.<br><br>
+                        Best regards,<br>
+                        Frank S.<br>
+                        Prestige Green Touch Cleaners<br>
+                        (310) 652-1200
+                    </div>
+
+                    <div class="email-template">
+                        <strong>Template 2: Restaurant/Hotel Industry</strong><br>
+                        Subject: Commercial Laundry Solutions for Your Establishment<br><br>
+                        Dear [CLIENT_NAME],<br><br>
+                        Running a successful [restaurant/hotel] requires attention to every detail, including the cleanliness and presentation of your linens and uniforms.<br><br>
+                        Prestige Green Touch Cleaners specializes in commercial laundry services that keep your establishment looking professional while reducing your operational burden:<br>
+                        • Scheduled pickup and delivery<br>
+                        • High-volume processing capacity<br>
+                        • Consistent quality standards<br>
+                        • Eco-friendly cleaning processes<br>
+                        • Competitive commercial pricing<br><br>
+                        Let us help you maintain the highest standards while you focus on serving your customers.<br><br>
+                        Professional regards,<br>
+                        Frank S.<br>
+                        Prestige Green Touch Cleaners
+                    </div>
+                </div>
+
+                <div class="strategy-section">
+                    <h3>Referral Strategy Dashboard</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
+                        <div class="metric-card">
+                            <div class="metric-value">12</div>
+                            <div class="metric-label">Active Referrals</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-value">$2,400</div>
+                            <div class="metric-label">Referral Rewards Paid</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-value">85%</div>
+                            <div class="metric-label">Customer Satisfaction</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-value">28</div>
+                            <div class="metric-label">Success Stories</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Modal -->
+    <div id="contactModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2 id="modalClientName">Contact Client</h2>
+            <div id="modalContent"></div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports Logo">
+        <p>&copy; 2024 Higgins Reports. All rights reserved.</p>
+    </div>
+
+    <script>
+        // Sample client data for Los Angeles area (within 10 miles of central LA)
+        const clientsData = [
+            {name: "Maria Rodriguez", email: "mrodriguez@elcaminohotel.com", phone: "(323) 555-0123", address: "1234 Sunset Blvd, Los Angeles, CA 90028", pures: 4.8, tier: "1A", industry: "Hotel", revenue: "$2.5M", status: "New Lead", notes: "Luxury boutique hotel, 50 rooms"},
+            {name: "David Chen", email: "dchen@pacificbistro.com", phone: "(213) 555-0234", address: "5678 Spring St, Los Angeles, CA 90013", pures: 4.6, tier: "1A", industry: "Restaurant", revenue: "$1.8M", status: "Contacted", notes: "High-end restaurant, white tablecloth service"},
+            {name: "Sarah Johnson", email: "sjohnson@downtownmedical.com", phone: "(213) 555-0345", address: "9876 Wilshire Blvd, Los Angeles, CA 90017", pures: 4.4, tier: "1A", industry: "Medical", revenue: "$3.2M", status: "Proposal Sent", notes: "Medical center, 200+ staff uniforms"},
+            {name: "Michael Thompson", email: "mthompson@techcorp.com", phone: "(310) 555-0456", address: "2468 Olympic Blvd, Santa Monica, CA 90404", pures: 4.2, tier: "1A", industry: "Corporate", revenue: "$5.0M", status: "Follow-up", notes: "Tech company, 150 employees"},
+            {name: "Lisa Park", email: "lpark@grandhoteloscar.com", phone: "(323) 555-0567", address: "1357 Hollywood Blvd, Hollywood, CA 90028", pures: 4.7, tier: "1A", industry: "Hotel", revenue: "$4.1M", status: "New Lead", notes: "Historic hotel, 200 rooms"},
+            {name: "Robert Kim", email: "rkim@koreatown-restaurant.com", phone: "(213) 555-0678", address: "2468 Western Ave, Los Angeles, CA 90018", pures: 4.3, tier: "1A", industry: "Restaurant", revenue: "$1.2M", status: "Interested", notes: "Korean BBQ chain, 3 locations"},
+            {name: "Amanda Davis", email: "adavis@cedarssinai.com", phone: "(310) 555-0789", address: "8700 Beverly Blvd, West Hollywood, CA 90048", pures: 4.9, tier: "1A", industry: "Medical", revenue: "$8.5M", status: "New Lead", notes: "Major medical center"},
+            {name: "Carlos Mendoza", email: "cmendoza@lalaw.com", phone: "(213) 555-0890", address: "633 W 5th St, Los Angeles, CA 90071", pures: 4.1, tier: "1A", industry: "Corporate", revenue: "$2.8M", status: "Contacted", notes: "Law firm, 75 attorneys"},
+            {name: "Jennifer Wu", email: "jwu@shangrilahotel.com", phone: "(310) 555-0901", address: "1301 Ocean Ave, Santa Monica, CA 90401", pures: 4.8, tier: "1A", industry: "Hotel", revenue: "$6.2M", status: "Proposal Sent", notes: "Luxury beachfront hotel"},
+            {name: "Kevin Brown", email: "kbrown@brownscatering.com", phone: "(323) 555-1012", address: "4567 Melrose Ave, Los Angeles, CA 90029", pures: 4.0, tier: "1A", industry: "Restaurant", revenue: "$1.5M", status: "Follow-up", notes: "Catering company"},
+            {name: "Rachel Green", email: "rgreen@fashiondistrict.com", phone: "(213) 555-1123", address: "1000 S Los Angeles St, Los Angeles, CA 90015", pures: 4.5, tier: "1A", industry: "Retail", revenue: "$2.1M", status: "New Lead", notes: "Fashion boutique chain"},
+            {name: "James Wilson", email: "jwilson@wilsonhotels.com", phone: "(213) 555-1234", address: "900 Wilshire Blvd, Los Angeles, CA 90017", pures: 4.6, tier: "1A", industry: "Hotel", revenue: "$3.8M", status: "Interested", notes: "Business hotel, 180 rooms"},
+            {name: "Emily Foster", email: "efoster@fostermedical.com", phone: "(310) 555-1345", address: "1500 S Fairfax Ave, Los Angeles, CA 90019", pures: 4.2, tier: "1A", industry: "Medical", revenue: "$2.4M", status: "Contacted", notes: "Medical practice, 12 doctors"},
+            {name: "Daniel Lee", email: "dlee@koreanplaza.com", phone: "(213) 555-1456", address: "3135 W Olympic Blvd, Los Angeles, CA 90006", pures: 4.4, tier: "1A", industry: "Retail", revenue: "$1.9M", status: "Proposal Sent", notes: "Korean shopping center"},
+            {name: "Sophie Miller", email: "smiller@arthotel.com", phone: "(323) 555-1567", address: "1234 N Highland Ave, Hollywood, CA 90028", pures: 4.3, tier: "1A", industry: "Hotel", revenue: "$2.7M", status: "Follow-up", notes: "Boutique art hotel"},
+
+            {name: "Tony Ricci", email: "tricci@littleitaly.com", phone: "(213) 555-1678", address: "1428 N Broadway, Los Angeles, CA 90012", pures: 3.8, tier: "1B", industry: "Restaurant", revenue: "$980K", status: "New Lead", notes: "Italian restaurant"},
+            {name: "Grace Liu", email: "gliu@chinatownhotel.com", phone: "(213) 555-1789", address: "950 N Hill St, Los Angeles, CA 90012", pures: 3.6, tier: "1B", industry: "Hotel", revenue: "$1.1M", status: "Contacted", notes: "Historic hotel, 80 rooms"},
+            {name: "Marcus Johnson", email: "mjohnson@johnsonlaw.com", phone: "(213) 555-1890", address: "350 S Grand Ave, Los Angeles, CA 90071", pures: 3.9, tier: "1B", industry: "Corporate", revenue: "$1.8M", status: "Interested", notes: "Mid-size law firm"},
+            {name: "Isabella Santos", email: "isantos@santosclinic.com", phone: "(323) 555-1901", address: "2100 E 1st St, Los Angeles, CA 90033", pures: 3.7, tier: "1B", industry: "Medical", revenue: "$1.3M", status: "Proposal Sent", notes: "Community health clinic"},
+            {name: "Brandon Taylor", email: "btaylor@taylorcafe.com", phone: "(310) 555-2012", address: "1500 Ocean Front Walk, Venice, CA 90291", pures: 3.5, tier: "1B", industry: "Restaurant", revenue: "$750K", status: "Follow-up", notes: "Beachside cafe"},
+            {name: "Nicole Wang", email: "nwang@wanghotel.com", phone: "(626) 555-2123", address: "125 N 1st St, Alhambra, CA 91801", pures: 3.8, tier: "1B", industry: "Hotel", revenue: "$1.4M", status: "New Lead", notes: "Family-owned hotel"},
+            {name: "Christopher Lee", email: "clee@leeaccounting.com", phone: "(213) 555-2234", address: "700 S Flower St, Los Angeles, CA 90017", pures: 3.6, tier: "1B", industry: "Corporate", revenue: "$890K", status: "Contacted", notes: "Accounting firm"},
+            {name: "Stephanie Garcia", email: "sgarcia@garciamed.com", phone: "(323) 555-2345", address: "3600 Whittier Blvd, Los Angeles, CA 90023", pures: 3.9, tier: "1B", industry: "Medical", revenue: "$1.6M", status: "Interested", notes: "Family practice"},
+            {name: "Andrew Kim", email: "akim@kimrestaurant.com", phone: "(213) 555-2456", address: "2700 W Olympic Blvd, Los Angeles, CA 90006", pures: 3.4, tier: "1B", industry: "Restaurant", revenue: "$680K", status: "Proposal Sent", notes: "Korean restaurant"},
+            {name: "Melissa Chen", email: "mchen@chenhotel.com", phone: "(626) 555-2567", address: "500 W Main St, Monterey Park, CA 91754", pures: 3.7, tier: "1B", industry: "Hotel", revenue: "$1.2M", status: "Follow-up", notes: "Business hotel"},
+            {name: "Ryan Murphy", email: "rmurphy@murphylaw.com", phone: "(310) 555-2678", address: "1800 Century Park E, Los Angeles, CA 90067", pures: 3.8, tier: "1B", industry: "Corporate", revenue: "$1.5M", status: "New Lead", notes: "Personal injury law"},
+            {name: "Laura Martinez", email: "lmartinez@martinezclinic.com", phone: "(323) 555-2789", address: "1200 N Vermont Ave, Los Angeles, CA 90029", pures: 3.5, tier: "1B", industry: "Medical", revenue: "$920K", status: "Contacted", notes: "Urgent care clinic"},
+            {name: "Kevin Park", email: "kpark@parkbistro.com", phone: "(213) 555-2890", address: "506 S Spring St, Los Angeles, CA 90013", pures: 3.6, tier: "1B", industry: "Restaurant", revenue: "$850K", status: "Interested", notes: "Modern American bistro"},
+            {name: "Diana Rodriguez", email: "drodriguez@plazahotel.com", phone: "(213) 555-2901", address: "1100 Wilshire Blvd, Los Angeles, CA 90017", pures: 3.9, tier: "1B", industry: "Hotel", revenue: "$1.7M", status: "Proposal Sent", notes: "Downtown hotel"},
+            {name: "Justin Wong", email: "jwong@wongcorp.com", phone: "(626) 555-3012", address: "888 E Valley Blvd, San Gabriel, CA 91776", pures: 3.3, tier: "1B", industry: "Corporate", revenue: "$710K", status: "Follow-up", notes: "Import/export company"},
+            {name: "Vanessa Lopez", email: "vlopez@lopezclinic.com", phone: "(323) 555-3123", address: "2500 E Cesar E Chavez Ave, Los Angeles, CA 90033", pures: 3.7, tier: "1B", industry: "Medical", revenue: "$1.1M", status: "New Lead", notes: "Pediatric clinic"},
+            {name: "Nathan Adams", email: "nadams@adamscafe.com", phone: "(310) 555-3234", address: "1200 3rd St Promenade, Santa Monica, CA 90401", pures: 3.4, tier: "1B", industry: "Restaurant", revenue: "$620K", status: "Contacted", notes: "Coffee shop chain"},
+            {name: "Samantha Zhou", email: "szhou@zhouhotel.com", phone: "(626) 555-3345", address: "320 W Valley Blvd, San Gabriel, CA 91776", pures: 3.8, tier: "1B", industry: "Hotel", revenue: "$1.3M", status: "Interested", notes: "Extended stay hotel"},
+            {name: "Matthew Taylor", email: "mtaylor@taylorlaw.com", phone: "(213) 555-3456", address: "1055 W 7th St, Los Angeles, CA 90017", pures: 3.5, tier: "1B", industry: "Corporate", revenue: "$780K", status: "Proposal Sent", notes: "Immigration law firm"},
+            {name: "Andrea Gonzalez", email: "agonzalez@gonzalezmed.com", phone: "(323) 555-3567", address: "1800 N Vermont Ave, Los Angeles, CA 90027", pures: 3.6, tier: "1B", industry: "Medical", revenue: "$940K", status: "Follow-up", notes: "Women's health clinic"},
+
+            {name: "Peter Chang", email: "pchang@changdeli.com", phone: "(213) 555-3678", address: "727 N Broadway, Los Angeles, CA 90012", pures: 2.8, tier: "1C", industry: "Restaurant", revenue: "$380K", status: "New Lead", notes: "Small deli"},
+            {name: "Michelle Roberts", email: "mroberts@innkeepers.com", phone: "(323) 555-3789", address: "1234 Fountain Ave, West Hollywood, CA 90046", pures: 3.2, tier: "1C", industry: "Hotel", revenue: "$650K", status: "Contacted", notes: "Boutique inn, 25 rooms"},
+            {name: "Steven Kim", email: "skim@kimconsulting.com", phone: "(213) 555-3890", address: "550 S Hope St, Los Angeles, CA 90071", pures: 2.9, tier: "1C", industry: "Corporate", revenue: "$420K", status: "Interested", notes: "IT consulting"},
+            {name: "Jennifer Patel", email: "jpatel@patelclinic.com", phone: "(323) 555-3901", address: "5201 Hollywood Blvd, Los Angeles, CA 90027", pures: 3.1, tier: "1C", industry: "Medical", revenue: "$580K", status: "Proposal Sent", notes: "General practice"},
+            {name: "Derek Lee", email: "dlee@leemarket.com", phone: "(213) 555-4012", address: "1000 S Vermont Ave, Los Angeles, CA 90006", pures: 2.7, tier: "1C", industry: "Retail", revenue: "$340K", status: "Follow-up", notes: "Convenience store"},
+            {name: "Kristen Johnson", email: "kjohnson@johnsoninn.com", phone: "(310) 555-4123", address: "2001 Santa Monica Blvd, Santa Monica, CA 90404", pures: 3.0, tier: "1C", industry: "Hotel", revenue: "$480K", status: "New Lead", notes: "Budget motel"},
+            {name: "Alex Martinez", email: "amartinez@martinezcafe.com", phone: "(323) 555-4234", address: "1500 N Western Ave, Los Angeles, CA 90027", pures: 2.8, tier: "1C", industry: "Restaurant", revenue: "$360K", status: "Contacted", notes: "Family restaurant"},
+            {name: "Lisa Thompson", email: "lthompson@thompsonlaw.com", phone: "(213) 555-4345", address: "445 S Figueroa St, Los Angeles, CA 90071", pures: 3.2, tier: "1C", industry: "Corporate", revenue: "$520K", status: "Interested", notes: "Solo practice law"},
+            {name: "Victor Hernandez", email: "vhernandez@hernandezmed.com", phone: "(323) 555-4456", address: "2200 E 1st St, Los Angeles, CA 90033", pures: 2.9, tier: "1C", industry: "Medical", revenue: "$450K", status: "Proposal Sent", notes: "Community clinic"},
+            {name: "Ashley Wang", email: "awang@wangstore.com", phone: "(626) 555-4567", address: "140 W Valley Blvd, San Gabriel, CA 91776", pures: 3.1, tier: "1C", industry: "Retail", revenue: "$390K", status: "Follow-up", notes: "Gift shop"},
+            {name: "Mark Davis", email: "mdavis@davishotel.com", phone: "(213) 555-4678", address: "1350 S Figueroa St, Los Angeles, CA 90015", pures: 2.6, tier: "1C", industry: "Hotel", revenue: "$320K", status: "New Lead", notes: "Economy hotel"},
+            {name: "Christine Lee", email: "clee@leetech.com", phone: "(310) 555-4789", address: "1440 4th St, Santa Monica, CA 90401", pures: 3.0, tier: "1C", industry: "Corporate", revenue: "$410K", status: "Contacted", notes: "Tech startup"},
+            {name: "Roberto Sanchez", email: "rsanchez@sanchezrestaurant.com", phone: "(323) 555-4890", address: "3000 E Olympic Blvd, Los Angeles, CA 90023", pures: 2.8, tier: "1C", industry: "Restaurant", revenue: "$350K", status: "Interested", notes: "Mexican restaurant"},
+            {name: "Karen Brown", email: "kbrown@brownmedical.com", phone: "(213) 555-4901", address: "1245 Wilshire Blvd, Los Angeles, CA 90017", pures: 3.1, tier: "1C", industry: "Medical", revenue: "$470K", status: "Proposal Sent", notes: "Dental office"},
+            {name: "Eric Chen", email: "echen@chenmarket.com", phone: "(626) 555-5012", address: "500 N Atlantic Blvd, Monterey Park, CA 91754", pures: 2.7, tier: "1C", industry: "Retail", revenue: "$330K", status: "Follow-up", notes: "Asian grocery store"}
+        ];
+
+        let currentSort = {column: -1, direction: 1};
+        let filteredData = [...clientsData];
+
+        // Initialize the table
+        function initializeTable() {
+            renderTable();
+            updateMetrics();
+        }
+
+        // Render the client table
+        function renderTable() {
+            const tbody = document.getElementById('clientsTableBody');
+            tbody.innerHTML = '';
+
+            filteredData.forEach((client, index) => {
+                const row = document.createElement('tr');
+                row.className = `tier-${client.tier.toLowerCase()}`;
+                
+                const scoreClass = client.pures >= 4.0 ? 'score-high' : client.pures >= 3.0 ? 'score-medium' : 'score-low';
+                
+                row.innerHTML = `
+                    <td>${client.name}</td>
+                    <td>${client.email}</td>
+                    <td>${client.phone}</td>
+                    <td>${client.address}</td>
+                    <td><span class="score-badge ${scoreClass}">${client.pures}</span></td>
+                    <td>Tier ${client.tier}</td>
+                    <td>${client.industry}</td>
+                    <td>${client.revenue}</td>
+                    <td>${client.status}</td>
+                    <td>
+                        <button class="btn btn-primary btn-small" onclick="contactClient(${index})">Contact</button>
+                    </td>
+                `;
+                
+                tbody.appendChild(row);
+            });
+        }
+
+        // Sort table by column
+        function sortTable(column) {
+            const headers = document.querySelectorAll('th');
+            
+            // Remove existing sort classes
+            headers.forEach(h => {
+                h.classList.remove('sort-asc', 'sort-desc');
+            });
+
+            if (currentSort.column === column) {
+                currentSort.direction *= -1;
+            } else {
+                currentSort.column = column;
+                currentSort.direction = 1;
+            }
+
+            // Add sort class to current header
+            const currentHeader = headers[column];
+            currentHeader.classList.add(currentSort.direction === 1 ? 'sort-asc' : 'sort-desc');
+
+            filteredData.sort((a, b) => {
+                let aVal, bVal;
+                
+                switch(column) {
+                    case 0: aVal = a.name; bVal = b.name; break;
+                    case 1: aVal = a.email; bVal = b.email; break;
+                    case 2: aVal = a.phone; bVal = b.phone; break;
+                    case 3: aVal = a.address; bVal = b.address; break;
+                    case 4: aVal = a.pures; bVal = b.pures; break;
+                    case 5: aVal = a.tier; bVal = b.tier; break;
+                    case 6: aVal = a.industry; bVal = b.industry; break;
+                    case 7: 
+                        aVal = parseFloat(a.revenue.replace(/[$KM,]/g, '').replace('K', '000').replace('M', '000000'));
+                        bVal = parseFloat(b.revenue.replace(/[$KM,]/g, '').replace('K', '000').replace('M', '000000'));
+                        break;
+                    case 8: aVal = a.status; bVal = b.status; break;
+                    default: return 0;
+                }
+                
+                if (typeof aVal === 'string') {
+                    return currentSort.direction * aVal.localeCompare(bVal);
+                }
+                return currentSort.direction * (aVal - bVal);
+            });
+
+            renderTable();
+        }
+
+        // Filter and search functionality
+        function filterTable() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const tierFilter = document.getElementById('tierFilter').value;
+            const industryFilter = document.getElementById('industryFilter').value;
+
+            filteredData = clientsData.filter(client => {
+                const matchesSearch = !searchTerm || 
+                    client.name.toLowerCase().includes(searchTerm) ||
+                    client.email.toLowerCase().includes(searchTerm) ||
+                    client.address.toLowerCase().includes(searchTerm) ||
+                    client.industry.toLowerCase().includes(searchTerm);
+                
+                const matchesTier = !tierFilter || client.tier === tierFilter;
+                const matchesIndustry = !industryFilter || client.industry === industryFilter;
+
+                return matchesSearch && matchesTier && matchesIndustry;
+            });
+
+            renderTable();
+            updateMetrics();
+        }
+
+        // Update metrics
+        function updateMetrics() {
+            const total = filteredData.length;
+            const tier1a = filteredData.filter(c => c.tier === '1A').length;
+            const tier1b = filteredData.filter(c => c.tier === '1B').length;
+            const tier1c = filteredData.filter(c => c.tier === '1C').length;
+
+            document.getElementById('totalProspects').textContent = total;
+            document.getElementById('tier1aCount').textContent = tier1a;
+            document.getElementById('tier1bCount').textContent = tier1b;
+            document.getElementById('tier1cCount').textContent = tier1c;
+        }
+
+        // Contact client
+        function contactClient(index) {
+            const client = filteredData[index];
+            document.getElementById('modalClientName').textContent = `Contact ${client.name}`;
+            
+            const emailTemplate = getEmailTemplate(client);
+            
+            document.getElementById('modalContent').innerHTML = `
+                <div style="margin-bottom: 15px;">
+                    <strong>Client Details:</strong><br>
+                    Company: ${client.industry} Business<br>
+                    Email: ${client.email}<br>
+                    Phone: ${client.phone}<br>
+                    Address: ${client.address}<br>
+                    P.U.R.E.S Score: ${client.pures}<br>
+                    Tier: ${client.tier}
+                </div>
+                
+                <div style="margin-bottom: 15px;">
+                    <button class="btn btn-primary" onclick="sendEmail('${client.email}', '${encodeURIComponent(emailTemplate.subject)}', '${encodeURIComponent(emailTemplate.body)}')">Send Email</button>
+                    <button class="btn btn-secondary" onclick="callClient('${client.phone}')">Call Client</button>
+                </div>
+                
+                <div style="margin-top: 20px;">
+                    <strong>Email Preview:</strong>
+                    <div style="background: #2a2a2a; padding: 15px; border-radius: 5px; margin-top: 10px; font-family: monospace; white-space: pre-wrap;">${emailTemplate.preview}</div>
+                </div>
+            `;
+            
+            document.getElementById('contactModal').style.display = 'block';
+        }
+
+        // Get email template based on client
+        function getEmailTemplate(client) {
+            let subject, body, preview;
+            
+            if (client.industry === 'Hotel') {
+                subject = "Premium Hospitality Laundry Services";
+                body = `Dear ${client.name},%0D%0A%0D%0ARunning a successful hotel requires attention to every detail, including the pristine presentation of your linens and guest amenities.%0D%0A%0D%0APrestige Green Touch Cleaners specializes in hospitality laundry services that maintain your reputation while reducing operational burden:%0D%0A• Daily pickup and delivery service%0D%0A• High-volume processing for linens and towels%0D%0A• Specialized care for delicate fabrics%0D%0A• Eco-friendly cleaning processes%0D%0A• Competitive hospitality pricing%0D%0A%0D%0ALet us help you maintain the highest standards while you focus on guest satisfaction.%0D%0A%0D%0ABest regards,%0D%0AFrank S.%0D%0APrestige Green Touch Cleaners%0D%0A(310) 652-1200`;
+                preview = `Subject: ${subject}
+
+Dear ${client.name},
+
+Running a successful hotel requires attention to every detail, including the pristine presentation of your linens and guest amenities.
+
+Prestige Green Touch Cleaners specializes in hospitality laundry services that maintain your reputation while reducing operational burden:
+• Daily pickup and delivery service
+• High-volume processing for linens and towels
+• Specialized care for delicate fabrics
+• Eco-friendly cleaning processes
+• Competitive hospitality pricing
+
+Let us help you maintain the highest standards while you focus on guest satisfaction.
+
+Best regards,
+Frank S.
+Prestige Green Touch Cleaners
+(310) 652-1200`;
+            } else if (client.industry === 'Restaurant') {
+                subject = "Professional Restaurant Uniform & Linen Service";
+                body = `Dear ${client.name},%0D%0A%0D%0AYour restaurant's success depends on maintaining the highest standards of cleanliness and professional appearance.%0D%0A%0D%0APrestige Green Touch Cleaners offers comprehensive restaurant laundry services:%0D%0A• Chef uniforms and aprons%0D%0A• Table linens and napkins%0D%0A• Kitchen towels and bar rags%0D%0A• Scheduled pickup and delivery%0D%0A• Fast turnaround times%0D%0A• Eco-friendly cleaning methods%0D%0A%0D%0AKeep your staff looking professional and your dining room immaculate.%0D%0A%0D%0ABest regards,%0D%0AFrank S.%0D%0APrestige Green Touch Cleaners%0D%0A(310) 652-1200`;
+                preview = `Subject: ${subject}
+
+Dear ${client.name},
+
+Your restaurant's success depends on maintaining the highest standards of cleanliness and professional appearance.
+
+Prestige Green Touch Cleaners offers comprehensive restaurant laundry services:
+• Chef uniforms and aprons
+• Table linens and napkins
+• Kitchen towels and bar rags
+• Scheduled pickup and delivery
+• Fast turnaround times
+• Eco-friendly cleaning methods
+
+Keep your staff looking professional and your dining room immaculate.
+
+Best regards,
+Frank S.
+Prestige Green Touch Cleaners
+(310) 652-1200`;
+            } else if (client.industry === 'Medical') {
+                subject = "Professional Medical Uniform Cleaning Services";
+                body = `Dear ${client.name},%0D%0A%0D%0AIn healthcare, cleanliness and infection control are paramount. Your staff uniforms and linens require specialized care.%0D%0A%0D%0APrestige Green Touch Cleaners offers medical-grade laundry services:%0D%0A• Infection control protocols%0D%0A• Medical uniform cleaning%0D%0A• Sanitization standards compliance%0D%0A• Convenient pickup and delivery%0D%0A• OSHA-compliant processes%0D%0A• Eco-friendly, hypoallergenic cleaning%0D%0A%0D%0ATrust us to maintain the hygiene standards your patients deserve.%0D%0A%0D%0ABest regards,%0D%0AFrank S.%0D%0APrestige Green Touch Cleaners%0D%0A(310) 652-1200`;
+                preview = `Subject: ${subject}
+
+Dear ${client.name},
+
+In healthcare, cleanliness and infection control are paramount. Your staff uniforms and linens require specialized care.
+
+Prestige Green Touch Cleaners offers medical-grade laundry services:
+• Infection control protocols
+• Medical uniform cleaning
+• Sanitization standards compliance
+• Convenient pickup and delivery
+• OSHA-compliant processes
+• Eco-friendly, hypoallergenic cleaning
+
+Trust us to maintain the hygiene standards your patients deserve.
+
+Best regards,
+Frank S.
+Prestige Green Touch Cleaners
+(310) 652-1200`;
+            } else {
+                subject = "Elevate Your Professional Image with Premium Garment Care";
+                body = `Dear ${client.name},%0D%0A%0D%0AAs a business professional in Los Angeles, your image matters. At Prestige Green Touch Cleaners, we understand that impeccable presentation is crucial to your success.%0D%0A%0D%0AOur eco-friendly cleaning process ensures your finest garments receive the care they deserve:%0D%0A• Same-day service for urgent needs%0D%0A• Pickup and delivery to your office%0D%0A• Specialized care for luxury fabrics%0D%0A• Environmentally responsible cleaning%0D%0A• Competitive corporate rates%0D%0A%0D%0ASchedule a consultation today and discover why Los Angeles professionals trust us.%0D%0A%0D%0ABest regards,%0D%0AFrank S.%0D%0APrestige Green Touch Cleaners%0D%0A(310) 652-1200`;
+                preview = `Subject: ${subject}
+
+Dear ${client.name},
+
+As a business professional in Los Angeles, your image matters. At Prestige Green Touch Cleaners, we understand that impeccable presentation is crucial to your success.
+
+Our eco-friendly cleaning process ensures your finest garments receive the care they deserve:
+• Same-day service for urgent needs
+• Pickup and delivery to your office
+• Specialized care for luxury fabrics
+• Environmentally responsible cleaning
+• Competitive corporate rates
+
+Schedule a consultation today and discover why Los Angeles professionals trust us.
+
+Best regards,
+Frank S.
+Prestige Green Touch Cleaners
+(310) 652-1200`;
+            }
+            
+            return {subject, body, preview};
+        }
+
+        // Send email
+        function sendEmail(email, subject, body) {
+            const mailtoLink = `mailto:${email}?subject=${subject}&body=${body}`;
+            window.location.href = mailtoLink;
+            closeModal();
+        }
+
+        // Call client
+        function callClient(phone) {
+            window.location.href = `tel:${phone}`;
+            closeModal();
+        }
+
+        // Close modal
+        function closeModal() {
+            document.getElementById('contactModal').style.display = 'none';
+        }
+
+        // Tab functionality
+        function showTab(tabName) {
+            // Hide all tab panels
+            const panels = document.querySelectorAll('.tab-panel');
+            panels.forEach(panel => panel.classList.remove('active'));
+            
+            // Remove active class from all tabs
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Show selected panel and activate tab
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // P.U.R.E.S. Score calculator
+        function updateScore() {
+            const profitability = document.getElementById('profitability').value;
+            const urgency = document.getElementById('urgency').value;
+            const reachability = document.getElementById('reachability').value;
+            const engagement = document.getElementById('engagement').value;
+            const sustainability = document.getElementById('sustainability').value;
+
+            document.getElementById('profitabilityValue').textContent = profitability;
+            document.getElementById('urgencyValue').textContent = urgency;
+            document.getElementById('reachabilityValue').textContent = reachability;
+            document.getElementById('engagementValue').textContent = engagement;
+            document.getElementById('sustainabilityValue').textContent = sustainability;
+
+            const total = parseInt(profitability) + parseInt(urgency) + parseInt(reachability) + parseInt(engagement) + parseInt(sustainability);
+            document.getElementById('totalScore').textContent = total;
+
+            let tier, color;
+            if (total >= 20) {
+                tier = "Tier 1A Premium (4-5 scores on all criteria)";
+                color = "#00ff00";
+            } else if (total >= 15) {
+                tier = "Tier 1B High-Value (3-4 scores on most criteria)";
+                color = "#ffff00";
+            } else {
+                tier = "Tier 1C Qualified (3+ scores on P.U.R.E.S. criteria)";
+                color = "#0088ff";
+            }
+
+            const tierDiv = document.getElementById('tierClassification');
+            tierDiv.textContent = tier;
+            tierDiv.style.color = color;
+        }
+
+        // Export data to CSV
+        function exportData() {
+            const csvContent = [
+                ['Client Name', 'Email', 'Phone', 'Address', 'P.U.R.E.S Score', 'Tier Level', 'Industry', 'Revenue Est.', 'Contact Status', 'Notes'],
+                ...filteredData.map(client => [
+                    client.name,
+                    client.email,
+                    client.phone,
+                    client.address,
+                    client.pures,
+                    client.tier,
+                    client.industry,
+                    client.revenue,
+                    client.status,
+                    client.notes
+                ])
+            ].map(row => row.map(field => `"${field}"`).join(',')).join('\n');
+
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'prestige_green_touch_prospects.csv';
+            link.click();
+        }
+
+        // Event listeners
+        document.getElementById('searchInput').addEventListener('input', filterTable);
+        document.getElementById('tierFilter').addEventListener('change', filterTable);
+        document.getElementById('industryFilter').addEventListener('change', filterTable);
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('contactModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+
+        // Initialize the application
+        window.onload = function() {
+            initializeTable();
+            updateScore();
+        }
+    </script>
+</body>
+</html>

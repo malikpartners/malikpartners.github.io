@@ -1,0 +1,1124 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>S.A.L.E. Client Targeting System - Virtual Used Car Manager</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #000000;
+            color: #FFFFFF;
+            line-height: 1.6;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #CF2030, #8B0000);
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(207, 32, 48, 0.3);
+        }
+        
+        .header img {
+            max-height: 80px;
+            margin-bottom: 10px;
+        }
+        
+        .header h1 {
+            color: #FFFFFF;
+            font-size: 2.5em;
+            margin: 10px 0;
+        }
+        
+        .header p {
+            color: #EEEEEE;
+            font-size: 1.2em;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .tabs {
+            display: flex;
+            background: #333333;
+            border-radius: 10px 10px 0 0;
+            overflow: hidden;
+            margin: 20px 0 0 0;
+        }
+        
+        .tab {
+            flex: 1;
+            padding: 15px 20px;
+            background: #333333;
+            color: #FFFFFF;
+            text-align: center;
+            cursor: pointer;
+            border: none;
+            font-size: 1.1em;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .tab:hover {
+            background: #CF2030;
+        }
+        
+        .tab.active {
+            background: #CF2030;
+            color: #FFFFFF;
+        }
+        
+        .tab-content {
+            display: none;
+            background: #1a1a1a;
+            padding: 30px;
+            border-radius: 0 0 10px 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .search-filter {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .search-filter input, .search-filter select {
+            padding: 10px;
+            border: 2px solid #CF2030;
+            border-radius: 5px;
+            background: #333333;
+            color: #FFFFFF;
+            font-size: 14px;
+        }
+        
+        .search-filter input::placeholder {
+            color: #CCCCCC;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #CF2030, #8B0000);
+            color: #FFFFFF;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(207, 32, 48, 0.4);
+        }
+        
+        .btn-small {
+            padding: 5px 10px;
+            font-size: 12px;
+        }
+        
+        .table-container {
+            overflow-x: auto;
+            background: #2a2a2a;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 1200px;
+        }
+        
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #444444;
+        }
+        
+        th {
+            background: #CF2030;
+            color: #FFFFFF;
+            font-weight: bold;
+            position: sticky;
+            top: 0;
+            cursor: pointer;
+            user-select: none;
+        }
+        
+        th:hover {
+            background: #8B0000;
+        }
+        
+        tr:hover {
+            background: #333333;
+        }
+        
+        .tier-1a { background: #00FF00; color: #000000; }
+        .tier-1b { background: #FFFF00; color: #000000; }
+        .tier-1c { background: #0080FF; color: #FFFFFF; }
+        
+        .score-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: bold;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #CF2030;
+            font-weight: bold;
+        }
+        
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #CF2030;
+            border-radius: 5px;
+            background: #333333;
+            color: #FFFFFF;
+        }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .pures-scoring {
+            background: #2a2a2a;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .score-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 15px 0;
+            padding: 10px;
+            background: #1a1a1a;
+            border-radius: 5px;
+        }
+        
+        .score-slider {
+            width: 200px;
+        }
+        
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .metric-card {
+            background: #2a2a2a;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            border: 2px solid #CF2030;
+        }
+        
+        .metric-value {
+            font-size: 2em;
+            color: #CF2030;
+            font-weight: bold;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+        }
+        
+        .modal-content {
+            background-color: #1a1a1a;
+            margin: 5% auto;
+            padding: 30px;
+            border: 2px solid #CF2030;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 600px;
+            color: #FFFFFF;
+        }
+        
+        .close {
+            color: #CF2030;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .close:hover {
+            color: #FFFFFF;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 20px;
+            background: #1a1a1a;
+            margin-top: 40px;
+        }
+        
+        .footer img {
+            max-height: 40px;
+            margin-bottom: 10px;
+        }
+        
+        .email-template {
+            background: #2a2a2a;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+            
+            .search-filter {
+                flex-direction: column;
+            }
+            
+            .tabs {
+                flex-direction: column;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports Logo">
+        <h1>S.A.L.E. Client Targeting System</h1>
+        <p>Virtual Used Car Manager - Automotive Sales Training & Trade-In Tools</p>
+    </div>
+
+    <div class="container">
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('sourcing')">SOURCING</button>
+            <button class="tab" onclick="showTab('assessing')">ASSESSING</button>
+            <button class="tab" onclick="showTab('listening')">LISTENING</button>
+            <button class="tab" onclick="showTab('empowering')">EMPOWERING</button>
+            <button class="tab" onclick="showTab('dashboard')">DASHBOARD</button>
+        </div>
+
+        <!-- SOURCING TAB -->
+        <div id="sourcing" class="tab-content active">
+            <h2>Client Database & P.U.R.E.S. Scoring</h2>
+            
+            <div class="search-filter">
+                <input type="text" id="searchInput" placeholder="Search clients..." onkeyup="filterTable()">
+                <select id="tierFilter" onchange="filterTable()">
+                    <option value="">All Tiers</option>
+                    <option value="1A">Tier 1A (Premium)</option>
+                    <option value="1B">Tier 1B (High-Value)</option>
+                    <option value="1C">Tier 1C (Qualified)</option>
+                </select>
+                <select id="industryFilter" onchange="filterTable()">
+                    <option value="">All Industries</option>
+                    <option value="Automotive">Automotive</option>
+                    <option value="Retail">Retail</option>
+                    <option value="Healthcare">Healthcare</option>
+                    <option value="Technology">Technology</option>
+                    <option value="Manufacturing">Manufacturing</option>
+                </select>
+                <button class="btn" onclick="exportData()">Export CSV</button>
+                <button class="btn" onclick="showAddClient()">Add Client</button>
+            </div>
+
+            <div class="table-container">
+                <table id="clientTable">
+                    <thead>
+                        <tr>
+                            <th onclick="sortTable(0)">Client Name ▲▼</th>
+                            <th onclick="sortTable(1)">Email ▲▼</th>
+                            <th onclick="sortTable(2)">Phone ▲▼</th>
+                            <th onclick="sortTable(3)">Address ▲▼</th>
+                            <th onclick="sortTable(4)">P.U.R.E.S. Score ▲▼</th>
+                            <th onclick="sortTable(5)">Tier ▲▼</th>
+                            <th onclick="sortTable(6)">Industry ▲▼</th>
+                            <th onclick="sortTable(7)">Revenue Est. ▲▼</th>
+                            <th onclick="sortTable(8)">Contact Status ▲▼</th>
+                            <th onclick="sortTable(9)">Last Contact ▲▼</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="clientTableBody">
+                        <!-- Client data will be populated here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- ASSESSING TAB -->
+        <div id="assessing" class="tab-content">
+            <h2>Buying Pattern Analysis</h2>
+            
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Client Buying Profile</label>
+                    <select id="buyingProfile">
+                        <option value="analytical">Analytical Buyers - ROI focused</option>
+                        <option value="relationship">Relationship Buyers - Trust focused</option>
+                        <option value="efficiency">Efficiency Buyers - Time-saving focused</option>
+                        <option value="innovation">Innovation Buyers - Competitive advantage focused</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>Decision Timeline</label>
+                    <select id="decisionTimeline">
+                        <option value="immediate">Immediate (0-30 days)</option>
+                        <option value="short">Short-term (1-3 months)</option>
+                        <option value="medium">Medium-term (3-6 months)</option>
+                        <option value="long">Long-term (6+ months)</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="pures-scoring">
+                <h3>P.U.R.E.S. Client Scoring System</h3>
+                <div class="score-item">
+                    <span>Profitability (Annual revenue & budget capacity):</span>
+                    <input type="range" class="score-slider" min="1" max="5" value="3" id="profitability">
+                    <span id="profitabilityValue">3</span>
+                </div>
+                <div class="score-item">
+                    <span>Urgency (Active pain points needing immediate solutions):</span>
+                    <input type="range" class="score-slider" min="1" max="5" value="3" id="urgency">
+                    <span id="urgencyValue">3</span>
+                </div>
+                <div class="score-item">
+                    <span>Reachability (Accessible decision makers):</span>
+                    <input type="range" class="score-slider" min="1" max="5" value="3" id="reachability">
+                    <span id="reachabilityValue">3</span>
+                </div>
+                <div class="score-item">
+                    <span>Engagement (Openness to innovation & partnerships):</span>
+                    <input type="range" class="score-slider" min="1" max="5" value="3" id="engagement">
+                    <span id="engagementValue">3</span>
+                </div>
+                <div class="score-item">
+                    <span>Sustainability (Long-term partnership potential):</span>
+                    <input type="range" class="score-slider" min="1" max="5" value="3" id="sustainability">
+                    <span id="sustainabilityValue">3</span>
+                </div>
+                <div class="score-item">
+                    <strong>Total P.U.R.E.S. Score: <span id="totalScore">15</span>/25</strong>
+                    <strong>Tier: <span id="tierResult">1C</span></strong>
+                </div>
+            </div>
+        </div>
+
+        <!-- LISTENING TAB -->
+        <div id="listening" class="tab-content">
+            <h2>Feedback Integration System</h2>
+            
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Client Name</label>
+                    <input type="text" id="feedbackClient" placeholder="Select or enter client name">
+                </div>
+                
+                <div class="form-group">
+                    <label>Feedback Type</label>
+                    <select id="feedbackType">
+                        <option value="pre-sale">Pre-sale Inquiry</option>
+                        <option value="during-sale">During-sale Progress</option>
+                        <option value="post-sale">Post-sale Satisfaction</option>
+                        <option value="complaint">Complaint Resolution</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>Satisfaction Rating</label>
+                    <select id="satisfactionRating">
+                        <option value="5">5 - Excellent</option>
+                        <option value="4">4 - Good</option>
+                        <option value="3">3 - Average</option>
+                        <option value="2">2 - Poor</option>
+                        <option value="1">1 - Very Poor</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label>Detailed Feedback</label>
+                <textarea id="detailedFeedback" rows="4" placeholder="Enter detailed feedback, concerns, or suggestions..."></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label>Action Items</label>
+                <textarea id="actionItems" rows="3" placeholder="What actions need to be taken based on this feedback?"></textarea>
+            </div>
+            
+            <button class="btn" onclick="saveFeedback()">Save Feedback</button>
+            
+            <div id="feedbackHistory" class="email-template">
+                <h3>Recent Feedback History</h3>
+                <div id="feedbackList">
+                    <!-- Feedback items will be populated here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- EMPOWERING TAB -->
+        <div id="empowering" class="tab-content">
+            <h2>Referral Strategy & Success Stories</h2>
+            
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Success Story Client</label>
+                    <input type="text" id="successClient" placeholder="Client name">
+                </div>
+                
+                <div class="form-group">
+                    <label>Service Provided</label>
+                    <select id="serviceProvided">
+                        <option value="appraisal-training">Appraisal Academy Training</option>
+                        <option value="trade-tracker">Trade-in Tracker System</option>
+                        <option value="alpha-grade">Alpha Grade Scorecard</option>
+                        <option value="vauto-training">vAuto Training</option>
+                        <option value="autohub-training">AutoHub Training</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>Results Achieved</label>
+                    <textarea id="resultsAchieved" rows="3" placeholder="Quantifiable results and improvements..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label>Referrals Generated</label>
+                    <input type="number" id="referralsGenerated" placeholder="Number of referrals">
+                </div>
+            </div>
+            
+            <button class="btn" onclick="saveSuccessStory()">Save Success Story</button>
+            
+            <div class="email-template">
+                <h3>Referral Reward Tracking</h3>
+                <div id="referralRewards">
+                    <div class="metric-card">
+                        <div class="metric-value" id="totalReferrals">24</div>
+                        <div>Total Referrals</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- DASHBOARD TAB -->
+        <div id="dashboard" class="tab-content">
+            <h2>Performance Dashboard</h2>
+            
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-value">85%</div>
+                    <div>P.U.R.E.S. Score Accuracy</div>
+                    <small>(Target: >80%)</small>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-value">92%</div>
+                    <div>Assessment Accuracy</div>
+                    <small>(Target: >90%)</small>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-value">78%</div>
+                    <div>Feedback Collection Rate</div>
+                    <small>(Target: >70%)</small>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-value">2.4</div>
+                    <div>Referrals per Client</div>
+                    <small>(Target: 2+)</small>
+                </div>
+            </div>
+            
+            <div class="email-template">
+                <h3>Email Template Generator</h3>
+                <div class="form-group">
+                    <label>Select Template Type</label>
+                    <select id="templateType">
+                        <option value="tier1a">Tier 1A Premium Template</option>
+                        <option value="tier1b">Tier 1B High-Value Template</option>
+                        <option value="tier1c">Tier 1C Qualified Template</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>Recipient Information</label>
+                    <input type="text" id="recipientName" placeholder="Decision Maker Name">
+                    <input type="text" id="recipientCompany" placeholder="Company Name">
+                    <input type="text" id="recipientIndustry" placeholder="Industry">
+                </div>
+                
+                <button class="btn" onclick="generateEmailTemplate()">Generate Template</button>
+                
+                <div id="emailPreview" class="email-template" style="display:none;">
+                    <h4>Email Preview:</h4>
+                    <div id="emailContent"></div>
+                    <button class="btn" onclick="copyEmail()">Copy to Clipboard</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Client Modal -->
+    <div id="addClientModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2>Add New Client</h2>
+            <div class="form-group">
+                <label>Client Name</label>
+                <input type="text" id="newClientName">
+            </div>
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" id="newClientEmail">
+            </div>
+            <div class="form-group">
+                <label>Phone</label>
+                <input type="tel" id="newClientPhone">
+            </div>
+            <div class="form-group">
+                <label>Address</label>
+                <input type="text" id="newClientAddress">
+            </div>
+            <div class="form-group">
+                <label>Industry</label>
+                <select id="newClientIndustry">
+                    <option value="Automotive">Automotive</option>
+                    <option value="Retail">Retail</option>
+                    <option value="Healthcare">Healthcare</option>
+                    <option value="Technology">Technology</option>
+                    <option value="Manufacturing">Manufacturing</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Revenue Estimate</label>
+                <input type="text" id="newClientRevenue" placeholder="$500K">
+            </div>
+            <button class="btn" onclick="addClient()">Add Client</button>
+        </div>
+    </div>
+
+    <div class="footer">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports Logo">
+        <p>&copy; 2025 Virtual Used Car Manager - All Rights Reserved. | Powered by Higgins Reports</p>
+        <p>Contact: rayzoila@virtualusedcarmanager.com | Los Angeles Metropolitan Area</p>
+    </div>
+
+    <script>
+        // Sample client data for Los Angeles area automotive industry
+        let clientData = [
+            {
+                name: "Mike Davidson", email: "m.davidson@autoworld.com", phone: "(323) 555-0101", 
+                address: "1234 Sunset Blvd, Hollywood, CA 90028", puresScore: 22, tier: "1A", 
+                industry: "Automotive", revenue: "$2.5M", status: "Active", lastContact: "2024-01-15", notes: "Interested in Trade-in Tracker"
+            },
+            {
+                name: "Sarah Martinez", email: "sarah.m@luxurycars.com", phone: "(310) 555-0102", 
+                address: "5678 Wilshire Blvd, Beverly Hills, CA 90210", puresScore: 20, tier: "1A", 
+                industry: "Automotive", revenue: "$1.8M", status: "Prospect", lastContact: "2024-01-10", notes: "Needs vAuto training"
+            },
+            {
+                name: "John Rodriguez", email: "j.rodriguez@cityauto.com", phone: "(213) 555-0103", 
+                address: "9012 Main St, Downtown LA, CA 90012", puresScore: 18, tier: "1B", 
+                industry: "Automotive", revenue: "$1.2M", status: "Follow-up", lastContact: "2024-01-08", notes: "Alpha Grade interest"
+            },
+            {
+                name: "Lisa Chen", email: "l.chen@premiermotors.com", phone: "(626) 555-0104", 
+                address: "3456 Colorado Blvd, Pasadena, CA 91107", puresScore: 19, tier: "1B", 
+                industry: "Automotive", revenue: "$1.5M", status: "Negotiation", lastContact: "2024-01-12", notes: "Full training package"
+            },
+            {
+                name: "David Thompson", email: "d.thompson@westcoastauto.com", phone: "(818) 555-0105", 
+                address: "7890 Ventura Blvd, Sherman Oaks, CA 91403", puresScore: 17, tier: "1B", 
+                industry: "Automotive", revenue: "$900K", status: "Quoted", lastContact: "2024-01-05", notes: "Small dealership focus"
+            },
+            {
+                name: "Maria Gonzalez", email: "m.gonzalez@rapiddealers.com", phone: "(562) 555-0106", 
+                address: "2345 Long Beach Blvd, Long Beach, CA 90806", puresScore: 16, tier: "1C", 
+                industry: "Automotive", revenue: "$700K", status: "Initial Contact", lastContact: "2024-01-03", notes: "Appraisal training needed"
+            },
+            {
+                name: "Robert Kim", email: "r.kim@goldenstateauto.com", phone: "(714) 555-0107", 
+                address: "4567 Beach Blvd, Huntington Beach, CA 92647", puresScore: 21, tier: "1A", 
+                industry: "Automotive", revenue: "$2.1M", status: "Active", lastContact: "2024-01-14", notes: "Multi-location training"
+            },
+            {
+                name: "Jennifer Walsh", email: "j.walsh@eliteautosales.com", phone: "(949) 555-0108", 
+                address: "6789 El Camino Real, Irvine, CA 92602", puresScore: 15, tier: "1C", 
+                industry: "Automotive", revenue: "$600K", status: "Prospect", lastContact: "2024-01-02", notes: "Budget concerns"
+            },
+            {
+                name: "Carlos Moreno", email: "c.moreno@speedwaydealer.com", phone: "(661) 555-0109", 
+                address: "8901 Magic Mountain Pkwy, Valencia, CA 91355", puresScore: 18, tier: "1B", 
+                industry: "Automotive", revenue: "$1.1M", status: "Demo Scheduled", lastContact: "2024-01-11", notes: "AutoHub interested"
+            },
+            {
+                name: "Amanda Foster", email: "a.foster@classiccarmart.com", phone: "(805) 555-0110", 
+                address: "1357 State St, Santa Barbara, CA 93101", puresScore: 14, tier: "1C", 
+                industry: "Automotive", revenue: "$500K", status: "Research", lastContact: "2023-12-28", notes: "Classic car focus"
+            }
+        ];
+
+        // Add 40 more realistic clients to reach 50 total
+        const additionalClients = [
+            {name: "Steve Wilson", email: "s.wilson@valleyauto.com", phone: "(818) 555-0111", address: "2468 Lankershim Blvd, North Hollywood, CA 91602", puresScore: 19, tier: "1B", industry: "Automotive", revenue: "$1.3M", status: "Active", lastContact: "2024-01-13", notes: "Management training focus"},
+            {name: "Rachel Park", email: "r.park@oceanviewdealer.com", phone: "(310) 555-0112", address: "1122 Pacific Coast Hwy, Manhattan Beach, CA 90266", puresScore: 17, tier: "1B", industry: "Automotive", revenue: "$950K", status: "Proposal", lastContact: "2024-01-09", notes: "Interested in AI tools"},
+            {name: "Tony Ricci", email: "t.ricci@motorsportdealer.com", phone: "(323) 555-0113", address: "3344 Figueroa St, Los Angeles, CA 90007", puresScore: 20, tier: "1A", industry: "Automotive", revenue: "$1.9M", status: "Contract", lastContact: "2024-01-16", notes: "Performance focused"},
+            {name: "Nicole Brooks", email: "n.brooks@greenautosales.com", phone: "(626) 555-0114", address: "5566 Huntington Dr, San Marino, CA 91108", puresScore: 16, tier: "1C", industry: "Automotive", revenue: "$750K", status: "Follow-up", lastContact: "2024-01-06", notes: "Eco-friendly focus"},
+            {name: "Michael Chang", email: "m.chang@luxurywheels.com", phone: "(213) 555-0115", address: "7788 Spring St, Los Angeles, CA 90012", puresScore: 22, tier: "1A", industry: "Automotive", revenue: "$2.3M", status: "Active", lastContact: "2024-01-17", notes: "Luxury segment"},
+            {name: "Jessica Torres", email: "j.torres@familyauto.com", phone: "(562) 555-0116", address: "9900 Bellflower Blvd, Bellflower, CA 90706", puresScore: 15, tier: "1C", industry: "Automotive", revenue: "$650K", status: "Initial", lastContact: "2024-01-01", notes: "Family business"},
+            {name: "Kevin Lee", email: "k.lee@turbodealer.com", phone: "(714) 555-0117", address: "1212 Harbor Blvd, Anaheim, CA 92805", puresScore: 18, tier: "1B", industry: "Automotive", revenue: "$1.0M", status: "Demo", lastContact: "2024-01-07", notes: "Tech-savvy operation"},
+            {name: "Lauren Davis", email: "l.davis@premiumpre-owned.com", phone: "(949) 555-0118", address: "3434 MacArthur Blvd, Newport Beach, CA 92660", puresScore: 21, tier: "1A", industry: "Automotive", revenue: "$2.0M", status: "Negotiation", lastContact: "2024-01-14", notes: "Pre-owned specialist"},
+            {name: "Alex Rivera", email: "a.rivera@metroautodealer.com", phone: "(323) 555-0119", address: "5656 Vermont Ave, Los Angeles, CA 90004", puresScore: 17, tier: "1B", industry: "Automotive", revenue: "$875K", status: "Quoted", lastContact: "2024-01-04", notes: "Urban location"},
+            {name: "Stephanie White", email: "s.white@coastalcars.com", phone: "(310) 555-0120", address: "7878 Sepulveda Blvd, Westchester, CA 90045", puresScore: 14, tier: "1C", industry: "Automotive", revenue: "$550K", status: "Research", lastContact: "2023-12-30", notes: "Small operation"},
+            {name: "Daniel Murphy", email: "d.murphy@highlineauto.com", phone: "(818) 555-0121", address: "2121 Glenoaks Blvd, Glendale, CA 91201", puresScore: 19, tier: "1B", industry: "Automotive", revenue: "$1.4M", status: "Active", lastContact: "2024-01-15", notes: "High-end focus"},
+            {name: "Vanessa Lopez", email: "v.lopez@quicksaleauto.com", phone: "(626) 555-0122", address: "4343 Baldwin Ave, El Monte, CA 91731", puresScore: 16, tier: "1C", industry: "Automotive", revenue: "$700K", status: "Proposal", lastContact: "2024-01-08", notes: "Volume dealer"},
+            {name: "Ryan Scott", email: "r.scott@elitemotor.com", phone: "(661) 555-0123", address: "6565 Sierra Hwy, Palmdale, CA 93550", puresScore: 20, tier: "1A", industry: "Automotive", revenue: "$1.7M", status: "Contract", lastContact: "2024-01-16", notes: "Expanding operation"},
+            {name: "Christina Bell", email: "c.bell@trusteddealers.com", phone: "(805) 555-0124", address: "8787 Telegraph Rd, Ventura, CA 93004", puresScore: 15, tier: "1C", industry: "Automotive", revenue: "$625K", status: "Follow-up", lastContact: "2024-01-03", notes: "Trust focused"},
+            {name: "Marcus Johnson", email: "m.johnson@apexautosales.com", phone: "(213) 555-0125", address: "1010 Crenshaw Blvd, Los Angeles, CA 90019", puresScore: 18, tier: "1B", industry: "Automotive", revenue: "$1.1M", status: "Demo", lastContact: "2024-01-10", notes: "Growth oriented"},
+            {name: "Natalie Green", email: "n.green@silverlineauto.com", phone: "(310) 555-0126", address: "2525 Artesia Blvd, Redondo Beach, CA 90278", puresScore: 17, tier: "1B", industry: "Automotive", revenue: "$900K", status: "Quoted", lastContact: "2024-01-06", notes: "Quality focused"},
+            {name: "Justin Adams", email: "j.adams@velocitydealer.com", phone: "(818) 555-0127", address: "4747 Laurel Canyon Blvd, Studio City, CA 91604", puresScore: 21, tier: "1A", industry: "Automotive", revenue: "$2.1M", status: "Active", lastContact: "2024-01-17", notes: "Innovation leader"},
+            {name: "Melissa King", email: "m.king@goldcoastauto.com", phone: "(562) 555-0128", address: "6969 Atlantic Ave, Bell, CA 90201", puresScore: 14, tier: "1C", industry: "Automotive", revenue: "$575K", status: "Initial", lastContact: "2023-12-29", notes: "Local focus"},
+            {name: "Christopher Hall", email: "c.hall@prestigeautosales.com", phone: "(714) 555-0129", address: "8181 Katella Ave, Stanton, CA 90680", puresScore: 19, tier: "1B", industry: "Automotive", revenue: "$1.2M", status: "Proposal", lastContact: "2024-01-11", notes: "Prestige brand"},
+            {name: "Andrea Wright", email: "a.wright@pioneermotors.com", phone: "(626) 555-0130", address: "3030 Rosemead Blvd, Rosemead, CA 91770", puresScore: 16, tier: "1C", industry: "Automotive", revenue: "$725K", status: "Research", lastContact: "2024-01-02", notes: "Pioneer in area"},
+            {name: "Brandon Baker", email: "b.baker@dynamicdealer.com", phone: "(323) 555-0131", address: "5252 Hollywood Blvd, Hollywood, CA 90027", puresScore: 20, tier: "1A", industry: "Automotive", revenue: "$1.8M", status: "Contract", lastContact: "2024-01-16", notes: "Dynamic growth"},
+            {name: "Samantha Cook", email: "s.cook@reliableauto.com", phone: "(310) 555-0132", address: "7474 La Tijera Blvd, Los Angeles, CA 90045", puresScore: 15, tier: "1C", industry: "Automotive", revenue: "$650K", status: "Follow-up", lastContact: "2024-01-04", notes: "Reliability focused"},
+            {name: "Gregory Taylor", email: "g.taylor@pinnacledealer.com", phone: "(818) 555-0133", address: "9393 Reseda Blvd, Reseda, CA 91335", puresScore: 18, tier: "1B", industry: "Automotive", revenue: "$1.0M", status: "Active", lastContact: "2024-01-12", notes: "Peak performance"},
+            {name: "Rebecca Miller", email: "r.miller@qualityautosales.com", phone: "(661) 555-0134", address: "1515 Avenue K, Lancaster, CA 93534", puresScore: 17, tier: "1B", industry: "Automotive", revenue: "$850K", status: "Demo", lastContact: "2024-01-08", notes: "Quality assurance"},
+            {name: "Jonathan Clark", email: "j.clark@supremeauto.com", phone: "(805) 555-0135", address: "3737 Oxnard Blvd, Oxnard, CA 93036", puresScore: 22, tier: "1A", industry: "Automotive", revenue: "$2.4M", status: "Active", lastContact: "2024-01-18", notes: "Market leader"},
+            {name: "Ashley Lewis", email: "a.lewis@modernmotors.com", phone: "(213) 555-0136", address: "5959 Exposition Blvd, Los Angeles, CA 90016", puresScore: 14, tier: "1C", industry: "Automotive", revenue: "$525K", status: "Initial", lastContact: "2023-12-31", notes: "Modern approach"},
+            {name: "Timothy Young", email: "t.young@advancedauto.com", phone: "(626) 555-0137", address: "8080 Garvey Ave, Rosemead, CA 91770", puresScore: 19, tier: "1B", industry: "Automotive", revenue: "$1.3M", status: "Proposal", lastContact: "2024-01-13", notes: "Technology advanced"},
+            {name: "Kimberly Allen", email: "k.allen@primeautosales.com", phone: "(714) 555-0138", address: "2424 Bristol St, Santa Ana, CA 92706", puresScore: 16, tier: "1C", industry: "Automotive", revenue: "$775K", status: "Quoted", lastContact: "2024-01-05", notes: "Prime location"},
+            {name: "Patrick Hill", email: "p.hill@maximumauto.com", phone: "(562) 555-0139", address: "4646 Lakewood Blvd, Lakewood, CA 90712", puresScore: 20, tier: "1A", industry: "Automotive", revenue: "$1.9M", status: "Contract", lastContact: "2024-01-17", notes: "Maximum efficiency"},
+            {name: "Diana Garcia", email: "d.garcia@innovativedealer.com", phone: "(818) 555-0140", address: "6868 Van Nuys Blvd, Van Nuys, CA 91405", puresScore: 15, tier: "1C", industry: "Automotive", revenue: "$600K", status: "Research", lastContact: "2024-01-01", notes: "Innovation seeker"},
+            {name: "Edward Moore", email: "e.moore@exceldealers.com", phone: "(323) 555-0141", address: "1919 Western Ave, Los Angeles, CA 90027", puresScore: 18, tier: "1B", industry: "Automotive", revenue: "$1.15M", status: "Active", lastContact: "2024-01-14", notes: "Excellence driven"},
+            {name: "Michelle Thomas", email: "m.thomas@victoryauto.com", phone: "(310) 555-0142", address: "3333 Inglewood Ave, Inglewood, CA 90302", puresScore: 17, tier: "1B", industry: "Automotive", revenue: "$925K", status: "Demo", lastContact: "2024-01-09", notes: "Victory oriented"},
+            {name: "Gary Robinson", email: "g.robinson@leadingdealer.com", phone: "(626) 555-0143", address: "5555 Temple City Blvd, Temple City, CA 91780", puresScore: 21, tier: "1A", industry: "Automotive", revenue: "$2.0M", status: "Negotiation", lastContact: "2024-01-15", notes: "Market leader"},
+            {name: "Tiffany Jackson", email: "t.jackson@futureautosales.com", phone: "(661) 555-0144", address: "7777 20th St West, Lancaster, CA 93534", puresScore: 14, tier: "1C", industry: "Automotive", revenue: "$550K", status: "Follow-up", lastContact: "2024-01-03", notes: "Future focused"},
+            {name: "Scott Martinez", email: "s.martinez@ultimatedealer.com", phone: "(714) 555-0145", address: "9999 Magnolia Ave, Riverside, CA 92503", puresScore: 19, tier: "1B", industry: "Automotive", revenue: "$1.35M", status: "Proposal", lastContact: "2024-01-11", notes: "Ultimate service"},
+            {name: "Heather Wilson", email: "h.wilson@toptiermotors.com", phone: "(805) 555-0146", address: "1234 Main St, Ventura, CA 93001", puresScore: 16, tier: "1C", industry: "Automotive", revenue: "$700K", status: "Quoted", lastContact: "2024-01-07", notes: "Top tier service"},
+            {name: "Brian Anderson", email: "b.anderson@elitecar.com", phone: "(213) 555-0147", address: "5678 Broadway, Los Angeles, CA 90003", puresScore: 20, tier: "1A", industry: "Automotive", revenue: "$1.75M", status: "Active", lastContact: "2024-01-16", notes: "Elite operation"},
+            {name: "Crystal Cooper", email: "c.cooper@premierdealer.com", phone: "(562) 555-0148", address: "2468 Cherry Ave, Long Beach, CA 90806", puresScore: 15, tier: "1C", industry: "Automotive", revenue: "$625K", status: "Initial", lastContact: "2024-01-02", notes: "Premier service"},
+            {name: "Jeremy Phillips", email: "j.phillips@supremedealer.com", phone: "(818) 555-0149", address: "7890 Foothill Blvd, Sylmar, CA 91342", puresScore: 18, tier: "1B", industry: "Automotive", revenue: "$1.05M", status: "Demo", lastContact: "2024-01-12", notes: "Supreme quality"},
+            {name: "Monica Reed", email: "m.reed@grandautosales.com", phone: "(626) 555-0150", address: "1357 Valley Blvd, Alhambra, CA 91801", puresScore: 17, tier: "1B", industry: "Automotive", revenue: "$875K", status: "Research", lastContact: "2024-01-06", notes: "Grand scale operation"}
+        ];
+
+        // Add additional clients to main array
+        clientData = clientData.concat(additionalClients);
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            populateTable();
+            updateSliderValues();
+        });
+
+        // Show tab functionality
+        function showTab(tabName) {
+            const tabs = document.querySelectorAll('.tab');
+            const contents = document.querySelectorAll('.tab-content');
+            
+            tabs.forEach(tab => tab.classList.remove('active'));
+            contents.forEach(content => content.classList.remove('active'));
+            
+            document.querySelector(`button[onclick="showTab('${tabName}')"]`).classList.add('active');
+            document.getElementById(tabName).classList.add('active');
+        }
+
+        // Populate client table
+        function populateTable() {
+            const tbody = document.getElementById('clientTableBody');
+            tbody.innerHTML = '';
+            
+            clientData.forEach((client, index) => {
+                const row = tbody.insertRow();
+                const tierClass = client.tier === '1A' ? 'tier-1a' : client.tier === '1B' ? 'tier-1b' : 'tier-1c';
+                
+                row.innerHTML = `
+                    <td>${client.name}</td>
+                    <td>${client.email}</td>
+                    <td>${client.phone}</td>
+                    <td>${client.address}</td>
+                    <td><span class="score-badge ${tierClass}">${client.puresScore}/25</span></td>
+                    <td><span class="score-badge ${tierClass}">${client.tier}</span></td>
+                    <td>${client.industry}</td>
+                    <td>${client.revenue}</td>
+                    <td>${client.status}</td>
+                    <td>${client.lastContact}</td>
+                    <td>
+                        <button class="btn btn-small" onclick="contactClient(${index})">Contact</button>
+                        <button class="btn btn-small" onclick="emailClient(${index})">Email</button>
+                    </td>
+                `;
+            });
+        }
+
+        // Filter table functionality
+        function filterTable() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const tierFilter = document.getElementById('tierFilter').value;
+            const industryFilter = document.getElementById('industryFilter').value;
+            
+            const rows = document.querySelectorAll('#clientTableBody tr');
+            
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                const tier = row.cells[5].textContent;
+                const industry = row.cells[6].textContent;
+                
+                const matchesSearch = text.includes(searchTerm);
+                const matchesTier = !tierFilter || tier.includes(tierFilter);
+                const matchesIndustry = !industryFilter || industry.includes(industryFilter);
+                
+                row.style.display = matchesSearch && matchesTier && matchesIndustry ? '' : 'none';
+            });
+        }
+
+        // Sort table functionality
+        let sortOrder = {};
+        function sortTable(columnIndex) {
+            const table = document.getElementById('clientTable');
+            const tbody = table.querySelector('tbody');
+            const rows = Array.from(tbody.querySelectorAll('tr'));
+            
+            const isAscending = !sortOrder[columnIndex];
+            sortOrder = {};
+            sortOrder[columnIndex] = isAscending;
+            
+            rows.sort((a, b) => {
+                let aValue = a.cells[columnIndex].textContent.trim();
+                let bValue = b.cells[columnIndex].textContent.trim();
+                
+                // Handle numeric values
+                if (!isNaN(aValue) && !isNaN(bValue)) {
+                    aValue = parseFloat(aValue);
+                    bValue = parseFloat(bValue);
+                } else if (aValue.includes('$')) {
+                    aValue = parseFloat(aValue.replace(/[$KM,]/g, '')) * (aValue.includes('K') ? 1000 : aValue.includes('M') ? 1000000 : 1);
+                    bValue = parseFloat(bValue.replace(/[$KM,]/g, '')) * (bValue.includes('K') ? 1000 : bValue.includes('M') ? 1000000 : 1);
+                }
+                
+                if (aValue < bValue) return isAscending ? -1 : 1;
+                if (aValue > bValue) return isAscending ? 1 : -1;
+                return 0;
+            });
+            
+            tbody.innerHTML = '';
+            rows.forEach(row => tbody.appendChild(row));
+        }
+
+        // Contact client functionality
+        function contactClient(index) {
+            const client = clientData[index];
+            alert(`Contacting ${client.name} at ${client.phone}\n\nRecommended approach: ${client.notes}`);
+        }
+
+        // Email client functionality
+        function emailClient(index) {
+            const client = clientData[index];
+            const subject = encodeURIComponent(`Transform Your Dealership Operations with Virtual Used Car Manager`);
+            const body = encodeURIComponent(`Dear ${client.name},
+
+I hope this message finds you well. I'm reaching out because Virtual Used Car Manager has helped numerous dealerships in the ${client.industry} industry dramatically improve their trade-in processes and sales performance.
+
+Based on your dealership's profile and current market position, I believe our comprehensive suite of training and tools could deliver significant value:
+
+🎯 APPRAISAL ACADEMY: Train your team with industry-leading appraisal processes
+📊 TRADE-IN TRACKER: AI-powered system for consistent appraisals and follow-up
+⭐ ALPHA GRADE SCORECARD: Performance tracking and accountability tools
+🚗 vAuto & AutoHub Training: Maximize your inventory management systems
+
+Key Benefits for Your Operation:
+• Increase trade-in acquisition rates by 30-50%
+• Improve appraisal consistency and accuracy
+• Reduce missed opportunities through systematic follow-up
+• Enhanced team performance and accountability
+
+Given your dealership's revenue level (${client.revenue}) and growth focus, I'd love to schedule a brief 15-minute demo to show you exactly how we can help streamline your operations and boost profitability.
+
+Would you be available for a quick call this week? I can work around your schedule.
+
+Best regards,
+Ray Zoila
+Virtual Used Car Manager
+rayzoila@virtualusedcarmanager.com
+Los Angeles Metropolitan Area
+
+P.S. We're currently offering a special promotion for Los Angeles area dealerships - I'd be happy to discuss the details during our call.`);
+            
+            window.location.href = `mailto:${client.email}?subject=${subject}&body=${body}`;
+        }
+
+        // Update slider values
+        function updateSliderValues() {
+            ['profitability', 'urgency', 'reachability', 'engagement', 'sustainability'].forEach(id => {
+                const slider = document.getElementById(id);
+                const valueSpan = document.getElementById(id + 'Value');
+                
+                slider.addEventListener('input', function() {
+                    valueSpan.textContent = this.value;
+                    updateTotalScore();
+                });
+            });
+        }
+
+        // Update total P.U.R.E.S. score
+        function updateTotalScore() {
+            const values = ['profitability', 'urgency', 'reachability', 'engagement', 'sustainability']
+                .map(id => parseInt(document.getElementById(id).value));
+            
+            const total = values.reduce((sum, val) => sum + val, 0);
+            const average = total / 5;
+            
+            document.getElementById('totalScore').textContent = total;
+            
+            let tier;
+            if (average >= 4) tier = '1A';
+            else if (average >= 3) tier = '1B';
+            else tier = '1C';
+            
+            document.getElementById('tierResult').textContent = tier;
+        }
+
+        // Modal functionality
+        function showAddClient() {
+            document.getElementById('addClientModal').style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('addClientModal').style.display = 'none';
+        }
+
+        // Add client functionality
+        function addClient() {
+            const newClient = {
+                name: document.getElementById('newClientName').value,
+                email: document.getElementById('newClientEmail').value,
+                phone: document.getElementById('newClientPhone').value,
+                address: document.getElementById('newClientAddress').value,
+                puresScore: 15, // Default score
+                tier: '1C',
+                industry: document.getElementById('newClientIndustry').value,
+                revenue: document.getElementById('newClientRevenue').value,
+                status: 'New',
+                lastContact: new Date().toISOString().split('T')[0],
+                notes: 'New client added'
+            };
+            
+            clientData.push(newClient);
+            populateTable();
+            closeModal();
+            
+            // Clear form
+            ['newClientName', 'newClientEmail', 'newClientPhone', 'newClientAddress', 'newClientRevenue']
+                .forEach(id => document.getElementById(id).value = '');
+        }
+
+        // Export data functionality
+        function exportData() {
+            const csv = [
+                ['Name', 'Email', 'Phone', 'Address', 'PURES Score', 'Tier', 'Industry', 'Revenue', 'Status', 'Last Contact', 'Notes'],
+                ...clientData.map(client => [
+                    client.name, client.email, client.phone, client.address,
+                    client.puresScore, client.tier, client.industry, client.revenue,
+                    client.status, client.lastContact, client.notes
+                ])
+            ].map(row => row.join(',')).join('\n');
+            
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'client_database.csv';
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+
+        // Save feedback functionality
+        function saveFeedback() {
+            const feedback = {
+                client: document.getElementById('feedbackClient').value,
+                type: document.getElementById('feedbackType').value,
+                rating: document.getElementById('satisfactionRating').value,
+                details: document.getElementById('detailedFeedback').value,
+                actions: document.getElementById('actionItems').value,
+                date: new Date().toLocaleDateString()
+            };
+            
+            alert(`Feedback saved for ${feedback.client}\nRating: ${feedback.rating}/5\nType: ${feedback.type}`);
+            
+            // Clear form
+            ['feedbackClient', 'detailedFeedback', 'actionItems'].forEach(id => {
+                document.getElementById(id).value = '';
+            });
+        }
+
+        // Save success story functionality
+        function saveSuccessStory() {
+            const story = {
+                client: document.getElementById('successClient').value,
+                service: document.getElementById('serviceProvided').value,
+                results: document.getElementById('resultsAchieved').value,
+                referrals: document.getElementById('referralsGenerated').value,
+                date: new Date().toLocaleDateString()
+            };
+            
+            alert(`Success story saved for ${story.client}\nService: ${story.service}\nReferrals Generated: ${story.referrals}`);
+            
+            // Clear form
+            ['successClient', 'resultsAchieved', 'referralsGenerated'].forEach(id => {
+                document.getElementById(id).value = '';
+            });
+        }
+
+        // Generate email template functionality
+        function generateEmailTemplate() {
+            const templateType = document.getElementById('templateType').value;
+            const recipientName = document.getElementById('recipientName').value || '[DECISION MAKER NAME]';
+            const recipientCompany = document.getElementById('recipientCompany').value || '[COMPANY NAME]';
+            const recipientIndustry = document.getElementById('recipientIndustry').value || '[INDUSTRY]';
+            
+            let template = '';
+            
+            if (templateType === 'tier1a') {
+                template = `Subject: Exclusive Partnership Opportunity for ${recipientCompany} - ROI-Focused Solutions
+
+Dear ${recipientName},
+
+Based on our P.U.R.E.S. analysis, ${recipientCompany} represents exactly the type of ${recipientIndustry} leader we partner with for transformational results.
+
+What if ${recipientCompany} could achieve:
+• 40-50% increase in trade-in acquisition rates
+• 25-30% improvement in appraisal accuracy and consistency  
+• 35-45% reduction in missed opportunities through systematic AI follow-up
+• 20-25% boost in used car department profitability
+
+Our S.A.L.E. methodology ensures we:
+✓ Source solutions perfectly matched to your operational challenges
+✓ Assess your team's requirements thoroughly with customized training
+✓ Listen continuously to optimize performance and results
+✓ Empower your success story to inspire industry referrals
+
+Virtual Used Car Manager's proven solutions:
+- Appraisal Academy: Comprehensive training for consistent processes
+- Trade-in Tracker: AI-powered appraisal and acquisition system  
+- Alpha Grade Scorecard: Performance tracking and accountability
+- vAuto/AutoHub Mastery: Maximize your inventory management ROI
+
+As a Tier 1A partner, you'd receive our premium implementation package with dedicated support, advanced analytics, and priority access to new features.
+
+Best regards,
+Ray Zoila | Virtual Used Car Manager
+rayzoila@virtualusedcarmanager.com
+Los Angeles Metropolitan Area`;
+            } else if (templateType === 'tier1b') {
+                template = `Subject: Boost Your Dealership Performance - Virtual Used Car Manager Solutions
+
+Dear ${recipientName},
+
+I hope this finds you well. Virtual Used Car Manager has been helping ${recipientIndustry} dealerships like ${recipientCompany} streamline operations and increase profitability.
+
+Key benefits our clients typically see:
+• 30-40% improvement in trade-in conversion rates
+• Standardized appraisal processes across all team members
+• Automated follow-up systems that recover lost deals
+• Enhanced team accountability and performance tracking
+
+Our comprehensive training and tools include:
+- Appraisal Academy training programs
+- Trade-in Tracker AI system
+- Alpha Grade performance scorecards
+- Platform-specific training (vAuto, AutoHub)
+
+I'd love to schedule a brief 15-minute demo to show you exactly how we can help ${recipientCompany} achieve similar results.
+
+Would you be available for a quick call this week?
+
+Best regards,
+Ray Zoila | Virtual Used Car Manager`;
+            } else {
+                template = `Subject: Automotive Training Solutions for ${recipientCompany}
+
+Dear ${recipientName},
+
+Virtual Used Car Manager specializes in helping automotive dealerships improve their trade-in processes and team performance.
+
+Our services include:
+- Professional appraisal training
+- Process standardization tools
+- Performance tracking systems
+- Ongoing support and coaching
+
+I believe ${recipientCompany} could benefit from our proven approach to dealership operations improvement.
+
+Would you be interested in learning more about how we can support your goals?
+
+Best regards,
+Ray Zoila | Virtual Used Car Manager
+rayzoila@virtualusedcarmanager.com`;
+            }
+            
+            document.getElementById('emailContent').innerHTML = template.replace(/\n/g, '<br>');
+            document.getElementById('emailPreview').style.display = 'block';
+        }
+
+        // Copy email functionality
+        function copyEmail() {
+            const emailContent = document.getElementById('emailContent').textContent;
+            navigator.clipboard.writeText(emailContent).then(() => {
+                alert('Email template copied to clipboard!');
+            });
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('addClientModal');
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>

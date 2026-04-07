@@ -1,0 +1,788 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>S.A.L.E. Client Targeting Dashboard - Leashes and Leads</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #000;
+            color: #CF2030;
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+        }
+
+        .header {
+            background-color: #000;
+            padding: 20px;
+            text-align: center;
+            border-bottom: 2px solid #CF2030;
+        }
+
+        .header img {
+            max-width: 300px;
+            height: auto;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .business-info {
+            background-color: #111;
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 8px;
+            border: 1px solid #CF2030;
+        }
+
+        .business-info h2 {
+            color: #CF2030;
+            margin-bottom: 15px;
+        }
+
+        .tabs {
+            display: flex;
+            background-color: #111;
+            border-radius: 8px 8px 0 0;
+            margin-bottom: 0;
+        }
+
+        .tab {
+            padding: 15px 20px;
+            background-color: #222;
+            border: none;
+            color: #CF2030;
+            cursor: pointer;
+            border-right: 1px solid #CF2030;
+            flex: 1;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .tab.active {
+            background-color: #CF2030;
+            color: #000;
+        }
+
+        .tab-content {
+            display: none;
+            background-color: #111;
+            padding: 30px;
+            border-radius: 0 0 8px 8px;
+            border: 1px solid #CF2030;
+            border-top: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .controls {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .control-group label {
+            color: #CF2030;
+            font-weight: bold;
+        }
+
+        input, select {
+            padding: 8px;
+            border: 1px solid #CF2030;
+            background-color: #222;
+            color: #fff;
+            border-radius: 4px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            background-color: #CF2030;
+            color: #000;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #a01828;
+        }
+
+        .btn-secondary {
+            background-color: #444;
+            color: #CF2030;
+        }
+
+        .btn-secondary:hover {
+            background-color: #555;
+        }
+
+        .client-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: #222;
+        }
+
+        .client-table th,
+        .client-table td {
+            padding: 10px;
+            text-align: left;
+            border: 1px solid #CF2030;
+        }
+
+        .client-table th {
+            background-color: #CF2030;
+            color: #000;
+            font-weight: bold;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .client-table tr:nth-child(even) {
+            background-color: #333;
+        }
+
+        .client-table tr:hover {
+            background-color: #444;
+        }
+
+        .tier-1a { background-color: #2d5a2d !important; }
+        .tier-1b { background-color: #5a5a2d !important; }
+        .tier-1c { background-color: #2d4a5a !important; }
+
+        .pures-form {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .pures-item {
+            background-color: #222;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #CF2030;
+        }
+
+        .pures-item h4 {
+            color: #CF2030;
+            margin-bottom: 10px;
+        }
+
+        .score-slider {
+            width: 100%;
+            margin: 10px 0;
+        }
+
+        .email-template {
+            background-color: #222;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #CF2030;
+            margin-top: 20px;
+        }
+
+        .footer {
+            background-color: #000;
+            padding: 20px;
+            text-align: center;
+            border-top: 2px solid #CF2030;
+            margin-top: 50px;
+        }
+
+        .footer img {
+            max-width: 150px;
+            height: auto;
+        }
+
+        .contact-btn {
+            padding: 5px 10px;
+            background-color: #CF2030;
+            color: #000;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 12px;
+            margin-right: 5px;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .metric-card {
+            background-color: #222;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #CF2030;
+            text-align: center;
+        }
+
+        .metric-value {
+            font-size: 2em;
+            font-weight: bold;
+            color: #CF2030;
+        }
+
+        .metric-label {
+            color: #ccc;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports">
+        <h1 style="color: #CF2030; margin-top: 15px;">S.A.L.E. Client Targeting Dashboard</h1>
+    </header>
+
+    <div class="container">
+        <div class="business-info">
+            <h2>Business Profile: Leashes and Leads</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+                <div><strong>Owner:</strong> Jerry Fischer</div>
+                <div><strong>Industry:</strong> Pet Retail</div>
+                <div><strong>Location:</strong> Los Angeles, California</div>
+                <div><strong>Website:</strong> www.leashesandleads.com</div>
+                <div><strong>Company Size:</strong> 11-50 employees</div>
+                <div><strong>Contact:</strong> contact@leashesandleads.com</div>
+            </div>
+        </div>
+
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-value" id="totalClients">50</div>
+                <div class="metric-label">Total Prospects</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value" id="tier1aCount">12</div>
+                <div class="metric-label">Tier 1A (Premium)</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value" id="tier1bCount">18</div>
+                <div class="metric-label">Tier 1B (High-Value)</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value" id="tier1cCount">20</div>
+                <div class="metric-label">Tier 1C (Qualified)</div>
+            </div>
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="openTab(event, 'sourcing')">S - SOURCING</button>
+            <button class="tab" onclick="openTab(event, 'assessing')">A - ASSESSING</button>
+            <button class="tab" onclick="openTab(event, 'listening')">L - LISTENING</button>
+            <button class="tab" onclick="openTab(event, 'empowering')">E - EMPOWERING</button>
+        </div>
+
+        <div id="sourcing" class="tab-content active">
+            <h3 style="color: #CF2030; margin-bottom: 20px;">P.U.R.E.S. Client Scoring & Database</h3>
+            
+            <div class="controls">
+                <div class="control-group">
+                    <label>Search Clients:</label>
+                    <input type="text" id="searchInput" placeholder="Search by name, email, or industry..." onkeyup="filterTable()">
+                </div>
+                <div class="control-group">
+                    <label>Filter by Tier:</label>
+                    <select id="tierFilter" onchange="filterTable()">
+                        <option value="">All Tiers</option>
+                        <option value="1A">Tier 1A (Premium)</option>
+                        <option value="1B">Tier 1B (High-Value)</option>
+                        <option value="1C">Tier 1C (Qualified)</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label>Sort by:</label>
+                    <select id="sortBy" onchange="sortTable()">
+                        <option value="name">Client Name</option>
+                        <option value="score">P.U.R.E.S. Score</option>
+                        <option value="revenue">Revenue Estimate</option>
+                        <option value="tier">Tier Level</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label>&nbsp;</label>
+                    <button class="btn" onclick="exportData()">Export CSV</button>
+                </div>
+            </div>
+
+            <table class="client-table" id="clientTable">
+                <thead>
+                    <tr>
+                        <th onclick="sortColumn('name')">Client Name</th>
+                        <th onclick="sortColumn('email')">Email</th>
+                        <th onclick="sortColumn('phone')">Phone</th>
+                        <th onclick="sortColumn('address')">Address</th>
+                        <th onclick="sortColumn('score')">P.U.R.E.S. Score</th>
+                        <th onclick="sortColumn('tier')">Tier</th>
+                        <th onclick="sortColumn('industry')">Industry</th>
+                        <th onclick="sortColumn('revenue')">Revenue Est.</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="clientTableBody">
+                    <!-- Client data will be populated here -->
+                </tbody>
+            </table>
+        </div>
+
+        <div id="assessing" class="tab-content">
+            <h3 style="color: #CF2030; margin-bottom: 20px;">Buying Pattern Analysis & Client Assessment</h3>
+            
+            <div class="pures-form">
+                <div class="pures-item">
+                    <h4>Profitability Assessment</h4>
+                    <p>Annual revenue and budget capacity for pet products</p>
+                    <input type="range" class="score-slider" min="1" max="5" value="3" id="profitability">
+                    <div>Score: <span id="profitabilityValue">3</span>/5</div>
+                </div>
+                <div class="pures-item">
+                    <h4>Urgency Evaluation</h4>
+                    <p>Immediate need for pet supplies and services</p>
+                    <input type="range" class="score-slider" min="1" max="5" value="3" id="urgency">
+                    <div>Score: <span id="urgencyValue">3</span>/5</div>
+                </div>
+                <div class="pures-item">
+                    <h4>Reachability Analysis</h4>
+                    <p>Accessibility of decision makers</p>
+                    <input type="range" class="score-slider" min="1" max="5" value="3" id="reachability">
+                    <div>Score: <span id="reachabilityValue">3</span>/5</div>
+                </div>
+                <div class="pures-item">
+                    <h4>Engagement Potential</h4>
+                    <p>Openness to new pet products and partnerships</p>
+                    <input type="range" class="score-slider" min="1" max="5" value="3" id="engagement">
+                    <div>Score: <span id="engagementValue">3</span>/5</div>
+                </div>
+                <div class="pures-item">
+                    <h4>Sustainability Outlook</h4>
+                    <p>Long-term partnership potential</p>
+                    <input type="range" class="score-slider" min="1" max="5" value="3" id="sustainability">
+                    <div>Score: <span id="sustainabilityValue">3</span>/5</div>
+                </div>
+                <div class="pures-item">
+                    <h4>Total P.U.R.E.S. Score</h4>
+                    <div style="font-size: 2em; color: #CF2030; font-weight: bold;" id="totalScore">15</div>
+                    <div id="tierClassification">Tier 1C - Qualified</div>
+                </div>
+            </div>
+
+            <h4 style="color: #CF2030; margin: 30px 0 15px 0;">Client Buying Profiles</h4>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+                <div class="pures-item">
+                    <h4>Analytical Pet Owners</h4>
+                    <p>Research breeds, compare products, read reviews extensively before purchasing premium pet supplies.</p>
+                </div>
+                <div class="pures-item">
+                    <h4>Relationship-Focused</h4>
+                    <p>Trust veterinarian recommendations, value personalized service, prefer established pet store relationships.</p>
+                </div>
+                <div class="pures-item">
+                    <h4>Convenience Seekers</h4>
+                    <p>Busy pet parents seeking time-saving solutions, online ordering, subscription services.</p>
+                </div>
+                <div class="pures-item">
+                    <h4>Innovation Adopters</h4>
+                    <p>Early adopters of new pet tech, premium organic products, cutting-edge pet health solutions.</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="listening" class="tab-content">
+            <h3 style="color: #CF2030; margin-bottom: 20px;">Feedback Integration & Customer Voice</h3>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+                <div class="pures-item">
+                    <h4>Pre-Sale Feedback Collection</h4>
+                    <p><strong>Key Questions for Pet Owners:</strong></p>
+                    <ul style="margin: 10px 0; padding-left: 20px;">
+                        <li>What pet supplies do you currently use?</li>
+                        <li>What challenges do you face with your pet's needs?</li>
+                        <li>What's your monthly pet care budget?</li>
+                        <li>How do you currently shop for pet products?</li>
+                    </ul>
+                    <button class="btn" style="width: 100%;">Launch Feedback Survey</button>
+                </div>
+                
+                <div class="pures-item">
+                    <h4>During-Sale Progress Tracking</h4>
+                    <p><strong>Engagement Metrics:</strong></p>
+                    <ul style="margin: 10px 0; padding-left: 20px;">
+                        <li>Store visit frequency and duration</li>
+                        <li>Product inquiry patterns</li>
+                        <li>Purchase decision timeline</li>
+                        <li>Additional service interest</li>
+                    </ul>
+                    <div style="color: #CF2030; font-weight: bold;">Avg. Decision Time: 3.2 days</div>
+                </div>
+                
+                <div class="pures-item">
+                    <h4>Post-Sale Satisfaction Monitoring</h4>
+                    <p><strong>Follow-up Schedule:</strong></p>
+                    <ul style="margin: 10px 0; padding-left: 20px;">
+                        <li>24 hours: Purchase confirmation</li>
+                        <li>1 week: Product satisfaction check</li>
+                        <li>1 month: Pet health & happiness review</li>
+                        <li>3 months: Loyalty program invitation</li>
+                    </ul>
+                    <div style="color: #CF2030; font-weight: bold;">Satisfaction Rate: 94%</div>
+                </div>
+                
+                <div class="pures-item">
+                    <h4>Real-Time Complaint Resolution</h4>
+                    <p><strong>Response Protocol:</strong></p>
+                    <ul style="margin: 10px 0; padding-left: 20px;">
+                        <li>Immediate acknowledgment (2 hours)</li>
+                        <li>Investigation and response (24 hours)</li>
+                        <li>Resolution and follow-up (48 hours)</li>
+                        <li>Relationship recovery plan</li>
+                    </ul>
+                    <button class="btn btn-secondary" style="width: 100%;">View Active Issues</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="empowering" class="tab-content">
+            <h3 style="color: #CF2030; margin-bottom: 20px;">Referral Strategy & Client Empowerment</h3>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+                <div class="pures-item">
+                    <h4>Success Story Documentation</h4>
+                    <p><strong>Featured Customer Stories:</strong></p>
+                    <ul style="margin: 10px 0; padding-left: 20px;">
+                        <li>"Max's Recovery" - Premium nutrition success</li>
+                        <li>"Bella's Training Journey" - Equipment & training</li>
+                        <li>"Senior Pet Care" - Specialized health products</li>
+                    </ul>
+                    <button class="btn" style="width: 100%;">Add New Success Story</button>
+                </div>
+                
+                <div class="pures-item">
+                    <h4>Referral Reward Tracking</h4>
+                    <p><strong>Current Program:</strong></p>
+                    <ul style="margin: 10px 0; padding-left: 20px;">
+                        <li>$25 credit for each new customer referral</li>
+                        <li>10% discount on next purchase for referee</li>
+                        <li>Bonus rewards for veterinarian referrals</li>
+                        <li>VIP status after 5 successful referrals</li>
+                    </ul>
+                    <div style="color: #CF2030; font-weight: bold;">Total Referrals This Month: 23</div>
+                </div>
+                
+                <div class="pures-item">
+                    <h4>Client Advocacy Program</h4>
+                    <p><strong>Advocate Benefits:</strong></p>
+                    <ul style="margin: 10px 0; padding-left: 20px;">
+                        <li>Early access to new products</li>
+                        <li>Pet care workshops and seminars</li>
+                        <li>Social media feature opportunities</li>
+                        <li>Annual VIP customer appreciation event</li>
+                    </ul>
+                    <div style="color: #CF2030; font-weight: bold;">Active Advocates: 15</div>
+                </div>
+                
+                <div class="pures-item">
+                    <h4>Co-Marketing Opportunities</h4>
+                    <p><strong>Partnership Prospects:</strong></p>
+                    <ul style="margin: 10px 0; padding-left: 20px;">
+                        <li>Local veterinary clinics</li>
+                        <li>Dog grooming services</li>
+                        <li>Pet photographers</li>
+                        <li>Dog training facilities</li>
+                    </ul>
+                    <button class="btn btn-secondary" style="width: 100%;">Explore Partnerships</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="email-template" id="emailTemplate" style="display: none;">
+        <h3 style="color: #CF2030; margin-bottom: 15px;">Email Template</h3>
+        <div style="background-color: #333; padding: 15px; border-radius: 4px;">
+            <div style="margin-bottom: 10px;"><strong>To:</strong> <span id="emailTo"></span></div>
+            <div style="margin-bottom: 10px;"><strong>Subject:</strong> Discover Premium Pet Care Solutions at Leashes and Leads</div>
+            <div style="margin-bottom: 15px;"><strong>Message:</strong></div>
+            <div id="emailBody" style="line-height: 1.6; color: #ccc;"></div>
+            <div style="margin-top: 20px;">
+                <button class="btn" onclick="sendEmail()">Send Email</button>
+                <button class="btn btn-secondary" onclick="closeEmailTemplate()">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports">
+        <p style="color: #CF2030; margin-top: 10px;">&copy; 2024 Higgins Reports. Powered by S.A.L.E. Methodology</p>
+    </footer>
+
+    <script>
+        // Sample client data for Los Angeles area pet owners
+        const clientData = [
+            {name: "Sarah Martinez", email: "sarah.martinez@gmail.com", phone: "(323) 555-0123", address: "1245 Sunset Blvd, Los Angeles, CA 90026", score: 22, tier: "1A", industry: "Pet Services", revenue: "$150K"},
+            {name: "Michael Chen", email: "mchen@petgrooming.com", phone: "(213) 555-0456", address: "3456 Melrose Ave, Los Angeles, CA 90038", score: 21, tier: "1A", industry: "Grooming", revenue: "$200K"},
+            {name: "Jennifer Wilson", email: "jwilson@vethospital.com", phone: "(310) 555-0789", address: "789 Beverly Blvd, Beverly Hills, CA 90210", score: 23, tier: "1A", industry: "Veterinary", revenue: "$500K"},
+            {name: "David Rodriguez", email: "drodriguez@dogpark.org", phone: "(323) 555-0321", address: "2134 Echo Park Ave, Los Angeles, CA 90026", score: 20, tier: "1A", industry: "Recreation", revenue: "$120K"},
+            {name: "Lisa Thompson", email: "lisa.thompson@yahoo.com", phone: "(818) 555-0654", address: "5678 Ventura Blvd, Sherman Oaks, CA 91403", score: 19, tier: "1B", industry: "Pet Training", revenue: "$95K"},
+            {name: "Robert Kim", email: "rkim@petstore.net", phone: "(213) 555-0987", address: "9012 Western Ave, Los Angeles, CA 90047", score: 18, tier: "1B", industry: "Retail", revenue: "$180K"},
+            {name: "Amanda Davis", email: "amanda.davis@outlook.com", phone: "(310) 555-0246", address: "3457 Santa Monica Blvd, West Hollywood, CA 90069", score: 17, tier: "1B", industry: "Pet Sitting", revenue: "$75K"},
+            {name: "James Garcia", email: "jgarcia@animalrescue.org", phone: "(323) 555-0135", address: "6789 Hollywood Blvd, Hollywood, CA 90028", score: 19, tier: "1B", industry: "Animal Welfare", revenue: "$250K"},
+            {name: "Michelle Lee", email: "mlee@petphotography.com", phone: "(818) 555-0468", address: "1234 Laurel Canyon Blvd, North Hollywood, CA 91607", score: 16, tier: "1C", industry: "Photography", revenue: "$65K"},
+            {name: "Kevin O'Connor", email: "koconnor@gmail.com", phone: "(213) 555-0579", address: "8901 Figueroa St, Los Angeles, CA 90003", score: 15, tier: "1C", industry: "Pet Owner", revenue: "$85K"},
+            {name: "Rachel Green", email: "rgreen@pettherapy.com", phone: "(310) 555-0691", address: "2468 Pico Blvd, Santa Monica, CA 90405", score: 16, tier: "1C", industry: "Therapy", revenue: "$110K"},
+            {name: "Daniel Park", email: "dpark@dogwalking.biz", phone: "(323) 555-0802", address: "3579 Wilshire Blvd, Los Angeles, CA 90010", score: 14, tier: "1C", industry: "Pet Services", revenue: "$45K"},
+            {name: "Nicole Brown", email: "nbrown@petboarding.com", phone: "(818) 555-0913", address: "4680 Sepulveda Blvd, Van Nuys, CA 91411", score: 17, tier: "1B", industry: "Boarding", revenue: "$135K"},
+            {name: "Anthony Nguyen", email: "anguyen@yahoo.com", phone: "(213) 555-0024", address: "5791 Olympic Blvd, Los Angeles, CA 90022", score: 15, tier: "1C", industry: "Pet Owner", revenue: "$70K"},
+            {name: "Stephanie White", email: "swhite@petinsurance.net", phone: "(310) 555-0135", address: "6802 Sunset Strip, West Hollywood, CA 90069", score: 20, tier: "1A", industry: "Insurance", revenue: "$300K"},
+            {name: "Christopher Lopez", email: "clopez@animalclinic.org", phone: "(323) 555-0246", address: "7913 Vermont Ave, Los Angeles, CA 90044", score: 21, tier: "1A", industry: "Veterinary", revenue: "$400K"},
+            {name: "Heather Johnson", email: "hjohnson@petfood.com", phone: "(818) 555-0357", address: "8024 Reseda Blvd, Reseda, CA 91335", score: 18, tier: "1B", industry: "Food/Nutrition", revenue: "$160K"},
+            {name: "Ryan Miller", email: "rmiller@gmail.com", phone: "(213) 555-0468", address: "9135 Crenshaw Blvd, Los Angeles, CA 90008", score: 14, tier: "1C", industry: "Pet Owner", revenue: "$95K"},
+            {name: "Christina Anderson", email: "canderson@petrescue.org", phone: "(310) 555-0579", address: "1024 Lincoln Blvd, Venice, CA 90291", score: 16, tier: "1C", industry: "Animal Rescue", revenue: "$80K"},
+            {name: "Matthew Taylor", email: "mtaylor@dogtraining.biz", phone: "(323) 555-0680", address: "2135 Fairfax Ave, Los Angeles, CA 90046", score: 19, tier: "1B", industry: "Training", revenue: "$125K"},
+            {name: "Samantha Clark", email: "sclark@outlook.com", phone: "(818) 555-0791", address: "3246 Lankershim Blvd, North Hollywood, CA 91602", score: 15, tier: "1C", industry: "Pet Owner", revenue: "$105K"},
+            {name: "Brian Lewis", email: "blewis@petstore.net", phone: "(213) 555-0802", address: "4357 Main St, Los Angeles, CA 90015", score: 17, tier: "1B", industry: "Retail", revenue: "$140K"},
+            {name: "Kimberly Moore", email: "kmoore@animalhealth.com", phone: "(310) 555-0913", address: "5468 Centinela Ave, Culver City, CA 90230", score: 20, tier: "1A", industry: "Healthcare", revenue: "$350K"},
+            {name: "Joshua Young", email: "jyoung@gmail.com", phone: "(323) 555-0124", address: "6579 Highland Ave, Hollywood, CA 90028", score: 14, tier: "1C", industry: "Pet Owner", revenue: "$65K"},
+            {name: "Ashley Hall", email: "ahall@petgrooming.biz", phone: "(818) 555-0235", address: "7680 Topanga Canyon Blvd, Canoga Park, CA 91303", score: 18, tier: "1B", industry: "Grooming", revenue: "$115K"},
+            {name: "Justin King", email: "jking@dogpark.org", phone: "(213) 555-0346", address: "8791 Broadway, Los Angeles, CA 90003", score: 16, tier: "1C", industry: "Recreation", revenue: "$90K"},
+            {name: "Megan Scott", email: "mscott@yahoo.com", phone: "(310) 555-0457", address: "9802 Washington Blvd, Culver City, CA 90232", score: 15, tier: "1C", industry: "Pet Owner", revenue: "$110K"},
+            {name: "Andrew Wright", email: "awright@vettech.com", phone: "(323) 555-0568", address: "1913 Silver Lake Blvd, Silver Lake, CA 90026", score: 19, tier: "1B", industry: "Veterinary Tech", revenue: "$85K"},
+            {name: "Brittany Adams", email: "badams@animalwelfare.org", phone: "(818) 555-0679", address: "2024 Ventura Blvd, Studio City, CA 91604", score: 17, tier: "1B", industry: "Animal Welfare", revenue: "$200K"},
+            {name: "Tyler Green", email: "tgreen@pettraining.net", phone: "(213) 555-0780", address: "3135 Spring St, Los Angeles, CA 90013", score: 16, tier: "1C", industry: "Training", revenue: "$75K"},
+            {name: "Kayla Baker", email: "kbaker@outlook.com", phone: "(310) 555-0891", address: "4246 Ocean Ave, Santa Monica, CA 90401", score: 14, tier: "1C", industry: "Pet Owner", revenue: "$120K"},
+            {name: "Nathan Hill", email: "nhill@petcare.biz", phone: "(323) 555-0902", address: "5357 Sunset Blvd, Hollywood, CA 90027", score: 18, tier: "1B", industry: "Pet Care", revenue: "$155K"},
+            {name: "Alexis Carter", email: "acarter@gmail.com", phone: "(818) 555-0013", address: "6468 Mulholland Dr, Hollywood Hills, CA 90068", score: 15, tier: "1C", industry: "Pet Owner", revenue: "$180K"},
+            {name: "Jordan Phillips", email: "jphillips@animalclinic.net", phone: "(213) 555-0124", address: "7579 La Brea Ave, Los Angeles, CA 90036", score: 21, tier: "1A", industry: "Veterinary", revenue: "$425K"},
+            {name: "Victoria Evans", email: "vevans@petnutrition.com", phone: "(310) 555-0235", address: "8680 Robertson Blvd, West Hollywood, CA 90048", score: 19, tier: "1B", industry: "Nutrition", revenue: "$175K"},
+            {name: "Jacob Campbell", email: "jcampbell@yahoo.com", phone: "(323) 555-0346", address: "9791 Vermont Ave, Los Angeles, CA 90037", score: 14, tier: "1C", industry: "Pet Owner", revenue: "$85K"},
+            {name: "Morgan Parker", email: "mparker@dogrescue.org", phone: "(818) 555-0457", address: "1802 Devonshire St, Northridge, CA 91325", score: 16, tier: "1C", industry: "Animal Rescue", revenue: "$95K"},
+            {name: "Ethan Roberts", email: "eroberts@petstore.biz", phone: "(213) 555-0568", address: "2913 Crenshaw Blvd, Los Angeles, CA 90016", score: 17, tier: "1B", industry: "Retail", revenue: "$145K"},
+            {name: "Jasmine Cooper", email: "jcooper@animaltherapy.com", phone: "(310) 555-0679", address: "3024 Wilshire Blvd, Santa Monica, CA 90403", score: 18, tier: "1B", industry: "Therapy", revenue: "$130K"},
+            {name: "Connor Reed", email: "creed@gmail.com", phone: "(323) 555-0780", address: "4135 Melrose Ave, Los Angeles, CA 90029", score: 15, tier: "1C", industry: "Pet Owner", revenue: "$70K"},
+            {name: "Taylor Bailey", email: "tbailey@petgrooming.org", phone: "(818) 555-0891", address: "5246 Van Nuys Blvd, Van Nuys, CA 91401", score: 17, tier: "1B", industry: "Grooming", revenue: "$100K"},
+            {name: "Cameron Wood", email: "cwood@dogtraining.com", phone: "(213) 555-0902", address: "6357 Figueroa St, Los Angeles, CA 90731", score: 18, tier: "1B", industry: "Training", revenue: "$110K"},
+            {name: "Sierra Long", email: "slong@outlook.com", phone: "(310) 555-0013", address: "7468 Sepulveda Blvd, Los Angeles, CA 90045", score: 14, tier: "1C", industry: "Pet Owner", revenue: "$115K"},
+            {name: "Hunter Foster", email: "hfoster@animalhealth.biz", phone: "(323) 555-0124", address: "8579 Western Ave, Los Angeles, CA 90018", score: 20, tier: "1A", industry: "Healthcare", revenue: "$275K"},
+            {name: "Destiny Russell", email: "drussell@petcare.net", phone: "(818) 555-0235", address: "9680 Roscoe Blvd, Panorama City, CA 91402", score: 16, tier: "1C", industry: "Pet Care", revenue: "$88K"},
+            {name: "Logan Price", email: "lprice@gmail.com", phone: "(213) 555-0346", address: "1791 Temple St, Los Angeles, CA 90026", score: 15, tier: "1C", industry: "Pet Owner", revenue: "$105K"},
+            {name: "Savannah Ward", email: "sward@vetclinic.org", phone: "(310) 555-0457", address: "2802 Pico Blvd, Santa Monica, CA 90405", score: 22, tier: "1A", industry: "Veterinary", revenue: "$380K"},
+            {name: "Blake Torres", email: "btorres@dogpark.biz", phone: "(323) 555-0568", address: "3913 Griffith Park Blvd, Los Angeles, CA 90027", score: 17, tier: "1B", industry: "Recreation", revenue: "$125K"},
+            {name: "Paige Peterson", email: "ppeterson@yahoo.com", phone: "(818) 555-0679", address: "4024 Laurel Canyon Blvd, Studio City, CA 91604", score: 15, tier: "1C", industry: "Pet Owner", revenue: "$95K"},
+            {name: "Carter Gray", email: "cgray@petfood.net", phone: "(213) 555-0780", address: "5135 Olympic Blvd, Los Angeles, CA 90019", score: 18, tier: "1B", industry: "Nutrition", revenue: "$165K"},
+            {name: "Peyton Howard", email: "phoward@animalrescue.com", phone: "(310) 555-0891", address: "6246 Santa Monica Blvd, Hollywood, CA 90038", score: 16, tier: "1C", industry: "Animal Rescue", revenue: "$78K"}
+        ];
+
+        let filteredData = [...clientData];
+
+        function populateTable() {
+            const tbody = document.getElementById('clientTableBody');
+            tbody.innerHTML = '';
+            
+            filteredData.forEach(client => {
+                const row = document.createElement('tr');
+                row.className = `tier-${client.tier.toLowerCase()}`;
+                row.innerHTML = `
+                    <td>${client.name}</td>
+                    <td>${client.email}</td>
+                    <td>${client.phone}</td>
+                    <td>${client.address}</td>
+                    <td>${client.score}</td>
+                    <td>${client.tier}</td>
+                    <td>${client.industry}</td>
+                    <td>${client.revenue}</td>
+                    <td>
+                        <button class="contact-btn" onclick="contactClient('${client.email}', '${client.name}', 'email')">Email</button>
+                        <button class="contact-btn" onclick="contactClient('${client.phone}', '${client.name}', 'call')">Call</button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function filterTable() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const tierFilter = document.getElementById('tierFilter').value;
+            
+            filteredData = clientData.filter(client => {
+                const matchesSearch = client.name.toLowerCase().includes(searchTerm) ||
+                                    client.email.toLowerCase().includes(searchTerm) ||
+                                    client.industry.toLowerCase().includes(searchTerm);
+                const matchesTier = !tierFilter || client.tier === tierFilter;
+                return matchesSearch && matchesTier;
+            });
+            
+            populateTable();
+        }
+
+        function sortTable() {
+            const sortBy = document.getElementById('sortBy').value;
+            
+            filteredData.sort((a, b) => {
+                switch(sortBy) {
+                    case 'name':
+                        return a.name.localeCompare(b.name);
+                    case 'score':
+                        return b.score - a.score;
+                    case 'revenue':
+                        return parseInt(b.revenue.replace(/\$|K|,/g, '')) - parseInt(a.revenue.replace(/\$|K|,/g, ''));
+                    case 'tier':
+                        return a.tier.localeCompare(b.tier);
+                    default:
+                        return 0;
+                }
+            });
+            
+            populateTable();
+        }
+
+        function sortColumn(column) {
+            const sortBy = document.getElementById('sortBy');
+            sortBy.value = column;
+            sortTable();
+        }
+
+        function contactClient(contact, name, type) {
+            if (type === 'email') {
+                showEmailTemplate(contact, name);
+            } else if (type === 'call') {
+                window.open(`tel:${contact}`);
+            }
+        }
+
+        function showEmailTemplate(email, name) {
+            document.getElementById('emailTo').textContent = email;
+            document.getElementById('emailBody').innerHTML = `
+                <p>Dear ${name},</p>
+                <p>I hope this message finds you and your beloved pet in great health and happiness!</p>
+                <p>As a fellow pet lover in the Los Angeles area, I wanted to personally introduce you to Leashes and Leads, your neighborhood's premier destination for premium pet care products and services.</p>
+                
+                <p><strong>Why Choose Leashes and Leads?</strong></p>
+                <ul style="margin: 10px 0; padding-left: 20px;">
+                    <li><strong>Premium Quality Products:</strong> We carefully curate only the finest pet foods, toys, and accessories from trusted brands</li>
+                    <li><strong>Expert Pet Care Advice:</strong> Our knowledgeable staff provides personalized recommendations for your pet's unique needs</li>
+                    <li><strong>Local Community Focus:</strong> We're deeply connected to the LA pet community and support local animal welfare initiatives</li>
+                    <li><strong>Convenient Location:</strong> Easy access with ample parking, plus online ordering for busy pet parents</li>
+                </ul>
+
+                <p><strong>Special Welcome Offer:</strong> Visit us this month and receive 15% off your first purchase, plus a complimentary pet wellness consultation!</p>
+                
+                <p>Whether you're looking for nutritious food, engaging toys, comfortable bedding, or expert advice on pet care, we're here to help you give your furry friend the best life possible.</p>
+                
+                <p>I'd love to meet you and your pet personally. Feel free to stop by anytime or give us a call to learn more about how we can support your pet's health and happiness.</p>
+                
+                <p>Warmest regards,<br>
+                Jerry Fischer<br>
+                Owner, Leashes and Leads<br>
+                www.leashesandleads.com<br>
+                contact@leashesandleads.com</p>
+                
+                <p><em>P.S. Follow us on social media for daily pet care tips, cute customer photos, and special promotions!</em></p>
+            `;
+            document.getElementById('emailTemplate').style.display = 'block';
+        }
+
+        function sendEmail() {
+            const email = document.getElementById('emailTo').textContent;
+            const subject = encodeURIComponent('Discover Premium Pet Care Solutions at Leashes and Leads');
+            const body = encodeURIComponent(document.getElementById('emailBody').textContent);
+            window.open(`mailto:${email}?subject=${subject}&body=${body}`);
+        }
+
+        function closeEmailTemplate() {
+            document.getElementById('emailTemplate').style.display = 'none';
+        }
+
+        function exportData() {
+            let csv = 'Client Name,Email,Phone,Address,PURES Score,Tier,Industry,Revenue\n';
+            filteredData.forEach(client => {
+                csv += `${client.name},${client.email},${client.phone},"${client.address}",${client.score},${client.tier},${client.industry},${client.revenue}\n`;
+            });
+            
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'leashes_leads_client_data.csv';
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+
+        function openTab(evt, tabName) {
+            const tabcontents = document.getElementsByClassName("tab-content");
+            for (let i = 0; i < tabcontents.length; i++) {
+                tabcontents[i].classList.remove("active");
+            }
+            
+            const tablinks = document.getElementsByClassName("tab");
+            for (let i = 0; i < tablinks.length; i++) {
+                tablinks[i].classList.remove("active");
+            }
+            
+            document.getElementById(tabName).classList.add("active");
+            evt.currentTarget.classList.add("active");
+        }
+
+        // P.U.R.E.S. scoring functionality
+        const sliders = ['profitability', 'urgency', 'reachability', 'engagement', 'sustainability'];
+        
+        sliders.forEach(slider => {
+            document.getElementById(slider).addEventListener('input', function() {
+                document.getElementById(slider + 'Value').textContent = this.value;
+                updateTotalScore();
+            });
+        });
+
+        function updateTotalScore() {
+            let total = 0;
+            sliders.forEach(slider => {
+                total += parseInt(document.getElementById(slider).value);
+            });
+            document.getElementById('totalScore').textContent = total;
+            
+            let tier, classification;
+            if (total >= 20) {
+                tier = '1A';
+                classification = 'Tier 1A - Premium';
+            } else if (total >= 15) {
+                tier = '1B';
+                classification = 'Tier 1B - High-Value';
+            } else {
+                tier = '1C';
+                classification = 'Tier 1C - Qualified';
+            }
+            
+            document.getElementById('tierClassification').textContent = classification;
+        }
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            populateTable();
+            updateTotalScore();
+        });
+    </script>
+</body>
+</html>

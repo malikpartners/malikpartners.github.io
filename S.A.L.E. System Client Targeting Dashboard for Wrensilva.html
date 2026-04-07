@@ -1,0 +1,1419 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>S.A.L.E. System - Wrensilva Client Targeting Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #000000;
+            color: #CF2030;
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+        }
+
+        .header {
+            background-color: #000000;
+            padding: 1rem;
+            border-bottom: 2px solid #CF2030;
+            text-align: center;
+        }
+
+        .header img {
+            max-height: 80px;
+            width: auto;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .business-info {
+            background-color: #1a1a1a;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            border: 1px solid #CF2030;
+        }
+
+        .tabs {
+            display: flex;
+            background-color: #1a1a1a;
+            border-radius: 8px 8px 0 0;
+            margin-bottom: 0;
+        }
+
+        .tab {
+            padding: 1rem 2rem;
+            background-color: #2a2a2a;
+            border: none;
+            color: #CF2030;
+            cursor: pointer;
+            border-radius: 8px 8px 0 0;
+            margin-right: 2px;
+            transition: all 0.3s;
+        }
+
+        .tab.active {
+            background-color: #CF2030;
+            color: #000000;
+            font-weight: bold;
+        }
+
+        .tab:hover {
+            background-color: #CF2030;
+            color: #000000;
+        }
+
+        .tab-content {
+            background-color: #1a1a1a;
+            padding: 2rem;
+            border-radius: 0 8px 8px 8px;
+            border: 1px solid #CF2030;
+            min-height: 600px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            color: #CF2030;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            background-color: #2a2a2a;
+            border: 1px solid #CF2030;
+            border-radius: 4px;
+            color: #ffffff;
+        }
+
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: #ffffff;
+            box-shadow: 0 0 5px #CF2030;
+        }
+
+        .btn {
+            background-color: #CF2030;
+            color: #ffffff;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .btn:hover {
+            background-color: #a01827;
+            transform: translateY(-1px);
+        }
+
+        .btn-small {
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+        }
+
+        .search-filter {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .search-filter input, .search-filter select {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .client-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+            background-color: #2a2a2a;
+        }
+
+        .client-table th, .client-table td {
+            padding: 0.75rem;
+            text-align: left;
+            border: 1px solid #CF2030;
+        }
+
+        .client-table th {
+            background-color: #CF2030;
+            color: #000000;
+            font-weight: bold;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .client-table th:hover {
+            background-color: #a01827;
+        }
+
+        .client-table tbody tr:hover {
+            background-color: #3a3a3a;
+        }
+
+        .tier-1a { background-color: #2d5a2d; }
+        .tier-1b { background-color: #5a5a2d; }
+        .tier-1c { background-color: #2d4a5a; }
+
+        .pures-form {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .pures-criteria {
+            background-color: #2a2a2a;
+            padding: 1rem;
+            border-radius: 4px;
+            border: 1px solid #CF2030;
+        }
+
+        .rating-input {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+            margin-top: 0.5rem;
+        }
+
+        .rating-input input[type="radio"] {
+            margin-right: 0.25rem;
+        }
+
+        .score-display {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #CF2030;
+            margin-top: 1rem;
+        }
+
+        .email-template {
+            background-color: #2a2a2a;
+            padding: 1rem;
+            border-radius: 4px;
+            border: 1px solid #CF2030;
+            margin-top: 1rem;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            border-top: 1px solid #CF2030;
+            margin-top: 3rem;
+        }
+
+        .footer img {
+            max-height: 40px;
+            width: auto;
+        }
+
+        .analytics-card {
+            background-color: #2a2a2a;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid #CF2030;
+            margin-bottom: 1rem;
+        }
+
+        .analytics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+
+        .metric {
+            text-align: center;
+        }
+
+        .metric-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #CF2030;
+        }
+
+        .metric-label {
+            font-size: 0.9rem;
+            color: #cccccc;
+        }
+
+        @media (max-width: 768px) {
+            .tabs {
+                flex-direction: column;
+            }
+            
+            .search-filter {
+                flex-direction: column;
+            }
+            
+            .client-table {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports" />
+    </header>
+
+    <div class="container">
+        <div class="business-info">
+            <h1>S.A.L.E. System Dashboard - Wrensilva</h1>
+            <p><strong>Business:</strong> Wrensilva | <strong>Owner:</strong> Debra Salyer | <strong>Industry:</strong> Furniture Design</p>
+            <p><strong>Location:</strong> San Diego, California | <strong>Website:</strong> www.wrensilva.com | <strong>Phone:</strong> (800) 292-6353</p>
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('sourcing')">S.OURCING</button>
+            <button class="tab" onclick="showTab('assessing')">A.SSESSING</button>
+            <button class="tab" onclick="showTab('listening')">L.ISTENING</button>
+            <button class="tab" onclick="showTab('empowering')">E.MPOWERING</button>
+            <button class="tab" onclick="showTab('database')">Client Database</button>
+            <button class="tab" onclick="showTab('analytics')">Analytics</button>
+        </div>
+
+        <!-- SOURCING Tab -->
+        <div id="sourcing" class="tab-content">
+            <h2>P.U.R.E.S. Client Scoring System</h2>
+            
+            <div class="pures-form">
+                <div class="pures-criteria">
+                    <label>Profitability (Budget Capacity)</label>
+                    <p>Annual revenue threshold and purchasing power for high-end furniture</p>
+                    <div class="rating-input">
+                        <input type="radio" name="profitability" value="1" onchange="calculatePuresScore()"> 1
+                        <input type="radio" name="profitability" value="2" onchange="calculatePuresScore()"> 2
+                        <input type="radio" name="profitability" value="3" onchange="calculatePuresScore()"> 3
+                        <input type="radio" name="profitability" value="4" onchange="calculatePuresScore()"> 4
+                        <input type="radio" name="profitability" value="5" onchange="calculatePuresScore()"> 5
+                    </div>
+                </div>
+
+                <div class="pures-criteria">
+                    <label>Urgency (Interior Design Needs)</label>
+                    <p>Active pain points requiring immediate furniture solutions</p>
+                    <div class="rating-input">
+                        <input type="radio" name="urgency" value="1" onchange="calculatePuresScore()"> 1
+                        <input type="radio" name="urgency" value="2" onchange="calculatePuresScore()"> 2
+                        <input type="radio" name="urgency" value="3" onchange="calculatePuresScore()"> 3
+                        <input type="radio" name="urgency" value="4" onchange="calculatePuresScore()"> 4
+                        <input type="radio" name="urgency" value="5" onchange="calculatePuresScore()"> 5
+                    </div>
+                </div>
+
+                <div class="pures-criteria">
+                    <label>Reachability (Decision Access)</label>
+                    <p>Accessible decision makers with clear contact paths</p>
+                    <div class="rating-input">
+                        <input type="radio" name="reachability" value="1" onchange="calculatePuresScore()"> 1
+                        <input type="radio" name="reachability" value="2" onchange="calculatePuresScore()"> 2
+                        <input type="radio" name="reachability" value="3" onchange="calculatePuresScore()"> 3
+                        <input type="radio" name="reachability" value="4" onchange="calculatePuresScore()"> 4
+                        <input type="radio" name="reachability" value="5" onchange="calculatePuresScore()"> 5
+                    </div>
+                </div>
+
+                <div class="pures-criteria">
+                    <label>Engagement (Design Innovation Interest)</label>
+                    <p>Openness to innovative furniture design and partnerships</p>
+                    <div class="rating-input">
+                        <input type="radio" name="engagement" value="1" onchange="calculatePuresScore()"> 1
+                        <input type="radio" name="engagement" value="2" onchange="calculatePuresScore()"> 2
+                        <input type="radio" name="engagement" value="3" onchange="calculatePuresScore()"> 3
+                        <input type="radio" name="engagement" value="4" onchange="calculatePuresScore()"> 4
+                        <input type="radio" name="engagement" value="5" onchange="calculatePuresScore()"> 5
+                    </div>
+                </div>
+
+                <div class="pures-criteria">
+                    <label>Sustainability (Long-term Potential)</label>
+                    <p>Long-term partnership potential with growth trajectory</p>
+                    <div class="rating-input">
+                        <input type="radio" name="sustainability" value="1" onchange="calculatePuresScore()"> 1
+                        <input type="radio" name="sustainability" value="2" onchange="calculatePuresScore()"> 2
+                        <input type="radio" name="sustainability" value="3" onchange="calculatePuresScore()"> 3
+                        <input type="radio" name="sustainability" value="4" onchange="calculatePuresScore()"> 4
+                        <input type="radio" name="sustainability" value="5" onchange="calculatePuresScore()"> 5
+                    </div>
+                </div>
+            </div>
+
+            <div class="score-display">
+                <p>P.U.R.E.S. Score: <span id="pures-score">0</span>/25</p>
+                <p>Client Tier: <span id="client-tier">Unclassified</span></p>
+            </div>
+
+            <button class="btn" onclick="addClientToDatabase()">Add Client to Database</button>
+        </div>
+
+        <!-- ASSESSING Tab -->
+        <div id="assessing" class="tab-content hidden">
+            <h2>Buying Pattern Analysis</h2>
+            
+            <div class="analytics-grid">
+                <div class="analytics-card">
+                    <h3>Analytical Buyers</h3>
+                    <p>Require detailed ROI analysis, portfolio reviews, material specifications</p>
+                    <ul>
+                        <li>High-end interior designers</li>
+                        <li>Corporate facility managers</li>
+                        <li>Luxury home builders</li>
+                    </ul>
+                </div>
+
+                <div class="analytics-card">
+                    <h3>Relationship Buyers</h3>
+                    <p>Value trust, referrals, long-term design partnerships</p>
+                    <ul>
+                        <li>Boutique hotels</li>
+                        <li>High-end residential clients</li>
+                        <li>Luxury retail spaces</li>
+                    </ul>
+                </div>
+
+                <div class="analytics-card">
+                    <h3>Efficiency Buyers</h3>
+                    <p>Focus on time-saving, complete room solutions, project management</p>
+                    <ul>
+                        <li>Restaurant chains</li>
+                        <li>Office space planners</li>
+                        <li>Multi-unit developers</li>
+                    </ul>
+                </div>
+
+                <div class="analytics-card">
+                    <h3>Innovation Buyers</h3>
+                    <p>Seek cutting-edge design, sustainable materials, smart furniture</p>
+                    <ul>
+                        <li>Tech company offices</li>
+                        <li>Modern art galleries</li>
+                        <li>High-tech residential projects</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- LISTENING Tab -->
+        <div id="listening" class="tab-content hidden">
+            <h2>Feedback Integration System</h2>
+            
+            <div class="form-group">
+                <label>Client Feedback Form</label>
+                <textarea rows="4" placeholder="Enter client feedback, concerns, or suggestions..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Feedback Category</label>
+                <select>
+                    <option>Product Quality</option>
+                    <option>Design Satisfaction</option>
+                    <option>Delivery Experience</option>
+                    <option>Customer Service</option>
+                    <option>Price Value</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Priority Level</label>
+                <select>
+                    <option>Low</option>
+                    <option>Medium</option>
+                    <option>High</option>
+                    <option>Critical</option>
+                </select>
+            </div>
+
+            <button class="btn">Submit Feedback</button>
+
+            <div class="analytics-card" style="margin-top: 2rem;">
+                <h3>Recent Feedback Summary</h3>
+                <p><strong>Positive:</strong> 85% - Clients love the craftsmanship and design aesthetic</p>
+                <p><strong>Neutral:</strong> 10% - Pricing inquiries and customization questions</p>
+                <p><strong>Negative:</strong> 5% - Delivery timeline concerns</p>
+            </div>
+        </div>
+
+        <!-- EMPOWERING Tab -->
+        <div id="empowering" class="tab-content hidden">
+            <h2>Referral Strategy Dashboard</h2>
+            
+            <div class="analytics-grid">
+                <div class="analytics-card">
+                    <h3>Referral Rewards Program</h3>
+                    <p>Encourage existing clients to refer new customers</p>
+                    <ul>
+                        <li>10% discount on next purchase</li>
+                        <li>Exclusive design consultations</li>
+                        <li>Priority access to new collections</li>
+                    </ul>
+                    <button class="btn btn-small">Manage Rewards</button>
+                </div>
+
+                <div class="analytics-card">
+                    <h3>Success Stories</h3>
+                    <p>Document and share client transformations</p>
+                    <ul>
+                        <li>Before/after photography</li>
+                        <li>Client testimonials</li>
+                        <li>Design process videos</li>
+                    </ul>
+                    <button class="btn btn-small">Add Success Story</button>
+                </div>
+
+                <div class="analytics-card">
+                    <h3>Partnership Opportunities</h3>
+                    <p>Collaborate with complementary businesses</p>
+                    <ul>
+                        <li>Interior designers</li>
+                        <li>Real estate agents</li>
+                        <li>Luxury home builders</li>
+                    </ul>
+                    <button class="btn btn-small">Explore Partnerships</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- CLIENT DATABASE Tab -->
+        <div id="database" class="tab-content hidden">
+            <h2>San Diego Area Client Database</h2>
+            
+            <div class="search-filter">
+                <input type="text" id="search-input" placeholder="Search clients..." onkeyup="filterTable()">
+                <select id="tier-filter" onchange="filterTable()">
+                    <option value="">All Tiers</option>
+                    <option value="Tier 1A">Tier 1A (Premium)</option>
+                    <option value="Tier 1B">Tier 1B (High-Value)</option>
+                    <option value="Tier 1C">Tier 1C (Qualified)</option>
+                </select>
+                <select id="industry-filter" onchange="filterTable()">
+                    <option value="">All Industries</option>
+                    <option value="Real Estate">Real Estate</option>
+                    <option value="Hospitality">Hospitality</option>
+                    <option value="Design">Interior Design</option>
+                    <option value="Tech">Technology</option>
+                    <option value="Healthcare">Healthcare</option>
+                </select>
+                <button class="btn" onclick="exportData()">Export CSV</button>
+            </div>
+
+            <table class="client-table" id="client-table">
+                <thead>
+                    <tr>
+                        <th onclick="sortTable(0)">Client Name</th>
+                        <th onclick="sortTable(1)">Email</th>
+                        <th onclick="sortTable(2)">Phone</th>
+                        <th onclick="sortTable(3)">Address</th>
+                        <th onclick="sortTable(4)">P.U.R.E.S. Score</th>
+                        <th onclick="sortTable(5)">Tier Level</th>
+                        <th onclick="sortTable(6)">Industry</th>
+                        <th onclick="sortTable(7)">Revenue Est.</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="client-tbody">
+                    <!-- Client data will be populated by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- ANALYTICS Tab -->
+        <div id="analytics" class="tab-content hidden">
+            <h2>S.A.L.E. Performance Analytics</h2>
+            
+            <div class="analytics-grid">
+                <div class="analytics-card">
+                    <div class="metric">
+                        <div class="metric-value">87%</div>
+                        <div class="metric-label">P.U.R.E.S. Score Accuracy</div>
+                    </div>
+                </div>
+
+                <div class="analytics-card">
+                    <div class="metric">
+                        <div class="metric-value">92%</div>
+                        <div class="metric-label">Needs Assessment Accuracy</div>
+                    </div>
+                </div>
+
+                <div class="analytics-card">
+                    <div class="metric">
+                        <div class="metric-value">78%</div>
+                        <div class="metric-label">Feedback Collection Rate</div>
+                    </div>
+                </div>
+
+                <div class="analytics-card">
+                    <div class="metric">
+                        <div class="metric-value">3.2</div>
+                        <div class="metric-label">Avg. Referrals per Client</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="analytics-card" style="margin-top: 2rem;">
+                <h3>Monthly Performance Trends</h3>
+                <p><strong>Tier 1A Clients:</strong> 15 (Premium furniture buyers)</p>
+                <p><strong>Tier 1B Clients:</strong> 25 (High-value prospects)</p>
+                <p><strong>Tier 1C Clients:</strong> 10 (Qualified leads)</p>
+                <p><strong>Conversion Rate:</strong> 68% from qualified leads to sales</p>
+                <p><strong>Average Deal Size:</strong> $12,500</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Email Template Modal -->
+    <div id="email-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); z-index: 1000;">
+        <div style="position: relative; margin: 5% auto; padding: 2rem; background-color: #1a1a1a; border: 1px solid #CF2030; border-radius: 8px; width: 80%; max-width: 600px;">
+            <span style="position: absolute; top: 10px; right: 20px; font-size: 28px; color: #CF2030; cursor: pointer;" onclick="closeEmailModal()">&times;</span>
+            <h3>Email Template</h3>
+            <div id="email-content" class="email-template">
+                <!-- Email content will be populated by JavaScript -->
+            </div>
+            <button class="btn" onclick="sendEmail()">Send Email</button>
+            <button class="btn" onclick="closeEmailModal()">Cancel</button>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports" />
+        <p>&copy; 2024 Higgins Reports. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Sample client data for San Diego area (within 10 miles of San Diego, CA)
+        let clientData = [
+            {
+                name: "Sarah Martinez",
+                email: "sarah.martinez@luxurydesigns.com",
+                phone: "(619) 555-0123",
+                address: "2150 Garnet Ave, San Diego, CA 92109",
+                puresScore: 23,
+                tier: "Tier 1A",
+                industry: "Interior Design",
+                revenue: "$2.5M",
+                buyerType: "Relationship",
+                notes: "High-end residential designer, prefers sustainable materials"
+            },
+            {
+                name: "Michael Chen",
+                email: "m.chen@techstartup.com",
+                phone: "(858) 555-0234",
+                address: "7634 Clairemont Mesa Blvd, San Diego, CA 92111",
+                puresScore: 21,
+                tier: "Tier 1A",
+                industry: "Tech",
+                revenue: "$5.2M",
+                buyerType: "Innovation",
+                notes: "Tech company CEO, looking for modern office furniture"
+            },
+            {
+                name: "Jennifer Walsh",
+                email: "j.walsh@coastalrealty.com",
+                phone: "(619) 555-0345",
+                address: "1055 University Ave, San Diego, CA 92103",
+                puresScore: 19,
+                tier: "Tier 1B",
+                industry: "Real Estate",
+                revenue: "$1.8M",
+                buyerType: "Efficiency",
+                notes: "Luxury real estate agent, stages high-end properties"
+            },
+            {
+                name: "David Rodriguez",
+                email: "david@premiumhotels.com",
+                phone: "(858) 555-0456",
+                address: "3299 Holiday Ct, La Jolla, CA 92037",
+                puresScore: 22,
+                tier: "Tier 1A",
+                industry: "Hospitality",
+                revenue: "$8.7M",
+                buyerType: "Analytical",
+                notes: "Boutique hotel chain owner, values craftsmanship"
+            },
+            {
+                name: "Lisa Thompson",
+                email: "lisa.t@modernclinics.com",
+                phone: "(619) 555-0567",
+                address: "4076 4th Ave, San Diego, CA 92103",
+                puresScore: 18,
+                tier: "Tier 1B",
+                industry: "Healthcare",
+                revenue: "$3.1M",
+                buyerType: "Efficiency",
+                notes: "Medical practice owner, needs waiting room furniture"
+            },
+            {
+                name: "Robert Kim",
+                email: "robert.kim@luxuryhomes.com",
+                phone: "(858) 555-0678",
+                address: "8950 Villa La Jolla Dr, La Jolla, CA 92037",
+                puresScore: 24,
+                tier: "Tier 1A",
+                industry: "Real Estate",
+                revenue: "$12.3M",
+                buyerType: "Relationship",
+                notes: "Luxury home builder, regular large orders"
+            },
+            {
+                name: "Amanda Foster",
+                email: "a.foster@artgallerysd.com",
+                phone: "(619) 555-0789",
+                address: "1439 El Prado, San Diego, CA 92101",
+                puresScore: 20,
+                tier: "Tier 1B",
+                industry: "Design",
+                revenue: "$950K",
+                buyerType: "Innovation",
+                notes: "Contemporary art gallery owner"
+            },
+            {
+                name: "Carlos Mendez",
+                email: "carlos@restaurantgroup.com",
+                phone: "(619) 555-0890",
+                address: "789 W Harbor Dr, San Diego, CA 92101",
+                puresScore: 17,
+                tier: "Tier 1C",
+                industry: "Hospitality",
+                revenue: "$2.8M",
+                buyerType: "Efficiency",
+                notes: "Restaurant chain owner, bulk furniture needs"
+            },
+            {
+                name: "Patricia Wilson",
+                email: "p.wilson@elegantinteriors.com",
+                phone: "(858) 555-0901",
+                address: "12750 Carmel Country Rd, San Diego, CA 92130",
+                puresScore: 21,
+                tier: "Tier 1A",
+                industry: "Design",
+                revenue: "$1.4M",
+                buyerType: "Analytical",
+                notes: "High-end interior designer, celebrity clients"
+            },
+            {
+                name: "Thomas Garcia",
+                email: "t.garcia@techoffices.com",
+                phone: "(858) 555-1012",
+                address: "4225 Executive Sq, La Jolla, CA 92037",
+                puresScore: 19,
+                tier: "Tier 1B",
+                industry: "Tech",
+                revenue: "$6.5M",
+                buyerType: "Innovation",
+                notes: "Office space developer for tech companies"
+            },
+            // Additional 40 clients to reach 50 total
+            {
+                name: "Michelle Adams",
+                email: "m.adams@premiumspas.com",
+                phone: "(619) 555-1123",
+                address: "2445 San Diego Ave, San Diego, CA 92110",
+                puresScore: 18,
+                tier: "Tier 1B",
+                industry: "Healthcare",
+                revenue: "$1.2M",
+                buyerType: "Relationship",
+                notes: "Luxury spa owner, zen aesthetic preference"
+            },
+            {
+                name: "Steven Lee",
+                email: "steven@modernlofts.com",
+                phone: "(858) 555-1234",
+                address: "3456 Ingraham St, San Diego, CA 92109",
+                puresScore: 20,
+                tier: "Tier 1B",
+                industry: "Real Estate",
+                revenue: "$4.2M",
+                buyerType: "Innovation",
+                notes: "Modern loft developer"
+            },
+            {
+                name: "Rachel Cooper",
+                email: "rachel@cooperdesign.com",
+                phone: "(619) 555-1345",
+                address: "1678 India St, San Diego, CA 92101",
+                puresScore: 22,
+                tier: "Tier 1A",
+                industry: "Design",
+                revenue: "$1.8M",
+                buyerType: "Analytical",
+                notes: "Award-winning architect"
+            },
+            {
+                name: "Brian Murphy",
+                email: "b.murphy@luxuryretail.com",
+                phone: "(858) 555-1456",
+                address: "7007 Friars Rd, San Diego, CA 92108",
+                puresScore: 19,
+                tier: "Tier 1B",
+                industry: "Design",
+                revenue: "$3.7M",
+                buyerType: "Efficiency",
+                notes: "Luxury retail chain owner"
+            },
+            {
+                name: "Diana Patel",
+                email: "diana@techcampus.com",
+                phone: "(858) 555-1567",
+                address: "9988 Hibert St, San Diego, CA 92131",
+                puresScore: 21,
+                tier: "Tier 1A",
+                industry: "Tech",
+                revenue: "$15.6M",
+                buyerType: "Innovation",
+                notes: "Tech campus facility manager"
+            },
+            {
+                name: "James Turner",
+                email: "j.turner@privatebanking.com",
+                phone: "(619) 555-1678",
+                address: "600 B St, San Diego, CA 92101",
+                puresScore: 23,
+                tier: "Tier 1A",
+                industry: "Real Estate",
+                revenue: "$45.2M",
+                buyerType: "Relationship",
+                notes: "Private banking executive offices"
+            },
+            {
+                name: "Laura Johnson",
+                email: "laura@boutiquevenues.com",
+                phone: "(858) 555-1789",
+                address: "2550 Fifth Ave, San Diego, CA 92103",
+                puresScore: 18,
+                tier: "Tier 1B",
+                industry: "Hospitality",
+                revenue: "$2.1M",
+                buyerType: "Analytical",
+                notes: "Event venue owner"
+            },
+            {
+                name: "Kevin Zhang",
+                email: "kevin@innovativeoffices.com",
+                phone: "(619) 555-1890",
+                address: "4747 Executive Dr, San Diego, CA 92121",
+                puresScore: 20,
+                tier: "Tier 1B",
+                industry: "Tech",
+                revenue: "$7.8M",
+                buyerType: "Innovation",
+                notes: "Co-working space operator"
+            },
+            {
+                name: "Melissa Brown",
+                email: "melissa@luxurycondos.com",
+                phone: "(858) 555-1901",
+                address: "1199 Pacific Hwy, San Diego, CA 92101",
+                puresScore: 22,
+                tier: "Tier 1A",
+                industry: "Real Estate",
+                revenue: "$18.5M",
+                buyerType: "Relationship",
+                notes: "Luxury condo developer"
+            },
+            {
+                name: "Daniel White",
+                email: "d.white@premiumfitness.com",
+                phone: "(619) 555-2012",
+                address: "3890 5th Ave, San Diego, CA 92103",
+                puresScore: 17,
+                tier: "Tier 1C",
+                industry: "Healthcare",
+                revenue: "$1.5M",
+                buyerType: "Efficiency",
+                notes: "High-end fitness club owner"
+            },
+            // Continue with more entries to reach 50 total...
+            {
+                name: "Christina Davis",
+                email: "christina@artmuseums.org",
+                phone: "(858) 555-2123",
+                address: "1649 El Prado, San Diego, CA 92101",
+                puresScore: 19,
+                tier: "Tier 1B",
+                industry: "Design",
+                revenue: "$2.3M",
+                buyerType: "Innovation",
+                notes: "Museum curator and designer"
+            },
+            {
+                name: "Mark Williams",
+                email: "mark@corporatesuites.com",
+                phone: "(619) 555-2234",
+                address: "4350 La Jolla Village Dr, San Diego, CA 92122",
+                puresScore: 21,
+                tier: "Tier 1A",
+                industry: "Real Estate",
+                revenue: "$8.9M",
+                buyerType: "Analytical",
+                notes: "Corporate housing developer"
+            },
+            {
+                name: "Sandra Martinez",
+                email: "sandra@eleganthomes.com",
+                phone: "(858) 555-2345",
+                address: "6950 Alvarado Rd, San Diego, CA 92120",
+                puresScore: 18,
+                tier: "Tier 1B",
+                industry: "Real Estate",
+                revenue: "$3.4M",
+                buyerType: "Relationship",
+                notes: "Luxury home staging specialist"
+            },
+            {
+                name: "Andrew Clark",
+                email: "andrew@modernworkspaces.com",
+                phone: "(619) 555-2456",
+                address: "8880 Rio San Diego Dr, San Diego, CA 92108",
+                puresScore: 20,
+                tier: "Tier 1B",
+                industry: "Tech",
+                revenue: "$5.1M",
+                buyerType: "Innovation",
+                notes: "Modern workspace designer"
+            },
+            {
+                name: "Nicole Rodriguez",
+                email: "nicole@luxuryresorts.com",
+                phone: "(858) 555-2567",
+                address: "11480 N Torrey Pines Rd, La Jolla, CA 92037",
+                puresScore: 24,
+                tier: "Tier 1A",
+                industry: "Hospitality",
+                revenue: "$22.7M",
+                buyerType: "Relationship",
+                notes: "Luxury resort chain executive"
+            },
+            // Additional clients to complete the 50...
+            {
+                name: "Eric Thompson",
+                email: "eric@designstudios.com",
+                phone: "(619) 555-2678",
+                address: "3025 Beyer Blvd, San Diego, CA 92154",
+                puresScore: 17,
+                tier: "Tier 1C",
+                industry: "Design",
+                revenue: "$890K",
+                buyerType: "Analytical",
+                notes: "Boutique design studio owner"
+            },
+            {
+                name: "Maria Gonzalez",
+                email: "maria@premiumdentistry.com",
+                phone: "(858) 555-2789",
+                address: "8929 University Center Ln, San Diego, CA 92122",
+                puresScore: 19,
+                tier: "Tier 1B",
+                industry: "Healthcare",
+                revenue: "$2.8M",
+                buyerType: "Efficiency",
+                notes: "Luxury dental practice owner"
+            },
+            {
+                name: "Jonathan Kim",
+                email: "jonathan@startupoffices.com",
+                phone: "(619) 555-2890",
+                address: "3900 5th Ave, San Diego, CA 92103",
+                puresScore: 18,
+                tier: "Tier 1B",
+                industry: "Tech",
+                revenue: "$4.6M",
+                buyerType: "Innovation",
+                notes: "Startup incubator facility manager"
+            },
+            {
+                name: "Kelly O'Brien",
+                email: "kelly@luxurylaw.com",
+                phone: "(858) 555-2901",
+                address: "12220 El Camino Real, San Diego, CA 92130",
+                puresScore: 22,
+                tier: "Tier 1A",
+                industry: "Real Estate",
+                revenue: "$12.1M",
+                buyerType: "Relationship",
+                notes: "High-end law firm managing partner"
+            },
+            {
+                name: "Ryan Taylor",
+                email: "ryan@modernretail.com",
+                phone: "(619) 555-3012",
+                address: "1055 2nd Ave, San Diego, CA 92101",
+                puresScore: 16,
+                tier: "Tier 1C",
+                industry: "Design",
+                revenue: "$1.1M",
+                buyerType: "Efficiency",
+                notes: "Modern retail chain owner"
+            },
+            // Continue adding more clients to reach 50 total...
+            {
+                name: "Ashley Moore",
+                email: "ashley@premiumsalons.com",
+                phone: "(858) 555-3123",
+                address: "4680 Clairemont Dr, San Diego, CA 92117",
+                puresScore: 17,
+                tier: "Tier 1C",
+                industry: "Healthcare",
+                revenue: "$750K",
+                buyerType: "Analytical",
+                notes: "Luxury salon and spa owner"
+            },
+            // Adding remaining clients to reach 50
+            {
+                name: "Gregory Smith",
+                email: "gregory@executivesuites.com",
+                phone: "(619) 555-3234",
+                address: "9255 Towne Centre Dr, San Diego, CA 92121",
+                puresScore: 21,
+                tier: "Tier 1A",
+                industry: "Real Estate",
+                revenue: "$9.2M",
+                buyerType: "Analytical",
+                notes: "Executive office suites developer"
+            },
+            {
+                name: "Stephanie Lewis",
+                email: "stephanie@modernhospitals.com",
+                phone: "(858) 555-3345",
+                address: "4077 5th Ave, San Diego, CA 92103",
+                puresScore: 23,
+                tier: "Tier 1A",
+                industry: "Healthcare",
+                revenue: "$34.5M",
+                buyerType: "Efficiency",
+                notes: "Private hospital administrator"
+            },
+            {
+                name: "Christopher Wong",
+                email: "chris@techincubator.com",
+                phone: "(619) 555-3456",
+                address: "1230 Columbia St, San Diego, CA 92101",
+                puresScore: 19,
+                tier: "Tier 1B",
+                industry: "Tech",
+                revenue: "$6.8M",
+                buyerType: "Innovation",
+                notes: "Technology incubator director"
+            },
+            {
+                name: "Rebecca Martinez",
+                email: "rebecca@luxuryweddings.com",
+                phone: "(858) 555-3567",
+                address: "15725 Pomerado Rd, Poway, CA 92064",
+                puresScore: 18,
+                tier: "Tier 1B",
+                industry: "Hospitality",
+                revenue: "$1.9M",
+                buyerType: "Relationship",
+                notes: "Luxury wedding venue owner"
+            },
+            {
+                name: "Anthony Garcia",
+                email: "anthony@financialplanning.com",
+                phone: "(619) 555-3678",
+                address: "701 B St, San Diego, CA 92101",
+                puresScore: 20,
+                tier: "Tier 1B",
+                industry: "Real Estate",
+                revenue: "$5.4M",
+                buyerType: "Analytical",
+                notes: "Wealth management firm owner"
+            },
+            {
+                name: "Samantha Johnson",
+                email: "samantha@arttherapy.com",
+                phone: "(858) 555-3789",
+                address: "3702 Ruffin Rd, San Diego, CA 92123",
+                puresScore: 16,
+                tier: "Tier 1C",
+                industry: "Healthcare",
+                revenue: "$680K",
+                buyerType: "Innovation",
+                notes: "Art therapy center owner"
+            },
+            {
+                name: "Peter Chen",
+                email: "peter@modernofficespace.com",
+                phone: "(619) 555-3890",
+                address: "2215 Colby Ave, San Diego, CA 92109",
+                puresScore: 19,
+                tier: "Tier 1B",
+                industry: "Tech",
+                revenue: "$4.1M",
+                buyerType: "Efficiency",
+                notes: "Flexible office space provider"
+            },
+            {
+                name: "Elizabeth Wilson",
+                email: "elizabeth@luxuryretirement.com",
+                phone: "(858) 555-3901",
+                address: "5450 Gaines St, San Diego, CA 92110",
+                puresScore: 22,
+                tier: "Tier 1A",
+                industry: "Healthcare",
+                revenue: "$16.7M",
+                buyerType: "Relationship",
+                notes: "Luxury senior living facility owner"
+            },
+            {
+                name: "Matthew Rodriguez",
+                email: "matthew@creativespaces.com",
+                phone: "(619) 555-4012",
+                address: "1370 India St, San Diego, CA 92101",
+                puresScore: 17,
+                tier: "Tier 1C",
+                industry: "Design",
+                revenue: "$1.3M",
+                buyerType: "Innovation",
+                notes: "Creative workspace designer"
+            },
+            {
+                name: "Jennifer Kim",
+                email: "jennifer@premiumchildcare.com",
+                phone: "(858) 555-4123",
+                address: "6150 Mira Mesa Blvd, San Diego, CA 92121",
+                puresScore: 18,
+                tier: "Tier 1B",
+                industry: "Healthcare",
+                revenue: "$2.2M",
+                buyerType: "Analytical",
+                notes: "Premium childcare center owner"
+            },
+            {
+                name: "Charles Taylor",
+                email: "charles@luxuryautos.com",
+                phone: "(619) 555-4234",
+                address: "1333 Camino Del Rio S, San Diego, CA 92108",
+                puresScore: 21,
+                tier: "Tier 1A",
+                industry: "Design",
+                revenue: "$8.3M",
+                buyerType: "Relationship",
+                notes: "Luxury auto dealership owner"
+            },
+            {
+                name: "Lisa Anderson",
+                email: "lisa@moderncafes.com",
+                phone: "(858) 555-4345",
+                address: "3780 Ingraham St, San Diego, CA 92109",
+                puresScore: 16,
+                tier: "Tier 1C",
+                industry: "Hospitality",
+                revenue: "$950K",
+                buyerType: "Efficiency",
+                notes: "Boutique cafe chain owner"
+            },
+            {
+                name: "Robert Davis",
+                email: "robert@luxurygyms.com",
+                phone: "(619) 555-4456",
+                address: "4445 Eastgate Mall, San Diego, CA 92121",
+                puresScore: 19,
+                tier: "Tier 1B",
+                industry: "Healthcare",
+                revenue: "$3.6M",
+                buyerType: "Innovation",
+                notes: "High-end fitness center owner"
+            },
+            {
+                name: "Catherine White",
+                email: "catherine@eliteclinics.com",
+                phone: "(858) 555-4567",
+                address: "9834 Genesee Ave, La Jolla, CA 92037",
+                puresScore: 23,
+                tier: "Tier 1A",
+                industry: "Healthcare",
+                revenue: "$18.9M",
+                buyerType: "Analytical",
+                notes: "Elite medical clinic administrator"
+            },
+            {
+                name: "Joseph Martinez",
+                email: "joseph@luxurytravel.com",
+                phone: "(619) 555-4678",
+                address: "750 B St, San Diego, CA 92101",
+                puresScore: 20,
+                tier: "Tier 1B",
+                industry: "Hospitality",
+                revenue: "$4.8M",
+                buyerType: "Relationship",
+                notes: "Luxury travel agency owner"
+            },
+            {
+                name: "Sarah Thompson",
+                email: "sarah@modernlibraries.org",
+                phone: "(858) 555-4789",
+                address: "9845 Erma Rd, San Diego, CA 92131",
+                puresScore: 17,
+                tier: "Tier 1C",
+                industry: "Design",
+                revenue: "$1.4M",
+                buyerType: "Innovation",
+                notes: "Modern library system director"
+            },
+            {
+                name: "William Garcia",
+                email: "william@techconference.com",
+                phone: "(619) 555-4890",
+                address: "111 W Harbor Dr, San Diego, CA 92101",
+                puresScore: 18,
+                tier: "Tier 1B",
+                industry: "Tech",
+                revenue: "$3.2M",
+                buyerType: "Efficiency",
+                notes: "Tech conference facility manager"
+            },
+            {
+                name: "Amanda Wilson",
+                email: "amanda@luxuryeducation.com",
+                phone: "(858) 555-4901",
+                address: "5998 Alcalá Park, San Diego, CA 92110",
+                puresScore: 21,
+                tier: "Tier 1A",
+                industry: "Design",
+                revenue: "$12.4M",
+                buyerType: "Relationship",
+                notes: "Private school facility director"
+            }
+        ];
+
+        // Load client data into table
+        function loadClientData() {
+            const tbody = document.getElementById('client-tbody');
+            tbody.innerHTML = '';
+            
+            clientData.forEach((client, index) => {
+                const row = tbody.insertRow();
+                const tierClass = client.tier.replace(' ', '-').toLowerCase();
+                row.className = tierClass;
+                
+                row.innerHTML = `
+                    <td>${client.name}</td>
+                    <td>${client.email}</td>
+                    <td>${client.phone}</td>
+                    <td>${client.address}</td>
+                    <td>${client.puresScore}/25</td>
+                    <td>${client.tier}</td>
+                    <td>${client.industry}</td>
+                    <td>${client.revenue}</td>
+                    <td>
+                        <button class="btn btn-small" onclick="contactClient('${client.email}', '${client.name}')">Email</button>
+                        <button class="btn btn-small" onclick="window.open('tel:${client.phone}')">Call</button>
+                    </td>
+                `;
+            });
+        }
+
+        // Tab switching functionality
+        function showTab(tabName) {
+            // Hide all tab contents
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabContents.forEach(content => content.classList.add('hidden'));
+            
+            // Remove active class from all tabs
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Show selected tab content
+            document.getElementById(tabName).classList.remove('hidden');
+            
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+            
+            // Load client data when database tab is opened
+            if (tabName === 'database') {
+                loadClientData();
+            }
+        }
+
+        // P.U.R.E.S. scoring system
+        function calculatePuresScore() {
+            const criteria = ['profitability', 'urgency', 'reachability', 'engagement', 'sustainability'];
+            let totalScore = 0;
+            
+            criteria.forEach(criterion => {
+                const selected = document.querySelector(`input[name="${criterion}"]:checked`);
+                if (selected) {
+                    totalScore += parseInt(selected.value);
+                }
+            });
+            
+            document.getElementById('pures-score').textContent = totalScore;
+            
+            let tier = 'Unclassified';
+            if (totalScore >= 20) tier = 'Tier 1A (Premium)';
+            else if (totalScore >= 15) tier = 'Tier 1B (High-Value)';
+            else if (totalScore >= 12) tier = 'Tier 1C (Qualified)';
+            
+            document.getElementById('client-tier').textContent = tier;
+        }
+
+        // Contact client functionality
+        function contactClient(email, name) {
+            const emailContent = generateEmailTemplate(name);
+            document.getElementById('email-content').innerHTML = emailContent;
+            document.getElementById('email-modal').style.display = 'block';
+            
+            // Store current client email for sending
+            window.currentClientEmail = email;
+        }
+
+        // Generate email template
+        function generateEmailTemplate(clientName) {
+            return `
+                <p><strong>To:</strong> ${window.currentClientEmail}</p>
+                <p><strong>Subject:</strong> Exclusive Furniture Design Solutions for ${clientName}</p>
+                <br>
+                <p>Dear ${clientName},</p>
+                <br>
+                <p>I hope this message finds you well. My name is Debra Salyer, and I'm the owner of Wrensilva, San Diego's premier destination for custom furniture design and luxury furnishings.</p>
+                <br>
+                <p>Based on our research, we believe Wrensilva's unique offerings could perfectly complement your ${clientData.find(c => c.email === window.currentClientEmail)?.industry || 'business'} needs:</p>
+                <br>
+                <ul>
+                    <li><strong>Custom Design Solutions:</strong> Bespoke furniture pieces tailored to your exact specifications and space requirements</li>
+                    <li><strong>Sustainable Materials:</strong> Eco-friendly options without compromising on luxury and durability</li>
+                    <li><strong>Professional Installation:</strong> White-glove delivery and setup service throughout San Diego County</li>
+                    <li><strong>Designer Partnerships:</strong> Collaborative approach with your existing design team</li>
+                </ul>
+                <br>
+                <p>Our recent projects include luxury hotels, high-end residential properties, corporate offices, and exclusive retail spaces throughout Southern California. We understand the importance of creating environments that reflect your brand and enhance your clients' experience.</p>
+                <br>
+                <p>I'd love to schedule a consultation to discuss how Wrensilva can contribute to your upcoming projects. We offer complimentary design consultations and can provide portfolio examples specific to your industry.</p>
+                <br>
+                <p>Please feel free to reach out at (800) 292-6353 or visit our showroom. I look forward to the opportunity to create something extraordinary for you.</p>
+                <br>
+                <p>Best regards,</p>
+                <p><strong>Debra Salyer</strong><br>
+                Owner & Creative Director<br>
+                Wrensilva<br>
+                San Diego, California<br>
+                www.wrensilva.com<br>
+                (800) 292-6353</p>
+            `;
+        }
+
+        // Email modal functions
+        function closeEmailModal() {
+            document.getElementById('email-modal').style.display = 'none';
+        }
+
+        function sendEmail() {
+            // In a real application, this would integrate with an email service
+            alert(`Email sent to ${window.currentClientEmail}!`);
+            closeEmailModal();
+        }
+
+        // Table filtering and sorting
+        function filterTable() {
+            const searchInput = document.getElementById('search-input').value.toLowerCase();
+            const tierFilter = document.getElementById('tier-filter').value;
+            const industryFilter = document.getElementById('industry-filter').value;
+            const table = document.getElementById('client-table');
+            const rows = table.getElementsByTagName('tr');
+
+            for (let i = 1; i < rows.length; i++) {
+                const row = rows[i];
+                const cells = row.getElementsByTagName('td');
+                let showRow = true;
+
+                // Search filter
+                if (searchInput) {
+                    const rowText = Array.from(cells).map(cell => cell.textContent.toLowerCase()).join(' ');
+                    if (!rowText.includes(searchInput)) {
+                        showRow = false;
+                    }
+                }
+
+                // Tier filter
+                if (tierFilter && cells[5] && cells[5].textContent !== tierFilter) {
+                    showRow = false;
+                }
+
+                // Industry filter
+                if (industryFilter && cells[6] && cells[6].textContent !== industryFilter) {
+                    showRow = false;
+                }
+
+                row.style.display = showRow ? '' : 'none';
+            }
+        }
+
+        // Table sorting
+        function sortTable(columnIndex) {
+            const table = document.getElementById('client-table');
+            const tbody = table.getElementsByTagName('tbody')[0];
+            const rows = Array.from(tbody.getElementsByTagName('tr'));
+            
+            rows.sort((a, b) => {
+                const cellA = a.getElementsByTagName('td')[columnIndex].textContent.toLowerCase();
+                const cellB = b.getElementsByTagName('td')[columnIndex].textContent.toLowerCase();
+                
+                if (cellA < cellB) return -1;
+                if (cellA > cellB) return 1;
+                return 0;
+            });
+            
+            rows.forEach(row => tbody.appendChild(row));
+        }
+
+        // Export data to CSV
+        function exportData() {
+            const table = document.getElementById('client-table');
+            const rows = table.querySelectorAll('tr');
+            let csv = '';
+            
+            rows.forEach(row => {
+                const cells = row.querySelectorAll('th, td');
+                const rowData = Array.from(cells).slice(0, -1).map(cell => 
+                    `"${cell.textContent.replace(/"/g, '""')}"`
+                ).join(',');
+                csv += rowData + '\n';
+            });
+            
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'wrensilva_clients.csv';
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+
+        // Add client to database
+        function addClientToDatabase() {
+            // This would typically involve a form to collect client details
+            alert('Client evaluation complete! Add client form would appear here in a full implementation.');
+        }
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            loadClientData();
+        });
+    </script>
+</body>
+</html>

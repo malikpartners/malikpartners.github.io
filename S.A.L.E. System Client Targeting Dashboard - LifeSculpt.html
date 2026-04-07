@@ -1,0 +1,909 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>S.A.L.E. System Dashboard - LifeSculpt</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #000000;
+            color: #ffffff;
+            line-height: 1.6;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #CF2030, #8B1538);
+            padding: 1rem 2rem;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(207, 32, 48, 0.3);
+        }
+        
+        .logo {
+            max-height: 60px;
+            width: auto;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .dashboard-tabs {
+            display: flex;
+            background-color: #1a1a1a;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+        
+        .tab-button {
+            flex: 1;
+            padding: 1rem;
+            background-color: #2a2a2a;
+            color: #ffffff;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+        
+        .tab-button:hover {
+            background-color: #CF2030;
+        }
+        
+        .tab-button.active {
+            background-color: #CF2030;
+            color: #ffffff;
+        }
+        
+        .tab-content {
+            display: none;
+            background-color: #1a1a1a;
+            padding: 2rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .search-filter-bar {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .search-input, .filter-select {
+            padding: 0.5rem;
+            border: 1px solid #444;
+            border-radius: 4px;
+            background-color: #2a2a2a;
+            color: #ffffff;
+            min-width: 150px;
+        }
+        
+        .search-input:focus, .filter-select:focus {
+            outline: none;
+            border-color: #CF2030;
+        }
+        
+        .client-table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #2a2a2a;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .client-table th, .client-table td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #444;
+        }
+        
+        .client-table th {
+            background-color: #CF2030;
+            font-weight: 600;
+            cursor: pointer;
+            user-select: none;
+        }
+        
+        .client-table th:hover {
+            background-color: #8B1538;
+        }
+        
+        .client-table tr:hover {
+            background-color: #3a3a3a;
+        }
+        
+        .tier-1a {
+            background-color: rgba(0, 255, 0, 0.2);
+        }
+        
+        .tier-1b {
+            background-color: rgba(255, 255, 0, 0.2);
+        }
+        
+        .tier-1c {
+            background-color: rgba(0, 150, 255, 0.2);
+        }
+        
+        .contact-btn {
+            background-color: #CF2030;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+        
+        .contact-btn:hover {
+            background-color: #8B1538;
+        }
+        
+        .pures-form {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .pures-card {
+            background-color: #2a2a2a;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 2px solid #444;
+        }
+        
+        .pures-card h3 {
+            color: #CF2030;
+            margin-bottom: 1rem;
+        }
+        
+        .rating-input {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+        
+        .rating-input input[type="radio"] {
+            display: none;
+        }
+        
+        .rating-input label {
+            width: 30px;
+            height: 30px;
+            background-color: #444;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        
+        .rating-input input[type="radio"]:checked + label {
+            background-color: #CF2030;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background-color: #2a2a2a;
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .stat-card h3 {
+            color: #CF2030;
+            font-size: 2rem;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 2rem;
+            background-color: #1a1a1a;
+            margin-top: 3rem;
+        }
+        
+        .footer-logo {
+            max-height: 30px;
+            width: auto;
+            opacity: 0.7;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+        
+        .modal-content {
+            background-color: #1a1a1a;
+            margin: 15% auto;
+            padding: 20px;
+            border-radius: 8px;
+            width: 80%;
+            max-width: 500px;
+            color: #ffffff;
+        }
+        
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .close:hover {
+            color: #CF2030;
+        }
+        
+        .email-template {
+            width: 100%;
+            min-height: 200px;
+            background-color: #2a2a2a;
+            color: #ffffff;
+            border: 1px solid #444;
+            padding: 1rem;
+            border-radius: 4px;
+            font-family: inherit;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports" class="logo">
+        <h1>S.A.L.E. System Dashboard - LifeSculpt</h1>
+    </header>
+
+    <div class="container">
+        <div class="dashboard-tabs">
+            <button class="tab-button active" onclick="showTab('sourcing')">S - Sourcing</button>
+            <button class="tab-button" onclick="showTab('assessing')">A - Assessing</button>
+            <button class="tab-button" onclick="showTab('listening')">L - Listening</button>
+            <button class="tab-button" onclick="showTab('empowering')">E - Empowering</button>
+            <button class="tab-button" onclick="showTab('client-database')">Client Database</button>
+        </div>
+
+        <!-- Sourcing Tab -->
+        <div id="sourcing" class="tab-content active">
+            <h2>S.A.L.E. Sourcing - P.U.R.E.S. Client Scoring</h2>
+            <div class="pures-form">
+                <div class="pures-card">
+                    <h3>Profitability</h3>
+                    <p>Annual revenue threshold and budget capacity for health & wellness services</p>
+                    <div class="rating-input">
+                        <input type="radio" id="profit1" name="profitability" value="1">
+                        <label for="profit1">1</label>
+                        <input type="radio" id="profit2" name="profitability" value="2">
+                        <label for="profit2">2</label>
+                        <input type="radio" id="profit3" name="profitability" value="3">
+                        <label for="profit3">3</label>
+                        <input type="radio" id="profit4" name="profitability" value="4">
+                        <label for="profit4">4</label>
+                        <input type="radio" id="profit5" name="profitability" value="5">
+                        <label for="profit5">5</label>
+                    </div>
+                </div>
+                
+                <div class="pures-card">
+                    <h3>Urgency</h3>
+                    <p>Active health challenges requiring immediate fitness solutions</p>
+                    <div class="rating-input">
+                        <input type="radio" id="urgent1" name="urgency" value="1">
+                        <label for="urgent1">1</label>
+                        <input type="radio" id="urgent2" name="urgency" value="2">
+                        <label for="urgent2">2</label>
+                        <input type="radio" id="urgent3" name="urgency" value="3">
+                        <label for="urgent3">3</label>
+                        <input type="radio" id="urgent4" name="urgency" value="4">
+                        <label for="urgent4">4</label>
+                        <input type="radio" id="urgent5" name="urgency" value="5">
+                        <label for="urgent5">5</label>
+                    </div>
+                </div>
+                
+                <div class="pures-card">
+                    <h3>Reachability</h3>
+                    <p>Accessible decision makers with clear contact paths</p>
+                    <div class="rating-input">
+                        <input type="radio" id="reach1" name="reachability" value="1">
+                        <label for="reach1">1</label>
+                        <input type="radio" id="reach2" name="reachability" value="2">
+                        <label for="reach2">2</label>
+                        <input type="radio" id="reach3" name="reachability" value="3">
+                        <label for="reach3">3</label>
+                        <input type="radio" id="reach4" name="reachability" value="4">
+                        <label for="reach4">4</label>
+                        <input type="radio" id="reach5" name="reachability" value="5">
+                        <label for="reach5">5</label>
+                    </div>
+                </div>
+                
+                <div class="pures-card">
+                    <h3>Engagement</h3>
+                    <p>Openness to innovative fitness and wellness programs</p>
+                    <div class="rating-input">
+                        <input type="radio" id="engage1" name="engagement" value="1">
+                        <label for="engage1">1</label>
+                        <input type="radio" id="engage2" name="engagement" value="2">
+                        <label for="engage2">2</label>
+                        <input type="radio" id="engage3" name="engagement" value="3">
+                        <label for="engage3">3</label>
+                        <input type="radio" id="engage4" name="engagement" value="4">
+                        <label for="engage4">4</label>
+                        <input type="radio" id="engage5" name="engagement" value="5">
+                        <label for="engage5">5</label>
+                    </div>
+                </div>
+                
+                <div class="pures-card">
+                    <h3>Sustainability</h3>
+                    <p>Long-term partnership potential with growth trajectory</p>
+                    <div class="rating-input">
+                        <input type="radio" id="sustain1" name="sustainability" value="1">
+                        <label for="sustain1">1</label>
+                        <input type="radio" id="sustain2" name="sustainability" value="2">
+                        <label for="sustain2">2</label>
+                        <input type="radio" id="sustain3" name="sustainability" value="3">
+                        <label for="sustain3">3</label>
+                        <input type="radio" id="sustain4" name="sustainability" value="4">
+                        <label for="sustain4">4</label>
+                        <input type="radio" id="sustain5" name="sustainability" value="5">
+                        <label for="sustain5">5</label>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>18</h3>
+                    <p>Tier 1A Prospects<br>(Premium)</p>
+                </div>
+                <div class="stat-card">
+                    <h3>21</h3>
+                    <p>Tier 1B Prospects<br>(High-Value)</p>
+                </div>
+                <div class="stat-card">
+                    <h3>11</h3>
+                    <p>Tier 1C Prospects<br>(Qualified)</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Assessing Tab -->
+        <div id="assessing" class="tab-content">
+            <h2>A.ssessing - Buying Pattern Analysis</h2>
+            <div class="pures-form">
+                <div class="pures-card">
+                    <h3>Analytical Buyers (28%)</h3>
+                    <p>Require detailed fitness assessments, progress tracking, and measurable results</p>
+                    <ul style="margin-top: 1rem; color: #ccc;">
+                        <li>Data-driven fitness programs</li>
+                        <li>Body composition analysis</li>
+                        <li>Performance metrics tracking</li>
+                    </ul>
+                </div>
+                
+                <div class="pures-card">
+                    <h3>Relationship Buyers (35%)</h3>
+                    <p>Value personal training relationships, community, and long-term wellness partnerships</p>
+                    <ul style="margin-top: 1rem; color: #ccc;">
+                        <li>Personal trainer matching</li>
+                        <li>Group fitness communities</li>
+                        <li>Family wellness programs</li>
+                    </ul>
+                </div>
+                
+                <div class="pures-card">
+                    <h3>Efficiency Buyers (22%)</h3>
+                    <p>Focus on time-saving fitness solutions and convenient wellness programs</p>
+                    <ul style="margin-top: 1rem; color: #ccc;">
+                        <li>Express workout sessions</li>
+                        <li>Virtual training options</li>
+                        <li>Meal prep services</li>
+                    </ul>
+                </div>
+                
+                <div class="pures-card">
+                    <h3>Innovation Buyers (15%)</h3>
+                    <p>Seek cutting-edge fitness technology and advanced wellness solutions</p>
+                    <ul style="margin-top: 1rem; color: #ccc;">
+                        <li>Biohacking programs</li>
+                        <li>Advanced recovery therapy</li>
+                        <li>Tech-integrated workouts</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Listening Tab -->
+        <div id="listening" class="tab-content">
+            <h2>L.istening - Feedback Integration</h2>
+            <div class="pures-form">
+                <div class="pures-card">
+                    <h3>Pre-Sale Feedback</h3>
+                    <p>Initial consultation and fitness assessment feedback collection</p>
+                    <div style="margin-top: 1rem;">
+                        <p><strong>Collection Rate:</strong> 87%</p>
+                        <p><strong>Average Score:</strong> 4.3/5</p>
+                    </div>
+                </div>
+                
+                <div class="pures-card">
+                    <h3>During-Sale Progress</h3>
+                    <p>Ongoing training session and program effectiveness tracking</p>
+                    <div style="margin-top: 1rem;">
+                        <p><strong>Progress Tracking:</strong> 92%</p>
+                        <p><strong>Engagement Score:</strong> 4.6/5</p>
+                    </div>
+                </div>
+                
+                <div class="pures-card">
+                    <h3>Post-Sale Satisfaction</h3>
+                    <p>Program completion and long-term wellness outcome monitoring</p>
+                    <div style="margin-top: 1rem;">
+                        <p><strong>Satisfaction Rate:</strong> 94%</p>
+                        <p><strong>Retention Rate:</strong> 78%</p>
+                    </div>
+                </div>
+                
+                <div class="pures-card">
+                    <h3>Complaint Resolution</h3>
+                    <p>Real-time issue identification and resolution protocols</p>
+                    <div style="margin-top: 1rem;">
+                        <p><strong>Resolution Time:</strong> 24 hours</p>
+                        <p><strong>Resolution Rate:</strong> 96%</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Empowering Tab -->
+        <div id="empowering" class="tab-content">
+            <h2>E.mpowering - Referral Strategy</h2>
+            <div class="pures-form">
+                <div class="pures-card">
+                    <h3>Success Stories</h3>
+                    <p>Documented client transformation and wellness achievement stories</p>
+                    <div style="margin-top: 1rem;">
+                        <p><strong>Active Stories:</strong> 47</p>
+                        <p><strong>Video Testimonials:</strong> 23</p>
+                    </div>
+                </div>
+                
+                <div class="pures-card">
+                    <h3>Referral Rewards</h3>
+                    <p>Tracking and managing client referral incentive programs</p>
+                    <div style="margin-top: 1rem;">
+                        <p><strong>Active Referrers:</strong> 34</p>
+                        <p><strong>Monthly Referrals:</strong> 18</p>
+                    </div>
+                </div>
+                
+                <div class="pures-card">
+                    <h3>Client Advocacy</h3>
+                    <p>Building brand ambassadors and community wellness advocates</p>
+                    <div style="margin-top: 1rem;">
+                        <p><strong>Ambassadors:</strong> 12</p>
+                        <p><strong>Social Reach:</strong> 15K</p>
+                    </div>
+                </div>
+                
+                <div class="pures-card">
+                    <h3>Co-Marketing</h3>
+                    <p>Partnership opportunities with complementary wellness businesses</p>
+                    <div style="margin-top: 1rem;">
+                        <p><strong>Active Partners:</strong> 8</p>
+                        <p><strong>Joint Campaigns:</strong> 5</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Client Database Tab -->
+        <div id="client-database" class="tab-content">
+            <h2>Client Database - Naperville Area Prospects</h2>
+            
+            <div class="search-filter-bar">
+                <input type="text" id="searchInput" class="search-input" placeholder="Search clients..." onkeyup="filterTable()">
+                <select id="tierFilter" class="filter-select" onchange="filterTable()">
+                    <option value="">All Tiers</option>
+                    <option value="1A">Tier 1A (Premium)</option>
+                    <option value="1B">Tier 1B (High-Value)</option>
+                    <option value="1C">Tier 1C (Qualified)</option>
+                </select>
+                <select id="industryFilter" class="filter-select" onchange="filterTable()">
+                    <option value="">All Industries</option>
+                    <option value="Healthcare">Healthcare</option>
+                    <option value="Technology">Technology</option>
+                    <option value="Education">Education</option>
+                    <option value="Finance">Finance</option>
+                    <option value="Manufacturing">Manufacturing</option>
+                    <option value="Retail">Retail</option>
+                </select>
+                <button class="contact-btn" onclick="exportData()">Export CSV</button>
+            </div>
+
+            <table class="client-table" id="clientTable">
+                <thead>
+                    <tr>
+                        <th onclick="sortTable(0)">Client Name</th>
+                        <th onclick="sortTable(1)">Email</th>
+                        <th onclick="sortTable(2)">Phone</th>
+                        <th onclick="sortTable(3)">Address</th>
+                        <th onclick="sortTable(4)">P.U.R.E.S. Score</th>
+                        <th onclick="sortTable(5)">Tier</th>
+                        <th onclick="sortTable(6)">Industry</th>
+                        <th onclick="sortTable(7)">Revenue Est.</th>
+                        <th onclick="sortTable(8)">Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="clientTableBody">
+                    <!-- Client data will be populated by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Email Modal -->
+    <div id="emailModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeEmailModal()">&times;</span>
+            <h2>Email Template</h2>
+            <p><strong>To:</strong> <span id="emailTo"></span></p>
+            <p><strong>Subject:</strong> Transform Your Health Journey with LifeSculpt</p>
+            <textarea id="emailTemplate" class="email-template" readonly></textarea>
+            <br><br>
+            <button class="contact-btn" onclick="sendEmail()">Send Email</button>
+        </div>
+    </div>
+
+    <footer>
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports" class="footer-logo">
+        <p>&copy; 2024 Higgins Reports. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Sample client data for Naperville area
+        const clientData = [
+            {name: "Sarah Johnson", email: "sarah.johnson@email.com", phone: "(630) 555-0123", address: "123 Main St, Naperville, IL", pures: 23, tier: "1A", industry: "Healthcare", revenue: "$150K", status: "New"},
+            {name: "Michael Chen", email: "m.chen@techcorp.com", phone: "(630) 555-0124", address: "456 Oak Ave, Aurora, IL", pures: 22, tier: "1A", industry: "Technology", revenue: "$200K", status: "Contacted"},
+            {name: "Emily Rodriguez", email: "emily.r@email.com", phone: "(630) 555-0125", address: "789 Elm St, Wheaton, IL", pures: 21, tier: "1A", industry: "Education", revenue: "$95K", status: "New"},
+            {name: "David Wilson", email: "d.wilson@finance.com", phone: "(630) 555-0126", address: "321 Pine Dr, Naperville, IL", pures: 20, tier: "1B", industry: "Finance", revenue: "$180K", status: "Proposal"},
+            {name: "Lisa Thompson", email: "lisa.t@healthcare.org", phone: "(630) 555-0127", address: "654 Cedar Ln, Bolingbrook, IL", pures: 19, tier: "1B", industry: "Healthcare", revenue: "$120K", status: "Follow-up"},
+            {name: "Robert Garcia", email: "r.garcia@email.com", phone: "(630) 555-0128", address: "987 Birch Rd, Downers Grove, IL", pures: 18, tier: "1B", industry: "Manufacturing", revenue: "$160K", status: "New"},
+            {name: "Jennifer Lee", email: "j.lee@techstart.com", phone: "(630) 555-0129", address: "147 Maple St, Lisle, IL", pures: 17, tier: "1C", industry: "Technology", revenue: "$85K", status: "Contacted"},
+            {name: "Mark Davis", email: "mark.davis@email.com", phone: "(630) 555-0130", address: "258 Walnut Ave, Naperville, IL", pures: 16, tier: "1C", industry: "Retail", revenue: "$110K", status: "New"},
+            {name: "Amanda Brown", email: "a.brown@school.edu", phone: "(630) 555-0131", address: "369 Cherry St, Aurora, IL", pures: 22, tier: "1A", industry: "Education", revenue: "$105K", status: "Proposal"},
+            {name: "Christopher Miller", email: "c.miller@bank.com", phone: "(630) 555-0132", address: "741 Spruce Dr, Wheaton, IL", pures: 21, tier: "1A", industry: "Finance", revenue: "$190K", status: "Follow-up"},
+            {name: "Michelle Taylor", email: "m.taylor@clinic.com", phone: "(630) 555-0133", address: "852 Ash Ln, Bolingbrook, IL", pures: 20, tier: "1B", industry: "Healthcare", revenue: "$135K", status: "New"},
+            {name: "James Anderson", email: "j.anderson@factory.com", phone: "(630) 555-0134", address: "963 Poplar Rd, Downers Grove, IL", pures: 19, tier: "1B", industry: "Manufacturing", revenue: "$145K", status: "Contacted"},
+            {name: "Nicole White", email: "n.white@startup.com", phone: "(630) 555-0135", address: "174 Hickory St, Lisle, IL", pures: 18, tier: "1B", industry: "Technology", revenue: "$125K", status: "New"},
+            {name: "Kevin Thomas", email: "k.thomas@shop.com", phone: "(630) 555-0136", address: "285 Willow Ave, Naperville, IL", pures: 17, tier: "1C", industry: "Retail", revenue: "$95K", status: "Follow-up"},
+            {name: "Rachel Martinez", email: "r.martinez@college.edu", phone: "(630) 555-0137", address: "396 Sycamore Dr, Aurora, IL", pures: 23, tier: "1A", industry: "Education", revenue: "$115K", status: "Proposal"},
+            {name: "Steven Jackson", email: "s.jackson@credit.com", phone: "(630) 555-0138", address: "507 Magnolia Ln, Wheaton, IL", pures: 22, tier: "1A", industry: "Finance", revenue: "$175K", status: "New"},
+            {name: "Kimberly Lewis", email: "k.lewis@hospital.org", phone: "(630) 555-0139", address: "618 Dogwood Rd, Bolingbrook, IL", pures: 21, tier: "1A", industry: "Healthcare", revenue: "$140K", status: "Contacted"},
+            {name: "Brian Clark", email: "b.clark@assembly.com", phone: "(630) 555-0140", address: "729 Redwood St, Downers Grove, IL", pures: 20, tier: "1B", industry: "Manufacturing", revenue: "$155K", status: "New"},
+            {name: "Angela Rodriguez", email: "a.rodriguez@techfirm.com", phone: "(630) 555-0141", address: "830 Palm Ave, Lisle, IL", pures: 19, tier: "1B", industry: "Technology", revenue: "$130K", status: "Follow-up"},
+            {name: "Daniel Young", email: "d.young@store.com", phone: "(630) 555-0142", address: "941 Cypress Dr, Naperville, IL", pures: 18, tier: "1B", industry: "Retail", revenue: "$100K", status: "Contacted"},
+            {name: "Stephanie King", email: "s.king@university.edu", phone: "(630) 555-0143", address: "152 Fir Ln, Aurora, IL", pures: 17, tier: "1C", industry: "Education", revenue: "$90K", status: "New"},
+            {name: "Matthew Wright", email: "m.wright@investment.com", phone: "(630) 555-0144", address: "263 Pine St, Wheaton, IL", pures: 16, tier: "1C", industry: "Finance", revenue: "$165K", status: "Proposal"},
+            {name: "Laura Lopez", email: "l.lopez@medical.com", phone: "(630) 555-0145", address: "374 Oak Dr, Bolingbrook, IL", pures: 22, tier: "1A", industry: "Healthcare", revenue: "$125K", status: "Follow-up"},
+            {name: "Anthony Hill", email: "a.hill@manufacturing.com", phone: "(630) 555-0146", address: "485 Elm Ave, Downers Grove, IL", pures: 21, tier: "1A", industry: "Manufacturing", revenue: "$170K", status: "New"},
+            {name: "Melissa Scott", email: "m.scott@software.com", phone: "(630) 555-0147", address: "596 Maple Ln, Lisle, IL", pures: 20, tier: "1B", industry: "Technology", revenue: "$115K", status: "Contacted"},
+            {name: "Joshua Green", email: "j.green@retail.com", phone: "(630) 555-0148", address: "607 Cedar St, Naperville, IL", pures: 19, tier: "1B", industry: "Retail", revenue: "$105K", status: "New"},
+            {name: "Rebecca Adams", email: "r.adams@school.org", phone: "(630) 555-0149", address: "718 Birch Ave, Aurora, IL", pures: 18, tier: "1B", industry: "Education", revenue: "$85K", status: "Follow-up"},
+            {name: "William Baker", email: "w.baker@bank.org", phone: "(630) 555-0150", address: "829 Walnut Dr, Wheaton, IL", pures: 17, tier: "1C", industry: "Finance", revenue: "$185K", status: "Contacted"},
+            {name: "Tiffany Nelson", email: "t.nelson@clinic.org", phone: "(630) 555-0151", address: "930 Cherry Ln, Bolingbrook, IL", pures: 23, tier: "1A", industry: "Healthcare", revenue: "$120K", status: "Proposal"},
+            {name: "Ryan Carter", email: "r.carter@factory.org", phone: "(630) 555-0152", address: "141 Spruce St, Downers Grove, IL", pures: 22, tier: "1A", industry: "Manufacturing", revenue: "$150K", status: "New"},
+            {name: "Heather Mitchell", email: "h.mitchell@tech.org", phone: "(630) 555-0153", address: "252 Ash Ave, Lisle, IL", pures: 21, tier: "1A", industry: "Technology", revenue: "$135K", status: "Follow-up"},
+            {name: "Carl Perez", email: "c.perez@store.org", phone: "(630) 555-0154", address: "363 Poplar Dr, Naperville, IL", pures: 20, tier: "1B", industry: "Retail", revenue: "$110K", status: "Contacted"},
+            {name: "Diana Roberts", email: "d.roberts@college.org", phone: "(630) 555-0155", address: "474 Hickory Ln, Aurora, IL", pures: 19, tier: "1B", industry: "Education", revenue: "$95K", status: "New"},
+            {name: "Gregory Turner", email: "g.turner@credit.org", phone: "(630) 555-0156", address: "585 Willow St, Wheaton, IL", pures: 18, tier: "1B", industry: "Finance", revenue: "$160K", status: "Proposal"},
+            {name: "Christina Phillips", email: "c.phillips@hospital.com", phone: "(630) 555-0157", address: "696 Sycamore Ave, Bolingbrook, IL", pures: 17, tier: "1C", industry: "Healthcare", revenue: "$145K", status: "Follow-up"},
+            {name: "Eric Campbell", email: "e.campbell@assembly.org", phone: "(630) 555-0158", address: "707 Magnolia Dr, Downers Grove, IL", pures: 16, tier: "1C", industry: "Manufacturing", revenue: "$125K", status: "New"},
+            {name: "Vanessa Parker", email: "v.parker@startup.org", phone: "(630) 555-0159", address: "818 Dogwood Ln, Lisle, IL", pures: 22, tier: "1A", industry: "Technology", revenue: "$140K", status: "Contacted"},
+            {name: "Sean Evans", email: "s.evans@shop.org", phone: "(630) 555-0160", address: "929 Redwood St, Naperville, IL", pures: 21, tier: "1A", industry: "Retail", revenue: "$100K", status: "New"},
+            {name: "Jacqueline Edwards", email: "j.edwards@university.com", phone: "(630) 555-0161", address: "130 Palm Ave, Aurora, IL", pures: 20, tier: "1B", industry: "Education", revenue: "$90K", status: "Follow-up"},
+            {name: "Patrick Collins", email: "p.collins@investment.org", phone: "(630) 555-0162", address: "241 Cypress Dr, Wheaton, IL", pures: 19, tier: "1B", industry: "Finance", revenue: "$155K", status: "Contacted"},
+            {name: "Samantha Stewart", email: "s.stewart@medical.org", phone: "(630) 555-0163", address: "352 Fir Ln, Bolingbrook, IL", pures: 18, tier: "1B", industry: "Healthcare", revenue: "$130K", status: "Proposal"},
+            {name: "Justin Sanchez", email: "j.sanchez@manufacturing.org", phone: "(630) 555-0164", address: "463 Pine St, Downers Grove, IL", pures: 17, tier: "1C", industry: "Manufacturing", revenue: "$165K", status: "New"},
+            {name: "Brenda Morris", email: "b.morris@software.org", phone: "(630) 555-0165", address: "574 Oak Dr, Lisle, IL", pures: 23, tier: "1A", industry: "Technology", revenue: "$115K", status: "Follow-up"},
+            {name: "Tyler Rogers", email: "t.rogers@retail.org", phone: "(630) 555-0166", address: "685 Elm Ave, Naperville, IL", pures: 22, tier: "1A", industry: "Retail", revenue: "$105K", status: "Contacted"},
+            {name: "Leslie Reed", email: "l.reed@school.com", phone: "(630) 555-0167", address: "796 Maple Ln, Aurora, IL", pures: 21, tier: "1A", industry: "Education", revenue: "$85K", status: "New"},
+            {name: "Gary Cook", email: "g.cook@bank.com", phone: "(630) 555-0168", address: "807 Cedar St, Wheaton, IL", pures: 20, tier: "1B", industry: "Finance", revenue: "$170K", status: "Proposal"},
+            {name: "Deborah Bailey", email: "d.bailey@clinic.com", phone: "(630) 555-0169", address: "918 Birch Ave, Bolingbrook, IL", pures: 19, tier: "1B", industry: "Healthcare", revenue: "$125K", status: "Follow-up"},
+            {name: "Jeremy Rivera", email: "j.rivera@factory.com", phone: "(630) 555-0170", address: "129 Walnut Dr, Downers Grove, IL", pures: 18, tier: "1B", industry: "Manufacturing", revenue: "$150K", status: "New"},
+            {name: "Kelly Cooper", email: "k.cooper@tech.com", phone: "(630) 555-0171", address: "240 Cherry Ln, Lisle, IL", pures: 17, tier: "1C", industry: "Technology", revenue: "$120K", status: "Contacted"},
+            {name: "Craig Richardson", email: "c.richardson@store.com", phone: "(630) 555-0172", address: "351 Spruce St, Naperville, IL", pures: 16, tier: "1C", industry: "Retail", revenue: "$95K", status: "New"}
+        ];
+
+        let currentClientData = [...clientData];
+
+        function showTab(tabName) {
+            // Hide all tab contents
+            const tabs = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Remove active class from all buttons
+            const buttons = document.querySelectorAll('.tab-button');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            
+            // Show selected tab and activate button
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+            
+            // Populate client table if database tab is selected
+            if (tabName === 'client-database') {
+                populateClientTable();
+            }
+        }
+
+        function populateClientTable() {
+            const tableBody = document.getElementById('clientTableBody');
+            tableBody.innerHTML = '';
+            
+            currentClientData.forEach((client, index) => {
+                const row = tableBody.insertRow();
+                const tierClass = client.tier === '1A' ? 'tier-1a' : client.tier === '1B' ? 'tier-1b' : 'tier-1c';
+                row.className = tierClass;
+                
+                row.innerHTML = `
+                    <td>${client.name}</td>
+                    <td>${client.email}</td>
+                    <td>${client.phone}</td>
+                    <td>${client.address}</td>
+                    <td>${client.pures}/25</td>
+                    <td>${client.tier}</td>
+                    <td>${client.industry}</td>
+                    <td>${client.revenue}</td>
+                    <td>${client.status}</td>
+                    <td>
+                        <button class="contact-btn" onclick="openEmailModal('${client.name}', '${client.email}', '${client.industry}')">Email</button>
+                    </td>
+                `;
+            });
+        }
+
+        function filterTable() {
+            const searchInput = document.getElementById('searchInput').value.toLowerCase();
+            const tierFilter = document.getElementById('tierFilter').value;
+            const industryFilter = document.getElementById('industryFilter').value;
+            
+            currentClientData = clientData.filter(client => {
+                const matchesSearch = client.name.toLowerCase().includes(searchInput) || 
+                                    client.email.toLowerCase().includes(searchInput) ||
+                                    client.address.toLowerCase().includes(searchInput);
+                const matchesTier = tierFilter === '' || client.tier === tierFilter;
+                const matchesIndustry = industryFilter === '' || client.industry === industryFilter;
+                
+                return matchesSearch && matchesTier && matchesIndustry;
+            });
+            
+            populateClientTable();
+        }
+
+        function sortTable(columnIndex) {
+            const table = document.getElementById('clientTable');
+            const rows = Array.from(table.rows).slice(1);
+            const isAscending = table.getAttribute('data-sort-direction') !== 'asc';
+            
+            rows.sort((a, b) => {
+                const aVal = a.cells[columnIndex].textContent.trim();
+                const bVal = b.cells[columnIndex].textContent.trim();
+                
+                if (isAscending) {
+                    return aVal.localeCompare(bVal, undefined, {numeric: true});
+                } else {
+                    return bVal.localeCompare(aVal, undefined, {numeric: true});
+                }
+            });
+            
+            const tbody = table.tBodies[0];
+            tbody.innerHTML = '';
+            rows.forEach(row => tbody.appendChild(row));
+            
+            table.setAttribute('data-sort-direction', isAscending ? 'asc' : 'desc');
+        }
+
+        function openEmailModal(clientName, clientEmail, industry) {
+            document.getElementById('emailTo').textContent = clientEmail;
+            
+            const emailTemplate = generateEmailTemplate(clientName, industry);
+            document.getElementById('emailTemplate').value = emailTemplate;
+            
+            document.getElementById('emailModal').style.display = 'block';
+        }
+
+        function closeEmailModal() {
+            document.getElementById('emailModal').style.display = 'none';
+        }
+
+        function generateEmailTemplate(clientName, industry) {
+            const templates = {
+                'Healthcare': `Dear ${clientName},
+
+As a healthcare professional, you understand the importance of maintaining peak physical and mental wellness. LifeSculpt offers specialized fitness programs designed for healthcare workers who need efficient, results-driven wellness solutions.
+
+Our services include:
+✓ High-intensity interval training for busy schedules
+✓ Stress reduction and recovery programs
+✓ Ergonomic movement therapy
+✓ Nutritional coaching for sustained energy
+
+We understand the unique challenges of your profession and have helped over 200+ healthcare professionals achieve their wellness goals while managing demanding schedules.
+
+Schedule your complimentary fitness assessment today and discover how LifeSculpt can help you maintain the energy and vitality needed for your important work.
+
+Best regards,
+Kendra Beery
+LifeSculpt - Transforming Lives Through Fitness
+www.mylifesculpt.com`,
+
+                'Technology': `Dear ${clientName},
+
+Working in technology often means long hours at a desk, which can take a toll on your physical health and mental clarity. LifeSculpt specializes in fitness programs for tech professionals who want to optimize their performance both at work and in life.
+
+Our tech-focused programs include:
+✓ Posture correction and mobility training
+✓ High-energy workouts to combat sedentary lifestyle
+✓ Cognitive enhancement through exercise
+✓ Flexible scheduling for demanding work hours
+
+We've helped numerous software engineers, developers, and IT professionals achieve better work-life balance through strategic fitness and wellness programs.
+
+Ready to upgrade your personal operating system? Schedule your complimentary consultation today.
+
+Best regards,
+Kendra Beery
+LifeSculpt - Optimizing Human Performance
+www.mylifesculpt.com`,
+
+                'Education': `Dear ${clientName},
+
+Educators dedicate their lives to shaping minds, but it's equally important to maintain your own physical and mental wellness. LifeSculpt offers fitness programs specifically designed for education professionals.
+
+Our educator-focused programs include:
+✓ Energy-boosting morning workouts
+✓ Stress management through fitness
+✓ Summer intensive programs
+✓ Group training with fellow educators
+
+We understand the unique schedule challenges educators face and have developed flexible programs that work around academic calendars.
+
+Invest in yourself the same way you invest in your students. Schedule your complimentary fitness consultation today.
+
+Best regards,
+Kendra Beery
+LifeSculpt - Empowering Educators Through Fitness
+www.mylifesculpt.com`,
+
+                'Finance': `Dear ${clientName},
+
+In the high-pressure world of finance, maintaining peak physical condition is crucial for sustained mental performance and stress management. LifeSculpt offers elite fitness programs for finance professionals.
+
+Our executive fitness programs include:
+✓ Executive training sessions
+✓ Stress-reduction protocols
+✓ High-performance nutrition coaching
+✓ Flexible scheduling for market hours
+
+We've worked with numerous finance professionals to help them maintain the physical and mental edge needed for success in competitive markets.
+
+Your health is your most valuable asset. Schedule your executive fitness consultation today.
+
+Best regards,
+Kendra Beery
+LifeSculpt - Executive Wellness Solutions
+www.mylifesculpt.com`,
+
+                'Manufacturing': `Dear ${clientName},
+
+Manufacturing professionals need strength, endurance, and injury prevention to maintain peak performance. LifeSculpt offers specialized fitness programs designed for manufacturing industry professionals.
+
+Our industrial fitness programs include:
+✓ Functional strength training
+✓ Injury prevention programs
+✓ Shift-work compatible scheduling
+✓ Ergonomic movement training
+
+We understand the physical demands of manufacturing work and have developed programs that enhance job performance while reducing injury risk.
+
+Build strength for work and life. Schedule your complimentary fitness assessment today.
+
+Best regards,
+Kendra Beery
+LifeSculpt - Industrial Strength Fitness
+www.mylifesculpt.com`,
+
+                'Retail': `Dear ${clientName},
+
+Retail professionals are always on their feet, serving customers and managing operations. LifeSculpt offers fitness programs that help retail workers maintain energy and prevent burnout.
+
+Our retail-focused programs include:
+✓ Energy and endurance training
+✓ Foot and back health programs
+✓ Flexible scheduling around retail hours
+✓ Group training with retail teams
+
+We've helped numerous retail managers and staff maintain the physical stamina needed for excellent customer service.
+
+Energize your work performance through fitness. Schedule your complimentary consultation today.
+
+Best regards,
+Kendra Beery
+LifeSculpt - Retail Energy Solutions
+www.mylifesculpt.com`
+            };
+
+            return templates[industry] || templates['Technology']; // Default to technology template
+        }
+
+        function sendEmail() {
+            const emailTo = document.getElementById('emailTo').textContent;
+            const emailBody = document.getElementById('emailTemplate').value;
+            const subject = encodeURIComponent('Transform Your Health Journey with LifeSculpt');
+            const body = encodeURIComponent(emailBody);
+            
+            window.open(`mailto:${emailTo}?subject=${subject}&body=${body}`);
+            closeEmailModal();
+        }
+
+        function exportData() {
+            const csvContent = "data:text/csv;charset=utf-8," + 
+                "Client Name,Email,Phone,Address,P.U.R.E.S. Score,Tier,Industry,Revenue Est.,Status\n" +
+                currentClientData.map(client => 
+                    `"${client.name}","${client.email}","${client.phone}","${client.address}","${client.pures}/25","${client.tier}","${client.industry}","${client.revenue}","${client.status}"`
+                ).join("\n");
+            
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "lifesculpt_client_database.csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            populateClientTable();
+        });
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('emailModal');
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    </script>
+</body>
+</html>

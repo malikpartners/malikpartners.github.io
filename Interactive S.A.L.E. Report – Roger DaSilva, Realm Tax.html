@@ -1,0 +1,836 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>S.A.L.E. Client Strategy Report – Roger DaSilva</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #000; color: #e0e0e0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+  
+  .header {
+    background: linear-gradient(135deg, #0a0a0a, #1a1a1a);
+    border-bottom: 3px solid #CF2030;
+    padding: 20px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  }
+  .header img { height: 50px; }
+  .header-title { color: #fff; font-size: 18px; font-weight: 600; }
+
+  .nav {
+    background: #111;
+    padding: 0 40px;
+    display: flex;
+    gap: 0;
+    border-bottom: 1px solid #222;
+    overflow-x: auto;
+    position: sticky;
+    top: 93px;
+    z-index: 999;
+  }
+  .nav a {
+    color: #ccc;
+    text-decoration: none;
+    padding: 14px 20px;
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 3px solid transparent;
+    transition: all 0.3s;
+    white-space: nowrap;
+  }
+  .nav a:hover, .nav a.active {
+    color: #CF2030;
+    border-bottom-color: #CF2030;
+    background: rgba(207,32,48,0.05);
+  }
+
+  .container { max-width: 1200px; margin: 0 auto; padding: 30px 20px 60px; }
+
+  .section {
+    background: #111;
+    border: 1px solid #222;
+    border-radius: 12px;
+    margin-bottom: 30px;
+    overflow: hidden;
+  }
+  .section-header {
+    background: linear-gradient(135deg, #CF2030, #a01828);
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .section-header h2 { color: #fff; font-size: 18px; font-weight: 700; }
+  .section-header .icon { font-size: 22px; }
+  .section-body { padding: 24px; }
+
+  .search-bar {
+    width: 100%;
+    padding: 12px 18px;
+    background: #1a1a1a;
+    border: 1px solid #333;
+    border-radius: 8px;
+    color: #fff;
+    font-size: 14px;
+    margin-bottom: 16px;
+    outline: none;
+    transition: border-color 0.3s;
+  }
+  .search-bar:focus { border-color: #CF2030; }
+  .search-bar::placeholder { color: #666; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+  }
+  thead th {
+    background: #1a1a1a;
+    color: #CF2030;
+    padding: 12px 16px;
+    text-align: left;
+    font-weight: 700;
+    cursor: pointer;
+    user-select: none;
+    border-bottom: 2px solid #CF2030;
+    position: relative;
+    white-space: nowrap;
+  }
+  thead th:hover { background: #222; }
+  thead th .sort-icon { margin-left: 6px; font-size: 11px; opacity: 0.5; }
+  thead th.sorted .sort-icon { opacity: 1; }
+  tbody tr { border-bottom: 1px solid #1e1e1e; transition: background 0.2s; }
+  tbody tr:hover { background: rgba(207,32,48,0.08); }
+  tbody td { padding: 12px 16px; color: #ccc; vertical-align: top; }
+
+  .badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .badge-red { background: rgba(207,32,48,0.15); color: #CF2030; }
+  .badge-green { background: rgba(46,204,113,0.15); color: #2ecc71; }
+  .badge-blue { background: rgba(52,152,219,0.15); color: #3498db; }
+  .badge-yellow { background: rgba(241,196,15,0.15); color: #f1c40f; }
+
+  .profile-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .profile-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 16px;
+    background: #1a1a1a;
+    border-radius: 8px;
+    border-left: 3px solid #CF2030;
+  }
+  .profile-item .label { color: #888; font-size: 13px; font-weight: 600; }
+  .profile-item .value { color: #fff; font-size: 13px; text-align: right; }
+  .profile-item .value a { color: #CF2030; text-decoration: none; }
+  .profile-item .value a:hover { text-decoration: underline; }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 18px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: all 0.3s;
+    text-decoration: none;
+  }
+  .btn-primary { background: #CF2030; color: #fff; }
+  .btn-primary:hover { background: #e02040; transform: translateY(-1px); }
+  .btn-outline { background: transparent; border: 1px solid #CF2030; color: #CF2030; }
+  .btn-outline:hover { background: rgba(207,32,48,0.1); }
+  .btn-sm { padding: 5px 12px; font-size: 12px; }
+
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+  .service-card {
+    background: #1a1a1a;
+    border: 1px solid #222;
+    border-radius: 10px;
+    padding: 20px;
+    transition: border-color 0.3s, transform 0.3s;
+  }
+  .service-card:hover { border-color: #CF2030; transform: translateY(-2px); }
+  .service-card h3 { color: #CF2030; font-size: 15px; margin-bottom: 8px; }
+  .service-card p { color: #999; font-size: 13px; line-height: 1.6; }
+
+  .differentiator { display: flex; align-items: flex-start; gap: 14px; padding: 14px 0; border-bottom: 1px solid #1e1e1e; }
+  .differentiator:last-child { border-bottom: none; }
+  .differentiator .d-icon { font-size: 28px; min-width: 40px; text-align: center; }
+  .differentiator h4 { color: #fff; font-size: 14px; margin-bottom: 4px; }
+  .differentiator p { color: #888; font-size: 13px; }
+
+  .trigger-card {
+    background: #1a1a1a;
+    border-left: 3px solid #CF2030;
+    padding: 14px 18px;
+    margin-bottom: 10px;
+    border-radius: 0 8px 8px 0;
+    font-style: italic;
+    color: #ccc;
+    font-size: 14px;
+    transition: background 0.2s;
+  }
+  .trigger-card:hover { background: #222; }
+
+  .convo-list { counter-reset: convo; }
+  .convo-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 14px 0;
+    border-bottom: 1px solid #1e1e1e;
+  }
+  .convo-item:last-child { border-bottom: none; }
+  .convo-num {
+    min-width: 32px;
+    height: 32px;
+    background: #CF2030;
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 14px;
+  }
+  .convo-text { color: #ccc; font-size: 14px; line-height: 1.5; padding-top: 4px; }
+
+  .template-box {
+    background: #0d0d0d;
+    border: 1px solid #222;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 16px;
+    position: relative;
+  }
+  .template-box h4 { color: #CF2030; margin-bottom: 10px; font-size: 14px; }
+  .template-box pre {
+    color: #bbb;
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 13px;
+    line-height: 1.7;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+  .copy-btn {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    background: #CF2030;
+    color: #fff;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .copy-btn:hover { background: #e02040; }
+
+  .chart-container {
+    background: #1a1a1a;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 16px;
+  }
+  .chart-container canvas { max-height: 300px; }
+
+  .stars { color: #f1c40f; letter-spacing: 2px; }
+  .stars-empty { color: #333; }
+
+  .footer {
+    background: #0a0a0a;
+    border-top: 2px solid #CF2030;
+    padding: 30px 40px;
+    text-align: center;
+  }
+  .footer img { height: 30px; margin-bottom: 12px; }
+  .footer p { color: #666; font-size: 12px; line-height: 1.8; }
+  .footer a { color: #CF2030; text-decoration: none; }
+
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .stat-card {
+    background: #1a1a1a;
+    border: 1px solid #222;
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+  }
+  .stat-card .stat-value { font-size: 28px; font-weight: 800; color: #CF2030; }
+  .stat-card .stat-label { font-size: 12px; color: #888; margin-top: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.8);
+    z-index: 2000;
+    align-items: center;
+    justify-content: center;
+  }
+  .modal-overlay.show { display: flex; }
+  .modal {
+    background: #111;
+    border: 1px solid #333;
+    border-radius: 12px;
+    padding: 30px;
+    max-width: 600px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+  }
+  .modal h3 { color: #CF2030; margin-bottom: 16px; }
+  .modal textarea, .modal input {
+    width: 100%;
+    background: #1a1a1a;
+    border: 1px solid #333;
+    border-radius: 8px;
+    color: #fff;
+    padding: 12px;
+    font-size: 13px;
+    margin-bottom: 12px;
+    font-family: inherit;
+    outline: none;
+  }
+  .modal textarea { min-height: 200px; resize: vertical; }
+  .modal textarea:focus, .modal input:focus { border-color: #CF2030; }
+  .modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 10px; }
+
+  @media (max-width: 768px) {
+    .profile-grid { grid-template-columns: 1fr; }
+    .services-grid { grid-template-columns: 1fr; }
+    .stats-row { grid-template-columns: repeat(2, 1fr); }
+    .header { padding: 15px 20px; }
+    .nav { padding: 0 10px; }
+    .container { padding: 20px 12px 40px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports" />
+  <span class="header-title">S.A.L.E. Client Strategy Report</span>
+</div>
+
+<!-- NAV -->
+<div class="nav" id="mainNav">
+  <a href="#profile" class="active" onclick="scrollToSection('profile', this)">Profile</a>
+  <a href="#company" onclick="scrollToSection('company', this)">Company</a>
+  <a href="#search" onclick="scrollToSection('search', this)">🔍 Search</a>
+  <a href="#approach" onclick="scrollToSection('approach', this)">🎯 Approach</a>
+  <a href="#language" onclick="scrollToSection('language', this)">💬 Language</a>
+  <a href="#engage" onclick="scrollToSection('engage', this)">📧 Engage</a>
+  <a href="#summary" onclick="scrollToSection('summary', this)">📊 Summary</a>
+</div>
+
+<div class="container">
+
+  <!-- STATS ROW -->
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="stat-value">15+</div>
+      <div class="stat-label">Years Experience</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value">11-50</div>
+      <div class="stat-label">Employees</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value">3</div>
+      <div class="stat-label">Core Services</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value">10</div>
+      <div class="stat-label">Referral Partners</div>
+    </div>
+  </div>
+
+  <!-- PROFILE -->
+  <div class="section" id="profile">
+    <div class="section-header">
+      <span class="icon">👤</span>
+      <h2>Client Profile — Roger DaSilva</h2>
+    </div>
+    <div class="section-body">
+      <div class="profile-grid">
+        <div class="profile-item"><span class="label">Full Name</span><span class="value">Roger DaSilva</span></div>
+        <div class="profile-item"><span class="label">Email</span><span class="value"><a href="mailto:roger@realmtax.com">roger@realmtax.com</a></span></div>
+        <div class="profile-item"><span class="label">Title</span><span class="value">Business Owner / Founder</span></div>
+        <div class="profile-item"><span class="label">Company</span><span class="value">Realm Business and Tax Advisory</span></div>
+        <div class="profile-item"><span class="label">Industry</span><span class="value"><span class="badge badge-blue">Accounting</span></span></div>
+        <div class="profile-item"><span class="label">Location</span><span class="value">Hermosa Beach, CA</span></div>
+        <div class="profile-item"><span class="label">Company Size</span><span class="value">11-50 employees</span></div>
+        <div class="profile-item"><span class="label">Website</span><span class="value"><a href="http://www.realmtax.com" target="_blank">realmtax.com</a></span></div>
+        <div class="profile-item"><span class="label">LinkedIn (Personal)</span><span class="value"><a href="https://www.linkedin.com/in/rogerdasilva1/" target="_blank">Roger DaSilva</a></span></div>
+        <div class="profile-item"><span class="label">LinkedIn (Company)</span><span class="value"><a href="https://www.linkedin.com/company/1585420" target="_blank">Realm Tax</a></span></div>
+        <div class="profile-item"><span class="label">BNI Membership Expiry</span><span class="value"><span class="badge badge-yellow">March 26, 2026</span></span></div>
+        <div class="profile-item"><span class="label">Service Area</span><span class="value">South Bay / Greater LA</span></div>
+      </div>
+      <div style="margin-top: 18px; display: flex; gap: 10px; flex-wrap: wrap;">
+        <a class="btn btn-primary" href="mailto:roger@realmtax.com?subject=Let%27s%20Connect%20%E2%80%93%20BNI%20Referral%20Opportunity&body=Hi%20Roger%2C%0A%0AI%20came%20across%20Realm%20Business%20and%20Tax%20Advisory%20and%20was%20impressed%20by%20your%20transparent%20flat-fee%20pricing%2C%20strategic%20tax%20planning%20expertise%2C%20and%20fractional%20CFO%20services.%20With%20over%2015%20years%20of%20experience%20helping%20business%20owners%20scale%2C%20I%20believe%20there%20is%20a%20strong%20opportunity%20for%20us%20to%20connect%20and%20exchange%20referrals%20through%20BNI.%0A%0AI%E2%80%99d%20love%20to%20schedule%20a%20quick%20conversation%20to%20explore%20how%20we%20can%20work%20together.%0A%0ABest%20regards">📧 Email Roger</a>
+        <a class="btn btn-outline" href="https://www.linkedin.com/in/rogerdasilva1/" target="_blank">🔗 LinkedIn Profile</a>
+        <a class="btn btn-outline" href="http://www.realmtax.com" target="_blank">🌐 Visit Website</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- COMPANY SNAPSHOT -->
+  <div class="section" id="company">
+    <div class="section-header">
+      <span class="icon">🏢</span>
+      <h2>Company Snapshot — Realm Tax</h2>
+    </div>
+    <div class="section-body">
+      <p style="color:#CF2030; font-style:italic; font-size:15px; margin-bottom:18px;">
+        "Navigating Clients through their Financial Realm"
+      </p>
+      <p style="color:#999; font-size:14px; line-height:1.7; margin-bottom:24px;">
+        Realm Tax is a full-service tax and accounting firm led by Roger DaSilva with over 15 years of experience scaling businesses. The firm emphasizes personalized, relationship-driven financial support and positions itself as a trusted partner — not just a number cruncher.
+      </p>
+
+      <h3 style="color:#fff; font-size:16px; margin-bottom:16px;">Core Services</h3>
+      <div class="services-grid">
+        <div class="service-card">
+          <h3>📚 Bookkeeping & Tax Preparation</h3>
+          <p>Full-service bookkeeping and accounting with no large upfront costs. Clients can call anytime for thorough discussions.</p>
+        </div>
+        <div class="service-card">
+          <h3>📋 Tax Planning</h3>
+          <p>Strategic tax mitigation for business owners, covering both business and personal returns. Navigating the complex tax code with confidence.</p>
+        </div>
+        <div class="service-card">
+          <h3>📈 CFO Services</h3>
+          <p>Financial projections, cash flow analysis, and strategic financial advice delivered in "plain English" to help clients make informed decisions.</p>
+        </div>
+      </div>
+
+      <h3 style="color:#fff; font-size:16px; margin: 24px 0 16px;">Key Differentiators</h3>
+      <div class="differentiator">
+        <div class="d-icon">💲</div>
+        <div><h4>Transparent, Flat-Fee Pricing</h4><p>Value-based pricing with no hourly surprises</p></div>
+      </div>
+      <div class="differentiator">
+        <div class="d-icon">🧭</div>
+        <div><h4>Strategic Guidance</h4><p>Creative, tailored tax mitigation strategies for individuals and businesses</p></div>
+      </div>
+      <div class="differentiator">
+        <div class="d-icon">🤝</div>
+        <div><h4>Personalized Support</h4><p>Proactive solutions with a team ready to address questions</p></div>
+      </div>
+
+      <div style="margin-top:24px; padding:16px 20px; background:#1a1a1a; border-radius:10px; border-left:4px solid #CF2030;">
+        <p style="color:#fff; font-size:14px; font-style:italic;">
+          Brand Promise: "A partnership that goes beyond numbers — we're here to empower your financial success."
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SEARCH -->
+  <div class="section" id="search">
+    <div class="section-header">
+      <span class="icon">🔍</span>
+      <h2>S — Search: Key Insights for BNI Engagement</h2>
+    </div>
+    <div class="section-body">
+      <input type="text" class="search-bar" id="searchInsights" placeholder="🔎 Search insights..." oninput="filterTable('insightsTable', this.value)" />
+      <table id="insightsTable">
+        <thead>
+          <tr>
+            <th onclick="sortTable('insightsTable', 0)">Insight <span class="sort-icon">⇅</span></th>
+            <th onclick="sortTable('insightsTable', 1)">Detail <span class="sort-icon">⇅</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><span class="badge badge-green">Ideal Client</span></td><td>Small-to-mid-size business owners who need bookkeeping, tax planning, and fractional CFO services</td></tr>
+          <tr><td><span class="badge badge-blue">Sweet Spot</span></td><td>Entrepreneurs scaling their business who need strategic financial guidance, not just tax filing</td></tr>
+          <tr><td><span class="badge badge-red">Pain Points Roger Solves</span></td><td>Overpaying on taxes, lack of financial visibility, no CFO-level insight, confusing hourly billing from accountants</td></tr>
+          <tr><td><span class="badge badge-yellow">Trust Signals</span></td><td>15+ years of experience, flat-fee transparency, "plain English" communication style</td></tr>
+          <tr><td><span class="badge badge-green">Service Area</span></td><td>Hermosa Beach, CA and surrounding South Bay / Greater Los Angeles area</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- APPROACH -->
+  <div class="section" id="approach">
+    <div class="section-header">
+      <span class="icon">🎯</span>
+      <h2>A — Approach: BNI Referral Strategy</h2>
+    </div>
+    <div class="section-body">
+      <h3 style="color:#fff; font-size:15px; margin-bottom:14px;">Who Should Refer to Roger?</h3>
+      <input type="text" class="search-bar" id="searchReferrals" placeholder="🔎 Search referral partners..." oninput="filterTable('referralTable', this.value)" />
+      <table id="referralTable">
+        <thead>
+          <tr>
+            <th onclick="sortTable('referralTable', 0)" style="width:30%;">BNI Seat <span class="sort-icon">⇅</span></th>
+            <th onclick="sortTable('referralTable', 1)">Why They Refer to Roger <span class="sort-icon">⇅</span></th>
+            <th style="width:12%;">Contact</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Real Estate Agent</td><td>Investors and homebuyers need tax planning for property transactions</td><td><button class="btn btn-primary btn-sm" onclick="openContactModal('Real Estate Agent')">✉️ Invite</button></td></tr>
+          <tr><td>Business Attorney</td><td>New business formations and restructurings require tax advisory</td><td><button class="btn btn-primary btn-sm" onclick="openContactModal('Business Attorney')">✉️ Invite</button></td></tr>
+          <tr><td>Financial Advisor</td><td>Wealth management clients benefit from coordinated tax strategies</td><td><button class="btn btn-primary btn-sm" onclick="openContactModal('Financial Advisor')">✉️ Invite</button></td></tr>
+          <tr><td>Insurance Broker</td><td>Business clients often need bookkeeping and tax prep simultaneously</td><td><button class="btn btn-primary btn-sm" onclick="openContactModal('Insurance Broker')">✉️ Invite</button></td></tr>
+          <tr><td>Mortgage Lender</td><td>Self-employed borrowers need clean books and tax returns</td><td><button class="btn btn-primary btn-sm" onclick="openContactModal('Mortgage Lender')">✉️ Invite</button></td></tr>
+          <tr><td>Business Consultant</td><td>Scaling businesses need CFO-level financial guidance</td><td><button class="btn btn-primary btn-sm" onclick="openContactModal('Business Consultant')">✉️ Invite</button></td></tr>
+          <tr><td>Payroll Service Provider</td><td>Payroll clients often need bookkeeping and tax filing</td><td><button class="btn btn-primary btn-sm" onclick="openContactModal('Payroll Service Provider')">✉️ Invite</button></td></tr>
+          <tr><td>Residential Realtor</td><td>Homeowners selling property need capital gains tax planning</td><td><button class="btn btn-primary btn-sm" onclick="openContactModal('Residential Realtor')">✉️ Invite</button></td></tr>
+          <tr><td>Estate Planning Attorney</td><td>Estate and trust clients need ongoing tax advisory</td><td><button class="btn btn-primary btn-sm" onclick="openContactModal('Estate Planning Attorney')">✉️ Invite</button></td></tr>
+          <tr><td>Commercial Banker</td><td>Business loan applicants need organized financials and projections</td><td><button class="btn btn-primary btn-sm" onclick="openContactModal('Commercial Banker')">✉️ Invite</button></td></tr>
+        </tbody>
+      </table>
+
+      <h3 style="color:#fff; font-size:15px; margin: 28px 0 14px;">🔴 Referral Triggers to Listen For</h3>
+      <input type="text" class="search-bar" id="searchTriggers" placeholder="🔎 Search triggers..." oninput="filterTriggers(this.value)" />
+      <div id="triggersContainer">
+        <div class="trigger-card" data-text="i'm overpaying on taxes and don't know what to do">"I'm overpaying on taxes and don't know what to do."</div>
+        <div class="trigger-card" data-text="i need someone to handle my books i'm drowning in receipts">"I need someone to handle my books — I'm drowning in receipts."</div>
+        <div class="trigger-card" data-text="i can't afford a full-time cfo but need that level of insight">"I can't afford a full-time CFO but need that level of insight."</div>
+        <div class="trigger-card" data-text="my accountant charges by the hour and i never know what i'll owe">"My accountant charges by the hour and I never know what I'll owe."</div>
+        <div class="trigger-card" data-text="i'm starting a new business and need to set up my finances right">"I'm starting a new business and need to set up my finances right."</div>
+        <div class="trigger-card" data-text="i need help with financial projections for a business loan">"I need help with financial projections for a business loan."</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LANGUAGE -->
+  <div class="section" id="language">
+    <div class="section-header">
+      <span class="icon">💬</span>
+      <h2>L — Language: 1-2-1 Conversation Starters</h2>
+    </div>
+    <div class="section-body">
+      <div class="convo-list">
+        <div class="convo-item"><div class="convo-num">1</div><div class="convo-text">"Roger, what type of business owner is your ideal client right now — startup, scaling, or established?"</div></div>
+        <div class="convo-item"><div class="convo-num">2</div><div class="convo-text">"What's the biggest tax mistake you see small business owners making?"</div></div>
+        <div class="convo-item"><div class="convo-num">3</div><div class="convo-text">"How does your flat-fee pricing work compared to traditional hourly accountants?"</div></div>
+        <div class="convo-item"><div class="convo-num">4</div><div class="convo-text">"When is the best time of year for someone to engage you for tax planning — before or after tax season?"</div></div>
+        <div class="convo-item"><div class="convo-num">5</div><div class="convo-text">"What's the difference between your CFO services and what a typical bookkeeper provides?"</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ENGAGE -->
+  <div class="section" id="engage">
+    <div class="section-header">
+      <span class="icon">📧</span>
+      <h2>E — Engage: Outreach Templates</h2>
+    </div>
+    <div class="section-body">
+      <div class="template-box">
+        <h4>📩 Email Introduction to Roger (for a referral)</h4>
+        <button class="copy-btn" onclick="copyTemplate('emailTemplate')">📋 Copy</button>
+        <pre id="emailTemplate">Subject: You Need to Meet Roger DaSilva — He Saves Business Owners Thousands on Taxes
+
+Hi [Referral Name],
+
+I wanted to introduce you to Roger DaSilva, the founder of Realm Business and Tax Advisory here in Hermosa Beach. Roger and his team specialize in helping business owners like you navigate bookkeeping, tax planning, and even fractional CFO services — all at a transparent, flat-fee rate (no hourly billing surprises).
+
+With over 15 years of experience scaling businesses, Roger doesn't just file taxes — he creates strategic tax mitigation plans that can save you real money. His approach is personal, proactive, and delivered in plain English.
+
+I think a quick conversation with Roger could be incredibly valuable for you. Here's how to reach him:
+
+📧 roger@realmtax.com
+🌐 realmtax.com
+
+Let me know if you'd like me to make a warm introduction!
+
+Best,
+[Your Name]</pre>
+      </div>
+
+      <div class="template-box">
+        <h4>📱 SMS Quick Referral Message</h4>
+        <button class="copy-btn" onclick="copyTemplate('smsTemplate')">📋 Copy</button>
+        <pre id="smsTemplate">Hey [Name]! I know a great accountant who helps business owners save on taxes with flat-fee pricing & CFO-level insight. His name is Roger DaSilva at Realm Tax. Want me to connect you? realmtax.com</pre>
+      </div>
+
+      <div class="template-box">
+        <h4>🎤 BNI Weekly Presentation Tip for Roger</h4>
+        <button class="copy-btn" onclick="copyTemplate('presTemplate')">📋 Copy</button>
+        <pre id="presTemplate">LCD Focus: "Business owners who are tired of overpaying taxes and want a strategic tax plan — not just a tax preparer."
+
+Specific Ask: "I'm looking for an introduction to a small business owner in the South Bay who made over $500K in revenue last year and doesn't currently have a tax strategist. If you know someone who said, 'I paid way too much in taxes this year,' that's my ideal referral."</pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- STRATEGIC SUMMARY -->
+  <div class="section" id="summary">
+    <div class="section-header">
+      <span class="icon">📊</span>
+      <h2>Strategic Summary</h2>
+    </div>
+    <div class="section-body">
+      <input type="text" class="search-bar" id="searchSummary" placeholder="🔎 Search categories..." oninput="filterTable('summaryTable', this.value)" />
+      <table id="summaryTable">
+        <thead>
+          <tr>
+            <th onclick="sortTable('summaryTable', 0)">Category <span class="sort-icon">⇅</span></th>
+            <th onclick="sortTable('summaryTable', 1)">Rating <span class="sort-icon">⇅</span></th>
+            <th onclick="sortTable('summaryTable', 2)">Score <span class="sort-icon">⇅</span></th>
+            <th>Detail</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Referral Potential</td><td><span class="stars">★★★★★</span></td><td>5/5</td><td>High — accounting touches every business</td></tr>
+          <tr><td>Contact Sphere Fit</td><td><span class="stars">★★★★★</span></td><td>5/5</td><td>Strong synergy with Real Estate, Legal, Financial, Insurance</td></tr>
+          <tr><td>Website Quality</td><td><span class="stars">★★★★</span><span class="stars-empty">★</span></td><td>4/5</td><td>Clean, professional, clear messaging — could add testimonials</td></tr>
+          <tr><td>BNI Engagement Opportunity</td><td><span class="stars">★★★★★</span></td><td>5/5</td><td>Ideal member for Power Team building</td></tr>
+        </tbody>
+      </table>
+
+      <!-- Charts -->
+      <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px; margin-top:24px;">
+        <div class="chart-container">
+          <h4 style="color:#CF2030; margin-bottom:12px; font-size:14px;">Strategic Ratings Overview</h4>
+          <canvas id="ratingsChart"></canvas>
+        </div>
+        <div class="chart-container">
+          <h4 style="color:#CF2030; margin-bottom:12px; font-size:14px;">Referral Partner Distribution</h4>
+          <canvas id="partnersChart"></canvas>
+        </div>
+      </div>
+      <div class="chart-container">
+        <h4 style="color:#CF2030; margin-bottom:12px; font-size:14px;">Referral Partner Synergy Score</h4>
+        <canvas id="synergyChart"></canvas>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- CONTACT MODAL -->
+<div class="modal-overlay" id="contactModal">
+  <div class="modal">
+    <h3 id="modalTitle">✉️ Invite to Visit Roger's BNI Chapter</h3>
+    <label style="color:#888; font-size:12px;">Recipient Email</label>
+    <input type="email" id="modalEmail" placeholder="Enter recipient email..." />
+    <label style="color:#888; font-size:12px;">Subject</label>
+    <input type="text" id="modalSubject" />
+    <label style="color:#888; font-size:12px;">Message</label>
+    <textarea id="modalBody"></textarea>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeContactModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="sendModalEmail()">📧 Open in Email Client</button>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports" />
+  <p>
+    Report generated by Higgins AI for BNI Chapter optimization.<br>
+    For questions or support: call/text <a href="tel:18883643924">1-888-364-3924</a> | email <a href="mailto:support@higgins.ai">support@higgins.ai</a> | <a href="https://higginstraining.com" target="_blank">higginstraining.com</a>
+  </p>
+</div>
+
+<script>
+// --- TABLE SORTING ---
+function sortTable(tableId, colIdx) {
+  const table = document.getElementById(tableId);
+  const tbody = table.querySelector('tbody');
+  const rows = Array.from(tbody.querySelectorAll('tr'));
+  const th = table.querySelectorAll('thead th')[colIdx];
+  const asc = !th.classList.contains('sorted-asc');
+  
+  table.querySelectorAll('thead th').forEach(h => { h.classList.remove('sorted-asc','sorted-desc','sorted'); });
+  th.classList.add('sorted', asc ? 'sorted-asc' : 'sorted-desc');
+  
+  rows.sort((a, b) => {
+    let aVal = a.cells[colIdx]?.textContent.trim().toLowerCase() || '';
+    let bVal = b.cells[colIdx]?.textContent.trim().toLowerCase() || '';
+    const aNum = parseFloat(aVal);
+    const bNum = parseFloat(bVal);
+    if (!isNaN(aNum) && !isNaN(bNum)) return asc ? aNum - bNum : bNum - aNum;
+    return asc ? aVal.localeCompare(bVal) : bVal.localeCompare(aVal);
+  });
+  rows.forEach(r => tbody.appendChild(r));
+}
+
+// --- TABLE FILTERING ---
+function filterTable(tableId, query) {
+  const table = document.getElementById(tableId);
+  const rows = table.querySelectorAll('tbody tr');
+  const q = query.toLowerCase();
+  rows.forEach(row => {
+    const text = row.textContent.toLowerCase();
+    row.style.display = text.includes(q) ? '' : 'none';
+  });
+}
+
+// --- TRIGGER FILTERING ---
+function filterTriggers(query) {
+  const q = query.toLowerCase();
+  document.querySelectorAll('#triggersContainer .trigger-card').forEach(card => {
+    card.style.display = card.getAttribute('data-text').includes(q) ? '' : 'none';
+  });
+}
+
+// --- COPY TEMPLATE ---
+function copyTemplate(id) {
+  const text = document.getElementById(id).textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = event.target;
+    btn.textContent = '✅ Copied!';
+    setTimeout(() => btn.textContent = '📋 Copy', 2000);
+  });
+}
+
+// --- CONTACT MODAL ---
+function openContactModal(profession) {
+  document.getElementById('contactModal').classList.add('show');
+  document.getElementById('modalTitle').textContent = '✉️ Invite ' + profession + ' to Visit BNI Chapter';
+  document.getElementById('modalSubject').value = 'You\'re Invited: Visit Our BNI Chapter — Connect with Roger DaSilva of Realm Tax';
+  document.getElementById('modalBody').value = `Hi [Name],
+
+I'm reaching out because, as a ${profession}, I think you'd find tremendous value in visiting our BNI chapter meeting.
+
+One of our valued members is Roger DaSilva, founder of Realm Business and Tax Advisory. Roger offers:
+
+• Transparent, flat-fee bookkeeping and tax preparation — no hourly billing surprises
+• Strategic tax planning that helps business owners save thousands
+• Fractional CFO services including financial projections and cash flow analysis
+
+As a ${profession}, your clients likely overlap with Roger's — which means there's a strong opportunity for mutual referrals. BNI's structured networking creates consistent, high-quality referral flow between professionals who serve the same client base.
+
+By visiting our chapter, you'll experience firsthand how BNI members support each other's businesses through trusted relationships and qualified referrals.
+
+To visit, simply complete this (***Visitor Invite***) form to reserve your seat and begin accelerating your business.
+
+I'd love to welcome you as our guest!
+
+Best regards,
+[Your Name]`;
+}
+
+function closeContactModal() {
+  document.getElementById('contactModal').classList.remove('show');
+}
+
+function sendModalEmail() {
+  const to = document.getElementById('modalEmail').value;
+  const subject = encodeURIComponent(document.getElementById('modalSubject').value);
+  const body = encodeURIComponent(document.getElementById('modalBody').value);
+  window.open(`mailto:${to}?subject=${subject}&body=${body}`);
+  closeContactModal();
+}
+
+// --- SMOOTH SCROLL NAV ---
+function scrollToSection(id, el) {
+  document.getElementById(id).scrollIntoView({ behavior: 'smooth', block: 'start' });
+  document.querySelectorAll('.nav a').forEach(a => a.classList.remove('active'));
+  if(el) el.classList.add('active');
+}
+
+// --- CHARTS ---
+window.addEventListener('load', function() {
+  // Ratings Bar Chart
+  new Chart(document.getElementById('ratingsChart'), {
+    type: 'bar',
+    data: {
+      labels: ['Referral Potential', 'Contact Sphere Fit', 'Website Quality', 'BNI Engagement'],
+      datasets: [{
+        label: 'Score',
+        data: [5, 5, 4, 5],
+        backgroundColor: ['#CF2030', '#e04050', '#d63040', '#CF2030'],
+        borderColor: ['#CF2030', '#e04050', '#d63040', '#CF2030'],
+        borderWidth: 1,
+        borderRadius: 6
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { display: false } },
+      scales: {
+        y: { beginAtZero: true, max: 5, ticks: { color: '#888', stepSize: 1 }, grid: { color: '#222' } },
+        x: { ticks: { color: '#aaa', font: { size: 11 } }, grid: { display: false } }
+      }
+    }
+  });
+
+  // Referral Partners Doughnut
+  new Chart(document.getElementById('partnersChart'), {
+    type: 'doughnut',
+    data: {
+      labels: ['Real Estate', 'Legal', 'Financial', 'Insurance', 'Business Services'],
+      datasets: [{
+        data: [2, 2, 2, 1, 3],
+        backgroundColor: ['#CF2030', '#e04050', '#ff6070', '#f08090', '#ffa0a8'],
+        borderColor: '#111',
+        borderWidth: 3
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { position: 'right', labels: { color: '#ccc', font: { size: 12 }, padding: 12 } }
+      }
+    }
+  });
+
+  // Synergy Horizontal Bar
+  new Chart(document.getElementById('synergyChart'), {
+    type: 'bar',
+    data: {
+      labels: ['Real Estate Agent', 'Financial Advisor', 'Business Attorney', 'Estate Planning Atty', 'Mortgage Lender', 'Commercial Banker', 'Business Consultant', 'Insurance Broker', 'Payroll Provider', 'Residential Realtor'],
+      datasets: [{
+        label: 'Synergy Score',
+        data: [95, 92, 90, 88, 87, 85, 83, 80, 78, 76],
+        backgroundColor: 'rgba(207, 32, 48, 0.7)',
+        borderColor: '#CF2030',
+        borderWidth: 1,
+        borderRadius: 4
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { beginAtZero: true, max: 100, ticks: { color: '#888', callback: v => v + '%' }, grid: { color: '#222' } },
+        y: { ticks: { color: '#ccc', font: { size: 12 } }, grid: { display: false } }
+      }
+    }
+  });
+});
+</script>
+
+</body>
+</html>

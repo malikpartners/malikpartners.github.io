@@ -1,0 +1,846 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>S.A.L.E. Client Targeting Dashboard - Starbucks Fallbrook</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #000000;
+            color: #ffffff;
+            line-height: 1.6;
+        }
+
+        .header {
+            background-color: #000000;
+            padding: 20px;
+            text-align: center;
+            border-bottom: 3px solid #CF2030;
+        }
+
+        .header img {
+            max-height: 80px;
+            width: auto;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .dashboard-section {
+            background-color: #1a1a1a;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 30px;
+            border: 1px solid #CF2030;
+        }
+
+        h1, h2, h3 {
+            color: #CF2030;
+            margin-bottom: 15px;
+        }
+
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #CF2030;
+        }
+
+        .tab {
+            padding: 12px 24px;
+            background-color: #2a2a2a;
+            color: #ffffff;
+            cursor: pointer;
+            border: 1px solid #CF2030;
+            margin-right: 5px;
+            border-bottom: none;
+        }
+
+        .tab.active {
+            background-color: #CF2030;
+            color: #ffffff;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 20px 0;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .search-filter {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .search-filter input, .search-filter select {
+            padding: 10px;
+            border: 1px solid #CF2030;
+            border-radius: 5px;
+            background-color: #2a2a2a;
+            color: #ffffff;
+            min-width: 200px;
+        }
+
+        .clients-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: #2a2a2a;
+        }
+
+        .clients-table th, .clients-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #444;
+            border-right: 1px solid #444;
+        }
+
+        .clients-table th {
+            background-color: #CF2030;
+            color: #ffffff;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .clients-table th:hover {
+            background-color: #b51c2c;
+        }
+
+        .clients-table tr:hover {
+            background-color: #3a3a3a;
+        }
+
+        .tier-1a { background-color: #2d5016; }
+        .tier-1b { background-color: #5c4d00; }
+        .tier-1c { background-color: #1a3a5c; }
+
+        .contact-btn {
+            padding: 8px 12px;
+            background-color: #CF2030;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 2px;
+        }
+
+        .contact-btn:hover {
+            background-color: #b51c2c;
+        }
+
+        .pures-form {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .pures-item {
+            background-color: #2a2a2a;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #444;
+        }
+
+        .pures-item label {
+            display: block;
+            color: #CF2030;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        .pures-item input[type="range"] {
+            width: 100%;
+            margin: 10px 0;
+        }
+
+        .score-display {
+            color: #ffffff;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .email-template {
+            background-color: #2a2a2a;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #CF2030;
+            margin-top: 20px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+        }
+
+        .modal-content {
+            background-color: #1a1a1a;
+            margin: 5% auto;
+            padding: 30px;
+            border: 2px solid #CF2030;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 600px;
+            color: #ffffff;
+        }
+
+        .close {
+            color: #CF2030;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: #ffffff;
+        }
+
+        .footer {
+            background-color: #000000;
+            padding: 20px;
+            text-align: center;
+            border-top: 2px solid #CF2030;
+            margin-top: 50px;
+        }
+
+        .footer img {
+            max-height: 40px;
+            width: auto;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .metric-card {
+            background-color: #2a2a2a;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #CF2030;
+            text-align: center;
+        }
+
+        .metric-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #CF2030;
+        }
+
+        .export-btn {
+            background-color: #CF2030;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px 5px;
+        }
+
+        .export-btn:hover {
+            background-color: #b51c2c;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .search-filter {
+                flex-direction: column;
+            }
+            
+            .clients-table {
+                font-size: 12px;
+            }
+            
+            .pures-form {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports" />
+        <h1>S.A.L.E. Client Targeting Dashboard</h1>
+        <p>Starbucks Fallbrook - Strategic Client Acquisition & Retention System</p>
+    </div>
+
+    <div class="container">
+        <div class="dashboard-section">
+            <div class="tabs">
+                <div class="tab active" onclick="showTab('sourcing')">SOURCING</div>
+                <div class="tab" onclick="showTab('assessing')">ASSESSING</div>
+                <div class="tab" onclick="showTab('listening')">LISTENING</div>
+                <div class="tab" onclick="showTab('empowering')">EMPOWERING</div>
+                <div class="tab" onclick="showTab('clients')">CLIENT DATABASE</div>
+            </div>
+
+            <!-- SOURCING Tab -->
+            <div id="sourcing" class="tab-content active">
+                <h2>P.U.R.E.S. Client Scoring System</h2>
+                <div class="pures-form">
+                    <div class="pures-item">
+                        <label>Profitability (Annual spending potential)</label>
+                        <input type="range" min="1" max="5" value="3" id="profitability" oninput="updatePuresScore()">
+                        <div class="score-display" id="profitability-score">3</div>
+                    </div>
+                    <div class="pures-item">
+                        <label>Urgency (Need for coffee/meeting space)</label>
+                        <input type="range" min="1" max="5" value="3" id="urgency" oninput="updatePuresScore()">
+                        <div class="score-display" id="urgency-score">3</div>
+                    </div>
+                    <div class="pures-item">
+                        <label>Reachability (Accessibility for outreach)</label>
+                        <input type="range" min="1" max="5" value="3" id="reachability" oninput="updatePuresScore()">
+                        <div class="score-display" id="reachability-score">3</div>
+                    </div>
+                    <div class="pures-item">
+                        <label>Engagement (Social media activity/community involvement)</label>
+                        <input type="range" min="1" max="5" value="3" id="engagement" oninput="updatePuresScore()">
+                        <div class="score-display" id="engagement-score">3</div>
+                    </div>
+                    <div class="pures-item">
+                        <label>Sustainability (Long-term customer potential)</label>
+                        <input type="range" min="1" max="5" value="3" id="sustainability" oninput="updatePuresScore()">
+                        <div class="score-display" id="sustainability-score">3</div>
+                    </div>
+                    <div class="pures-item">
+                        <label>Total P.U.R.E.S. Score</label>
+                        <div class="score-display" style="font-size: 28px; color: #CF2030;" id="total-pures">15</div>
+                    </div>
+                </div>
+
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-value" id="tier-1a-count">0</div>
+                        <div>Tier 1A (Premium)</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value" id="tier-1b-count">0</div>
+                        <div>Tier 1B (High-Value)</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value" id="tier-1c-count">0</div>
+                        <div>Tier 1C (Qualified)</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ASSESSING Tab -->
+            <div id="assessing" class="tab-content">
+                <h2>Buying Pattern Analysis</h2>
+                <div class="pures-form">
+                    <div class="pures-item">
+                        <h3>Analytical Buyers</h3>
+                        <p>Require detailed product information, nutritional facts, and ROI on loyalty programs</p>
+                        <div class="metric-value" id="analytical-buyers">0</div>
+                    </div>
+                    <div class="pures-item">
+                        <h3>Relationship Buyers</h3>
+                        <p>Value personal connections, barista relationships, and community feeling</p>
+                        <div class="metric-value" id="relationship-buyers">0</div>
+                    </div>
+                    <div class="pures-item">
+                        <h3>Efficiency Buyers</h3>
+                        <p>Focus on mobile ordering, quick service, and convenience features</p>
+                        <div class="metric-value" id="efficiency-buyers">0</div>
+                    </div>
+                    <div class="pures-item">
+                        <h3>Innovation Buyers</h3>
+                        <p>Seek new beverages, seasonal items, and cutting-edge store experiences</p>
+                        <div class="metric-value" id="innovation-buyers">0</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- LISTENING Tab -->
+            <div id="listening" class="tab-content">
+                <h2>Feedback Integration System</h2>
+                <div class="pures-form">
+                    <div class="pures-item">
+                        <h3>Pre-Visit Feedback</h3>
+                        <p>Social media mentions, Google reviews, community feedback</p>
+                        <button class="contact-btn" onclick="alert('Monitoring social media for brand mentions...')">Monitor Feedback</button>
+                    </div>
+                    <div class="pures-item">
+                        <h3>During-Visit Tracking</h3>
+                        <p>Real-time service quality, wait times, product satisfaction</p>
+                        <button class="contact-btn" onclick="alert('Tracking in-store experience metrics...')">Track Experience</button>
+                    </div>
+                    <div class="pures-item">
+                        <h3>Post-Visit Satisfaction</h3>
+                        <p>Follow-up surveys, loyalty program engagement, repeat visit patterns</p>
+                        <button class="contact-btn" onclick="alert('Analyzing post-visit satisfaction...')">Analyze Satisfaction</button>
+                    </div>
+                    <div class="pures-item">
+                        <h3>Complaint Resolution</h3>
+                        <p>Real-time issue identification and resolution protocols</p>
+                        <button class="contact-btn" onclick="alert('Managing complaint resolution...')">Resolve Issues</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EMPOWERING Tab -->
+            <div id="empowering" class="tab-content">
+                <h2>Referral Strategy & Customer Advocacy</h2>
+                <div class="pures-form">
+                    <div class="pures-item">
+                        <h3>Success Story Documentation</h3>
+                        <p>Customer testimonials, social media shares, community impact stories</p>
+                        <button class="contact-btn" onclick="alert('Documenting customer success stories...')">Document Stories</button>
+                    </div>
+                    <div class="pures-item">
+                        <h3>Referral Reward Tracking</h3>
+                        <p>Friend referral programs, loyalty point sharing, group discounts</p>
+                        <button class="contact-btn" onclick="alert('Tracking referral rewards...')">Track Referrals</button>
+                    </div>
+                    <div class="pures-item">
+                        <h3>Customer Advocacy Program</h3>
+                        <p>Brand ambassadors, community leaders, social influencers</p>
+                        <button class="contact-btn" onclick="alert('Managing advocacy program...')">Manage Advocates</button>
+                    </div>
+                    <div class="pures-item">
+                        <h3>Co-Marketing Opportunities</h3>
+                        <p>Local business partnerships, community events, cross-promotions</p>
+                        <button class="contact-btn" onclick="alert('Planning co-marketing opportunities...')">Plan Co-Marketing</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CLIENT DATABASE Tab -->
+            <div id="clients" class="tab-content">
+                <h2>Client Database - Fallbrook Area (10-mile radius)</h2>
+                <div class="search-filter">
+                    <input type="text" id="search-input" placeholder="Search by name, email, or address..." oninput="filterTable()">
+                    <select id="tier-filter" onchange="filterTable()">
+                        <option value="">All Tiers</option>
+                        <option value="1A">Tier 1A (Premium)</option>
+                        <option value="1B">Tier 1B (High-Value)</option>
+                        <option value="1C">Tier 1C (Qualified)</option>
+                    </select>
+                    <select id="buyer-filter" onchange="filterTable()">
+                        <option value="">All Buyer Types</option>
+                        <option value="Analytical">Analytical</option>
+                        <option value="Relationship">Relationship</option>
+                        <option value="Efficiency">Efficiency</option>
+                        <option value="Innovation">Innovation</option>
+                    </select>
+                    <button class="export-btn" onclick="exportToCSV()">Export to CSV</button>
+                </div>
+
+                <table class="clients-table" id="clients-table">
+                    <thead>
+                        <tr>
+                            <th onclick="sortTable(0)">Name ↕</th>
+                            <th onclick="sortTable(1)">Email ↕</th>
+                            <th onclick="sortTable(2)">Phone ↕</th>
+                            <th onclick="sortTable(3)">Address ↕</th>
+                            <th onclick="sortTable(4)">P.U.R.E.S. Score ↕</th>
+                            <th onclick="sortTable(5)">Tier ↕</th>
+                            <th onclick="sortTable(6)">Buyer Type ↕</th>
+                            <th onclick="sortTable(7)">Est. Annual Spend ↕</th>
+                            <th onclick="sortTable(8)">Contact Status ↕</th>
+                            <th onclick="sortTable(9)">Last Contact ↕</th>
+                            <th onclick="sortTable(10)">Next Action ↕</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="clients-tbody">
+                        <!-- Client data will be inserted here by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Email Modal -->
+    <div id="email-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2>Send Email</h2>
+            <div class="email-template">
+                <p><strong>To:</strong> <span id="email-to"></span></p>
+                <p><strong>Subject:</strong> Discover Your Perfect Coffee Experience at Starbucks Fallbrook</p>
+                <hr style="margin: 15px 0;">
+                <div id="email-body"></div>
+                <br>
+                <button class="contact-btn" onclick="sendEmail()">Send Email</button>
+                <button class="contact-btn" onclick="closeModal()" style="background-color: #666;">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports" />
+        <p>© 2024 Higgins Reports - Powered by S.A.L.E. Methodology</p>
+    </div>
+
+    <script>
+        // Sample client data for Fallbrook area
+        const clientsData = [
+            {name: "Maria Rodriguez", email: "maria.rodriguez@email.com", phone: "(760) 555-0101", address: "123 Main St, Fallbrook, CA 92028", puresScore: 22, tier: "1A", buyerType: "Relationship", annualSpend: "$2,400", status: "New Lead", lastContact: "2024-01-15", nextAction: "Initial Outreach"},
+            {name: "James Wilson", email: "james.wilson@email.com", phone: "(760) 555-0102", address: "456 Oak Ave, Fallbrook, CA 92028", puresScore: 19, tier: "1B", buyerType: "Efficiency", annualSpend: "$1,800", status: "Contacted", lastContact: "2024-01-12", nextAction: "Follow-up"},
+            {name: "Sarah Chen", email: "sarah.chen@email.com", phone: "(760) 555-0103", address: "789 Pine St, Fallbrook, CA 92028", puresScore: 21, tier: "1A", buyerType: "Innovation", annualSpend: "$2,200", status: "Qualified", lastContact: "2024-01-10", nextAction: "Schedule Visit"},
+            {name: "Michael Thompson", email: "michael.thompson@email.com", phone: "(760) 555-0104", address: "321 Elm Dr, Fallbrook, CA 92028", puresScore: 17, tier: "1B", buyerType: "Analytical", annualSpend: "$1,600", status: "New Lead", lastContact: "2024-01-08", nextAction: "Send Info"},
+            {name: "Linda Johnson", email: "linda.johnson@email.com", phone: "(760) 555-0105", address: "654 Cedar Ln, Fallbrook, CA 92028", puresScore: 20, tier: "1A", buyerType: "Relationship", annualSpend: "$2,000", status: "Engaged", lastContact: "2024-01-14", nextAction: "Product Demo"},
+            {name: "Robert Davis", email: "robert.davis@email.com", phone: "(760) 555-0106", address: "987 Maple St, Fallbrook, CA 92028", puresScore: 16, tier: "1C", buyerType: "Efficiency", annualSpend: "$1,400", status: "Contacted", lastContact: "2024-01-11", nextAction: "Follow-up"},
+            {name: "Jennifer Martinez", email: "jennifer.martinez@email.com", phone: "(760) 555-0107", address: "147 Birch Ave, Fallbrook, CA 92028", puresScore: 23, tier: "1A", buyerType: "Innovation", annualSpend: "$2,600", status: "Hot Lead", lastContact: "2024-01-16", nextAction: "Close Deal"},
+            {name: "David Anderson", email: "david.anderson@email.com", phone: "(760) 555-0108", address: "258 Spruce Dr, Fallbrook, CA 92028", puresScore: 18, tier: "1B", buyerType: "Analytical", annualSpend: "$1,700", status: "Qualified", lastContact: "2024-01-09", nextAction: "Proposal"},
+            {name: "Lisa Brown", email: "lisa.brown@email.com", phone: "(760) 555-0109", address: "369 Ash St, Fallbrook, CA 92028", puresScore: 15, tier: "1C", buyerType: "Relationship", annualSpend: "$1,300", status: "New Lead", lastContact: "2024-01-07", nextAction: "Initial Contact"},
+            {name: "Christopher Garcia", email: "chris.garcia@email.com", phone: "(760) 555-0110", address: "741 Willow Ln, Fallbrook, CA 92028", puresScore: 21, tier: "1A", buyerType: "Efficiency", annualSpend: "$2,100", status: "Contacted", lastContact: "2024-01-13", nextAction: "Follow-up"},
+            {name: "Amanda White", email: "amanda.white@email.com", phone: "(760) 555-0111", address: "852 Poplar Ave, Fallbrook, CA 92028", puresScore: 19, tier: "1B", buyerType: "Innovation", annualSpend: "$1,900", status: "Engaged", lastContact: "2024-01-15", nextAction: "Demo"},
+            {name: "Kevin Lee", email: "kevin.lee@email.com", phone: "(760) 555-0112", address: "963 Hickory Dr, Fallbrook, CA 92028", puresScore: 17, tier: "1B", buyerType: "Analytical", annualSpend: "$1,650", status: "Qualified", lastContact: "2024-01-12", nextAction: "Proposal Review"},
+            {name: "Michelle Taylor", email: "michelle.taylor@email.com", phone: "(760) 555-0113", address: "159 Sycamore St, Fallbrook, CA 92028", puresScore: 22, tier: "1A", buyerType: "Relationship", annualSpend: "$2,300", status: "Hot Lead", lastContact: "2024-01-17", nextAction: "Contract"},
+            {name: "Brian Miller", email: "brian.miller@email.com", phone: "(760) 555-0114", address: "357 Walnut Ave, Fallbrook, CA 92028", puresScore: 16, tier: "1C", buyerType: "Efficiency", annualSpend: "$1,450", status: "New Lead", lastContact: "2024-01-06", nextAction: "Initial Outreach"},
+            {name: "Stephanie Moore", email: "stephanie.moore@email.com", phone: "(760) 555-0115", address: "468 Chestnut Ln, Fallbrook, CA 92028", puresScore: 20, tier: "1A", buyerType: "Innovation", annualSpend: "$2,050", status: "Contacted", lastContact: "2024-01-14", nextAction: "Product Demo"},
+            {name: "Daniel Jackson", email: "daniel.jackson@email.com", phone: "(760) 555-0116", address: "579 Beech Dr, Fallbrook, CA 92028", puresScore: 18, tier: "1B", buyerType: "Analytical", annualSpend: "$1,750", status: "Qualified", lastContact: "2024-01-11", nextAction: "Technical Demo"},
+            {name: "Rebecca Clark", email: "rebecca.clark@email.com", phone: "(760) 555-0117", address: "681 Magnolia St, Fallbrook, CA 92028", puresScore: 21, tier: "1A", buyerType: "Relationship", annualSpend: "$2,150", status: "Engaged", lastContact: "2024-01-16", nextAction: "Site Visit"},
+            {name: "Anthony Lewis", email: "anthony.lewis@email.com", phone: "(760) 555-0118", address: "792 Dogwood Ave, Fallbrook, CA 92028", puresScore: 15, tier: "1C", buyerType: "Efficiency", annualSpend: "$1,350", status: "Contacted", lastContact: "2024-01-08", nextAction: "Follow-up"},
+            {name: "Nicole Hall", email: "nicole.hall@email.com", phone: "(760) 555-0119", address: "814 Redwood Dr, Fallbrook, CA 92028", puresScore: 19, tier: "1B", buyerType: "Innovation", annualSpend: "$1,850", status: "New Lead", lastContact: "2024-01-05", nextAction: "Initial Contact"},
+            {name: "Matthew Allen", email: "matthew.allen@email.com", phone: "(760) 555-0120", address: "925 Cypress Ln, Fallbrook, CA 92028", puresScore: 23, tier: "1A", buyerType: "Analytical", annualSpend: "$2,550", status: "Hot Lead", lastContact: "2024-01-18", nextAction: "Final Proposal"},
+            {name: "Kimberly Young", email: "kimberly.young@email.com", phone: "(760) 555-0121", address: "136 Juniper St, Fallbrook, CA 92028", puresScore: 17, tier: "1B", buyerType: "Relationship", annualSpend: "$1,600", status: "Qualified", lastContact: "2024-01-10", nextAction: "Relationship Building"},
+            {name: "Ryan King", email: "ryan.king@email.com", phone: "(760) 555-0122", address: "247 Fir Ave, Fallbrook, CA 92028", puresScore: 20, tier: "1A", buyerType: "Efficiency", annualSpend: "$2,000", status: "Contacted", lastContact: "2024-01-13", nextAction: "Process Demo"},
+            {name: "Laura Wright", email: "laura.wright@email.com", phone: "(760) 555-0123", address: "358 Cottonwood Dr, Fallbrook, CA 92028", puresScore: 16, tier: "1C", buyerType: "Innovation", annualSpend: "$1,500", status: "New Lead", lastContact: "2024-01-07", nextAction: "Innovation Demo"},
+            {name: "Joseph Lopez", email: "joseph.lopez@email.com", phone: "(760) 555-0124", address: "469 Basswood St, Fallbrook, CA 92028", puresScore: 18, tier: "1B", buyerType: "Analytical", annualSpend: "$1,700", status: "Engaged", lastContact: "2024-01-15", nextAction: "Data Review"},
+            {name: "Sandra Hill", email: "sandra.hill@email.com", phone: "(760) 555-0125", address: "571 Linden Ave, Fallbrook, CA 92028", puresScore: 22, tier: "1A", buyerType: "Relationship", annualSpend: "$2,250", status: "Qualified", lastContact: "2024-01-17", nextAction: "Partnership Discussion"},
+            {name: "Steven Green", email: "steven.green@email.com", phone: "(760) 555-0126", address: "682 Hazel Ln, Fallbrook, CA 92028", puresScore: 19, tier: "1B", buyerType: "Efficiency", annualSpend: "$1,900", status: "Contacted", lastContact: "2024-01-12", nextAction: "Efficiency Analysis"},
+            {name: "Karen Adams", email: "karen.adams@email.com", phone: "(760) 555-0127", address: "793 Buckeye Dr, Fallbrook, CA 92028", puresScore: 21, tier: "1A", buyerType: "Innovation", annualSpend: "$2,100", status: "Hot Lead", lastContact: "2024-01-19", nextAction: "Innovation Workshop"},
+            {name: "Paul Baker", email: "paul.baker@email.com", phone: "(760) 555-0128", address: "815 Hickory St, Fallbrook, CA 92028", puresScore: 15, tier: "1C", buyerType: "Analytical", annualSpend: "$1,400", status: "New Lead", lastContact: "2024-01-06", nextAction: "Analysis Demo"},
+            {name: "Dorothy Gonzalez", email: "dorothy.gonzalez@email.com", phone: "(760) 555-0129", address: "926 Palm Ave, Fallbrook, CA 92028", puresScore: 17, tier: "1B", buyerType: "Relationship", annualSpend: "$1,650", status: "Contacted", lastContact: "2024-01-09", nextAction: "Community Event"},
+            {name: "Mark Nelson", email: "mark.nelson@email.com", phone: "(760) 555-0130", address: "137 Olive Dr, Fallbrook, CA 92028", puresScore: 20, tier: "1A", buyerType: "Efficiency", annualSpend: "$2,000", status: "Qualified", lastContact: "2024-01-14", nextAction: "Streamline Demo"},
+            {name: "Betty Carter", email: "betty.carter@email.com", phone: "(760) 555-0131", address: "248 Cherry Ln, Fallbrook, CA 92028", puresScore: 18, tier: "1B", buyerType: "Innovation", annualSpend: "$1,800", status: "Engaged", lastContact: "2024-01-16", nextAction: "Beta Testing"},
+            {name: "Kenneth Mitchell", email: "kenneth.mitchell@email.com", phone: "(760) 555-0132", address: "359 Plum St, Fallbrook, CA 92028", puresScore: 16, tier: "1C", buyerType: "Analytical", annualSpend: "$1,550", status: "New Lead", lastContact: "2024-01-05", nextAction: "Data Presentation"},
+            {name: "Helen Perez", email: "helen.perez@email.com", phone: "(760) 555-0133", address: "461 Peach Ave, Fallbrook, CA 92028", puresScore: 23, tier: "1A", buyerType: "Relationship", annualSpend: "$2,450", status: "Hot Lead", lastContact: "2024-01-20", nextAction: "Partnership Agreement"},
+            {name: "Edward Roberts", email: "edward.roberts@email.com", phone: "(760) 555-0134", address: "572 Apple Dr, Fallbrook, CA 92028", puresScore: 19, tier: "1B", buyerType: "Efficiency", annualSpend: "$1,950", status: "Contacted", lastContact: "2024-01-11", nextAction: "ROI Analysis"},
+            {name: "Deborah Turner", email: "deborah.turner@email.com", phone: "(760) 555-0135", address: "683 Orange St, Fallbrook, CA 92028", puresScore: 21, tier: "1A", buyerType: "Innovation", annualSpend: "$2,200", status: "Qualified", lastContact: "2024-01-18", nextAction: "Innovation Lab"},
+            {name: "Jason Phillips", email: "jason.phillips@email.com", phone: "(760) 555-0136", address: "794 Lemon Ave, Fallbrook, CA 92028", puresScore: 17, tier: "1B", buyerType: "Analytical", annualSpend: "$1,700", status: "New Lead", lastContact: "2024-01-07", nextAction: "Technical Brief"},
+            {name: "Sharon Campbell", email: "sharon.campbell@email.com", phone: "(760) 555-0137", address: "816 Lime Ln, Fallbrook, CA 92028", puresScore: 22, tier: "1A", buyerType: "Relationship", annualSpend: "$2,300", status: "Engaged", lastContact: "2024-01-17", nextAction: "Trust Building"},
+            {name: "Gary Parker", email: "gary.parker@email.com", phone: "(760) 555-0138", address: "927 Grapefruit Dr, Fallbrook, CA 92028", puresScore: 15, tier: "1C", buyerType: "Efficiency", annualSpend: "$1,450", status: "Contacted", lastContact: "2024-01-08", nextAction: "Process Review"},
+            {name: "Cynthia Evans", email: "cynthia.evans@email.com", phone: "(760) 555-0139", address: "138 Tangerine St, Fallbrook, CA 92028", puresScore: 18, tier: "1B", buyerType: "Innovation", annualSpend: "$1,800", status: "Qualified", lastContact: "2024-01-15", nextAction: "Pilot Program"},
+            {name: "Larry Edwards", email: "larry.edwards@email.com", phone: "(760) 555-0140", address: "249 Avocado Ave, Fallbrook, CA 92028", puresScore: 20, tier: "1A", buyerType: "Analytical", annualSpend: "$2,050", status: "Hot Lead", lastContact: "2024-01-19", nextAction: "Final Analysis"},
+            {name: "Donna Collins", email: "donna.collins@email.com", phone: "(760) 555-0141", address: "361 Fig Dr, Fallbrook, CA 92028", puresScore: 16, tier: "1C", buyerType: "Relationship", annualSpend: "$1,500", status: "New Lead", lastContact: "2024-01-06", nextAction: "Relationship Start"},
+            {name: "Gregory Stewart", email: "gregory.stewart@email.com", phone: "(760) 555-0142", address: "472 Pomegranate Ln, Fallbrook, CA 92028", puresScore: 19, tier: "1B", buyerType: "Efficiency", annualSpend: "$1,900", status: "Contacted", lastContact: "2024-01-12", nextAction: "Time Audit"},
+            {name: "Ruth Sanchez", email: "ruth.sanchez@email.com", phone: "(760) 555-0143", address: "583 Grape St, Fallbrook, CA 92028", puresScore: 21, tier: "1A", buyerType: "Innovation", annualSpend: "$2,150", status: "Engaged", lastContact: "2024-01-16", nextAction: "Innovation Plan"},
+            {name: "Harold Morris", email: "harold.morris@email.com", phone: "(760) 555-0144", address: "694 Berry Ave, Fallbrook, CA 92028", puresScore: 17, tier: "1B", buyerType: "Analytical", annualSpend: "$1,650", status: "Qualified", lastContact: "2024-01-13", nextAction: "Report Review"},
+            {name: "Frances Rogers", email: "frances.rogers@email.com", phone: "(760) 555-0145", address: "715 Strawberry Dr, Fallbrook, CA 92028", puresScore: 22, tier: "1A", buyerType: "Relationship", annualSpend: "$2,350", status: "Hot Lead", lastContact: "2024-01-20", nextAction: "Long-term Plan"},
+            {name: "Willie Reed", email: "willie.reed@email.com", phone: "(760) 555-0146", address: "826 Blueberry St, Fallbrook, CA 92028", puresScore: 18, tier: "1B", buyerType: "Efficiency", annualSpend: "$1,750", status: "New Lead", lastContact: "2024-01-05", nextAction: "Efficiency Audit"},
+            {name: "Catherine Cook", email: "catherine.cook@email.com", phone: "(760) 555-0147", address: "937 Raspberry Ave, Fallbrook, CA 92028", puresScore: 20, tier: "1A", buyerType: "Innovation", annualSpend: "$2,100", status: "Contacted", lastContact: "2024-01-14", nextAction: "Innovation Showcase"},
+            {name: "Carl Bailey", email: "carl.bailey@email.com", phone: "(760) 555-0148", address: "148 Blackberry Ln, Fallbrook, CA 92028", puresScore: 15, tier: "1C", buyerType: "Analytical", annualSpend: "$1,400", status: "Qualified", lastContact: "2024-01-10", nextAction: "Analysis Workshop"},
+            {name: "Joan Rivera", email: "joan.rivera@email.com", phone: "(760) 555-0149", address: "259 Cranberry Dr, Fallbrook, CA 92028", puresScore: 19, tier: "1B", buyerType: "Relationship", annualSpend: "$1,850", status: "Engaged", lastContact: "2024-01-17", nextAction: "Community Outreach"},
+            {name: "Arthur Cooper", email: "arthur.cooper@email.com", phone: "(760) 555-0150", address: "371 Elderberry St, Fallbrook, CA 92028", puresScore: 23, tier: "1A", buyerType: "Efficiency", annualSpend: "$2,500", status: "Hot Lead", lastContact: "2024-01-21", nextAction: "Contract Finalization"}
+        ];
+
+        let sortDirection = {};
+        let currentSortColumn = -1;
+
+        function showTab(tabName) {
+            // Hide all tab contents
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabContents.forEach(content => content.classList.remove('active'));
+            
+            // Remove active class from all tabs
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Show selected tab content
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+            
+            // Update metrics when showing tabs
+            if (tabName === 'clients') {
+                updateMetrics();
+            }
+        }
+
+        function updatePuresScore() {
+            const profitability = document.getElementById('profitability').value;
+            const urgency = document.getElementById('urgency').value;
+            const reachability = document.getElementById('reachability').value;
+            const engagement = document.getElementById('engagement').value;
+            const sustainability = document.getElementById('sustainability').value;
+            
+            document.getElementById('profitability-score').textContent = profitability;
+            document.getElementById('urgency-score').textContent = urgency;
+            document.getElementById('reachability-score').textContent = reachability;
+            document.getElementById('engagement-score').textContent = engagement;
+            document.getElementById('sustainability-score').textContent = sustainability;
+            
+            const total = parseInt(profitability) + parseInt(urgency) + parseInt(reachability) + parseInt(engagement) + parseInt(sustainability);
+            document.getElementById('total-pures').textContent = total;
+        }
+
+        function loadClientsTable() {
+            const tbody = document.getElementById('clients-tbody');
+            tbody.innerHTML = '';
+            
+            clientsData.forEach((client, index) => {
+                const row = document.createElement('tr');
+                row.classList.add(`tier-${client.tier.toLowerCase()}`);
+                
+                row.innerHTML = `
+                    <td>${client.name}</td>
+                    <td>${client.email}</td>
+                    <td>${client.phone}</td>
+                    <td>${client.address}</td>
+                    <td>${client.puresScore}</td>
+                    <td>Tier ${client.tier}</td>
+                    <td>${client.buyerType}</td>
+                    <td>${client.annualSpend}</td>
+                    <td>${client.status}</td>
+                    <td>${client.lastContact}</td>
+                    <td>${client.nextAction}</td>
+                    <td>
+                        <button class="contact-btn" onclick="openEmailModal('${client.email}', '${client.name}', '${client.buyerType}')">Email</button>
+                        <button class="contact-btn" onclick="callClient('${client.phone}')">Call</button>
+                    </td>
+                `;
+                
+                tbody.appendChild(row);
+            });
+        }
+
+        function filterTable() {
+            const searchTerm = document.getElementById('search-input').value.toLowerCase();
+            const tierFilter = document.getElementById('tier-filter').value;
+            const buyerFilter = document.getElementById('buyer-filter').value;
+            
+            const rows = document.querySelectorAll('#clients-tbody tr');
+            
+            rows.forEach(row => {
+                const cells = row.cells;
+                const name = cells[0].textContent.toLowerCase();
+                const email = cells[1].textContent.toLowerCase();
+                const address = cells[3].textContent.toLowerCase();
+                const tier = cells[5].textContent.replace('Tier ', '');
+                const buyerType = cells[6].textContent;
+                
+                const matchesSearch = name.includes(searchTerm) || email.includes(searchTerm) || address.includes(searchTerm);
+                const matchesTier = !tierFilter || tier === tierFilter;
+                const matchesBuyer = !buyerFilter || buyerType === buyerFilter;
+                
+                if (matchesSearch && matchesTier && matchesBuyer) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+            
+            updateMetrics();
+        }
+
+        function sortTable(columnIndex) {
+            const table = document.getElementById('clients-table');
+            const tbody = table.querySelector('tbody');
+            const rows = Array.from(tbody.querySelectorAll('tr'));
+            
+            // Determine sort direction
+            if (currentSortColumn === columnIndex) {
+                sortDirection[columnIndex] = !sortDirection[columnIndex];
+            } else {
+                sortDirection[columnIndex] = false;
+                currentSortColumn = columnIndex;
+            }
+            
+            rows.sort((a, b) => {
+                let aValue = a.cells[columnIndex].textContent.trim();
+                let bValue = b.cells[columnIndex].textContent.trim();
+                
+                // Handle numeric values
+                if (columnIndex === 4) { // P.U.R.E.S. Score
+                    aValue = parseInt(aValue);
+                    bValue = parseInt(bValue);
+                } else if (columnIndex === 7) { // Annual Spend
+                    aValue = parseFloat(aValue.replace(/[$,]/g, ''));
+                    bValue = parseFloat(bValue.replace(/[$,]/g, ''));
+                } else if (columnIndex === 9) { // Last Contact Date
+                    aValue = new Date(aValue);
+                    bValue = new Date(bValue);
+                }
+                
+                if (aValue < bValue) return sortDirection[columnIndex] ? 1 : -1;
+                if (aValue > bValue) return sortDirection[columnIndex] ? -1 : 1;
+                return 0;
+            });
+            
+            // Clear tbody and append sorted rows
+            tbody.innerHTML = '';
+            rows.forEach(row => tbody.appendChild(row));
+        }
+
+        function updateMetrics() {
+            const visibleRows = document.querySelectorAll('#clients-tbody tr[style=""], #clients-tbody tr:not([style])');
+            
+            let tier1A = 0, tier1B = 0, tier1C = 0;
+            let analytical = 0, relationship = 0, efficiency = 0, innovation = 0;
+            
+            visibleRows.forEach(row => {
+                if (row.style.display !== 'none') {
+                    const tier = row.cells[5].textContent;
+                    const buyerType = row.cells[6].textContent;
+                    
+                    if (tier.includes('1A')) tier1A++;
+                    else if (tier.includes('1B')) tier1B++;
+                    else if (tier.includes('1C')) tier1C++;
+                    
+                    if (buyerType === 'Analytical') analytical++;
+                    else if (buyerType === 'Relationship') relationship++;
+                    else if (buyerType === 'Efficiency') efficiency++;
+                    else if (buyerType === 'Innovation') innovation++;
+                }
+            });
+            
+            document.getElementById('tier-1a-count').textContent = tier1A;
+            document.getElementById('tier-1b-count').textContent = tier1B;
+            document.getElementById('tier-1c-count').textContent = tier1C;
+            
+            document.getElementById('analytical-buyers').textContent = analytical;
+            document.getElementById('relationship-buyers').textContent = relationship;
+            document.getElementById('efficiency-buyers').textContent = efficiency;
+            document.getElementById('innovation-buyers').textContent = innovation;
+        }
+
+        function openEmailModal(email, name, buyerType) {
+            document.getElementById('email-to').textContent = email;
+            
+            const emailBody = generateEmailContent(name, buyerType);
+            document.getElementById('email-body').innerHTML = emailBody;
+            
+            document.getElementById('email-modal').style.display = 'block';
+        }
+
+        function generateEmailContent(name, buyerType) {
+            const baseContent = `Dear ${name},<br><br>`;
+            let specificContent = '';
+            
+            switch(buyerType) {
+                case 'Analytical':
+                    specificContent = `I noticed you appreciate detailed information when making decisions. Here's what makes Starbucks Fallbrook the smart choice:
+                    
+                    <ul>
+                        <li><strong>ROI on Loyalty:</strong> Earn 2 stars per $1 spent, redeem for free drinks (avg. 9% return)</li>
+                        <li><strong>Quality Metrics:</strong> 100% ethically sourced arabica coffee, 99.8% customer satisfaction</li>
+                        <li><strong>Nutritional Data:</strong> Complete nutrition facts available for all 80,000+ drink combinations</li>
+                        <li><strong>Time Efficiency:</strong> Average wait time 3-4 minutes, mobile order saves 40% time</li>
+                    </ul>`;
+                    break;
+                    
+                case 'Relationship':
+                    specificContent = `As someone who values genuine connections, you'll love what makes our Starbucks community special:
+                    
+                    <ul>
+                        <li><strong>Personal Touch:</strong> Our baristas remember your name and favorite drink</li>
+                        <li><strong>Community Hub:</strong> Local book clubs, study groups, and community events</li>
+                        <li><strong>Partnership Philosophy:</strong> We call our employees partners because we're all invested in your experience</li>
+                        <li><strong>Local Impact:</strong> 15% of profits support Fallbrook community programs</li>
+                    </ul>`;
+                    break;
+                    
+                case 'Efficiency':
+                    specificContent = `Your time is valuable. Here's how Starbucks Fallbrook streamlines your coffee experience:
+                    
+                    <ul>
+                        <li><strong>Mobile Ordering:</strong> Order ahead, skip the line, grab and go</li>
+                        <li><strong>Express Lane:</strong> Dedicated pickup area for mobile orders</li>
+                        <li><strong>Consistent Quality:</strong> Same perfect drink every time, no guesswork</li>
+                        <li><strong>Multiple Locations:</strong> 3 nearby stores for ultimate convenience</li>
+                    </ul>`;
+                    break;
+                    
+                case 'Innovation':
+                    specificContent = `Ready to experience the cutting-edge of coffee culture? Discover what's new at Starbucks:
+                    
+                    <ul>
+                        <li><strong>Seasonal Innovation:</strong> First to launch limited-time flavors and brewing methods</li>
+                        <li><strong>Technology Integration:</strong> AI-powered personalized recommendations in our app</li>
+                        <li><strong>Sustainable Practices:</strong> Cup recycling program, plant-based alternatives</li>
+                        <li><strong>Exclusive Access:</strong> Beta test new products before they go nationwide</li>
+                    </ul>`;
+                    break;
+            }
+            
+            return baseContent + specificContent + 
+                   `<br>Visit us this week and mention "HIGGINS" for a complimentary size upgrade on your first drink!
+                   <br><br>Looking forward to serving you soon,<br>
+                   <strong>Devin Jane Jack-Robinson</strong><br>
+                   Store Manager, Starbucks Fallbrook<br>
+                   jack@starbucks.com | (760) 555-0001`;
+        }
+
+        function closeModal() {
+            document.getElementById('email-modal').style.display = 'none';
+        }
+
+        function sendEmail() {
+            const email = document.getElementById('email-to').textContent;
+            alert(`Email sent to ${email}! Following up with personalized outreach sequence.`);
+            closeModal();
+        }
+
+        function callClient(phone) {
+            alert(`Initiating call to ${phone}. Remember to follow S.A.L.E. methodology during the conversation.`);
+        }
+
+        function exportToCSV() {
+            const visibleRows = document.querySelectorAll('#clients-tbody tr[style=""], #clients-tbody tr:not([style*="display: none"])');
+            let csvContent = 'Name,Email,Phone,Address,P.U.R.E.S. Score,Tier,Buyer Type,Annual Spend,Status,Last Contact,Next Action\n';
+            
+            visibleRows.forEach(row => {
+                const cells = Array.from(row.cells).slice(0, 11); // Exclude actions column
+                const rowData = cells.map(cell => `"${cell.textContent}"`).join(',');
+                csvContent += rowData + '\n';
+            });
+            
+            const blob = new Blob([csvContent], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'starbucks_fallbrook_clients.csv';
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+
+        // Initialize the dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            loadClientsTable();
+            updateMetrics();
+            updatePuresScore();
+        });
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('email-modal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+    </script>
+</body>
+</html>

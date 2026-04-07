@@ -1,0 +1,858 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Davies Animal Medical Hospital - S.A.L.E. Client Targeting System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #000000;
+            color: #ffffff;
+            line-height: 1.6;
+        }
+
+        .header {
+            background-color: #CF2030;
+            padding: 1rem;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .header img {
+            max-height: 60px;
+            width: auto;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .main-content {
+            background-color: #1a1a1a;
+            border-radius: 8px;
+            padding: 2rem;
+        }
+
+        .sidebar {
+            background-color: #1a1a1a;
+            border-radius: 8px;
+            padding: 1.5rem;
+            height: fit-content;
+        }
+
+        .section {
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background-color: #2a2a2a;
+            border-radius: 8px;
+            border-left: 4px solid #CF2030;
+        }
+
+        h1, h2, h3 {
+            color: #CF2030;
+            margin-bottom: 1rem;
+        }
+
+        .search-filter {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 150px;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #CF2030;
+        }
+
+        input, select, textarea {
+            padding: 0.75rem;
+            border: 1px solid #444;
+            border-radius: 4px;
+            background-color: #333;
+            color: #fff;
+            font-size: 1rem;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #CF2030;
+        }
+
+        button {
+            background-color: #CF2030;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #a61928;
+        }
+
+        .btn-small {
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            background-color: #2a2a2a;
+            border-radius: 8px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #2a2a2a;
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #444;
+        }
+
+        th {
+            background-color: #CF2030;
+            color: white;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        th:hover {
+            background-color: #a61928;
+        }
+
+        tr:hover {
+            background-color: #3a3a3a;
+        }
+
+        .tier-1a {
+            background-color: rgba(40, 167, 69, 0.2);
+        }
+
+        .tier-1b {
+            background-color: rgba(255, 193, 7, 0.2);
+        }
+
+        .tier-1c {
+            background-color: rgba(0, 123, 255, 0.2);
+        }
+
+        .pure-score {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .score-input {
+            width: 60px;
+            text-align: center;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+        }
+
+        .modal-content {
+            background-color: #1a1a1a;
+            margin: 5% auto;
+            padding: 2rem;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .close {
+            color: #CF2030;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: #a61928;
+        }
+
+        .analytics-card {
+            background-color: #2a2a2a;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .analytics-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #CF2030;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            background-color: #1a1a1a;
+            margin-top: 2rem;
+        }
+
+        .footer img {
+            max-height: 40px;
+            width: auto;
+            opacity: 0.7;
+        }
+
+        .email-template {
+            background-color: #333;
+            padding: 1rem;
+            border-radius: 4px;
+            margin-top: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .search-filter {
+                grid-template-columns: 1fr;
+            }
+            
+            .container {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports Logo">
+        <h1 style="margin-top: 1rem;">Davies Animal Medical Hospital - S.A.L.E. Client Targeting System</h1>
+    </header>
+
+    <div class="container">
+        <div class="dashboard-grid">
+            <div class="main-content">
+                <div class="section">
+                    <h2>S.A.L.E. SOURCING - Client Database</h2>
+                    
+                    <div class="search-filter">
+                        <div class="form-group">
+                            <label>Search Clients</label>
+                            <input type="text" id="searchInput" placeholder="Search by name, email, or address...">
+                        </div>
+                        <div class="form-group">
+                            <label>Filter by Tier</label>
+                            <select id="tierFilter">
+                                <option value="">All Tiers</option>
+                                <option value="1A">Tier 1A (Premium)</option>
+                                <option value="1B">Tier 1B (High-Value)</option>
+                                <option value="1C">Tier 1C (Qualified)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Pet Type</label>
+                            <select id="petTypeFilter">
+                                <option value="">All Pets</option>
+                                <option value="Dog">Dog</option>
+                                <option value="Cat">Cat</option>
+                                <option value="Both">Both</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>&nbsp;</label>
+                            <button onclick="exportData()">Export CSV</button>
+                        </div>
+                    </div>
+
+                    <div class="table-container">
+                        <table id="clientTable">
+                            <thead>
+                                <tr>
+                                    <th onclick="sortTable(0)">Client Name</th>
+                                    <th onclick="sortTable(1)">Email</th>
+                                    <th onclick="sortTable(2)">Phone</th>
+                                    <th onclick="sortTable(3)">Address</th>
+                                    <th onclick="sortTable(4)">P.U.R.E.S Score</th>
+                                    <th onclick="sortTable(5)">Tier</th>
+                                    <th onclick="sortTable(6)">Pet Type</th>
+                                    <th onclick="sortTable(7)">Est. Annual Spend</th>
+                                    <th onclick="sortTable(8)">Last Visit</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="clientTableBody">
+                                <!-- Client data will be populated here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h2>A.SSESSING - P.U.R.E.S. Client Evaluation</h2>
+                    <div id="puresForm">
+                        <div class="form-group">
+                            <label>Select Client for Evaluation:</label>
+                            <select id="clientSelect">
+                                <option value="">Choose a client...</option>
+                            </select>
+                        </div>
+                        
+                        <div class="pure-score">
+                            <div class="form-group">
+                                <label>Profitability (1-5)</label>
+                                <input type="number" min="1" max="5" class="score-input" id="profitabilityScore">
+                            </div>
+                            <div class="form-group">
+                                <label>Urgency (1-5)</label>
+                                <input type="number" min="1" max="5" class="score-input" id="urgencyScore">
+                            </div>
+                            <div class="form-group">
+                                <label>Reachability (1-5)</label>
+                                <input type="number" min="1" max="5" class="score-input" id="reachabilityScore">
+                            </div>
+                            <div class="form-group">
+                                <label>Engagement (1-5)</label>
+                                <input type="number" min="1" max="5" class="score-input" id="engagementScore">
+                            </div>
+                            <div class="form-group">
+                                <label>Sustainability (1-5)</label>
+                                <input type="number" min="1" max="5" class="score-input" id="sustainabilityScore">
+                            </div>
+                        </div>
+                        
+                        <button onclick="updatePuresScore()">Update P.U.R.E.S. Score</button>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h2>L.ISTENING - Feedback Tracking</h2>
+                    <div class="form-group">
+                        <label>Client Feedback</label>
+                        <textarea id="feedbackText" placeholder="Enter client feedback, concerns, or notes..."></textarea>
+                    </div>
+                    <button onclick="saveFeedback()">Save Feedback</button>
+                </div>
+
+                <div class="section">
+                    <h2>E.MPOWERING - Marketing Campaign Scheduler</h2>
+                    <div class="search-filter">
+                        <div class="form-group">
+                            <label>Campaign Type</label>
+                            <select id="campaignType">
+                                <option value="wellness">Wellness Check Reminder</option>
+                                <option value="vaccination">Vaccination Due</option>
+                                <option value="dental">Dental Care Promotion</option>
+                                <option value="senior">Senior Pet Care</option>
+                                <option value="emergency">Emergency Care Info</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Target Tier</label>
+                            <select id="campaignTier">
+                                <option value="all">All Tiers</option>
+                                <option value="1A">Tier 1A Only</option>
+                                <option value="1B">Tier 1B Only</option>
+                                <option value="1C">Tier 1C Only</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Schedule Date</label>
+                            <input type="date" id="campaignDate">
+                        </div>
+                        <div class="form-group">
+                            <label>&nbsp;</label>
+                            <button onclick="scheduleCampaign()">Schedule Campaign</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sidebar">
+                <div class="analytics-card">
+                    <div class="analytics-number" id="totalClients">50</div>
+                    <div>Total Prospects</div>
+                </div>
+                
+                <div class="analytics-card">
+                    <div class="analytics-number" id="tier1aCount">12</div>
+                    <div>Tier 1A (Premium)</div>
+                </div>
+                
+                <div class="analytics-card">
+                    <div class="analytics-number" id="tier1bCount">18</div>
+                    <div>Tier 1B (High-Value)</div>
+                </div>
+                
+                <div class="analytics-card">
+                    <div class="analytics-number" id="tier1cCount">20</div>
+                    <div>Tier 1C (Qualified)</div>
+                </div>
+
+                <div class="section">
+                    <h3>Quick Actions</h3>
+                    <button onclick="generateReport()" style="width: 100%; margin-bottom: 1rem;">Generate Report</button>
+                    <button onclick="bulkEmail()" style="width: 100%; margin-bottom: 1rem;">Bulk Email Campaign</button>
+                    <button onclick="showAnalytics()" style="width: 100%;">View Analytics</button>
+                </div>
+
+                <div class="section">
+                    <h3>Success Metrics</h3>
+                    <div>Sourcing Accuracy: <strong>85%</strong></div>
+                    <div>Assessment Quality: <strong>92%</strong></div>
+                    <div>Feedback Collection: <strong>78%</strong></div>
+                    <div>Referral Rate: <strong>2.3 per client</strong></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Modal -->
+    <div id="contactModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Contact Client</h2>
+            <div id="contactContent">
+                <!-- Contact options will be populated here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Email Modal -->
+    <div id="emailModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Compose Email</h2>
+            <div class="form-group">
+                <label>To:</label>
+                <input type="email" id="emailTo" readonly>
+            </div>
+            <div class="form-group">
+                <label>Subject:</label>
+                <input type="text" id="emailSubject" value="Your Pet's Health is Our Priority - Davies Animal Medical Hospital">
+            </div>
+            <div class="form-group">
+                <label>Message:</label>
+                <textarea id="emailMessage" rows="10"></textarea>
+            </div>
+            <button onclick="sendEmail()">Send Email</button>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports Logo">
+        <p>&copy; 2026 Davies Animal Medical Hospital. S.A.L.E. System by Higgins Reports.</p>
+    </footer>
+
+    <script>
+        // Sample client data for Yuba City area
+        const clientData = [
+            {name: "Sarah Johnson", email: "sarah.johnson@email.com", phone: "(530) 555-0101", address: "1234 Oak Street, Yuba City, CA", pures: 4.2, tier: "1A", petType: "Dog", spend: "$1,200", lastVisit: "2024-01-15", notes: "Regular wellness visits, high-value client"},
+            {name: "Michael Chen", email: "m.chen@email.com", phone: "(530) 555-0102", address: "567 Pine Avenue, Yuba City, CA", pures: 3.8, tier: "1B", petType: "Cat", spend: "$800", lastVisit: "2024-02-03", notes: "Emergency care responsive"},
+            {name: "Emily Rodriguez", email: "emily.r@email.com", phone: "(530) 555-0103", address: "890 Maple Drive, Yuba City, CA", pures: 4.6, tier: "1A", petType: "Both", spend: "$1,500", lastVisit: "2024-01-28", notes: "Multiple pets, premium services"},
+            {name: "David Thompson", email: "dthompson@email.com", phone: "(530) 555-0104", address: "234 Elm Street, Yuba City, CA", pures: 3.4, tier: "1C", petType: "Dog", spend: "$600", lastVisit: "2023-12-10", notes: "Price-conscious, basic care"},
+            {name: "Jessica Williams", email: "jessica.w@email.com", phone: "(530) 555-0105", address: "456 Cedar Lane, Yuba City, CA", pures: 4.0, tier: "1B", petType: "Cat", spend: "$950", lastVisit: "2024-02-14", notes: "Regular check-ups, vaccination compliant"},
+            {name: "Robert Anderson", email: "r.anderson@email.com", phone: "(530) 555-0106", address: "678 Birch Road, Yuba City, CA", pures: 4.4, tier: "1A", petType: "Dog", spend: "$1,300", lastVisit: "2024-02-01", notes: "Senior pet care, frequent visits"},
+            {name: "Amanda Davis", email: "amanda.davis@email.com", phone: "(530) 555-0107", address: "123 Willow Street, Yuba City, CA", pures: 3.6, tier: "1B", petType: "Both", spend: "$1,100", lastVisit: "2024-01-20", notes: "Two cats, preventive care focused"},
+            {name: "Christopher Lee", email: "c.lee@email.com", phone: "(530) 555-0108", address: "789 Spruce Avenue, Yuba City, CA", pures: 3.2, tier: "1C", petType: "Dog", spend: "$550", lastVisit: "2023-11-15", notes: "Irregular visits, budget constraints"},
+            {name: "Michelle Brown", email: "m.brown@email.com", phone: "(530) 555-0109", address: "345 Poplar Drive, Yuba City, CA", pures: 4.8, tier: "1A", petType: "Cat", spend: "$1,400", lastVisit: "2024-02-10", notes: "Premium care, dental services"},
+            {name: "Kevin Miller", email: "kevin.miller@email.com", phone: "(530) 555-0110", address: "567 Ash Street, Yuba City, CA", pures: 3.9, tier: "1B", petType: "Dog", spend: "$900", lastVisit: "2024-01-25", notes: "Active dog owner, injury prone pet"},
+            {name: "Lisa Garcia", email: "lisa.garcia@email.com", phone: "(530) 555-0111", address: "890 Hickory Lane, Yuba City, CA", pures: 4.1, tier: "1A", petType: "Both", spend: "$1,250", lastVisit: "2024-02-05", notes: "Multiple pets, comprehensive care"},
+            {name: "Brian Wilson", email: "b.wilson@email.com", phone: "(530) 555-0112", address: "234 Walnut Road, Yuba City, CA", pures: 3.3, tier: "1C", petType: "Cat", spend: "$580", lastVisit: "2023-12-20", notes: "Basic care only, cost-sensitive"},
+            {name: "Nicole Taylor", email: "nicole.taylor@email.com", phone: "(530) 555-0113", address: "456 Chestnut Avenue, Yuba City, CA", pures: 4.3, tier: "1A", petType: "Dog", spend: "$1,350", lastVisit: "2024-01-30", notes: "Show dog, premium grooming"},
+            {name: "Daniel Martinez", email: "d.martinez@email.com", phone: "(530) 555-0114", address: "678 Sycamore Street, Yuba City, CA", pures: 3.7, tier: "1B", petType: "Cat", spend: "$850", lastVisit: "2024-02-08", notes: "Indoor cat, preventive focused"},
+            {name: "Rachel White", email: "rachel.white@email.com", phone: "(530) 555-0115", address: "123 Magnolia Drive, Yuba City, CA", pures: 4.5, tier: "1A", petType: "Both", spend: "$1,600", lastVisit: "2024-02-12", notes: "Multiple pets, emergency responsive"},
+            {name: "Steven Clark", email: "s.clark@email.com", phone: "(530) 555-0116", address: "789 Dogwood Lane, Yuba City, CA", pures: 3.1, tier: "1C", petType: "Dog", spend: "$520", lastVisit: "2023-10-05", notes: "Minimal visits, budget-focused"},
+            {name: "Jennifer Lewis", email: "jennifer.lewis@email.com", phone: "(530) 555-0117", address: "345 Redwood Road, Yuba City, CA", pures: 4.0, tier: "1B", petType: "Cat", spend: "$920", lastVisit: "2024-01-18", notes: "Senior cat, specialized diet"},
+            {name: "Matthew Walker", email: "m.walker@email.com", phone: "(530) 555-0118", address: "567 Sequoia Avenue, Yuba City, CA", pures: 4.7, tier: "1A", petType: "Dog", spend: "$1,450", lastVisit: "2024-02-15", notes: "Working dog, frequent check-ups"},
+            {name: "Kimberly Hall", email: "kim.hall@email.com", phone: "(530) 555-0119", address: "890 Palm Street, Yuba City, CA", pures: 3.5, tier: "1C", petType: "Both", spend: "$750", lastVisit: "2024-01-05", notes: "Rescue animals, compassionate care"},
+            {name: "Anthony Young", email: "anthony.young@email.com", phone: "(530) 555-0120", address: "234 Cypress Drive, Yuba City, CA", pures: 4.2, tier: "1A", petType: "Cat", spend: "$1,180", lastVisit: "2024-02-02", notes: "Purebred cat, show preparation"},
+            {name: "Angela Green", email: "angela.green@email.com", phone: "(530) 555-0121", address: "456 Fir Lane, Yuba City, CA", pures: 3.8, tier: "1B", petType: "Dog", spend: "$880", lastVisit: "2024-01-22", notes: "Hunting dog, outdoor activity injuries"},
+            {name: "Jason Adams", email: "jason.adams@email.com", phone: "(530) 555-0122", address: "678 Juniper Road, Yuba City, CA", pures: 3.4, tier: "1C", petType: "Cat", spend: "$610", lastVisit: "2023-12-28", notes: "Elderly owner, fixed income"},
+            {name: "Melissa Baker", email: "melissa.baker@email.com", phone: "(530) 555-0123", address: "123 Laurel Avenue, Yuba City, CA", pures: 4.4, tier: "1A", petType: "Both", spend: "$1,380", lastVisit: "2024-02-06", notes: "Therapy animals, special needs"},
+            {name: "Ryan Gonzalez", email: "ryan.gonzalez@email.com", phone: "(530) 555-0124", address: "789 Beech Street, Yuba City, CA", pures: 3.6, tier: "1B", petType: "Dog", spend: "$820", lastVisit: "2024-01-12", notes: "Active lifestyle, sports injuries"},
+            {name: "Stephanie Nelson", email: "s.nelson@email.com", phone: "(530) 555-0125", address: "345 Cottonwood Drive, Yuba City, CA", pures: 4.1, tier: "1A", petType: "Cat", spend: "$1,220", lastVisit: "2024-02-09", notes: "Multiple cats, breeding program"},
+            {name: "Timothy Carter", email: "tim.carter@email.com", phone: "(530) 555-0126", address: "567 Mulberry Lane, Yuba City, CA", pures: 3.3, tier: "1C", petType: "Dog", spend: "$590", lastVisit: "2023-11-30", notes: "Farm dog, basic vaccinations"},
+            {name: "Laura Mitchell", email: "laura.mitchell@email.com", phone: "(530) 555-0127", address: "890 Hawthorn Road, Yuba City, CA", pures: 4.6, tier: "1A", petType: "Both", spend: "$1,520", lastVisit: "2024-02-13", notes: "Exotic pets included, specialized care"},
+            {name: "Kenneth Perez", email: "kenneth.perez@email.com", phone: "(530) 555-0128", address: "234 Holly Street, Yuba City, CA", pures: 3.7, tier: "1B", petType: "Cat", spend: "$860", lastVisit: "2024-01-26", notes: "Indoor/outdoor cat, parasite prevention"},
+            {name: "Sharon Roberts", email: "sharon.roberts@email.com", phone: "(530) 555-0129", address: "456 Ivy Avenue, Yuba City, CA", pures: 4.3, tier: "1A", petType: "Dog", spend: "$1,320", lastVisit: "2024-02-04", notes: "German Shepherd, hip monitoring"},
+            {name: "Patrick Turner", email: "patrick.turner@email.com", phone: "(530) 555-0130", address: "678 Jasmine Drive, Yuba City, CA", pures: 3.2, tier: "1C", petType: "Cat", spend: "$540", lastVisit: "2023-12-15", notes: "Stray care, limited budget"},
+            {name: "Deborah Phillips", email: "deborah.phillips@email.com", phone: "(530) 555-0131", address: "123 Lilac Lane, Yuba City, CA", pures: 4.0, tier: "1B", petType: "Both", spend: "$980", lastVisit: "2024-01-29", notes: "Senior pets, end-of-life care"},
+            {name: "Gregory Campbell", email: "greg.campbell@email.com", phone: "(530) 555-0132", address: "789 Orchid Road, Yuba City, CA", pures: 3.9, tier: "1B", petType: "Dog", spend: "$910", lastVisit: "2024-02-11", notes: "Large breed, joint supplements"},
+            {name: "Karen Parker", email: "karen.parker@email.com", phone: "(530) 555-0133", address: "345 Rose Street, Yuba City, CA", pures: 4.5, tier: "1A", petType: "Cat", spend: "$1,410", lastVisit: "2024-02-07", notes: "Diabetic cat, regular monitoring"},
+            {name: "Jeremy Evans", email: "jeremy.evans@email.com", phone: "(530) 555-0134", address: "567 Tulip Avenue, Yuba City, CA", pures: 3.4, tier: "1C", petType: "Dog", spend: "$620", lastVisit: "2024-01-08", notes: "Mixed breed rescue, basic care"},
+            {name: "Dorothy Edwards", email: "dorothy.edwards@email.com", phone: "(530) 555-0135", address: "890 Violet Drive, Yuba City, CA", pures: 4.2, tier: "1A", petType: "Both", spend: "$1,290", lastVisit: "2024-01-31", notes: "Show animals, grooming services"},
+            {name: "Frank Collins", email: "frank.collins@email.com", phone: "(530) 555-0136", address: "234 Sunflower Lane, Yuba City, CA", pures: 3.6, tier: "1B", petType: "Cat", spend: "$840", lastVisit: "2024-01-19", notes: "Outdoor cat, injury prone"},
+            {name: "Ruth Stewart", email: "ruth.stewart@email.com", phone: "(530) 555-0137", address: "456 Daisy Road, Yuba City, CA", pures: 4.7, tier: "1A", petType: "Dog", spend: "$1,480", lastVisit: "2024-02-14", notes: "Service dog, health insurance"},
+            {name: "Harold Sanchez", email: "harold.sanchez@email.com", phone: "(530) 555-0138", address: "678 Petunia Street, Yuba City, CA", pures: 3.1, tier: "1C", petType: "Cat", spend: "$510", lastVisit: "2023-11-20", notes: "Feral cat colony, TNR program"},
+            {name: "Catherine Morris", email: "catherine.morris@email.com", phone: "(530) 555-0139", address: "123 Marigold Avenue, Yuba City, CA", pures: 4.1, tier: "1B", petType: "Both", spend: "$1,050", lastVisit: "2024-01-24", notes: "Pet insurance covered, preventive care"},
+            {name: "Ernest Rogers", email: "ernest.rogers@email.com", phone: "(530) 555-0140", address: "789 Zinnia Drive, Yuba City, CA", pures: 3.8, tier: "1B", petType: "Dog", spend: "$890", lastVisit: "2024-02-01", notes: "Hunting companion, seasonal care"},
+            {name: "Gloria Reed", email: "gloria.reed@email.com", phone: "(530) 555-0141", address: "345 Carnation Lane, Yuba City, CA", pures: 4.4, tier: "1A", petType: "Cat", spend: "$1,360", lastVisit: "2024-02-10", notes: "Persian cat, grooming needs"},
+            {name: "Wayne Cook", email: "wayne.cook@email.com", phone: "(530) 555-0142", address: "567 Gardenia Road, Yuba City, CA", pures: 3.3, tier: "1C", petType: "Dog", spend: "$580", lastVisit: "2023-12-05", notes: "Rural location, basic services"},
+            {name: "Frances Morgan", email: "frances.morgan@email.com", phone: "(530) 555-0143", address: "890 Azalea Street, Yuba City, CA", pures: 4.8, tier: "1A", petType: "Both", spend: "$1,650", lastVisit: "2024-02-16", notes: "Breeder, multiple animals"},
+            {name: "Eugene Bailey", email: "eugene.bailey@email.com", phone: "(530) 555-0144", address: "234 Camellia Avenue, Yuba City, CA", pures: 3.5, tier: "1C", petType: "Cat", spend: "$680", lastVisit: "2024-01-15", notes: "Senior citizen, fixed income"},
+            {name: "Joyce Rivera", email: "joyce.rivera@email.com", phone: "(530) 555-0145", address: "456 Hibiscus Drive, Yuba City, CA", pures: 4.3, tier: "1A", petType: "Dog", spend: "$1,340", lastVisit: "2024-02-08", notes: "Competition dog, performance health"},
+            {name: "Arthur Cooper", email: "arthur.cooper@email.com", phone: "(530) 555-0146", address: "678 Begonia Lane, Yuba City, CA", pures: 3.7, tier: "1B", petType: "Both", spend: "$930", lastVisit: "2024-01-27", notes: "Farm animals, preventive focus"},
+            {name: "Marie Richardson", email: "marie.richardson@email.com", phone: "(530) 555-0147", address: "123 Impatiens Road, Yuba City, CA", pures: 4.6, tier: "1A", petType: "Cat", spend: "$1,470", lastVisit: "2024-02-12", notes: "Exotic breed, specialized nutrition"},
+            {name: "Victor Cox", email: "victor.cox@email.com", phone: "(530) 555-0148", address: "789 Geranium Street, Yuba City, CA", pures: 3.2, tier: "1C", petType: "Dog", spend: "$560", lastVisit: "2023-10-22", notes: "Minimal contact, price-sensitive"},
+            {name: "Teresa Ward", email: "teresa.ward@email.com", phone: "(530) 555-0149", address: "345 Pansy Avenue, Yuba City, CA", pures: 4.0, tier: "1B", petType: "Both", spend: "$1,020", lastVisit: "2024-02-03", notes: "Rescue advocate, donations welcome"},
+            {name: "Louis Torres", email: "louis.torres@email.com", phone: "(530) 555-0150", address: "567 Snapdragon Drive, Yuba City, CA", pures: 4.2, tier: "1A", petType: "Cat", spend: "$1,260", lastVisit: "2024-02-09", notes: "Maine Coon, genetic testing"}
+        ];
+
+        let filteredData = [...clientData];
+        let sortDirection = 1;
+
+        function initializeTable() {
+            populateTable();
+            populateClientSelect();
+            updateAnalytics();
+            
+            // Set default date to tomorrow
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            document.getElementById('campaignDate').value = tomorrow.toISOString().split('T')[0];
+        }
+
+        function populateTable() {
+            const tbody = document.getElementById('clientTableBody');
+            tbody.innerHTML = '';
+            
+            filteredData.forEach((client, index) => {
+                const row = document.createElement('tr');
+                row.className = `tier-${client.tier.toLowerCase()}`;
+                row.innerHTML = `
+                    <td>${client.name}</td>
+                    <td>${client.email}</td>
+                    <td>${client.phone}</td>
+                    <td>${client.address}</td>
+                    <td>${client.pures}</td>
+                    <td>${client.tier}</td>
+                    <td>${client.petType}</td>
+                    <td>${client.spend}</td>
+                    <td>${client.lastVisit}</td>
+                    <td>
+                        <button class="btn-small" onclick="contactClient(${index})">Contact</button>
+                        <button class="btn-small" onclick="emailClient(${index})">Email</button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function populateClientSelect() {
+            const select = document.getElementById('clientSelect');
+            select.innerHTML = '<option value="">Choose a client...</option>';
+            
+            clientData.forEach((client, index) => {
+                const option = document.createElement('option');
+                option.value = index;
+                option.textContent = client.name;
+                select.appendChild(option);
+            });
+        }
+
+        function sortTable(columnIndex) {
+            const headers = ['name', 'email', 'phone', 'address', 'pures', 'tier', 'petType', 'spend', 'lastVisit'];
+            const header = headers[columnIndex];
+            
+            filteredData.sort((a, b) => {
+                let aVal = a[header];
+                let bVal = b[header];
+                
+                if (header === 'pures') {
+                    return sortDirection * (aVal - bVal);
+                } else if (header === 'spend') {
+                    aVal = parseInt(aVal.replace(/[$,]/g, ''));
+                    bVal = parseInt(bVal.replace(/[$,]/g, ''));
+                    return sortDirection * (aVal - bVal);
+                } else if (header === 'lastVisit') {
+                    return sortDirection * (new Date(aVal) - new Date(bVal));
+                } else {
+                    return sortDirection * aVal.localeCompare(bVal);
+                }
+            });
+            
+            sortDirection *= -1;
+            populateTable();
+        }
+
+        function filterTable() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const tierFilter = document.getElementById('tierFilter').value;
+            const petTypeFilter = document.getElementById('petTypeFilter').value;
+            
+            filteredData = clientData.filter(client => {
+                const matchesSearch = !searchTerm || 
+                    client.name.toLowerCase().includes(searchTerm) ||
+                    client.email.toLowerCase().includes(searchTerm) ||
+                    client.address.toLowerCase().includes(searchTerm);
+                
+                const matchesTier = !tierFilter || client.tier === tierFilter;
+                const matchesPetType = !petTypeFilter || client.petType === petTypeFilter;
+                
+                return matchesSearch && matchesTier && matchesPetType;
+            });
+            
+            populateTable();
+            updateAnalytics();
+        }
+
+        function updateAnalytics() {
+            document.getElementById('totalClients').textContent = filteredData.length;
+            document.getElementById('tier1aCount').textContent = filteredData.filter(c => c.tier === '1A').length;
+            document.getElementById('tier1bCount').textContent = filteredData.filter(c => c.tier === '1B').length;
+            document.getElementById('tier1cCount').textContent = filteredData.filter(c => c.tier === '1C').length;
+        }
+
+        function contactClient(index) {
+            const client = filteredData[index];
+            const modal = document.getElementById('contactModal');
+            const content = document.getElementById('contactContent');
+            
+            content.innerHTML = `
+                <h3>${client.name}</h3>
+                <p><strong>Email:</strong> ${client.email}</p>
+                <p><strong>Phone:</strong> ${client.phone}</p>
+                <p><strong>Address:</strong> ${client.address}</p>
+                <p><strong>Pet Type:</strong> ${client.petType}</p>
+                <p><strong>P.U.R.E.S. Score:</strong> ${client.pures}/5</p>
+                <p><strong>Tier:</strong> ${client.tier}</p>
+                <p><strong>Notes:</strong> ${client.notes}</p>
+                <div style="margin-top: 1rem;">
+                    <button onclick="callClient('${client.phone}')" style="margin-right: 1rem;">Call</button>
+                    <button onclick="emailClientDirect('${client.email}', '${client.name}', '${client.petType}')">Send Email</button>
+                </div>
+            `;
+            
+            modal.style.display = 'block';
+        }
+
+        function emailClient(index) {
+            const client = filteredData[index];
+            emailClientDirect(client.email, client.name, client.petType);
+        }
+
+        function emailClientDirect(email, name, petType) {
+            const modal = document.getElementById('emailModal');
+            document.getElementById('emailTo').value = email;
+            
+            const petMessage = petType === 'Both' ? 'pets' : petType.toLowerCase();
+            const services = getRelevantServices(petType);
+            
+            document.getElementById('emailMessage').value = `Dear ${name.split(' ')[0]},
+
+At Davies Animal Medical Hospital, we understand how much your ${petMessage} mean to you. As your trusted veterinary partner in Yuba City, we're committed to keeping your beloved companions healthy and happy.
+
+${services}
+
+Why Choose Davies Animal Medical Hospital?
+✓ Over 25 years serving the Yuba City community
+✓ Family-owned practice with personalized care
+✓ Urgent care available every day until 8pm
+✓ Comprehensive services from puppies to senior pets
+✓ Advanced diagnostic equipment and techniques
+
+We're conveniently located at 1630 Sierra Ave, and our experienced team is here to help with everything from routine wellness care to emergency situations.
+
+Schedule your pet's next appointment today by calling (530) 671-3014 or visit us online at daviesanimalhospital.com
+
+Your pet's health is our priority!
+
+Warm regards,
+The Davies Animal Medical Hospital Team
+
+P.S. Don't forget - we offer urgent care every day and have an online store for your convenience!`;
+            
+            modal.style.display = 'block';
+        }
+
+        function getRelevantServices(petType) {
+            if (petType === 'Dog') {
+                return `We specialize in comprehensive canine care including:
+• Puppy wellness programs and vaccinations
+• Dental care and cleaning
+• Senior dog health monitoring
+• Emergency and urgent care
+• Surgery and diagnostic services`;
+            } else if (petType === 'Cat') {
+                return `Our feline-focused services include:
+• Kitten care and early vaccinations
+• Indoor cat wellness programs
+• Senior cat health monitoring
+• Dental care and parasite control
+• Emergency and urgent care`;
+            } else {
+                return `Our comprehensive veterinary services include:
+• Wellness care for all life stages
+• Vaccinations and preventive care
+• Dental care and parasite control
+• Emergency and urgent care
+• Advanced diagnostics and surgery`;
+            }
+        }
+
+        function updatePuresScore() {
+            const clientIndex = document.getElementById('clientSelect').value;
+            if (!clientIndex) return;
+            
+            const profitability = document.getElementById('profitabilityScore').value;
+            const urgency = document.getElementById('urgencyScore').value;
+            const reachability = document.getElementById('reachabilityScore').value;
+            const engagement = document.getElementById('engagementScore').value;
+            const sustainability = document.getElementById('sustainabilityScore').value;
+            
+            if (profitability && urgency && reachability && engagement && sustainability) {
+                const average = ((+profitability + +urgency + +reachability + +engagement + +sustainability) / 5).toFixed(1);
+                clientData[clientIndex].pures = parseFloat(average);
+                
+                // Update tier based on score
+                if (average >= 4.0) {
+                    clientData[clientIndex].tier = '1A';
+                } else if (average >= 3.5) {
+                    clientData[clientIndex].tier = '1B';
+                } else {
+                    clientData[clientIndex].tier = '1C';
+                }
+                
+                filterTable();
+                alert(`P.U.R.E.S. score updated to ${average} for ${clientData[clientIndex].name}`);
+            }
+        }
+
+        function saveFeedback() {
+            const feedback = document.getElementById('feedbackText').value;
+            if (feedback) {
+                alert('Feedback saved successfully!');
+                document.getElementById('feedbackText').value = '';
+            }
+        }
+
+        function scheduleCampaign() {
+            const campaignType = document.getElementById('campaignType').value;
+            const tier = document.getElementById('campaignTier').value;
+            const date = document.getElementById('campaignDate').value;
+            
+            let targetCount = 0;
+            if (tier === 'all') {
+                targetCount = clientData.length;
+            } else {
+                targetCount = clientData.filter(c => c.tier === tier).length;
+            }
+            
+            alert(`Campaign "${campaignType}" scheduled for ${date} targeting ${targetCount} clients (${tier === 'all' ? 'All Tiers' : 'Tier ' + tier})`);
+        }
+
+        function callClient(phone) {
+            window.location.href = `tel:${phone}`;
+        }
+
+        function sendEmail() {
+            const to = document.getElementById('emailTo').value;
+            const subject = document.getElementById('emailSubject').value;
+            const message = document.getElementById('emailMessage').value;
+            
+            const mailtoLink = `mailto:${to}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(message)}`;
+            window.location.href = mailtoLink;
+            
+            document.getElementById('emailModal').style.display = 'none';
+        }
+
+        function exportData() {
+            let csv = 'Client Name,Email,Phone,Address,P.U.R.E.S Score,Tier,Pet Type,Est. Annual Spend,Last Visit,Notes\n';
+            
+            filteredData.forEach(client => {
+                csv += `"${client.name}","${client.email}","${client.phone}","${client.address}",${client.pures},"${client.tier}","${client.petType}","${client.spend}","${client.lastVisit}","${client.notes}"\n`;
+            });
+            
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'davies_clients.csv';
+            a.click();
+        }
+
+        function bulkEmail() {
+            const tier = prompt('Target which tier? (1A, 1B, 1C, or ALL)');
+            if (tier) {
+                let targets = tier.toUpperCase() === 'ALL' ? 
+                    clientData : 
+                    clientData.filter(c => c.tier === tier.toUpperCase());
+                alert(`Bulk email campaign prepared for ${targets.length} clients`);
+            }
+        }
+
+        function generateReport() {
+            alert('Generating comprehensive S.A.L.E. system report...');
+        }
+
+        function showAnalytics() {
+            alert('Detailed analytics dashboard coming soon!');
+        }
+
+        // Event listeners
+        document.getElementById('searchInput').addEventListener('input', filterTable);
+        document.getElementById('tierFilter').addEventListener('change', filterTable);
+        document.getElementById('petTypeFilter').addEventListener('change', filterTable);
+
+        // Modal functionality
+        const modals = document.querySelectorAll('.modal');
+        const closeBtns = document.querySelectorAll('.close');
+
+        closeBtns.forEach(btn => {
+            btn.onclick = function() {
+                modals.forEach(modal => {
+                    modal.style.display = 'none';
+                });
+            }
+        });
+
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = 'none';
+            }
+        }
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', initializeTable);
+    </script>
+</body>
+</html>

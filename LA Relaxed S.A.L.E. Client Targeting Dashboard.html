@@ -1,0 +1,841 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LA Relaxed - S.A.L.E. Client Targeting Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #000000;
+            color: #ffffff;
+            line-height: 1.6;
+        }
+        
+        .header {
+            background: #000000;
+            padding: 1rem 0;
+            border-bottom: 3px solid #CF2030;
+        }
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            height: 60px;
+        }
+        
+        .header-title {
+            color: #CF2030;
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .dashboard-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .dashboard-header h1 {
+            color: #CF2030;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .business-info {
+            background: #1a1a1a;
+            padding: 2rem;
+            border-radius: 10px;
+            border: 2px solid #CF2030;
+            margin-bottom: 2rem;
+        }
+        
+        .business-info h2 {
+            color: #CF2030;
+            margin-bottom: 1rem;
+        }
+        
+        .tabs {
+            display: flex;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid #CF2030;
+        }
+        
+        .tab {
+            padding: 1rem 2rem;
+            background: #333;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            border-radius: 10px 10px 0 0;
+            margin-right: 5px;
+            transition: background 0.3s;
+        }
+        
+        .tab.active {
+            background: #CF2030;
+        }
+        
+        .tab-content {
+            display: none;
+            background: #1a1a1a;
+            padding: 2rem;
+            border-radius: 0 10px 10px 10px;
+            border: 2px solid #CF2030;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .scoring-form {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .score-section {
+            background: #2a2a2a;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid #CF2030;
+        }
+        
+        .score-section h3 {
+            color: #CF2030;
+            margin-bottom: 1rem;
+        }
+        
+        .score-input {
+            width: 100%;
+            padding: 0.5rem;
+            margin: 0.5rem 0;
+            background: #333;
+            color: #fff;
+            border: 1px solid #555;
+            border-radius: 5px;
+        }
+        
+        .search-controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .search-input {
+            flex: 1;
+            padding: 1rem;
+            background: #333;
+            color: #fff;
+            border: 1px solid #CF2030;
+            border-radius: 5px;
+        }
+        
+        .filter-select {
+            padding: 1rem;
+            background: #333;
+            color: #fff;
+            border: 1px solid #CF2030;
+            border-radius: 5px;
+        }
+        
+        .client-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 2rem;
+            background: #1a1a1a;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 2px solid #CF2030;
+        }
+        
+        .client-table th {
+            background: #CF2030;
+            color: #fff;
+            padding: 1rem;
+            text-align: left;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .client-table th:hover {
+            background: #a01828;
+        }
+        
+        .client-table td {
+            padding: 1rem;
+            border-bottom: 1px solid #333;
+        }
+        
+        .client-table tr:nth-child(even) {
+            background: #2a2a2a;
+        }
+        
+        .tier-1a { color: #00ff00; font-weight: bold; }
+        .tier-1b { color: #ffff00; font-weight: bold; }
+        .tier-1c { color: #0099ff; font-weight: bold; }
+        
+        .contact-btn {
+            padding: 0.5rem 1rem;
+            background: #CF2030;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 0.2rem;
+            transition: background 0.3s;
+        }
+        
+        .contact-btn:hover {
+            background: #a01828;
+        }
+        
+        .email-template {
+            background: #2a2a2a;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid #CF2030;
+            margin-top: 2rem;
+        }
+        
+        .footer {
+            background: #000000;
+            padding: 2rem 0;
+            border-top: 3px solid #CF2030;
+            text-align: center;
+        }
+        
+        .footer-logo {
+            height: 30px;
+            margin-bottom: 1rem;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+        }
+        
+        .modal-content {
+            background-color: #1a1a1a;
+            margin: 5% auto;
+            padding: 2rem;
+            border: 2px solid #CF2030;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 600px;
+            color: #fff;
+        }
+        
+        .close {
+            color: #CF2030;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .close:hover {
+            color: #fff;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .search-controls {
+                flex-direction: column;
+            }
+            
+            .client-table {
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports" class="logo">
+            <h1 class="header-title">S.A.L.E. Client Targeting Dashboard</h1>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="dashboard-header">
+            <h1>LA Relaxed - Client Targeting System</h1>
+            <p>Maximize your apparel & fashion business with AI-powered client intelligence</p>
+        </div>
+
+        <div class="business-info">
+            <h2>Business Profile</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+                <div><strong>Business:</strong> LA Relaxed</div>
+                <div><strong>Industry:</strong> Apparel & Fashion</div>
+                <div><strong>Location:</strong> Los Angeles, CA</div>
+                <div><strong>Website:</strong> www.larelaxed.com</div>
+                <div><strong>Owner:</strong> Dana Weinstein</div>
+                <div><strong>Size:</strong> 11-50 employees</div>
+            </div>
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('sourcing')">S - SOURCING</button>
+            <button class="tab" onclick="showTab('assessing')">A - ASSESSING</button>
+            <button class="tab" onclick="showTab('listening')">L - LISTENING</button>
+            <button class="tab" onclick="showTab('empowering')">E - EMPOWERING</button>
+            <button class="tab" onclick="showTab('clients')">CLIENT DATABASE</button>
+        </div>
+
+        <div id="sourcing" class="tab-content active">
+            <h2 style="color: #CF2030; margin-bottom: 1rem;">P.U.R.E.S. Client Scoring System</h2>
+            <div class="scoring-form">
+                <div class="score-section">
+                    <h3>Profitability</h3>
+                    <p>Annual revenue threshold and budget capacity</p>
+                    <input type="range" min="1" max="5" value="3" class="score-input" id="profitability">
+                    <div>Score: <span id="profitability-val">3</span>/5</div>
+                </div>
+                <div class="score-section">
+                    <h3>Urgency</h3>
+                    <p>Active pain points requiring immediate solutions</p>
+                    <input type="range" min="1" max="5" value="3" class="score-input" id="urgency">
+                    <div>Score: <span id="urgency-val">3</span>/5</div>
+                </div>
+                <div class="score-section">
+                    <h3>Reachability</h3>
+                    <p>Accessible decision makers with clear contact paths</p>
+                    <input type="range" min="1" max="5" value="3" class="score-input" id="reachability">
+                    <div>Score: <span id="reachability-val">3</span>/5</div>
+                </div>
+                <div class="score-section">
+                    <h3>Engagement</h3>
+                    <p>Openness to innovation and partnerships</p>
+                    <input type="range" min="1" max="5" value="3" class="score-input" id="engagement">
+                    <div>Score: <span id="engagement-val">3</span>/5</div>
+                </div>
+                <div class="score-section">
+                    <h3>Sustainability</h3>
+                    <p>Long-term partnership potential with growth trajectory</p>
+                    <input type="range" min="1" max="5" value="3" class="score-input" id="sustainability">
+                    <div>Score: <span id="sustainability-val">3</span>/5</div>
+                </div>
+            </div>
+            <div style="text-align: center; padding: 2rem; background: #2a2a2a; border-radius: 10px; border: 2px solid #CF2030;">
+                <h3 style="color: #CF2030;">Total P.U.R.E.S. Score: <span id="total-score">15</span>/25</h3>
+                <p>Client Tier: <span id="client-tier" class="tier-1c">Tier 1C (Qualified)</span></p>
+            </div>
+        </div>
+
+        <div id="assessing" class="tab-content">
+            <h2 style="color: #CF2030; margin-bottom: 2rem;">Buying Pattern Analysis</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+                <div class="score-section">
+                    <h3>Analytical Buyers</h3>
+                    <p>Require detailed ROI analysis, case studies, trials</p>
+                    <ul style="margin-top: 1rem;">
+                        <li>Fashion boutiques seeking data-driven inventory</li>
+                        <li>Corporate buyers analyzing cost per wear</li>
+                        <li>Retailers comparing supplier performance</li>
+                    </ul>
+                </div>
+                <div class="score-section">
+                    <h3>Relationship Buyers</h3>
+                    <p>Value trust, referrals, long-term partnerships</p>
+                    <ul style="margin-top: 1rem;">
+                        <li>Fashion influencers building brand partnerships</li>
+                        <li>Loyalty program members</li>
+                        <li>Repeat customers seeking personal styling</li>
+                    </ul>
+                </div>
+                <div class="score-section">
+                    <h3>Efficiency Buyers</h3>
+                    <p>Focus on time-saving, process improvement</p>
+                    <ul style="margin-top: 1rem;">
+                        <li>Busy professionals needing wardrobe solutions</li>
+                        <li>Online shoppers preferring quick delivery</li>
+                        <li>Subscription service seekers</li>
+                    </ul>
+                </div>
+                <div class="score-section">
+                    <h3>Innovation Buyers</h3>
+                    <p>Seek cutting-edge solutions, competitive advantage</p>
+                    <ul style="margin-top: 1rem;">
+                        <li>Early adopters of sustainable fashion</li>
+                        <li>Tech-forward fashion enthusiasts</li>
+                        <li>Trendsetters seeking unique pieces</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div id="listening" class="tab-content">
+            <h2 style="color: #CF2030; margin-bottom: 2rem;">Feedback Integration System</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+                <div class="score-section">
+                    <h3>Pre-Sale Feedback</h3>
+                    <p>Collection forms for customer preferences</p>
+                    <ul style="margin-top: 1rem;">
+                        <li>Style preference surveys</li>
+                        <li>Size and fit consultations</li>
+                        <li>Budget range discussions</li>
+                        <li>Occasion-specific needs</li>
+                    </ul>
+                </div>
+                <div class="score-section">
+                    <h3>During-Sale Tracking</h3>
+                    <p>Progress monitoring and engagement</p>
+                    <ul style="margin-top: 1rem;">
+                        <li>Fitting room feedback</li>
+                        <li>Product comparison notes</li>
+                        <li>Styling consultation results</li>
+                        <li>Purchase decision factors</li>
+                    </ul>
+                </div>
+                <div class="score-section">
+                    <h3>Post-Sale Satisfaction</h3>
+                    <p>Monitoring and follow-up protocols</p>
+                    <ul style="margin-top: 1rem;">
+                        <li>Wear and comfort feedback</li>
+                        <li>Quality assessment surveys</li>
+                        <li>Styling success stories</li>
+                        <li>Repeat purchase intentions</li>
+                    </ul>
+                </div>
+                <div class="score-section">
+                    <h3>Complaint Resolution</h3>
+                    <p>Real-time issue handling protocols</p>
+                    <ul style="margin-top: 1rem;">
+                        <li>Sizing and fit issues</li>
+                        <li>Quality concerns</li>
+                        <li>Delivery problems</li>
+                        <li>Return/exchange requests</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div id="empowering" class="tab-content">
+            <h2 style="color: #CF2030; margin-bottom: 2rem;">Referral Strategy Dashboard</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+                <div class="score-section">
+                    <h3>Success Story Documentation</h3>
+                    <p>Customer transformation stories</p>
+                    <ul style="margin-top: 1rem;">
+                        <li>Before/after styling photos</li>
+                        <li>Confidence boost testimonials</li>
+                        <li>Professional wardrobe makeovers</li>
+                        <li>Special occasion success stories</li>
+                    </ul>
+                </div>
+                <div class="score-section">
+                    <h3>Referral Reward Tracking</h3>
+                    <p>Incentive program management</p>
+                    <ul style="margin-top: 1rem;">
+                        <li>Friend referral discounts</li>
+                        <li>Loyalty point bonuses</li>
+                        <li>Exclusive access rewards</li>
+                        <li>Social media sharing incentives</li>
+                    </ul>
+                </div>
+                <div class="score-section">
+                    <h3>Client Advocacy Program</h3>
+                    <p>Brand ambassador development</p>
+                    <ul style="margin-top: 1rem;">
+                        <li>Influencer partnerships</li>
+                        <li>Customer review programs</li>
+                        <li>Social media collaborations</li>
+                        <li>Fashion show invitations</li>
+                    </ul>
+                </div>
+                <div class="score-section">
+                    <h3>Co-Marketing Opportunities</h3>
+                    <p>Strategic partnership planning</p>
+                    <ul style="margin-top: 1rem;">
+                        <li>Local boutique collaborations</li>
+                        <li>Complementary brand partnerships</li>
+                        <li>Event co-sponsorships</li>
+                        <li>Cross-promotional campaigns</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div id="clients" class="tab-content">
+            <h2 style="color: #CF2030; margin-bottom: 2rem;">Client Database - Los Angeles Area</h2>
+            
+            <div class="search-controls">
+                <input type="text" class="search-input" id="searchInput" placeholder="Search clients..." onkeyup="searchTable()">
+                <select class="filter-select" id="tierFilter" onchange="filterByTier()">
+                    <option value="">All Tiers</option>
+                    <option value="Tier 1A">Tier 1A (Premium)</option>
+                    <option value="Tier 1B">Tier 1B (High-Value)</option>
+                    <option value="Tier 1C">Tier 1C (Qualified)</option>
+                </select>
+                <button class="contact-btn" onclick="exportToCSV()">Export CSV</button>
+            </div>
+
+            <div style="overflow-x: auto;">
+                <table class="client-table" id="clientTable">
+                    <thead>
+                        <tr>
+                            <th onclick="sortTable(0)">Client Name ↕</th>
+                            <th onclick="sortTable(1)">Email ↕</th>
+                            <th onclick="sortTable(2)">Phone ↕</th>
+                            <th onclick="sortTable(3)">Address ↕</th>
+                            <th onclick="sortTable(4)">P.U.R.E.S. Score ↕</th>
+                            <th onclick="sortTable(5)">Tier Level ↕</th>
+                            <th onclick="sortTable(6)">Industry ↕</th>
+                            <th onclick="sortTable(7)">Revenue Estimate ↕</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="clientTableBody">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Email Modal -->
+    <div id="emailModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h3 style="color: #CF2030; margin-bottom: 1rem;">Email Template</h3>
+            <div id="emailContent"></div>
+            <button class="contact-btn" onclick="sendEmail()">Send Email</button>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports" class="footer-logo">
+        <p>&copy; 2024 Higgins Reports. Powered by AI-driven business intelligence.</p>
+    </footer>
+
+    <script>
+        // Sample client data for LA area (within 10 miles)
+        const clientData = [
+            {name: "Sarah Johnson", email: "sarah@bevhillsboutique.com", phone: "(310) 555-0123", address: "9876 Rodeo Drive, Beverly Hills, CA 90210", pures: 23, tier: "Tier 1A", industry: "Fashion Retail", revenue: "$2.5M"},
+            {name: "Michael Chen", email: "mchen@luxefashion.com", phone: "(213) 555-0456", address: "1234 Melrose Ave, Los Angeles, CA 90046", pures: 22, tier: "Tier 1A", industry: "Luxury Retail", revenue: "$1.8M"},
+            {name: "Amanda Rodriguez", email: "amanda@styleLA.com", phone: "(323) 555-0789", address: "5678 Sunset Blvd, Hollywood, CA 90028", pures: 21, tier: "Tier 1A", industry: "Fashion Consulting", revenue: "$950K"},
+            {name: "David Park", email: "dpark@trendsetters.com", phone: "(310) 555-0321", address: "2468 Santa Monica Blvd, Santa Monica, CA 90404", pures: 20, tier: "Tier 1B", industry: "Fashion Retail", revenue: "$750K"},
+            {name: "Jennifer Lopez-Smith", email: "jen@chicboutique.com", phone: "(213) 555-0654", address: "1357 Fashion District, Los Angeles, CA 90015", pures: 19, tier: "Tier 1B", industry: "Boutique Owner", revenue: "$680K"},
+            {name: "Robert Kim", email: "rkim@modernstyle.com", phone: "(323) 555-0987", address: "9753 Wilshire Blvd, Beverly Hills, CA 90210", pures: 19, tier: "Tier 1B", industry: "Fashion Design", revenue: "$525K"},
+            {name: "Lisa Thompson", email: "lisa@urbanfashion.com", phone: "(310) 555-0147", address: "8642 Abbot Kinney, Venice, CA 90291", pures: 18, tier: "Tier 1B", industry: "Fashion Retail", revenue: "$425K"},
+            {name: "Carlos Mendez", email: "carlos@westsidefashion.com", phone: "(213) 555-0258", address: "3691 Beverly Blvd, Los Angeles, CA 90004", pures: 18, tier: "Tier 1B", industry: "Retail Manager", revenue: "$385K"},
+            {name: "Emily Davis", email: "emily@stylestudio.com", phone: "(323) 555-0369", address: "7531 Fairfax Ave, Los Angeles, CA 90036", pures: 17, tier: "Tier 1C", industry: "Personal Stylist", revenue: "$275K"},
+            {name: "Anthony Brown", email: "anthony@fashionforward.com", phone: "(310) 555-0741", address: "4862 Main St, Santa Monica, CA 90405", pures: 17, tier: "Tier 1C", industry: "Fashion Buyer", revenue: "$245K"},
+            {name: "Michelle Wu", email: "michelle@trendyLA.com", phone: "(213) 555-0852", address: "6174 Hollywood Blvd, Hollywood, CA 90028", pures: 16, tier: "Tier 1C", industry: "Fashion Blogger", revenue: "$195K"},
+            {name: "Thomas Garcia", email: "tgarcia@styleplus.com", phone: "(323) 555-0963", address: "2583 Pico Blvd, Los Angeles, CA 90006", pures: 16, tier: "Tier 1C", industry: "Retail Consultant", revenue: "$185K"},
+            {name: "Rachel Green", email: "rachel@fashionista.com", phone: "(310) 555-0174", address: "8426 Sunset Strip, West Hollywood, CA 90069", pures: 15, tier: "Tier 1C", industry: "Fashion Editor", revenue: "$165K"},
+            {name: "Kevin Martinez", email: "kevin@moderntrends.com", phone: "(213) 555-0285", address: "5297 Olympic Blvd, Los Angeles, CA 90019", pures: 15, tier: "Tier 1C", industry: "Fashion Retail", revenue: "$145K"},
+            {name: "Nicole Taylor", email: "nicole@chicstyling.com", phone: "(323) 555-0396", address: "7418 Vine St, Hollywood, CA 90028", pures: 15, tier: "Tier 1C", industry: "Personal Shopper", revenue: "$125K"},
+            {name: "Ryan Wilson", email: "ryan@fashionhouse.com", phone: "(310) 555-0517", address: "3652 Robertson Blvd, West Hollywood, CA 90048", pures: 14, tier: "Tier 1C", industry: "Fashion Retail", revenue: "$115K"},
+            {name: "Stephanie Moore", email: "stephanie@stylegenius.com", phone: "(213) 555-0628", address: "9184 Figueroa St, Los Angeles, CA 90003", pures: 14, tier: "Tier 1C", industry: "Fashion Consultant", revenue: "$95K"},
+            {name: "Matthew Lewis", email: "matt@fashionista.com", phone: "(323) 555-0739", address: "6527 Highland Ave, Hollywood, CA 90028", pures: 14, tier: "Tier 1C", industry: "Retail Manager", revenue: "$85K"},
+            {name: "Ashley Clark", email: "ashley@trendsetla.com", phone: "(310) 555-0841", address: "4813 Lincoln Blvd, Marina del Rey, CA 90292", pures: 13, tier: "Tier 1C", industry: "Fashion Buyer", revenue: "$75K"},
+            {name: "Brandon White", email: "brandon@styleworks.com", phone: "(213) 555-0952", address: "2759 Vermont Ave, Los Angeles, CA 90027", pures: 13, tier: "Tier 1C", industry: "Fashion Retail", revenue: "$65K"},
+            {name: "Megan Hall", email: "megan@fashionforwardla.com", phone: "(323) 555-0163", address: "8374 La Brea Ave, Los Angeles, CA 90036", pures: 13, tier: "Tier 1C", industry: "Fashion Stylist", revenue: "$58K"},
+            {name: "Christopher Young", email: "chris@modernchic.com", phone: "(310) 555-0274", address: "5196 Washington Blvd, Los Angeles, CA 90016", pures: 12, tier: "Tier 1C", industry: "Boutique Manager", revenue: "$52K"},
+            {name: "Lauren King", email: "lauren@styleicon.com", phone: "(213) 555-0385", address: "7281 Crenshaw Blvd, Los Angeles, CA 90043", pures: 12, tier: "Tier 1C", industry: "Fashion Consultant", revenue: "$48K"},
+            {name: "Jonathan Scott", email: "jonathan@trendzone.com", phone: "(323) 555-0496", address: "3947 Western Ave, Los Angeles, CA 90027", pures: 12, tier: "Tier 1C", industry: "Fashion Retail", revenue: "$45K"},
+            {name: "Samantha Adams", email: "sam@chicfashion.com", phone: "(310) 555-0517", address: "6853 Century Blvd, Los Angeles, CA 90045", pures: 11, tier: "Tier 1C", industry: "Personal Stylist", revenue: "$42K"},
+            {name: "Daniel Baker", email: "daniel@stylestudiola.com", phone: "(213) 555-0628", address: "4629 Normandie Ave, Los Angeles, CA 90037", pures: 11, tier: "Tier 1C", industry: "Fashion Buyer", revenue: "$38K"},
+            {name: "Olivia Turner", email: "olivia@fashiontrendz.com", phone: "(323) 555-0739", address: "8516 Venice Blvd, Los Angeles, CA 90034", pures: 11, tier: "Tier 1C", industry: "Fashion Blogger", revenue: "$35K"},
+            {name: "Andrew Phillips", email: "andrew@modernstyling.com", phone: "(310) 555-0841", address: "2483 Sepulveda Blvd, Los Angeles, CA 90064", pures: 10, tier: "Tier 1C", industry: "Retail Assistant", revenue: "$32K"},
+            {name: "Kimberly Campbell", email: "kim@fashionworld.com", phone: "(213) 555-0952", address: "7195 San Pedro St, Los Angeles, CA 90003", pures: 10, tier: "Tier 1C", industry: "Fashion Coordinator", revenue: "$28K"},
+            {name: "Tyler Parker", email: "tyler@stylecenter.com", phone: "(323) 555-0163", address: "5372 Fountain Ave, Los Angeles, CA 90029", pures: 10, tier: "Tier 1C", industry: "Fashion Retail", revenue: "$25K"},
+            // Additional 20 clients to reach 50 total
+            {name: "Victoria Evans", email: "victoria@elegantfashion.com", phone: "(310) 555-1234", address: "9287 Burton Way, Beverly Hills, CA 90210", pures: 24, tier: "Tier 1A", industry: "Luxury Fashion", revenue: "$3.2M"},
+            {name: "Nathan Collins", email: "nathan@premiumstyle.com", phone: "(213) 555-2345", address: "1847 Silver Lake Blvd, Los Angeles, CA 90026", pures: 23, tier: "Tier 1A", industry: "Fashion Design", revenue: "$2.8M"},
+            {name: "Grace Mitchell", email: "grace@sophisticatedstyle.com", phone: "(323) 555-3456", address: "6394 Melrose Place, Los Angeles, CA 90048", pures: 22, tier: "Tier 1A", industry: "High-End Retail", revenue: "$2.1M"},
+            {name: "Alexander Reed", email: "alex@luxurylabel.com", phone: "(310) 555-4567", address: "3728 Montana Ave, Santa Monica, CA 90403", pures: 21, tier: "Tier 1A", industry: "Designer Boutique", revenue: "$1.9M"},
+            {name: "Isabella Cooper", email: "isabella@couturecollection.com", phone: "(213) 555-5678", address: "8561 La Cienega Blvd, Los Angeles, CA 90048", pures: 20, tier: "Tier 1B", industry: "Fashion House", revenue: "$1.2M"},
+            {name: "Marcus Rivera", email: "marcus@fashionempire.com", phone: "(323) 555-6789", address: "4972 Cahuenga Blvd, North Hollywood, CA 91601", pures: 19, tier: "Tier 1B", industry: "Fashion Retailer", revenue: "$895K"},
+            {name: "Sophia Bailey", email: "sophia@trendsetters.com", phone: "(310) 555-7891", address: "7253 Beverly Blvd, Los Angeles, CA 90036", pures: 18, tier: "Tier 1B", industry: "Fashion Consultant", revenue: "$672K"},
+            {name: "Ethan Hughes", email: "ethan@modernfashion.com", phone: "(213) 555-8912", address: "2186 Glendale Blvd, Los Angeles, CA 90039", pures: 17, tier: "Tier 1C", industry: "Fashion Buyer", revenue: "$445K"},
+            {name: "Madison Price", email: "madison@stylehaven.com", phone: "(323) 555-9123", address: "5849 Wilshire Blvd, Los Angeles, CA 90036", pures: 16, tier: "Tier 1C", industry: "Boutique Owner", revenue: "$358K"},
+            {name: "Caleb Ward", email: "caleb@fashionforward.com", phone: "(310) 555-1357", address: "9614 Olympic Blvd, Beverly Hills, CA 90212", pures: 15, tier: "Tier 1C", industry: "Fashion Editor", revenue: "$285K"},
+            {name: "Aria Peterson", email: "aria@chictrendz.com", phone: "(213) 555-2468", address: "3495 Exposition Blvd, Los Angeles, CA 90018", pures: 14, tier: "Tier 1C", industry: "Personal Stylist", revenue: "$225K"},
+            {name: "Gabriel Gray", email: "gabriel@urbanfashion.com", phone: "(323) 555-3579", address: "7826 Sunset Blvd, Los Angeles, CA 90046", pures: 13, tier: "Tier 1C", industry: "Fashion Merchandiser", revenue: "$185K"},
+            {name: "Lily Watson", email: "lily@fashionistala.com", phone: "(310) 555-4681", address: "4317 Admiralty Way, Marina del Rey, CA 90292", pures: 12, tier: "Tier 1C", industry: "Fashion Blogger", revenue: "$145K"},
+            {name: "Jackson Brooks", email: "jackson@stylelab.com", phone: "(213) 555-5792", address: "6582 Temple St, Los Angeles, CA 90026", pures: 11, tier: "Tier 1C", industry: "Fashion Photographer", revenue: "$125K"},
+            {name: "Chloe Sanders", email: "chloe@modernstylist.com", phone: "(323) 555-6813", address: "8739 Fairfax Ave, West Hollywood, CA 90069", pures: 10, tier: "Tier 1C", industry: "Personal Shopper", revenue: "$95K"},
+            {name: "Logan Bennett", email: "logan@fashionhouse.com", phone: "(310) 555-7924", address: "2654 Main St, Venice, CA 90291", pures: 14, tier: "Tier 1C", industry: "Retail Manager", revenue: "$115K"},
+            {name: "Zoe Powell", email: "zoe@trendywardrobe.com", phone: "(213) 555-8135", address: "5971 Broadway, Los Angeles, CA 90003", pures: 13, tier: "Tier 1C", industry: "Fashion Coordinator", revenue: "$85K"},
+            {name: "Mason Long", email: "mason@styleworkshop.com", phone: "(323) 555-9246", address: "7418 Fountain Ave, Hollywood, CA 90046", pures: 12, tier: "Tier 1C", industry: "Fashion Assistant", revenue: "$65K"},
+            {name: "Ava Foster", email: "ava@chicboutique.com", phone: "(310) 555-1468", address: "3925 Pico Blvd, Santa Monica, CA 90405", pures: 11, tier: "Tier 1C", industry: "Boutique Manager", revenue: "$55K"},
+            {name: "Connor Ross", email: "connor@fashiontrends.com", phone: "(213) 555-2579", address: "8372 Vermont Ave, Los Angeles, CA 90044", pures: 10, tier: "Tier 1C", industry: "Fashion Analyst", revenue: "$45K"}
+        ];
+
+        let sortDirection = {};
+
+        function showTab(tabName) {
+            // Hide all tab contents
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => content.classList.remove('active'));
+            
+            // Remove active class from all tabs
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Show selected tab content
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+            
+            // If clients tab is selected, populate the table
+            if (tabName === 'clients') {
+                populateClientTable();
+            }
+        }
+
+        function populateClientTable() {
+            const tbody = document.getElementById('clientTableBody');
+            tbody.innerHTML = '';
+            
+            clientData.forEach((client, index) => {
+                const row = tbody.insertRow();
+                row.innerHTML = `
+                    <td>${client.name}</td>
+                    <td>${client.email}</td>
+                    <td>${client.phone}</td>
+                    <td>${client.address}</td>
+                    <td>${client.pures}/25</td>
+                    <td><span class="${getTierClass(client.tier)}">${client.tier}</span></td>
+                    <td>${client.industry}</td>
+                    <td>${client.revenue}</td>
+                    <td>
+                        <button class="contact-btn" onclick="openEmailModal('${client.name}', '${client.email}')">📧 Email</button>
+                        <button class="contact-btn" onclick="callClient('${client.phone}')">📞 Call</button>
+                    </td>
+                `;
+            });
+        }
+
+        function getTierClass(tier) {
+            if (tier === 'Tier 1A') return 'tier-1a';
+            if (tier === 'Tier 1B') return 'tier-1b';
+            return 'tier-1c';
+        }
+
+        function openEmailModal(name, email) {
+            const modal = document.getElementById('emailModal');
+            const emailContent = document.getElementById('emailContent');
+            
+            emailContent.innerHTML = `
+                <p><strong>To:</strong> ${email}</p>
+                <p><strong>Subject:</strong> Discover LA Relaxed's Latest Fashion Collection</p>
+                <div style="background: #333; padding: 1rem; border-radius: 5px; margin-top: 1rem;">
+                    <p>Dear ${name},</p>
+                    <br>
+                    <p>I hope this message finds you well. I'm reaching out from LA Relaxed, Los Angeles' premier destination for sophisticated, comfortable fashion that seamlessly blends style with ease.</p>
+                    <br>
+                    <p>As someone in the ${getClientIndustry(email)} industry, I believe you'll appreciate our carefully curated collection of:</p>
+                    <ul style="margin: 1rem 0;">
+                        <li>• <strong>Elevated Basics:</strong> Premium quality essentials that form the foundation of any wardrobe</li>
+                        <li>• <strong>Contemporary Designs:</strong> On-trend pieces that transition effortlessly from day to night</li>
+                        <li>• <strong>Sustainable Fashion:</strong> Eco-conscious options without compromising on style</li>
+                        <li>• <strong>Size-Inclusive Range:</strong> Flattering fits for every body type</li>
+                    </ul>
+                    <br>
+                    <p>What sets LA Relaxed apart:</p>
+                    <ul style="margin: 1rem 0;">
+                        <li>✨ Personal styling consultations</li>
+                        <li>🚚 Same-day delivery within LA</li>
+                        <li>👗 Exclusive member-only collections</li>
+                        <li>💯 30-day satisfaction guarantee</li>
+                    </ul>
+                    <br>
+                    <p>I'd love to invite you to visit our showroom and experience our personalized approach to fashion. As a valued member of the LA fashion community, I'm offering you an exclusive 20% discount on your first purchase.</p>
+                    <br>
+                    <p>Would you be available for a brief consultation this week? I'm confident we can find pieces that will enhance your personal style and professional wardrobe.</p>
+                    <br>
+                    <p>Best regards,</p>
+                    <p>Dana Weinstein<br>
+                    Owner, LA Relaxed<br>
+                    📞 (323) 555-STYLE<br>
+                    🌐 www.larelaxed.com</p>
+                </div>
+            `;
+            
+            modal.style.display = 'block';
+        }
+
+        function getClientIndustry(email) {
+            const client = clientData.find(c => c.email === email);
+            return client ? client.industry : 'fashion';
+        }
+
+        function closeModal() {
+            document.getElementById('emailModal').style.display = 'none';
+        }
+
+        function sendEmail() {
+            alert('Email sent successfully! (This is a demo - in production, this would integrate with your email system)');
+            closeModal();
+        }
+
+        function callClient(phone) {
+            alert(`Calling ${phone}... (This is a demo - in production, this would integrate with your phone system)`);
+        }
+
+        function searchTable() {
+            const input = document.getElementById('searchInput');
+            const filter = input.value.toLowerCase();
+            const table = document.getElementById('clientTable');
+            const rows = table.getElementsByTagName('tr');
+
+            for (let i = 1; i < rows.length; i++) {
+                const row = rows[i];
+                const cells = row.getElementsByTagName('td');
+                let found = false;
+
+                for (let j = 0; j < cells.length - 1; j++) {
+                    if (cells[j].textContent.toLowerCase().includes(filter)) {
+                        found = true;
+                        break;
+                    }
+                }
+
+                row.style.display = found ? '' : 'none';
+            }
+        }
+
+        function filterByTier() {
+            const filter = document.getElementById('tierFilter').value;
+            const table = document.getElementById('clientTable');
+            const rows = table.getElementsByTagName('tr');
+
+            for (let i = 1; i < rows.length; i++) {
+                const row = rows[i];
+                const tierCell = row.getElementsByTagName('td')[5];
+                
+                if (filter === '' || tierCell.textContent.includes(filter)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            }
+        }
+
+        function sortTable(columnIndex) {
+            const table = document.getElementById('clientTable');
+            const tbody = table.querySelector('tbody');
+            const rows = Array.from(tbody.querySelectorAll('tr'));
+            
+            const currentDirection = sortDirection[columnIndex] || 'asc';
+            const newDirection = currentDirection === 'asc' ? 'desc' : 'asc';
+            sortDirection[columnIndex] = newDirection;
+
+            rows.sort((a, b) => {
+                const aText = a.cells[columnIndex].textContent.trim();
+                const bText = b.cells[columnIndex].textContent.trim();
+                
+                if (newDirection === 'asc') {
+                    return aText.localeCompare(bText, undefined, {numeric: true});
+                } else {
+                    return bText.localeCompare(aText, undefined, {numeric: true});
+                }
+            });
+
+            tbody.innerHTML = '';
+            rows.forEach(row => tbody.appendChild(row));
+        }
+
+        function exportToCSV() {
+            const table = document.getElementById('clientTable');
+            const rows = Array.from(table.querySelectorAll('tr'));
+            const csvData = rows.map(row => {
+                const cells = Array.from(row.querySelectorAll('td, th'));
+                return cells.slice(0, -1).map(cell => `"${cell.textContent.trim()}"`).join(',');
+            }).join('\n');
+
+            const blob = new Blob([csvData], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'la_relaxed_clients.csv';
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+
+        // P.U.R.E.S. scoring system
+        function updateScore(scoreType) {
+            const value = document.getElementById(scoreType).value;
+            document.getElementById(scoreType + '-val').textContent = value;
+            calculateTotalScore();
+        }
+
+        function calculateTotalScore() {
+            const profitability = parseInt(document.getElementById('profitability').value);
+            const urgency = parseInt(document.getElementById('urgency').value);
+            const reachability = parseInt(document.getElementById('reachability').value);
+            const engagement = parseInt(document.getElementById('engagement').value);
+            const sustainability = parseInt(document.getElementById('sustainability').value);
+            
+            const total = profitability + urgency + reachability + engagement + sustainability;
+            document.getElementById('total-score').textContent = total;
+            
+            let tier, tierClass;
+            if (total >= 20) {
+                tier = 'Tier 1A (Premium)';
+                tierClass = 'tier-1a';
+            } else if (total >= 15) {
+                tier = 'Tier 1B (High-Value)';
+                tierClass = 'tier-1b';
+            } else {
+                tier = 'Tier 1C (Qualified)';
+                tierClass = 'tier-1c';
+            }
+            
+            const tierElement = document.getElementById('client-tier');
+            tierElement.textContent = tier;
+            tierElement.className = tierClass;
+        }
+
+        // Initialize scoring system
+        document.addEventListener('DOMContentLoaded', function() {
+            ['profitability', 'urgency', 'reachability', 'engagement', 'sustainability'].forEach(scoreType => {
+                const slider = document.getElementById(scoreType);
+                slider.addEventListener('input', () => updateScore(scoreType));
+            });
+            calculateTotalScore();
+        });
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('emailModal');
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>

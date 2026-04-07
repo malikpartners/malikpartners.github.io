@@ -1,0 +1,1015 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>S.A.L.E. Client Targeting System - The Technology Depot</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #000000;
+            color: #ffffff;
+            line-height: 1.6;
+        }
+
+        .header {
+            background: #CF2030;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(207, 32, 48, 0.3);
+        }
+
+        .header img {
+            height: 60px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .nav-tabs {
+            display: flex;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid #CF2030;
+        }
+
+        .tab {
+            background: #333;
+            color: #fff;
+            padding: 1rem 2rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
+        }
+
+        .tab:hover, .tab.active {
+            background: #CF2030;
+        }
+
+        .tab-content {
+            display: none;
+            background: #222;
+            padding: 2rem;
+            border-radius: 0 5px 5px 5px;
+            margin-bottom: 2rem;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .search-filters {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+            padding: 1rem;
+            background: #333;
+            border-radius: 5px;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .filter-group label {
+            margin-bottom: 0.5rem;
+            color: #CF2030;
+            font-weight: bold;
+        }
+
+        .filter-group input, .filter-group select {
+            padding: 0.5rem;
+            border: 1px solid #555;
+            border-radius: 3px;
+            background: #444;
+            color: #fff;
+        }
+
+        .client-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #222;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+
+        .client-table th {
+            background: #CF2030;
+            color: #fff;
+            padding: 1rem;
+            text-align: left;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .client-table th:hover {
+            background: #a01828;
+        }
+
+        .client-table td {
+            padding: 1rem;
+            border-bottom: 1px solid #444;
+        }
+
+        .client-table tr:hover {
+            background: #333;
+        }
+
+        .tier-1a { background-color: rgba(0, 255, 0, 0.1) !important; }
+        .tier-1b { background-color: rgba(255, 255, 0, 0.1) !important; }
+        .tier-1c { background-color: rgba(0, 0, 255, 0.1) !important; }
+
+        .btn {
+            background: #CF2030;
+            color: #fff;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-right: 0.5rem;
+        }
+
+        .btn:hover {
+            background: #a01828;
+            transform: translateY(-2px);
+        }
+
+        .btn-small {
+            padding: 0.3rem 0.8rem;
+            font-size: 0.9rem;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .form-section {
+            background: #333;
+            padding: 1.5rem;
+            border-radius: 5px;
+            border: 2px solid #CF2030;
+        }
+
+        .form-section h3 {
+            color: #CF2030;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid #CF2030;
+            padding-bottom: 0.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #CF2030;
+        }
+
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #555;
+            border-radius: 3px;
+            background: #444;
+            color: #fff;
+        }
+
+        .score-slider {
+            width: 100%;
+        }
+
+        .score-display {
+            background: #444;
+            padding: 0.5rem;
+            border-radius: 3px;
+            text-align: center;
+            margin-top: 0.5rem;
+        }
+
+        .marketing-plan {
+            background: #333;
+            padding: 2rem;
+            border-radius: 5px;
+            margin-bottom: 2rem;
+        }
+
+        .schedule-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 1px;
+            background: #555;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .schedule-day {
+            background: #444;
+            padding: 1rem;
+            min-height: 150px;
+            position: relative;
+        }
+
+        .schedule-day h4 {
+            color: #CF2030;
+            margin-bottom: 0.5rem;
+        }
+
+        .schedule-item {
+            background: #CF2030;
+            color: #fff;
+            padding: 0.3rem;
+            margin: 0.2rem 0;
+            border-radius: 3px;
+            font-size: 0.8rem;
+        }
+
+        .footer {
+            background: #333;
+            padding: 2rem;
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        .footer img {
+            height: 30px;
+            opacity: 0.7;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+        }
+
+        .modal-content {
+            background-color: #222;
+            margin: 5% auto;
+            padding: 2rem;
+            border: 2px solid #CF2030;
+            border-radius: 5px;
+            width: 80%;
+            max-width: 600px;
+            color: #fff;
+        }
+
+        .close {
+            color: #CF2030;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            opacity: 0.7;
+        }
+
+        .analytics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .metric-card {
+            background: #333;
+            padding: 1.5rem;
+            border-radius: 5px;
+            border-left: 4px solid #CF2030;
+            text-align: center;
+        }
+
+        .metric-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #CF2030;
+        }
+
+        .export-buttons {
+            margin: 1rem 0;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports">
+    </header>
+
+    <div class="container">
+        <h1 style="color: #CF2030; text-align: center; margin-bottom: 2rem;">S.A.L.E. Client Targeting System</h1>
+        <p style="text-align: center; margin-bottom: 2rem;">The Technology Depot - IT Services & Solutions | Azusa, California</p>
+
+        <div class="nav-tabs">
+            <button class="tab active" onclick="showTab('sourcing')">S - Sourcing</button>
+            <button class="tab" onclick="showTab('assessing')">A - Assessing</button>
+            <button class="tab" onclick="showTab('listening')">L - Listening</button>
+            <button class="tab" onclick="showTab('empowering')">E - Empowering</button>
+            <button class="tab" onclick="showTab('analytics')">Analytics</button>
+        </div>
+
+        <!-- SOURCING TAB -->
+        <div id="sourcing" class="tab-content active">
+            <h2 style="color: #CF2030; margin-bottom: 1rem;">SOURCING - P.U.R.E.S. Client Scoring</h2>
+            
+            <div class="search-filters">
+                <div class="filter-group">
+                    <label>Search Clients:</label>
+                    <input type="text" id="searchClients" placeholder="Search by name, email, or company..." onkeyup="filterTable()">
+                </div>
+                <div class="filter-group">
+                    <label>Filter by Tier:</label>
+                    <select id="tierFilter" onchange="filterTable()">
+                        <option value="">All Tiers</option>
+                        <option value="1A">Tier 1A (Premium)</option>
+                        <option value="1B">Tier 1B (High-Value)</option>
+                        <option value="1C">Tier 1C (Qualified)</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Filter by Industry:</label>
+                    <select id="industryFilter" onchange="filterTable()">
+                        <option value="">All Industries</option>
+                        <option value="Healthcare">Healthcare</option>
+                        <option value="Manufacturing">Manufacturing</option>
+                        <option value="Finance">Finance</option>
+                        <option value="Retail">Retail</option>
+                        <option value="Education">Education</option>
+                        <option value="Legal">Legal</option>
+                        <option value="Real Estate">Real Estate</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Revenue Range:</label>
+                    <select id="revenueFilter" onchange="filterTable()">
+                        <option value="">All Ranges</option>
+                        <option value="500K-1M">$500K - $1M</option>
+                        <option value="1M-5M">$1M - $5M</option>
+                        <option value="5M-10M">$5M - $10M</option>
+                        <option value="10M+">$10M+</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="export-buttons">
+                <button class="btn" onclick="exportToCSV()">Export to CSV</button>
+                <button class="btn" onclick="exportToPDF()">Export to PDF</button>
+            </div>
+
+            <table class="client-table" id="clientTable">
+                <thead>
+                    <tr>
+                        <th onclick="sortTable(0)">Client Name ↕</th>
+                        <th onclick="sortTable(1)">Email ↕</th>
+                        <th onclick="sortTable(2)">Phone ↕</th>
+                        <th onclick="sortTable(3)">Address ↕</th>
+                        <th onclick="sortTable(4)">P.U.R.E.S. Score ↕</th>
+                        <th onclick="sortTable(5)">Tier Level ↕</th>
+                        <th onclick="sortTable(6)">Industry ↕</th>
+                        <th onclick="sortTable(7)">Revenue Est. ↕</th>
+                        <th onclick="sortTable(8)">Contact Status ↕</th>
+                        <th onclick="sortTable(9)">Last Contact ↕</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="clientTableBody">
+                    <!-- Client data will be populated here -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- ASSESSING TAB -->
+        <div id="assessing" class="tab-content">
+            <h2 style="color: #CF2030; margin-bottom: 1rem;">ASSESSING - Buying Pattern Analysis</h2>
+            
+            <div class="form-grid">
+                <div class="form-section">
+                    <h3>Client Evaluation</h3>
+                    <div class="form-group">
+                        <label>Select Client:</label>
+                        <select id="assessClient">
+                            <option value="">Choose a client...</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Buying Profile:</label>
+                        <select id="buyingProfile">
+                            <option value="">Select profile...</option>
+                            <option value="Analytical">Analytical Buyer</option>
+                            <option value="Relationship">Relationship Buyer</option>
+                            <option value="Efficiency">Efficiency Buyer</option>
+                            <option value="Innovation">Innovation Buyer</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3>P.U.R.E.S. Scoring</h3>
+                    <div class="form-group">
+                        <label>Profitability (1-5):</label>
+                        <input type="range" min="1" max="5" value="3" id="profitability" class="score-slider" oninput="updateScore()">
+                        <div class="score-display" id="profitabilityScore">3</div>
+                    </div>
+                    <div class="form-group">
+                        <label>Urgency (1-5):</label>
+                        <input type="range" min="1" max="5" value="3" id="urgency" class="score-slider" oninput="updateScore()">
+                        <div class="score-display" id="urgencyScore">3</div>
+                    </div>
+                    <div class="form-group">
+                        <label>Reachability (1-5):</label>
+                        <input type="range" min="1" max="5" value="3" id="reachability" class="score-slider" oninput="updateScore()">
+                        <div class="score-display" id="reachabilityScore">3</div>
+                    </div>
+                    <div class="form-group">
+                        <label>Engagement (1-5):</label>
+                        <input type="range" min="1" max="5" value="3" id="engagement" class="score-slider" oninput="updateScore()">
+                        <div class="score-display" id="engagementScore">3</div>
+                    </div>
+                    <div class="form-group">
+                        <label>Sustainability (1-5):</label>
+                        <input type="range" min="1" max="5" value="3" id="sustainability" class="score-slider" oninput="updateScore()">
+                        <div class="score-display" id="sustainabilityScore">3</div>
+                    </div>
+                    <div class="form-group">
+                        <label>Total Score:</label>
+                        <div class="score-display" id="totalScore" style="background: #CF2030; color: white;">15</div>
+                    </div>
+                </div>
+            </div>
+
+            <button class="btn" onclick="saveAssessment()">Save Assessment</button>
+        </div>
+
+        <!-- LISTENING TAB -->
+        <div id="listening" class="tab-content">
+            <h2 style="color: #CF2030; margin-bottom: 1rem;">LISTENING - Feedback Integration</h2>
+            
+            <div class="form-grid">
+                <div class="form-section">
+                    <h3>Feedback Collection</h3>
+                    <div class="form-group">
+                        <label>Client:</label>
+                        <select id="feedbackClient">
+                            <option value="">Choose a client...</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Feedback Type:</label>
+                        <select id="feedbackType">
+                            <option value="Pre-sale">Pre-sale</option>
+                            <option value="During-sale">During-sale</option>
+                            <option value="Post-sale">Post-sale</option>
+                            <option value="Complaint">Complaint</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Satisfaction Rating (1-5):</label>
+                        <input type="range" min="1" max="5" value="3" id="satisfactionRating">
+                        <div class="score-display" id="satisfactionDisplay">3</div>
+                    </div>
+                    <div class="form-group">
+                        <label>Feedback Details:</label>
+                        <textarea id="feedbackDetails" rows="4" placeholder="Enter feedback details..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Action Required:</label>
+                        <input type="text" id="actionRequired" placeholder="What action is needed?">
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3>Recent Feedback</h3>
+                    <div id="feedbackList">
+                        <!-- Feedback items will be displayed here -->
+                    </div>
+                </div>
+            </div>
+
+            <button class="btn" onclick="saveFeedback()">Save Feedback</button>
+        </div>
+
+        <!-- EMPOWERING TAB -->
+        <div id="empowering" class="tab-content">
+            <h2 style="color: #CF2030; margin-bottom: 1rem;">EMPOWERING - Referral Strategy</h2>
+            
+            <div class="form-grid">
+                <div class="form-section">
+                    <h3>Referral Tracking</h3>
+                    <div class="form-group">
+                        <label>Referring Client:</label>
+                        <select id="referringClient">
+                            <option value="">Choose a client...</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Referred Prospect:</label>
+                        <input type="text" id="referredProspect" placeholder="New prospect name">
+                    </div>
+                    <div class="form-group">
+                        <label>Referral Value:</label>
+                        <input type="number" id="referralValue" placeholder="Estimated value ($)">
+                    </div>
+                    <div class="form-group">
+                        <label>Referral Status:</label>
+                        <select id="referralStatus">
+                            <option value="Pending">Pending</option>
+                            <option value="Contacted">Contacted</option>
+                            <option value="Meeting Scheduled">Meeting Scheduled</option>
+                            <option value="Proposal Sent">Proposal Sent</option>
+                            <option value="Closed Won">Closed Won</option>
+                            <option value="Closed Lost">Closed Lost</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3>Success Stories</h3>
+                    <div class="form-group">
+                        <label>Client:</label>
+                        <select id="successClient">
+                            <option value="">Choose a client...</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Success Story:</label>
+                        <textarea id="successStory" rows="4" placeholder="Describe the success story..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Results Achieved:</label>
+                        <input type="text" id="resultsAchieved" placeholder="Quantifiable results">
+                    </div>
+                </div>
+            </div>
+
+            <button class="btn" onclick="saveReferral()">Save Referral</button>
+            <button class="btn" onclick="saveSuccessStory()">Save Success Story</button>
+        </div>
+
+        <!-- ANALYTICS TAB -->
+        <div id="analytics" class="tab-content">
+            <h2 style="color: #CF2030; margin-bottom: 1rem;">Analytics Dashboard</h2>
+            
+            <div class="analytics-grid">
+                <div class="metric-card">
+                    <div class="metric-value" id="totalClients">50</div>
+                    <div>Total Clients</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value" id="tier1aClients">15</div>
+                    <div>Tier 1A Clients</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value" id="avgScore">3.2</div>
+                    <div>Avg P.U.R.E.S. Score</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value" id="conversionRate">25%</div>
+                    <div>Conversion Rate</div>
+                </div>
+            </div>
+
+            <div class="marketing-plan">
+                <h3 style="color: #CF2030; margin-bottom: 1rem;">Marketing Schedule</h3>
+                <div class="schedule-grid">
+                    <div class="schedule-day">
+                        <h4>Monday</h4>
+                        <div class="schedule-item">Email Campaign - Tier 1A</div>
+                        <div class="schedule-item">Follow-up Calls</div>
+                    </div>
+                    <div class="schedule-day">
+                        <h4>Tuesday</h4>
+                        <div class="schedule-item">LinkedIn Outreach</div>
+                        <div class="schedule-item">Content Creation</div>
+                    </div>
+                    <div class="schedule-day">
+                        <h4>Wednesday</h4>
+                        <div class="schedule-item">Client Meetings</div>
+                        <div class="schedule-item">Proposal Reviews</div>
+                    </div>
+                    <div class="schedule-day">
+                        <h4>Thursday</h4>
+                        <div class="schedule-item">Email Campaign - Tier 1B</div>
+                        <div class="schedule-item">Referral Follow-up</div>
+                    </div>
+                    <div class="schedule-day">
+                        <h4>Friday</h4>
+                        <div class="schedule-item">Weekly Review</div>
+                        <div class="schedule-item">Success Stories</div>
+                    </div>
+                    <div class="schedule-day">
+                        <h4>Saturday</h4>
+                        <div class="schedule-item">Networking Events</div>
+                    </div>
+                    <div class="schedule-day">
+                        <h4>Sunday</h4>
+                        <div class="schedule-item">Planning & Strategy</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Email Modal -->
+    <div id="emailModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h3 style="color: #CF2030;">Send Email</h3>
+            <div class="form-group">
+                <label>To:</label>
+                <input type="email" id="emailTo" readonly>
+            </div>
+            <div class="form-group">
+                <label>Subject:</label>
+                <input type="text" id="emailSubject">
+            </div>
+            <div class="form-group">
+                <label>Message:</label>
+                <textarea id="emailMessage" rows="8"></textarea>
+            </div>
+            <button class="btn" onclick="sendEmail()">Send Email</button>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports">
+        <p style="margin-top: 1rem; opacity: 0.7;">Powered by Higgins Reports - Advanced Business Intelligence</p>
+    </footer>
+
+    <script>
+        // Sample client data for demonstration
+        let clientData = [
+            {name: "MedCare Associates", email: "contact@medcare.com", phone: "(626) 555-0101", address: "123 Medical Blvd, Azusa, CA 91702", score: 4.6, tier: "1A", industry: "Healthcare", revenue: "$2.5M", status: "Active", lastContact: "2024-01-15"},
+            {name: "Sunrise Manufacturing", email: "info@sunrisemfg.com", phone: "(626) 555-0102", address: "456 Industry Way, Covina, CA 91723", score: 4.2, tier: "1A", industry: "Manufacturing", revenue: "$5.8M", status: "Prospect", lastContact: "2024-01-10"},
+            {name: "Pacific Bank", email: "business@pacificbank.com", phone: "(626) 555-0103", address: "789 Financial Ave, Glendora, CA 91741", score: 4.8, tier: "1A", industry: "Finance", revenue: "$12.3M", status: "Client", lastContact: "2024-01-20"},
+            {name: "TechStart Solutions", email: "hello@techstart.com", phone: "(626) 555-0104", address: "321 Innovation Dr, West Covina, CA 91790", score: 3.8, tier: "1B", industry: "Technology", revenue: "$1.2M", status: "Prospect", lastContact: "2024-01-08"},
+            {name: "Green Valley Schools", email: "admin@gvschools.edu", phone: "(626) 555-0105", address: "654 Education St, Baldwin Park, CA 91706", score: 3.4, tier: "1B", industry: "Education", revenue: "$800K", status: "Contacted", lastContact: "2024-01-12"},
+            {name: "Retail Plus", email: "manager@retailplus.com", phone: "(626) 555-0106", address: "987 Commerce Way, El Monte, CA 91731", score: 3.6, tier: "1B", industry: "Retail", revenue: "$1.8M", status: "Active", lastContact: "2024-01-18"},
+            {name: "Law Offices of Smith & Co", email: "info@smithlaw.com", phone: "(626) 555-0107", address: "147 Legal Lane, San Dimas, CA 91773", score: 4.0, tier: "1A", industry: "Legal", revenue: "$3.2M", status: "Client", lastContact: "2024-01-22"},
+            {name: "Horizon Real Estate", email: "contact@horizonre.com", phone: "(626) 555-0108", address: "258 Property Blvd, Pomona, CA 91766", score: 3.2, tier: "1C", industry: "Real Estate", revenue: "$950K", status: "Prospect", lastContact: "2024-01-05"},
+            {name: "Advanced Dental Care", email: "office@advanceddental.com", phone: "(626) 555-0109", address: "369 Health Plaza, Duarte, CA 91010", score: 4.4, tier: "1A", industry: "Healthcare", revenue: "$1.9M", status: "Active", lastContact: "2024-01-25"},
+            {name: "Metro Construction", email: "projects@metroconstruction.com", phone: "(626) 555-0110", address: "741 Builder Ave, Monrovia, CA 91016", score: 3.7, tier: "1B", industry: "Construction", revenue: "$4.1M", status: "Contacted", lastContact: "2024-01-14"}
+        ];
+
+        // Add more sample data to reach 50 clients
+        const additionalClients = [
+            {name: "Elite Consulting Group", email: "info@eliteconsulting.com", phone: "(626) 555-0111", address: "852 Strategy St, Arcadia, CA 91006", score: 4.1, tier: "1A", industry: "Consulting", revenue: "$2.8M", status: "Client", lastContact: "2024-01-16"},
+            {name: "Digital Marketing Pro", email: "team@digitalmarketingpro.com", phone: "(626) 555-0112", address: "963 Online Blvd, Pasadena, CA 91101", score: 3.5, tier: "1B", industry: "Marketing", revenue: "$1.1M", status: "Prospect", lastContact: "2024-01-09"},
+            {name: "Valley Veterinary Clinic", email: "care@valleyvet.com", phone: "(626) 555-0113", address: "174 Animal Way, Temple City, CA 91780", score: 3.9, tier: "1B", industry: "Healthcare", revenue: "$1.4M", status: "Active", lastContact: "2024-01-21"},
+            {name: "Professional Services Inc", email: "contact@proservices.com", phone: "(626) 555-0114", address: "285 Business Dr, Rosemead, CA 91770", score: 3.3, tier: "1C", industry: "Professional Services", revenue: "$750K", status: "Contacted", lastContact: "2024-01-07"},
+            {name: "Mountain View Insurance", email: "quotes@mvinsurance.com", phone: "(626) 555-0115", address: "396 Coverage Ave, Sierra Madre, CA 91024", score: 4.3, tier: "1A", industry: "Insurance", revenue: "$2.2M", status: "Client", lastContact: "2024-01-19"}
+        ];
+
+        // Extend client data
+        clientData = [...clientData, ...additionalClients];
+
+        // Generate more sample data to reach 50 clients
+        const industries = ["Healthcare", "Manufacturing", "Finance", "Technology", "Education", "Retail", "Legal", "Real Estate", "Construction", "Consulting"];
+        const cities = ["Azusa", "Covina", "Glendora", "West Covina", "Baldwin Park", "El Monte", "San Dimas", "Pomona", "Duarte", "Monrovia"];
+        const statuses = ["Active", "Prospect", "Client", "Contacted"];
+
+        while (clientData.length < 50) {
+            const randomId = clientData.length + 1;
+            const industry = industries[Math.floor(Math.random() * industries.length)];
+            const city = cities[Math.floor(Math.random() * cities.length)];
+            const status = statuses[Math.floor(Math.random() * statuses.length)];
+            const score = (Math.random() * 2 + 3).toFixed(1); // Score between 3.0 and 5.0
+            
+            let tier;
+            if (score >= 4.0) tier = "1A";
+            else if (score >= 3.5) tier = "1B";
+            else tier = "1C";
+
+            clientData.push({
+                name: `Business ${randomId}`,
+                email: `contact${randomId}@business${randomId}.com`,
+                phone: `(626) 555-${String(randomId).padStart(4, '0')}`,
+                address: `${randomId} Main St, ${city}, CA 9${Math.floor(Math.random() * 900 + 100)}`,
+                score: parseFloat(score),
+                tier: tier,
+                industry: industry,
+                revenue: `$${(Math.random() * 10 + 0.5).toFixed(1)}M`,
+                status: status,
+                lastContact: `2024-01-${String(Math.floor(Math.random() * 30 + 1)).padStart(2, '0')}`
+            });
+        }
+
+        let currentSortColumn = -1;
+        let sortDirection = 1;
+
+        function showTab(tabName) {
+            // Hide all tab contents
+            const tabContents = document.getElementsByClassName('tab-content');
+            for (let i = 0; i < tabContents.length; i++) {
+                tabContents[i].classList.remove('active');
+            }
+
+            // Remove active class from all tabs
+            const tabs = document.getElementsByClassName('tab');
+            for (let i = 0; i < tabs.length; i++) {
+                tabs[i].classList.remove('active');
+            }
+
+            // Show selected tab content
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+
+            // Populate dropdowns when switching tabs
+            if (tabName === 'assessing' || tabName === 'listening' || tabName === 'empowering') {
+                populateClientDropdowns();
+            }
+        }
+
+        function populateClientDropdowns() {
+            const selects = ['assessClient', 'feedbackClient', 'referringClient', 'successClient'];
+            
+            selects.forEach(selectId => {
+                const select = document.getElementById(selectId);
+                if (select) {
+                    select.innerHTML = '<option value="">Choose a client...</option>';
+                    clientData.forEach(client => {
+                        const option = document.createElement('option');
+                        option.value = client.name;
+                        option.textContent = client.name;
+                        select.appendChild(option);
+                    });
+                }
+            });
+        }
+
+        function populateTable(data = clientData) {
+            const tbody = document.getElementById('clientTableBody');
+            tbody.innerHTML = '';
+
+            data.forEach(client => {
+                const row = document.createElement('tr');
+                const tierClass = `tier-${client.tier.toLowerCase()}`;
+                row.className = tierClass;
+
+                row.innerHTML = `
+                    <td>${client.name}</td>
+                    <td>${client.email}</td>
+                    <td>${client.phone}</td>
+                    <td>${client.address}</td>
+                    <td>${client.score}</td>
+                    <td>${client.tier}</td>
+                    <td>${client.industry}</td>
+                    <td>${client.revenue}</td>
+                    <td>${client.status}</td>
+                    <td>${client.lastContact}</td>
+                    <td>
+                        <button class="btn btn-small" onclick="contactClient('${client.email}', '${client.name}')">Email</button>
+                        <button class="btn btn-small" onclick="callClient('${client.phone}')">Call</button>
+                    </td>
+                `;
+
+                tbody.appendChild(row);
+            });
+        }
+
+        function filterTable() {
+            const searchTerm = document.getElementById('searchClients').value.toLowerCase();
+            const tierFilter = document.getElementById('tierFilter').value;
+            const industryFilter = document.getElementById('industryFilter').value;
+            const revenueFilter = document.getElementById('revenueFilter').value;
+
+            const filteredData = clientData.filter(client => {
+                const matchesSearch = 
+                    client.name.toLowerCase().includes(searchTerm) ||
+                    client.email.toLowerCase().includes(searchTerm) ||
+                    client.industry.toLowerCase().includes(searchTerm);
+
+                const matchesTier = !tierFilter || client.tier === tierFilter;
+                const matchesIndustry = !industryFilter || client.industry === industryFilter;
+                
+                let matchesRevenue = true;
+                if (revenueFilter) {
+                    const revenue = parseFloat(client.revenue.replace('$', '').replace('M', ''));
+                    switch (revenueFilter) {
+                        case '500K-1M':
+                            matchesRevenue = revenue >= 0.5 && revenue < 1;
+                            break;
+                        case '1M-5M':
+                            matchesRevenue = revenue >= 1 && revenue < 5;
+                            break;
+                        case '5M-10M':
+                            matchesRevenue = revenue >= 5 && revenue < 10;
+                            break;
+                        case '10M+':
+                            matchesRevenue = revenue >= 10;
+                            break;
+                    }
+                }
+
+                return matchesSearch && matchesTier && matchesIndustry && matchesRevenue;
+            });
+
+            populateTable(filteredData);
+        }
+
+        function sortTable(columnIndex) {
+            if (currentSortColumn === columnIndex) {
+                sortDirection *= -1;
+            } else {
+                sortDirection = 1;
+                currentSortColumn = columnIndex;
+            }
+
+            const sortedData = [...clientData].sort((a, b) => {
+                let aValue, bValue;
+
+                switch (columnIndex) {
+                    case 0: aValue = a.name; bValue = b.name; break;
+                    case 1: aValue = a.email; bValue = b.email; break;
+                    case 2: aValue = a.phone; bValue = b.phone; break;
+                    case 3: aValue = a.address; bValue = b.address; break;
+                    case 4: aValue = a.score; bValue = b.score; break;
+                    case 5: aValue = a.tier; bValue = b.tier; break;
+                    case 6: aValue = a.industry; bValue = b.industry; break;
+                    case 7: 
+                        aValue = parseFloat(a.revenue.replace('$', '').replace('M', ''));
+                        bValue = parseFloat(b.revenue.replace('$', '').replace('M', ''));
+                        break;
+                    case 8: aValue = a.status; bValue = b.status; break;
+                    case 9: aValue = new Date(a.lastContact); bValue = new Date(b.lastContact); break;
+                }
+
+                if (typeof aValue === 'string') {
+                    return sortDirection * aValue.localeCompare(bValue);
+                } else {
+                    return sortDirection * (aValue - bValue);
+                }
+            });
+
+            populateTable(sortedData);
+        }
+
+        function contactClient(email, name) {
+            document.getElementById('emailTo').value = email;
+            document.getElementById('emailSubject').value = `Transform Your IT Infrastructure - Exclusive Solutions for ${name}`;
+            
+            const emailTemplate = `Dear ${name},
+
+I hope this email finds you well. As the leading IT services provider in the Azusa area, The Technology Depot has been helping businesses like yours achieve remarkable results through innovative technology solutions.
+
+Here's how we can specifically help your business:
+
+🔹 IT Infrastructure Optimization - Reduce downtime by up to 90% with our proactive monitoring
+🔹 Cloud Migration Services - Cut IT costs by 30-50% while improving accessibility
+🔹 Cybersecurity Solutions - Protect your business from the latest threats with enterprise-grade security
+🔹 Network Management - Ensure seamless connectivity and peak performance
+🔹 Help Desk Support - 24/7 technical support to keep your team productive
+
+Recent Success Stories:
+• Helped a local manufacturing company reduce IT costs by $50K annually
+• Implemented cloud solutions that improved productivity by 40% for a healthcare practice
+• Prevented a potential cyberattack that could have cost a financial firm $200K+
+
+As a P.U.R.E.S.-qualified prospect in the ${clientData.find(c => c.email === email)?.industry || 'business'} sector, you're exactly the type of forward-thinking organization we love working with.
+
+Would you be available for a brief 15-minute call this week to discuss how we can help optimize your IT infrastructure and drive business growth?
+
+Best regards,
+
+Ginny Dean
+President, The Technology Depot
+Phone: (858) 427-4464
+Email: gdean@thetechnologydepot.com
+Website: www.thetechnologydepot.com
+
+P.S. As a special offer for qualified businesses in your area, we're providing complimentary IT assessments this month. This $500 value consultation could identify immediate opportunities to improve efficiency and reduce costs.`;
+
+            document.getElementById('emailMessage').value = emailTemplate;
+            document.getElementById('emailModal').style.display = 'block';
+        }
+
+        function callClient(phone) {
+            alert(`Calling ${phone}...`);
+        }
+
+        function closeModal() {
+            document.getElementById('emailModal').style.display = 'block';
+        }
+
+        function sendEmail() {
+            const to = document.getElementById('emailTo').value;
+            const subject = document.getElementById('emailSubject').value;
+            const message = document.getElementById('emailMessage').value;
+
+            // Create mailto link
+            const mailtoLink = `mailto:${to}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(message)}`;
+            window.location.href = mailtoLink;
+
+            // Update client status
+            const client = clientData.find(c => c.email === to);
+            if (client) {
+                client.status = 'Contacted';
+                client.lastContact = new Date().toISOString().split('T')[0];
+                populateTable();
+            }
+
+            closeModal();
+        }
+
+        function updateScore() {
+            const profitability = parseInt(document.getElementById('profitability').value);
+            const urgency = parseInt(document.getElementById('urgency').value);
+            const reachability = parseInt(document.getElementById('reachability').value);
+            const engagement = parseInt(document.getElementById('engagement').value);
+            const sustainability = parseInt(document.getElementById('sustainability').value);
+
+            document.getElementById('profitabilityScore').textContent = profitability;
+            document.getElementById('urgencyScore').textContent = urgency;
+            document.getElementById('reachabilityScore').textContent = reachability;
+            document.getElementById('engagementScore').textContent = engagement;
+            document.getElementById('sustainabilityScore').textContent = sustainability;
+
+            const total = profitability + urgency + reachability + engagement + sustainability;
+            document.getElementById('totalScore').textContent = total;
+        }
+
+        function saveAssessment() {
+            alert('Assessment saved successfully!');
+        }
+
+        function saveFeedback() {
+            alert('Feedback saved successfully!');
+        }
+
+        function saveReferral() {
+            alert('Referral saved successfully!');
+        }
+
+        function saveSuccessStory() {
+            alert('Success story saved successfully!');
+        }
+
+        function exportToCSV() {
+            let csv = 'Name,Email,Phone,Address,Score,Tier,Industry,Revenue,Status,Last Contact\n';
+            clientData.forEach(client => {
+                csv += `"${client.name}","${client.email}","${client.phone}","${client.address}","${client.score}","${client.tier}","${client.industry}","${client.revenue}","${client.status}","${client.lastContact}"\n`;
+            });
+
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'client_data.csv';
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+
+        function exportToPDF() {
+            alert('PDF export functionality would be implemented with a PDF library like jsPDF');
+        }
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            populateTable();
+            populateClientDropdowns();
+
+            // Update analytics
+            document.getElementById('totalClients').textContent = clientData.length;
+            document.getElementById('tier1aClients').textContent = clientData.filter(c => c.tier === '1A').length;
+            document.getElementById('avgScore').textContent = (clientData.reduce((sum, c) => sum + c.score, 0) / clientData.length).toFixed(1);
+            
+            // Update satisfaction rating display
+            document.getElementById('satisfactionRating').addEventListener('input', function() {
+                document.getElementById('satisfactionDisplay').textContent = this.value;
+            });
+        });
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('emailModal');
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>

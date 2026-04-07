@@ -1,0 +1,664 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>S.A.L.E. Client Report | Lemonlight</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #000; color: #e0e0e0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; min-height: 100vh; }
+  
+  /* Header */
+  .header { background: linear-gradient(135deg, #0a0a0a, #1a1a1a); padding: 20px 40px; display: flex; align-items: center; justify-content: space-between; border-bottom: 3px solid #CF2030; position: sticky; top: 0; z-index: 1000; }
+  .header img { height: 50px; }
+  .header-title { color: #CF2030; font-size: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; }
+  
+  /* Navigation */
+  .nav { background: #0d0d0d; padding: 0 40px; display: flex; gap: 0; border-bottom: 1px solid #222; overflow-x: auto; position: sticky; top: 93px; z-index: 999; }
+  .nav-item { padding: 14px 22px; color: #888; cursor: pointer; font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; border-bottom: 3px solid transparent; transition: all 0.3s; white-space: nowrap; }
+  .nav-item:hover, .nav-item.active { color: #CF2030; border-bottom-color: #CF2030; background: rgba(207,32,48,0.05); }
+  
+  /* Main Content */
+  .main { max-width: 1400px; margin: 0 auto; padding: 30px 40px; }
+  .section { display: none; animation: fadeIn 0.4s ease; }
+  .section.active { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+  
+  /* Cards */
+  .card { background: linear-gradient(145deg, #111, #1a1a1a); border: 1px solid #222; border-radius: 12px; padding: 24px; margin-bottom: 20px; }
+  .card-header { font-size: 18px; font-weight: 700; color: #CF2030; margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
+  .card-header .icon { font-size: 22px; }
+  
+  /* Profile Grid */
+  .profile-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .profile-item { display: flex; flex-direction: column; padding: 12px 16px; background: #0a0a0a; border-radius: 8px; border-left: 3px solid #CF2030; }
+  .profile-label { font-size: 11px; color: #666; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+  .profile-value { font-size: 14px; color: #e0e0e0; font-weight: 500; }
+  .profile-value a { color: #CF2030; text-decoration: none; }
+  .profile-value a:hover { text-decoration: underline; }
+  
+  /* Stats Grid */
+  .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+  .stat-card { background: linear-gradient(145deg, #111, #1a1a1a); border: 1px solid #222; border-radius: 12px; padding: 24px; text-align: center; transition: transform 0.3s, border-color 0.3s; }
+  .stat-card:hover { transform: translateY(-4px); border-color: #CF2030; }
+  .stat-number { font-size: 36px; font-weight: 800; color: #CF2030; margin-bottom: 6px; }
+  .stat-label { font-size: 12px; color: #888; text-transform: uppercase; letter-spacing: 1px; }
+  
+  /* Chart Container */
+  .chart-container { position: relative; width: 100%; margin: 20px 0; }
+  .bar-chart { display: flex; align-items: flex-end; justify-content: space-around; height: 250px; padding: 20px 10px 40px; background: #0a0a0a; border-radius: 8px; border: 1px solid #1a1a1a; }
+  .bar-wrapper { display: flex; flex-direction: column; align-items: center; gap: 8px; flex: 1; }
+  .bar { width: 50px; border-radius: 6px 6px 0 0; transition: height 1s ease, background 0.3s; cursor: pointer; position: relative; min-height: 4px; }
+  .bar:hover { filter: brightness(1.3); }
+  .bar-value { font-size: 13px; font-weight: 700; color: #CF2030; }
+  .bar-label { font-size: 10px; color: #888; text-align: center; max-width: 80px; line-height: 1.3; }
+  
+  /* Donut Chart */
+  .donut-container { display: flex; align-items: center; justify-content: center; gap: 40px; padding: 20px; }
+  .donut-svg { width: 220px; height: 220px; }
+  .donut-legend { display: flex; flex-direction: column; gap: 10px; }
+  .legend-item { display: flex; align-items: center; gap: 10px; font-size: 13px; }
+  .legend-dot { width: 12px; height: 12px; border-radius: 50%; }
+  
+  /* Tables */
+  .table-controls { display: flex; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; align-items: center; }
+  .search-input { background: #0a0a0a; border: 1px solid #333; border-radius: 8px; padding: 10px 16px; color: #e0e0e0; font-size: 13px; width: 300px; outline: none; transition: border-color 0.3s; }
+  .search-input:focus { border-color: #CF2030; }
+  .search-input::placeholder { color: #555; }
+  
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  thead th { background: #CF2030; color: #fff; padding: 12px 16px; text-align: left; cursor: pointer; user-select: none; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; font-size: 11px; white-space: nowrap; position: relative; }
+  thead th:hover { background: #b81c2a; }
+  thead th .sort-icon { margin-left: 6px; font-size: 10px; }
+  tbody tr { border-bottom: 1px solid #1a1a1a; transition: background 0.2s; }
+  tbody tr:hover { background: rgba(207,32,48,0.08); }
+  tbody td { padding: 12px 16px; vertical-align: middle; }
+  
+  /* Buttons */
+  .btn { padding: 8px 18px; border-radius: 6px; border: none; cursor: pointer; font-size: 12px; font-weight: 600; transition: all 0.3s; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; }
+  .btn-primary { background: #CF2030; color: #fff; }
+  .btn-primary:hover { background: #e6243a; transform: translateY(-1px); }
+  .btn-outline { background: transparent; color: #CF2030; border: 1px solid #CF2030; }
+  .btn-outline:hover { background: rgba(207,32,48,0.1); }
+  .btn-sm { padding: 6px 12px; font-size: 11px; }
+  
+  /* Outreach Section */
+  .outreach-card { background: #0a0a0a; border: 1px solid #222; border-radius: 10px; padding: 20px; margin-bottom: 16px; }
+  .outreach-card h3 { color: #CF2030; font-size: 15px; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+  .outreach-body { color: #bbb; font-size: 13px; line-height: 1.7; white-space: pre-wrap; }
+  .subject-options { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
+  .subject-option { background: #111; border: 1px solid #222; border-radius: 6px; padding: 10px 14px; font-size: 13px; color: #ccc; cursor: pointer; transition: all 0.3s; }
+  .subject-option:hover { border-color: #CF2030; color: #CF2030; }
+  
+  /* Copy Button */
+  .copy-btn { background: #222; color: #aaa; border: 1px solid #333; padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 11px; transition: all 0.3s; }
+  .copy-btn:hover { background: #CF2030; color: #fff; border-color: #CF2030; }
+  .copy-btn.copied { background: #28a745; color: #fff; border-color: #28a745; }
+  
+  /* Instructions */
+  .instructions-list { list-style: none; counter-reset: inst; }
+  .instructions-list li { counter-increment: inst; padding: 12px 16px; margin-bottom: 8px; background: #0a0a0a; border-radius: 8px; border-left: 3px solid #CF2030; font-size: 13px; line-height: 1.6; display: flex; align-items: flex-start; gap: 12px; }
+  .instructions-list li::before { content: counter(inst); background: #CF2030; color: #fff; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; }
+  
+  /* Elements Cards */
+  .elements-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .element-card { background: linear-gradient(145deg, #0a0a0a, #111); border: 1px solid #222; border-radius: 12px; padding: 24px; transition: all 0.3s; border-top: 3px solid #CF2030; }
+  .element-card:hover { transform: translateY(-4px); border-color: #CF2030; }
+  .element-num { font-size: 36px; font-weight: 800; color: #CF2030; opacity: 0.3; margin-bottom: 8px; }
+  .element-title { font-size: 15px; font-weight: 700; color: #fff; margin-bottom: 10px; }
+  .element-desc { font-size: 12px; color: #999; line-height: 1.6; }
+  
+  /* Services */
+  .services-flow { display: flex; align-items: center; justify-content: center; gap: 0; margin: 30px 0; flex-wrap: wrap; }
+  .service-node { background: linear-gradient(145deg, #111, #1a1a1a); border: 2px solid #CF2030; border-radius: 12px; padding: 20px 28px; text-align: center; min-width: 180px; }
+  .service-node .svc-icon { font-size: 28px; margin-bottom: 8px; }
+  .service-node .svc-title { font-size: 14px; font-weight: 700; color: #CF2030; margin-bottom: 6px; }
+  .service-node .svc-items { font-size: 11px; color: #888; line-height: 1.6; }
+  .service-arrow { font-size: 28px; color: #CF2030; padding: 0 8px; }
+  
+  /* BNI Value */
+  .value-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 16px; }
+  .value-card { background: #0a0a0a; border: 1px solid #1a1a1a; border-radius: 10px; padding: 20px; transition: all 0.3s; }
+  .value-card:hover { border-color: #CF2030; }
+  .value-icon { font-size: 28px; margin-bottom: 10px; }
+  .value-title { font-size: 14px; font-weight: 700; color: #CF2030; margin-bottom: 8px; }
+  .value-desc { font-size: 12px; color: #999; line-height: 1.6; }
+
+  /* Modal */
+  .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 2000; align-items: center; justify-content: center; }
+  .modal-overlay.show { display: flex; }
+  .modal { background: #111; border: 1px solid #333; border-radius: 12px; padding: 30px; max-width: 600px; width: 90%; max-height: 80vh; overflow-y: auto; }
+  .modal h3 { color: #CF2030; margin-bottom: 16px; }
+  .modal textarea { width: 100%; background: #0a0a0a; border: 1px solid #333; border-radius: 8px; padding: 14px; color: #e0e0e0; font-size: 13px; line-height: 1.6; min-height: 200px; resize: vertical; outline: none; font-family: inherit; }
+  .modal textarea:focus { border-color: #CF2030; }
+  .modal-actions { display: flex; gap: 10px; margin-top: 16px; justify-content: flex-end; }
+  .modal .close-btn { position: absolute; top: 10px; right: 16px; background: none; border: none; color: #666; font-size: 24px; cursor: pointer; }
+  
+  /* Footer */
+  .footer { background: #0a0a0a; border-top: 1px solid #222; padding: 24px 40px; display: flex; align-items: center; justify-content: space-between; margin-top: 40px; }
+  .footer img { height: 30px; opacity: 0.6; }
+  .footer-text { font-size: 11px; color: #555; }
+  
+  /* Responsive */
+  @media (max-width: 900px) {
+    .profile-grid { grid-template-columns: 1fr; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .elements-grid { grid-template-columns: 1fr; }
+    .main { padding: 20px; }
+    .header { padding: 16px 20px; }
+    .nav { padding: 0 20px; }
+    .services-flow { flex-direction: column; }
+    .service-arrow { transform: rotate(90deg); }
+    .donut-container { flex-direction: column; }
+  }
+  @media (max-width: 600px) {
+    .stats-grid { grid-template-columns: 1fr; }
+    .search-input { width: 100%; }
+  }
+
+  /* Tooltip */
+  .tooltip { position: relative; }
+  .tooltip:hover::after { content: attr(data-tip); position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%); background: #CF2030; color: #fff; padding: 4px 10px; border-radius: 4px; font-size: 11px; white-space: nowrap; z-index: 10; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports" />
+  <div class="header-title">S.A.L.E. Client Report</div>
+</div>
+
+<!-- NAV -->
+<div class="nav" id="mainNav">
+  <div class="nav-item active" data-section="profile">📋 Profile</div>
+  <div class="nav-item" data-section="overview">🎬 Overview</div>
+  <div class="nav-item" data-section="elements">🔑 Elements</div>
+  <div class="nav-item" data-section="bnivalue">💡 BNI Value</div>
+  <div class="nav-item" data-section="contactsphere">🤝 Contact Sphere</div>
+  <div class="nav-item" data-section="outreach">📧 Outreach</div>
+  <div class="nav-item" data-section="instructions">✅ Instructions</div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- PROFILE SECTION -->
+  <div class="section active" id="profile">
+    <div class="card">
+      <div class="card-header"><span class="icon">📋</span> Client Profile — Lemonlight</div>
+      <div class="profile-grid">
+        <div class="profile-item"><span class="profile-label">Contact Name</span><span class="profile-value">Lemonlight Learning (Business Owner)</span></div>
+        <div class="profile-item"><span class="profile-label">Email</span><span class="profile-value"><a href="mailto:lemonlightl@lemonlight.com">lemonlightl@lemonlight.com</a></span></div>
+        <div class="profile-item"><span class="profile-label">Phone</span><span class="profile-value"><a href="tel:3104020275">(310) 402-0275</a></span></div>
+        <div class="profile-item"><span class="profile-label">Company</span><span class="profile-value">Lemonlight</span></div>
+        <div class="profile-item"><span class="profile-label">Website</span><span class="profile-value"><a href="https://www.lemonlight.com" target="_blank">www.lemonlight.com</a></span></div>
+        <div class="profile-item"><span class="profile-label">LinkedIn (Personal)</span><span class="profile-value"><a href="https://www.linkedin.com/in/lemonlight-learning-209385246" target="_blank">LinkedIn Profile</a></span></div>
+        <div class="profile-item"><span class="profile-label">LinkedIn (Company)</span><span class="profile-value"><a href="https://www.linkedin.com/company/5315187" target="_blank">Company Page</a></span></div>
+        <div class="profile-item"><span class="profile-label">Industry</span><span class="profile-value">Marketing & Advertising — Video Production</span></div>
+        <div class="profile-item"><span class="profile-label">Company Size</span><span class="profile-value">51–200 Employees</span></div>
+        <div class="profile-item"><span class="profile-label">Location</span><span class="profile-value">Inglewood, California, United States</span></div>
+        <div class="profile-item"><span class="profile-label">Lead Date</span><span class="profile-value">March 26, 2026</span></div>
+        <div class="profile-item"><span class="profile-label">State</span><span class="profile-value">California</span></div>
+      </div>
+      <div style="margin-top:20px; display:flex; gap:10px; flex-wrap:wrap;">
+        <a class="btn btn-primary" href="mailto:lemonlightl@lemonlight.com?subject=BNI%20Chapter%20Visit%20Invitation%20for%20Lemonlight&body=Dear%20Lemonlight%20Learning%2C%0A%0AI%20came%20across%20Lemonlight%20and%20was%20immediately%20impressed%20%E2%80%94%20over%2030%2C000%20videos%20produced%2C%20trusted%20by%20brands%20like%20Walmart%2C%20Amazon%2C%20and%20Rolex.%20I%20believe%20BNI%20could%20be%20a%20powerful%20growth%20channel%20for%20your%20business.%0A%0AI%E2%80%99d%20love%20to%20invite%20you%20to%20visit%20our%20upcoming%20BNI%20chapter%20meeting%20as%20my%20guest.%0A%0AWarm%20regards">📧 Email Lemonlight</a>
+        <a class="btn btn-outline" href="tel:3104020275">📞 Call (310) 402-0275</a>
+        <a class="btn btn-outline" href="https://www.lemonlight.com" target="_blank">🌐 Visit Website</a>
+        <a class="btn btn-outline" href="https://www.linkedin.com/company/5315187" target="_blank">🔗 LinkedIn</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- OVERVIEW SECTION -->
+  <div class="section" id="overview">
+    <div class="stats-grid">
+      <div class="stat-card"><div class="stat-number" data-target="30000">0</div><div class="stat-label">Videos Produced</div></div>
+      <div class="stat-card"><div class="stat-number" data-target="4500">0</div><div class="stat-label">Clients Served</div></div>
+      <div class="stat-card"><div class="stat-number" data-target="2000">0</div><div class="stat-label">Crew Members</div></div>
+      <div class="stat-card"><div class="stat-number" data-target="80">0</div><div class="stat-label">Global Markets</div></div>
+    </div>
+
+    <div class="card">
+      <div class="card-header"><span class="icon">📊</span> Key Metrics at a Glance</div>
+      <div class="chart-container">
+        <div class="bar-chart" id="metricsChart">
+          <div class="bar-wrapper">
+            <div class="bar-value">30,000+</div>
+            <div class="bar" style="height:200px; background: linear-gradient(to top, #CF2030, #e85d6a);" data-value="30000"></div>
+            <div class="bar-label">Videos Produced</div>
+          </div>
+          <div class="bar-wrapper">
+            <div class="bar-value">4,500+</div>
+            <div class="bar" style="height:150px; background: linear-gradient(to top, #CF2030, #e85d6a);" data-value="4500"></div>
+            <div class="bar-label">Clients Served</div>
+          </div>
+          <div class="bar-wrapper">
+            <div class="bar-value">2,000+</div>
+            <div class="bar" style="height:120px; background: linear-gradient(to top, #CF2030, #e85d6a);" data-value="2000"></div>
+            <div class="bar-label">Crew Members</div>
+          </div>
+          <div class="bar-wrapper">
+            <div class="bar-value">80+</div>
+            <div class="bar" style="height:60px; background: linear-gradient(to top, #CF2030, #e85d6a);" data-value="80"></div>
+            <div class="bar-label">Global Markets</div>
+          </div>
+          <div class="bar-wrapper">
+            <div class="bar-value">10+</div>
+            <div class="bar" style="height:40px; background: linear-gradient(to top, #CF2030, #e85d6a);" data-value="10"></div>
+            <div class="bar-label">Years in Business</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header"><span class="icon">🎬</span> Service Lifecycle</div>
+      <div class="services-flow">
+        <div class="service-node">
+          <div class="svc-icon">📝</div>
+          <div class="svc-title">Pre-Production</div>
+          <div class="svc-items">Strategy<br>Scripting<br>Planning</div>
+        </div>
+        <div class="service-arrow">→</div>
+        <div class="service-node">
+          <div class="svc-icon">🎥</div>
+          <div class="svc-title">Production</div>
+          <div class="svc-items">Filming<br>Casting<br>Crew Management</div>
+        </div>
+        <div class="service-arrow">→</div>
+        <div class="service-node">
+          <div class="svc-icon">✂️</div>
+          <div class="svc-title">Post-Production</div>
+          <div class="svc-items">Editing<br>Finalization<br>Delivery</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header"><span class="icon">🏢</span> Notable Clients</div>
+      <div style="display:flex; flex-wrap:wrap; gap:12px; margin-top:8px;">
+        <span style="background:#1a1a1a; border:1px solid #333; border-radius:20px; padding:8px 18px; font-size:13px; color:#ccc;">Walmart</span>
+        <span style="background:#1a1a1a; border:1px solid #333; border-radius:20px; padding:8px 18px; font-size:13px; color:#ccc;">Amazon</span>
+        <span style="background:#1a1a1a; border:1px solid #333; border-radius:20px; padding:8px 18px; font-size:13px; color:#ccc;">Rolex</span>
+        <span style="background:#1a1a1a; border:1px solid #333; border-radius:20px; padding:8px 18px; font-size:13px; color:#ccc;">AAA</span>
+        <span style="background:#1a1a1a; border:1px solid #333; border-radius:20px; padding:8px 18px; font-size:13px; color:#ccc;">Vicks</span>
+        <span style="background:#1a1a1a; border:1px solid #333; border-radius:20px; padding:8px 18px; font-size:13px; color:#ccc;">Samsonite</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ELEMENTS SECTION -->
+  <div class="section" id="elements">
+    <div class="card" style="background:transparent; border:none; padding:0;">
+      <div class="card-header" style="margin-bottom:20px;"><span class="icon">🔑</span> Three Distinctive Business Elements</div>
+      <div class="elements-grid">
+        <div class="element-card">
+          <div class="element-num">01</div>
+          <div class="element-title">🌎 Massive Scale & Global Reach</div>
+          <div class="element-desc">Lemonlight operates across 80+ global markets with over 2,000 crew members. They can produce content anywhere in the world, making them a one-stop-shop for brands needing scalable video content.</div>
+        </div>
+        <div class="element-card">
+          <div class="element-num">02</div>
+          <div class="element-title">🎥 One-Partner Model</div>
+          <div class="element-desc">"Scale your video content without scaling your vendor list." Brands can rely on Lemonlight for everything from a single product video to hundreds of content pieces — all under one roof with consistent quality.</div>
+        </div>
+        <div class="element-card">
+          <div class="element-num">03</div>
+          <div class="element-title">🏢 In-House Studio & End-to-End</div>
+          <div class="element-desc">Lemonlight Studios features multiple professional sets, versatile spaces, and professional equipment — offering clients cost savings, quick setups, and more filming time without compromising quality.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BNI VALUE SECTION -->
+  <div class="section" id="bnivalue">
+    <div class="card" style="background:transparent; border:none; padding:0;">
+      <div class="card-header" style="margin-bottom:20px;"><span class="icon">💡</span> BNI Value Proposition for Lemonlight</div>
+      <div class="value-grid">
+        <div class="value-card">
+          <div class="value-icon">🎯</div>
+          <div class="value-title">Qualified Referrals</div>
+          <div class="value-desc">Every business in a BNI chapter needs video content — social media ads, testimonials, product demos, about us videos. Lemonlight could receive referrals from virtually every member.</div>
+        </div>
+        <div class="value-card">
+          <div class="value-icon">🤝</div>
+          <div class="value-title">Trusted Relationships</div>
+          <div class="value-desc">Video production is a high-trust, high-investment purchase. BNI's relationship-first model means referrals come pre-qualified and warm.</div>
+        </div>
+        <div class="value-card">
+          <div class="value-icon">🔄</div>
+          <div class="value-title">Recurring Revenue</div>
+          <div class="value-desc">Businesses that invest in one video often need ongoing content. BNI relationships create long-term, repeat-business pipelines.</div>
+        </div>
+        <div class="value-card">
+          <div class="value-icon">🔗</div>
+          <div class="value-title">Contact Sphere Synergy</div>
+          <div class="value-desc">Lemonlight naturally connects with marketing consultants, social media managers, web designers, PR firms, event planners, real estate agents, and more.</div>
+        </div>
+        <div class="value-card">
+          <div class="value-icon">👑</div>
+          <div class="value-title">Brand Authority</div>
+          <div class="value-desc">Being the "video production expert" in a BNI chapter positions Lemonlight as the go-to resource in that community.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Donut Chart for BNI Value -->
+    <div class="card" style="margin-top:20px;">
+      <div class="card-header"><span class="icon">📊</span> BNI Value Distribution</div>
+      <div class="donut-container">
+        <svg class="donut-svg" viewBox="0 0 42 42">
+          <circle cx="21" cy="21" r="15.9" fill="transparent" stroke="#CF2030" stroke-width="3" stroke-dasharray="25 75" stroke-dashoffset="25"></circle>
+          <circle cx="21" cy="21" r="15.9" fill="transparent" stroke="#e85d6a" stroke-width="3" stroke-dasharray="22 78" stroke-dashoffset="0"></circle>
+          <circle cx="21" cy="21" r="15.9" fill="transparent" stroke="#ff8a94" stroke-width="3" stroke-dasharray="20 80" stroke-dashoffset="-22"></circle>
+          <circle cx="21" cy="21" r="15.9" fill="transparent" stroke="#993040" stroke-width="3" stroke-dasharray="18 82" stroke-dashoffset="-42"></circle>
+          <circle cx="21" cy="21" r="15.9" fill="transparent" stroke="#661520" stroke-width="3" stroke-dasharray="15 85" stroke-dashoffset="-60"></circle>
+        </svg>
+        <div class="donut-legend">
+          <div class="legend-item"><span class="legend-dot" style="background:#CF2030"></span> Qualified Referrals (25%)</div>
+          <div class="legend-item"><span class="legend-dot" style="background:#e85d6a"></span> Trusted Relationships (22%)</div>
+          <div class="legend-item"><span class="legend-dot" style="background:#ff8a94"></span> Recurring Revenue (20%)</div>
+          <div class="legend-item"><span class="legend-dot" style="background:#993040"></span> Contact Sphere (18%)</div>
+          <div class="legend-item"><span class="legend-dot" style="background:#661520"></span> Brand Authority (15%)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTACT SPHERE SECTION -->
+  <div class="section" id="contactsphere">
+    <div class="card">
+      <div class="card-header"><span class="icon">🤝</span> Ideal Contact Sphere Matches</div>
+      <div class="table-controls">
+        <input type="text" class="search-input" id="sphereSearch" placeholder="🔍 Search professions or synergy..." oninput="filterTable('sphereTable', this.value)">
+      </div>
+      <div style="overflow-x:auto;">
+        <table id="sphereTable">
+          <thead>
+            <tr>
+              <th onclick="sortTable('sphereTable', 0)"># <span class="sort-icon">⇅</span></th>
+              <th onclick="sortTable('sphereTable', 1)">Profession <span class="sort-icon">⇅</span></th>
+              <th onclick="sortTable('sphereTable', 2)">Referral Synergy <span class="sort-icon">⇅</span></th>
+              <th>Contact</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>1</td><td>Marketing Consultant</td><td>Clients always need video content for campaigns</td><td><button class="btn btn-primary btn-sm" onclick="openContactModal('Marketing Consultant','Clients always need video content for campaigns — and Lemonlight produces 30,000+ videos for brands like Walmart and Amazon. Partnering through BNI referrals could be a game-changer for both businesses.')">📧 Contact</button></td></tr>
+            <tr><td>2</td><td>Social Media Manager</td><td>Video is the #1 performing content type on social</td><td><button class="btn btn-primary btn-sm" onclick="openContactModal('Social Media Manager','Video drives the highest engagement on every platform. Lemonlight has produced over 30,000 videos for 4,500+ clients — the kind of partner that elevates any social strategy.')">📧 Contact</button></td></tr>
+            <tr><td>3</td><td>Web Designer/Developer</td><td>Websites need hero videos, product demos, testimonials</td><td><button class="btn btn-primary btn-sm" onclick="openContactModal('Web Designer/Developer','Every modern website needs compelling video — hero sections, product demos, testimonials. Lemonlight delivers end-to-end production trusted by brands like Rolex and Samsonite.')">📧 Contact</button></td></tr>
+            <tr><td>4</td><td>Real Estate Agent</td><td>Listing videos, agent branding, property tours</td><td><button class="btn btn-primary btn-sm" onclick="openContactModal('Real Estate Agent','From stunning listing videos to agent branding and property tours, Lemonlight offers scalable video production across 80+ markets with their own in-house studio.')">📧 Contact</button></td></tr>
+            <tr><td>5</td><td>Event Planner</td><td>Event recaps, promotional videos, highlight reels</td><td><button class="btn btn-primary btn-sm" onclick="openContactModal('Event Planner','Capture every event with cinematic quality. Lemonlight produces event recaps, promo videos, and highlight reels — backed by 2,000+ crew members worldwide.')">📧 Contact</button></td></tr>
+            <tr><td>6</td><td>PR/Communications Specialist</td><td>Press videos, brand storytelling, crisis communications</td><td><button class="btn btn-primary btn-sm" onclick="openContactModal('PR/Communications Specialist','Press videos, brand storytelling, and crisis comms all benefit from professional video. Lemonlight is the #1 video production company with 10+ years of trusted experience.')">📧 Contact</button></td></tr>
+            <tr><td>7</td><td>Photographer</td><td>Natural cross-referral for visual content needs</td><td><button class="btn btn-primary btn-sm" onclick="openContactModal('Photographer','Photography and video go hand-in-hand. Lemonlight complements still photography with end-to-end video production from their own in-house studio — a perfect cross-referral partner.')">📧 Contact</button></td></tr>
+            <tr><td>8</td><td>Business Consultant</td><td>Advises clients on marketing — video is always part of the mix</td><td><button class="btn btn-primary btn-sm" onclick="openContactModal('Business Consultant','Every growth strategy includes video marketing. Lemonlight handles everything from strategy to delivery for 4,500+ clients — the ideal recommendation for consulting clients.')">📧 Contact</button></td></tr>
+            <tr><td>9</td><td>Commercial Insurance Broker</td><td>Connects with businesses that invest in growth assets</td><td><button class="btn btn-primary btn-sm" onclick="openContactModal('Commercial Insurance Broker','Businesses investing in growth need professional video content. Lemonlight serves brands like Walmart and Amazon — a natural referral for growth-minded business clients.')">📧 Contact</button></td></tr>
+            <tr><td>10</td><td>Graphic Designer</td><td>Collaborates on branding projects that include video</td><td><button class="btn btn-primary btn-sm" onclick="openContactModal('Graphic Designer','Branding projects increasingly require video. Lemonlight offers a one-partner model for scalable video content that complements any design or branding initiative.')">📧 Contact</button></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Referral Synergy Chart -->
+    <div class="card">
+      <div class="card-header"><span class="icon">📊</span> Referral Synergy Score (Estimated)</div>
+      <div class="chart-container">
+        <div class="bar-chart" id="synergyChart" style="height:280px; align-items:flex-end;">
+          <div class="bar-wrapper"><div class="bar-value">98</div><div class="bar" style="height:225px; background:linear-gradient(to top,#CF2030,#e85d6a)"></div><div class="bar-label">Marketing Consultant</div></div>
+          <div class="bar-wrapper"><div class="bar-value">95</div><div class="bar" style="height:218px; background:linear-gradient(to top,#CF2030,#e85d6a)"></div><div class="bar-label">Social Media Mgr</div></div>
+          <div class="bar-wrapper"><div class="bar-value">90</div><div class="bar" style="height:205px; background:linear-gradient(to top,#CF2030,#e85d6a)"></div><div class="bar-label">Web Designer</div></div>
+          <div class="bar-wrapper"><div class="bar-value">88</div><div class="bar" style="height:200px; background:linear-gradient(to top,#CF2030,#e85d6a)"></div><div class="bar-label">Real Estate</div></div>
+          <div class="bar-wrapper"><div class="bar-value">85</div><div class="bar" style="height:192px; background:linear-gradient(to top,#CF2030,#e85d6a)"></div><div class="bar-label">Event Planner</div></div>
+          <div class="bar-wrapper"><div class="bar-value">83</div><div class="bar" style="height:187px; background:linear-gradient(to top,#CF2030,#e85d6a)"></div><div class="bar-label">PR Specialist</div></div>
+          <div class="bar-wrapper"><div class="bar-value">80</div><div class="bar" style="height:180px; background:linear-gradient(to top,#CF2030,#e85d6a)"></div><div class="bar-label">Photographer</div></div>
+          <div class="bar-wrapper"><div class="bar-value">78</div><div class="bar" style="height:175px; background:linear-gradient(to top,#CF2030,#e85d6a)"></div><div class="bar-label">Biz Consultant</div></div>
+          <div class="bar-wrapper"><div class="bar-value">72</div><div class="bar" style="height:160px; background:linear-gradient(to top,#CF2030,#e85d6a)"></div><div class="bar-label">Insurance</div></div>
+          <div class="bar-wrapper"><div class="bar-value">75</div><div class="bar" style="height:168px; background:linear-gradient(to top,#CF2030,#e85d6a)"></div><div class="bar-label">Graphic Designer</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- OUTREACH SECTION -->
+  <div class="section" id="outreach">
+    <div class="card">
+      <div class="card-header"><span class="icon">📧</span> Email Invitation</div>
+      <p style="font-size:12px; color:#888; margin-bottom:12px;">Select a subject line:</p>
+      <div class="subject-options">
+        <div class="subject-option" onclick="selectSubject(this)">1. Lemonlight + BNI: A Referral Engine for World-Class Video Production</div>
+        <div class="subject-option" onclick="selectSubject(this)">2. How Lemonlight Can Get 30+ Business Owners Referring Video Clients</div>
+        <div class="subject-option" onclick="selectSubject(this)">3. An Exclusive Invitation for Lemonlight — See How BNI Drives Business Growth</div>
+      </div>
+      <div class="outreach-card">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+          <h3>📨 Email Body</h3>
+          <button class="copy-btn" onclick="copyText('emailBody', this)">📋 Copy</button>
+        </div>
+        <div class="outreach-body" id="emailBody">Dear Lemonlight Learning,
+
+I came across Lemonlight and was immediately impressed — over 30,000 videos produced, trusted by brands like Walmart, Amazon, and Rolex, and a reputation as the #1 video production company worldwide. That kind of track record speaks volumes.
+
+I'm reaching out because I believe BNI (Business Network International) could be a powerful growth channel for Lemonlight, and here are three reasons why:
+
+🎯 1. A Room Full of Referral Partners
+Imagine walking into a room of 30–50 business owners — real estate agents, marketing consultants, financial advisors, event planners — all trained to listen for opportunities to refer YOUR business. Every one of them either needs video production or knows someone who does.
+
+🎥 2. Your "One-Partner Model" Is Perfect for BNI
+Lemonlight's ability to handle everything from strategy to post-production makes it incredibly easy for BNI members to refer. One name, one company, one recommendation — that simplicity is gold in a referral network.
+
+🌍 3. Scale Beyond Your Current Pipeline
+With your global reach and scalable solutions, BNI referrals can open doors to local businesses, startups, and mid-market brands that may not find you through traditional advertising but are actively looking for a trusted video partner.
+
+I'd love to invite you to visit our upcoming BNI chapter meeting as my guest — no obligation, just an opportunity to experience the power of referral networking firsthand.
+
+To visit a chapter, just complete this (***Visitor Invite***) simple form to reserve your seat and begin accelerating your business.
+
+Looking forward to connecting!
+
+Warm regards,
+[Your Name]
+[Your Company]
+[Your Phone]
+[Your Email]</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header"><span class="icon">📱</span> SMS Invitation</div>
+      <div class="outreach-card">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+          <h3>💬 SMS (≤320 chars)</h3>
+          <button class="copy-btn" onclick="copyText('smsBody', this)">📋 Copy</button>
+        </div>
+        <div class="outreach-body" id="smsBody">Hi Lemonlight! I'm impressed by your 30,000+ video productions for brands like Walmart & Amazon. I'd love to invite you to visit our BNI chapter — a room of business owners who could refer video clients your way. RSVP here: ***Visitor Invite*** 🎬</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header"><span class="icon">📞</span> Phone Script (20–30 Seconds)</div>
+      <div class="outreach-card">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+          <h3>🎙️ Call Script</h3>
+          <button class="copy-btn" onclick="copyText('phoneBody', this)">📋 Copy</button>
+        </div>
+        <div class="outreach-body" id="phoneBody">"Hi, this is [Your Name] — I'm a local business owner and member of BNI, the world's largest referral networking organization. I'm calling because I came across Lemonlight and was blown away by the caliber of work you do in video production. I think our chapter members could be incredible referral sources for your business. I'd love to invite you or a team member to visit as a guest. Could I get the best email to send over the details?"
+
+If gatekeeper: "I'm looking to connect with someone who handles business development or community partnerships. Who would be the best person to speak with?"</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header"><span class="icon">⏰</span> 48-Hour Follow-Up</div>
+      <div class="outreach-card">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+          <h3>🔄 Follow-Up Email</h3>
+          <button class="copy-btn" onclick="copyText('followupBody', this)">📋 Copy</button>
+        </div>
+        <div class="outreach-body" id="followupBody">Hi Lemonlight Learning,
+
+Just checking in on my invitation to visit our BNI chapter! I know things get busy — especially when you're producing world-class video content for major brands.
+
+We'd love to have you (or a colleague) join us at an upcoming meeting. Here are two upcoming options:
+• [Date Option 1]
+• [Date Option 2]
+
+If a teammate would be a better fit to attend, that works too! Just let me know.
+
+Reserve your seat here: ***Visitor Invite***
+
+Looking forward to hearing from you!</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- INSTRUCTIONS SECTION -->
+  <div class="section" id="instructions">
+    <div class="card">
+      <div class="card-header"><span class="icon">✅</span> Member Instructions</div>
+      <ol class="instructions-list">
+        <li><strong>Copy</strong> the email invitation from the Outreach tab</li>
+        <li><strong>Replace</strong> the <code style="background:#1a1a1a; padding:2px 6px; border-radius:4px; color:#CF2030;">***Visitor Invite***</code> placeholder with your chapter's actual visitor registration URL</li>
+        <li><strong>Personalize</strong> with your name, company, and contact details</li>
+        <li><strong>Send</strong> to: <a href="mailto:lemonlightl@lemonlight.com" style="color:#CF2030;">lemonlightl@lemonlight.com</a></li>
+        <li><strong>Follow up</strong> via SMS and/or phone using the scripts in the Outreach tab</li>
+        <li><strong>Set a reminder</strong> for a 48-hour follow-up if no response is received</li>
+      </ol>
+      <div style="margin-top:20px; padding:16px; background:#0a0a0a; border:1px solid #CF2030; border-radius:8px;">
+        <p style="font-size:13px; color:#ccc; line-height:1.6;">💡 <strong style="color:#CF2030;">Pro Tip:</strong> When reaching out, emphasize that every business owner in the room either needs video production or knows someone who does — Lemonlight's one-partner model makes it incredibly easy for BNI members to refer.</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- CONTACT MODAL -->
+<div class="modal-overlay" id="contactModal">
+  <div class="modal" style="position:relative;">
+    <button class="close-btn" onclick="closeModal()" style="position:absolute; top:10px; right:16px; background:none; border:none; color:#666; font-size:24px; cursor:pointer;">✕</button>
+    <h3>📧 Contact <span id="modalProfession"></span></h3>
+    <p style="font-size:12px; color:#888; margin-bottom:12px;">Email will be pre-populated explaining why they should visit Lemonlight's BNI chapter:</p>
+    <textarea id="modalEmail" readonly></textarea>
+    <div class="modal-actions">
+      <button class="copy-btn" onclick="copyModalEmail(this)">📋 Copy Email Text</button>
+      <a id="modalMailtoLink" class="btn btn-primary" href="#">📧 Open in Email Client</a>
+      <button class="btn btn-outline" onclick="closeModal()">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports" />
+  <div class="footer-text">Report Generated by Higgins AI for BNI Chapter Growth &nbsp;|&nbsp; © 2026 Higgins AI</div>
+</div>
+
+<script>
+  // Navigation
+  document.querySelectorAll('.nav-item').forEach(item => {
+    item.addEventListener('click', () => {
+      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+      document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+      item.classList.add('active');
+      const sectionId = item.getAttribute('data-section');
+      document.getElementById(sectionId).classList.add('active');
+      if (sectionId === 'overview') animateCounters();
+    });
+  });
+
+  // Animate Counters
+  function animateCounters() {
+    document.querySelectorAll('.stat-number[data-target]').forEach(el => {
+      const target = parseInt(el.getAttribute('data-target'));
+      const duration = 1500;
+      const step = target / (duration / 16);
+      let current = 0;
+      const timer = setInterval(() => {
+        current += step;
+        if (current >= target) { current = target; clearInterval(timer); }
+        el.textContent = Math.floor(current).toLocaleString() + '+';
+      }, 16);
+    });
+  }
+
+  // Table Search/Filter
+  function filterTable(tableId, query) {
+    const table = document.getElementById(tableId);
+    const rows = table.querySelectorAll('tbody tr');
+    const q = query.toLowerCase();
+    rows.forEach(row => {
+      const text = row.textContent.toLowerCase();
+      row.style.display = text.includes(q) ? '' : 'none';
+    });
+  }
+
+  // Table Sort
+  let sortDirs = {};
+  function sortTable(tableId, colIndex) {
+    const table = document.getElementById(tableId);
+    const tbody = table.querySelector('tbody');
+    const rows = Array.from(tbody.querySelectorAll('tr'));
+    const key = tableId + '_' + colIndex;
+    sortDirs[key] = !sortDirs[key];
+    const dir = sortDirs[key] ? 1 : -1;
+    rows.sort((a, b) => {
+      const aVal = a.children[colIndex]?.textContent.trim() || '';
+      const bVal = b.children[colIndex]?.textContent.trim() || '';
+      const aNum = parseFloat(aVal);
+      const bNum = parseFloat(bVal);
+      if (!isNaN(aNum) && !isNaN(bNum)) return (aNum - bNum) * dir;
+      return aVal.localeCompare(bVal) * dir;
+    });
+    rows.forEach(row => tbody.appendChild(row));
+  }
+
+  // Copy Text
+  function copyText(elementId, btn) {
+    const text = document.getElementById(elementId).textContent;
+    navigator.clipboard.writeText(text).then(() => {
+      btn.textContent = '✅ Copied!';
+      btn.classList.add('copied');
+      setTimeout(() => { btn.textContent = '📋 Copy'; btn.classList.remove('copied'); }, 2000);
+    });
+  }
+
+  // Subject Line Selection
+  function selectSubject(el) {
+    document.querySelectorAll('.subject-option').forEach(s => { s.style.borderColor = '#222'; s.style.color = '#ccc'; });
+    el.style.borderColor = '#CF2030';
+    el.style.color = '#CF2030';
+  }
+
+  // Contact Modal
+  function openContactModal(profession, reason) {
+    document.getElementById('modalProfession').textContent = profession;
+    const emailText = `Subject: Grow Your ${profession} Business with World-Class Video Referrals\n\nHi there,\n\nI'd like to invite you to visit our BNI chapter and meet Lemonlight — a premier video production company that has produced over 30,000 videos for brands like Walmart, Amazon, and Rolex.\n\n${reason}\n\nAs a ${profession}, attending our BNI chapter meeting could connect you with 30–50 local business owners who are trained to refer business your way — and Lemonlight could become a valuable referral partner for your clients.\n\nHere's what to expect:\n• A structured, professional networking meeting (about 90 minutes)\n• The opportunity to introduce yourself and your business\n• A chance to see how referral marketing can accelerate your growth\n\nTo reserve your seat, simply complete this form: ***Visitor Invite***\n\nLooking forward to welcoming you!\n\nWarm regards,\n[Your Name]\n[Your Company]\n[Your Phone]\n[Your Email]`;
+    document.getElementById('modalEmail').value = emailText;
+    const encodedSubject = encodeURIComponent(`Grow Your ${profession} Business with World-Class Video Referrals`);
+    const encodedBody = encodeURIComponent(emailText.replace('Subject: ' + `Grow Your ${profession} Business with World-Class Video Referrals` + '\n\n', ''));
+    document.getElementById('modalMailtoLink').href = `mailto:?subject=${encodedSubject}&body=${encodedBody}`;
+    document.getElementById('contactModal').classList.add('show');
+  }
+
+  function closeModal() {
+    document.getElementById('contactModal').classList.remove('show');
+  }
+
+  function copyModalEmail(btn) {
+    const text = document.getElementById('modalEmail').value;
+    navigator.clipboard.writeText(text).then(() => {
+      btn.textContent = '✅ Copied!';
+      btn.classList.add('copied');
+      setTimeout(() => { btn.textContent = '📋 Copy Email Text'; btn.classList.remove('copied'); }, 2000);
+    });
+  }
+
+  // Close modal on overlay click
+  document.getElementById('contactModal').addEventListener('click', function(e) {
+    if (e.target === this) closeModal();
+  });
+</script>
+
+</body>
+</html>

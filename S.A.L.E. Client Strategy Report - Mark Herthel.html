@@ -1,0 +1,807 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>S.A.L.E. Client Strategy Report - Mark Herthel</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #000; color: #e0e0e0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+  
+  .header {
+    background: linear-gradient(135deg, #111 0%, #1a1a1a 100%);
+    border-bottom: 3px solid #CF2030;
+    padding: 20px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  }
+  .header img { height: 50px; }
+  
+  .nav {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .nav button {
+    background: transparent;
+    color: #CF2030;
+    border: 1px solid #CF2030;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    transition: all 0.3s;
+  }
+  .nav button:hover, .nav button.active {
+    background: #CF2030;
+    color: #fff;
+  }
+
+  .container { max-width: 1300px; margin: 0 auto; padding: 30px 20px; }
+
+  .section { display: none; animation: fadeIn 0.4s ease; }
+  .section.active { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+  .card {
+    background: #141414;
+    border: 1px solid #2a2a2a;
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 20px;
+    transition: border-color 0.3s;
+  }
+  .card:hover { border-color: #CF2030; }
+
+  .card-header {
+    font-size: 20px;
+    font-weight: 700;
+    color: #CF2030;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .card-header .icon { font-size: 24px; }
+
+  .badge {
+    display: inline-block;
+    background: #CF2030;
+    color: #fff;
+    padding: 3px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+
+  .profile-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .profile-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 14px;
+    background: #1c1c1c;
+    border-radius: 8px;
+    border-left: 3px solid #CF2030;
+  }
+  .profile-item .label { color: #888; font-size: 13px; }
+  .profile-item .value { color: #fff; font-weight: 600; font-size: 13px; text-align: right; }
+  .profile-item .value a { color: #CF2030; text-decoration: none; }
+  .profile-item .value a:hover { text-decoration: underline; }
+
+  .search-bar {
+    width: 100%;
+    padding: 12px 18px;
+    background: #1c1c1c;
+    border: 1px solid #333;
+    border-radius: 8px;
+    color: #fff;
+    font-size: 14px;
+    margin-bottom: 16px;
+    outline: none;
+    transition: border-color 0.3s;
+  }
+  .search-bar:focus { border-color: #CF2030; }
+  .search-bar::placeholder { color: #666; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+  }
+  thead th {
+    background: #1a1a1a;
+    color: #CF2030;
+    padding: 12px 14px;
+    text-align: left;
+    cursor: pointer;
+    user-select: none;
+    border-bottom: 2px solid #CF2030;
+    position: relative;
+    white-space: nowrap;
+  }
+  thead th:hover { background: #222; }
+  thead th::after { content: ' ⇅'; color: #555; font-size: 11px; }
+  thead th.asc::after { content: ' ▲'; color: #CF2030; }
+  thead th.desc::after { content: ' ▼'; color: #CF2030; }
+  tbody td {
+    padding: 11px 14px;
+    border-bottom: 1px solid #222;
+  }
+  tbody tr:hover { background: #1a1a1a; }
+
+  .approach-card {
+    background: #1c1c1c;
+    border-radius: 10px;
+    padding: 18px 20px;
+    margin-bottom: 14px;
+    border-left: 4px solid #CF2030;
+  }
+  .approach-card .num {
+    color: #CF2030;
+    font-weight: 800;
+    font-size: 28px;
+    margin-right: 12px;
+    float: left;
+    line-height: 1;
+  }
+  .approach-card .text { color: #ccc; line-height: 1.6; font-size: 14px; }
+  .approach-card .text em { color: #999; font-style: italic; font-size: 12px; display: block; margin-top: 6px; }
+
+  .timeline {
+    position: relative;
+    padding-left: 40px;
+  }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 15px;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: linear-gradient(to bottom, #CF2030, #333);
+    border-radius: 2px;
+  }
+  .timeline-item {
+    position: relative;
+    margin-bottom: 24px;
+    padding: 16px 20px;
+    background: #1c1c1c;
+    border-radius: 10px;
+    border: 1px solid #2a2a2a;
+  }
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -33px;
+    top: 20px;
+    width: 14px;
+    height: 14px;
+    background: #CF2030;
+    border-radius: 50%;
+    border: 3px solid #000;
+  }
+  .timeline-item .day {
+    color: #CF2030;
+    font-weight: 700;
+    font-size: 13px;
+    margin-bottom: 4px;
+  }
+  .timeline-item .action { font-size: 14px; color: #ccc; line-height: 1.5; }
+
+  .chart-wrapper {
+    background: #141414;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+    border: 1px solid #2a2a2a;
+  }
+  .chart-wrapper canvas { max-height: 320px; }
+
+  .charts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+
+  .btn-contact {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: all 0.3s;
+    text-decoration: none;
+  }
+  .btn-phone { background: #CF2030; color: #fff; }
+  .btn-phone:hover { background: #e0233a; }
+  .btn-email { background: transparent; border: 1px solid #CF2030; color: #CF2030; }
+  .btn-email:hover { background: #CF2030; color: #fff; }
+  .btn-linkedin { background: #0A66C2; color: #fff; }
+  .btn-linkedin:hover { background: #0b78e0; }
+  .btn-web { background: #2c8c3c; color: #fff; }
+  .btn-web:hover { background: #36a548; }
+
+  .contact-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 16px;
+  }
+
+  .stat-cards {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .stat-card {
+    background: #141414;
+    border: 1px solid #2a2a2a;
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    transition: border-color 0.3s;
+  }
+  .stat-card:hover { border-color: #CF2030; }
+  .stat-card .stat-num { font-size: 36px; font-weight: 800; color: #CF2030; }
+  .stat-card .stat-label { font-size: 12px; color: #888; margin-top: 6px; text-transform: uppercase; letter-spacing: 1px; }
+
+  .footer {
+    background: #0a0a0a;
+    border-top: 2px solid #CF2030;
+    padding: 20px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 40px;
+  }
+  .footer img { height: 28px; opacity: 0.7; }
+  .footer .copy { color: #555; font-size: 12px; }
+
+  .sale-letter {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #CF2030;
+    color: #fff;
+    font-weight: 800;
+    font-size: 20px;
+    margin-right: 10px;
+    flex-shrink: 0;
+  }
+
+  .specialties-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+  }
+  .spec-tag {
+    background: #1c1c1c;
+    border: 1px solid #333;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    color: #ccc;
+  }
+
+  @media (max-width: 900px) {
+    .profile-grid { grid-template-columns: 1fr; }
+    .charts-grid { grid-template-columns: 1fr; }
+    .stat-cards { grid-template-columns: repeat(2, 1fr); }
+    .nav { gap: 4px; }
+    .nav button { padding: 6px 10px; font-size: 11px; }
+    .header { padding: 12px 16px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports" />
+  <div class="nav">
+    <button class="active" onclick="showSection('overview')">📋 Overview</button>
+    <button onclick="showSection('profile')">👤 Prospect Profile</button>
+    <button onclick="showSection('approach')">🎯 Approach Angles</button>
+    <button onclick="showSection('leverage')">⚡ Leverage Points</button>
+    <button onclick="showSection('engagement')">📅 Engagement Plan</button>
+    <button onclick="showSection('charts')">📊 Analytics</button>
+    <button onclick="showSection('contact')">📞 Contact</button>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- OVERVIEW -->
+  <div id="overview" class="section active">
+    <div style="margin-bottom: 24px;">
+      <h1 style="font-size: 32px; font-weight: 800; color: #fff;">S.A.L.E. Client Strategy Report</h1>
+      <p style="color: #888; font-size: 15px; margin-top: 6px;">Prospect: <strong style="color: #CF2030;">Mark Herthel</strong> — Alamo Pintado Equine Medical Center</p>
+    </div>
+
+    <div class="stat-cards">
+      <div class="stat-card">
+        <div class="stat-num">50+</div>
+        <div class="stat-label">Years in Business</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">51–200</div>
+        <div class="stat-label">Employees</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">5</div>
+        <div class="stat-label">Core Specialties</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">5</div>
+        <div class="stat-label">Engagement Steps</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header"><span class="icon">🏥</span> Company Overview</div>
+      <p style="line-height: 1.7; color: #bbb; font-size: 14px;">
+        Alamo Pintado Equine Medical Center has been a <strong style="color:#fff;">pioneer in equine veterinary medicine since 1972</strong> — over 50 years of continuous innovation. Located in the heart of California's Santa Ynez Valley, this is no ordinary veterinary practice. With 51–200 employees, this is a significant regional employer and a <strong style="color:#fff;">premium-tier veterinary institution</strong>.
+      </p>
+      <div class="specialties-tags">
+        <span class="spec-tag">🔬 Advanced Equine Surgery</span>
+        <span class="spec-tag">📡 Diagnostic Imaging</span>
+        <span class="spec-tag">💉 Regenerative Medicine</span>
+        <span class="spec-tag">🏥 Internal Medicine & Wellness</span>
+        <span class="spec-tag">🤝 Referral-Based Model</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header"><span class="icon">🧠</span> S.A.L.E. Framework Summary</div>
+      <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;">
+        <div style="text-align:center; padding: 16px; background: #1c1c1c; border-radius: 10px;">
+          <div class="sale-letter" style="margin: 0 auto 8px;">S</div>
+          <div style="font-weight:700; color:#fff; font-size: 14px;">Search</div>
+          <div style="color:#888; font-size: 12px; margin-top: 4px;">Market Insights & Positioning</div>
+        </div>
+        <div style="text-align:center; padding: 16px; background: #1c1c1c; border-radius: 10px;">
+          <div class="sale-letter" style="margin: 0 auto 8px;">A</div>
+          <div style="font-weight:700; color:#fff; font-size: 14px;">Approach</div>
+          <div style="color:#888; font-size: 12px; margin-top: 4px;">Conversation Starters</div>
+        </div>
+        <div style="text-align:center; padding: 16px; background: #1c1c1c; border-radius: 10px;">
+          <div class="sale-letter" style="margin: 0 auto 8px;">L</div>
+          <div style="font-weight:700; color:#fff; font-size: 14px;">Leverage</div>
+          <div style="color:#888; font-size: 12px; margin-top: 4px;">Key Strengths & Value</div>
+        </div>
+        <div style="text-align:center; padding: 16px; background: #1c1c1c; border-radius: 10px;">
+          <div class="sale-letter" style="margin: 0 auto 8px;">E</div>
+          <div style="font-weight:700; color:#fff; font-size: 14px;">Engage</div>
+          <div style="color:#888; font-size: 12px; margin-top: 4px;">Action Timeline</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROSPECT PROFILE -->
+  <div id="profile" class="section">
+    <h2 style="font-size: 24px; font-weight: 700; color: #fff; margin-bottom: 20px;">👤 Prospect Profile</h2>
+    <div class="card">
+      <div class="card-header"><span class="icon">📄</span> Field Details <span class="badge">VERIFIED</span></div>
+      <input class="search-bar" id="profileSearch" placeholder="🔍 Search profile fields..." onkeyup="filterTable('profileTable', 'profileSearch')">
+      <table id="profileTable">
+        <thead>
+          <tr>
+            <th onclick="sortTable('profileTable', 0)">Field</th>
+            <th onclick="sortTable('profileTable', 1)">Details</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Name</td><td style="color:#fff; font-weight:600;">Mark Herthel</td></tr>
+          <tr><td>Title</td><td>Business Owner</td></tr>
+          <tr><td>Company</td><td style="color:#fff; font-weight:600;">Alamo Pintado Equine Medical Center</td></tr>
+          <tr><td>Industry</td><td>Veterinary / Biotechnology</td></tr>
+          <tr><td>Location</td><td>Los Olivos, California, United States</td></tr>
+          <tr><td>Company Size</td><td>51–200 Employees</td></tr>
+          <tr><td>Phone</td><td><a href="tel:8056886510" style="color:#CF2030;">(805) 688-6510</a></td></tr>
+          <tr><td>Website</td><td><a href="https://alamopintado.com" target="_blank" style="color:#CF2030;">alamopintado.com</a></td></tr>
+          <tr><td>LinkedIn (Personal)</td><td><a href="#" style="color:#CF2030;">Mark Herthel</a></td></tr>
+          <tr><td>LinkedIn (Company)</td><td><a href="#" style="color:#CF2030;">Alamo Pintado Equine Medical Center</a></td></tr>
+          <tr><td>Email</td><td><a href="mailto:info@alamopintado.com" style="color:#CF2030;">info@alamopintado.com</a></td></tr>
+          <tr><td>Address</td><td>2501 Santa Barbara Avenue, Los Olivos, CA 93441</td></tr>
+          <tr><td>Founded</td><td>1972</td></tr>
+          <tr><td>Years in Operation</td><td>50+</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- APPROACH ANGLES -->
+  <div id="approach" class="section">
+    <h2 style="font-size: 24px; font-weight: 700; color: #fff; margin-bottom: 20px;">🎯 Approach Angles</h2>
+    <div class="card">
+      <div class="card-header"><span class="sale-letter">A</span> 3 Key Conversation Starters</div>
+      <div class="approach-card">
+        <span class="num">1</span>
+        <div class="text">
+          "Your center has built 50+ years of trust with referring veterinarians — that referral-based model is exactly the kind of relationship-building we focus on at BNI."
+          <em>→ Speaks their language — they already understand the power of referrals.</em>
+        </div>
+      </div>
+      <div class="approach-card">
+        <span class="num">2</span>
+        <div class="text">
+          "With a team of 51–200 employees, your operational needs span everything from insurance and HR to commercial services and financial planning — BNI could connect you with trusted local professionals for all of that."
+          <em>→ Appeals to the business operations side.</em>
+        </div>
+      </div>
+      <div class="approach-card">
+        <span class="num">3</span>
+        <div class="text">
+          "The equine community on the Central Coast is tight-knit — BNI could help amplify your visibility with complementary professionals like equine insurance agents, farriers, feed suppliers, real estate professionals with ranch properties, and event planners for equestrian shows."
+          <em>→ Highlights Contact Sphere value.</em>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LEVERAGE POINTS -->
+  <div id="leverage" class="section">
+    <h2 style="font-size: 24px; font-weight: 700; color: #fff; margin-bottom: 20px;">⚡ Leverage Points</h2>
+    <div class="card">
+      <div class="card-header"><span class="sale-letter">L</span> Strategic Leverage Analysis</div>
+      <input class="search-bar" id="leverageSearch" placeholder="🔍 Search leverage points..." onkeyup="filterTable('leverageTable', 'leverageSearch')">
+      <table id="leverageTable">
+        <thead>
+          <tr>
+            <th onclick="sortTable('leverageTable', 0)">Leverage Point</th>
+            <th onclick="sortTable('leverageTable', 1)">Why It Matters</th>
+            <th onclick="sortTable('leverageTable', 2)">Impact Score</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td style="color:#fff; font-weight:600;">50+ Year Legacy</td><td>Established credibility — other BNI members would be proud to refer them</td><td><span style="color:#CF2030; font-weight:700;">★★★★★</span></td></tr>
+          <tr><td style="color:#fff; font-weight:600;">Innovation Leader</td><td>Cutting-edge technology positions them as a premium referral partner</td><td><span style="color:#CF2030; font-weight:700;">★★★★☆</span></td></tr>
+          <tr><td style="color:#fff; font-weight:600;">Referral-Based Model</td><td>They already rely on referring vets — BNI's Givers Gain philosophy is a natural extension</td><td><span style="color:#CF2030; font-weight:700;">★★★★★</span></td></tr>
+          <tr><td style="color:#fff; font-weight:600;">Central Coast Location</td><td>Strong local community ties — ideal for BNI's local networking model</td><td><span style="color:#CF2030; font-weight:700;">★★★★☆</span></td></tr>
+          <tr><td style="color:#fff; font-weight:600;">51–200 Employees</td><td>A business this size has needs across multiple professional categories</td><td><span style="color:#CF2030; font-weight:700;">★★★★★</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ENGAGEMENT PLAN -->
+  <div id="engagement" class="section">
+    <h2 style="font-size: 24px; font-weight: 700; color: #fff; margin-bottom: 20px;">📅 Engagement Plan</h2>
+    <div class="card">
+      <div class="card-header"><span class="sale-letter">E</span> 5-Step Action Timeline</div>
+      <input class="search-bar" id="engagementSearch" placeholder="🔍 Search engagement steps..." onkeyup="filterTable('engagementTable', 'engagementSearch')">
+      <table id="engagementTable">
+        <thead>
+          <tr>
+            <th onclick="sortTable('engagementTable', 0)">Step</th>
+            <th onclick="sortTable('engagementTable', 1)">Action</th>
+            <th onclick="sortTable('engagementTable', 2)">Timeline</th>
+            <th onclick="sortTable('engagementTable', 3)">Channel</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td style="color:#CF2030; font-weight:700;">1</td><td>Connect on LinkedIn — personalize the request referencing their 50+ year legacy in equine medicine</td><td>Day 1</td><td>LinkedIn</td></tr>
+          <tr><td style="color:#CF2030; font-weight:700;">2</td><td>Phone Call — Call (805) 688-6510, ask for Mark, and use the referral-based approach angle</td><td>Day 1–2</td><td>Phone</td></tr>
+          <tr><td style="color:#CF2030; font-weight:700;">3</td><td>Email Introduction — Send to info@alamopintado.com with a tailored BNI visitor invitation</td><td>Day 2–3</td><td>Email</td></tr>
+          <tr><td style="color:#CF2030; font-weight:700;">4</td><td>Visitor Invitation — Invite Mark to your next BNI chapter meeting as a guest</td><td>Day 3–5</td><td>In-Person / Email</td></tr>
+          <tr><td style="color:#CF2030; font-weight:700;">5</td><td>Follow Up — If no response, follow up with a brief "checking in" message and offer alternative dates</td><td>Day 7</td><td>Email / Phone</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <div class="card-header"><span class="icon">🗓️</span> Visual Timeline</div>
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="day">📌 Day 1 — LinkedIn Connect</div>
+          <div class="action">Personalize the connection request referencing their 50+ year legacy in equine medicine and your shared interest in referral-based business.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="day">📌 Day 1–2 — Phone Call</div>
+          <div class="action">Call (805) 688-6510. Ask for Mark. Use approach angle #1 about their referral-based model aligning perfectly with BNI's Givers Gain® philosophy.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="day">📌 Day 2–3 — Email Introduction</div>
+          <div class="action">Send a tailored BNI visitor invitation to info@alamopintado.com highlighting the value of connecting with complementary professionals.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="day">📌 Day 3–5 — Visitor Invitation</div>
+          <div class="action">Formally invite Mark to attend your next BNI chapter meeting as a guest. Emphasize the no-obligation, value-first experience.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="day">📌 Day 7 — Follow Up</div>
+          <div class="action">If no response, send a brief "checking in" message. Offer 2 alternative meeting dates and keep the tone warm and professional.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHARTS -->
+  <div id="charts" class="section">
+    <h2 style="font-size: 24px; font-weight: 700; color: #fff; margin-bottom: 20px;">📊 Analytics & Insights</h2>
+    
+    <div class="charts-grid">
+      <div class="chart-wrapper">
+        <div class="card-header"><span class="icon">📈</span> Leverage Impact Scores</div>
+        <canvas id="leverageChart"></canvas>
+      </div>
+      <div class="chart-wrapper">
+        <div class="card-header"><span class="icon">🕐</span> Engagement Timeline (Days)</div>
+        <canvas id="timelineChart"></canvas>
+      </div>
+      <div class="chart-wrapper">
+        <div class="card-header"><span class="icon">🏥</span> Specialties Distribution</div>
+        <canvas id="specialtiesChart"></canvas>
+      </div>
+      <div class="chart-wrapper">
+        <div class="card-header"><span class="icon">📊</span> BNI Fit Score Radar</div>
+        <canvas id="radarChart"></canvas>
+      </div>
+    </div>
+
+    <div class="chart-wrapper">
+      <div class="card-header"><span class="icon">💼</span> Company Metrics Overview</div>
+      <canvas id="metricsChart"></canvas>
+    </div>
+  </div>
+
+  <!-- CONTACT -->
+  <div id="contact" class="section">
+    <h2 style="font-size: 24px; font-weight: 700; color: #fff; margin-bottom: 20px;">📞 Quick-Reference Contact Card</h2>
+    <div class="card">
+      <div class="card-header"><span class="icon">📇</span> Mark Herthel — Contact Details</div>
+      <input class="search-bar" id="contactSearch" placeholder="🔍 Search contact channels..." onkeyup="filterTable('contactTable', 'contactSearch')">
+      <table id="contactTable">
+        <thead>
+          <tr>
+            <th onclick="sortTable('contactTable', 0)">Channel</th>
+            <th onclick="sortTable('contactTable', 1)">Details</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>📞 Phone</td><td><a href="tel:8056886510" style="color:#CF2030;">(805) 688-6510</a></td></tr>
+          <tr><td>📧 Email</td><td><a href="mailto:info@alamopintado.com" style="color:#CF2030;">info@alamopintado.com</a></td></tr>
+          <tr><td>🌐 Website</td><td><a href="https://alamopintado.com" target="_blank" style="color:#CF2030;">alamopintado.com</a></td></tr>
+          <tr><td>💼 LinkedIn</td><td><a href="#" style="color:#CF2030;">Mark Herthel</a></td></tr>
+          <tr><td>📍 Address</td><td>2501 Santa Barbara Avenue, Los Olivos, CA 93441</td></tr>
+        </tbody>
+      </table>
+
+      <div class="contact-actions">
+        <a class="btn-contact btn-phone" href="tel:8056886510">📞 Call Mark</a>
+        <a class="btn-contact btn-email" id="emailBtn" href="#">📧 Send Email Invitation</a>
+        <a class="btn-contact btn-linkedin" href="#" target="_blank">💼 Connect on LinkedIn</a>
+        <a class="btn-contact btn-web" href="https://alamopintado.com" target="_blank">🌐 Visit Website</a>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports" />
+  <span class="copy">© 2025 Higgins Reports — S.A.L.E. Client Strategy Report | Powered by Higgins AI</span>
+</div>
+
+<script>
+  // NAV
+  function showSection(id) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    document.querySelectorAll('.nav button').forEach(b => b.classList.remove('active'));
+    event.target.classList.add('active');
+  }
+
+  // SEARCH / FILTER
+  function filterTable(tableId, inputId) {
+    const filter = document.getElementById(inputId).value.toUpperCase();
+    const rows = document.getElementById(tableId).querySelectorAll('tbody tr');
+    rows.forEach(row => {
+      const text = row.textContent.toUpperCase();
+      row.style.display = text.includes(filter) ? '' : 'none';
+    });
+  }
+
+  // SORT
+  let sortStates = {};
+  function sortTable(tableId, colIdx) {
+    const table = document.getElementById(tableId);
+    const tbody = table.querySelector('tbody');
+    const rows = Array.from(tbody.querySelectorAll('tr'));
+    const headers = table.querySelectorAll('thead th');
+    
+    const key = tableId + '_' + colIdx;
+    sortStates[key] = sortStates[key] === 'asc' ? 'desc' : 'asc';
+    const dir = sortStates[key];
+
+    headers.forEach((h, i) => { h.classList.remove('asc', 'desc'); if (i === colIdx) h.classList.add(dir); });
+
+    rows.sort((a, b) => {
+      let aVal = a.cells[colIdx].textContent.trim();
+      let bVal = b.cells[colIdx].textContent.trim();
+      const aNum = parseFloat(aVal);
+      const bNum = parseFloat(bVal);
+      if (!isNaN(aNum) && !isNaN(bNum)) {
+        return dir === 'asc' ? aNum - bNum : bNum - aNum;
+      }
+      return dir === 'asc' ? aVal.localeCompare(bVal) : bVal.localeCompare(aVal);
+    });
+    rows.forEach(r => tbody.appendChild(r));
+  }
+
+  // EMAIL BUTTON
+  document.getElementById('emailBtn').addEventListener('click', function(e) {
+    e.preventDefault();
+    const subject = encodeURIComponent('Invitation to Visit Our BNI Chapter — A Perfect Fit for Alamo Pintado');
+    const body = encodeURIComponent(
+`Dear Mark,
+
+I hope this message finds you well! I'm reaching out because I believe Alamo Pintado Equine Medical Center would be an outstanding addition to our BNI chapter — and here's why:
+
+1. YOUR REFERRAL-BASED MODEL IS A NATURAL FIT: With 50+ years of building trust through referring veterinarians, you already understand the power of structured referral relationships. BNI's Givers Gain® philosophy mirrors exactly how you've built your practice.
+
+2. CONNECT WITH COMPLEMENTARY PROFESSIONALS: Imagine having trusted connections with equine insurance agents, farriers, feed suppliers, ranch real estate professionals, and equestrian event planners — all referring clients to your center and vice versa.
+
+3. OPERATIONAL SUPPORT FOR A GROWING BUSINESS: With 51–200 employees, your needs span insurance, HR, commercial services, and financial planning. Our BNI chapter is filled with vetted local professionals who can support your operations.
+
+I'd love to invite you to visit our next BNI chapter meeting as a guest — no obligation, just an opportunity to experience firsthand how structured networking can amplify what you've already built so beautifully in the Santa Ynez Valley.
+
+To reserve your seat, simply complete this form: ***Visitor Invite***
+
+Would any of the upcoming meeting dates work for you? I'm happy to share details.
+
+Looking forward to connecting!
+
+Warm regards`
+    );
+    window.open(`mailto:info@alamopintado.com?subject=${subject}&body=${body}`);
+  });
+
+  // CHARTS
+  const chartColors = {
+    red: '#CF2030',
+    redLight: 'rgba(207, 32, 48, 0.3)',
+    white: '#ffffff',
+    gray: '#888',
+    grid: '#222',
+    bg: '#141414'
+  };
+
+  Chart.defaults.color = '#888';
+  Chart.defaults.borderColor = '#222';
+
+  // Leverage Chart
+  new Chart(document.getElementById('leverageChart'), {
+    type: 'bar',
+    data: {
+      labels: ['50+ Year Legacy', 'Innovation Leader', 'Referral Model', 'Central Coast', '51-200 Employees'],
+      datasets: [{
+        label: 'Impact Score',
+        data: [5, 4, 5, 4, 5],
+        backgroundColor: ['#CF2030', '#e04050', '#CF2030', '#e04050', '#CF2030'],
+        borderColor: '#CF2030',
+        borderWidth: 1,
+        borderRadius: 6
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { display: false } },
+      scales: { y: { beginAtZero: true, max: 5, ticks: { stepSize: 1 }, grid: { color: '#222' } }, x: { grid: { display: false } } }
+    }
+  });
+
+  // Timeline Chart
+  new Chart(document.getElementById('timelineChart'), {
+    type: 'line',
+    data: {
+      labels: ['Day 1', 'Day 1-2', 'Day 2-3', 'Day 3-5', 'Day 7'],
+      datasets: [{
+        label: 'Engagement Steps',
+        data: [1, 2, 3, 4, 5],
+        borderColor: '#CF2030',
+        backgroundColor: 'rgba(207, 32, 48, 0.15)',
+        fill: true,
+        tension: 0.4,
+        pointBackgroundColor: '#CF2030',
+        pointBorderColor: '#fff',
+        pointRadius: 7,
+        pointHoverRadius: 10
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { display: false }, tooltip: {
+        callbacks: {
+          label: function(ctx) {
+            const steps = ['LinkedIn Connect', 'Phone Call', 'Email Introduction', 'Visitor Invitation', 'Follow Up'];
+            return steps[ctx.dataIndex];
+          }
+        }
+      }},
+      scales: { y: { beginAtZero: true, max: 6, ticks: { stepSize: 1, callback: v => 'Step ' + v }, grid: { color: '#222' } }, x: { grid: { color: '#1a1a1a' } } }
+    }
+  });
+
+  // Specialties Doughnut
+  new Chart(document.getElementById('specialtiesChart'), {
+    type: 'doughnut',
+    data: {
+      labels: ['Advanced Surgery', 'Diagnostic Imaging', 'Regenerative Medicine', 'Internal Medicine', 'Referral Network'],
+      datasets: [{
+        data: [25, 20, 20, 20, 15],
+        backgroundColor: ['#CF2030', '#e04050', '#ff6070', '#992028', '#661018'],
+        borderColor: '#141414',
+        borderWidth: 3
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { position: 'bottom', labels: { padding: 14, usePointStyle: true, font: { size: 11 } } } }
+    }
+  });
+
+  // Radar Chart — BNI Fit
+  new Chart(document.getElementById('radarChart'), {
+    type: 'radar',
+    data: {
+      labels: ['Referral Readiness', 'Community Ties', 'Business Size', 'Industry Prestige', 'Contact Sphere Fit', 'Growth Potential'],
+      datasets: [{
+        label: 'BNI Fit Score',
+        data: [95, 88, 85, 92, 90, 87],
+        backgroundColor: 'rgba(207, 32, 48, 0.2)',
+        borderColor: '#CF2030',
+        pointBackgroundColor: '#CF2030',
+        pointBorderColor: '#fff',
+        pointRadius: 5
+      }]
+    },
+    options: {
+      responsive: true,
+      scales: { r: { beginAtZero: true, max: 100, ticks: { stepSize: 20, color: '#555', backdropColor: 'transparent' }, grid: { color: '#333' }, pointLabels: { color: '#aaa', font: { size: 11 } } } },
+      plugins: { legend: { position: 'bottom', labels: { usePointStyle: true } } }
+    }
+  });
+
+  // Metrics Bar
+  new Chart(document.getElementById('metricsChart'), {
+    type: 'bar',
+    data: {
+      labels: ['Years Operating', 'Min Employees', 'Max Employees', 'Core Specialties', 'Engagement Steps', 'Leverage Points', 'Approach Angles'],
+      datasets: [{
+        label: 'Key Metrics',
+        data: [50, 51, 200, 5, 5, 5, 3],
+        backgroundColor: [
+          '#CF2030', '#e04050', '#ff6070', '#992028', '#CF2030', '#e04050', '#ff6070'
+        ],
+        borderRadius: 6
+      }]
+    },
+    options: {
+      responsive: true,
+      indexAxis: 'y',
+      plugins: { legend: { display: false } },
+      scales: { x: { grid: { color: '#222' } }, y: { grid: { display: false } } }
+    }
+  });
+</script>
+
+</body>
+</html>

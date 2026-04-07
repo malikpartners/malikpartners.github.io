@@ -1,0 +1,1619 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>S.A.L.E. Client Targeting System - Robinson Hill Architecture</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #000000;
+            color: #ffffff;
+            line-height: 1.6;
+        }
+
+        .header {
+            background: #CF2030;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(207, 32, 48, 0.3);
+        }
+
+        .header img {
+            height: 60px;
+        }
+
+        .company-info {
+            text-align: right;
+            color: white;
+        }
+
+        .company-info h2 {
+            margin: 0;
+            font-size: 1.2rem;
+        }
+
+        .company-info p {
+            margin: 0;
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .nav-tabs {
+            display: flex;
+            background: #333;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+
+        .nav-tab {
+            flex: 1;
+            background: #333;
+            color: white;
+            border: none;
+            padding: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .nav-tab:hover {
+            background: #CF2030;
+        }
+
+        .nav-tab.active {
+            background: #CF2030;
+        }
+
+        .tab-content {
+            display: none;
+            background: #1a1a1a;
+            border-radius: 8px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .section-header {
+            color: #CF2030;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid #CF2030;
+            padding-bottom: 0.5rem;
+        }
+
+        .controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .search-box, .filter-select, .btn {
+            padding: 0.75rem 1rem;
+            border: 1px solid #444;
+            border-radius: 6px;
+            background: #333;
+            color: white;
+            font-size: 0.9rem;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .btn {
+            background: #CF2030;
+            border-color: #CF2030;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn:hover {
+            background: #a91825;
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: #666;
+            border-color: #666;
+        }
+
+        .btn-secondary:hover {
+            background: #555;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            background: #222;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 1200px;
+        }
+
+        th, td {
+            padding: 1rem 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #333;
+            font-size: 0.85rem;
+        }
+
+        th {
+            background: #CF2030;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            position: relative;
+            white-space: nowrap;
+        }
+
+        th:hover {
+            background: #a91825;
+        }
+
+        tr:hover {
+            background: #333;
+        }
+
+        .tier-1a { background: rgba(46, 204, 113, 0.2); }
+        .tier-1b { background: rgba(241, 196, 15, 0.2); }
+        .tier-1c { background: rgba(52, 152, 219, 0.2); }
+
+        .tier-badge {
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .tier-1a .tier-badge { background: #2ecc71; color: white; }
+        .tier-1b .tier-badge { background: #f1c40f; color: black; }
+        .tier-1c .tier-badge { background: #3498db; color: white; }
+
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .action-btn {
+            padding: 0.5rem 0.75rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            transition: all 0.3s;
+        }
+
+        .email-btn {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .call-btn {
+            background: #2ecc71;
+            color: white;
+        }
+
+        .contact-btn {
+            background: #3498db;
+            color: white;
+        }
+
+        .scoring-form {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .score-card {
+            background: #333;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid #CF2030;
+        }
+
+        .score-card h4 {
+            color: #CF2030;
+            margin-bottom: 0.5rem;
+        }
+
+        .score-slider {
+            width: 100%;
+            margin: 1rem 0;
+        }
+
+        .score-display {
+            font-weight: bold;
+            color: #CF2030;
+            font-size: 1.2rem;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .metric-card {
+            background: #333;
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+            border-top: 4px solid #CF2030;
+        }
+
+        .metric-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #CF2030;
+        }
+
+        .metric-label {
+            color: #ccc;
+            margin-top: 0.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #CF2030;
+            font-weight: 600;
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #444;
+            border-radius: 6px;
+            background: #333;
+            color: white;
+        }
+
+        .form-group textarea {
+            height: 100px;
+            resize: vertical;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: #222;
+            margin: 5% auto;
+            padding: 2rem;
+            width: 90%;
+            max-width: 600px;
+            border-radius: 8px;
+            position: relative;
+        }
+
+        .close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            color: #ccc;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .footer {
+            background: #111;
+            padding: 1rem 2rem;
+            text-align: center;
+            margin-top: 3rem;
+            border-top: 1px solid #333;
+        }
+
+        .footer img {
+            height: 30px;
+            margin-bottom: 0.5rem;
+        }
+
+        .footer p {
+            color: #666;
+            font-size: 0.8rem;
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .controls {
+                flex-direction: column;
+            }
+
+            .nav-tabs {
+                flex-direction: column;
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports">
+        <div class="company-info">
+            <h2>Robinson Hill Architecture, Inc.</h2>
+            <p>Costa Mesa, California | Architecture & Planning</p>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="showTab('sourcing')">S.OURCING</button>
+            <button class="nav-tab" onclick="showTab('assessing')">A.SSESSING</button>
+            <button class="nav-tab" onclick="showTab('listening')">L.ISTENING</button>
+            <button class="nav-tab" onclick="showTab('empowering')">E.MPOWERING</button>
+            <button class="nav-tab" onclick="showTab('analytics')">Analytics</button>
+        </div>
+
+        <!-- SOURCING Tab -->
+        <div id="sourcing" class="tab-content active">
+            <h2 class="section-header">S.A.L.E. SOURCING - Client Database & P.U.R.E.S. Scoring</h2>
+            
+            <div class="dashboard-grid">
+                <div class="metric-card">
+                    <div class="metric-number" id="totalClients">50</div>
+                    <div class="metric-label">Total Prospects</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number" id="tier1aCount">15</div>
+                    <div class="metric-label">Tier 1A (Premium)</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number" id="tier1bCount">20</div>
+                    <div class="metric-label">Tier 1B (High-Value)</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number" id="tier1cCount">15</div>
+                    <div class="metric-label">Tier 1C (Qualified)</div>
+                </div>
+            </div>
+
+            <div class="controls">
+                <input type="text" id="searchInput" class="search-box" placeholder="Search clients, companies, or locations...">
+                <select id="tierFilter" class="filter-select">
+                    <option value="">All Tiers</option>
+                    <option value="1A">Tier 1A - Premium</option>
+                    <option value="1B">Tier 1B - High-Value</option>
+                    <option value="1C">Tier 1C - Qualified</option>
+                </select>
+                <select id="industryFilter" class="filter-select">
+                    <option value="">All Industries</option>
+                    <option value="Commercial">Commercial Development</option>
+                    <option value="Residential">Residential Development</option>
+                    <option value="Healthcare">Healthcare</option>
+                    <option value="Education">Education</option>
+                    <option value="Hospitality">Hospitality</option>
+                    <option value="Retail">Retail</option>
+                </select>
+                <button class="btn" onclick="exportData()">Export CSV</button>
+                <button class="btn btn-secondary" onclick="showAddClientModal()">Add Client</button>
+            </div>
+
+            <div class="table-container">
+                <table id="clientTable">
+                    <thead>
+                        <tr>
+                            <th onclick="sortTable(0)">Client Name</th>
+                            <th onclick="sortTable(1)">Email</th>
+                            <th onclick="sortTable(2)">Phone</th>
+                            <th onclick="sortTable(3)">Address</th>
+                            <th onclick="sortTable(4)">P.U.R.E.S. Score</th>
+                            <th onclick="sortTable(5)">Tier Level</th>
+                            <th onclick="sortTable(6)">Industry</th>
+                            <th onclick="sortTable(7)">Revenue Est.</th>
+                            <th onclick="sortTable(8)">Last Contact</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="clientTableBody">
+                        <!-- Client data will be populated here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- ASSESSING Tab -->
+        <div id="assessing" class="tab-content">
+            <h2 class="section-header">A.SSESSING - Buying Pattern Analysis</h2>
+            
+            <div class="scoring-form">
+                <div class="score-card">
+                    <h4>Profitability</h4>
+                    <p>Annual revenue threshold and budget capacity</p>
+                    <input type="range" class="score-slider" min="1" max="5" value="3" id="profitabilityScore">
+                    <div class="score-display">Score: <span id="profitabilityDisplay">3</span>/5</div>
+                </div>
+                
+                <div class="score-card">
+                    <h4>Urgency</h4>
+                    <p>Active pain points requiring immediate solutions</p>
+                    <input type="range" class="score-slider" min="1" max="5" value="3" id="urgencyScore">
+                    <div class="score-display">Score: <span id="urgencyDisplay">3</span>/5</div>
+                </div>
+                
+                <div class="score-card">
+                    <h4>Reachability</h4>
+                    <p>Accessible decision makers with clear contact paths</p>
+                    <input type="range" class="score-slider" min="1" max="5" value="3" id="reachabilityScore">
+                    <div class="score-display">Score: <span id="reachabilityDisplay">3</span>/5</div>
+                </div>
+                
+                <div class="score-card">
+                    <h4>Engagement</h4>
+                    <p>Openness to innovation and partnerships</p>
+                    <input type="range" class="score-slider" min="1" max="5" value="3" id="engagementScore">
+                    <div class="score-display">Score: <span id="engagementDisplay">3</span>/5</div>
+                </div>
+                
+                <div class="score-card">
+                    <h4>Sustainability</h4>
+                    <p>Long-term partnership potential with growth trajectory</p>
+                    <input type="range" class="score-slider" min="1" max="5" value="3" id="sustainabilityScore">
+                    <div class="score-display">Score: <span id="sustainabilityDisplay">3</span>/5</div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Buying Pattern Assessment</label>
+                <select id="buyingPattern">
+                    <option value="Analytical">Analytical Buyers - Require detailed ROI analysis</option>
+                    <option value="Relationship">Relationship Buyers - Value trust and referrals</option>
+                    <option value="Efficiency">Efficiency Buyers - Focus on time-saving solutions</option>
+                    <option value="Innovation">Innovation Buyers - Seek cutting-edge solutions</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Decision Timeline</label>
+                <select id="decisionTimeline">
+                    <option value="Immediate">Immediate (0-30 days)</option>
+                    <option value="Short">Short-term (1-3 months)</option>
+                    <option value="Medium">Medium-term (3-6 months)</option>
+                    <option value="Long">Long-term (6+ months)</option>
+                </select>
+            </div>
+
+            <button class="btn" onclick="calculatePURESScore()">Calculate & Save Assessment</button>
+        </div>
+
+        <!-- LISTENING Tab -->
+        <div id="listening" class="tab-content">
+            <h2 class="section-header">L.ISTENING - Feedback Integration</h2>
+            
+            <div class="form-group">
+                <label>Client Feedback Type</label>
+                <select id="feedbackType">
+                    <option value="Pre-Sale">Pre-Sale Inquiry</option>
+                    <option value="During-Sale">During-Sale Progress</option>
+                    <option value="Post-Sale">Post-Sale Satisfaction</option>
+                    <option value="Complaint">Complaint Resolution</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Feedback Details</label>
+                <textarea id="feedbackDetails" placeholder="Enter detailed feedback from client interaction..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Satisfaction Rating</label>
+                <select id="satisfactionRating">
+                    <option value="5">5 - Excellent</option>
+                    <option value="4">4 - Good</option>
+                    <option value="3">3 - Average</option>
+                    <option value="2">2 - Below Average</option>
+                    <option value="1">1 - Poor</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Follow-up Required</label>
+                <select id="followupRequired">
+                    <option value="No">No Follow-up Needed</option>
+                    <option value="Yes">Follow-up Required</option>
+                    <option value="Urgent">Urgent Follow-up</option>
+                </select>
+            </div>
+
+            <button class="btn" onclick="saveFeedback()">Save Feedback</button>
+        </div>
+
+        <!-- EMPOWERING Tab -->
+        <div id="empowering" class="tab-content">
+            <h2 class="section-header">E.MPOWERING - Referral Strategy</h2>
+            
+            <div class="dashboard-grid">
+                <div class="metric-card">
+                    <div class="metric-number">12</div>
+                    <div class="metric-label">Active Referrals</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">8</div>
+                    <div class="metric-label">Success Stories</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">$125K</div>
+                    <div class="metric-label">Referral Revenue</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">25%</div>
+                    <div class="metric-label">Conversion Rate</div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Success Story Title</label>
+                <input type="text" id="successTitle" placeholder="e.g., Modern Office Complex for Tech Startup">
+            </div>
+
+            <div class="form-group">
+                <label>Project Details</label>
+                <textarea id="projectDetails" placeholder="Describe the successful project outcome..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Referral Source</label>
+                <input type="text" id="referralSource" placeholder="Who referred this client?">
+            </div>
+
+            <div class="form-group">
+                <label>Referral Reward</label>
+                <input type="number" id="referralReward" placeholder="Reward amount ($)">
+            </div>
+
+            <button class="btn" onclick="saveSuccessStory()">Document Success Story</button>
+        </div>
+
+        <!-- ANALYTICS Tab -->
+        <div id="analytics" class="tab-content">
+            <h2 class="section-header">Analytics Dashboard</h2>
+            
+            <div class="dashboard-grid">
+                <div class="metric-card">
+                    <div class="metric-number">85%</div>
+                    <div class="metric-label">P.U.R.E.S. Accuracy</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">92%</div>
+                    <div class="metric-label">Assessment Accuracy</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">78%</div>
+                    <div class="metric-label">Feedback Collection Rate</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">2.3</div>
+                    <div class="metric-label">Referrals per Client</div>
+                </div>
+            </div>
+
+            <h3 style="color: #CF2030; margin: 2rem 0 1rem 0;">Performance Metrics</h3>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Metric</th>
+                            <th>Current</th>
+                            <th>Target</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>P.U.R.E.S. Score Accuracy</td>
+                            <td>85%</td>
+                            <td>80%</td>
+                            <td style="color: #2ecc71;">✓ Above Target</td>
+                        </tr>
+                        <tr>
+                            <td>Needs Assessment Accuracy</td>
+                            <td>92%</td>
+                            <td>90%</td>
+                            <td style="color: #2ecc71;">✓ Above Target</td>
+                        </tr>
+                        <tr>
+                            <td>Feedback Collection Rate</td>
+                            <td>78%</td>
+                            <td>70%</td>
+                            <td style="color: #2ecc71;">✓ Above Target</td>
+                        </tr>
+                        <tr>
+                            <td>Referral Generation</td>
+                            <td>2.3</td>
+                            <td>2.0</td>
+                            <td style="color: #2ecc71;">✓ Above Target</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Client Modal -->
+    <div id="addClientModal" class="modal">
+        <div class="modal-content">
+            <button class="close" onclick="closeModal()">&times;</button>
+            <h3>Add New Client</h3>
+            <div class="form-group">
+                <label>Client Name</label>
+                <input type="text" id="newClientName">
+            </div>
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" id="newClientEmail">
+            </div>
+            <div class="form-group">
+                <label>Phone</label>
+                <input type="tel" id="newClientPhone">
+            </div>
+            <div class="form-group">
+                <label>Address</label>
+                <input type="text" id="newClientAddress">
+            </div>
+            <div class="form-group">
+                <label>Industry</label>
+                <select id="newClientIndustry">
+                    <option value="Commercial">Commercial Development</option>
+                    <option value="Residential">Residential Development</option>
+                    <option value="Healthcare">Healthcare</option>
+                    <option value="Education">Education</option>
+                    <option value="Hospitality">Hospitality</option>
+                    <option value="Retail">Retail</option>
+                </select>
+            </div>
+            <button class="btn" onclick="addNewClient()">Add Client</button>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports">
+        <p>&copy; 2024 Higgins Reports. All rights reserved. | S.A.L.E. System Implementation</p>
+    </footer>
+
+    <script>
+        // Sample client data for Robinson Hill Architecture
+        const clientData = [
+            {
+                name: "Sarah Chen",
+                email: "s.chen@techstartup.com", 
+                phone: "(714) 555-0123",
+                address: "1500 Main St, Irvine, CA 92614",
+                puresScore: 4.8,
+                tier: "1A",
+                industry: "Commercial",
+                revenue: "$2.5M",
+                lastContact: "2024-01-15",
+                notes: "Seeking modern office space design"
+            },
+            {
+                name: "Michael Rodriguez", 
+                email: "mrodriguez@healthcaresys.com",
+                phone: "(949) 555-0234", 
+                address: "2200 Healthcare Blvd, Newport Beach, CA 92660",
+                puresScore: 4.6,
+                tier: "1A", 
+                industry: "Healthcare",
+                revenue: "$15M",
+                lastContact: "2024-01-18",
+                notes: "Medical facility expansion project"
+            },
+            {
+                name: "Jennifer Kim",
+                email: "jkim@residentialdev.com",
+                phone: "(714) 555-0345",
+                address: "800 Residential Way, Huntington Beach, CA 92648", 
+                puresScore: 4.2,
+                tier: "1B",
+                industry: "Residential", 
+                revenue: "$8M",
+                lastContact: "2024-01-12",
+                notes: "Luxury housing development"
+            },
+            {
+                name: "David Thompson",
+                email: "dthompson@schooldistrict.edu",
+                phone: "(714) 555-0456",
+                address: "1200 Education Ave, Fountain Valley, CA 92708",
+                puresScore: 4.4,
+                tier: "1A",
+                industry: "Education",
+                revenue: "$25M",
+                lastContact: "2024-01-20",
+                notes: "New elementary school design"
+            },
+            {
+                name: "Lisa Martinez",
+                email: "lmartinez@hospitalitygroup.com", 
+                phone: "(949) 555-0567",
+                address: "3000 Hotel Dr, Laguna Beach, CA 92651",
+                puresScore: 3.9,
+                tier: "1B",
+                industry: "Hospitality",
+                revenue: "$12M", 
+                lastContact: "2024-01-10",
+                notes: "Boutique hotel renovation"
+            },
+            {
+                name: "Robert Johnson",
+                email: "rjohnson@retailchain.com",
+                phone: "(714) 555-0678",
+                address: "500 Shopping Center Dr, Tustin, CA 92780",
+                puresScore: 3.7,
+                tier: "1B", 
+                industry: "Retail",
+                revenue: "$5M",
+                lastContact: "2024-01-08",
+                notes: "Flagship store redesign"
+            },
+            {
+                name: "Amanda White",
+                email: "awhite@officecomplexes.com",
+                phone: "(949) 555-0789",
+                address: "1800 Business Park Blvd, Costa Mesa, CA 92626",
+                puresScore: 4.1,
+                tier: "1B",
+                industry: "Commercial", 
+                revenue: "$18M",
+                lastContact: "2024-01-16",
+                notes: "Corporate headquarters design"
+            },
+            {
+                name: "James Wilson",
+                email: "jwilson@medicalcenter.org",
+                phone: "(714) 555-0890", 
+                address: "900 Medical Plaza, Orange, CA 92868",
+                puresScore: 4.5,
+                tier: "1A",
+                industry: "Healthcare",
+                revenue: "$30M",
+                lastContact: "2024-01-22", 
+                notes: "Surgical center expansion"
+            },
+            {
+                name: "Maria Garcia",
+                email: "mgarcia@luxuryhomes.com",
+                phone: "(949) 555-0901",
+                address: "2500 Luxury Lane, Newport Coast, CA 92657",
+                puresScore: 3.8,
+                tier: "1B",
+                industry: "Residential",
+                revenue: "$6M",
+                lastContact: "2024-01-14",
+                notes: "Custom home designs"
+            },
+            {
+                name: "Thomas Brown",
+                email: "tbrown@universitygroup.edu",
+                phone: "(714) 555-1012", 
+                address: "1100 University Dr, Fullerton, CA 92831",
+                puresScore: 4.3,
+                tier: "1A",
+                industry: "Education",
+                revenue: "$50M", 
+                lastContact: "2024-01-25",
+                notes: "Campus master planning"
+            },
+            {
+                name: "Elizabeth Davis",
+                email: "edavis@resorthotels.com",
+                phone: "(949) 555-1123",
+                address: "4000 Resort Way, Dana Point, CA 92629",
+                puresScore: 4.0,
+                tier: "1B",
+                industry: "Hospitality",
+                revenue: "$20M",
+                lastContact: "2024-01-11",
+                notes: "Resort renovation project"
+            },
+            {
+                name: "Christopher Lee",
+                email: "clee@mallgroup.com",
+                phone: "(714) 555-1234",
+                address: "700 Mall Blvd, Anaheim, CA 92805",
+                puresScore: 3.6,
+                tier: "1C",
+                industry: "Retail",
+                revenue: "$8M",
+                lastContact: "2024-01-09",
+                notes: "Shopping center updates"
+            },
+            {
+                name: "Michelle Taylor",
+                email: "mtaylor@corporateoffices.com",
+                phone: "(949) 555-1345",
+                address: "1600 Corporate Center, Irvine, CA 92614",
+                puresScore: 3.9,
+                tier: "1B",
+                industry: "Commercial",
+                revenue: "$10M",
+                lastContact: "2024-01-17",
+                notes: "Office space planning"
+            },
+            {
+                name: "Daniel Anderson",
+                email: "danderson@clinics.com",
+                phone: "(714) 555-1456",
+                address: "1000 Clinic Way, Garden Grove, CA 92840",
+                puresScore: 3.5,
+                tier: "1C",
+                industry: "Healthcare",
+                revenue: "$4M",
+                lastContact: "2024-01-13",
+                notes: "Medical office design"
+            },
+            {
+                name: "Karen Moore",
+                email: "kmoore@condodevelopment.com",
+                phone: "(949) 555-1567",
+                address: "3200 Condo Dr, Mission Viejo, CA 92691",
+                puresScore: 3.4,
+                tier: "1C",
+                industry: "Residential",
+                revenue: "$3M",
+                lastContact: "2024-01-07",
+                notes: "Condominium complex"
+            },
+            {
+                name: "Steven Clark",
+                email: "sclark@collegegroup.edu",
+                phone: "(714) 555-1678",
+                address: "1400 College Blvd, Santa Ana, CA 92706",
+                puresScore: 4.1,
+                tier: "1B",
+                industry: "Education",
+                revenue: "$12M",
+                lastContact: "2024-01-19",
+                notes: "Student center design"
+            },
+            {
+                name: "Nancy Lewis",
+                email: "nlewis@boutiquehotels.com",
+                phone: "(949) 555-1789",
+                address: "2800 Boutique Ave, Laguna Niguel, CA 92677",
+                puresScore: 3.7,
+                tier: "1C",
+                industry: "Hospitality",
+                revenue: "$4.5M",
+                lastContact: "2024-01-06",
+                notes: "Boutique hotel design"
+            },
+            {
+                name: "Paul Walker",
+                email: "pwalker@shoppingcenters.com",
+                phone: "(714) 555-1890",
+                address: "600 Shopping Plaza, Cypress, CA 90630",
+                puresScore: 3.3,
+                tier: "1C",
+                industry: "Retail",
+                revenue: "$2.8M",
+                lastContact: "2024-01-05",
+                notes: "Strip mall renovation"
+            },
+            {
+                name: "Laura Hall",
+                email: "lhall@corporateparks.com",
+                phone: "(949) 555-1901",
+                address: "2100 Corporate Way, Lake Forest, CA 92630",
+                puresScore: 4.0,
+                tier: "1B",
+                industry: "Commercial",
+                revenue: "$14M",
+                lastContact: "2024-01-21",
+                notes: "Business park planning"
+            },
+            {
+                name: "Mark Young",
+                email: "myoung@hospitals.org",
+                phone: "(714) 555-2012",
+                address: "1300 Hospital Dr, Westminster, CA 92683",
+                puresScore: 4.7,
+                tier: "1A",
+                industry: "Healthcare",
+                revenue: "$40M",
+                lastContact: "2024-01-24",
+                notes: "Hospital expansion"
+            },
+            {
+                name: "Sandra King",
+                email: "sking@luxuryestates.com",
+                phone: "(949) 555-2123",
+                address: "3500 Estate Dr, Coto de Caza, CA 92679",
+                puresScore: 3.8,
+                tier: "1B",
+                industry: "Residential",
+                revenue: "$7M",
+                lastContact: "2024-01-12",
+                notes: "Estate home designs"
+            },
+            {
+                name: "Kevin Scott",
+                email: "kscott@privateschools.edu",
+                phone: "(714) 555-2234",
+                address: "1700 Academy Rd, Yorba Linda, CA 92886",
+                puresScore: 3.9,
+                tier: "1B",
+                industry: "Education",
+                revenue: "$8M",
+                lastContact: "2024-01-15",
+                notes: "Private school campus"
+            },
+            {
+                name: "Lisa Adams",
+                email: "ladams@spas.com",
+                phone: "(949) 555-2345",
+                address: "2600 Spa Way, Corona del Mar, CA 92625",
+                puresScore: 3.6,
+                tier: "1C",
+                industry: "Hospitality",
+                revenue: "$3.5M",
+                lastContact: "2024-01-08",
+                notes: "Spa facility design"
+            },
+            {
+                name: "Ryan Baker",
+                email: "rbaker@outletmalls.com",
+                phone: "(714) 555-2456",
+                address: "800 Outlet Dr, Buena Park, CA 90620",
+                puresScore: 3.4,
+                tier: "1C",
+                industry: "Retail",
+                revenue: "$6M",
+                lastContact: "2024-01-04",
+                notes: "Outlet center upgrades"
+            },
+            {
+                name: "Nicole Green",
+                email: "ngreen@techparks.com",
+                phone: "(949) 555-2567",
+                address: "1900 Innovation Dr, Aliso Viejo, CA 92656",
+                puresScore: 4.2,
+                tier: "1B",
+                industry: "Commercial",
+                revenue: "$16M",
+                lastContact: "2024-01-18",
+                notes: "Tech campus design"
+            },
+            {
+                name: "Brandon Phillips",
+                email: "bphillips@emergencycenter.org",
+                phone: "(714) 555-2678",
+                address: "1050 Emergency Way, La Habra, CA 90631",
+                puresScore: 4.4,
+                tier: "1A",
+                industry: "Healthcare",
+                revenue: "$8M",
+                lastContact: "2024-01-23",
+                notes: "Emergency care facility"
+            },
+            {
+                name: "Jennifer Evans",
+                email: "jevans@townhomes.com",
+                phone: "(949) 555-2789",
+                address: "2700 Townhome Ln, Trabuco Canyon, CA 92679",
+                puresScore: 3.5,
+                tier: "1C",
+                industry: "Residential",
+                revenue: "$4.2M",
+                lastContact: "2024-01-10",
+                notes: "Townhome development"
+            },
+            {
+                name: "Gregory Campbell",
+                email: "gcampbell@community.edu",
+                phone: "(714) 555-2890",
+                address: "1250 Community Blvd, Stanton, CA 90680",
+                puresScore: 3.7,
+                tier: "1C",
+                industry: "Education",
+                revenue: "$5M",
+                lastContact: "2024-01-14",
+                notes: "Community center"
+            },
+            {
+                name: "Stephanie Parker",
+                email: "sparker@conferencecenter.com",
+                phone: "(949) 555-2901",
+                address: "3100 Conference Dr, San Juan Capistrano, CA 92675",
+                puresScore: 3.8,
+                tier: "1B",
+                industry: "Hospitality",
+                revenue: "$9M",
+                lastContact: "2024-01-16",
+                notes: "Conference center expansion"
+            },
+            {
+                name: "Joshua Carter",
+                email: "jcarter@lifestyle.com",
+                phone: "(714) 555-3012",
+                address: "750 Lifestyle Center, Brea, CA 92821",
+                puresScore: 3.6,
+                tier: "1C",
+                industry: "Retail",
+                revenue: "$4.8M",
+                lastContact: "2024-01-11",
+                notes: "Lifestyle center design"
+            },
+            {
+                name: "Amanda Roberts",
+                email: "aroberts@businesscenter.com",
+                phone: "(949) 555-3123",
+                address: "1850 Business Center Dr, San Clemente, CA 92672",
+                puresScore: 3.9,
+                tier: "1B",
+                industry: "Commercial",
+                revenue: "$11M",
+                lastContact: "2024-01-20",
+                notes: "Business center planning"
+            },
+            {
+                name: "Nathan Turner",
+                email: "nturner@surgerycenter.org",
+                phone: "(714) 555-3234",
+                address: "1150 Surgery Dr, Placentia, CA 92870",
+                puresScore: 4.3,
+                tier: "1A",
+                industry: "Healthcare",
+                revenue: "$12M",
+                lastContact: "2024-01-25",
+                notes: "Outpatient surgery center"
+            },
+            {
+                name: "Melissa Collins",
+                email: "mcollins@apartments.com",
+                phone: "(949) 555-3345",
+                address: "2900 Apartment Complex Dr, Rancho Santa Margarita, CA 92688",
+                puresScore: 3.4,
+                tier: "1C",
+                industry: "Residential",
+                revenue: "$6.5M",
+                lastContact: "2024-01-09",
+                notes: "Apartment complex design"
+            },
+            {
+                name: "Timothy Stewart",
+                email: "tstewart@libraries.edu",
+                phone: "(714) 555-3456",
+                address: "1350 Library Way, Los Alamitos, CA 90720",
+                puresScore: 3.5,
+                tier: "1C",
+                industry: "Education",
+                revenue: "$3.8M",
+                lastContact: "2024-01-07",
+                notes: "Public library renovation"
+            },
+            {
+                name: "Heather Morris",
+                email: "hmorris@beachresort.com",
+                phone: "(949) 555-3567",
+                address: "3300 Beach Resort Dr, Huntington Beach, CA 92649",
+                puresScore: 4.1,
+                tier: "1B",
+                industry: "Hospitality",
+                revenue: "$22M",
+                lastContact: "2024-01-17",
+                notes: "Beachfront resort design"
+            },
+            {
+                name: "Jeremy Cook",
+                email: "jcook@powercenters.com",
+                phone: "(714) 555-3678",
+                address: "850 Power Center Blvd, La Mirada, CA 90638",
+                puresScore: 3.3,
+                tier: "1C",
+                industry: "Retail",
+                revenue: "$7.2M",
+                lastContact: "2024-01-03",
+                notes: "Power center renovation"
+            },
+            {
+                name: "Rachel Bailey",
+                email: "rbailey@medicalpark.com",
+                phone: "(949) 555-3789",
+                address: "2000 Medical Park Dr, Laguna Hills, CA 92653",
+                puresScore: 4.0,
+                tier: "1B",
+                industry: "Commercial",
+                revenue: "$13M",
+                lastContact: "2024-01-19",
+                notes: "Medical office park"
+            },
+            {
+                name: "Brian Rivera",
+                email: "brivera@rehabilitationcenter.org",
+                phone: "(714) 555-3890",
+                address: "1200 Rehabilitation Dr, Seal Beach, CA 90740",
+                puresScore: 4.2,
+                tier: "1B",
+                industry: "Healthcare",
+                revenue: "$9M",
+                lastContact: "2024-01-22",
+                notes: "Rehabilitation facility"
+            },
+            {
+                name: "Kimberly Cooper",
+                email: "kcooper@seniorliving.com",
+                phone: "(949) 555-3901",
+                address: "3400 Senior Living Way, Ladera Ranch, CA 92694",
+                puresScore: 4.5,
+                tier: "1A",
+                industry: "Residential",
+                revenue: "$28M",
+                lastContact: "2024-01-26",
+                notes: "Senior living community"
+            },
+            {
+                name: "Jacob Richardson",
+                email: "jrichardson@artscenter.edu",
+                phone: "(714) 555-4012",
+                address: "1450 Arts Center Dr, Cypress, CA 90630",
+                puresScore: 3.6,
+                tier: "1C",
+                industry: "Education",
+                revenue: "$4.5M",
+                lastContact: "2024-01-12",
+                notes: "Performing arts center"
+            },
+            {
+                name: "Crystal Cox",
+                email: "ccox@golfresort.com",
+                phone: "(949) 555-4123",
+                address: "3600 Golf Resort Dr, Mission Viejo, CA 92692",
+                puresScore: 3.9,
+                tier: "1B",
+                industry: "Hospitality",
+                revenue: "$18M",
+                lastContact: "2024-01-15",
+                notes: "Golf resort clubhouse"
+            },
+            {
+                name: "Aaron Ward",
+                email: "award@autodealer.com",
+                phone: "(714) 555-4234",
+                address: "900 Auto Plaza, Fountain Valley, CA 92708",
+                puresScore: 3.2,
+                tier: "1C",
+                industry: "Retail",
+                revenue: "$5.5M",
+                lastContact: "2024-01-02",
+                notes: "Auto dealership design"
+            },
+            {
+                name: "Vanessa Peterson",
+                email: "vpeterson@techcenter.com",
+                phone: "(949) 555-4345",
+                address: "2150 Technology Center Dr, Irvine, CA 92618",
+                puresScore: 4.6,
+                tier: "1A",
+                industry: "Commercial",
+                revenue: "$32M",
+                lastContact: "2024-01-27",
+                notes: "Technology center campus"
+            },
+            {
+                name: "Patrick Torres",
+                email: "ptorres@veterinaryhospital.com",
+                phone: "(714) 555-4456",
+                address: "1075 Veterinary Way, Huntington Beach, CA 92647",
+                puresScore: 3.7,
+                tier: "1C",
+                industry: "Healthcare",
+                revenue: "$2.8M",
+                lastContact: "2024-01-13",
+                notes: "Veterinary hospital expansion"
+            },
+            {
+                name: "Tiffany Gray",
+                email: "tgray@mobilehome.com",
+                phone: "(949) 555-4567",
+                address: "2800 Mobile Home Park Dr, San Juan Capistrano, CA 92675",
+                puresScore: 3.1,
+                tier: "1C",
+                industry: "Residential",
+                revenue: "$2.2M",
+                lastContact: "2024-01-05",
+                notes: "Mobile home park upgrades"
+            },
+            {
+                name: "Harold James",
+                email: "hjames@recreationcenter.edu",
+                phone: "(714) 555-4678",
+                address: "1550 Recreation Dr, Buena Park, CA 90621",
+                puresScore: 3.8,
+                tier: "1B",
+                industry: "Education",
+                revenue: "$7.5M",
+                lastContact: "2024-01-16",
+                notes: "Recreation center design"
+            },
+            {
+                name: "Samantha Watson",
+                email: "swatson@winery.com",
+                phone: "(949) 555-4789",
+                address: "3700 Vineyard Dr, Temecula, CA 92591",
+                puresScore: 3.5,
+                tier: "1C",
+                industry: "Hospitality",
+                revenue: "$4.8M",
+                lastContact: "2024-01-08",
+                notes: "Winery tasting room"
+            },
+            {
+                name: "Jose Brooks",
+                email: "jbrooks@warehouse.com",
+                phone: "(714) 555-4890",
+                address: "950 Warehouse Blvd, Santa Fe Springs, CA 90670",
+                puresScore: 3.3,
+                tier: "1C",
+                industry: "Commercial",
+                revenue: "$8.5M",
+                lastContact: "2024-01-04",
+                notes: "Warehouse facility design"
+            },
+            {
+                name: "Denise Kelly",
+                email: "dkelly@plasticssurgery.com",
+                phone: "(949) 555-4901",
+                address: "2250 Medical Aesthetics Dr, Newport Beach, CA 92660",
+                puresScore: 4.1,
+                tier: "1B",
+                industry: "Healthcare",
+                revenue: "$6.2M",
+                lastContact: "2024-01-21",
+                notes: "Cosmetic surgery center"
+            }
+        ];
+
+        let currentSortColumn = 0;
+        let sortDirection = 1;
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            loadClientTable();
+            setupEventListeners();
+        });
+
+        function showTab(tabName) {
+            // Hide all tabs
+            const tabs = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Remove active class from all nav tabs
+            const navTabs = document.querySelectorAll('.nav-tab');
+            navTabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked nav tab
+            event.target.classList.add('active');
+        }
+
+        function loadClientTable() {
+            const tbody = document.getElementById('clientTableBody');
+            tbody.innerHTML = '';
+            
+            clientData.forEach((client, index) => {
+                const row = createClientRow(client, index);
+                tbody.appendChild(row);
+            });
+        }
+
+        function createClientRow(client, index) {
+            const row = document.createElement('tr');
+            row.className = `tier-${client.tier.toLowerCase()}`;
+            
+            row.innerHTML = `
+                <td>${client.name}</td>
+                <td>${client.email}</td>
+                <td>${client.phone}</td>
+                <td>${client.address}</td>
+                <td>${client.puresScore}</td>
+                <td><span class="tier-badge">Tier ${client.tier}</span></td>
+                <td>${client.industry}</td>
+                <td>${client.revenue}</td>
+                <td>${client.lastContact}</td>
+                <td>
+                    <div class="action-buttons">
+                        <button class="action-btn email-btn" onclick="sendEmail('${client.email}', '${client.name}', '${client.industry}')">📧</button>
+                        <button class="action-btn call-btn" onclick="callClient('${client.phone}', '${client.name}')">📞</button>
+                        <button class="action-btn contact-btn" onclick="contactClient('${index}')">💼</button>
+                    </div>
+                </td>
+            `;
+            
+            return row;
+        }
+
+        function setupEventListeners() {
+            // Search functionality
+            document.getElementById('searchInput').addEventListener('input', filterTable);
+            document.getElementById('tierFilter').addEventListener('change', filterTable);
+            document.getElementById('industryFilter').addEventListener('change', filterTable);
+
+            // P.U.R.E.S. scoring sliders
+            const sliders = ['profitability', 'urgency', 'reachability', 'engagement', 'sustainability'];
+            sliders.forEach(slider => {
+                document.getElementById(`${slider}Score`).addEventListener('input', function() {
+                    document.getElementById(`${slider}Display`).textContent = this.value;
+                });
+            });
+        }
+
+        function filterTable() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const tierFilter = document.getElementById('tierFilter').value;
+            const industryFilter = document.getElementById('industryFilter').value;
+            
+            const rows = document.querySelectorAll('#clientTableBody tr');
+            
+            rows.forEach(row => {
+                const cells = row.children;
+                const name = cells[0].textContent.toLowerCase();
+                const email = cells[1].textContent.toLowerCase();
+                const address = cells[3].textContent.toLowerCase();
+                const tier = cells[5].textContent.includes(tierFilter) || tierFilter === '';
+                const industry = cells[6].textContent === industryFilter || industryFilter === '';
+                
+                const matchesSearch = name.includes(searchTerm) || 
+                                    email.includes(searchTerm) || 
+                                    address.includes(searchTerm);
+                
+                if (matchesSearch && tier && industry) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+
+        function sortTable(column) {
+            const tbody = document.getElementById('clientTableBody');
+            const rows = Array.from(tbody.querySelectorAll('tr'));
+            
+            // Toggle sort direction if same column
+            if (currentSortColumn === column) {
+                sortDirection *= -1;
+            } else {
+                sortDirection = 1;
+                currentSortColumn = column;
+            }
+            
+            rows.sort((a, b) => {
+                const aVal = a.children[column].textContent.trim();
+                const bVal = b.children[column].textContent.trim();
+                
+                // Handle numeric columns
+                if (column === 4) { // P.U.R.E.S. score
+                    return (parseFloat(aVal) - parseFloat(bVal)) * sortDirection;
+                }
+                
+                return aVal.localeCompare(bVal) * sortDirection;
+            });
+            
+            // Clear and re-append sorted rows
+            tbody.innerHTML = '';
+            rows.forEach(row => tbody.appendChild(row));
+        }
+
+        function sendEmail(email, name, industry) {
+            const subject = `Innovative Architecture Solutions for ${industry} Development - Robinson Hill Architecture`;
+            const body = `Dear ${name},
+
+I hope this message finds you well. I'm reaching out from Robinson Hill Architecture, Inc., a leading architecture and planning firm based in Costa Mesa, California.
+
+We specialize in creating innovative, sustainable, and cost-effective architectural solutions for ${industry.toLowerCase()} projects. Our team has successfully delivered numerous projects in Orange County and beyond, focusing on:
+
+🏗️ Cutting-edge design that maximizes functionality and aesthetic appeal
+💰 Value engineering to optimize your budget and timeline  
+🌱 Sustainable design practices that reduce operational costs
+📋 Comprehensive project management from concept to completion
+
+Given your involvement in ${industry.toLowerCase()} development, I believe there may be excellent opportunities for collaboration. Our recent projects in similar sectors have delivered:
+
+• 15-25% reduction in construction costs through innovative design
+• 30-40% improvement in energy efficiency
+• Accelerated permitting timelines through our local expertise
+• Award-winning designs that enhance property values
+
+I would welcome the opportunity to discuss how Robinson Hill Architecture can contribute to your upcoming projects. Could we schedule a brief 15-minute call to explore potential synergies?
+
+Best regards,
+
+Michael Robinson
+Robinson Hill Architecture, Inc.
+Costa Mesa, California
+📧 robinson@rhainc.net
+🌐 http://rhainc.net
+📱 Direct contact available upon request
+
+P.S. I'd be happy to share our portfolio of recent ${industry.toLowerCase()} projects that demonstrate our proven track record of delivering exceptional results.`;
+
+            const mailtoLink = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+            window.location.href = mailtoLink;
+        }
+
+        function callClient(phone, name) {
+            alert(`Initiating call to ${name} at ${phone}\n\nPrepare to discuss:\n• Current project needs\n• Timeline and budget\n• How Robinson Hill Architecture can add value\n• Schedule follow-up meeting`);
+            
+            // In a real application, this would integrate with a phone system
+            window.open(`tel:${phone}`);
+        }
+
+        function contactClient(index) {
+            const client = clientData[index];
+            alert(`Contact Strategy for ${client.name}:\n\nNext Actions:\n• Send personalized architecture portfolio\n• Schedule site visit or virtual consultation\n• Prepare project proposal template\n• Follow up within 3-5 business days\n\nNotes: ${client.notes}`);
+        }
+
+        function calculatePURESScore() {
+            const scores = {
+                profitability: parseInt(document.getElementById('profitabilityScore').value),
+                urgency: parseInt(document.getElementById('urgencyScore').value),
+                reachability: parseInt(document.getElementById('reachabilityScore').value),
+                engagement: parseInt(document.getElementById('engagementScore').value),
+                sustainability: parseInt(document.getElementById('sustainabilityScore').value)
+            };
+            
+            const average = Object.values(scores).reduce((a, b) => a + b, 0) / 5;
+            const buyingPattern = document.getElementById('buyingPattern').value;
+            const timeline = document.getElementById('decisionTimeline').value;
+            
+            let tier;
+            if (average >= 4.0) tier = '1A';
+            else if (average >= 3.0) tier = '1B';
+            else tier = '1C';
+            
+            alert(`P.U.R.E.S. Assessment Complete!\n\nAverage Score: ${average.toFixed(1)}/5\nTier Classification: ${tier}\nBuying Pattern: ${buyingPattern}\nDecision Timeline: ${timeline}\n\nRecommended Action: ${getRecommendedAction(tier, buyingPattern, timeline)}`);
+        }
+
+        function getRecommendedAction(tier, pattern, timeline) {
+            if (tier === '1A') {
+                return "High-priority outreach with executive-level presentation and custom proposal";
+            } else if (tier === '1B') {
+                return "Structured follow-up with portfolio showcase and case studies";
+            } else {
+                return "Nurture campaign with valuable content and periodic check-ins";
+            }
+        }
+
+        function saveFeedback() {
+            const feedbackData = {
+                type: document.getElementById('feedbackType').value,
+                details: document.getElementById('feedbackDetails').value,
+                rating: document.getElementById('satisfactionRating').value,
+                followup: document.getElementById('followupRequired').value
+            };
+            
+            alert('Feedback saved successfully!\n\nThis information will be used to:\n• Improve client relationships\n• Identify service gaps\n• Enhance future proposals\n• Track satisfaction trends');
+            
+            // Clear form
+            document.getElementById('feedbackDetails').value = '';
+        }
+
+        function saveSuccessStory() {
+            const storyData = {
+                title: document.getElementById('successTitle').value,
+                details: document.getElementById('projectDetails').value,
+                source: document.getElementById('referralSource').value,
+                reward: document.getElementById('referralReward').value
+            };
+            
+            alert('Success story documented!\n\nThis will be used for:\n• Marketing materials\n• Case studies\n• Referral partner recognition\n• Proposal examples');
+            
+            // Clear form
+            document.getElementById('successTitle').value = '';
+            document.getElementById('projectDetails').value = '';
+            document.getElementById('referralSource').value = '';
+            document.getElementById('referralReward').value = '';
+        }
+
+        function showAddClientModal() {
+            document.getElementById('addClientModal').style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('addClientModal').style.display = 'none';
+        }
+
+        function addNewClient() {
+            const newClient = {
+                name: document.getElementById('newClientName').value,
+                email: document.getElementById('newClientEmail').value,
+                phone: document.getElementById('newClientPhone').value,
+                address: document.getElementById('newClientAddress').value,
+                puresScore: 3.0,
+                tier: '1C',
+                industry: document.getElementById('newClientIndustry').value,
+                revenue: 'TBD',
+                lastContact: new Date().toISOString().split('T')[0],
+                notes: 'New prospect - needs initial assessment'
+            };
+            
+            clientData.push(newClient);
+            loadClientTable();
+            closeModal();
+            
+            // Clear form
+            document.getElementById('newClientName').value = '';
+            document.getElementById('newClientEmail').value = '';
+            document.getElementById('newClientPhone').value = '';
+            document.getElementById('newClientAddress').value = '';
+        }
+
+        function exportData() {
+            let csv = 'Client Name,Email,Phone,Address,P.U.R.E.S. Score,Tier Level,Industry,Revenue Estimate,Last Contact,Notes\n';
+            
+            clientData.forEach(client => {
+                csv += `"${client.name}","${client.email}","${client.phone}","${client.address}",${client.puresScore},"${client.tier}","${client.industry}","${client.revenue}","${client.lastContact}","${client.notes}"\n`;
+            });
+            
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'robinson-hill-architecture-prospects.csv';
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('addClientModal');
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,869 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>S.A.L.E. System - 7-Eleven Client Targeting Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #000000;
+            color: #CF2030;
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+        }
+
+        .header {
+            background-color: #000000;
+            padding: 20px;
+            border-bottom: 2px solid #CF2030;
+            text-align: center;
+        }
+
+        .logo {
+            max-width: 300px;
+            height: auto;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .business-info {
+            background-color: #1a1a1a;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            border: 1px solid #CF2030;
+        }
+
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #CF2030;
+        }
+
+        .tab {
+            background-color: #1a1a1a;
+            color: #CF2030;
+            padding: 15px 30px;
+            border: none;
+            cursor: pointer;
+            border-top: 1px solid #CF2030;
+            border-left: 1px solid #CF2030;
+            border-right: 1px solid #CF2030;
+        }
+
+        .tab.active {
+            background-color: #CF2030;
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+            background-color: #1a1a1a;
+            padding: 20px;
+            border-radius: 0 10px 10px 10px;
+            border: 1px solid #CF2030;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .controls {
+            margin-bottom: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .search-box, .filter-select {
+            padding: 10px;
+            background-color: #000000;
+            color: #CF2030;
+            border: 1px solid #CF2030;
+            border-radius: 5px;
+        }
+
+        .btn {
+            background-color: #CF2030;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: background-color 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #a51825;
+        }
+
+        .btn-small {
+            padding: 5px 10px;
+            font-size: 12px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #1a1a1a;
+            margin-bottom: 20px;
+            border: 1px solid #CF2030;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #CF2030;
+        }
+
+        th {
+            background-color: #CF2030;
+            color: white;
+            cursor: pointer;
+            position: sticky;
+            top: 0;
+        }
+
+        th:hover {
+            background-color: #a51825;
+        }
+
+        tr:nth-child(even) {
+            background-color: #2a2a2a;
+        }
+
+        tr:hover {
+            background-color: #333333;
+        }
+
+        .tier-1a { background-color: rgba(46, 204, 113, 0.2); }
+        .tier-1b { background-color: rgba(241, 196, 15, 0.2); }
+        .tier-1c { background-color: rgba(52, 152, 219, 0.2); }
+
+        .pures-form {
+            background-color: #2a2a2a;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #CF2030;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .form-group label {
+            flex: 1;
+            margin-right: 20px;
+        }
+
+        .rating-scale {
+            display: flex;
+            gap: 10px;
+        }
+
+        .rating-scale input[type="radio"] {
+            display: none;
+        }
+
+        .rating-scale label {
+            background-color: #CF2030;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            flex: none;
+        }
+
+        .rating-scale label:hover {
+            background-color: #a51825;
+        }
+
+        .rating-scale input[type="radio"]:checked + label {
+            background-color: #2ecc71;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            border-top: 2px solid #CF2030;
+            margin-top: 50px;
+        }
+
+        .footer img {
+            max-width: 150px;
+            height: auto;
+            opacity: 0.7;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .metric-card {
+            background-color: #2a2a2a;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #CF2030;
+            text-align: center;
+        }
+
+        .metric-value {
+            font-size: 2em;
+            font-weight: bold;
+            color: #CF2030;
+        }
+
+        .email-template {
+            background-color: #2a2a2a;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 10px;
+            border: 1px solid #CF2030;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            table {
+                font-size: 14px;
+            }
+
+            .tabs {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="HigginsReports" class="logo">
+    </div>
+
+    <div class="container">
+        <div class="business-info">
+            <h1>S.A.L.E. System Dashboard - 7-Eleven Store</h1>
+            <p><strong>Business Owner:</strong> Nancy Luu</p>
+            <p><strong>Location:</strong> San Jose, California</p>
+            <p><strong>Industry:</strong> Retail Convenience Store</p>
+            <p><strong>Email:</strong> nancy@7-eleven.com</p>
+            <p><strong>Service Area:</strong> 10-mile radius from San Jose, CA</p>
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="openTab(event, 'sourcing')">S - Sourcing</button>
+            <button class="tab" onclick="openTab(event, 'assessing')">A - Assessing</button>
+            <button class="tab" onclick="openTab(event, 'listening')">L - Listening</button>
+            <button class="tab" onclick="openTab(event, 'empowering')">E - Empowering</button>
+            <button class="tab" onclick="openTab(event, 'analytics')">Analytics</button>
+        </div>
+
+        <!-- SOURCING Module -->
+        <div id="sourcing" class="tab-content active">
+            <h2>S.OURCING - P.U.R.E.S. Client Evaluation</h2>
+            
+            <div class="pures-form">
+                <h3>P.U.R.E.S. Scoring System</h3>
+                <form id="puresForm">
+                    <div class="form-group">
+                        <label><strong>P - Profitability:</strong> Customer spending capacity</label>
+                        <div class="rating-scale">
+                            <input type="radio" id="p1" name="profitability" value="1">
+                            <label for="p1">1</label>
+                            <input type="radio" id="p2" name="profitability" value="2">
+                            <label for="p2">2</label>
+                            <input type="radio" id="p3" name="profitability" value="3">
+                            <label for="p3">3</label>
+                            <input type="radio" id="p4" name="profitability" value="4">
+                            <label for="p4">4</label>
+                            <input type="radio" id="p5" name="profitability" value="5">
+                            <label for="p5">5</label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label><strong>U - Urgency:</strong> Immediate convenience needs</label>
+                        <div class="rating-scale">
+                            <input type="radio" id="u1" name="urgency" value="1">
+                            <label for="u1">1</label>
+                            <input type="radio" id="u2" name="urgency" value="2">
+                            <label for="u2">2</label>
+                            <input type="radio" id="u3" name="urgency" value="3">
+                            <label for="u3">3</label>
+                            <input type="radio" id="u4" name="urgency" value="4">
+                            <label for="u4">4</label>
+                            <input type="radio" id="u5" name="urgency" value="5">
+                            <label for="u5">5</label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label><strong>R - Reachability:</strong> Accessible location/contact</label>
+                        <div class="rating-scale">
+                            <input type="radio" id="r1" name="reachability" value="1">
+                            <label for="r1">1</label>
+                            <input type="radio" id="r2" name="reachability" value="2">
+                            <label for="r2">2</label>
+                            <input type="radio" id="r3" name="reachability" value="3">
+                            <label for="r3">3</label>
+                            <input type="radio" id="r4" name="reachability" value="4">
+                            <label for="r4">4</label>
+                            <input type="radio" id="r5" name="reachability" value="5">
+                            <label for="r5">5</label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label><strong>E - Engagement:</strong> Brand loyalty potential</label>
+                        <div class="rating-scale">
+                            <input type="radio" id="e1" name="engagement" value="1">
+                            <label for="e1">1</label>
+                            <input type="radio" id="e2" name="engagement" value="2">
+                            <label for="e2">2</label>
+                            <input type="radio" id="e3" name="engagement" value="3">
+                            <label for="e3">3</label>
+                            <input type="radio" id="e4" name="engagement" value="4">
+                            <label for="e4">4</label>
+                            <input type="radio" id="e5" name="engagement" value="5">
+                            <label for="e5">5</label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label><strong>S - Sustainability:</strong> Long-term customer potential</label>
+                        <div class="rating-scale">
+                            <input type="radio" id="s1" name="sustainability" value="1">
+                            <label for="s1">1</label>
+                            <input type="radio" id="s2" name="sustainability" value="2">
+                            <label for="s2">2</label>
+                            <input type="radio" id="s3" name="sustainability" value="3">
+                            <label for="s3">3</label>
+                            <input type="radio" id="s4" name="sustainability" value="4">
+                            <label for="s4">4</label>
+                            <input type="radio" id="s5" name="sustainability" value="5">
+                            <label for="s5">5</label>
+                        </div>
+                    </div>
+
+                    <button type="button" class="btn" onclick="calculatePURES()">Calculate P.U.R.E.S. Score</button>
+                    <div id="puresResult"></div>
+                </form>
+            </div>
+
+            <div class="controls">
+                <input type="text" class="search-box" id="searchInput" placeholder="Search customers..." onkeyup="filterTable()">
+                <select class="filter-select" id="tierFilter" onchange="filterTable()">
+                    <option value="">All Tiers</option>
+                    <option value="Tier 1A">Tier 1A (Premium)</option>
+                    <option value="Tier 1B">Tier 1B (High-Value)</option>
+                    <option value="Tier 1C">Tier 1C (Qualified)</option>
+                </select>
+                <button class="btn" onclick="exportToCSV()">Export CSV</button>
+                <button class="btn" onclick="generateProspects()">Generate New Prospects</button>
+            </div>
+
+            <div style="overflow-x: auto;">
+                <table id="clientTable">
+                    <thead>
+                        <tr>
+                            <th onclick="sortTable(0)">Client Name ↕</th>
+                            <th onclick="sortTable(1)">Email ↕</th>
+                            <th onclick="sortTable(2)">Phone ↕</th>
+                            <th onclick="sortTable(3)">Address ↕</th>
+                            <th onclick="sortTable(4)">P.U.R.E.S. Score ↕</th>
+                            <th onclick="sortTable(5)">Tier Level ↕</th>
+                            <th onclick="sortTable(6)">Customer Type ↕</th>
+                            <th onclick="sortTable(7)">Est. Monthly Spend ↕</th>
+                            <th onclick="sortTable(8)">Contact Status ↕</th>
+                            <th onclick="sortTable(9)">Last Contact ↕</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="clientTableBody">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- ASSESSING Module -->
+        <div id="assessing" class="tab-content">
+            <h2>A.SSESSING - Buying Pattern Analysis</h2>
+            
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-value" id="analyticalCount">0</div>
+                    <h3>Analytical Buyers</h3>
+                    <p>Data-driven decision makers</p>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value" id="relationshipCount">0</div>
+                    <h3>Relationship Buyers</h3>
+                    <p>Trust and loyalty focused</p>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value" id="efficiencyCount">0</div>
+                    <h3>Efficiency Buyers</h3>
+                    <p>Time-saving focused</p>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value" id="innovationCount">0</div>
+                    <h3>Innovation Buyers</h3>
+                    <p>Early adopters</p>
+                </div>
+            </div>
+
+            <h3>Buyer Profile Analysis</h3>
+            <div style="background-color: #2a2a2a; padding: 20px; border-radius: 10px; border: 1px solid #CF2030;">
+                <h4>Recommended Strategies by Buyer Type:</h4>
+                <ul>
+                    <li><strong>Analytical:</strong> Highlight product specs, nutritional info, and value comparisons</li>
+                    <li><strong>Relationship:</strong> Focus on personal service, loyalty rewards, and community connection</li>
+                    <li><strong>Efficiency:</strong> Emphasize speed, convenience, and one-stop shopping</li>
+                    <li><strong>Innovation:</strong> Promote new products, exclusive items, and latest offerings</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- LISTENING Module -->
+        <div id="listening" class="tab-content">
+            <h2>L.ISTENING - Feedback Integration</h2>
+            
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-value">87%</div>
+                    <h3>Customer Satisfaction</h3>
+                    <p>Based on recent feedback</p>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">23</div>
+                    <h3>Active Feedback Items</h3>
+                    <p>Requiring response</p>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">4.2/5</div>
+                    <h3>Average Rating</h3>
+                    <p>Across all touchpoints</p>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">156</div>
+                    <h3>Suggestions Received</h3>
+                    <p>This month</p>
+                </div>
+            </div>
+
+            <h3>Recent Customer Feedback</h3>
+            <div style="background-color: #2a2a2a; padding: 20px; border-radius: 10px; border: 1px solid #CF2030;">
+                <h4>Common Themes:</h4>
+                <ul>
+                    <li>Request for extended hours during peak commute times</li>
+                    <li>More healthy food options and fresh produce</li>
+                    <li>Faster checkout process during lunch rush</li>
+                    <li>Better coffee quality and variety</li>
+                    <li>Mobile app for pre-ordering and rewards</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- EMPOWERING Module -->
+        <div id="empowering" class="tab-content">
+            <h2>E.MPOWERING - Referral Strategy</h2>
+            
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-value">42</div>
+                    <h3>Active Referrers</h3>
+                    <p>Customers generating referrals</p>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">128</div>
+                    <h3>Referrals This Month</h3>
+                    <p>New customers from referrals</p>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">15%</div>
+                    <h3>Referral Conversion</h3>
+                    <p>Referrals becoming customers</p>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">$2,340</div>
+                    <h3>Referral Value</h3>
+                    <p>Monthly revenue from referrals</p>
+                </div>
+            </div>
+
+            <h3>Referral Programs</h3>
+            <div style="background-color: #2a2a2a; padding: 20px; border-radius: 10px; border: 1px solid #CF2030;">
+                <h4>Active Programs:</h4>
+                <ul>
+                    <li><strong>Friend Referral:</strong> $5 7-Eleven Cash for both referrer and new customer</li>
+                    <li><strong>Corporate Partnerships:</strong> Bulk discount programs for local businesses</li>
+                    <li><strong>Community Events:</strong> Sponsor local events for brand visibility</li>
+                    <li><strong>Social Media Sharing:</strong> Rewards for positive reviews and social shares</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- ANALYTICS Module -->
+        <div id="analytics" class="tab-content">
+            <h2>Analytics Dashboard</h2>
+            
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-value" id="totalProspects">50</div>
+                    <h3>Total Prospects</h3>
+                    <p>In 10-mile radius</p>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value" id="avgPuresScore">3.2</div>
+                    <h3>Avg P.U.R.E.S. Score</h3>
+                    <p>Across all prospects</p>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value" id="tier1ACount">12</div>
+                    <h3>Tier 1A Prospects</h3>
+                    <p>Premium customers</p>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">$45,600</div>
+                    <h3>Projected Revenue</h3>
+                    <p>From prospect conversion</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="HigginsReports">
+        <p>© 2024 HigginsReports. All rights reserved.</p>
+    </div>
+
+    <script>
+        // Sample prospect data for 50 customers within 10 miles of San Jose
+        const prospects = [
+            {name: "Maria Rodriguez", email: "maria.rodriguez@email.com", phone: "(408) 555-0101", address: "123 Main St, San Jose, CA", pures: 4.2, tier: "Tier 1A", type: "Efficiency", spend: "$85", status: "New", lastContact: "2024-01-15"},
+            {name: "James Chen", email: "james.chen@email.com", phone: "(408) 555-0102", address: "456 Oak Ave, San Jose, CA", pures: 3.8, tier: "Tier 1B", type: "Analytical", spend: "$65", status: "Contacted", lastContact: "2024-01-14"},
+            {name: "Sarah Johnson", email: "sarah.johnson@email.com", phone: "(408) 555-0103", address: "789 Pine St, San Jose, CA", pures: 4.6, tier: "Tier 1A", type: "Relationship", spend: "$95", status: "New", lastContact: "Never"},
+            {name: "David Kim", email: "david.kim@email.com", phone: "(408) 555-0104", address: "321 Elm Dr, San Jose, CA", pures: 3.4, tier: "Tier 1C", type: "Innovation", spend: "$50", status: "Follow-up", lastContact: "2024-01-12"},
+            {name: "Emily Davis", email: "emily.davis@email.com", phone: "(408) 555-0105", address: "654 Maple Ln, San Jose, CA", pures: 4.0, tier: "Tier 1B", type: "Efficiency", spend: "$70", status: "New", lastContact: "Never"},
+            {name: "Michael Brown", email: "michael.brown@email.com", phone: "(408) 555-0106", address: "987 Cedar Ct, San Jose, CA", pures: 4.4, tier: "Tier 1A", type: "Relationship", spend: "$90", status: "Interested", lastContact: "2024-01-13"},
+            {name: "Lisa Wong", email: "lisa.wong@email.com", phone: "(408) 555-0107", address: "147 Birch Way, San Jose, CA", pures: 3.6, tier: "Tier 1B", type: "Analytical", spend: "$60", status: "New", lastContact: "Never"},
+            {name: "Robert Garcia", email: "robert.garcia@email.com", phone: "(408) 555-0108", address: "258 Spruce Rd, San Jose, CA", pures: 3.2, tier: "Tier 1C", type: "Efficiency", spend: "$45", status: "Contacted", lastContact: "2024-01-11"},
+            {name: "Jennifer Lee", email: "jennifer.lee@email.com", phone: "(408) 555-0109", address: "369 Willow St, San Jose, CA", pures: 4.8, tier: "Tier 1A", type: "Innovation", spend: "$110", status: "New", lastContact: "Never"},
+            {name: "Thomas Wilson", email: "thomas.wilson@email.com", phone: "(408) 555-0110", address: "741 Poplar Ave, San Jose, CA", pures: 3.9, tier: "Tier 1B", type: "Relationship", spend: "$75", status: "Follow-up", lastContact: "2024-01-10"},
+            {name: "Amanda Martinez", email: "amanda.martinez@email.com", phone: "(408) 555-0111", address: "852 Redwood Dr, Santa Clara, CA", pures: 4.1, tier: "Tier 1A", type: "Analytical", spend: "$80", status: "New", lastContact: "Never"},
+            {name: "Christopher Taylor", email: "chris.taylor@email.com", phone: "(408) 555-0112", address: "963 Sequoia Blvd, Santa Clara, CA", pures: 3.5, tier: "Tier 1C", type: "Efficiency", spend: "$55", status: "Contacted", lastContact: "2024-01-09"},
+            {name: "Jessica Anderson", email: "jessica.anderson@email.com", phone: "(408) 555-0113", address: "159 Cypress Ct, Santa Clara, CA", pures: 4.3, tier: "Tier 1A", type: "Innovation", spend: "$85", status: "Interested", lastContact: "2024-01-08"},
+            {name: "Matthew Jackson", email: "matt.jackson@email.com", phone: "(408) 555-0114", address: "357 Magnolia Way, Santa Clara, CA", pures: 3.7, tier: "Tier 1B", type: "Relationship", spend: "$65", status: "New", lastContact: "Never"},
+            {name: "Ashley White", email: "ashley.white@email.com", phone: "(408) 555-0115", address: "486 Juniper Ln, Milpitas, CA", pures: 4.5, tier: "Tier 1A", type: "Efficiency", spend: "$95", status: "Follow-up", lastContact: "2024-01-07"},
+            {name: "Daniel Harris", email: "daniel.harris@email.com", phone: "(408) 555-0116", address: "624 Holly Dr, Milpitas, CA", pures: 3.3, tier: "Tier 1C", type: "Analytical", spend: "$50", status: "New", lastContact: "Never"},
+            {name: "Megan Clark", email: "megan.clark@email.com", phone: "(408) 555-0117", address: "735 Laurel St, Milpitas, CA", pures: 4.0, tier: "Tier 1B", type: "Innovation", spend: "$70", status: "Contacted", lastContact: "2024-01-06"},
+            {name: "Kevin Lewis", email: "kevin.lewis@email.com", phone: "(408) 555-0118", address: "846 Chestnut Ave, Milpitas, CA", pures: 3.8, tier: "Tier 1B", type: "Relationship", spend: "$60", status: "New", lastContact: "Never"},
+            {name: "Stephanie Young", email: "stephanie.young@email.com", phone: "(408) 555-0119", address: "957 Walnut Rd, Cupertino, CA", pures: 4.7, tier: "Tier 1A", type: "Efficiency", spend: "$100", status: "Interested", lastContact: "2024-01-05"},
+            {name: "Brandon Hall", email: "brandon.hall@email.com", phone: "(408) 555-0120", address: "168 Hickory Ct, Cupertino, CA", pures: 3.6, tier: "Tier 1B", type: "Analytical", spend: "$55", status: "Follow-up", lastContact: "2024-01-04"},
+            {name: "Rachel Green", email: "rachel.green@email.com", phone: "(408) 555-0121", address: "279 Beech Way, Cupertino, CA", pures: 4.2, tier: "Tier 1A", type: "Innovation", spend: "$85", status: "New", lastContact: "Never"},
+            {name: "Ryan Baker", email: "ryan.baker@email.com", phone: "(408) 555-0122", address: "381 Sycamore Blvd, Cupertino, CA", pures: 3.4, tier: "Tier 1C", type: "Relationship", spend: "$45", status: "Contacted", lastContact: "2024-01-03"},
+            {name: "Nicole Adams", email: "nicole.adams@email.com", phone: "(408) 555-0123", address: "492 Dogwood Dr, Sunnyvale, CA", pures: 4.4, tier: "Tier 1A", type: "Efficiency", spend: "$90", status: "New", lastContact: "Never"},
+            {name: "Jonathan Nelson", email: "jon.nelson@email.com", phone: "(408) 555-0124", address: "513 Fir St, Sunnyvale, CA", pures: 3.9, tier: "Tier 1B", type: "Analytical", spend: "$70", status: "Follow-up", lastContact: "2024-01-02"},
+            {name: "Samantha Carter", email: "sam.carter@email.com", phone: "(408) 555-0125", address: "624 Ash Ave, Sunnyvale, CA", pures: 4.1, tier: "Tier 1A", type: "Innovation", spend: "$80", status: "Interested", lastContact: "2024-01-01"},
+            {name: "Gregory Mitchell", email: "greg.mitchell@email.com", phone: "(408) 555-0126", address: "735 Sage Rd, Sunnyvale, CA", pures: 3.5, tier: "Tier 1C", type: "Relationship", spend: "$50", status: "New", lastContact: "Never"},
+            {name: "Lauren Roberts", email: "lauren.roberts@email.com", phone: "(408) 555-0127", address: "846 Mint Ln, Mountain View, CA", pures: 4.6, tier: "Tier 1A", type: "Efficiency", spend: "$95", status: "Contacted", lastContact: "2023-12-30"},
+            {name: "Anthony Cooper", email: "anthony.cooper@email.com", phone: "(408) 555-0128", address: "957 Rosemary Way, Mountain View, CA", pures: 3.7, tier: "Tier 1B", type: "Analytical", spend: "$65", status: "New", lastContact: "Never"},
+            {name: "Kimberly Reed", email: "kim.reed@email.com", phone: "(408) 555-0129", address: "168 Thyme Ct, Mountain View, CA", pures: 4.3, tier: "Tier 1A", type: "Innovation", spend: "$85", status: "Follow-up", lastContact: "2023-12-29"},
+            {name: "Eric Cook", email: "eric.cook@email.com", phone: "(408) 555-0130", address: "279 Basil Dr, Palo Alto, CA", pures: 3.8, tier: "Tier 1B", type: "Relationship", spend: "$60", status: "New", lastContact: "Never"},
+            {name: "Heather Morgan", email: "heather.morgan@email.com", phone: "(408) 555-0131", address: "381 Oregano St, Palo Alto, CA", pures: 4.5, tier: "Tier 1A", type: "Efficiency", spend: "$90", status: "Interested", lastContact: "2023-12-28"},
+            {name: "Jeremy Bell", email: "jeremy.bell@email.com", phone: "(408) 555-0132", address: "492 Dill Ave, Palo Alto, CA", pures: 3.2, tier: "Tier 1C", type: "Analytical", spend: "$40", status: "Contacted", lastContact: "2023-12-27"},
+            {name: "Monica Murphy", email: "monica.murphy@email.com", phone: "(408) 555-0133", address: "513 Parsley Rd, Los Altos, CA", pures: 4.0, tier: "Tier 1B", type: "Innovation", spend: "$75", status: "New", lastContact: "Never"},
+            {name: "Adam Rivera", email: "adam.rivera@email.com", phone: "(408) 555-0134", address: "624 Cilantro Blvd, Los Altos, CA", pures: 3.6, tier: "Tier 1B", type: "Relationship", spend: "$55", status: "Follow-up", lastContact: "2023-12-26"},
+            {name: "Kelly Ward", email: "kelly.ward@email.com", phone: "(408) 555-0135", address: "735 Chive Way, Los Gatos, CA", pures: 4.8, tier: "Tier 1A", type: "Efficiency", spend: "$105", status: "New", lastContact: "Never"},
+            {name: "Tyler Torres", email: "tyler.torres@email.com", phone: "(408) 555-0136", address: "846 Fennel Ln, Los Gatos, CA", pures: 3.4, tier: "Tier 1C", type: "Analytical", spend: "$45", status: "Contacted", lastContact: "2023-12-25"},
+            {name: "Crystal Peterson", email: "crystal.peterson@email.com", phone: "(408) 555-0137", address: "957 Lavender Ct, Campbell, CA", pures: 4.2, tier: "Tier 1A", type: "Innovation", spend: "$80", status: "Interested", lastContact: "2023-12-24"},
+            {name: "Jacob Gray", email: "jacob.gray@email.com", phone: "(408) 555-0138", address: "168 Chamomile Dr, Campbell, CA", pures: 3.9, tier: "Tier 1B", type: "Relationship", spend: "$70", status: "New", lastContact: "Never"},
+            {name: "Vanessa Ramirez", email: "vanessa.ramirez@email.com", phone: "(408) 555-0139", address: "279 Eucalyptus St, Fremont, CA", pures: 4.4, tier: "Tier 1A", type: "Efficiency", spend: "$90", status: "Follow-up", lastContact: "2023-12-23"},
+            {name: "Nathan James", email: "nathan.james@email.com", phone: "(408) 555-0140", address: "381 Jasmine Ave, Fremont, CA", pures: 3.1, tier: "Tier 1C", type: "Analytical", spend: "$35", status: "New", lastContact: "Never"},
+            {name: "Tiffany Watson", email: "tiffany.watson@email.com", phone: "(408) 555-0141", address: "492 Gardenia Rd, Newark, CA", pures: 4.1, tier: "Tier 1A", type: "Innovation", spend: "$80", status: "Contacted", lastContact: "2023-12-22"},
+            {name: "Marcus Brooks", email: "marcus.brooks@email.com", phone: "(408) 555-0142", address: "513 Violet Blvd, Newark, CA", pures: 3.7, tier: "Tier 1B", type: "Relationship", spend: "$60", status: "New", lastContact: "Never"},
+            {name: "Brittany Sanders", email: "brittany.sanders@email.com", phone: "(408) 555-0143", address: "624 Iris Way, Union City, CA", pures: 4.6, tier: "Tier 1A", type: "Efficiency", spend: "$95", status: "Interested", lastContact: "2023-12-21"},
+            {name: "Justin Price", email: "justin.price@email.com", phone: "(408) 555-0144", address: "735 Lily Ln, Union City, CA", pures: 3.3, tier: "Tier 1C", type: "Analytical", spend: "$40", status: "Follow-up", lastContact: "2023-12-20"},
+            {name: "Courtney Bennett", email: "courtney.bennett@email.com", phone: "(408) 555-0145", address: "846 Rose Ct, Hayward, CA", pures: 4.3, tier: "Tier 1A", type: "Innovation", spend: "$85", status: "New", lastContact: "Never"},
+            {name: "Brian Wood", email: "brian.wood@email.com", phone: "(408) 555-0146", address: "957 Tulip Dr, Hayward, CA", pures: 3.8, tier: "Tier 1B", type: "Relationship", spend: "$65", status: "Contacted", lastContact: "2023-12-19"},
+            {name: "Alexis Barnes", email: "alexis.barnes@email.com", phone: "(408) 555-0147", address: "168 Daisy St, San Mateo, CA", pures: 4.7, tier: "Tier 1A", type: "Efficiency", spend: "$100", status: "New", lastContact: "Never"},
+            {name: "Sean Ross", email: "sean.ross@email.com", phone: "(408) 555-0148", address: "279 Orchid Ave, San Mateo, CA", pures: 3.5, tier: "Tier 1C", type: "Analytical", spend: "$50", status: "Follow-up", lastContact: "2023-12-18"},
+            {name: "Diana Henderson", email: "diana.henderson@email.com", phone: "(408) 555-0149", address: "381 Peony Rd, Foster City, CA", pures: 4.0, tier: "Tier 1B", type: "Innovation", spend: "$75", status: "New", lastContact: "Never"},
+            {name: "Trevor Coleman", email: "trevor.coleman@email.com", phone: "(408) 555-0150", address: "492 Azalea Blvd, Redwood City, CA", pures: 4.5, tier: "Tier 1A", type: "Relationship", spend: "$90", status: "Interested", lastContact: "2023-12-17"}
+        ];
+
+        let currentSort = { column: -1, ascending: true };
+
+        function openTab(evt, tabName) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tab-content");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].classList.remove("active");
+            }
+            tablinks = document.getElementsByClassName("tab");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].classList.remove("active");
+            }
+            document.getElementById(tabName).classList.add("active");
+            evt.currentTarget.classList.add("active");
+            
+            if (tabName === 'assessing') {
+                updateBuyerAnalytics();
+            }
+        }
+
+        function generateProspects() {
+            populateTable();
+            updateAnalytics();
+        }
+
+        function populateTable() {
+            const tbody = document.getElementById('clientTableBody');
+            tbody.innerHTML = '';
+
+            prospects.forEach(prospect => {
+                const row = tbody.insertRow();
+                const tierClass = prospect.tier.replace(' ', '').toLowerCase();
+                row.className = tierClass;
+
+                row.innerHTML = `
+                    <td>${prospect.name}</td>
+                    <td>${prospect.email}</td>
+                    <td>${prospect.phone}</td>
+                    <td>${prospect.address}</td>
+                    <td>${prospect.pures}</td>
+                    <td><span class="${tierClass}">${prospect.tier}</span></td>
+                    <td>${prospect.type}</td>
+                    <td>${prospect.spend}</td>
+                    <td>${prospect.status}</td>
+                    <td>${prospect.lastContact}</td>
+                    <td>
+                        <button class="btn btn-small" onclick="contactClient('${prospect.email}', '${prospect.name}')">Email</button>
+                        <button class="btn btn-small" onclick="callClient('${prospect.phone}')">Call</button>
+                    </td>
+                `;
+            });
+        }
+
+        function contactClient(email, name) {
+            const emailTemplate = `
+Subject: Welcome to Your Neighborhood 7-Eleven - Exclusive Offers Inside!
+
+Dear ${name},
+
+Welcome to your convenient neighborhood 7-Eleven in San Jose! We're excited to serve you with everything you need, when you need it.
+
+🕐 Open 24/7 for Your Convenience
+☕ Fresh Coffee & Specialty Drinks
+🥪 Fresh Food & Hot Items
+⛽ Quality Fuel & Car Care
+💳 7-Eleven App with Exclusive Deals
+
+Special Offer Just for You:
+- Get $10 in 7-Eleven Cash when you sign up for our 7-Eleven Gold Pass
+- Any size hot coffee refill for only $1
+- Download our app for exclusive deals and mobile ordering
+
+Visit us at your convenience - we're here 24/7 to serve our community!
+
+Best regards,
+Nancy Luu
+Store Manager
+nancy@7-eleven.com
+            `;
+
+            // Create mailto link
+            const mailtoLink = `mailto:${email}?subject=Welcome to Your Neighborhood 7-Eleven - Exclusive Offers Inside!&body=${encodeURIComponent(emailTemplate)}`;
+            window.open(mailtoLink);
+        }
+
+        function callClient(phone) {
+            window.open(`tel:${phone}`);
+        }
+
+        function filterTable() {
+            const searchInput = document.getElementById('searchInput').value.toLowerCase();
+            const tierFilter = document.getElementById('tierFilter').value;
+            const tbody = document.getElementById('clientTableBody');
+            const rows = tbody.getElementsByTagName('tr');
+
+            for (let i = 0; i < rows.length; i++) {
+                const row = rows[i];
+                const cells = row.getElementsByTagName('td');
+                let showRow = true;
+
+                // Search filter
+                if (searchInput) {
+                    let found = false;
+                    for (let j = 0; j < cells.length - 1; j++) {
+                        if (cells[j].textContent.toLowerCase().includes(searchInput)) {
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (!found) showRow = false;
+                }
+
+                // Tier filter
+                if (tierFilter && cells[5] && !cells[5].textContent.includes(tierFilter)) {
+                    showRow = false;
+                }
+
+                row.style.display = showRow ? '' : 'none';
+            }
+        }
+
+        function sortTable(column) {
+            const table = document.getElementById('clientTable');
+            const tbody = table.getElementsByTagName('tbody')[0];
+            const rows = Array.from(tbody.rows);
+
+            // Toggle sort direction
+            const ascending = currentSort.column !== column || !currentSort.ascending;
+            currentSort = { column, ascending };
+
+            rows.sort((a, b) => {
+                let aVal = a.cells[column].textContent.trim();
+                let bVal = b.cells[column].textContent.trim();
+
+                // Handle numeric values
+                if (column === 4) { // P.U.R.E.S. score
+                    aVal = parseFloat(aVal);
+                    bVal = parseFloat(bVal);
+                } else if (column === 7) { // Monthly spend
+                    aVal = parseFloat(aVal.replace('$', ''));
+                    bVal = parseFloat(bVal.replace('$', ''));
+                }
+
+                if (aVal < bVal) return ascending ? -1 : 1;
+                if (aVal > bVal) return ascending ? 1 : -1;
+                return 0;
+            });
+
+            // Clear tbody and re-append sorted rows
+            tbody.innerHTML = '';
+            rows.forEach(row => tbody.appendChild(row));
+        }
+
+        function calculatePURES() {
+            const form = document.getElementById('puresForm');
+            const formData = new FormData(form);
+            
+            let total = 0;
+            let count = 0;
+            
+            ['profitability', 'urgency', 'reachability', 'engagement', 'sustainability'].forEach(field => {
+                const value = formData.get(field);
+                if (value) {
+                    total += parseInt(value);
+                    count++;
+                }
+            });
+            
+            if (count === 5) {
+                const average = (total / 5).toFixed(1);
+                let tier = 'Tier 1C';
+                if (average >= 4.5) tier = 'Tier 1A';
+                else if (average >= 3.5) tier = 'Tier 1B';
+                
+                document.getElementById('puresResult').innerHTML = `
+                    <div style="margin-top: 20px; padding: 15px; background-color: #CF2030; color: white; border-radius: 5px;">
+                        <strong>P.U.R.E.S. Score: ${average}/5.0</strong><br>
+                        <strong>Tier Classification: ${tier}</strong>
+                    </div>
+                `;
+            } else {
+                document.getElementById('puresResult').innerHTML = `
+                    <div style="margin-top: 20px; padding: 15px; background-color: #a51825; color: white; border-radius: 5px;">
+                        Please rate all 5 criteria to calculate the P.U.R.E.S. score.
+                    </div>
+                `;
+            }
+        }
+
+        function updateBuyerAnalytics() {
+            const buyerCounts = { Analytical: 0, Relationship: 0, Efficiency: 0, Innovation: 0 };
+            
+            prospects.forEach(prospect => {
+                buyerCounts[prospect.type]++;
+            });
+            
+            document.getElementById('analyticalCount').textContent = buyerCounts.Analytical;
+            document.getElementById('relationshipCount').textContent = buyerCounts.Relationship;
+            document.getElementById('efficiencyCount').textContent = buyerCounts.Efficiency;
+            document.getElementById('innovationCount').textContent = buyerCounts.Innovation;
+        }
+
+        function updateAnalytics() {
+            document.getElementById('totalProspects').textContent = prospects.length;
+            
+            const avgScore = prospects.reduce((sum, p) => sum + p.pures, 0) / prospects.length;
+            document.getElementById('avgPuresScore').textContent = avgScore.toFixed(1);
+            
+            const tier1A = prospects.filter(p => p.tier === 'Tier 1A').length;
+            document.getElementById('tier1ACount').textContent = tier1A;
+        }
+
+        function exportToCSV() {
+            const table = document.getElementById('clientTable');
+            const rows = table.querySelectorAll('tr');
+            let csv = [];
+
+            for (let i = 0; i < rows.length; i++) {
+                const row = rows[i];
+                const cols = row.querySelectorAll('td, th');
+                let csvRow = [];
+                
+                for (let j = 0; j < cols.length - 1; j++) { // Exclude actions column
+                    csvRow.push('"' + cols[j].textContent.replace(/"/g, '""') + '"');
+                }
+                csv.push(csvRow.join(','));
+            }
+
+            const csvFile = new Blob([csv.join('\n')], { type: 'text/csv' });
+            const downloadLink = document.createElement('a');
+            downloadLink.download = '7eleven_prospects.csv';
+            downloadLink.href = window.URL.createObjectURL(csvFile);
+            downloadLink.style.display = 'none';
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            document.body.removeChild(downloadLink);
+        }
+
+        // Initialize the dashboard
+        window.onload = function() {
+            populateTable();
+            updateAnalytics();
+            updateBuyerAnalytics();
+        };
+    </script>
+</body>
+</html>
