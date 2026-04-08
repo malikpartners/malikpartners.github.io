@@ -1,0 +1,1581 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RED REALTY SEO Strategy Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #000000;
+            color: #ffffff;
+            line-height: 1.6;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #CF2030, #8B0000);
+            padding: 1rem 2rem;
+            border-bottom: 3px solid #CF2030;
+        }
+        
+        .header img {
+            height: 60px;
+        }
+        
+        .nav-tabs {
+            background-color: #111111;
+            padding: 0;
+            display: flex;
+            flex-wrap: wrap;
+            border-bottom: 2px solid #CF2030;
+        }
+        
+        .nav-tab {
+            background-color: #222222;
+            color: #CF2030;
+            border: none;
+            padding: 12px 20px;
+            cursor: pointer;
+            border-right: 1px solid #333;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+        
+        .nav-tab:hover {
+            background-color: #CF2030;
+            color: #ffffff;
+        }
+        
+        .nav-tab.active {
+            background-color: #CF2030;
+            color: #ffffff;
+        }
+        
+        .tab-content {
+            padding: 2rem;
+            min-height: 80vh;
+        }
+        
+        .tab-pane {
+            display: none;
+        }
+        
+        .tab-pane.active {
+            display: block;
+        }
+        
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .metric-card {
+            background: linear-gradient(135deg, #1a1a1a, #2a2a2a);
+            border: 1px solid #CF2030;
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+        
+        .metric-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #CF2030;
+            margin-bottom: 0.5rem;
+        }
+        
+        .metric-label {
+            color: #cccccc;
+            font-size: 0.9rem;
+        }
+        
+        .search-container {
+            margin-bottom: 1rem;
+        }
+        
+        .search-input {
+            width: 100%;
+            max-width: 400px;
+            padding: 10px;
+            background-color: #222222;
+            border: 1px solid #CF2030;
+            border-radius: 5px;
+            color: #ffffff;
+        }
+        
+        .search-input::placeholder {
+            color: #888888;
+        }
+        
+        .data-table {
+            width: 100%;
+            background-color: #1a1a1a;
+            border-collapse: collapse;
+            border: 1px solid #333333;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .data-table th {
+            background-color: #CF2030;
+            color: #ffffff;
+            padding: 12px;
+            text-align: left;
+            cursor: pointer;
+            user-select: none;
+        }
+        
+        .data-table th:hover {
+            background-color: #a01828;
+        }
+        
+        .data-table td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #333333;
+        }
+        
+        .data-table tr:hover {
+            background-color: #2a2a2a;
+        }
+        
+        .grade-A { color: #4CAF50; }
+        .grade-B { color: #8BC34A; }
+        .grade-C { color: #FFC107; }
+        .grade-D { color: #FF9800; }
+        .grade-F { color: #F44336; }
+        
+        .priority-P0 { color: #FF4444; font-weight: bold; }
+        .priority-P1 { color: #FF9800; font-weight: bold; }
+        .priority-P2 { color: #FFC107; }
+        
+        .content-section {
+            background-color: #1a1a1a;
+            border: 1px solid #333333;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .content-section h3 {
+            color: #CF2030;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #CF2030;
+        }
+        
+        .code-block {
+            background-color: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            padding: 1rem;
+            margin: 1rem 0;
+            overflow-x: auto;
+        }
+        
+        .code-block pre {
+            color: #c9d1d9;
+            margin: 0;
+            white-space: pre-wrap;
+        }
+        
+        .footer {
+            background-color: #111111;
+            padding: 1rem 2rem;
+            text-align: center;
+            border-top: 2px solid #CF2030;
+            margin-top: 2rem;
+        }
+        
+        .footer img {
+            height: 30px;
+            opacity: 0.7;
+        }
+        
+        .keyword-cluster {
+            background-color: #2a2a2a;
+            border-left: 4px solid #CF2030;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        
+        .timeline {
+            position: relative;
+            padding: 1rem 0;
+        }
+        
+        .timeline-item {
+            background-color: #2a2a2a;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-left: 4px solid #CF2030;
+        }
+        
+        .chart-container {
+            background-color: #1a1a1a;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports">
+    </header>
+
+    <nav class="nav-tabs">
+        <button class="nav-tab active" data-tab="overview">Executive Overview</button>
+        <button class="nav-tab" data-tab="technical">Technical Audit</button>
+        <button class="nav-tab" data-tab="keywords">Keyword Research</button>
+        <button class="nav-tab" data-tab="content">Landing Pages</button>
+        <button class="nav-tab" data-tab="strategy">12-Month Plan</button>
+        <button class="nav-tab" data-tab="competitors">Competitive Analysis</button>
+        <button class="nav-tab" data-tab="kpis">KPIs & Metrics</button>
+        <button class="nav-tab" data-tab="technical-fixes">Technical Fixes</button>
+    </nav>
+
+    <main class="tab-content">
+        <!-- Overview Tab -->
+        <div id="overview" class="tab-pane active">
+            <h2 style="color: #CF2030; margin-bottom: 2rem;">RED REALTY SEO Executive Summary</h2>
+            
+            <div class="dashboard-grid">
+                <div class="metric-card">
+                    <div class="metric-value">D+</div>
+                    <div class="metric-label">Overall SEO Grade</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">42/100</div>
+                    <div class="metric-label">SEO Score</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">19 Years</div>
+                    <div class="metric-label">Domain Age</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">40,000+</div>
+                    <div class="metric-label">Homes Sold Claim</div>
+                </div>
+            </div>
+
+            <div class="content-section">
+                <h3>Business Profile</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+                    <div><strong>Company:</strong> Red Realty, LLC</div>
+                    <div><strong>Established:</strong> 2007</div>
+                    <div><strong>Location:</strong> 1574 Medical Center Pkwy, Suite 202, Murfreesboro, TN 37129</div>
+                    <div><strong>Platform:</strong> Kunversion (kvCORE / InsideRE)</div>
+                    <div><strong>Markets:</strong> Rutherford County, Williamson County, Davidson County + Florida Panhandle</div>
+                </div>
+            </div>
+
+            <div class="content-section">
+                <h3>Critical Issues Identified</h3>
+                <div class="search-container">
+                    <input type="text" class="search-input" id="issuesSearch" placeholder="Search issues...">
+                </div>
+                <table class="data-table" id="issuesTable">
+                    <thead>
+                        <tr>
+                            <th onclick="sortTable(0, 'issuesTable')">Issue</th>
+                            <th onclick="sortTable(1, 'issuesTable')">Severity</th>
+                            <th onclick="sortTable(2, 'issuesTable')">Impact</th>
+                            <th onclick="sortTable(3, 'issuesTable')">Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Robots.txt Blocking Crawlers</td>
+                            <td class="priority-P0">CRITICAL</td>
+                            <td>Site-breaking</td>
+                            <td>Wildcard rule blocks all non-specified bots</td>
+                        </tr>
+                        <tr>
+                            <td>Conflicting Meta Robots</td>
+                            <td class="priority-P0">CRITICAL</td>
+                            <td>De-indexing risk</td>
+                            <td>Homepage has both index,follow AND noindex</td>
+                        </tr>
+                        <tr>
+                            <td>Broken Pages (404/403)</td>
+                            <td class="priority-P1">HIGH</td>
+                            <td>Poor UX</td>
+                            <td>/areas, /resources, /pages return errors</td>
+                        </tr>
+                        <tr>
+                            <td>No Schema Markup</td>
+                            <td class="priority-P1">HIGH</td>
+                            <td>Lost SERP features</td>
+                            <td>Zero structured data implementation</td>
+                        </tr>
+                        <tr>
+                            <td>Slow Bing Crawl Delay</td>
+                            <td class="priority-P1">HIGH</td>
+                            <td>Indexing delays</td>
+                            <td>120-second crawl delay for Bing/Yahoo</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="content-section">
+                <h3>Strengths & Opportunities</h3>
+                <ul style="list-style-type: none; padding: 0;">
+                    <li style="margin: 0.5rem 0; padding: 0.5rem; background-color: #2a2a2a; border-left: 4px solid #4CAF50;">✓ Premium exact-match domain (redrealty.com)</li>
+                    <li style="margin: 0.5rem 0; padding: 0.5rem; background-color: #2a2a2a; border-left: 4px solid #4CAF50;">✓ 17+ years in business with strong local reputation</li>
+                    <li style="margin: 0.5rem 0; padding: 0.5rem; background-color: #2a2a2a; border-left: 4px solid #4CAF50;">✓ Higgins AI Chatbot - unique differentiator</li>
+                    <li style="margin: 0.5rem 0; padding: 0.5rem; background-color: #2a2a2a; border-left: 4px solid #4CAF50;">✓ Real Google reviews and testimonials</li>
+                    <li style="margin: 0.5rem 0; padding: 0.5rem; background-color: #2a2a2a; border-left: 4px solid #4CAF50;">✓ Multiple market coverage (TN + FL)</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Technical Audit Tab -->
+        <div id="technical" class="tab-pane">
+            <h2 style="color: #CF2030; margin-bottom: 2rem;">Technical SEO Audit</h2>
+            
+            <div class="search-container">
+                <input type="text" class="search-input" id="technicalSearch" placeholder="Search technical issues...">
+            </div>
+            
+            <table class="data-table" id="technicalTable">
+                <thead>
+                    <tr>
+                        <th onclick="sortTable(0, 'technicalTable')">Category</th>
+                        <th onclick="sortTable(1, 'technicalTable')">Issue</th>
+                        <th onclick="sortTable(2, 'technicalTable')">Status</th>
+                        <th onclick="sortTable(3, 'technicalTable')">Grade</th>
+                        <th onclick="sortTable(4, 'technicalTable')">Priority</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Robots.txt</td>
+                        <td>Wildcard blocking all crawlers</td>
+                        <td>BROKEN</td>
+                        <td class="grade-F">F</td>
+                        <td class="priority-P0">P0</td>
+                    </tr>
+                    <tr>
+                        <td>Meta Tags</td>
+                        <td>Conflicting robots directives</td>
+                        <td>CRITICAL</td>
+                        <td class="grade-F">F</td>
+                        <td class="priority-P0">P0</td>
+                    </tr>
+                    <tr>
+                        <td>Site Structure</td>
+                        <td>/areas returns 403</td>
+                        <td>BROKEN</td>
+                        <td class="grade-F">F</td>
+                        <td class="priority-P1">P1</td>
+                    </tr>
+                    <tr>
+                        <td>Site Structure</td>
+                        <td>/resources returns 404</td>
+                        <td>BROKEN</td>
+                        <td class="grade-F">F</td>
+                        <td class="priority-P1">P1</td>
+                    </tr>
+                    <tr>
+                        <td>Schema Markup</td>
+                        <td>No structured data</td>
+                        <td>MISSING</td>
+                        <td class="grade-F">F</td>
+                        <td class="priority-P1">P1</td>
+                    </tr>
+                    <tr>
+                        <td>HTTPS</td>
+                        <td>SSL Certificate Active</td>
+                        <td>WORKING</td>
+                        <td class="grade-A">A</td>
+                        <td class="priority-P2">P2</td>
+                    </tr>
+                    <tr>
+                        <td>Sitemap</td>
+                        <td>XML Sitemap present</td>
+                        <td>WORKING</td>
+                        <td class="grade-B">B</td>
+                        <td class="priority-P2">P2</td>
+                    </tr>
+                    <tr>
+                        <td>Content</td>
+                        <td>Duplicate H1 tags</td>
+                        <td>NEEDS FIX</td>
+                        <td class="grade-D">D</td>
+                        <td class="priority-P2">P2</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Keywords Tab -->
+        <div id="keywords" class="tab-pane">
+            <h2 style="color: #CF2030; margin-bottom: 2rem;">Comprehensive Keyword Research (100+ Keywords)</h2>
+            
+            <div class="search-container">
+                <input type="text" class="search-input" id="keywordSearch" placeholder="Search keywords...">
+            </div>
+            
+            <table class="data-table" id="keywordTable">
+                <thead>
+                    <tr>
+                        <th onclick="sortTable(0, 'keywordTable')">Keyword</th>
+                        <th onclick="sortTable(1, 'keywordTable')">Search Volume</th>
+                        <th onclick="sortTable(2, 'keywordTable')">Competition</th>
+                        <th onclick="sortTable(3, 'keywordTable')">Intent</th>
+                        <th onclick="sortTable(4, 'keywordTable')">Priority</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>murfreesboro homes for sale</td><td>1,300</td><td>High</td><td>Commercial</td><td>High</td></tr>
+                    <tr><td>franklin tn real estate</td><td>900</td><td>High</td><td>Commercial</td><td>High</td></tr>
+                    <tr><td>middle tennessee real estate</td><td>800</td><td>Medium</td><td>Commercial</td><td>High</td></tr>
+                    <tr><td>brentwood tn homes for sale</td><td>750</td><td>High</td><td>Commercial</td><td>High</td></tr>
+                    <tr><td>smyrna tn real estate</td><td>600</td><td>Medium</td><td>Commercial</td><td>Medium</td></tr>
+                    <tr><td>nolensville tn homes</td><td>500</td><td>Medium</td><td>Commercial</td><td>Medium</td></tr>
+                    <tr><td>murfreesboro tn real estate agent</td><td>450</td><td>Medium</td><td>Commercial</td><td>High</td></tr>
+                    <tr><td>franklin tn homes under 500k</td><td>400</td><td>Low</td><td>Commercial</td><td>Medium</td></tr>
+                    <tr><td>rutherford county homes</td><td>350</td><td>Medium</td><td>Commercial</td><td>Medium</td></tr>
+                    <tr><td>williamson county real estate</td><td>320</td><td>High</td><td>Commercial</td><td>Medium</td></tr>
+                    <tr><td>homes for sale murfreesboro tn</td><td>1,200</td><td>High</td><td>Commercial</td><td>High</td></tr>
+                    <tr><td>real estate murfreesboro tn</td><td>800</td><td>High</td><td>Commercial</td><td>High</td></tr>
+                    <tr><td>houses for sale murfreesboro tn</td><td>700</td><td>Medium</td><td>Commercial</td><td>High</td></tr>
+                    <tr><td>property management murfreesboro</td><td>300</td><td>Low</td><td>Commercial</td><td>Medium</td></tr>
+                    <tr><td>commercial real estate murfreesboro</td><td>250</td><td>Low</td><td>Commercial</td><td>Medium</td></tr>
+                    <tr><td>investment property tennessee</td><td>400</td><td>Medium</td><td>Commercial</td><td>Medium</td></tr>
+                    <tr><td>tennessee real estate market</td><td>600</td><td>Medium</td><td>Informational</td><td>Medium</td></tr>
+                    <tr><td>middle tn home prices</td><td>300</td><td>Low</td><td>Informational</td><td>Medium</td></tr>
+                    <tr><td>murfreesboro neighborhoods</td><td>250</td><td>Low</td><td>Informational</td><td>High</td></tr>
+                    <tr><td>franklin tn neighborhoods</td><td>200</td><td>Low</td><td>Informational</td><td>High</td></tr>
+                    <tr><td>brentwood tn school districts</td><td>180</td><td>Low</td><td>Informational</td><td>Medium</td></tr>
+                    <tr><td>murfreesboro tn cost of living</td><td>150</td><td>Low</td><td>Informational</td><td>Medium</td></tr>
+                    <tr><td>selling home murfreesboro tn</td><td>400</td><td>Medium</td><td>Commercial</td><td>High</td></tr>
+                    <tr><td>buy house murfreesboro tn</td><td>350</td><td>Medium</td><td>Commercial</td><td>High</td></tr>
+                    <tr><td>first time home buyer tennessee</td><td>500</td><td>Medium</td><td>Informational</td><td>Medium</td></tr>
+                    <tr><td>tennessee real estate trends</td><td>300</td><td>Low</td><td>Informational</td><td>Medium</td></tr>
+                    <tr><td>murfreesboro real estate forecast</td><td>120</td><td>Low</td><td>Informational</td><td>Medium</td></tr>
+                    <tr><td>davidson county real estate</td><td>800</td><td>High</td><td>Commercial</td><td>Medium</td></tr>
+                    <tr><td>nashville suburb homes</td><td>600</td><td>Medium</td><td>Commercial</td><td>Medium</td></tr>
+                    <tr><td>tennessee luxury homes</td><td>400</td><td>Medium</td><td>Commercial</td><td>Low</td></tr>
+                    <tr><td>la vergne tn real estate</td><td>200</td><td>Low</td><td>Commercial</td><td>Medium</td></tr>
+                    <tr><td>lebanon tn homes for sale</td><td>300</td><td>Medium</td><td>Commercial</td><td>Medium</td></tr>
+                    <tr><td>florida panhandle real estate</td><td>1,500</td><td>High</td><td>Commercial</td><td>High</td></tr>
+                    <tr><td>destin florida homes</td><td>2,000</td><td>High</td><td>Commercial</td><td>High</td></tr>
+                    <tr><td>pensacola real estate</td><td>1,200</td><td>Medium</td><td>Commercial</td><td>Medium</td></tr>
+                    <tr><td>gulf shores alabama homes</td><td>900</td><td>Medium</td><td>Commercial</td><td>Medium</td></tr>
+                    <tr><td>30a real estate</td><td>800</td><td>High</td><td>Commercial</td><td>Medium</td></tr>
+                    <tr><td>beach homes florida panhandle</td><td>600</td><td>Medium</td><td>Commercial</td><td>Medium</td></tr>
+                    <tr><td>vacation rental properties florida</td><td>400</td><td>Medium</td><td>Commercial</td><td>Medium</td></tr>
+                    <tr><td>murfreesboro tn apartments</td><td>800</td><td>Medium</td><td>Commercial</td><td>Low</td></tr>
+                    <tr><td>franklin tn luxury homes</td><td>300</td><td>High</td><td>Commercial</td><td>Medium</td></tr>
+                    <tr><td>brentwood tn mansions</td><td>150</td><td>Medium</td><td>Commercial</td><td>Low</td></tr>
+                    <tr><td>tennessee horse properties</td><td>200</td><td>Low</td><td>Commercial</td><td>Low</td></tr>
+                    <tr><td>middle tennessee farms for sale</td><td>180</td><td>Low</td><td>Commercial</td><td>Medium</td></tr>
+                    <tr><td>murfreesboro tn home values</td><td>250</td><td>Low</td><td>Informational</td><td>Medium</td></tr>
+                    <tr><td>franklin tn market trends</td><td>150</td><td>Low</td><td>Informational</td><td>Medium</td></tr>
+                    <tr><td>williamson county home prices</td><td>200</td><td>Low</td><td>Informational</td><td>Medium</td></tr>
+                    <tr><td>rutherford county market report</td><td>100</td><td>Low</td><td>Informational</td><td>High</td></tr>
+                    <tr><td>real estate agent murfreesboro</td><td>400</td><td>Medium</td><td>Commercial</td><td>High</td></tr>
+                    <tr><td>best realtor franklin tn</td><td>200</td><td>Medium</td><td>Commercial</td><td>High</td></tr>
+                    <tr><td>top real estate agent brentwood</td><td>150</td><td>Medium</td><td>Commercial</td><td>Medium</td></tr>
+                    <tr><td>murfreesboro realtor reviews</td><td>100</td><td>Low</td><td>Navigational</td><td>Medium</td></tr>
+                    <tr><td>red realty murfreesboro</td><td>50</td><td>Low</td><td>Navigational</td><td>High</td></tr>
+                    <tr><td>steven dotson realtor</td><td>30</td><td>Low</td><td>Navigational</td><td>High</td></tr>
+                    <tr><td>moving to murfreesboro tn</td><td>800</td><td>Medium</td><td>Informational</td><td>High</td></tr>
+                    <tr><td>relocating to franklin tn</td><td>300</td><td>Low</td><td>Informational</td><td>High</td></tr>
+                    <tr><td>living in brentwood tn</td><td>250</td><td>Low</td><td>Informational</td><td>Medium</td></tr>
+                    <tr><td>murfreesboro tn schools</td><td>600</td><td>Medium</td><td>Informational</td><td>Medium</td></tr>
+                    <tr><td>franklin tn elementary schools</td><td>200</td><td>Low</td><td>Informational</td><td>Medium</td></tr>
+                    <tr><td>williamson county schools</td><td>500</td><td>Medium</td><td>Informational</td><td>Medium</td></tr>
+                    <tr><td>rutherford county schools</td><td>400</td><td>Medium</td><td>Informational</td><td>Medium</td></tr>
+                    <tr><td>tennessee property taxes</td><td>300</td><td>Low</td><td>Informational</td><td>Low</td></tr>
+                    <tr><td>murfreesboro property tax rate</td><td>150</td><td>Low</td><td>Informational</td><td>Low</td></tr>
+                    <tr><td>home inspection murfreesboro</td><td>200</td><td>Low</td><td>Commercial</td><td>Low</td></tr>
+                    <tr><td>mortgage lender murfreesboro</td><td>180</td><td>Medium</td><td>Commercial</td><td>Low</td></tr>
+                    <tr><td>closing attorney murfreesboro</td><td>100</td><td>Low</td><td>Commercial</td><td>Low</td></tr>
+                    <tr><td>real estate photography tn</td><td>120</td><td>Low</td><td>Commercial</td><td>Low</td></tr>
+                    <tr><td>virtual tour real estate</td><td>400</td><td>Medium</td><td>Commercial</td><td>Low</td></tr>
+                    <tr><td>staging homes for sale</td><td>300</td><td>Low</td><td>Informational</td><td>Low</td></tr>
+                    <tr><td>how to sell house fast</td><td>2,000</td><td>High</td><td>Informational</td><td>Medium</td></tr>
+                    <tr><td>buying first home checklist</td><td>1,500</td><td>Medium</td><td>Informational</td><td>Medium</td></tr>
+                    <tr><td>real estate investment tips</td><td>1,000</td><td>Medium</td><td>Informational</td><td>Medium</td></tr>
+                    <tr><td>rental property management</td><td>800</td><td>Medium</td><td>Commercial</td><td>Medium</td></tr>
+                    <tr><td>fix and flip properties</td><td>600</td><td>Medium</td><td>Informational</td><td>Medium</td></tr>
+                    <tr><td>real estate market analysis</td><td>500</td><td>Medium</td><td>Informational</td><td>Medium</td></tr>
+                    <tr><td>home appraisal process</td><td>400</td><td>Low</td><td>Informational</td><td>Low</td></tr>
+                    <tr><td>real estate commission rates</td><td>300</td><td>Medium</td><td>Informational</td><td>Low</td></tr>
+                    <tr><td>for sale by owner tips</td><td>250</td><td>Medium</td><td>Informational</td><td>Low</td></tr>
+                    <tr><td>real estate contract terms</td><td>200</td><td>Low</td><td>Informational</td><td>Low</td></tr>
+                    <tr><td>home warranty coverage</td><td>400</td><td>Medium</td><td>Informational</td><td>Low</td></tr>
+                    <tr><td>real estate closing costs</td><td>600</td><td>Medium</td><td>Informational</td><td>Medium</td></tr>
+                    <tr><td>tennessee real estate law</td><td>150</td><td>Low</td><td>Informational</td><td>Low</td></tr>
+                    <tr><td>homeowners insurance tennessee</td><td>300</td><td>Medium</td><td>Commercial</td><td>Low</td></tr>
+                    <tr><td>flood insurance murfreesboro</td><td>100</td><td>Low</td><td>Commercial</td><td>Low</td></tr>
+                    <tr><td>hoa communities murfreesboro</td><td>150</td><td>Low</td><td>Informational</td><td>Medium</td></tr>
+                    <tr><td>gated communities franklin tn</td><td>120</td><td>Low</td><td>Commercial</td><td>Medium</td></tr>
+                    <tr><td>new construction murfreesboro</td><td>300</td><td>Medium</td><td>Commercial</td><td>Medium</td></tr>
+                    <tr><td>custom homes franklin tn</td><td>200</td><td>Medium</td><td>Commercial</td><td>Medium</td></tr>
+                    <tr><td>townhomes for sale brentwood</td><td>150</td><td>Medium</td><td>Commercial</td><td>Medium</td></tr>
+                    <tr><td>condos murfreesboro tn</td><td>250</td><td>Low</td><td>Commercial</td><td>Low</td></tr>
+                    <tr><td>55+ communities tennessee</td><td>200</td><td>Low</td><td>Commercial</td><td>Medium</td></tr>
+                    <tr><td>golf course homes franklin</td><td>100</td><td>Low</td><td>Commercial</td><td>Medium</td></tr>
+                    <tr><td>waterfront homes tennessee</td><td>300</td><td>Medium</td><td>Commercial</td><td>Medium</td></tr>
+                    <tr><td>lake homes middle tennessee</td><td>250</td><td>Medium</td><td>Commercial</td><td>Medium</td></tr>
+                    <tr><td>historic homes franklin tn</td><td>100</td><td>Low</td><td>Commercial</td><td>Low</td></tr>
+                    <tr><td>modern homes brentwood</td><td>80</td><td>Low</td><td>Commercial</td><td>Low</td></tr>
+                    <tr><td>farmhouse style homes tn</td><td>150</td><td>Low</td><td>Commercial</td><td>Low</td></tr>
+                    <tr><td>real estate franchise opportunities</td><td>800</td><td>Medium</td><td>Commercial</td><td>Medium</td></tr>
+                    <tr><td>become real estate agent tn</td><td>400</td><td>Medium</td><td>Informational</td><td>Medium</td></tr>
+                    <tr><td>real estate license tennessee</td><td>300</td><td>Medium</td><td>Informational</td><td>Low</td></tr>
+                    <tr><td>real estate career change</td><td>200</td><td>Low</td><td>Informational</td><td>Low</td></tr>
+                    <tr><td>join real estate team</td><td>150</td><td>Low</td><td>Commercial</td><td>High</td></tr>
+                    <tr><td>real estate agent training</td><td>250</td><td>Medium</td><td>Informational</td><td>Low</td></tr>
+                    <tr><td>ai in real estate</td><td>500</td><td>Medium</td><td>Informational</td><td>High</td></tr>
+                    <tr><td>real estate chatbot</td><td>200</td><td>Low</td><td>Commercial</td><td>High</td></tr>
+                    <tr><td>virtual real estate assistant</td><td>150</td><td>Low</td><td>Commercial</td><td>High</td></tr>
+                    <tr><td>automated property search</td><td>100</td><td>Low</td><td>Commercial</td><td>Medium</td></tr>
+                    <tr><td>smart home features</td><td>800</td><td>Medium</td><td>Informational</td><td>Low</td></tr>
+                    <tr><td>energy efficient homes tn</td><td>200</td><td>Low</td><td>Commercial</td><td>Low</td></tr>
+                    <tr><td>solar homes murfreesboro</td><td>100</td><td>Low</td><td>Commercial</td><td>Low</td></tr>
+                    <tr><td>green building tennessee</td><td>80</td><td>Low</td><td>Informational</td><td>Low</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Landing Pages Tab -->
+        <div id="content" class="tab-pane">
+            <h2 style="color: #CF2030; margin-bottom: 2rem;">SEO-Optimized Service Landing Pages</h2>
+            
+            <div class="content-section">
+                <h3>1. Buy Homes in Middle Tennessee (/buy)</h3>
+                <div class="code-block">
+                    <pre><strong>Title:</strong> Buy Homes in Murfreesboro, Franklin & Middle Tennessee | Red Realty
+
+<strong>Meta Description:</strong> Find your dream home in Middle Tennessee with Red Realty. Search homes for sale in Murfreesboro, Franklin, Brentwood & surrounding areas. 17+ years experience, 40K+ homes sold.
+
+<strong>H1:</strong> Buy Your Dream Home in Middle Tennessee
+
+<strong>Content:</strong>
+Looking to buy a home in Middle Tennessee? Red Realty has been helping families find their perfect homes in Murfreesboro, Franklin, Brentwood, and surrounding areas since 2007. With over 40,000 homes sold and 17+ years of local market expertise, we make home buying simple and stress-free.
+
+<strong>Why Choose Red Realty for Your Home Purchase?</strong>
+• Local expertise in Rutherford, Williamson, and Davidson Counties
+• Advanced AI-powered property search with Higgins
+• Access to MLS listings and off-market opportunities
+• First-time buyer programs and assistance
+• Investment property guidance
+• Detailed neighborhood insights and school district information
+
+<strong>Popular Areas We Serve:</strong>
+- Murfreesboro: Family-friendly communities with excellent schools
+- Franklin: Historic charm with modern amenities
+- Brentwood: Luxury homes and top-rated schools
+- Smyrna: Affordable options close to Nashville
+- Nolensville: Growing community with new developments
+
+<strong>Home Buying Process:</strong>
+1. Initial consultation and needs assessment
+2. Mortgage pre-approval assistance
+3. Personalized property search
+4. Home tours and market analysis
+5. Offer negotiation and contract management
+6. Inspection coordination
+7. Smooth closing process
+
+Contact Red Realty today to start your home buying journey in Middle Tennessee.</pre>
+                </div>
+            </div>
+
+            <div class="content-section">
+                <h3>2. Sell Your Home in Middle Tennessee (/sell)</h3>
+                <div class="code-block">
+                    <pre><strong>Title:</strong> Sell Your Home Fast in Murfreesboro, Franklin & Middle TN | Red Realty
+
+<strong>Meta Description:</strong> Sell your home quickly for top dollar with Red Realty. Expert real estate agents serving Murfreesboro, Franklin, Brentwood. Free home valuation. Call today!
+
+<strong>H1:</strong> Sell Your Home for Maximum Value in Middle Tennessee
+
+<strong>Content:</strong>
+Ready to sell your home in Middle Tennessee? Red Realty's proven marketing system and local expertise ensure you get the best price in the shortest time. Our team has successfully sold over 40,000 homes throughout Rutherford, Williamson, and Davidson Counties.
+
+<strong>Our Home Selling Advantage:</strong>
+• Professional photography and virtual tours
+• Strategic pricing based on comprehensive market analysis
+• Multi-channel marketing: MLS, social media, and premium websites
+• Higgins AI chatbot for instant buyer inquiries
+• Staging consultation and preparation guidance
+• Negotiation expertise to maximize your profit
+
+<strong>Average Days on Market by Area:</strong>
+- Murfreesboro: 25-35 days
+- Franklin: 20-30 days
+- Brentwood: 15-25 days
+- Smyrna: 30-40 days
+- Nolensville: 25-35 days
+
+<strong>Home Selling Process:</strong>
+1. Free comprehensive market analysis
+2. Strategic pricing and marketing plan
+3. Professional staging and photography
+4. Multi-platform marketing launch
+5. Showing coordination and feedback
+6. Offer negotiation and acceptance
+7. Contract to closing management
+
+<strong>Get Your Free Home Valuation</strong>
+Find out what your home is worth in today's market. Our detailed comparative market analysis includes recent sales, current competition, and market trends specific to your neighborhood.
+
+Ready to sell? Contact Red Realty for your free consultation and market analysis.</pre>
+                </div>
+            </div>
+
+            <div class="content-section">
+                <h3>3. Commercial Real Estate Middle Tennessee (/commercial)</h3>
+                <div class="code-block">
+                    <pre><strong>Title:</strong> Commercial Real Estate Murfreesboro, Franklin & Middle TN | Red Realty
+
+<strong>Meta Description:</strong> Commercial real estate experts in Middle Tennessee. Office, retail, industrial properties in Murfreesboro, Franklin, Brentwood. Investment opportunities available.
+
+<strong>H1:</strong> Commercial Real Estate Solutions in Middle Tennessee
+
+<strong>Content:</strong>
+Red Realty specializes in commercial real estate throughout Middle Tennessee, including Murfreesboro, Franklin, Brentwood, and surrounding markets. Whether you're looking to buy, sell, lease, or invest in commercial properties, our experienced team provides comprehensive market knowledge and professional service.
+
+<strong>Commercial Services:</strong>
+• Office buildings and professional spaces
+• Retail and restaurant locations
+• Industrial and warehouse facilities
+• Multi-family investment properties
+• Land development opportunities
+• Build-to-suit consulting
+
+<strong>Key Commercial Markets:</strong>
+- Murfreesboro: Growing medical and professional corridor
+- Franklin: Premium retail and office spaces
+- Brentwood: High-end commercial developments
+- Smyrna: Industrial and distribution hub
+- Nashville corridor: Major highway access
+
+<strong>Investment Opportunities:</strong>
+Middle Tennessee's strong economy, population growth, and business-friendly environment create excellent commercial real estate opportunities. Our team provides detailed market analysis, financial modeling, and investment guidance.
+
+<strong>Recent Market Trends:</strong>
+• Healthcare and medical office demand increasing
+• E-commerce driving warehouse/distribution needs
+• Mixed-use developments gaining popularity
+• Technology companies expanding in the region
+
+Contact Red Realty for expert commercial real estate guidance in Middle Tennessee.</pre>
+                </div>
+            </div>
+
+            <div class="content-section">
+                <h3>4. Property Management Murfreesboro (/property-management)</h3>
+                <div class="code-block">
+                    <pre><strong>Title:</strong> Property Management Services Murfreesboro & Middle Tennessee | Red Realty
+
+<strong>Meta Description:</strong> Professional property management in Murfreesboro, Franklin & Middle TN. Tenant screening, rent collection, maintenance coordination. Maximize your rental income.
+
+<strong>H1:</strong> Professional Property Management in Middle Tennessee
+
+<strong>Content:</strong>
+Maximize your rental property investment with Red Realty's comprehensive property management services. We handle everything from tenant screening to maintenance coordination, allowing you to enjoy passive income without the daily hassles of property management.
+
+<strong>Property Management Services:</strong>
+• Tenant screening and background checks
+• Rent collection and financial reporting
+• Property maintenance and repairs
+• Regular property inspections
+• Lease agreement preparation and enforcement
+• Eviction processing when necessary
+• Market rent analysis and adjustments
+
+<strong>Areas We Manage:</strong>
+- Murfreesboro: High rental demand near MTSU
+- Franklin: Premium rental market
+- Brentwood: Executive rental properties
+- Smyrna: Family rental communities
+- Nashville suburbs: Professional rentals
+
+<strong>Investment Property Benefits:</strong>
+• Steady rental income stream
+• Property appreciation over time
+• Tax advantages and deductions
+• Professional management removes daily stress
+• Market expertise ensures competitive pricing
+
+<strong>Owner Benefits:</strong>
+- Monthly financial statements
+- Online owner portal access
+- 24/7 emergency maintenance coordination
+- Detailed property inspection reports
+- Market-competitive rental rates
+
+<strong>Tenant Benefits:</strong>
+- Professional application process
+- Online rent payment options
+- Responsive maintenance requests
+- Clear lease terms and expectations
+
+Let Red Realty manage your investment properties while you enjoy the returns. Contact us for a free rental market analysis.</pre>
+                </div>
+            </div>
+
+            <div class="content-section">
+                <h3>5. Real Estate Investment Middle Tennessee (/investments)</h3>
+                <div class="code-block">
+                    <pre><strong>Title:</strong> Real Estate Investment Opportunities Middle Tennessee | Red Realty
+
+<strong>Meta Description:</strong> Real estate investment guidance in Middle Tennessee. Rental properties, fix-and-flip, commercial investments. Expert analysis and market insights from Red Realty.
+
+<strong>H1:</strong> Real Estate Investment Opportunities in Middle Tennessee
+
+<strong>Content:</strong>
+Middle Tennessee offers exceptional real estate investment opportunities, from single-family rentals to commercial developments. Red Realty's investment team provides market analysis, financial modeling, and ongoing support to help you build wealth through real estate.
+
+<strong>Investment Strategies:</strong>
+• Buy-and-hold rental properties
+• Fix-and-flip opportunities
+• Commercial real estate investments
+• Multi-family properties
+• Raw land development
+• Real estate investment trusts (REITs)
+
+<strong>Why Invest in Middle Tennessee?</strong>
+- Strong population growth (2%+ annually)
+- Diverse economy with major employers
+- No state income tax
+- Below-average cost of living
+- Strong rental demand
+- Excellent transportation infrastructure
+
+<strong>Market Analysis by Area:</strong>
+- Murfreesboro: University town with consistent rental demand
+- Franklin: High-end market with strong appreciation
+- Brentwood: Luxury market with stable values
+- Smyrna: Industrial growth driving housing demand
+- Nashville suburbs: Urban sprawl creating opportunities
+
+<strong>Investment Property Financing:</strong>
+• Conventional investment loans
+• Portfolio lender relationships
+- Fix-and-flip financing options
+• Commercial property loans
+• Private money connections
+• 1031 exchange coordination
+
+<strong>Investment Analysis Services:</strong>
+- Cash flow projections
+- Cap rate calculations
+- Comparative market analysis
+- Rental rate research
+- Property condition assessments
+- Exit strategy planning
+
+Red Realty's investment team combines local market knowledge with financial expertise to help you make informed investment decisions. Contact us for a confidential consultation about your real estate investment goals.</pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- Strategy Tab -->
+        <div id="strategy" class="tab-pane">
+            <h2 style="color: #CF2030; margin-bottom: 2rem;">12-Month Strategic Implementation Plan</h2>
+            
+            <div class="search-container">
+                <input type="text" class="search-input" id="strategySearch" placeholder="Search strategy items...">
+            </div>
+            
+            <table class="data-table" id="strategyTable">
+                <thead>
+                    <tr>
+                        <th onclick="sortTable(0, 'strategyTable')">Quarter</th>
+                        <th onclick="sortTable(1, 'strategyTable')">Month</th>
+                        <th onclick="sortTable(2, 'strategyTable')">Theme</th>
+                        <th onclick="sortTable(3, 'strategyTable')">Key Actions</th>
+                        <th onclick="sortTable(4, 'strategyTable')">Priority</th>
+                        <th onclick="sortTable(5, 'strategyTable')">Impact</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Q1</td>
+                        <td>Month 1</td>
+                        <td>Stop the Bleeding</td>
+                        <td>Fix robots.txt, conflicting meta tags, broken pages</td>
+                        <td class="priority-P0">P0</td>
+                        <td>Critical</td>
+                    </tr>
+                    <tr>
+                        <td>Q1</td>
+                        <td>Month 2</td>
+                        <td>Build the Framework</td>
+                        <td>Keyword research, service pages, content strategy</td>
+                        <td class="priority-P1">P1</td>
+                        <td>High</td>
+                    </tr>
+                    <tr>
+                        <td>Q1</td>
+                        <td>Month 3</td>
+                        <td>Own the Map</td>
+                        <td>Local SEO, city pages, Google Business Profile</td>
+                        <td class="priority-P1">P1</td>
+                        <td>High</td>
+                    </tr>
+                    <tr>
+                        <td>Q2</td>
+                        <td>Month 4</td>
+                        <td>Feed the Machine</td>
+                        <td>Content creation, blog posts, neighborhood guides</td>
+                        <td class="priority-P1">P1</td>
+                        <td>High</td>
+                    </tr>
+                    <tr>
+                        <td>Q2</td>
+                        <td>Month 5</td>
+                        <td>Build Authority</td>
+                        <td>Link building, digital PR, linkable assets</td>
+                        <td class="priority-P1">P1</td>
+                        <td>High</td>
+                    </tr>
+                    <tr>
+                        <td>Q2</td>
+                        <td>Month 6</td>
+                        <td>Measure & Adjust</td>
+                        <td>Performance review, CRO, page speed optimization</td>
+                        <td class="priority-P1">P1</td>
+                        <td>High</td>
+                    </tr>
+                    <tr>
+                        <td>Q3</td>
+                        <td>Month 7</td>
+                        <td>Dominate SERPs</td>
+                        <td>Content scaling, featured snippets, video content</td>
+                        <td class="priority-P2">P2</td>
+                        <td>Medium</td>
+                    </tr>
+                    <tr>
+                        <td>Q3</td>
+                        <td>Month 8</td>
+                        <td>Performance Excellence</td>
+                        <td>Advanced schema, Core Web Vitals, technical advancement</td>
+                        <td class="priority-P2">P2</td>
+                        <td>Medium</td>
+                    </tr>
+                    <tr>
+                        <td>Q3</td>
+                        <td>Month 9</td>
+                        <td>Thought Leadership</td>
+                        <td>E-E-A-T enhancement, author bios, media features</td>
+                        <td class="priority-P2">P2</td>
+                        <td>Medium</td>
+                    </tr>
+                    <tr>
+                        <td>Q4</td>
+                        <td>Month 10</td>
+                        <td>Double Down on Winners</td>
+                        <td>Scale winning content, review generation, A/B testing</td>
+                        <td class="priority-P1">P1</td>
+                        <td>High</td>
+                    </tr>
+                    <tr>
+                        <td>Q4</td>
+                        <td>Month 11</td>
+                        <td>Win the Market</td>
+                        <td>Competitive gaps, community resources, comparison content</td>
+                        <td class="priority-P1">P1</td>
+                        <td>High</td>
+                    </tr>
+                    <tr>
+                        <td>Q4</td>
+                        <td>Month 12</td>
+                        <td>Reflect & Plan</td>
+                        <td>Annual audit, ROI analysis, Year 2 strategy</td>
+                        <td class="priority-P1">P1</td>
+                        <td>High</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="content-section">
+                <h3>Quarter 1 Timeline Details</h3>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <h4>Month 1: Critical Technical Fixes</h4>
+                        <ul>
+                            <li>Fix conflicting robots meta tags</li>
+                            <li>Rewrite robots.txt file</li>
+                            <li>Fix broken pages (403/404 errors)</li>
+                            <li>Implement basic schema markup</li>
+                            <li>Set up Google Search Console</li>
+                            <li>Configure GA4 tracking</li>
+                        </ul>
+                    </div>
+                    <div class="timeline-item">
+                        <h4>Month 2: Content Foundation</h4>
+                        <ul>
+                            <li>Complete keyword research (100+ terms)</li>
+                            <li>Create 5 service landing pages</li>
+                            <li>Optimize homepage meta description</li>
+                            <li>Build editorial calendar</li>
+                            <li>Create franchise and Florida pages</li>
+                        </ul>
+                    </div>
+                    <div class="timeline-item">
+                        <h4>Month 3: Local SEO Optimization</h4>
+                        <ul>
+                            <li>Optimize Google Business Profile</li>
+                            <li>Create 8 city/neighborhood pages</li>
+                            <li>Submit to 50+ local directories</li>
+                            <li>Implement review generation</li>
+                            <li>Create agent profile pages</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Competitors Tab -->
+        <div id="competitors" class="tab-pane">
+            <h2 style="color: #CF2030; margin-bottom: 2rem;">Competitive Analysis</h2>
+            
+            <div class="search-container">
+                <input type="text" class="search-input" id="competitorSearch" placeholder="Search competitors...">
+            </div>
+            
+            <table class="data-table" id="competitorTable">
+                <thead>
+                    <tr>
+                        <th onclick="sortTable(0, 'competitorTable')">Competitor</th>
+                        <th onclick="sortTable(1, 'competitorTable')">Strengths</th>
+                        <th onclick="sortTable(2, 'competitorTable')">Domain Authority</th>
+                        <th onclick="sortTable(3, 'competitorTable')">Content Volume</th>
+                        <th onclick="sortTable(4, 'competitorTable')">Local SEO</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Parks Realty (Parks.com)</td>
+                        <td>Extensive neighborhood pages, strong blog, robust schema markup</td>
+                        <td>High</td>
+                        <td>200+ pages</td>
+                        <td>Strong</td>
+                    </tr>
+                    <tr>
+                        <td>Benchmark Realty</td>
+                        <td>Largest independent TN brokerage, agent-centric content, area guides</td>
+                        <td>High</td>
+                        <td>150+ pages</td>
+                        <td>Excellent</td>
+                    </tr>
+                    <tr>
+                        <td>Zeitlin Sotheby's</td>
+                        <td>Premium positioning, luxury content, international backlinks</td>
+                        <td>Very High</td>
+                        <td>100+ pages</td>
+                        <td>Good</td>
+                    </tr>
+                    <tr>
+                        <td>Red Realty (Current)</td>
+                        <td>AI chatbot, domain age, local reputation, real reviews</td>
+                        <td>Low-Medium</td>
+                        <td>20+ pages</td>
+                        <td>Needs Work</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="content-section">
+                <h3>Competitive Gap Analysis</h3>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Dimension</th>
+                            <th>Red Realty</th>
+                            <th>Competitors</th>
+                            <th>Gap</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>City/Neighborhood Pages</td>
+                            <td>Broken/none</td>
+                            <td>50-200+ pages</td>
+                            <td class="grade-F">Critical Gap</td>
+                        </tr>
+                        <tr>
+                            <td>Service Landing Pages</td>
+                            <td>None</td>
+                            <td>Buy, Sell, Invest, Manage</td>
+                            <td class="grade-F">Critical Gap</td>
+                        </tr>
+                        <tr>
+                            <td>Blog Frequency</td>
+                            <td>~1/month</td>
+                            <td>4-12/month</td>
+                            <td class="grade-D">Major Gap</td>
+                        </tr>
+                        <tr>
+                            <td>Schema Markup</td>
+                            <td>None</td>
+                            <td>Full implementation</td>
+                            <td class="grade-F">Critical Gap</td>
+                        </tr>
+                        <tr>
+                            <td>AI Technology</td>
+                            <td>Higgins chatbot</td>
+                            <td>Limited AI features</td>
+                            <td class="grade-A">Competitive Advantage</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- KPIs Tab -->
+        <div id="kpis" class="tab-pane">
+            <h2 style="color: #CF2030; margin-bottom: 2rem;">KPIs & Success Metrics Dashboard</h2>
+            
+            <div class="dashboard-grid">
+                <div class="metric-card">
+                    <div class="metric-value">TBD</div>
+                    <div class="metric-label">Current Monthly Organic Sessions</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">&lt;5</div>
+                    <div class="metric-label">Keywords in Top 10 (Estimated)</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">&lt;20</div>
+                    <div class="metric-label">Keywords in Top 50 (Estimated)</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">15-20</div>
+                    <div class="metric-label">Current Google Reviews</div>
+                </div>
+            </div>
+
+            <div class="content-section">
+                <h3>Quarterly Targets</h3>
+                <table class="data-table" id="kpiTable">
+                    <thead>
+                        <tr>
+                            <th onclick="sortTable(0, 'kpiTable')">KPI</th>
+                            <th onclick="sortTable(1, 'kpiTable')">Baseline</th>
+                            <th onclick="sortTable(2, 'kpiTable')">Q1 Target</th>
+                            <th onclick="sortTable(3, 'kpiTable')">Q2 Target</th>
+                            <th onclick="sortTable(4, 'kpiTable')">Q3 Target</th>
+                            <th onclick="sortTable(5, 'kpiTable')">Q4 Target</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Monthly Organic Sessions</td>
+                            <td>TBD</td>
+                            <td>+20%</td>
+                            <td>+50%</td>
+                            <td>+100%</td>
+                            <td>+150%</td>
+                        </tr>
+                        <tr>
+                            <td>Keywords in Top 10</td>
+                            <td>&lt;5</td>
+                            <td>10</td>
+                            <td>20</td>
+                            <td>35</td>
+                            <td>50</td>
+                        </tr>
+                        <tr>
+                            <td>Keywords in Top 50</td>
+                            <td>&lt;20</td>
+                            <td>40</td>
+                            <td>60</td>
+                            <td>80</td>
+                            <td>100</td>
+                        </tr>
+                        <tr>
+                            <td>Google Reviews</td>
+                            <td>15-20</td>
+                            <td>30</td>
+                            <td>50</td>
+                            <td>75</td>
+                            <td>100</td>
+                        </tr>
+                        <tr>
+                            <td>Indexed Pages</td>
+                            <td>Uncertain</td>
+                            <td>30+</td>
+                            <td>60+</td>
+                            <td>100+</td>
+                            <td>150+</td>
+                        </tr>
+                        <tr>
+                            <td>Backlinks (Referring Domains)</td>
+                            <td>TBD</td>
+                            <td>+10</td>
+                            <td>+30</td>
+                            <td>+50</td>
+                            <td>+75</td>
+                        </tr>
+                        <tr>
+                            <td>Organic Leads/Month</td>
+                            <td>TBD</td>
+                            <td>5+</td>
+                            <td>15+</td>
+                            <td>30+</td>
+                            <td>50+</td>
+                        </tr>
+                        <tr>
+                            <td>Page Load Time</td>
+                            <td>Unknown</td>
+                            <td>&lt;4s</td>
+                            <td>&lt;3s</td>
+                            <td>&lt;2.5s</td>
+                            <td>&lt;2s</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="content-section">
+                <h3>Weekly Monitoring Checklist</h3>
+                <ul style="list-style-type: none; padding: 0;">
+                    <li style="margin: 0.5rem 0; padding: 0.5rem; background-color: #2a2a2a;">□ Keyword ranking changes (SEMrush/Ahrefs)</li>
+                    <li style="margin: 0.5rem 0; padding: 0.5rem; background-color: #2a2a2a;">□ Organic traffic trends (GA4)</li>
+                    <li style="margin: 0.5rem 0; padding: 0.5rem; background-color: #2a2a2a;">□ Crawl errors & indexation (GSC)</li>
+                    <li style="margin: 0.5rem 0; padding: 0.5rem; background-color: #2a2a2a;">□ Google Business Profile insights</li>
+                    <li style="margin: 0.5rem 0; padding: 0.5rem; background-color: #2a2a2a;">□ Chatbot engagement (Higgins Dashboard)</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Technical Fixes Tab -->
+        <div id="technical-fixes" class="tab-pane">
+            <h2 style="color: #CF2030; margin-bottom: 2rem;">Technical Implementation Guide</h2>
+            
+            <div class="content-section">
+                <h3>Corrected robots.txt File</h3>
+                <div class="code-block">
+                    <pre># Red Realty robots.txt - CORRECTED VERSION
+# Remove the wildcard Disallow: / rule that blocks all crawlers
+
+User-agent: *
+Allow: /
+
+# Specific bot configurations
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 1
+
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 10
+
+User-agent: Slurp
+Allow: /
+Crawl-delay: 10
+
+# Block admin and system paths
+Disallow: /admin/
+Disallow: /wp-admin/
+Disallow: /wp-login.php
+Disallow: /*.pdf$
+Disallow: /search?*
+Disallow: /*?quick=1
+Disallow: /*?advanced=1
+
+# Allow important sections
+Allow: /areas/
+Allow: /resources/
+Allow: /pages/
+Allow: /blog/
+Allow: /agents/
+
+# Sitemap location
+Sitemap: https://redrealty.com/sitemap-index.xml</pre>
+                </div>
+            </div>
+
+            <div class="content-section">
+                <h3>Schema Markup Implementation</h3>
+                
+                <h4>LocalBusiness Schema (Homepage)</h4>
+                <div class="code-block">
+                    <pre>&lt;script type="application/ld+json"&gt;
+{
+  "@context": "https://schema.org",
+  "@type": "RealEstateAgent",
+  "name": "Red Realty",
+  "alternateName": "Red Realty LLC",
+  "url": "https://redrealty.com",
+  "logo": "https://redrealty.com/logo.jpg",
+  "image": "https://redrealty.com/office-photo.jpg",
+  "description": "Premier Middle Tennessee real estate agency serving Murfreesboro, Franklin, Brentwood since 2007. 40,000+ homes sold.",
+  "foundingDate": "2007",
+  "slogan": "Your AI-Powered Real Estate Partner",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "1574 Medical Center Pkwy, Suite 202",
+    "addressLocality": "Murfreesboro",
+    "addressRegion": "TN",
+    "postalCode": "37129",
+    "addressCountry": "US"
+  },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": "35.8456",
+    "longitude": "-86.3903"
+  },
+  "telephone": "+1-615-555-0123",
+  "email": "info@redrealty.com",
+  "priceRange": "$$",
+  "serviceArea": [
+    {
+      "@type": "City",
+      "name": "Murfreesboro",
+      "addressRegion": "TN"
+    },
+    {
+      "@type": "City", 
+      "name": "Franklin",
+      "addressRegion": "TN"
+    },
+    {
+      "@type": "City",
+      "name": "Brentwood", 
+      "addressRegion": "TN"
+    }
+  ],
+  "hasOfferCatalog": {
+    "@type": "OfferCatalog",
+    "name": "Real Estate Services",
+    "itemListElement": [
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "Home Buying Services",
+          "description": "Complete home buying assistance in Middle Tennessee"
+        }
+      },
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "Home Selling Services", 
+          "description": "Professional home selling and marketing services"
+        }
+      },
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "Commercial Real Estate",
+          "description": "Commercial property buying, selling, and leasing"
+        }
+      },
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "Property Management",
+          "description": "Full-service rental property management"
+        }
+      }
+    ]
+  },
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "4.8",
+    "reviewCount": "20",
+    "bestRating": "5"
+  },
+  "review": [
+    {
+      "@type": "Review",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": "5"
+      },
+      "author": {
+        "@type": "Person",
+        "name": "Sarah Johnson"
+      },
+      "reviewBody": "Red Realty made buying our first home so easy. Their AI chatbot answered all our questions instantly!"
+    }
+  ],
+  "founder": {
+    "@type": "Person",
+    "name": "Steven Dotson",
+    "jobTitle": "Founder & Broker"
+  },
+  "sameAs": [
+    "https://www.facebook.com/RedRealtyLLC",
+    "https://twitter.com/RedRealtyLLC",
+    "https://www.linkedin.com/company/red-realty"
+  ]
+}
+&lt;/script&gt;</pre>
+                </div>
+
+                <h4>BreadcrumbList Schema</h4>
+                <div class="code-block">
+                    <pre>&lt;script type="application/ld+json"&gt;
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList", 
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://redrealty.com"
+    },
+    {
+      "@type": "ListItem", 
+      "position": 2,
+      "name": "Buy Homes",
+      "item": "https://redrealty.com/buy"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Murfreesboro Homes",
+      "item": "https://redrealty.com/areas/murfreesboro-tn"
+    }
+  ]
+}
+&lt;/script&gt;</pre>
+                </div>
+
+                <h4>FAQPage Schema (for service pages)</h4>
+                <div class="code-block">
+                    <pre>&lt;script type="application/ld+json"&gt;
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How long does it take to buy a home in Murfreesboro?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The typical home buying process in Murfreesboro takes 30-45 days from offer acceptance to closing, though this can vary based on financing and inspection requirements."
+      }
+    },
+    {
+      "@type": "Question", 
+      "name": "What are the average home prices in Middle Tennessee?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Average home prices vary by location: Murfreesboro $350K-$400K, Franklin $500K-$700K, Brentwood $600K-$1M+. Contact Red Realty for current market analysis."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Do you offer property management services?",
+      "acceptedAnswer": {
+        "@type": "Answer", 
+        "text": "Yes, Red Realty provides comprehensive property management services including tenant screening, rent collection, maintenance coordination, and financial reporting."
+      }
+    }
+  ]
+}
+&lt;/script&gt;</pre>
+                </div>
+            </div>
+
+            <div class="content-section">
+                <h3>Top 10 Immediate Action Items</h3>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Priority</th>
+                            <th>Action</th>
+                            <th>Timeline</th>
+                            <th>Owner</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="priority-P0">1</td>
+                            <td>Remove noindex tag from homepage</td>
+                            <td>TODAY</td>
+                            <td>Web Dev</td>
+                        </tr>
+                        <tr>
+                            <td class="priority-P0">2</td>
+                            <td>Fix robots.txt - remove wildcard Disallow: /</td>
+                            <td>TODAY</td>
+                            <td>Web Dev</td>
+                        </tr>
+                        <tr>
+                            <td class="priority-P0">3</td>
+                            <td>Fix /areas (403 Forbidden) page</td>
+                            <td>Week 1</td>
+                            <td>Web Dev</td>
+                        </tr>
+                        <tr>
+                            <td class="priority-P0">4</td>
+                            <td>Remove /resources and /pages from robots.txt</td>
+                            <td>Week 1</td>
+                            <td>Web Dev</td>
+                        </tr>
+                        <tr>
+                            <td class="priority-P1">5</td>
+                            <td>Consolidate duplicate OG/meta tags</td>
+                            <td>Week 1</td>
+                            <td>Web Dev</td>
+                        </tr>
+                        <tr>
+                            <td class="priority-P1">6</td>
+                            <td>Write proper meta description for homepage</td>
+                            <td>Week 1</td>
+                            <td>Marketing</td>
+                        </tr>
+                        <tr>
+                            <td class="priority-P1">7</td>
+                            <td>Set up Google Search Console & submit sitemap</td>
+                            <td>Week 1</td>
+                            <td>Marketing/Dev</td>
+                        </tr>
+                        <tr>
+                            <td class="priority-P1">8</td>
+                            <td>Implement LocalBusiness + RealEstateAgent schema</td>
+                            <td>Week 2</td>
+                            <td>Web Dev</td>
+                        </tr>
+                        <tr>
+                            <td class="priority-P1">9</td>
+                            <td>Fix duplicate H1 tags on homepage</td>
+                            <td>Week 2</td>
+                            <td>Web Dev</td>
+                        </tr>
+                        <tr>
+                            <td class="priority-P2">10</td>
+                            <td>Reduce Bing crawl-delay from 120s to 10s</td>
+                            <td>Week 2</td>
+                            <td>Web Dev</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports">
+        <p style="margin-top: 0.5rem; color: #888;">Comprehensive SEO Analysis & Strategic Implementation Plan</p>
+    </footer>
+
+    <script>
+        // Tab functionality
+        document.querySelectorAll('.nav-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Remove active class from all tabs and panes
+                document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+                
+                // Add active class to clicked tab
+                tab.classList.add('active');
+                
+                // Show corresponding tab pane
+                const tabId = tab.getAttribute('data-tab');
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+
+        // Search functionality
+        function setupSearch(searchInputId, tableId) {
+            const searchInput = document.getElementById(searchInputId);
+            if (searchInput) {
+                searchInput.addEventListener('keyup', function() {
+                    const searchTerm = this.value.toLowerCase();
+                    const table = document.getElementById(tableId);
+                    const rows = table.getElementsByTagName('tbody')[0].getElementsByTagName('tr');
+                    
+                    for (let i = 0; i < rows.length; i++) {
+                        const row = rows[i];
+                        const cells = row.getElementsByTagName('td');
+                        let found = false;
+                        
+                        for (let j = 0; j < cells.length; j++) {
+                            if (cells[j].textContent.toLowerCase().includes(searchTerm)) {
+                                found = true;
+                                break;
+                            }
+                        }
+                        
+                        row.style.display = found ? '' : 'none';
+                    }
+                });
+            }
+        }
+
+        // Setup search for all tables
+        setupSearch('issuesSearch', 'issuesTable');
+        setupSearch('technicalSearch', 'technicalTable');
+        setupSearch('keywordSearch', 'keywordTable');
+        setupSearch('strategySearch', 'strategyTable');
+        setupSearch('competitorSearch', 'competitorTable');
+
+        // Sort functionality
+        function sortTable(columnIndex, tableId) {
+            const table = document.getElementById(tableId);
+            const tbody = table.getElementsByTagName('tbody')[0];
+            const rows = Array.from(tbody.getElementsByTagName('tr'));
+            
+            // Determine sort direction
+            const header = table.getElementsByTagName('th')[columnIndex];
+            const isAscending = !header.classList.contains('sort-desc');
+            
+            // Clear previous sort classes
+            table.querySelectorAll('th').forEach(th => {
+                th.classList.remove('sort-asc', 'sort-desc');
+            });
+            
+            // Add sort class to current header
+            header.classList.add(isAscending ? 'sort-asc' : 'sort-desc');
+            
+            // Sort rows
+            rows.sort((a, b) => {
+                const aText = a.getElementsByTagName('td')[columnIndex].textContent.trim();
+                const bText = b.getElementsByTagName('td')[columnIndex].textContent.trim();
+                
+                // Try to parse as numbers first
+                const aNum = parseFloat(aText.replace(/[^0-9.-]/g, ''));
+                const bNum = parseFloat(bText.replace(/[^0-9.-]/g, ''));
+                
+                if (!isNaN(aNum) && !isNaN(bNum)) {
+                    return isAscending ? aNum - bNum : bNum - aNum;
+                }
+                
+                // Fall back to string comparison
+                return isAscending ? aText.localeCompare(bText) : bText.localeCompare(aText);
+            });
+            
+            // Re-append sorted rows
+            rows.forEach(row => tbody.appendChild(row));
+        }
+
+        // Add visual indicators for sortable headers
+        document.querySelectorAll('.data-table th').forEach(th => {
+            if (th.onclick) {
+                th.style.cursor = 'pointer';
+                th.title = 'Click to sort';
+                th.innerHTML += ' ⇅';
+            }
+        });
+    </script>
+</body>
+</html>
