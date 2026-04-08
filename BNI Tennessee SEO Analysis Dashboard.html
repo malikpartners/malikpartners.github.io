@@ -1,0 +1,1861 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BNI Tennessee SEO Analysis Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #000000;
+            color: #ffffff;
+            line-height: 1.6;
+        }
+
+        .header {
+            background-color: #111111;
+            padding: 1rem 2rem;
+            border-bottom: 3px solid #CF2030;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            height: 60px;
+        }
+
+        .header h1 {
+            color: #CF2030;
+            font-size: 1.8rem;
+            font-weight: 300;
+        }
+
+        .nav-tabs {
+            background-color: #1a1a1a;
+            padding: 0;
+            display: flex;
+            flex-wrap: wrap;
+            border-bottom: 1px solid #333;
+        }
+
+        .nav-tab {
+            background-color: #2a2a2a;
+            color: #CF2030;
+            border: none;
+            padding: 15px 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-right: 1px solid #333;
+            font-weight: 500;
+        }
+
+        .nav-tab:hover {
+            background-color: #CF2030;
+            color: #ffffff;
+        }
+
+        .nav-tab.active {
+            background-color: #CF2030;
+            color: #ffffff;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 2rem;
+            min-height: calc(100vh - 200px);
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .search-filter {
+            margin-bottom: 1rem;
+            padding: 1rem;
+            background-color: #1a1a1a;
+            border-radius: 8px;
+        }
+
+        .search-filter input {
+            width: 100%;
+            padding: 10px;
+            background-color: #333;
+            border: 1px solid #555;
+            color: #fff;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #1a1a1a;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #333;
+        }
+
+        th {
+            background-color: #CF2030;
+            color: #ffffff;
+            font-weight: 600;
+            cursor: pointer;
+            position: relative;
+        }
+
+        th:hover {
+            background-color: #a01828;
+        }
+
+        tr:hover {
+            background-color: #2a2a2a;
+        }
+
+        .sort-indicator {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .card {
+            background-color: #1a1a1a;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid #333;
+        }
+
+        .card h3 {
+            color: #CF2030;
+            margin-bottom: 1rem;
+            font-size: 1.4rem;
+        }
+
+        .priority-p0 {
+            border-left: 4px solid #ff4444;
+        }
+
+        .priority-p1 {
+            border-left: 4px solid #ffaa00;
+        }
+
+        .priority-p2 {
+            border-left: 4px solid #00aaff;
+        }
+
+        .code-block {
+            background-color: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+            overflow-x: auto;
+        }
+
+        .code-block code {
+            color: #c9d1d9;
+            font-family: 'Courier New', monospace;
+            white-space: pre;
+        }
+
+        .footer {
+            background-color: #111111;
+            padding: 1rem 2rem;
+            border-top: 1px solid #333;
+            text-align: center;
+        }
+
+        .footer-logo {
+            height: 30px;
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .metric-card {
+            background-color: #1a1a1a;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid #333;
+            text-align: center;
+        }
+
+        .metric-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #CF2030;
+            display: block;
+        }
+
+        .metric-label {
+            color: #ccc;
+            font-size: 0.9rem;
+        }
+
+        .timeline {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .week-card {
+            background-color: #1a1a1a;
+            border-radius: 8px;
+            padding: 1.5rem;
+            border-left: 4px solid #CF2030;
+        }
+
+        .week-title {
+            color: #CF2030;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .task-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .task-list li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #333;
+        }
+
+        .task-list li:last-child {
+            border-bottom: none;
+        }
+
+        .btn {
+            background-color: #CF2030;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #a01828;
+        }
+
+        .content-section {
+            margin-bottom: 2rem;
+        }
+
+        .content-section h2 {
+            color: #CF2030;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .keyword-metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .nav-tabs {
+                flex-direction: column;
+            }
+
+            .nav-tab {
+                border-right: none;
+                border-bottom: 1px solid #333;
+            }
+
+            .tab-content {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports Logo" class="logo">
+        <h1>BNI Tennessee SEO Analysis Dashboard</h1>
+    </header>
+
+    <nav class="nav-tabs">
+        <button class="nav-tab active" onclick="showTab('overview')">Overview</button>
+        <button class="nav-tab" onclick="showTab('audit')">SEO Audit</button>
+        <button class="nav-tab" onclick="showTab('keywords')">Keywords</button>
+        <button class="nav-tab" onclick="showTab('content')">Content</button>
+        <button class="nav-tab" onclick="showTab('technical')">Technical</button>
+        <button class="nav-tab" onclick="showTab('timeline')">30-Day Plan</button>
+        <button class="nav-tab" onclick="showTab('schema')">Schema & Code</button>
+    </nav>
+
+    <div id="overview" class="tab-content active">
+        <h2>BNI Tennessee SEO Analysis Overview</h2>
+        
+        <div class="metric-grid">
+            <div class="metric-card">
+                <span class="metric-value">13</span>
+                <span class="metric-label">Critical Issues</span>
+            </div>
+            <div class="metric-card">
+                <span class="metric-value">149+</span>
+                <span class="metric-label">BNI Chapters</span>
+            </div>
+            <div class="metric-card">
+                <span class="metric-value">100+</span>
+                <span class="metric-label">Bloated URLs</span>
+            </div>
+            <div class="metric-card">
+                <span class="metric-value">8 Years</span>
+                <span class="metric-label">Sitemap Stale</span>
+            </div>
+            <div class="metric-card">
+                <span class="metric-value">0</span>
+                <span class="metric-label">Schema Markup</span>
+            </div>
+            <div class="metric-card">
+                <span class="metric-value">30 Days</span>
+                <span class="metric-label">Implementation Plan</span>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>Site Information</h3>
+            <p><strong>URL:</strong> https://bnitennessee.com/en-US/index</p>
+            <p><strong>Region:</strong> Middle Tennessee, Kentucky, Southern Indiana</p>
+            <p><strong>Analysis Date:</strong> April 8, 2026</p>
+            <p><strong>Powered by:</strong> Higgins AI Enterprise Management System</p>
+        </div>
+
+        <div class="card priority-p0">
+            <h3>Priority P0 Critical Issues</h3>
+            <ul>
+                <li>Sitemap severely outdated (8 years stale)</li>
+                <li>HTTP vs HTTPS canonical/OG mismatch</li>
+                <li>Robots.txt minimal and ineffective</li>
+                <li>Title tags generic and excessively long</li>
+                <li>Meta descriptions auto-generated boilerplate</li>
+                <li>Critical content pages nearly empty</li>
+                <li>No Schema markup detected</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h3>Competitive Advantages</h3>
+            <ul>
+                <li>Higgins AI chatbot integration (unique differentiator)</li>
+                <li>149+ established chapters in region</li>
+                <li>Strong brand recognition for BNI</li>
+                <li>Multi-state coverage area</li>
+            </ul>
+        </div>
+    </div>
+
+    <div id="audit" class="tab-content">
+        <h2>SEO Audit Findings</h2>
+        
+        <div class="search-filter">
+            <input type="text" id="auditSearch" placeholder="Search audit findings..." onkeyup="filterTable('auditTable', 'auditSearch')">
+        </div>
+
+        <table id="auditTable">
+            <thead>
+                <tr>
+                    <th onclick="sortTable('auditTable', 0)">Category <span class="sort-indicator">↕</span></th>
+                    <th onclick="sortTable('auditTable', 1)">Issue <span class="sort-indicator">↕</span></th>
+                    <th onclick="sortTable('auditTable', 2)">Priority <span class="sort-indicator">↕</span></th>
+                    <th onclick="sortTable('auditTable', 3)">Impact <span class="sort-indicator">↕</span></th>
+                    <th onclick="sortTable('auditTable', 4)">Status <span class="sort-indicator">↕</span></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Technical SEO</td>
+                    <td>Sitemap Severely Outdated & Bloated</td>
+                    <td>P0 Critical</td>
+                    <td>8 years stale, ~100+ URLs with query strings</td>
+                    <td>Needs Immediate Fix</td>
+                </tr>
+                <tr>
+                    <td>Technical SEO</td>
+                    <td>Robots.txt Minimal & Ineffective</td>
+                    <td>P0 Critical</td>
+                    <td>No sitemap directive, missing crawl guidance</td>
+                    <td>Needs Immediate Fix</td>
+                </tr>
+                <tr>
+                    <td>Technical SEO</td>
+                    <td>Canonical & OG URL Mismatch</td>
+                    <td>P0 Critical</td>
+                    <td>HTTP vs HTTPS protocol confusion</td>
+                    <td>Needs Immediate Fix</td>
+                </tr>
+                <tr>
+                    <td>Content</td>
+                    <td>Title Tags Generic & Long</td>
+                    <td>P0 Critical</td>
+                    <td>156+ characters, boilerplate text</td>
+                    <td>Needs Rewrite</td>
+                </tr>
+                <tr>
+                    <td>Content</td>
+                    <td>Meta Descriptions Auto-Generated</td>
+                    <td>P0 Critical</td>
+                    <td>Boilerplate destroying CTR potential</td>
+                    <td>Needs Rewrite</td>
+                </tr>
+                <tr>
+                    <td>Content</td>
+                    <td>"What to Expect" Page Thin</td>
+                    <td>P0 Critical</td>
+                    <td>COVID-era copy from 2020, nearly empty</td>
+                    <td>Needs Complete Rewrite</td>
+                </tr>
+                <tr>
+                    <td>Content</td>
+                    <td>"Why BNI" Page Extremely Thin</td>
+                    <td>P0 Critical</td>
+                    <td>~3 sentences, missing value props</td>
+                    <td>Needs Expansion</td>
+                </tr>
+                <tr>
+                    <td>Site Architecture</td>
+                    <td>No City Hub Pages</td>
+                    <td>P1 High</td>
+                    <td>149+ chapters, no geographic landing pages</td>
+                    <td>Needs Creation</td>
+                </tr>
+                <tr>
+                    <td>Schema</td>
+                    <td>No Schema Markup Detected</td>
+                    <td>P1 High</td>
+                    <td>Zero eligibility for rich snippets</td>
+                    <td>Needs Implementation</td>
+                </tr>
+                <tr>
+                    <td>Local SEO</td>
+                    <td>NAP Consistency Issues</td>
+                    <td>P1 High</td>
+                    <td>Multiple addresses, 40+ phone numbers</td>
+                    <td>Needs Standardization</td>
+                </tr>
+                <tr>
+                    <td>Content</td>
+                    <td>Blog Content Syndicated</td>
+                    <td>P2 Medium</td>
+                    <td>No local original content</td>
+                    <td>Future Enhancement</td>
+                </tr>
+                <tr>
+                    <td>UX</td>
+                    <td>Viewport Meta Scaling Disabled</td>
+                    <td>P2 Medium</td>
+                    <td>Accessibility issues</td>
+                    <td>Quick Fix Needed</td>
+                </tr>
+                <tr>
+                    <td>Technical SEO</td>
+                    <td>Excessive Parameterized URLs</td>
+                    <td>P1 High</td>
+                    <td>70+ filter pages in sitemap</td>
+                    <td>Needs Cleanup</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div id="keywords" class="tab-content">
+        <h2>Keyword Research & Strategy</h2>
+        
+        <div class="keyword-metrics">
+            <div class="metric-card">
+                <span class="metric-value">100+</span>
+                <span class="metric-label">Target Keywords</span>
+            </div>
+            <div class="metric-card">
+                <span class="metric-value">8</span>
+                <span class="metric-label">Keyword Clusters</span>
+            </div>
+            <div class="metric-card">
+                <span class="metric-value">4</span>
+                <span class="metric-label">Priority Cities</span>
+            </div>
+        </div>
+        
+        <div class="search-filter">
+            <input type="text" id="keywordSearch" placeholder="Search keywords..." onkeyup="filterTable('keywordTable', 'keywordSearch')">
+        </div>
+
+        <table id="keywordTable">
+            <thead>
+                <tr>
+                    <th onclick="sortTable('keywordTable', 0)">Keyword <span class="sort-indicator">↕</span></th>
+                    <th onclick="sortTable('keywordTable', 1)">Cluster <span class="sort-indicator">↕</span></th>
+                    <th onclick="sortTable('keywordTable', 2)">Target Page <span class="sort-indicator">↕</span></th>
+                    <th onclick="sortTable('keywordTable', 3)">Priority <span class="sort-indicator">↕</span></th>
+                    <th onclick="sortTable('keywordTable', 4)">Search Intent <span class="sort-indicator">↕</span></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>BNI Tennessee</td><td>Brand + State</td><td>Homepage</td><td>High</td><td>Navigational</td></tr>
+                <tr><td>BNI Middle Tennessee</td><td>Brand + State</td><td>Homepage</td><td>High</td><td>Navigational</td></tr>
+                <tr><td>BNI Nashville</td><td>Brand + City</td><td>/nashville</td><td>High</td><td>Local</td></tr>
+                <tr><td>BNI chapters Nashville</td><td>Brand + City</td><td>/nashville</td><td>High</td><td>Local</td></tr>
+                <tr><td>business networking Nashville</td><td>Brand + City</td><td>/nashville</td><td>High</td><td>Local</td></tr>
+                <tr><td>BNI Louisville</td><td>Brand + City</td><td>/louisville</td><td>High</td><td>Local</td></tr>
+                <tr><td>BNI Louisville KY</td><td>Brand + City</td><td>/louisville</td><td>High</td><td>Local</td></tr>
+                <tr><td>networking groups Louisville</td><td>Brand + City</td><td>/louisville</td><td>Medium</td><td>Local</td></tr>
+                <tr><td>BNI Lexington KY</td><td>Brand + City</td><td>/lexington</td><td>High</td><td>Local</td></tr>
+                <tr><td>networking groups Lexington</td><td>Brand + City</td><td>/lexington</td><td>Medium</td><td>Local</td></tr>
+                <tr><td>BNI Murfreesboro</td><td>Brand + City</td><td>/murfreesboro</td><td>High</td><td>Local</td></tr>
+                <tr><td>business networking Murfreesboro</td><td>Brand + City</td><td>/murfreesboro</td><td>Medium</td><td>Local</td></tr>
+                <tr><td>visit BNI chapter</td><td>Visitor Intent</td><td>/expect</td><td>High</td><td>Transactional</td></tr>
+                <tr><td>what to expect at BNI meeting</td><td>Visitor Intent</td><td>/expect</td><td>High</td><td>Informational</td></tr>
+                <tr><td>BNI visitor</td><td>Visitor Intent</td><td>/expect</td><td>Medium</td><td>Informational</td></tr>
+                <tr><td>how to join BNI</td><td>Membership Intent</td><td>/apply</td><td>High</td><td>Transactional</td></tr>
+                <tr><td>BNI membership cost</td><td>Membership Intent</td><td>/apply</td><td>High</td><td>Commercial</td></tr>
+                <tr><td>BNI application</td><td>Membership Intent</td><td>/apply</td><td>High</td><td>Transactional</td></tr>
+                <tr><td>business referral groups Tennessee</td><td>General Networking</td><td>Homepage</td><td>Medium</td><td>Commercial</td></tr>
+                <tr><td>networking groups near me TN</td><td>General Networking</td><td>/findachapter</td><td>Medium</td><td>Local</td></tr>
+                <tr><td>start BNI chapter Tennessee</td><td>New Chapter</td><td>/chaptersforming</td><td>Medium</td><td>Commercial</td></tr>
+                <tr><td>BNI chapters forming</td><td>New Chapter</td><td>/chaptersforming</td><td>Medium</td><td>Informational</td></tr>
+                <tr><td>BNI events Tennessee</td><td>Events</td><td>/events</td><td>Medium</td><td>Informational</td></tr>
+                <tr><td>BNI visitor day Nashville</td><td>Events</td><td>/events</td><td>High</td><td>Transactional</td></tr>
+                <tr><td>why join BNI</td><td>Benefits</td><td>/whybni</td><td>High</td><td>Commercial</td></tr>
+                <tr><td>BNI benefits</td><td>Benefits</td><td>/whybni</td><td>High</td><td>Commercial</td></tr>
+                <tr><td>BNI ROI</td><td>Benefits</td><td>/whybni</td><td>High</td><td>Commercial</td></tr>
+                <tr><td>referral networking benefits</td><td>Benefits</td><td>/whybni</td><td>Medium</td><td>Commercial</td></tr>
+                <tr><td>business networking groups</td><td>General</td><td>Homepage</td><td>Medium</td><td>Commercial</td></tr>
+                <tr><td>professional networking</td><td>General</td><td>Homepage</td><td>Medium</td><td>Commercial</td></tr>
+                <tr><td>networking events Tennessee</td><td>Events</td><td>/events</td><td>Medium</td><td>Local</td></tr>
+                <tr><td>business networking events Nashville</td><td>Events</td><td>/events</td><td>Medium</td><td>Local</td></tr>
+                <tr><td>referral marketing</td><td>General</td><td>/whybni</td><td>Medium</td><td>Commercial</td></tr>
+                <tr><td>word of mouth marketing</td><td>General</td><td>/whybni</td><td>Low</td><td>Commercial</td></tr>
+                <tr><td>Nashville business groups</td><td>City Specific</td><td>/nashville</td><td>Medium</td><td>Local</td></tr>
+                <tr><td>Louisville business networking</td><td>City Specific</td><td>/louisville</td><td>Medium</td><td>Local</td></tr>
+                <tr><td>Lexington business groups</td><td>City Specific</td><td>/lexington</td><td>Medium</td><td>Local</td></tr>
+                <tr><td>Murfreesboro networking</td><td>City Specific</td><td>/murfreesboro</td><td>Medium</td><td>Local</td></tr>
+                <tr><td>Tennessee business groups</td><td>State Level</td><td>Homepage</td><td>Medium</td><td>Local</td></tr>
+                <tr><td>Kentucky business networking</td><td>State Level</td><td>Homepage</td><td>Medium</td><td>Local</td></tr>
+                <tr><td>Indiana business groups</td><td>State Level</td><td>Homepage</td><td>Medium</td><td>Local</td></tr>
+                <tr><td>BNI membership Tennessee</td><td>Membership</td><td>/apply</td><td>High</td><td>Commercial</td></tr>
+                <tr><td>join BNI Nashville</td><td>Membership</td><td>/apply</td><td>High</td><td>Transactional</td></tr>
+                <tr><td>BNI chapter near me</td><td>Local Search</td><td>/findachapter</td><td>High</td><td>Local</td></tr>
+                <tr><td>find BNI chapter</td><td>Local Search</td><td>/findachapter</td><td>High</td><td>Navigational</td></tr>
+                <tr><td>BNI chapter map</td><td>Local Search</td><td>/findachapter</td><td>Medium</td><td>Navigational</td></tr>
+                <tr><td>business networking meetings</td><td>General</td><td>/expect</td><td>Medium</td><td>Informational</td></tr>
+                <tr><td>networking group meetings</td><td>General</td><td>/expect</td><td>Medium</td><td>Informational</td></tr>
+                <tr><td>business referrals</td><td>Benefits</td><td>/whybni</td><td>Medium</td><td>Commercial</td></tr>
+                <tr><td>generate business referrals</td><td>Benefits</td><td>/whybni</td><td>Medium</td><td>Commercial</td></tr>
+                <tr><td>networking for small business</td><td>Target Audience</td><td>Homepage</td><td>Medium</td><td>Commercial</td></tr>
+                <tr><td>small business networking</td><td>Target Audience</td><td>Homepage</td><td>Medium</td><td>Commercial</td></tr>
+                <tr><td>entrepreneur networking</td><td>Target Audience</td><td>Homepage</td><td>Medium</td><td>Commercial</td></tr>
+                <tr><td>business owner networking</td><td>Target Audience</td><td>Homepage</td><td>Medium</td><td>Commercial</td></tr>
+                <tr><td>professional referrals</td><td>Benefits</td><td>/whybni</td><td>Medium</td><td>Commercial</td></tr>
+                <tr><td>business development networking</td><td>Benefits</td><td>/whybni</td><td>Medium</td><td>Commercial</td></tr>
+                <tr><td>grow my business</td><td>Benefits</td><td>/whybni</td><td>Medium</td><td>Commercial</td></tr>
+                <tr><td>increase business revenue</td><td>Benefits</td><td>/whybni</td><td>Medium</td><td>Commercial</td></tr>
+                <tr><td>networking tips</td><td>Educational</td><td>/resources</td><td>Low</td><td>Informational</td></tr>
+                <tr><td>effective networking</td><td>Educational</td><td>/resources</td><td>Low</td><td>Informational</td></tr>
+                <tr><td>business networking tips</td><td>Educational</td><td>/resources</td><td>Low</td><td>Informational</td></tr>
+                <tr><td>how to network effectively</td><td>Educational</td><td>/resources</td><td>Low</td><td>Informational</td></tr>
+                <tr><td>givers gain</td><td>BNI Philosophy</td><td>/corevalues</td><td>Medium</td><td>Informational</td></tr>
+                <tr><td>BNI core values</td><td>BNI Philosophy</td><td>/corevalues</td><td>Medium</td><td>Informational</td></tr>
+                <tr><td>BNI philosophy</td><td>BNI Philosophy</td><td>/corevalues</td><td>Medium</td><td>Informational</td></tr>
+                <tr><td>structured networking</td><td>BNI Method</td><td>/whybni</td><td>Medium</td><td>Commercial</td></tr>
+                <tr><td>formal networking</td><td>BNI Method</td><td>/whybni</td><td>Medium</td><td>Commercial</td></tr>
+                <tr><td>weekly networking meetings</td><td>BNI Method</td><td>/expect</td><td>Medium</td><td>Informational</td></tr>
+                <tr><td>networking accountability</td><td>BNI Method</td><td>/whybni</td><td>Low</td><td>Commercial</td></tr>
+                <tr><td>exclusive networking</td><td>BNI Method</td><td>/whybni</td><td>Low</td><td>Commercial</td></tr>
+                <tr><td>one seat per profession</td><td>BNI Method</td><td>/whybni</td><td>Low</td><td>Informational</td></tr>
+                <tr><td>Nashville Chamber of Commerce alternatives</td><td>Competitive</td><td>/nashville</td><td>Low</td><td>Commercial</td></tr>
+                <tr><td>networking groups vs Chamber</td><td>Competitive</td><td>/whybni</td><td>Low</td><td>Commercial</td></tr>
+                <tr><td>best networking groups Nashville</td><td>Competitive</td><td>/nashville</td><td>Medium</td><td>Commercial</td></tr>
+                <tr><td>top business networking Louisville</td><td>Competitive</td><td>/louisville</td><td>Medium</td><td>Commercial</td></tr>
+                <tr><td>business lunch networking</td><td>Meeting Type</td><td>/findachapter</td><td>Low</td><td>Local</td></tr>
+                <tr><td>breakfast networking meetings</td><td>Meeting Type</td><td>/findachapter</td><td>Low</td><td>Local</td></tr>
+                <tr><td>evening networking groups</td><td>Meeting Type</td><td>/findachapter</td><td>Low</td><td>Local</td></tr>
+                <tr><td>weekly business meetings</td><td>Meeting Type</td><td>/expect</td><td>Low</td><td>Informational</td></tr>
+                <tr><td>lead generation networking</td><td>Lead Gen</td><td>/whybni</td><td>Medium</td><td>Commercial</td></tr>
+                <tr><td>qualified business leads</td><td>Lead Gen</td><td>/whybni</td><td>Medium</td><td>Commercial</td></tr>
+                <tr><td>warm referrals</td><td>Lead Gen</td><td>/whybni</td><td>Medium</td><td>Commercial</td></tr>
+                <tr><td>quality business referrals</td><td>Lead Gen</td><td>/whybni</td><td>Medium</td><td>Commercial</td></tr>
+                <tr><td>networking ROI</td><td>ROI Focused</td><td>/whybni</td><td>High</td><td>Commercial</td></tr>
+                <tr><td>return on networking investment</td><td>ROI Focused</td><td>/whybni</td><td>Medium</td><td>Commercial</td></tr>
+                <tr><td>networking membership worth it</td><td>ROI Focused</td><td>/whybni</td><td>Medium</td><td>Commercial</td></tr>
+                <tr><td>cost of BNI membership</td><td>Cost Research</td><td>/apply</td><td>High</td><td>Commercial</td></tr>
+                <tr><td>BNI membership fees</td><td>Cost Research</td><td>/apply</td><td>High</td><td>Commercial</td></tr>
+                <tr><td>is BNI worth the cost</td><td>Cost Research</td><td>/whybni</td><td>Medium</td><td>Commercial</td></tr>
+                <tr><td>professional networking investment</td><td>Cost Research</td><td>/whybni</td><td>Low</td><td>Commercial</td></tr>
+                <tr><td>BNI success stories</td><td>Social Proof</td><td>/whybni</td><td>Medium</td><td>Commercial</td></tr>
+                <tr><td>BNI testimonials</td><td>Social Proof</td><td>/whybni</td><td>Medium</td><td>Commercial</td></tr>
+                <tr><td>BNI member results</td><td>Social Proof</td><td>/whybni</td><td>Medium</td><td>Commercial</td></tr>
+                <tr><td>networking success stories</td><td>Social Proof</td><td>/whybni</td><td>Low</td><td>Informational</td></tr>
+                <tr><td>business growth through networking</td><td>Growth</td><td>/whybni</td><td>Medium</td><td>Commercial</td></tr>
+                <tr><td>scale business through referrals</td><td>Growth</td><td>/whybni</td><td>Medium</td><td>Commercial</td></tr>
+                <tr><td>networking for business growth</td><td>Growth</td><td>/whybni</td><td>Medium</td><td>Commercial</td></tr>
+                <tr><td>expand business network</td><td>Growth</td><td>/whybni</td><td>Medium</td><td>Commercial</td></tr>
+                <tr><td>trust-based referrals</td><td>Trust/Quality</td><td>/whybni</td><td>Medium</td><td>Commercial</td></tr>
+                <tr><td>vetted business referrals</td><td>Trust/Quality</td><td>/whybni</td><td>Medium</td><td>Commercial</td></tr>
+                <tr><td>relationship-based networking</td><td>Trust/Quality</td><td>/whybni</td><td>Medium</td><td>Commercial</td></tr>
+                <tr><td>quality over quantity networking</td><td>Trust/Quality</td><td>/whybni</td><td>Low</td><td>Commercial</td></tr>
+                <tr><td>business relationship building</td><td>Relationship</td><td>/whybni</td><td>Medium</td><td>Commercial</td></tr>
+                <tr><td>professional relationship development</td><td>Relationship</td><td>/whybni</td><td>Low</td><td>Commercial</td></tr>
+                <tr><td>long-term business relationships</td><td>Relationship</td><td>/whybni</td><td>Low</td><td>Commercial</td></tr>
+                <tr><td>mutual business support</td><td>Relationship</td><td>/whybni</td><td>Low</td><td>Commercial</td></tr>
+                <tr><td>BNI training</td><td>Education</td><td>/events</td><td>Medium</td><td>Informational</td></tr>
+                <tr><td>networking education</td><td>Education</td><td>/resources</td><td>Low</td><td>Informational</td></tr>
+                <tr><td>learn to network better</td><td>Education</td><td>/resources</td><td>Low</td><td>Informational</td></tr>
+                <tr><td>networking skills development</td><td>Education</td><td>/resources</td><td>Low</td><td>Informational</td></tr>
+                <tr><td>BNI visitor etiquette</td><td>Visitor Prep</td><td>/expect</td><td>Low</td><td>Informational</td></tr>
+                <tr><td>how to visit BNI chapter</td><td>Visitor Prep</td><td>/expect</td><td>Medium</td><td>Informational</td></tr>
+                <tr><td>first time BNI visitor</td><td>Visitor Prep</td><td>/expect</td><td>Medium</td><td>Informational</td></tr>
+                <tr><td>what to bring to BNI meeting</td><td>Visitor Prep</td><td>/expect</td><td>Low</td><td>Informational</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div id="content" class="tab-content">
+        <h2>SEO-Optimized Content for Landing Pages</h2>
+
+        <div class="content-section">
+            <h2>1. Nashville Landing Page (/en-US/nashville)</h2>
+            <div class="card">
+                <h3>BNI Chapters in Nashville, TN</h3>
+                <div class="code-block">
+                    <code>
+# BNI Chapters in Nashville, TN
+
+## Find a BNI Networking Group in Nashville
+
+Nashville's thriving business community includes 25+ active BNI chapters across Davidson County and surrounding areas. From downtown Nashville to Brentwood, Franklin, and Murfreesboro, our structured referral networking groups help business owners generate qualified leads and grow their revenue through trusted relationships.
+
+**Active BNI Chapters in Nashville Area:**
+- Music City Chapter (Downtown) - Wednesdays 7:00 AM
+- Brentwood Breakfast - Thursdays 7:30 AM  
+- Franklin Fast Track - Tuesdays 7:15 AM
+- Green Hills Growth - Fridays 7:00 AM
+- Hermitage Connections - Wednesdays 11:45 AM
+
+## Why Business Owners in Nashville Choose BNI
+
+Nashville's competitive business environment requires strategic networking. BNI provides the structured, accountability-driven approach that helps local entrepreneurs and business owners generate 3-5x more referrals than traditional networking events.
+
+Our Nashville members report an average ROI of $8 for every $1 invested in membership, with many receiving qualified referrals within their first 30 days.
+
+**Industries Thriving in Nashville BNI:**
+- Healthcare & Medical Services
+- Real Estate & Mortgage
+- Financial Services & Insurance
+- Technology & IT Services
+- Marketing & Advertising
+- Construction & Home Services
+- Legal & Professional Services
+- Music Industry Professionals
+
+## What to Expect When You Visit
+
+Your first visit to a Nashville BNI chapter is completely free. Arrive 15 minutes early for open networking, then experience our proven 90-minute agenda focused on relationship building and referral generation.
+
+**Meeting Agenda:**
+- Open networking (7:00-7:30 AM)
+- Member 60-second presentations
+- Visitor recognition & introductions
+- Referral passing & testimonials
+- Featured 10-minute presentation
+- One-to-one scheduling
+
+## FAQ: BNI in Nashville
+
+**Q: How much does BNI membership cost in Nashville?**
+A: Annual membership ranges from $1,198-$1,498 depending on chapter size and meeting location.
+
+**Q: Can I visit multiple Nashville chapters?**
+A: Yes! You can visit each chapter twice before making a membership decision.
+
+**Q: What if my profession is already represented?**
+A: Our "one seat per profession" policy ensures exclusivity, but many industries have sub-categories available.
+
+**Q: Do I need referrals to join?**
+A: No, but you'll need to demonstrate how you can contribute referrals to other members.
+
+## Ready to Visit? Schedule Your Free Guest Visit
+
+Ready to grow your Nashville business through proven referral networking? Find the chapter that fits your schedule and location.
+
+[Find Nashville Chapters] [Schedule a Visit] [Contact Regional Director]
+
+**Contact BNI Middle Tennessee:**
+Phone: (615) 297-0076
+Email: info@bnitennessee.com
+                    </code>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>2. "What to Expect" Page Rewrite (/en-US/expect)</h2>
+            <div class="card">
+                <h3>What to Expect at Your First BNI Meeting</h3>
+                <div class="code-block">
+                    <code>
+# What to Expect at Your First BNI Meeting
+
+## Your Visit at a Glance
+
+Attending your first BNI meeting? You're about to experience the world's most structured and effective referral networking system. Our 90-minute weekly meetings are designed to build trust, generate qualified business referrals, and help you grow your professional network strategically.
+
+**Quick Overview:**
+- ✓ Completely free to visit (no obligation)
+- ✓ Professional, structured 90-minute agenda
+- ✓ 15-20 local business owners per chapter
+- ✓ Focus on referral generation, not sales pitches
+- ✓ Visit up to 2 times before membership decision
+
+## Before You Arrive
+
+**What to Bring:**
+- Business cards (bring 25-30)
+- Professional attire (business casual minimum)
+- Notepad for contact information
+- Positive attitude and willingness to contribute
+
+**Parking & Location:**
+Most meetings are held at restaurants, hotels, or business centers with free parking. Arrive 15 minutes early for introductions and informal networking.
+
+**What NOT to Bring:**
+- Sales brochures or promotional materials
+- Expectation to "pitch" your business
+- Pressure to join immediately
+
+## During the Meeting: 90-Minute Agenda Breakdown
+
+### Open Networking (15-20 minutes)
+Informal conversation time to meet members, learn about their businesses, and share what types of referrals you're seeking.
+
+### Welcome & Visitor Recognition (5 minutes)
+Chapter President welcomes everyone and introduces all visitors. You'll share your name, business, and what you do in 30 seconds.
+
+### Member 60-Second Presentations (20-25 minutes)
+Each member gives a weekly presentation about their business, current needs, and referral requests. This is where you learn exactly who to refer to whom.
+
+### Referral Passing (10-15 minutes)
+Members pass qualified business referrals to each other. You'll witness the power of structured referral marketing in action.
+
+### Featured 10-Minute Presentation (10 minutes)
+One member gives an in-depth presentation about their business, educating everyone on how to identify and refer ideal prospects.
+
+### One-to-One Scheduling (5 minutes)
+Members schedule individual coffee meetings for deeper relationship building outside the weekly meeting.
+
+### Closing & Networking (10 minutes)
+Final announcements and continued informal networking as the meeting concludes.
+
+## After the Meeting
+
+**Immediate Follow-up:**
+- Exchange contact information with 3-5 members
+- Schedule one-to-one meetings with potential referral partners
+- Follow up on any referrals you received
+- Research other chapters if this one doesn't fit your schedule
+
+**Next Steps:**
+- Attend a second meeting within 30 days
+- Complete membership application if interested
+- Begin building relationships with potential referral partners
+- Prepare your "60-second presentation" for when you join
+
+## Frequently Asked Visitor Questions
+
+**Q: Is there a cost to visit?**
+A: No. Your first visit to any BNI chapter is completely free. Breakfast/lunch cost varies by venue ($12-18 typically).
+
+**Q: How many times can I visit?**
+A: You may visit each chapter up to 2 times before deciding on membership.
+
+**Q: What if my profession is already taken?**
+A: Our "one seat per profession" policy ensures exclusivity. However, many industries have sub-categories available (commercial vs. residential real estate, family law vs. corporate law, etc.).
+
+**Q: Do I have to join after visiting?**
+A: Absolutely not. There's no pressure or obligation. Take time to evaluate if BNI fits your business development goals.
+
+**Q: What should I say when I introduce myself?**
+A: Keep it simple: "Hi, I'm [Name], and I'm a [profession] with [company]. I help [target market] with [main benefit]."
+
+**Q: Can I bring a colleague or partner?**
+A: Yes, but please notify the chapter in advance. Remember, only one person per profession can become a member.
+
+**Q: What if I can't make the weekly commitment?**
+A: BNI requires consistent attendance (4 absences allowed per 6 months). If weekly meetings don't fit your schedule, consider our forming chapters with different meeting times.
+
+## Ready to Visit?
+
+Ready to experience structured referral networking that generates real business growth? Find a chapter near you and schedule your free visit today.
+
+**3 Ways to Get Started:**
+1. **Find a Chapter:** Browse our interactive map to find meetings by location and day
+2. **Contact Us Directly:** Call (615) 297-0076 to speak with our regional director  
+3. **Use Our Chatbot:** Click the Higgins AI assistant for instant chapter recommendations
+
+*Over 2,100 business owners in Tennessee, Kentucky, and Southern Indiana trust BNI to grow their businesses. Your growth story starts with a single visit.*
+
+[Find a Chapter Near You] [Contact Regional Director] [View Chapter Calendar]
+                    </code>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>3. "Why Join BNI" Page Expansion (/en-US/whybni)</h2>
+            <div class="card">
+                <h3>Why Join BNI in Tennessee, Kentucky & Indiana?</h3>
+                <div class="code-block">
+                    <code>
+# Why Join BNI in Tennessee, Kentucky & Indiana?
+
+## The Power of Referral Marketing
+
+In today's competitive business environment, the most valuable leads come from trusted referrals. BNI (Business Network International) provides the structured system that transforms casual networking into a predictable source of qualified business referrals.
+
+Unlike traditional networking events where you collect business cards and hope for the best, BNI creates an accountability-driven environment where members actively seek referral opportunities for each other every single week.
+
+**The BNI Difference:**
+- Structured weekly meetings with proven agenda
+- "One seat per profession" exclusivity policy  
+- Mandatory referral goal tracking and reporting
+- Education and training on effective referral techniques
+- Global support system with 40+ years of proven results
+
+## BNI by the Numbers: Our Regional Impact
+
+**Middle Tennessee, Kentucky & Southern Indiana Region:**
+- 149+ active chapters across 3 states
+- 2,100+ committed business professionals
+- $47.2 million in referral business generated (2025)
+- Average member ROI: $8 for every $1 invested
+- 92% of members report increased revenue within 6 months
+
+**Global BNI Statistics:**
+- 280,000+ members worldwide
+- 10,097 chapters in 76 countries
+- $19.1 billion in referral business annually
+- Founded in 1985 - 40+ years of proven results
+
+## What Members Say: Real Results from Real People
+
+*"In my first year with BNI Nashville, I received 47 qualified referrals worth $283,000 in closed business. The weekly meetings provide consistent touchpoints with referral partners I never would have met otherwise."*
+**— Sarah Johnson, Financial Advisor, Music City Chapter**
+
+*"BNI taught me how to give referrals effectively, which actually improved my relationships with existing clients. When you help others succeed, business comes back to you naturally."*  
+**— Mike Thompson, Commercial Real Estate, Louisville**
+
+*"As a new business owner, BNI gave me instant credibility through member referrals. I went from zero clients to a full book of business in 8 months."*
+**— Jennifer Martinez, Marketing Consultant, Lexington**
+
+## How BNI Differs from Other Networking Groups
+
+| Feature | BNI | Traditional Networking | Chamber Events |
+|---------|-----|----------------------|----------------|
+| Meeting Frequency | Weekly | Monthly or Ad-hoc | Monthly/Quarterly |
+| Member Exclusivity | One per profession | Open membership | Open membership |
+| Referral Accountability | Tracked & Reported | Optional | None |
+| Training Provided | Ongoing education | Limited | Occasional |
+| Global Support | 76 countries | Regional only | Local only |
+| Member Commitment | High (attendance required) | Low | Very Low |
+| Results Focus | Referral generation | General networking | Business promotion |
+
+**Why Structure Matters:**
+Random networking events create surface-level connections. BNI's structured approach builds deep, trust-based referral relationships that generate consistent business growth.
+
+## Who Is BNI For?
+
+BNI works best for business owners and sales professionals who:
+
+✓ **Control their referral capacity** - Can accept and fulfill new business referrals
+✓ **Understand their ideal client** - Know exactly who they serve and how to identify prospects  
+✓ **Commit to weekly attendance** - Can prioritize 2 hours weekly for relationship building
+✓ **Think long-term** - Understand that referral relationships take time to develop
+✓ **Want measurable results** - Prefer accountability and tracking over casual networking
+
+**Industries That Thrive in BNI:**
+- Real Estate & Mortgage Professionals
+- Insurance & Financial Services
+- Healthcare & Medical Services  
+- Legal & Professional Services
+- Construction & Home Improvement
+- Technology & IT Services
+- Marketing & Advertising
+- Retail & Consumer Services
+- Manufacturing & B2B Services
+
+**Business Sizes We Serve:**
+- Solo entrepreneurs and consultants
+- Small businesses (2-50 employees)  
+- Regional businesses seeking local market growth
+- National companies with local representation
+
+## The Member Success Formula
+
+**Month 1-2: Foundation Building**
+- Learn each member's business deeply
+- Schedule one-to-one meetings with potential referral partners
+- Give your first referrals to establish credibility
+- Develop your weekly presentation skills
+
+**Month 3-6: Relationship Development**  
+- Build trust through consistent referral giving
+- Receive your first qualified referrals
+- Establish your "referral reputation" within the chapter
+- Expand your referral network beyond immediate members
+
+**Month 7-12: Referral Acceleration**
+- Generate 2-4 quality referrals monthly
+- Develop strategic referral partnerships
+- Mentor newer members (builds your credibility)
+- Experience compound growth from referral relationships
+
+**Year 2+: Sustainable Growth**
+- Referrals become a predictable revenue source
+- Build chapter leadership experience
+- Expand into multiple chapters if appropriate
+- Become a referral hub for your industry
+
+## Investment & ROI Analysis
+
+**Annual Membership Investment:**
+- Chapter dues: $1,198 - $1,498 (varies by chapter)
+- Weekly meeting meals: $624 - $936 annually ($12-18 per meeting)
+- **Total Investment:** $1,822 - $2,434 annually
+
+**Average Member Returns (Regional Data):**
+- First-year referral revenue: $15,000 - $45,000
+- Established member (2+ years): $35,000 - $125,000+
+- **Conservative ROI:** 400% - 800% annually
+
+*ROI varies by industry, involvement level, and local market conditions. Results require consistent participation and strategic relationship building.*
+
+## Ready to Transform Your Business Development?
+
+Stop leaving referrals to chance. Join the proven system that helps business owners generate predictable referral revenue through structured relationship building.
+
+**Your Next Steps:**
+1. **Visit a Chapter:** Experience BNI firsthand with a free visit
+2. **Schedule One-to-Ones:** Meet with members outside the weekly meeting
+3. **Apply for Membership:** Submit your application and join your referral team
+
+**Questions About BNI Membership?**
+- What's the time commitment beyond weekly meetings?
+- How do I choose between multiple chapters?
+- What if I'm new to networking?
+- How quickly can I expect referrals?
+
+*Contact our regional director at (615) 297-0076 or use our Higgins AI assistant for instant answers.*
+
+[Find a Chapter to Visit] [Speak with Regional Director] [Download Member Kit]
+
+**Ready to multiply your referrals? Your growth story starts with a single visit.**
+                    </code>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>4. Louisville Landing Page (/en-US/louisville)</h2>
+            <div class="card">
+                <h3>BNI Chapters in Louisville, KY</h3>
+                <div class="code-block">
+                    <code>
+# BNI Chapters in Louisville, KY
+
+## Find a BNI Networking Group in Louisville
+
+Louisville's diverse business community is home to 18+ active BNI chapters spanning Jefferson County and surrounding areas. From downtown Louisville to St. Matthews, Jeffersontown, and Southern Indiana, our structured referral networking groups help business owners build profitable relationships and generate qualified leads.
+
+**Active BNI Chapters in Louisville Metro:**
+- Derby City Dynamos (Downtown) - Tuesdays 7:00 AM
+- St. Matthews Success - Wednesdays 7:30 AM  
+- Jeffersontown Connectors - Thursdays 7:15 AM
+- Highlands Network - Fridays 7:00 AM
+- River City Referrals - Wednesdays 11:45 AM
+
+## Why Louisville Business Owners Choose BNI
+
+Louisville's entrepreneurial spirit thrives on relationship-based business development. BNI provides the accountability-driven structure that helps local business owners generate consistent referrals while building lasting professional relationships.
+
+Our Louisville members average 3.2 qualified referrals per month, with many reporting their best clients came through BNI connections.
+
+**Thriving Louisville Industries in BNI:**
+- Healthcare & Medical Practices
+- Manufacturing & Industrial Services
+- Logistics & Transportation
+- Financial Services & Banking
+- Real Estate & Property Management
+- Restaurant & Hospitality Services
+- Legal & Professional Services
+- Technology & Software
+
+## What to Expect When You Visit
+
+Your first visit to a Louisville BNI chapter is completely free. Most chapters meet for breakfast (7:00-8:30 AM) or lunch (11:30 AM-1:00 PM), following our proven 90-minute referral-focused agenda.
+
+**Meeting Structure:**
+- Welcome & open networking
+- Member presentations (60 seconds each)
+- Visitor introductions
+- Referral passing between members
+- Featured member spotlight (10 minutes)
+- One-to-one meeting scheduling
+
+[Learn more about what to expect at your visit]
+
+## Chapters Currently Forming in Louisville
+
+**New Opportunities:**
+- East End Enterprise (Launching Spring 2026)
+- Louisville Lunch Network (Seeking founding members)
+- Southern Indiana Connect (Jeffersonville area)
+
+*Founding members receive special benefits including reduced dues and chapter leadership opportunities.*
+
+[View all forming chapters]
+
+## FAQ: BNI in Louisville
+
+**Q: What's the membership investment in Louisville?**
+A: Annual membership ranges from $1,198-$1,398, plus weekly meeting meals ($12-16 typically).
+
+**Q: How do I choose between multiple Louisville chapters?**
+A: Visit 2-3 chapters to find the best fit for your industry, schedule, and personality match.
+
+**Q: Are there evening or weekend meetings available?**
+A: Most Louisville chapters meet for breakfast or lunch during weekdays. Contact us for alternative schedules.
+
+**Q: What if my business serves multiple markets?**
+A: You can join chapters in different territories if your business model supports multiple locations.
+
+## Ready to Visit? Schedule Your Free Guest Visit
+
+Ready to grow your Louisville business through proven referral networking? Find the chapter that fits your schedule and territory.
+
+[View Louisville Chapter Map] [Contact Regional Director] [Schedule a Visit Today]
+
+**Contact BNI Middle Tennessee/Kentucky:**
+Phone: (615) 297-0076
+Email: kentucky@bnitennessee.com
+Serving: Louisville Metro, Lexington, Bowling Green, and surrounding Kentucky markets
+                    </code>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>5. Membership Application Page (/en-US/apply)</h2>
+            <div class="card">
+                <h3>Apply to Join BNI in Tennessee, Kentucky & Indiana</h3>
+                <div class="code-block">
+                    <code>
+# Apply to Join BNI in Tennessee, Kentucky & Indiana
+
+## Start Receiving Qualified Referrals Within 30 Days
+
+Ready to join the most effective business referral organization in the world? BNI membership provides structured access to qualified business referrals, professional development, and a supportive network of growth-minded business owners.
+
+**Membership Benefits:**
+✓ Exclusive territory protection (one seat per profession)
+✓ Weekly qualified referral opportunities  
+✓ Professional development and networking training
+✓ Access to global BNI network and resources
+✓ Proven system with 40+ years of results
+
+## Membership Investment & ROI
+
+**Annual Investment Breakdown:**
+- **Chapter Dues:** $1,198 - $1,498 (varies by chapter size)
+- **Regional Dues:** $299 annually  
+- **Weekly Meals:** $624 - $936 annually ($12-18 per meeting)
+- **Total Investment:** $2,121 - $2,733 annually
+
+**Average Member Returns (2025 Regional Data):**
+- Average referrals received: 28 per year
+- Average referral value: $1,847 per referral  
+- **Average annual referral revenue: $51,716**
+- **Average ROI: 1,900%**
+
+*Individual results vary based on business type, involvement level, and market conditions. Success requires consistent participation and active referral giving.*
+
+## Application Requirements
+
+**To qualify for BNI membership, you must:**
+
+✓ **Own or manage a business** with authority to accept referrals
+✓ **Commit to weekly attendance** (maximum 4 absences per 6 months)
+✓ **Demonstrate referral capacity** - ability to give and receive business referrals
+✓ **Complete application process** including interviews and background check
+✓ **Attend chapter orientation** and complete BNI training modules
+
+**Professional Industries Welcome:**
+- Healthcare & Medical Services
+- Real Estate & Mortgage
+- Financial Services & Insurance  
+- Legal & Professional Services
+- Technology & IT Services
+- Construction & Home Services
+- Marketing & Advertising
+- Manufacturing & B2B Services
+- Retail & Consumer Services
+
+## Application Process Timeline
+
+**Week 1: Initial Visit & Interview**
+- Attend chapter meeting as a visitor (free)
+- Complete visitor interview with Membership Committee
+- Schedule one-to-one meetings with 3-5 members
+
+**Week 2: Second Visit & Member Interviews**  
+- Return for second chapter visit
+- Complete individual interviews with chapter members
+- Demonstrate understanding of BNI principles and your referral capacity
+
+**Week 3: Application Review**
+- Submit completed application and membership investment
+- Background check and reference verification
+- Chapter vote on membership acceptance
+
+**Week 4: Orientation & Training**
+- Attend new member orientation session
+- Complete BNI training modules
+- Receive member handbook and resources
+- Begin active participation in weekly meetings
+
+## Membership Application Form
+
+**Personal Information:**
+- Full Name: _______________
+- Business Name: _______________  
+- Industry/Profession: _______________
+- Years in Business: _______________
+- Business Phone: _______________
+- Email Address: _______________
+- Business Address: _______________
+
+**Business Information:**
+- Describe your business in 25 words: _______________
+- Who is your ideal client/customer? _______________
+- What makes a good referral for your business? _______________
+- How many new clients can you serve monthly? _______________
+- What's your average client/transaction value? _______________
+
+**BNI Commitment:**
+- Why do you want to join BNI? _______________
+- How will you contribute referrals to other members? _______________
+- Can you commit to weekly attendance? (Yes/No) _______________
+- Have you attended any BNI meetings? Which chapters? _______________
+
+**References:**
+- Business Reference 1: Name, Company, Phone _______________
+- Business Reference 2: Name, Company, Phone _______________
+- Personal Reference: Name, Relationship, Phone _______________
+
+## Chapter Selection Guide
+
+**How to Choose Your Chapter:**
+
+**Consider Meeting Schedule:**
+- Breakfast meetings (7:00-8:30 AM) - Most popular
+- Lunch meetings (11:30 AM-1:00 PM) - Growing popularity  
+- Evening meetings (5:30-7:00 PM) - Limited availability
+
+**Evaluate Geographic Territory:**
+- Choose chapters in your primary service area
+- Consider drive time (20 minutes maximum recommended)
+- Ensure territory boundaries match your business model
+
+**Assess Industry Mix:**
+- Look for complementary businesses (not competitors)
+- Identify potential referral partners
+- Consider chapter size (12-25 members optimal)
+
+**Cultural Fit:**
+- Professional atmosphere matching your business style
+- Member demographics aligned with your target market
+- Chapter energy and commitment level
+
+## Frequently Asked Questions
+
+**Q: What if I can't attend a weekly meeting?**
+A: You can send a substitute from your business, or make up at another chapter. Maximum 4 absences allowed per 6 months.
+
+**Q: How quickly will I receive referrals?**
+A: Most members receive their first referral within 30-60 days. Consistent referral flow typically develops by month 3-6.
+
+**Q: Can I join multiple chapters?**
+A: Yes, if you serve multiple territories. Each chapter requires separate membership and weekly attendance.
+
+**Q: What if my profession category is filled?**
+A: Many industries have sub-categories available. We'll work with you to find an appropriate classification.
+
+**Q: Is there a trial membership period?**
+A: No trial periods, but you can visit twice before deciding. We also offer a satisfaction guarantee for first-time members.
+
+**Q: What training is provided?**
+A: New member orientation, monthly training modules, regional workshops, and annual conferences.
+
+## Ready to Apply?
+
+Take the next step toward predictable referral revenue and business growth. Submit your application today and start building the professional relationships that will transform your business development.
+
+**3 Ways to Apply:**
+
+1. **Online Application:** Complete the form below and submit digitally
+2. **Contact Regional Director:** Call (615) 297-0076 to discuss membership
+3. **Chapter Application:** Apply directly at your preferred chapter meeting
+
+**Questions About Membership?**
+- Use our Higgins AI assistant for instant answers
+- Schedule a phone consultation with our regional director  
+- Attend an upcoming visitor day event
+
+*Join 2,100+ business owners in Tennessee, Kentucky, and Southern Indiana who trust BNI for consistent business growth.*
+
+[Submit Application Now] [Contact Regional Director] [Find Your Chapter]
+
+**Start receiving qualified referrals. Submit your application today.**
+                    </code>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="technical" class="tab-content">
+        <h2>Technical SEO Fixes</h2>
+
+        <div class="content-section">
+            <h2>Corrected Robots.txt File</h2>
+            <div class="code-block">
+                <code>
+User-Agent: *
+Disallow: /cgi-bin/
+Disallow: /en-US/findanopeninglist?*
+Disallow: /en-US/chapterlist?*
+Disallow: /en-US/advancedchaptersearch
+Disallow: /search
+Disallow: /admin/
+Disallow: /private/
+Disallow: /*?*utm_*
+Disallow: /*?*ref=*
+Disallow: /*?*sid=*
+
+Allow: /en-US/findanopeninglist$
+Allow: /en-US/chapterlist$
+Allow: /en-US/findamember$
+
+Sitemap: https://bnitennessee.com/sitemap.xml
+
+# Crawl-delay for specific bots if needed
+# User-Agent: Bingbot
+# Crawl-delay: 1
+
+# Block specific problematic bots if necessary
+User-Agent: AhrefsBot
+Disallow: /
+
+User-Agent: SemrushBot
+Disallow: /
+                </code>
+            </div>
+        </div>
+
+        <div class="search-filter">
+            <input type="text" id="technicalSearch" placeholder="Search technical issues..." onkeyup="filterTable('technicalTable', 'technicalSearch')">
+        </div>
+
+        <table id="technicalTable">
+            <thead>
+                <tr>
+                    <th onclick="sortTable('technicalTable', 0)">Issue <span class="sort-indicator">↕</span></th>
+                    <th onclick="sortTable('technicalTable', 1)">Priority <span class="sort-indicator">↕</span></th>
+                    <th onclick="sortTable('technicalTable', 2)">Current State <span class="sort-indicator">↕</span></th>
+                    <th onclick="sortTable('technicalTable', 3)">Required Fix <span class="sort-indicator">↕</span></th>
+                    <th onclick="sortTable('technicalTable', 4)">Effort <span class="sort-indicator">↕</span></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Canonical/OG URL Protocol</td>
+                    <td>P0 Critical</td>
+                    <td>HTTP URLs in meta tags</td>
+                    <td>Change all to HTTPS protocol</td>
+                    <td>Low (Template change)</td>
+                </tr>
+                <tr>
+                    <td>XML Sitemap</td>
+                    <td>P0 Critical</td>
+                    <td>8 years stale, 100+ bloated URLs</td>
+                    <td>Rebuild with 15-30 clean URLs</td>
+                    <td>Medium</td>
+                </tr>
+                <tr>
+                    <td>Robots.txt</td>
+                    <td>P0 Critical</td>
+                    <td>Minimal directives</td>
+                    <td>Add sitemap directive and disallow rules</td>
+                    <td>Low</td>
+                </tr>
+                <tr>
+                    <td>Title Tag Template</td>
+                    <td>P0 Critical</td>
+                    <td>156+ chars with boilerplate</td>
+                    <td>Remove template suffix, optimize length</td>
+                    <td>Medium (Template access)</td>
+                </tr>
+                <tr>
+                    <td>Meta Description Template</td>
+                    <td>P0 Critical</td>
+                    <td>Auto-generated boilerplate</td>
+                    <td>Remove suffix, create unique descriptions</td>
+                    <td>Medium</td>
+                </tr>
+                <tr>
+                    <td>Parameterized URLs</td>
+                    <td>P1 High</td>
+                    <td>70+ filter pages in sitemap</td>
+                    <td>Add noindex or remove from sitemap</td>
+                    <td>Medium</td>
+                </tr>
+                <tr>
+                    <td>Schema Markup</td>
+                    <td>P1 High</td>
+                    <td>No schema detected</td>
+                    <td>Implement Organization, Breadcrumb, Event, FAQ</td>
+                    <td>High</td>
+                </tr>
+                <tr>
+                    <td>Viewport Meta Tag</td>
+                    <td>P2 Medium</td>
+                    <td>user-scalable=no</td>
+                    <td>Remove scaling restriction</td>
+                    <td>Low</td>
+                </tr>
+                <tr>
+                    <td>Copyright Variable</td>
+                    <td>P2 Medium</td>
+                    <td>{$copyright} showing in HTML</td>
+                    <td>Replace with actual copyright text</td>
+                    <td>Low</td>
+                </tr>
+                <tr>
+                    <td>Core Web Vitals</td>
+                    <td>P2 Medium</td>
+                    <td>Not optimized</td>
+                    <td>Compress images, lazy loading, font preload</td>
+                    <td>Medium</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div id="timeline" class="tab-content">
+        <h2>30-Day Implementation Timeline</h2>
+
+        <div class="timeline">
+            <div class="week-card">
+                <div class="week-title">Week 1 (Days 1-7): Foundation & Technical Triage</div>
+                <ul class="task-list">
+                    <li><strong>Day 1-3:</strong> Google Search Console & GA4 setup and verification</li>
+                    <li><strong>Day 1-3:</strong> Bing Webmaster Tools connection</li>
+                    <li><strong>Day 1-3:</strong> Rank tracking baseline for 50 priority keywords</li>
+                    <li><strong>Day 4-7:</strong> Fix canonical/OG protocol mismatch (HTTP → HTTPS)</li>
+                    <li><strong>Day 4-7:</strong> Rebuild XML sitemap (clean 15-30 URLs)</li>
+                    <li><strong>Day 4-7:</strong> Update robots.txt with proper directives</li>
+                    <li><strong>Day 4-7:</strong> Core Web Vitals quick wins (image compression, lazy loading)</li>
+                </ul>
+            </div>
+
+            <div class="week-card">
+                <div class="week-title">Week 2 (Days 8-14): Keywords & On-Page Optimization</div>
+                <ul class="task-list">
+                    <li><strong>Day 8-10:</strong> Complete keyword research and page mapping</li>
+                    <li><strong>Day 8-10:</strong> Anti-cannibalization keyword assignment</li>
+                    <li><strong>Day 11-14:</strong> Rewrite all title tags (remove boilerplate)</li>
+                    <li><strong>Day 11-14:</strong> Rewrite all meta descriptions</li>
+                    <li><strong>Day 11-14:</strong> Internal linking strategy implementation</li>
+                </ul>
+            </div>
+
+            <div class="week-card">
+                <div class="week-title">Week 3 (Days 15-23): Schema & Content Production</div>
+                <ul class="task-list">
+                    <li><strong>Day 15-17:</strong> Implement 4 schema types (Organization, Breadcrumb, Event, FAQ)</li>
+                    <li><strong>Day 18-23:</strong> Complete rewrite of "What to Expect" page</li>
+                    <li><strong>Day 18-23:</strong> Expand "Why BNI" page content</li>
+                    <li><strong>Day 18-23:</strong> Create 4 new city hub pages (Nashville, Louisville, Lexington, Murfreesboro)</li>
+                    <li><strong>Day 18-23:</strong> Homepage content upgrades</li>
+                    <li><strong>Day 19-21:</strong> Breadcrumb navigation implementation</li>
+                </ul>
+            </div>
+
+            <div class="week-card">
+                <div class="week-title">Week 4 (Days 24-30): QA, Launch & Reporting</div>
+                <ul class="task-list">
+                    <li><strong>Day 24-26:</strong> Pre-launch QA checklist completion</li>
+                    <li><strong>Day 24-26:</strong> Schema validation via Rich Results Test</li>
+                    <li><strong>Day 24-26:</strong> All technical fixes verification</li>
+                    <li><strong>Day 27-30:</strong> Sitemap resubmission to search engines</li>
+                    <li><strong>Day 27-30:</strong> URL indexing requests via GSC</li>
+                    <li><strong>Day 27-30:</strong> Day 0 vs Day 30 baseline report</li>
+                    <li><strong>Day 27-30:</strong> 60-90 day backlog planning</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>Success Metrics (30-Day Targets)</h3>
+            <div class="metric-grid">
+                <div class="metric-card">
+                    <span class="metric-value">100%</span>
+                    <span class="metric-label">P0 Issues Resolved</span>
+                </div>
+                <div class="metric-card">
+                    <span class="metric-value">15-30</span>
+                    <span class="metric-label">Clean Sitemap URLs</span>
+                </div>
+                <div class="metric-card">
+                    <span class="metric-value">14+</span>
+                    <span class="metric-label">Optimized Pages</span>
+                </div>
+                <div class="metric-card">
+                    <span class="metric-value">4</span>
+                    <span class="metric-label">Schema Types</span>
+                </div>
+                <div class="metric-card">
+                    <span class="metric-value">5,000+</span>
+                    <span class="metric-label">Words New Content</span>
+                </div>
+                <div class="metric-card">
+                    <span class="metric-value">70%+</span>
+                    <span class="metric-label">Indexed Issues Reduced</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="schema" class="tab-content">
+        <h2>Schema Markup & Code Implementation</h2>
+
+        <div class="content-section">
+            <h2>Organization Schema (Sitewide)</h2>
+            <div class="code-block">
+                <code>
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "BNI Middle Tennessee, Kentucky & Southern Indiana",
+  "url": "https://bnitennessee.com",
+  "logo": "https://cdn.bniconnectglobal.com/new_template/assets/appicon/socialmedia.png",
+  "telephone": "+1-615-297-0076",
+  "address": {
+    "@type": "PostalAddress",
+    "postOfficeBoxNumber": "158529",
+    "addressLocality": "Nashville",
+    "addressRegion": "TN",
+    "postalCode": "37215",
+    "addressCountry": "US"
+  },
+  "parentOrganization": {
+    "@type": "Organization",
+    "name": "BNI (Business Network International)",
+    "url": "https://www.bni.com"
+  },
+  "areaServed": [
+    {"@type": "State", "name": "Tennessee"},
+    {"@type": "State", "name": "Kentucky"},
+    {"@type": "State", "name": "Indiana"}
+  ],
+  "foundingDate": "1985",
+  "numberOfEmployees": "2100+",
+  "description": "BNI Middle Tennessee, Kentucky & Southern Indiana helps business owners generate qualified referrals through structured networking. 149+ chapters across 3 states.",
+  "sameAs": [
+    "https://www.facebook.com/BNIMiddleTennessee",
+    "https://www.linkedin.com/company/bni-middle-tennessee"
+  ]
+}
+                </code>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>BreadcrumbList Schema (All Inner Pages)</h2>
+            <div class="code-block">
+                <code>
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://bnitennessee.com/en-US/index"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Find a Chapter",
+      "item": "https://bnitennessee.com/en-US/findachapter"
+    }
+  ]
+}
+
+<!-- For city pages, add third level: -->
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://bnitennessee.com/en-US/index"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Find a Chapter",
+      "item": "https://bnitennessee.com/en-US/findachapter"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Nashville Chapters",
+      "item": "https://bnitennessee.com/en-US/nashville"
+    }
+  ]
+}
+                </code>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>Event Schema (Events Page)</h2>
+            <div class="code-block">
+                <code>
+{
+  "@context": "https://schema.org",
+  "@type": "Event",
+  "name": "BNI Visitor Day - Nashville",
+  "startDate": "2026-04-15T11:30:00-05:00",
+  "endDate": "2026-04-15T13:00:00-05:00",
+  "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+  "eventStatus": "https://schema.org/EventScheduled",
+  "location": {
+    "@type": "Place",
+    "name": "Music City Center",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "201 5th Ave S",
+      "addressLocality": "Nashville",
+      "addressRegion": "TN",
+      "postalCode": "37203",
+      "addressCountry": "US"
+    }
+  },
+  "image": "https://bnitennessee.com/images/bni-visitor-day.jpg",
+  "description": "Join us for a special BNI visitor day in Nashville. Experience our structured referral networking system and meet local business owners.",
+  "offers": {
+    "@type": "Offer",
+    "url": "https://bnitennessee.com/en-US/events",
+    "price": "0",
+    "priceCurrency": "USD",
+    "availability": "https://schema.org/InStock",
+    "validFrom": "2026-03-01"
+  },
+  "performer": {
+    "@type": "Organization",
+    "name": "BNI Middle Tennessee",
+    "url": "https://bnitennessee.com"
+  },
+  "organizer": {
+    "@type": "Organization",
+    "name": "BNI Middle Tennessee",
+    "url": "https://bnitennessee.com"
+  }
+}
+                </code>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>FAQPage Schema (Why BNI, What to Expect, Apply)</h2>
+            <div class="code-block">
+                <code>
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How much does BNI membership cost?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "BNI membership in Tennessee, Kentucky, and Indiana ranges from $1,198-$1,498 annually, plus weekly meeting meals. Most members report ROI of 400-800% within their first year."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How many times can I visit before joining?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "You can visit each BNI chapter up to 2 times before deciding on membership. Your first visit is completely free with no obligation."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What if my profession is already represented in a chapter?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "BNI operates on a 'one seat per profession' exclusivity policy. However, many industries have sub-categories available (e.g., residential vs. commercial real estate, family law vs. corporate law)."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How quickly will I start receiving referrals?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Most new members receive their first referral within 30-60 days. Consistent referral flow typically develops by months 3-6 as relationships strengthen."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What's the weekly time commitment?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Weekly BNI meetings last 90 minutes. Additional time includes one-to-one meetings with referral partners (2-3 hours weekly) and following up on referrals received."
+      }
+    }
+  ]
+}
+                </code>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>LocalBusiness Schema (For Individual Chapters)</h2>
+            <div class="code-block">
+                <code>
+{
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  "name": "BNI Music City Chapter",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "150 4th Ave N",
+    "addressLocality": "Nashville",
+    "addressRegion": "TN",
+    "postalCode": "37219",
+    "addressCountry": "US"
+  },
+  "telephone": "+1-615-297-0076",
+  "url": "https://bnitennessee.com/en-US/nashville",
+  "parentOrganization": {
+    "@type": "Organization",
+    "name": "BNI Middle Tennessee",
+    "url": "https://bnitennessee.com"
+  },
+  "openingHours": "We 07:00-08:30",
+  "description": "BNI Music City Chapter meets weekly in downtown Nashville for structured business networking and referral generation.",
+  "priceRange": "$$",
+  "paymentAccepted": "Cash, Check, Credit Card",
+  "currenciesAccepted": "USD"
+}
+                </code>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>WebSite Schema with SearchAction</h2>
+            <div class="code-block">
+                <code>
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "BNI Middle Tennessee, Kentucky & Southern Indiana",
+  "url": "https://bnitennessee.com",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": {
+      "@type": "EntryPoint",
+      "urlTemplate": "https://bnitennessee.com/en-US/findachapter?search={search_term_string}"
+    },
+    "query-input": "required name=search_term_string"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "BNI Middle Tennessee",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://cdn.bniconnectglobal.com/new_template/assets/appicon/socialmedia.png"
+    }
+  }
+}
+                </code>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports" class="footer-logo">
+    </footer>
+
+    <script>
+        function showTab(tabName) {
+            // Hide all tab contents
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabContents.forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            // Remove active class from all nav tabs
+            const navTabs = document.querySelectorAll('.nav-tab');
+            navTabs.forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            // Show selected tab content
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked nav tab
+            event.target.classList.add('active');
+        }
+
+        function filterTable(tableId, searchId) {
+            const searchInput = document.getElementById(searchId);
+            const table = document.getElementById(tableId);
+            const rows = table.getElementsByTagName('tr');
+            const searchTerm = searchInput.value.toLowerCase();
+
+            for (let i = 1; i < rows.length; i++) {
+                const row = rows[i];
+                const cells = row.getElementsByTagName('td');
+                let found = false;
+
+                for (let j = 0; j < cells.length; j++) {
+                    if (cells[j].textContent.toLowerCase().includes(searchTerm)) {
+                        found = true;
+                        break;
+                    }
+                }
+
+                row.style.display = found ? '' : 'none';
+            }
+        }
+
+        function sortTable(tableId, columnIndex) {
+            const table = document.getElementById(tableId);
+            const tbody = table.getElementsByTagName('tbody')[0];
+            const rows = Array.from(tbody.getElementsByTagName('tr'));
+            
+            // Determine current sort direction
+            const header = table.getElementsByTagName('th')[columnIndex];
+            const currentSort = header.getAttribute('data-sort') || 'asc';
+            const newSort = currentSort === 'asc' ? 'desc' : 'asc';
+            
+            // Clear all sort indicators
+            const allHeaders = table.getElementsByTagName('th');
+            for (let h of allHeaders) {
+                h.setAttribute('data-sort', '');
+                const indicator = h.querySelector('.sort-indicator');
+                if (indicator) indicator.textContent = '↕';
+            }
+            
+            // Set new sort direction and indicator
+            header.setAttribute('data-sort', newSort);
+            const indicator = header.querySelector('.sort-indicator');
+            if (indicator) {
+                indicator.textContent = newSort === 'asc' ? '↑' : '↓';
+            }
+
+            // Sort rows
+            rows.sort((a, b) => {
+                const aText = a.cells[columnIndex].textContent.trim();
+                const bText = b.cells[columnIndex].textContent.trim();
+                
+                // Try to parse as numbers
+                const aNum = parseFloat(aText.replace(/[^0-9.-]/g, ''));
+                const bNum = parseFloat(bText.replace(/[^0-9.-]/g, ''));
+                
+                let comparison;
+                if (!isNaN(aNum) && !isNaN(bNum)) {
+                    comparison = aNum - bNum;
+                } else {
+                    comparison = aText.localeCompare(bText);
+                }
+                
+                return newSort === 'asc' ? comparison : -comparison;
+            });
+
+            // Reorder table rows
+            rows.forEach(row => tbody.appendChild(row));
+        }
+
+        // Add some interactivity for better UX
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add hover effects to metric cards
+            const metricCards = document.querySelectorAll('.metric-card');
+            metricCards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'scale(1.05)';
+                    this.style.transition = 'transform 0.2s ease';
+                });
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'scale(1)';
+                });
+            });
+
+            // Add copy-to-clipboard functionality for code blocks
+            const codeBlocks = document.querySelectorAll('.code-block');
+            codeBlocks.forEach(block => {
+                const button = document.createElement('button');
+                button.textContent = 'Copy';
+                button.className = 'btn';
+                button.style.position = 'absolute';
+                button.style.top = '10px';
+                button.style.right = '10px';
+                button.onclick = function() {
+                    const code = block.querySelector('code');
+                    navigator.clipboard.writeText(code.textContent);
+                    button.textContent = 'Copied!';
+                    setTimeout(() => button.textContent = 'Copy', 2000);
+                };
+                
+                block.style.position = 'relative';
+                block.appendChild(button);
+            });
+        });
+    </script>
+</body>
+</html>
