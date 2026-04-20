@@ -1,0 +1,1315 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BNI Atlanta SEO Analysis Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #000000;
+            color: #ffffff;
+            line-height: 1.6;
+        }
+        
+        .header {
+            background-color: #000000;
+            padding: 20px 0;
+            text-align: center;
+            border-bottom: 2px solid #CF2030;
+        }
+        
+        .logo-header {
+            max-width: 300px;
+            height: auto;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .nav-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            background-color: #111;
+            border-radius: 8px;
+            padding: 10px;
+            margin-bottom: 30px;
+        }
+        
+        .nav-tab {
+            background-color: #CF2030;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            margin: 5px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.3s;
+        }
+        
+        .nav-tab:hover {
+            background-color: #a01825;
+        }
+        
+        .nav-tab.active {
+            background-color: #ffffff;
+            color: #000000;
+        }
+        
+        .tab-content {
+            display: none;
+            background-color: #111;
+            border-radius: 8px;
+            padding: 30px;
+            margin-bottom: 20px;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .search-box {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #CF2030;
+            border-radius: 6px;
+            background-color: #222;
+            color: white;
+            font-size: 16px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: #000;
+        }
+        
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #333;
+        }
+        
+        th {
+            background-color: #CF2030;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        th:hover {
+            background-color: #a01825;
+        }
+        
+        .sort-indicator {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        
+        tr:nth-child(even) {
+            background-color: #1a1a1a;
+        }
+        
+        tr:hover {
+            background-color: #222;
+        }
+        
+        .metric-card {
+            background-color: #222;
+            border: 1px solid #CF2030;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 10px;
+            display: inline-block;
+            min-width: 200px;
+            text-align: center;
+        }
+        
+        .metric-value {
+            font-size: 2em;
+            font-weight: bold;
+            color: #CF2030;
+        }
+        
+        .metric-label {
+            font-size: 0.9em;
+            color: #ccc;
+            margin-top: 5px;
+        }
+        
+        .code-block {
+            background-color: #000;
+            border: 1px solid #CF2030;
+            border-radius: 6px;
+            padding: 20px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+        }
+        
+        .priority-high {
+            color: #ff4444;
+            font-weight: bold;
+        }
+        
+        .priority-medium {
+            color: #ffaa00;
+            font-weight: bold;
+        }
+        
+        .priority-low {
+            color: #00ff00;
+            font-weight: bold;
+        }
+        
+        .status-critical {
+            background-color: #ff4444;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8em;
+        }
+        
+        .status-warning {
+            background-color: #ffaa00;
+            color: black;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8em;
+        }
+        
+        .status-good {
+            background-color: #00ff00;
+            color: black;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8em;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 20px 0;
+            border-top: 1px solid #CF2030;
+            margin-top: 40px;
+        }
+        
+        .logo-footer {
+            max-width: 150px;
+            height: auto;
+            opacity: 0.7;
+        }
+        
+        .landing-page-content {
+            background-color: #222;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .landing-page-content h2 {
+            color: #CF2030;
+            border-bottom: 2px solid #CF2030;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .keyword-difficulty {
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+        
+        .difficulty-low { background-color: #00ff00; color: black; }
+        .difficulty-medium { background-color: #ffaa00; color: black; }
+        .difficulty-high { background-color: #ff4444; color: white; }
+        
+        .chart-container {
+            background-color: #222;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports" class="logo-header">
+    </div>
+    
+    <div class="container">
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="showTab('executive-summary')">Executive Summary</button>
+            <button class="nav-tab" onclick="showTab('technical-issues')">Technical Issues</button>
+            <button class="nav-tab" onclick="showTab('keyword-research')">Keyword Research</button>
+            <button class="nav-tab" onclick="showTab('content-strategy')">Content Strategy</button>
+            <button class="nav-tab" onclick="showTab('location-pages')">Location Pages</button>
+            <button class="nav-tab" onclick="showTab('schema-code')">Schema & Code</button>
+            <button class="nav-tab" onclick="showTab('timeline')">Implementation Timeline</button>
+        </div>
+
+        <!-- Executive Summary Tab -->
+        <div id="executive-summary" class="tab-content active">
+            <h1>BNI Atlanta SEO Analysis - Executive Summary</h1>
+            
+            <div class="metric-card">
+                <div class="metric-value">47/100</div>
+                <div class="metric-label">Overall SEO Health Score</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value">150%</div>
+                <div class="metric-label">Projected Traffic Growth</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value">65+</div>
+                <div class="metric-label">BNI Chapters</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value">$44M</div>
+                <div class="metric-label">Referrals Generated</div>
+            </div>
+
+            <h2>Current Performance by Dimension</h2>
+            <table id="performance-table">
+                <thead>
+                    <tr>
+                        <th onclick="sortTable('performance-table', 0)">Dimension <span class="sort-indicator">↕</span></th>
+                        <th onclick="sortTable('performance-table', 1)">Current Grade <span class="sort-indicator">↕</span></th>
+                        <th onclick="sortTable('performance-table', 2)">Priority <span class="sort-indicator">↕</span></th>
+                        <th onclick="sortTable('performance-table', 3)">Key Issues <span class="sort-indicator">↕</span></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Technical SEO</td>
+                        <td>C+</td>
+                        <td><span class="priority-high">HIGH</span></td>
+                        <td>URL structure, duplicate content, sitemap issues</td>
+                    </tr>
+                    <tr>
+                        <td>On-Page Optimization</td>
+                        <td>C</td>
+                        <td><span class="priority-high">HIGH</span></td>
+                        <td>Template errors in title tags, generic meta descriptions</td>
+                    </tr>
+                    <tr>
+                        <td>Content Strategy</td>
+                        <td>D+</td>
+                        <td><span class="status-critical">CRITICAL</span></td>
+                        <td>Zero original blog content, no location pages</td>
+                    </tr>
+                    <tr>
+                        <td>Local SEO</td>
+                        <td>D</td>
+                        <td><span class="status-critical">CRITICAL</span></td>
+                        <td>No location pages for 20+ cities served</td>
+                    </tr>
+                    <tr>
+                        <td>Authority/Off-Page</td>
+                        <td>C</td>
+                        <td><span class="priority-medium">MEDIUM</span></td>
+                        <td>Limited local backlinks, no digital PR strategy</td>
+                    </tr>
+                    <tr>
+                        <td>User Experience & CRO</td>
+                        <td>B-</td>
+                        <td><span class="priority-medium">MEDIUM</span></td>
+                        <td>Mobile zoom disabled, broken links</td>
+                    </tr>
+                    <tr>
+                        <td>Schema & Structured Data</td>
+                        <td>D</td>
+                        <td><span class="priority-high">HIGH</span></td>
+                        <td>Zero structured data detected</td>
+                    </tr>
+                    <tr>
+                        <td>Analytics & Tracking</td>
+                        <td>C-</td>
+                        <td><span class="priority-high">HIGH</span></td>
+                        <td>No conversion tracking, incomplete setup</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Technical Issues Tab -->
+        <div id="technical-issues" class="tab-content">
+            <h1>Critical Technical SEO Issues</h1>
+            <input type="text" class="search-box" placeholder="Search technical issues..." onkeyup="filterTable('technical-table', this.value)">
+            
+            <table id="technical-table">
+                <thead>
+                    <tr>
+                        <th onclick="sortTable('technical-table', 0)">Issue Type <span class="sort-indicator">↕</span></th>
+                        <th onclick="sortTable('technical-table', 1)">Current State <span class="sort-indicator">↕</span></th>
+                        <th onclick="sortTable('technical-table', 2)">Recommended Fix <span class="sort-indicator">↕</span></th>
+                        <th onclick="sortTable('technical-table', 3)">Priority <span class="sort-indicator">↕</span></th>
+                        <th onclick="sortTable('technical-table', 4)">Effort <span class="sort-indicator">↕</span></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Title Tag Template Error</td>
+                        <td>All titles contain "English (American US)"</td>
+                        <td>Remove template suffix, optimize for keywords</td>
+                        <td><span class="priority-high">HIGH</span></td>
+                        <td>1 hour</td>
+                    </tr>
+                    <tr>
+                        <td>URL Structure</td>
+                        <td>/en-US/ prefix, underscores, mixed patterns</td>
+                        <td>Clean URLs with hyphens, remove /en-US/</td>
+                        <td><span class="priority-high">HIGH</span></td>
+                        <td>3 hours</td>
+                    </tr>
+                    <tr>
+                        <td>Duplicate Content</td>
+                        <td>/memberarticles = /en-US/index (identical)</td>
+                        <td>301 redirect or create unique content</td>
+                        <td><span class="status-critical">CRITICAL</span></td>
+                        <td>2 hours</td>
+                    </tr>
+                    <tr>
+                        <td>Meta Descriptions</td>
+                        <td>7/9 pages have identical generic descriptions</td>
+                        <td>Write unique, keyword-optimized descriptions</td>
+                        <td><span class="priority-high">HIGH</span></td>
+                        <td>2 hours</td>
+                    </tr>
+                    <tr>
+                        <td>Sitemap Issues</td>
+                        <td>Stale dates (8+ months), URL mismatch</td>
+                        <td>Update lastmod dates, fix robots.txt URL</td>
+                        <td><span class="priority-medium">MEDIUM</span></td>
+                        <td>30 minutes</td>
+                    </tr>
+                    <tr>
+                        <td>Mobile Accessibility</td>
+                        <td>user-scalable=no blocks zoom</td>
+                        <td>Enable pinch-to-zoom for accessibility</td>
+                        <td><span class="priority-medium">MEDIUM</span></td>
+                        <td>15 minutes</td>
+                    </tr>
+                    <tr>
+                        <td>Broken Links</td>
+                        <td>Multiple "click here" links are empty</td>
+                        <td>Fix all internal link targets</td>
+                        <td><span class="priority-medium">MEDIUM</span></td>
+                        <td>1 hour</td>
+                    </tr>
+                    <tr>
+                        <td>OG URLs</td>
+                        <td>Using HTTP instead of HTTPS</td>
+                        <td>Update all og:url values to HTTPS</td>
+                        <td><span class="priority-low">LOW</span></td>
+                        <td>30 minutes</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Keyword Research Tab -->
+        <div id="keyword-research" class="tab-content">
+            <h1>Comprehensive Keyword Research</h1>
+            <input type="text" class="search-box" placeholder="Search keywords..." onkeyup="filterTable('keyword-table', this.value)">
+            
+            <table id="keyword-table">
+                <thead>
+                    <tr>
+                        <th onclick="sortTable('keyword-table', 0)">Keyword <span class="sort-indicator">↕</span></th>
+                        <th onclick="sortTable('keyword-table', 1)">Monthly Searches <span class="sort-indicator">↕</span></th>
+                        <th onclick="sortTable('keyword-table', 2)">Difficulty <span class="sort-indicator">↕</span></th>
+                        <th onclick="sortTable('keyword-table', 3)">Intent <span class="sort-indicator">↕</span></th>
+                        <th onclick="sortTable('keyword-table', 4)">Target Page <span class="sort-indicator">↕</span></th>
+                        <th onclick="sortTable('keyword-table', 5)">Priority <span class="sort-indicator">↕</span></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>business networking groups near me</td><td>1500</td><td><span class="difficulty-medium">Medium</span></td><td>Local</td><td>Find a Chapter</td><td><span class="priority-high">HIGH</span></td></tr>
+                    <tr><td>networking events Atlanta</td><td>2400</td><td><span class="difficulty-high">High</span></td><td>Local</td><td>Events</td><td><span class="priority-high">HIGH</span></td></tr>
+                    <tr><td>business referral group Atlanta</td><td>500</td><td><span class="difficulty-low">Low</span></td><td>Local</td><td>Homepage</td><td><span class="priority-high">HIGH</span></td></tr>
+                    <tr><td>BNI chapter Atlanta</td><td>300</td><td><span class="difficulty-low">Low</span></td><td>Brand</td><td>Find a Chapter</td><td><span class="priority-high">HIGH</span></td></tr>
+                    <tr><td>how to get business referrals</td><td>800</td><td><span class="difficulty-medium">Medium</span></td><td>Educational</td><td>Blog</td><td><span class="priority-medium">MEDIUM</span></td></tr>
+                    <tr><td>professional networking Atlanta</td><td>600</td><td><span class="difficulty-medium">Medium</span></td><td>Local</td><td>Homepage</td><td><span class="priority-high">HIGH</span></td></tr>
+                    <tr><td>small business networking Georgia</td><td>400</td><td><span class="difficulty-low">Low</span></td><td>Local</td><td>Homepage</td><td><span class="priority-medium">MEDIUM</span></td></tr>
+                    <tr><td>networking breakfast Atlanta</td><td>300</td><td><span class="difficulty-low">Low</span></td><td>Local</td><td>Events</td><td><span class="priority-medium">MEDIUM</span></td></tr>
+                    <tr><td>BNI membership cost</td><td>1000</td><td><span class="difficulty-medium">Medium</span></td><td>Commercial</td><td>Pricing Page</td><td><span class="priority-high">HIGH</span></td></tr>
+                    <tr><td>business leads group</td><td>500</td><td><span class="difficulty-medium">Medium</span></td><td>Commercial</td><td>Why BNI</td><td><span class="priority-medium">MEDIUM</span></td></tr>
+                    <tr><td>Alpharetta networking group</td><td>200</td><td><span class="difficulty-low">Low</span></td><td>Local</td><td>Alpharetta Page</td><td><span class="priority-high">HIGH</span></td></tr>
+                    <tr><td>Marietta networking group</td><td>200</td><td><span class="difficulty-low">Low</span></td><td>Local</td><td>Marietta Page</td><td><span class="priority-high">HIGH</span></td></tr>
+                    <tr><td>Roswell business networking</td><td>150</td><td><span class="difficulty-low">Low</span></td><td>Local</td><td>Roswell Page</td><td><span class="priority-medium">MEDIUM</span></td></tr>
+                    <tr><td>networking groups for realtors Atlanta</td><td>180</td><td><span class="difficulty-low">Low</span></td><td>Niche</td><td>Blog</td><td><span class="priority-medium">MEDIUM</span></td></tr>
+                    <tr><td>business networking international</td><td>600</td><td><span class="difficulty-high">High</span></td><td>Brand</td><td>About</td><td><span class="priority-medium">MEDIUM</span></td></tr>
+                    <tr><td>referral marketing strategy</td><td>450</td><td><span class="difficulty-medium">Medium</span></td><td>Educational</td><td>Blog</td><td><span class="priority-medium">MEDIUM</span></td></tr>
+                    <tr><td>networking tips for business owners</td><td>350</td><td><span class="difficulty-medium">Medium</span></td><td>Educational</td><td>Blog</td><td><span class="priority-low">LOW</span></td></tr>
+                    <tr><td>what is BNI</td><td>800</td><td><span class="difficulty-low">Low</span></td><td>Informational</td><td>About</td><td><span class="priority-high">HIGH</span></td></tr>
+                    <tr><td>givers gain philosophy</td><td>120</td><td><span class="difficulty-low">Low</span></td><td>Brand</td><td>Why BNI</td><td><span class="priority-medium">MEDIUM</span></td></tr>
+                    <tr><td>BNI visitor day</td><td>90</td><td><span class="difficulty-low">Low</span></td><td>Commercial</td><td>Visit</td><td><span class="priority-medium">MEDIUM</span></td></tr>
+                    <tr><td>networking events near me</td><td>3200</td><td><span class="difficulty-high">High</span></td><td>Local</td><td>Events</td><td><span class="priority-high">HIGH</span></td></tr>
+                    <tr><td>business networking meetup Atlanta</td><td>280</td><td><span class="difficulty-medium">Medium</span></td><td>Local</td><td>Events</td><td><span class="priority-medium">MEDIUM</span></td></tr>
+                    <tr><td>referral partners</td><td>400</td><td><span class="difficulty-medium">Medium</span></td><td>Educational</td><td>Blog</td><td><span class="priority-low">LOW</span></td></tr>
+                    <tr><td>networking for introverts</td><td>250</td><td><span class="difficulty-low">Low</span></td><td>Educational</td><td>Blog</td><td><span class="priority-low">LOW</span></td></tr>
+                    <tr><td>BNI training</td><td>180</td><td><span class="difficulty-low">Low</span></td><td>Educational</td><td>Training</td><td><span class="priority-medium">MEDIUM</span></td></tr>
+                    <tr><td>business referrals</td><td>1200</td><td><span class="difficulty-high">High</span></td><td>Commercial</td><td>Homepage</td><td><span class="priority-high">HIGH</span></td></tr>
+                    <tr><td>lead generation groups</td><td>350</td><td><span class="difficulty-medium">Medium</span></td><td>Commercial</td><td>Why BNI</td><td><span class="priority-medium">MEDIUM</span></td></tr>
+                    <tr><td>networking calendar Atlanta</td><td>150</td><td><span class="difficulty-low">Low</span></td><td>Local</td><td>Events</td><td><span class="priority-low">LOW</span></td></tr>
+                    <tr><td>business growth through networking</td><td>320</td><td><span class="difficulty-medium">Medium</span></td><td>Educational</td><td>Blog</td><td><span class="priority-medium">MEDIUM</span></td></tr>
+                    <tr><td>word of mouth marketing</td><td>600</td><td><span class="difficulty-high">High</span></td><td>Educational</td><td>Blog</td><td><span class="priority-low">LOW</span></td></tr>
+                    <tr><td>networking breakfast near me</td><td>800</td><td><span class="difficulty-medium">Medium</span></td><td>Local</td><td>Find a Chapter</td><td><span class="priority-medium">MEDIUM</span></td></tr>
+                    <tr><td>business networking groups Georgia</td><td>220</td><td><span class="difficulty-low">Low</span></td><td>Local</td><td>Homepage</td><td><span class="priority-high">HIGH</span></td></tr>
+                    <tr><td>professional referral network</td><td>180</td><td><span class="difficulty-medium">Medium</span></td><td>Commercial</td><td>Why BNI</td><td><span class="priority-medium">MEDIUM</span></td></tr>
+                    <tr><td>networking group membership</td><td>160</td><td><span class="difficulty-low">Low</span></td><td>Commercial</td><td>Join</td><td><span class="priority-medium">MEDIUM</span></td></tr>
+                    <tr><td>BNI Georgia chapters</td><td>140</td><td><span class="difficulty-low">Low</span></td><td>Local</td><td>Find a Chapter</td><td><span class="priority-high">HIGH</span></td></tr>
+                    <tr><td>networking events calendar</td><td>380</td><td><span class="difficulty-medium">Medium</span></td><td>Local</td><td>Events</td><td><span class="priority-medium">MEDIUM</span></td></tr>
+                    <tr><td>business development networking</td><td>290</td><td><span class="difficulty-medium">Medium</span></td><td>Commercial</td><td>Why BNI</td><td><span class="priority-low">LOW</span></td></tr>
+                    <tr><td>referral marketing group</td><td>120</td><td><span class="difficulty-low">Low</span></td><td>Commercial</td><td>Homepage</td><td><span class="priority-medium">MEDIUM</span></td></tr>
+                    <tr><td>networking for small business</td><td>450</td><td><span class="difficulty-medium">Medium</span></td><td>Educational</td><td>Blog</td><td><span class="priority-medium">MEDIUM</span></td></tr>
+                    <tr><td>business referral program</td><td>380</td><td><span class="difficulty-medium">Medium</span></td><td>Commercial</td><td>Why BNI</td><td><span class="priority-low">LOW</span></td></tr>
+                    <tr><td>join business networking group</td><td>200</td><td><span class="difficulty-low">Low</span></td><td>Commercial</td><td>Join</td><td><span class="priority-high">HIGH</span></td></tr>
+                    <tr><td>networking organizations Atlanta</td><td>180</td><td><span class="difficulty-medium">Medium</span></td><td>Local</td><td>Homepage</td><td><span class="priority-medium">MEDIUM</span></td></tr>
+                    <tr><td>business networking benefits</td><td>320</td><td><span class="difficulty-low">Low</span></td><td>Educational</td><td>Why BNI</td><td><span class="priority-medium">MEDIUM</span></td></tr>
+                    <tr><td>networking group rules</td><td>150</td><td><span class="difficulty-low">Low</span></td><td>Informational</td><td>FAQ</td><td><span class="priority-low">LOW</span></td></tr>
+                    <tr><td>BNI presentation topics</td><td>80</td><td><span class="difficulty-low">Low</span></td><td>Educational</td><td>Blog</td><td><span class="priority-low">LOW</span></td></tr>
+                    <tr><td>networking statistics</td><td>280</td><td><span class="difficulty-medium">Medium</span></td><td>Educational</td><td>Blog</td><td><span class="priority-low">LOW</span></td></tr>
+                    <tr><td>effective networking strategies</td><td>240</td><td><span class="difficulty-medium">Medium</span></td><td>Educational</td><td>Blog</td><td><span class="priority-low">LOW</span></td></tr>
+                    <tr><td>business networking events Georgia</td><td>160</td><td><span class="difficulty-low">Low</span></td><td>Local</td><td>Events</td><td><span class="priority-medium">MEDIUM</span></td></tr>
+                    <tr><td>networking follow up tips</td><td>120</td><td><span class="difficulty-low">Low</span></td><td>Educational</td><td>Blog</td><td><span class="priority-low">LOW</span></td></tr>
+                    <tr><td>BNI success stories</td><td>90</td><td><span class="difficulty-low">Low</span></td><td>Social Proof</td><td>Testimonials</td><td><span class="priority-medium">MEDIUM</span></td></tr>
+                    <tr><td>networking elevator pitch</td><td>200</td><td><span class="difficulty-low">Low</span></td><td>Educational</td><td>Blog</td><td><span class="priority-low">LOW</span></td></tr>
+                    <tr><td>business networking etiquette</td><td>180</td><td><span class="difficulty-low">Low</span></td><td>Educational</td><td>Blog</td><td><span class="priority-low">LOW</span></td></tr>
+                    <tr><td>networking ROI</td><td>160</td><td><span class="difficulty-medium">Medium</span></td><td>Educational</td><td>Blog</td><td><span class="priority-medium">MEDIUM</span></td></tr>
+                    <tr><td>professional networking benefits</td><td>220</td><td><span class="difficulty-low">Low</span></td><td>Educational</td><td>Why BNI</td><td><span class="priority-medium">MEDIUM</span></td></tr>
+                    <tr><td>networking accountability</td><td>100</td><td><span class="difficulty-low">Low</span></td><td>Educational</td><td>Blog</td><td><span class="priority-low">LOW</span></td></tr>
+                    <tr><td>business networking tools</td><td>140</td><td><span class="difficulty-medium">Medium</span></td><td>Educational</td><td>Blog</td><td><span class="priority-low">LOW</span></td></tr>
+                    <tr><td>networking membership fee</td><td>180</td><td><span class="difficulty-low">Low</span></td><td>Commercial</td><td>Pricing</td><td><span class="priority-medium">MEDIUM</span></td></tr>
+                    <tr><td>BNI referral tracking</td><td>70</td><td><span class="difficulty-low">Low</span></td><td>Educational</td><td>Blog</td><td><span class="priority-low">LOW</span></td></tr>
+                    <tr><td>networking goal setting</td><td>120</td><td><span class="difficulty-low">Low</span></td><td>Educational</td><td>Blog</td><td><span class="priority-low">LOW</span></td></tr>
+                    <tr><td>business networking mistakes</td><td>150</td><td><span class="difficulty-low">Low</span></td><td>Educational</td><td>Blog</td><td><span class="priority-low">LOW</span></td></tr>
+                    <tr><td>networking group leadership</td><td>90</td><td><span class="difficulty-low">Low</span></td><td>Educational</td><td>Leadership</td><td><span class="priority-low">LOW</span></td></tr>
+                    <tr><td>BNI director training</td><td>60</td><td><span class="difficulty-low">Low</span></td><td>Educational</td><td>Training</td><td><span class="priority-low">LOW</span></td></tr>
+                    <tr><td>networking retreat Atlanta</td><td>80</td><td><span class="difficulty-low">Low</span></td><td>Local</td><td>Events</td><td><span class="priority-low">LOW</span></td></tr>
+                    <tr><td>business networking certification</td><td>110</td><td><span class="difficulty-low">Low</span></td><td>Educational</td><td>Training</td><td><span class="priority-low">LOW</span></td></tr>
+                    <tr><td>networking referral system</td><td>100</td><td><span class="difficulty-low">Low</span></td><td>Educational</td><td>Blog</td><td><span class="priority-low">LOW</span></td></tr>
+                    <tr><td>BNI meeting format</td><td>80</td><td><span class="difficulty-low">Low</span></td><td>Informational</td><td>FAQ</td><td><span class="priority-medium">MEDIUM</span></td></tr>
+                    <tr><td>networking power partners</td><td>70</td><td><span class="difficulty-low">Low</span></td><td>Educational</td><td>Blog</td><td><span class="priority-low">LOW</span></td></tr>
+                    <tr><td>business networking apps</td><td>140</td><td><span class="difficulty-medium">Medium</span></td><td>Educational</td><td>Blog</td><td><span class="priority-low">LOW</span></td></tr>
+                    <tr><td>networking conversation starters</td><td>160</td><td><span class="difficulty-low">Low</span></td><td>Educational</td><td>Blog</td><td><span class="priority-low">LOW</span></td></tr>
+                    <tr><td>BNI one to ones</td><td>50</td><td><span class="difficulty-low">Low</span></td><td>Educational</td><td>Blog</td><td><span class="priority-low">LOW</span></td></tr>
+                    <tr><td>networking confidence building</td><td>90</td><td><span class="difficulty-low">Low</span></td><td>Educational</td><td>Blog</td><td><span class="priority-low">LOW</span></td></tr>
+                    <tr><td>business referral etiquette</td><td>80</td><td><span class="difficulty-low">Low</span></td><td>Educational</td><td>Blog</td><td><span class="priority-low">LOW</span></td></tr>
+                    <tr><td>networking time management</td><td>120</td><td><span class="difficulty-low">Low</span></td><td>Educational</td><td>Blog</td><td><span class="priority-low">LOW</span></td></tr>
+                    <tr><td>BNI chapter growth</td><td>60</td><td><span class="difficulty-low">Low</span></td><td>Educational</td><td>Leadership</td><td><span class="priority-low">LOW</span></td></tr>
+                    <tr><td>networking industry trends</td><td>100</td><td><span class="difficulty-medium">Medium</span></td><td>Educational</td><td>Blog</td><td><span class="priority-low">LOW</span></td></tr>
+                    <tr><td>business networking courses</td><td>110</td><td><span class="difficulty-medium">Medium</span></td><td>Educational</td><td>Training</td><td><span class="priority-low">LOW</span></td></tr>
+                    <tr><td>networking best practices</td><td>180</td><td><span class="difficulty-medium">Medium</span></td><td>Educational</td><td>Blog</td><td><span class="priority-low">LOW</span></td></tr>
+                    <tr><td>referral partner program</td><td>150</td><td><span class="difficulty-medium">Medium</span></td><td>Commercial</td><td>Partners</td><td><span class="priority-low">LOW</span></td></tr>
+                    <tr><td>networking event planning</td><td>140</td><td><span class="difficulty-medium">Medium</span></td><td>Educational</td><td>Blog</td><td><span class="priority-low">LOW</span></td></tr>
+                    <tr><td>BNI visitor guidelines</td><td>40</td><td><span class="difficulty-low">Low</span></td><td>Informational</td><td>Visit</td><td><span class="priority-medium">MEDIUM</span></td></tr>
+                    <tr><td>networking relationship building</td><td>130</td><td><span class="difficulty-low">Low</span></td><td>Educational</td><td>Blog</td><td><span class="priority-low">LOW</span></td></tr>
+                    <tr><td>business networking coach</td><td>90</td><td><span class="difficulty-medium">Medium</span></td><td>Commercial</td><td>Training</td><td><span class="priority-low">LOW</span></td></tr>
+                    <tr><td>networking group diversity</td><td>70</td><td><span class="difficulty-low">Low</span></td><td>Educational</td><td>Blog</td><td><span class="priority-low">LOW</span></td></tr>
+                    <tr><td>referral marketing automation</td><td>80</td><td><span class="difficulty-medium">Medium</span></td><td>Educational</td><td>Blog</td><td><span class="priority-low">LOW</span></td></tr>
+                    <tr><td>networking mentor</td><td>110</td><td><span class="difficulty-medium">Medium</span></td><td>Educational</td><td>Blog</td><td><span class="priority-low">LOW</span></td></tr>
+                    <tr><td>BNI chapter awards</td><td>30</td><td><span class="difficulty-low">Low</span></td><td>Brand</td><td>Awards</td><td><span class="priority-low">LOW</span></td></tr>
+                    <tr><td>networking group evaluation</td><td>60</td><td><span class="difficulty-low">Low</span></td><td>Educational</td><td>Blog</td><td><span class="priority-low">LOW</span></td></tr>
+                    <tr><td>business networking workshop</td><td>100</td><td><span class="difficulty-medium">Medium</span></td><td>Educational</td><td>Training</td><td><span class="priority-low">LOW</span></td></tr>
+                    <tr><td>networking group commitment</td><td>50</td><td><span class="difficulty-low">Low</span></td><td>Educational</td><td>FAQ</td><td><span class="priority-low">LOW</span></td></tr>
+                    <tr><td>referral tracking software</td><td>120</td><td><span class="difficulty-medium">Medium</span></td><td>Educational</td><td>Blog</td><td><span class="priority-low">LOW</span></td></tr>
+                    <tr><td>networking virtual events</td><td>180</td><td><span class="difficulty-medium">Medium</span></td><td>Educational</td><td>Events</td><td><span class="priority-medium">MEDIUM</span></td></tr>
+                    <tr><td>business networking goals</td><td>90</td><td><span class="difficulty-low">Low</span></td><td>Educational</td><td>Blog</td><td><span class="priority-low">LOW</span></td></tr>
+                    <tr><td>BNI chapter meeting</td><td>120</td><td><span class="difficulty-low">Low</span></td><td>Informational</td><td>Visit</td><td><span class="priority-medium">MEDIUM</span></td></tr>
+                    <tr><td>networking group expectations</td><td>70</td><td><span class="difficulty-low">Low</span></td><td>Educational</td><td>FAQ</td><td><span class="priority-low">LOW</span></td></tr>
+                    <tr><td>business referral guidelines</td><td>80</td><td><span class="difficulty-low">Low</span></td><td>Educational</td><td>Blog</td><td><span class="priority-low">LOW</span></td></tr>
+                    <tr><td>networking group benefits</td><td>150</td><td><span class="difficulty-low">Low</span></td><td>Educational</td><td>Why BNI</td><td><span class="priority-medium">MEDIUM</span></td></tr>
+                    <tr><td>referral marketing tips</td><td>140</td><td><span class="difficulty-medium">Medium</span></td><td>Educational</td><td>Blog</td><td><span class="priority-low">LOW</span></td></tr>
+                    <tr><td>networking for professionals</td><td>200</td><td><span class="difficulty-medium">Medium</span></td><td>Educational</td><td>Homepage</td><td><span class="priority-medium">MEDIUM</span></td></tr>
+                    <tr><td>BNI membership benefits</td><td>160</td><td><span class="difficulty-low">Low</span></td><td>Commercial</td><td>Why BNI</td><td><span class="priority-medium">MEDIUM</span></td></tr>
+                    <tr><td>networking group leadership</td><td>80</td><td><span class="difficulty-low">Low</span></td><td>Educational</td><td>Leadership</td><td><span class="priority-low">LOW</span></td></tr>
+                    <tr><td>business networking success</td><td>120</td><td><span class="difficulty-medium">Medium</span></td><td>Educational</td><td>Success Stories</td><td><span class="priority-medium">MEDIUM</span></td></tr>
+                    <tr><td>networking referral process</td><td>90</td><td><span class="difficulty-low">Low</span></td><td>Educational</td><td>Blog</td><td><span class="priority-low">LOW</span></td></tr>
+                    <tr><td>BNI chapter directory</td><td>100</td><td><span class="difficulty-low">Low</span></td><td>Local</td><td>Find a Chapter</td><td><span class="priority-medium">MEDIUM</span></td></tr>
+                    <tr><td>networking group pricing</td><td>110</td><td><span class="difficulty-low">Low</span></td><td>Commercial</td><td>Pricing</td><td><span class="priority-medium">MEDIUM</span></td></tr>
+                    <tr><td>business networking value</td><td>80</td><td><span class="difficulty-low">Low</span></td><td>Educational</td><td>Why BNI</td><td><span class="priority-low">LOW</span></td></tr>
+                    <tr><td>referral marketing results</td><td>70</td><td><span class="difficulty-medium">Medium</span></td><td>Social Proof</td><td>Testimonials</td><td><span class="priority-low">LOW</span></td></tr>
+                    <tr><td>networking group comparison</td><td>90</td><td><span class="difficulty-medium">Medium</span></td><td>Commercial</td><td>Blog</td><td><span class="priority-medium">MEDIUM</span></td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Content Strategy Tab -->
+        <div id="content-strategy" class="tab-content">
+            <h1>Content Strategy & Landing Pages</h1>
+            
+            <div class="landing-page-content">
+                <h2>1. Business Networking Groups Atlanta - Homepage Optimization</h2>
+                <div class="code-block">
+<strong>Target Keywords:</strong> business networking groups Atlanta, professional networking Atlanta, BNI Atlanta
+
+<strong>Meta Title (58 chars):</strong>
+BNI Atlanta | Business Networking & Referrals in Georgia
+
+<strong>Meta Description (155 chars):</strong>
+Join 65+ BNI chapters across Georgia. Build your business through trusted referrals, exclusive networking, and the Givers Gain philosophy. Visit free!
+
+<strong>H1:</strong> Grow Your Business with Atlanta's Most Trusted Referral Network
+
+<strong>Content Outline:</strong>
+- Hero: $44M in referrals generated by 65+ Georgia chapters
+- Social proof: 355K members globally, 76 countries
+- Value props: Exclusive networking, quality referrals, proven system
+- Chapter finder tool with map
+- Success stories from local members
+- CTA: "Get Invited to Visit a Chapter Free"
+
+<strong>Schema Markup:</strong> Organization, LocalBusiness, WebSite
+                </div>
+            </div>
+
+            <div class="landing-page-content">
+                <h2>2. Networking Groups Alpharetta - Location Page</h2>
+                <div class="code-block">
+<strong>Target Keywords:</strong> networking groups Alpharetta GA, business networking Alpharetta
+
+<strong>Meta Title (57 chars):</strong>
+BNI Networking Groups in Alpharetta, GA | Visit Free
+
+<strong>Meta Description (153 chars):</strong>
+Find BNI business networking groups in Alpharetta, Georgia. Weekly breakfast meetings, quality referrals, professional growth. Visit a chapter free!
+
+<strong>H1:</strong> BNI Business Networking Groups in Alpharetta, Georgia
+
+<strong>Content Structure:</strong>
+- Introduction to Alpharetta's business community
+- List of local BNI chapters with meeting details
+- Success stories from Alpharetta members
+- Local business statistics and networking benefits
+- Embedded Google Map of chapter locations
+- CTA: "Visit an Alpharetta Chapter"
+
+<strong>Word Count:</strong> 600-800 words
+<strong>Schema:</strong> LocalBusiness, Place, Event
+                </div>
+            </div>
+
+            <div class="landing-page-content">
+                <h2>3. BNI Membership Cost - Commercial Page</h2>
+                <div class="code-block">
+<strong>Target Keywords:</strong> BNI membership cost, BNI fees, networking group pricing
+
+<strong>Meta Title (59 chars):</strong>
+BNI Membership Cost: Investment & ROI Guide | BNI Atlanta
+
+<strong>Meta Description (154 chars):</strong>
+Learn about BNI membership investment, what's included, and ROI potential. Most members generate 10x+ their membership fee through referrals.
+
+<strong>H1:</strong> BNI Membership Investment: Cost, Value & ROI
+
+<strong>Content Sections:</strong>
+- Annual membership fee structure
+- What's included (training, networking, support)
+- ROI calculator with member examples
+- Comparison vs. traditional advertising costs
+- Payment options and chapter-specific details
+- FAQ about fees and value
+- CTA: "Calculate Your Potential ROI"
+
+<strong>Schema:</strong> PriceSpecification, FAQPage
+                </div>
+            </div>
+
+            <div class="landing-page-content">
+                <h2>4. How to Get Business Referrals - Educational Blog</h2>
+                <div class="code-block">
+<strong>Target Keywords:</strong> how to get business referrals, referral marketing strategy
+
+<strong>Meta Title (58 chars):</strong>
+How to Get Business Referrals: 10 Proven Strategies
+
+<strong>Meta Description (152 chars):</strong>
+Discover 10 proven strategies to generate quality business referrals. Learn from BNI's referral experts who've generated $44M in Atlanta alone.
+
+<strong>H1:</strong> How to Get Business Referrals: 10 Proven Strategies That Work
+
+<strong>Content Outline:</strong>
+1. Build genuine relationships first
+2. Provide exceptional service consistently
+3. Ask for referrals strategically
+4. Join structured referral networks (like BNI)
+5. Create referral partner programs
+6. Use the Givers Gain philosophy
+7. Follow up and track referrals
+8. Express gratitude meaningfully
+9. Educate your network on ideal clients
+10. Leverage testimonials and case studies
+
+<strong>Word Count:</strong> 2,500+ words
+<strong>Schema:</strong> Article, HowTo
+                </div>
+            </div>
+
+            <div class="landing-page-content">
+                <h2>5. What to Expect at Your First BNI Meeting - Guide</h2>
+                <div class="code-block">
+<strong>Target Keywords:</strong> what to expect at BNI meeting, first BNI meeting, BNI visitor experience
+
+<strong>Meta Title (59 chars):</strong>
+What to Expect at Your First BNI Meeting | Visitor Guide
+
+<strong>Meta Description (149 chars):</strong>
+Nervous about your first BNI meeting? Learn exactly what happens, what to bring, and how to make the most of your chapter visit experience.
+
+<strong>H1:</strong> What to Expect at Your First BNI Meeting: A Visitor's Guide
+
+<strong>Content Structure:</strong>
+- Pre-meeting preparation checklist
+- Meeting agenda breakdown (60-second intros, presentations, etc.)
+- What to bring (business cards, notepad, elevator pitch)
+- Meeting etiquette and expectations
+- Follow-up process after the meeting
+- How to evaluate if the chapter is right for you
+- Next steps toward membership
+
+<strong>Word Count:</strong> 1,500+ words
+<strong>Schema:</strong> HowTo, FAQPage
+                </div>
+            </div>
+        </div>
+
+        <!-- Location Pages Tab -->
+        <div id="location-pages" class="tab-content">
+            <h1>Priority Location Pages Strategy</h1>
+            <input type="text" class="search-box" placeholder="Search cities..." onkeyup="filterTable('location-table', this.value)">
+            
+            <table id="location-table">
+                <thead>
+                    <tr>
+                        <th onclick="sortTable('location-table', 0)">Priority <span class="sort-indicator">↕</span></th>
+                        <th onclick="sortTable('location-table', 1)">City <span class="sort-indicator">↕</span></th>
+                        <th onclick="sortTable('location-table', 2)">Target URL <span class="sort-indicator">↕</span></th>
+                        <th onclick="sortTable('location-table', 3)">Primary Keyword <span class="sort-indicator">↕</span></th>
+                        <th onclick="sortTable('location-table', 4)">Est. Monthly Searches <span class="sort-indicator">↕</span></th>
+                        <th onclick="sortTable('location-table', 5)">Chapters <span class="sort-indicator">↕</span></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="priority-high">1</span></td>
+                        <td>Atlanta</td>
+                        <td>/networking-groups-atlanta-ga</td>
+                        <td>business networking groups Atlanta</td>
+                        <td>1,500+</td>
+                        <td>15+</td>
+                    </tr>
+                    <tr>
+                        <td><span class="priority-high">2</span></td>
+                        <td>Marietta</td>
+                        <td>/networking-groups-marietta-ga</td>
+                        <td>networking groups Marietta GA</td>
+                        <td>200</td>
+                        <td>3</td>
+                    </tr>
+                    <tr>
+                        <td><span class="priority-high">3</span></td>
+                        <td>Alpharetta</td>
+                        <td>/networking-groups-alpharetta-ga</td>
+                        <td>networking groups Alpharetta GA</td>
+                        <td>180</td>
+                        <td>4</td>
+                    </tr>
+                    <tr>
+                        <td><span class="priority-high">4</span></td>
+                        <td>Roswell</td>
+                        <td>/networking-groups-roswell-ga</td>
+                        <td>business networking Roswell GA</td>
+                        <td>150</td>
+                        <td>3</td>
+                    </tr>
+                    <tr>
+                        <td><span class="priority-medium">5</span></td>
+                        <td>Kennesaw</td>
+                        <td>/networking-groups-kennesaw-ga</td>
+                        <td>networking groups Kennesaw GA</td>
+                        <td>120</td>
+                        <td>2</td>
+                    </tr>
+                    <tr>
+                        <td><span class="priority-medium">6</span></td>
+                        <td>Cumming</td>
+                        <td>/networking-groups-cumming-ga</td>
+                        <td>business networking Cumming GA</td>
+                        <td>100</td>
+                        <td>2</td>
+                    </tr>
+                    <tr>
+                        <td><span class="priority-medium">7</span></td>
+                        <td>Woodstock</td>
+                        <td>/networking-groups-woodstock-ga</td>
+                        <td>networking groups Woodstock GA</td>
+                        <td>90</td>
+                        <td>2</td>
+                    </tr>
+                    <tr>
+                        <td><span class="priority-medium">8</span></td>
+                        <td>Smyrna</td>
+                        <td>/networking-groups-smyrna-ga</td>
+                        <td>business networking Smyrna GA</td>
+                        <td>80</td>
+                        <td>1</td>
+                    </tr>
+                    <tr>
+                        <td><span class="priority-medium">9</span></td>
+                        <td>Gainesville</td>
+                        <td>/networking-groups-gainesville-ga</td>
+                        <td>networking groups Gainesville GA</td>
+                        <td>70</td>
+                        <td>3</td>
+                    </tr>
+                    <tr>
+                        <td><span class="priority-medium">10</span></td>
+                        <td>McDonough</td>
+                        <td>/networking-groups-mcdonough-ga</td>
+                        <td>networking groups McDonough GA</td>
+                        <td>60</td>
+                        <td>1</td>
+                    </tr>
+                    <tr>
+                        <td><span class="priority-low">11</span></td>
+                        <td>Conyers</td>
+                        <td>/networking-groups-conyers-ga</td>
+                        <td>networking groups Conyers GA</td>
+                        <td>50</td>
+                        <td>1</td>
+                    </tr>
+                    <tr>
+                        <td><span class="priority-low">12</span></td>
+                        <td>Peachtree City</td>
+                        <td>/networking-groups-peachtree-city-ga</td>
+                        <td>networking groups Peachtree City GA</td>
+                        <td>50</td>
+                        <td>2</td>
+                    </tr>
+                    <tr>
+                        <td><span class="priority-low">13</span></td>
+                        <td>Norcross</td>
+                        <td>/networking-groups-norcross-ga</td>
+                        <td>networking groups Norcross GA</td>
+                        <td>45</td>
+                        <td>1</td>
+                    </tr>
+                    <tr>
+                        <td><span class="priority-low">14</span></td>
+                        <td>Monroe</td>
+                        <td>/networking-groups-monroe-ga</td>
+                        <td>networking groups Monroe GA</td>
+                        <td>40</td>
+                        <td>1</td>
+                    </tr>
+                    <tr>
+                        <td><span class="priority-low">15</span></td>
+                        <td>Rome</td>
+                        <td>/networking-groups-rome-ga</td>
+                        <td>networking groups Rome GA</td>
+                        <td>40</td>
+                        <td>2</td>
+                    </tr>
+                    <tr>
+                        <td><span class="priority-low">16</span></td>
+                        <td>Warner Robins</td>
+                        <td>/networking-groups-warner-robins-ga</td>
+                        <td>networking groups Warner Robins GA</td>
+                        <td>35</td>
+                        <td>1</td>
+                    </tr>
+                    <tr>
+                        <td><span class="priority-low">17</span></td>
+                        <td>Jefferson</td>
+                        <td>/networking-groups-jefferson-ga</td>
+                        <td>networking groups Jefferson GA</td>
+                        <td>30</td>
+                        <td>1</td>
+                    </tr>
+                    <tr>
+                        <td><span class="priority-low">18</span></td>
+                        <td>Winder</td>
+                        <td>/networking-groups-winder-ga</td>
+                        <td>networking groups Winder GA</td>
+                        <td>25</td>
+                        <td>1</td>
+                    </tr>
+                    <tr>
+                        <td><span class="priority-low">19</span></td>
+                        <td>Brunswick</td>
+                        <td>/networking-groups-brunswick-ga</td>
+                        <td>networking groups Brunswick GA</td>
+                        <td>25</td>
+                        <td>1</td>
+                    </tr>
+                    <tr>
+                        <td><span class="priority-low">20</span></td>
+                        <td>Acworth</td>
+                        <td>/networking-groups-acworth-ga</td>
+                        <td>networking groups Acworth GA</td>
+                        <td>20</td>
+                        <td>1</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Schema & Code Tab -->
+        <div id="schema-code" class="tab-content">
+            <h1>Technical Implementation Code</h1>
+            
+            <h2>Corrected robots.txt File</h2>
+            <div class="code-block">
+User-agent: *
+Allow: /
+
+# Important pages
+Allow: /find-a-chapter
+Allow: /why-bni
+Allow: /how-to-join
+Allow: /events
+Allow: /testimonials
+Allow: /contact-us
+Allow: /faq
+
+# Location pages
+Allow: /networking-groups-atlanta-ga
+Allow: /networking-groups-marietta-ga
+Allow: /networking-groups-alpharetta-ga
+
+# Block admin and private areas
+Disallow: /admin/
+Disallow: /private/
+Disallow: /wp-admin/
+Disallow: /wp-includes/
+
+# Sitemap location (corrected from www.bniatl.com)
+Sitemap: https://bniatl.com/sitemap.xml
+            </div>
+
+            <h2>Organization Schema Markup</h2>
+            <div class="code-block">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "BNI Atlanta",
+  "url": "https://bniatl.com",
+  "logo": "https://bniatl.com/logo.png",
+  "telephone": "+1-678-264-8708",
+  "email": "info@bniatl.com",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "840 Cold Harbor Drive",
+    "addressLocality": "Roswell",
+    "addressRegion": "GA",
+    "postalCode": "30075",
+    "addressCountry": "US"
+  },
+  "areaServed": [
+    "Georgia",
+    "Atlanta",
+    "Marietta",
+    "Alpharetta",
+    "Roswell",
+    "Kennesaw",
+    "Cumming"
+  ],
+  "parentOrganization": {
+    "@type": "Organization",
+    "name": "BNI - Business Network International"
+  },
+  "sameAs": [
+    "https://www.facebook.com/BNIAtlanta",
+    "https://www.linkedin.com/company/bni-atlanta"
+  ],
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "4.8",
+    "reviewCount": "150"
+  },
+  "numberOfEmployees": "10-15",
+  "foundingDate": "1995"
+}
+            </div>
+
+            <h2>LocalBusiness Schema (for Location Pages)</h2>
+            <div class="code-block">
+{
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  "name": "BNI Business Networking - [City Name]",
+  "description": "Professional business networking groups in [City], Georgia. Weekly meetings focused on referral marketing and business growth.",
+  "url": "https://bniatl.com/networking-groups-[city]-ga",
+  "telephone": "+1-678-264-8708",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "[City Name]",
+    "addressRegion": "GA",
+    "addressCountry": "US"
+  },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": "[City Latitude]",
+    "longitude": "[City Longitude]"
+  },
+  "openingHours": "Mo-Fr 07:00-09:00",
+  "paymentAccepted": "Cash, Credit Card, Check",
+  "priceRange": "$$",
+  "parentOrganization": {
+    "@type": "Organization",
+    "name": "BNI Atlanta"
+  }
+}
+            </div>
+
+            <h2>FAQ Schema Markup</h2>
+            <div class="code-block">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How much does BNI membership cost?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "BNI membership includes an annual fee plus chapter dues. The investment typically ranges from $500-800 per year depending on the chapter. Most members generate 10x+ their membership fee through referrals."
+      }
+    },
+    {
+      "@type": "Question", 
+      "name": "What happens at a BNI meeting?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "BNI meetings follow a structured 90-minute format including networking, 60-second member introductions, a featured presentation, referral sharing, and one-to-one scheduling."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I find a BNI chapter near me?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Use our chapter finder tool or browse chapters by city. BNI Atlanta has 65+ chapters across Georgia meeting on different days and times to fit your schedule."
+      }
+    }
+  ]
+}
+            </div>
+
+            <h2>Event Schema (for Events Page)</h2>
+            <div class="code-block">
+{
+  "@context": "https://schema.org",
+  "@type": "Event",
+  "name": "BNI Chapter Visitor Day",
+  "description": "Visit a BNI chapter meeting to experience professional networking and referral marketing in action. Free for first-time visitors.",
+  "startDate": "2026-04-15T07:00:00-04:00",
+  "endDate": "2026-04-15T08:30:00-04:00",
+  "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+  "eventStatus": "https://schema.org/EventScheduled",
+  "location": {
+    "@type": "Place",
+    "name": "[Chapter Meeting Location]",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "[Meeting Address]",
+      "addressLocality": "[City]",
+      "addressRegion": "GA",
+      "postalCode": "[Zip]",
+      "addressCountry": "US"
+    }
+  },
+  "organizer": {
+    "@type": "Organization",
+    "name": "BNI Atlanta",
+    "url": "https://bniatl.com"
+  },
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD",
+    "description": "Free visitor pass for first-time attendees"
+  }
+}
+            </div>
+        </div>
+
+        <!-- Timeline Tab -->
+        <div id="timeline" class="tab-content">
+            <h1>12-Month Implementation Timeline</h1>
+            <input type="text" class="search-box" placeholder="Search timeline items..." onkeyup="filterTable('timeline-table', this.value)">
+            
+            <table id="timeline-table">
+                <thead>
+                    <tr>
+                        <th onclick="sortTable('timeline-table', 0)">Quarter <span class="sort-indicator">↕</span></th>
+                        <th onclick="sortTable('timeline-table', 1)">Month <span class="sort-indicator">↕</span></th>
+                        <th onclick="sortTable('timeline-table', 2)">Focus Area <span class="sort-indicator">↕</span></th>
+                        <th onclick="sortTable('timeline-table', 3)">Key Deliverables <span class="sort-indicator">↕</span></th>
+                        <th onclick="sortTable('timeline-table', 4)">Success Metrics <span class="sort-indicator">↕</span></th>
+                        <th onclick="sortTable('timeline-table', 5)">Priority <span class="sort-indicator">↕</span></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Q1</td>
+                        <td>Month 1</td>
+                        <td>Technical Foundation</td>
+                        <td>Fix title tags, URL structure, schema markup, analytics setup</td>
+                        <td>0 template errors, 100% schema validation</td>
+                        <td><span class="status-critical">CRITICAL</span></td>
+                    </tr>
+                    <tr>
+                        <td>Q1</td>
+                        <td>Month 2</td>
+                        <td>On-Page Optimization</td>
+                        <td>Rewrite meta descriptions, content strategy, keyword mapping</td>
+                        <td>100% unique metas, 75+ keywords mapped</td>
+                        <td><span class="priority-high">HIGH</span></td>
+                    </tr>
+                    <tr>
+                        <td>Q1</td>
+                        <td>Month 3</td>
+                        <td>Local SEO Foundation</td>
+                        <td>10 location pages, Google Business Profile optimization</td>
+                        <td>10 location pages indexed, 90%+ GBP score</td>
+                        <td><span class="status-critical">CRITICAL</span></td>
+                    </tr>
+                    <tr>
+                        <td>Q2</td>
+                        <td>Month 4</td>
+                        <td>Content Creation</td>
+                        <td>Blog launch with 8 articles, 10 more location pages</td>
+                        <td>18+ new content pieces, 25% traffic increase</td>
+                        <td><span class="priority-high">HIGH</span></td>
+                    </tr>
+                    <tr>
+                        <td>Q2</td>
+                        <td>Month 5</td>
+                        <td>Link Building</td>
+                        <td>20+ quality backlinks, digital PR campaign</td>
+                        <td>20+ backlinks acquired, 3+ linkable assets</td>
+                        <td><span class="priority-medium">MEDIUM</span></td>
+                    </tr>
+                    <tr>
+                        <td>Q2</td>
+                        <td>Month 6</td>
+                        <td>Performance Optimization</td>
+                        <td>Q2 review, conversion optimization, Core Web Vitals</td>
+                        <td>50% traffic increase, improved conversion rate</td>
+                        <td><span class="priority-medium">MEDIUM</span></td>
+                    </tr>
+                    <tr>
+                        <td>Q3</td>
+                        <td>Month 7</td>
+                        <td>Content Expansion</td>
+                        <td>Scale blog to 4 posts/month, featured snippet optimization</td>
+                        <td>4 posts published, 5+ featured snippets</td>
+                        <td><span class="priority-medium">MEDIUM</span></td>
+                    </tr>
+                    <tr>
+                        <td>Q3</td>
+                        <td>Month 8</td>
+                        <td>Technical Advancement</td>
+                        <td>Advanced schema, Core Web Vitals optimization</td>
+                        <td>All CWV metrics in "Good" range</td>
+                        <td><span class="priority-medium">MEDIUM</span></td>
+                    </tr>
+                    <tr>
+                        <td>Q3</td>
+                        <td>Month 9</td>
+                        <td>Authority Building</td>
+                        <td>Thought leadership content, strategic partnerships</td>
+                        <td>75-100% traffic increase from baseline</td>
+                        <td><span class="priority-medium">MEDIUM</span></td>
+                    </tr>
+                    <tr>
+                        <td>Q4</td>
+                        <td>Month 10</td>
+                        <td>Performance Maximization</td>
+                        <td>Optimize top content, conversion rate optimization</td>
+                        <td>Double down on what works</td>
+                        <td><span class="priority-high">HIGH</span></td>
+                    </tr>
+                    <tr>
+                        <td>Q4</td>
+                        <td>Month 11</td>
+                        <td>Competitive Advantage</td>
+                        <td>Gap exploitation, advanced content formats</td>
+                        <td>Capture competitor keywords</td>
+                        <td><span class="priority-medium">MEDIUM</span></td>
+                    </tr>
+                    <tr>
+                        <td>Q4</td>
+                        <td>Month 12</td>
+                        <td>Annual Review</td>
+                        <td>Comprehensive audit, Year 2 strategy</td>
+                        <td>150%+ traffic increase achieved</td>
+                        <td><span class="priority-high">HIGH</span></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h2>Quick Wins (Week 1 Priority)</h2>
+            <table id="quick-wins-table">
+                <thead>
+                    <tr>
+                        <th onclick="sortTable('quick-wins-table', 0)"># <span class="sort-indicator">↕</span></th>
+                        <th onclick="sortTable('quick-wins-table', 1)">Quick Win Action <span class="sort-indicator">↕</span></th>
+                        <th onclick="sortTable('quick-wins-table', 2)">Effort <span class="sort-indicator">↕</span></th>
+                        <th onclick="sortTable('quick-wins-table', 3)">Impact <span class="sort-indicator">↕</span></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>Remove "English (American US)" from all title tags</td>
+                        <td>1 hour</td>
+                        <td><span class="priority-high">HIGH</span></td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>Write unique meta descriptions for all 9 key pages</td>
+                        <td>2 hours</td>
+                        <td><span class="priority-high">HIGH</span></td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>Fix broken/empty hyperlinks on homepage</td>
+                        <td>1 hour</td>
+                        <td><span class="priority-high">HIGH</span></td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>Fix copyright template error {$copyright}</td>
+                        <td>15 minutes</td>
+                        <td><span class="priority-medium">MEDIUM</span></td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td>Change og:url from HTTP to HTTPS everywhere</td>
+                        <td>30 minutes</td>
+                        <td><span class="priority-medium">MEDIUM</span></td>
+                    </tr>
+                    <tr>
+                        <td>6</td>
+                        <td>Enable pinch-to-zoom (remove user-scalable=no)</td>
+                        <td>15 minutes</td>
+                        <td><span class="priority-medium">MEDIUM</span></td>
+                    </tr>
+                    <tr>
+                        <td>7</td>
+                        <td>Add Organization schema to homepage</td>
+                        <td>1 hour</td>
+                        <td><span class="priority-high">HIGH</span></td>
+                    </tr>
+                    <tr>
+                        <td>8</td>
+                        <td>Add FAQPage schema to FAQ page</td>
+                        <td>30 minutes</td>
+                        <td><span class="priority-high">HIGH</span></td>
+                    </tr>
+                    <tr>
+                        <td>9</td>
+                        <td>Fix sitemap URL in robots.txt (www → non-www)</td>
+                        <td>5 minutes</td>
+                        <td><span class="priority-medium">MEDIUM</span></td>
+                    </tr>
+                    <tr>
+                        <td>10</td>
+                        <td>Fix "yourslf" typo on homepage</td>
+                        <td>2 minutes</td>
+                        <td><span class="priority-low">LOW</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="footer">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports" class="logo-footer">
+    </div>
+
+    <script>
+        function showTab(tabName) {
+            // Hide all tab contents
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabContents.forEach(tab => tab.classList.remove('active'));
+            
+            // Remove active class from all nav tabs
+            const navTabs = document.querySelectorAll('.nav-tab');
+            navTabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Show selected tab content
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked nav tab
+            event.target.classList.add('active');
+        }
+
+        function sortTable(tableId, column) {
+            const table = document.getElementById(tableId);
+            const tbody = table.querySelector('tbody');
+            const rows = Array.from(tbody.querySelectorAll('tr'));
+            
+            const isNumeric = !isNaN(parseFloat(rows[0]?.cells[column]?.textContent?.replace(/[^0-9.-]/g, '')));
+            
+            rows.sort((a, b) => {
+                const aVal = a.cells[column].textContent.trim();
+                const bVal = b.cells[column].textContent.trim();
+                
+                if (isNumeric) {
+                    return parseFloat(aVal.replace(/[^0-9.-]/g, '')) - parseFloat(bVal.replace(/[^0-9.-]/g, ''));
+                } else {
+                    return aVal.localeCompare(bVal);
+                }
+            });
+            
+            // Clear tbody and append sorted rows
+            tbody.innerHTML = '';
+            rows.forEach(row => tbody.appendChild(row));
+            
+            // Update sort indicator
+            const ths = table.querySelectorAll('th');
+            ths.forEach(th => th.querySelector('.sort-indicator').textContent = '↕');
+            table.querySelector(`th:nth-child(${column + 1}) .sort-indicator`).textContent = '↑';
+        }
+
+        function filterTable(tableId, searchTerm) {
+            const table = document.getElementById(tableId);
+            const rows = table.querySelectorAll('tbody tr');
+            
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(searchTerm.toLowerCase()) ? '' : 'none';
+            });
+        }
+
+        // Initialize with first tab active
+        document.addEventListener('DOMContentLoaded', function() {
+            showTab('executive-summary');
+        });
+    </script>
+</body>
+</html>
