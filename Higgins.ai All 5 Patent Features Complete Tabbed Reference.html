@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<title>Higgins.ai — Patent Features 1–5</title>
+<style>
+  :root{
+    --dark:#0d0d0d;--mid:#1a1a1a;--border:#2e2e2e;--text:#e0e0e0;--subtext:#aaa;
+    --f1:#c0392b;--f2:#e67e22;--f3:#8e44ad;--f4:#16a085;--f5:#f39c12;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{background:var(--dark);color:var(--text);font-family:'Segoe UI',sans-serif;line-height:1.75;min-height:100vh;}
+
+  /* ── HEADER ── */
+  header{background:linear-gradient(135deg,#0d0d0d,#1a0a0a);padding:1.5rem 2rem 1rem;border-bottom:2px solid #333;}
+  header h1{font-size:1.3rem;color:#fff;}
+  header p{color:var(--subtext);font-size:.8rem;margin-top:.3rem;}
+  .hbadge{display:inline-block;background:#c0392b;color:#fff;font-size:.65rem;padding:.15rem .5rem;border-radius:3px;margin-left:.4rem;vertical-align:middle;}
+
+  /* ── TABS ── */
+  .tab-bar{display:flex;overflow-x:auto;background:#111;border-bottom:2px solid #222;gap:0;}
+  .tab-btn{flex:1;min-width:120px;padding:.85rem .5rem;border:none;background:transparent;color:var(--subtext);font-size:.78rem;font-weight:600;cursor:pointer;text-transform:uppercase;letter-spacing:.8px;border-bottom:3px solid transparent;transition:all .2s;white-space:nowrap;}
+  .tab-btn:hover{background:#1a1a1a;color:#fff;}
+  .tab-btn.active-f1{color:var(--f1);border-bottom-color:var(--f1);background:#1a0000;}
+  .tab-btn.active-f2{color:var(--f2);border-bottom-color:var(--f2);background:#1a0e00;}
+  .tab-btn.active-f3{color:var(--f3);border-bottom-color:var(--f3);background:#0e001a;}
+  .tab-btn.active-f4{color:var(--f4);border-bottom-color:var(--f4);background:#001a14;}
+  .tab-btn.active-f5{color:var(--f5);border-bottom-color:var(--f5);background:#1a1200;}
+
+  /* ── PANELS ── */
+  .tab-panel{display:none;max-width:960px;margin:0 auto;padding:2rem 1.5rem 4rem;}
+  .tab-panel.active{display:block;}
+
+  /* ── SHARED COMPONENTS ── */
+  .claim-box{background:var(--mid);padding:1rem 1.2rem;border-radius:4px;font-style:italic;font-size:.92rem;margin-bottom:1.5rem;}
+  .claim-box.f1{border-left:4px solid var(--f1);color:#f0d0d0;}
+  .claim-box.f2{border-left:4px solid var(--f2);color:#f0e0c0;}
+  .claim-box.f3{border-left:4px solid var(--f3);color:#d0c0f0;}
+  .claim-box.f4{border-left:4px solid var(--f4);color:#c0f0f0;}
+  .claim-box.f5{border-left:4px solid var(--f5);color:#f0e0b0;}
+
+  h2{font-size:.95rem;text-transform:uppercase;letter-spacing:1px;border-bottom:1px solid var(--border);padding-bottom:.4rem;margin-bottom:.9rem;}
+  h2.f1{color:var(--f1);}h2.f2{color:var(--f2);}h2.f3{color:var(--f3);}h2.f4{color:var(--f4);}h2.f5{color:var(--f5);}
+  h3{font-size:.93rem;color:var(--f2);margin:.9rem 0 .4rem;}
+  p{margin-bottom:.85rem;font-size:.92rem;}
+  section{margin-bottom:2.2rem;}
+  ul{padding-left:1.3rem;margin-bottom:.85rem;}
+  li{margin-bottom:.35rem;font-size:.91rem;}
+
+  .highlight{border-radius:4px;padding:.85rem 1rem;margin:.8rem 0;font-size:.88rem;}
+  .hl-f1{background:#1a0000;border:1px solid var(--f1);}  .hl-f1 strong{color:#f06060;}
+  .hl-f2{background:#1e1000;border:1px solid var(--f2);}  .hl-f2 strong{color:var(--f2);}
+  .hl-f3{background:#100a1e;border:1px solid var(--f3);}  .hl-f3 strong{color:#c39af0;}
+  .hl-f4{background:#001a1a;border:1px solid var(--f4);}  .hl-f4 strong{color:#4dd9d9;}
+  .hl-f5{background:#1a1200;border:1px solid var(--f5);}  .hl-f5 strong{color:var(--f5);}
+  .hl-blue{background:#001020;border:1px solid #2980b9;}  .hl-blue strong{color:#6fa8f0;}
+
+  .tag{display:inline-block;padding:.12rem .45rem;border-radius:3px;font-size:.7rem;font-weight:700;}
+  .tag-n{background:#1a3a1a;color:#6fcf6f;}
+  .tag-p{background:#3a2a00;color:#f0b429;}
+  .tag-d{background:#3a0000;color:#f06060;}
+  .tag-b{background:#0a1a3a;color:#6fa8f0;}
+
+  table{width:100%;border-collapse:collapse;font-size:.8rem;margin-top:.8rem;}
+  th{color:#fff;padding:.5rem .7rem;text-align:left;font-weight:600;}
+  th.f1{background:var(--f1);}th.f2{background:var(--f2);color:#000;}
+  th.f3{background:var(--f3);}th.f4{background:var(--f4);}th.f5{background:var(--f5);color:#000;}
+  td{padding:.5rem .7rem;border-bottom:1px solid var(--border);vertical-align:top;line-height:1.5;}
+  tr:nth-child(even) td{background:#141414;}
+
+  /* grids */
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem;}
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:.8rem;margin:1rem 0;}
+  .grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:.7rem;margin:1rem 0;}
+  .grid5{display:grid;grid-template-columns:repeat(5,1fr);gap:.6rem;margin:1rem 0;}
+  @media(max-width:700px){.grid2,.grid3,.grid4,.grid5{grid-template-columns:1fr;}}
+
+  .card{background:var(--mid);border:1px solid var(--border);border-radius:5px;padding:.9rem 1rem;}
+  .card .clabel{font-size:.67rem;text-transform:uppercase;letter-spacing:1px;font-weight:700;margin-bottom:.25rem;}
+  .card .ctitle{font-size:.84rem;color:#fff;font-weight:600;margin-bottom:.25rem;}
+  .card .cdesc{font-size:.76rem;color:var(--subtext);line-height:1.5;}
+  .card.red{border-color:var(--f1);}.card.red .clabel{color:var(--f1);}
+  .card.orange{border-color:var(--f2);}.card.orange .clabel{color:var(--f2);}
+  .card.purple{border-color:var(--f3);}.card.purple .clabel{color:var(--f3);}
+  .card.teal{border-color:var(--f4);}.card.teal .clabel{color:var(--f4);}
+  .card.gold{border-color:var(--f5);}.card.gold .clabel{color:var(--f5);}
+
+  /* JSON blocks */
+  .json-block{background:#0a0a0a;border:1px solid #333;border-radius:5px;padding:1rem 1.2rem;font-family:'Courier New',monospace;font-size:.76rem;margin:1rem 0;overflow-x:auto;line-height:1.6;}
+  .jk{color:#f0b429;}.js{color:#4dd9d9;}.jn{color:#6fa8f0;}.jb{color:#f06060;}.jc{color:#555;font-style:italic;}
+
+  /* rank strip */
+  .rank-strip{background:linear-gradient(90deg,#1a1200,#2c2000);border:1px solid var(--f5);border-radius:5px;padding:.7rem 1.2rem;margin-bottom:1.5rem;display:flex;align-items:center;gap:1rem;}
+  .rank-num{font-size:2rem;font-weight:900;color:var(--f5);line-height:1;}
+  .rank-text{font-size:.84rem;color:var(--text);}
+  .rank-text strong{color:var(--f5);}
+
+  /* pill row */
+  .pill-row{display:flex;gap:.5rem;flex-wrap:wrap;margin:.6rem 0;}
+  .pill{display:inline-block;padding:.2rem .7rem;border-radius:12px;font-size:.74rem;font-weight:700;}
+  .pill-ro{background:#1a3a1a;color:#6fcf6f;border:1px solid #2a5a2a;}
+  .pill-iw{background:#3a2a00;color:#f0b429;border:1px solid #5a4000;}
+  .pill-ew{background:#3a0000;color:#f06060;border:1px solid #5a0000;}
+
+  /* loop cards */
+  .loop-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.8rem;margin:1rem 0;}
+  @media(max-width:680px){.loop-grid{grid-template-columns:1fr;}}
+  .loop-card{background:var(--mid);border:1px solid var(--border);border-radius:5px;padding:.9rem 1rem;text-align:center;}
+  .loop-card .icon{font-size:1.3rem;margin-bottom:.35rem;}
+  .loop-card h4{font-size:.8rem;margin-bottom:.3rem;text-transform:uppercase;letter-spacing:.5px;}
+  .loop-card p{font-size:.76rem;color:var(--subtext);line-height:1.5;margin:0;}
+  .loop-card.pass{border-color:var(--f4);}.loop-card.pass h4{color:var(--f4);}
+  .loop-card.reject{border-color:var(--f1);}.loop-card.reject h4{color:var(--f1);}
+
+  footer{text-align:center;color:var(--subtext);font-size:.75rem;padding:1.5rem;border-top:1px solid var(--border);}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Higgins.ai (Roseboard Inc.) <span class="hbadge">HIGG201US</span> <span class="hbadge">5-FEATURE PATENT SUITE</span></h1>
+  <p>Complete Application Narratives — Features 1–5 &nbsp;|&nbsp; Provisional 63/794177 &nbsp;|&nbsp; US9971979B2 &nbsp;|&nbsp; Inventor: Malek Hakim &nbsp;|&nbsp; For attorney review only — not a legal opinion</p>
+</header>
+
+<!-- TAB BAR -->
+<div class="tab-bar">
+  <button class="tab-btn active-f1" onclick="showTab('f1',this)">🔐 F1 — Execution Gate</button>
+  <button class="tab-btn" onclick="showTab('f2',this)">🧠 F2 — Hybrid Classifier</button>
+  <button class="tab-btn" onclick="showTab('f3',this)">📋 F3 — JSON Action Plan</button>
+  <button class="tab-btn" onclick="showTab('f4',this)">📚 F4 — Citation RAG</button>
+  <button class="tab-btn" onclick="showTab('f5',this)">🗂️ F5 — Audit Ledger</button>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     FEATURE 1
+════════════════════════════════════════════ -->
+<div id="tab-f1" class="tab-panel active">
+
+  <section>
+    <h2 class="f1">Feature 1 — Tool-Execution Gate with Cryptographic Approval Token</h2>
+    <div class="claim-box f1">"A tool-execution gate requiring an approval token cryptographically bound to an action-plan hash before an external-write operation is executed."</div>
+    <p>This narrative describes a concrete application of Feature 1 as implemented within Higgins.ai (higginsworkassistant.com), demonstrating novelty and non-obviousness over the eight closest prior-art references identified in the Feature 1 screening analysis.</p>
+  </section>
+
+  <section>
+    <h2 class="f1">1. Background — The Security Gap</h2>
+    <p>Higgins operates across 60+ regions, servicing 42,232+ associated businesses (Slide 09), integrating with SAP, Teamcenter, Veeva, and Trackwise (Slide 08). When an AI agent executes an unverified external-write operation — even one that has drifted slightly from its approved form — this poses significant compliance, data integrity, and legal risk. Feature 1 addresses this with a novel cryptographic binding mechanism that no prior art reference teaches.</p>
+  </section>
+
+  <section>
+    <h2 class="f1">2. Implementation — The Five-Stage Gate Pipeline</h2>
+    <div class="grid5">
+      <div class="card red"><div class="clabel">Stage 1</div><div class="ctitle">Canonical Record</div><div class="cdesc">Request ID + Tenant ID + vector embeddings generated on intake</div></div>
+      <div class="card red"><div class="clabel">Stage 2</div><div class="ctitle">Write-Semantics Tag</div><div class="cdesc">Each tool call classified READ_ONLY / INTERNAL_WRITE / EXTERNAL_WRITE</div></div>
+      <div class="card red"><div class="clabel">Stage 3</div><div class="ctitle">Hash at Review</div><div class="cdesc">Deterministic SHA-256 hash of complete action plan at moment of human review</div></div>
+      <div class="card red"><div class="clabel">Stage 4</div><div class="ctitle">Approval Token</div><div class="cdesc">Token = signature over hash + timestamp + tenant ID + user ID</div></div>
+      <div class="card red"><div class="clabel">Stage 5</div><div class="ctitle">Gate Validation</div><div class="cdesc">4-condition check immediately before every EXTERNAL_WRITE fires</div></div>
+    </div>
+    <div class="highlight hl-f1">
+      <strong>Concrete Example — Higgins Biomedical:</strong> A QA associate requests a deviation investigation update to Trackwise. The action plan contains a READ_ONLY retrieval and an EXTERNAL_WRITE commit. The plan is hashed, presented for review, and an approval token is issued. At execution, the gate validates: (i) token present and valid; (ii) hash recomputed; (iii) hashes match; (iv) tenant context matches. If any condition fails, execution is blocked and an alert is logged.
+    </div>
+  </section>
+
+  <section>
+    <h2 class="f1">3. Prior Art Distinctions</h2>
+    <table>
+      <thead><tr><th class="f1">Patent</th><th class="f1">Assignee</th><th class="f1">Rating</th><th class="f1">Key Distinction</th></tr></thead>
+      <tbody>
+        <tr><td>US20220318674A1</td><td>Microsoft</td><td><span class="tag tag-n">N</span></td><td>Infrastructure scheduling only. No approval token, no action-plan hash, no pre-execution write gate.</td></tr>
+        <tr><td>US11501177B2</td><td>Accenture</td><td><span class="tag tag-n">N</span></td><td>Knowledge graph traversal. No gated write mechanism, no token binding, no action-plan hashing.</td></tr>
+        <tr><td>US11876910B2</td><td>Salesforce</td><td><span class="tag tag-p">P — CLOSEST</span></td><td>Blockchain audit records post-execution. Salesforce records what the AI decided; Higgins gates execution BEFORE it occurs.</td></tr>
+        <tr><td>US20240403693A1</td><td>Oracle</td><td><span class="tag tag-n">N</span></td><td>Capability packaging and tenant training pipeline. No external-write gating or cryptographic approval-token binding.</td></tr>
+        <tr><td>US20210064953A1</td><td>Bull SAS</td><td><span class="tag tag-n">N</span></td><td>TOSCA-based orchestration metadata. No cryptographically constrained approval gate for external writes.</td></tr>
+        <tr><td>US20250123898A1</td><td>ETRI</td><td><span class="tag tag-n">N</span></td><td>GPU sharing and queue-based resource management. No approval tokens, plan hashes, or gated write operations.</td></tr>
+        <tr><td>US20240220831A1</td><td>NVIDIA</td><td><span class="tag tag-n">N</span></td><td>AI resource brokerage. No external-write authorization or cryptographic gating.</td></tr>
+        <tr><td>US20250168198A1</td><td>CoreStack</td><td><span class="tag tag-n">N</span></td><td>LLM-driven cloud policy interpretation. Does not require a token bound to an action-plan hash as a condition precedent.</td></tr>
+      </tbody>
+    </table>
+    <div class="highlight hl-f1" style="margin-top:1rem;"><strong>Critical Distinction:</strong> Salesforce (P3) records AI decision provenance after execution. Higgins' Feature 1 prevents execution from occurring unless a cryptographic approval token — bound to the exact hash of the action plan at the time of human review — is validated immediately before the external-write operation fires. This is a pre-execution authorization gate, not a post-execution audit record.</div>
+  </section>
+
+  <section>
+    <h2 class="f1">4. Platform Anchors & Claim Scope</h2>
+    <div class="grid2">
+      <div class="card red">
+        <div class="clabel">Platform Evidence</div>
+        <ul style="margin-top:.4rem;">
+          <li><strong>Slide 02:</strong> Privacy-first isolated environments → tenant ID in token</li>
+          <li><strong>Slide 04:</strong> FDA, GxP, ISO/ASTM compliance → regulated write gate</li>
+          <li><strong>Slide 08:</strong> SAP, Veeva, Trackwise → EXTERNAL_WRITE targets</li>
+          <li><strong>Transformation Book:</strong> 90:10 Rule → gate enforces the 10% human approval</li>
+        </ul>
+      </div>
+      <div class="card red">
+        <div class="clabel">Claim Scope Recommendation</div>
+        <p style="font-size:.82rem;margin-top:.4rem;">Independent claim should recite: (1) canonical request record; (2) write-semantics field; (3) cryptographic action-plan hash at review time; (4) approval token bound to hash; (5) four-condition gate validation; (6) permit/block conditional; (7) immutable audit record. Dependent claims add: tenant isolation, biomedical embodiment, enterprise integration embodiment.</p>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     FEATURE 2
+════════════════════════════════════════════ -->
+<div id="tab-f2" class="tab-panel">
+
+  <section>
+    <h2 class="f2">Feature 2 — Hybrid Request-Classification Engine</h2>
+    <div class="claim-box f2">"A hybrid request-classification engine combining a rules-based classifier and a statistical classifier, with merged outputs using weighted scoring, voting, or hierarchical precedence, to assign domain/task labels for routing."</div>
+    <p>Feature 2 is the gateway through which every user request enters the Higgins orchestration layer. Its accuracy directly determines whether the platform delivers on its core promise: that 101+ AI models working in specialized teams outperform any single generalist AI (Slide 04).</p>
+  </section>
+
+  <section>
+    <h2 class="f2">1. Background — The Classification Problem</h2>
+    <p>Higgins serves 42,232+ associated businesses across 60+ regions (Slide 09) spanning biomedical, pharmaceutical, real estate, financial services, insurance, and legal. A single-classifier routing system fails predictably: rules-based systems cannot handle semantic ambiguity; statistical systems cannot enforce hard compliance constraints in regulated industries. Feature 2 solves this with a hybrid architecture that no prior art reference teaches.</p>
+  </section>
+
+  <section>
+    <h2 class="f2">2. Implementation — The Three-Layer Hybrid Pipeline</h2>
+    <div class="grid3">
+      <div class="card orange"><div class="clabel">Layer 1 — Rules-Based</div><div class="ctitle">Domain Flag Detection</div><div class="cdesc">Deterministic pattern-matching on FDA nomenclature, ISO/ASTM identifiers, GxP terminology, MLS vocabulary. Fast, compliance-safe, binary domain signal + flag-confidence score.</div></div>
+      <div class="card orange"><div class="clabel">Layer 2 — Statistical</div><div class="ctitle">Embedding Confidence</div><div class="cdesc">Cosine similarity between request embedding and pre-trained domain centroid embeddings. Handles semantic variation, abbreviations, cross-domain requests, novel phrasing.</div></div>
+      <div class="card orange"><div class="clabel">Layer 3 — Merge</div><div class="ctitle">Weighted Score Fusion</div><div class="cdesc">W₁ × rules score + W₂ × embedding score. W₁ elevated in regulated domains (Biomedical); W₂ elevated in general-purpose domains. Final domain + task label assigned.</div></div>
+    </div>
+    <div class="highlight hl-f2">
+      <strong>Worked Example — Higgins Biomedical:</strong> Request: "Help me write up the investigation for the failed pH test on Batch 2024-0317." Rules classifier fires on "investigation," "failed," "pH test," "Batch" → flag score: 0.91 (Biomedical). Statistical classifier: Biomedical 0.84, General Document 0.31, Realty 0.02. Weighted fusion (W₁=0.6, W₂=0.4): final score = 0.6×0.91 + 0.4×0.84 = <strong>0.882 → BIOMEDICAL / DEVIATION-INVESTIGATION</strong>. Routed to Higgins Biomedical team with FDA + ISO/ASTM access.
+    </div>
+  </section>
+
+  <section>
+    <h2 class="f2">3. Prior Art Distinctions</h2>
+    <table>
+      <thead><tr><th class="f2">Patent</th><th class="f2">Assignee</th><th class="f2">Rating</th><th class="f2">Key Distinction</th></tr></thead>
+      <tbody>
+        <tr><td>US20220318674A1</td><td>Microsoft</td><td><span class="tag tag-n">N</span></td><td>AI workload scheduling. No request-classification stack and no merger of rules-based and statistical outputs.</td></tr>
+        <tr><td>US11501177B2</td><td>Accenture</td><td><span class="tag tag-p">P — CLOSEST</span></td><td>Graph traversal classifies pre-indexed task blocks. Does NOT disclose parallel dual-classifier with weighted fusion for runtime request routing.</td></tr>
+        <tr><td>US11876910B2</td><td>Salesforce</td><td><span class="tag tag-n">N</span></td><td>AI recommends accept/reject for blockchain transactions. Categorically different from hybrid request router assigning domain/task labels.</td></tr>
+        <tr><td>US20240403693A1</td><td>Oracle</td><td><span class="tag tag-n">N</span></td><td>Users manually select AI capabilities. Manual selection is the antithesis of Higgins' automatic routing design.</td></tr>
+        <tr><td>US20210064953A1</td><td>Bull SAS</td><td><span class="tag tag-n">N</span></td><td>Development environment for designing applications. No runtime classification engine.</td></tr>
+        <tr><td>US20250123898A1</td><td>ETRI</td><td><span class="tag tag-n">N</span></td><td>AI services scheduled based on resource requirements. No rules/statistical request-label merger.</td></tr>
+        <tr><td>US20240220831A1</td><td>NVIDIA</td><td><span class="tag tag-n">N</span></td><td>Selects compatible compute resources. Routes to hardware; Higgins routes to specialized AI knowledge teams.</td></tr>
+        <tr><td>US20250168198A1</td><td>CoreStack</td><td><span class="tag tag-p">P</span></td><td>LLM interprets cloud policies via RAG. No parallel rules + statistical classification merged by weighted scoring for request routing.</td></tr>
+      </tbody>
+    </table>
+    <div class="highlight hl-f2" style="margin-top:1rem;"><strong>Critical Distinction from Accenture (P2):</strong> Accenture's graph-traversal classifier operates on pre-indexed task blocks in a repository. Higgins operates on live user requests at runtime, runs two classifiers in parallel, and merges their outputs through explicit weighted scoring. No reference discloses this three-part architecture as a unified runtime request-routing engine.</div>
+  </section>
+
+  <section>
+    <h2 class="f2">4. Platform Anchors</h2>
+    <div class="grid2">
+      <div class="card orange">
+        <div class="clabel">Platform Evidence</div>
+        <ul style="margin-top:.4rem;">
+          <li><strong>Slide 02:</strong> Privacy-first → tenant ID in canonical record prevents cross-tenant classification signal contamination</li>
+          <li><strong>Slide 04:</strong> FDA, ISO/ASTM, Realty databases → source of domain flag vocabulary</li>
+          <li><strong>Slide 05:</strong> Gemini-validated Accuracy + Precision → outcome of accurate routing</li>
+          <li><strong>Slide 03:</strong> 72-hour workflow deployment → extensibility of flag sets without full retraining</li>
+        </ul>
+      </div>
+      <div class="card orange">
+        <div class="clabel">§ 103 Prosecution Strategy</div>
+        <p style="font-size:.82rem;margin-top:.4rem;">Most likely rejection: Accenture (P2) + CoreStack (P8). Key argument: Accenture classifies pre-indexed task blocks; CoreStack interprets policies. Neither discloses parallel dual-classifier with weighted fusion. Combining them yields two separate single-classifier systems — not a unified hybrid engine. The write-semantics field (Feature 3) further distinguishes the downstream use of the classification output.</p>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     FEATURE 3
+════════════════════════════════════════════ -->
+<div id="tab-f3" class="tab-panel">
+
+  <section>
+    <h2 class="f3">Feature 3 — JSON-Based Action Plan with Write-Semantics, Deadlines, Concurrency &amp; Resource Constraints</h2>
+    <div class="claim-box f3">"Generation of a JSON-based action plan for tool execution, including write-semantics fields classifying operations as read-only, internal-write, or external-write, and including deadlines, concurrency limits, and resource-allocation constraints."</div>
+    <p>Feature 3 is the architectural backbone that connects Feature 2 (hybrid classification) and Feature 1 (cryptographic gate) into a single coherent orchestration system. Without it, Features 1 and 2 are isolated components. With it, they form a complete enterprise-grade pipeline.</p>
+  </section>
+
+  <section>
+    <h2 class="f3">1. The Four Mandatory Constraint Fields</h2>
+    <div class="grid4">
+      <div class="card purple"><div class="clabel">Field 1</div><div class="ctitle">write_semantics</div><div class="cdesc">READ_ONLY / INTERNAL_WRITE / EXTERNAL_WRITE — determines execution pathway and gate requirement</div></div>
+      <div class="card purple"><div class="clabel">Field 2</div><div class="ctitle">deadline_ms</div><div class="cdesc">Maximum wall-clock execution time before timeout and fallback protocol activation</div></div>
+      <div class="card purple"><div class="clabel">Field 3</div><div class="ctitle">concurrency_limit</div><div class="cdesc">Maximum simultaneous instances per tenant context — prevents data integrity conflicts</div></div>
+      <div class="card purple"><div class="clabel">Field 4</div><div class="ctitle">resource_tokens</div><div class="cdesc">Computational budget drawn from tenant resource pool — enforces fair-use across 42,232+ businesses</div></div>
+    </div>
+    <div class="pill-row">
+      <span class="pill pill-ro">READ_ONLY</span>
+      <span class="pill pill-iw">INTERNAL_WRITE</span>
+      <span class="pill pill-ew">EXTERNAL_WRITE → triggers Feature 1 gate</span>
+    </div>
+  </section>
+
+  <section>
+    <h2 class="f3">2. Live JSON Schema Example</h2>
+    <div class="json-block">
+{<br/>
+&nbsp;&nbsp;<span class="jk">"plan_id"</span>: <span class="js">"PLN-20240317-BIO-0042"</span>,<br/>
+&nbsp;&nbsp;<span class="jk">"tenant_id"</span>: <span class="js">"TEN-PHARMA-0091"</span>,<br/>
+&nbsp;&nbsp;<span class="jk">"domain_label"</span>: <span class="js">"BIOMEDICAL"</span>,<br/>
+&nbsp;&nbsp;<span class="jk">"task_label"</span>: <span class="js">"DEVIATION-INVESTIGATION"</span>,<br/>
+&nbsp;&nbsp;<span class="jk">"tool_calls"</span>: [<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;{ <span class="jk">"tool_name"</span>: <span class="js">"trackwise_record_read"</span>, <span class="jk">"write_semantics"</span>: <span class="js">"READ_ONLY"</span>, <span class="jk">"deadline_ms"</span>: <span class="jn">3000</span>, <span class="jk">"concurrency_limit"</span>: <span class="jn">1</span>, <span class="jk">"resource_tokens"</span>: <span class="jn">50</span> },<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;{ <span class="jk">"tool_name"</span>: <span class="js">"fda_database_query"</span>, <span class="jk">"write_semantics"</span>: <span class="js">"READ_ONLY"</span>, <span class="jk">"deadline_ms"</span>: <span class="jn">5000</span>, <span class="jk">"concurrency_limit"</span>: <span class="jn">2</span>, <span class="jk">"resource_tokens"</span>: <span class="jn">75</span> },<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;{ <span class="jk">"tool_name"</span>: <span class="js">"trackwise_deviation_write"</span>, <span class="jk">"write_semantics"</span>: <span class="js">"EXTERNAL_WRITE"</span>, <span class="jk">"deadline_ms"</span>: <span class="jn">8000</span>, <span class="jk">"concurrency_limit"</span>: <span class="jn">1</span>, <span class="jk">"resource_tokens"</span>: <span class="jn">200</span>, <span class="jk">"requires_approval_gate"</span>: <span class="jb">true</span> }<br/>
+&nbsp;&nbsp;]<br/>
+}
+    </div>
+  </section>
+
+  <section>
+    <h2 class="f3">3. Prior Art Distinctions</h2>
+    <table>
+      <thead><tr><th class="f3">Patent</th><th class="f3">Assignee</th><th class="f3">Rating</th><th class="f3">Key Distinction</th></tr></thead>
+      <tbody>
+        <tr><td>US20220318674A1</td><td>Microsoft</td><td><span class="tag tag-p">P</span></td><td>Has resource scheduling constraints but NOT a tool-call action plan schema with explicit write-semantics classification field.</td></tr>
+        <tr><td>US11501177B2</td><td>Accenture</td><td><span class="tag tag-n">N</span></td><td>Contextual metadata for pre-indexed task blocks. Not a runtime JSON action plan governing tool-call semantics and execution limits.</td></tr>
+        <tr><td>US11876910B2</td><td>Salesforce</td><td><span class="tag tag-p">P</span></td><td>Transaction decisions and blockchain records. No explicit execution plan data structure with write-semantics triage and deadline/concurrency fields.</td></tr>
+        <tr><td>US20240403693A1</td><td>Oracle</td><td><span class="tag tag-n">N</span></td><td>Capability lifecycle management. Does not define how every tool call must execute with per-call resource constraints.</td></tr>
+        <tr><td>US20210064953A1</td><td>Bull SAS</td><td><span class="tag tag-p">P — CLOSEST</span></td><td>TOSCA-based structured orchestration for application deployment. Does NOT teach a write-semantics taxonomy or per-call deadline/concurrency/resource fields as mandatory schema elements.</td></tr>
+        <tr><td>US20250123898A1</td><td>ETRI</td><td><span class="tag tag-p">P</span></td><td>Infrastructure-level operational constraints. Not a declarative tool-execution plan with explicit write semantics as a per-tool-call classification field.</td></tr>
+        <tr><td>US20240220831A1</td><td>NVIDIA</td><td><span class="tag tag-p">P</span></td><td>Infrastructure constraints present but not the claimed plan structure with semantic classes of write behavior.</td></tr>
+        <tr><td>US20250168198A1</td><td>CoreStack</td><td><span class="tag tag-p">P</span></td><td>Generates executable checks for policy enforcement. Does not disclose a JSON action plan with write-semantics, deadlines, concurrency limits, and resource constraints as tool-call parameters.</td></tr>
+      </tbody>
+    </table>
+    <div class="highlight hl-f3" style="margin-top:1rem;"><strong>Critical Distinction from Bull SAS (P5 — Closest):</strong> Bull SAS teaches structured orchestration for application deployment. Higgins' Feature 3 operates at the AI tool-call level (not deployment), introduces a novel write-semantics taxonomy as a mandatory per-call field, and is generated at runtime per user request by the lead AI model — not pre-authored by a developer. No reference discloses all three characteristics in combination.</div>
+  </section>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     FEATURE 4
+════════════════════════════════════════════ -->
+<div id="tab-f4" class="tab-panel">
+
+  <section>
+    <h2 class="f4">Feature 4 — Citation-Enforced RAG with Tenant-Isolated Vector Stores &amp; Reject/Regenerate Loop <span style="background:#16a085;color:#fff;font-size:.65rem;padding:.15rem .5rem;border-radius:3px;margin-left:.5rem;vertical-align:middle;">RANKED #2 STRONGEST</span></h2>
+    <div class="claim-box f4">"Retrieval-augmented inference that retrieves evidence from tenant-isolated vector stores and external sources, enforces citation pointers in generated responses, and rejects/regenerates candidate responses lacking required citations."</div>
+    <p>Feature 4 is the technical embodiment of Dr. Hakim's principle from the "Transformation" book: <em>"If your AI hallucinates, provides shallow answers, gives you too much when you need less — then AI becomes a burden, not a gift."</em> Feature 4 makes hallucination architecturally impossible to deliver to the user.</p>
+  </section>
+
+  <section>
+    <h2 class="f4">1. The Five-Stage Citation-Enforced RAG Pipeline</h2>
+    <div class="grid5">
+      <div class="card teal"><div class="clabel">Stage 1</div><div class="ctitle">Evidence Retrieval</div><div class="cdesc">Query tenant-isolated vector store (primary) + domain-validated external sources (secondary)</div></div>
+      <div class="card teal"><div class="clabel">Stage 2</div><div class="ctitle">Evidence Packet</div><div class="cdesc">Canonical JSON packet: chunk_id + source_id + timestamp + relevance_score per chunk. Immutable once assembled.</div></div>
+      <div class="card teal"><div class="clabel">Stage 3</div><div class="ctitle">Constrained Generation</div><div class="cdesc">Lead AI generates candidate response with mandatory inline citation pointer per factual claim</div></div>
+      <div class="card teal"><div class="clabel">Stage 4 — GATE</div><div class="ctitle">Citation Validation</div><div class="cdesc">Platform validates every citation pointer against canonical evidence packet. Reject if missing or invalid.</div></div>
+      <div class="card teal"><div class="clabel">Stage 5</div><div class="ctitle">Deliver or Regenerate</div><div class="cdesc">Pass → deliver. Fail → incremental retrieval + regeneration loop until all citations present.</div></div>
+    </div>
+  </section>
+
+  <section>
+    <h2 class="f4">2. Canonical Evidence Packet Schema</h2>
+    <div class="json-block">
+{<br/>
+&nbsp;&nbsp;<span class="jk">"evidence_packet_id"</span>: <span class="js">"EVP-BIO-20240317-0042"</span>,<br/>
+&nbsp;&nbsp;<span class="jk">"tenant_id"</span>: <span class="js">"TEN-PHARMA-0091"</span>,<br/>
+&nbsp;&nbsp;<span class="jk">"evidence_chunks"</span>: [<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;{ <span class="jk">"chunk_id"</span>: <span class="js">"CHK-001"</span>, <span class="jk">"source_id"</span>: <span class="js">"FDA-GMP-2023-Q4-§211.192"</span>, <span class="jk">"source_type"</span>: <span class="js">"EXTERNAL_FDA"</span>, <span class="jk">"relevance_score"</span>: <span class="jn">0.94</span> },<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;{ <span class="jk">"chunk_id"</span>: <span class="js">"CHK-002"</span>, <span class="jk">"source_id"</span>: <span class="js">"TEN-SOP-DEV-2024-003"</span>, <span class="jk">"source_type"</span>: <span class="js">"TENANT_ISOLATED"</span>, <span class="jk">"relevance_score"</span>: <span class="jn">0.91</span> }<br/>
+&nbsp;&nbsp;]<br/>
+}
+    </div>
+    <div class="loop-grid">
+      <div class="loop-card pass"><div class="icon">✅</div><h4>All Citations Valid</h4><p>Every claim maps to a verified chunk_id. Response delivered with citation manifest.</p></div>
+      <div class="loop-card reject"><div class="icon">🚫</div><h4>Citation Gap Detected</h4><p>One or more claims lack citation pointers or cite non-existent chunk_ids. Response rejected — not delivered.</p></div>
+      <div class="loop-card"><div class="icon">🔄</div><h4>Incremental Retrieval + Regeneration</h4><p>Platform retrieves additional chunks targeting uncited claim topics, then triggers regeneration with expanded packet.</p></div>
+    </div>
+  </section>
+
+  <section>
+    <h2 class="f4">3. Prior Art Distinctions</h2>
+    <table>
+      <thead><tr><th class="f4">Patent</th><th class="f4">Assignee</th><th class="f4">Rating</th><th class="f4">Key Distinction</th></tr></thead>
+      <tbody>
+        <tr><td>US20220318674A1</td><td>Microsoft</td><td><span class="tag tag-n">N</span></td><td>Multi-tenant AI infrastructure scheduling. No RAG, no citation enforcement, no reject/regenerate loop.</td></tr>
+        <tr><td>US11501177B2</td><td>Accenture</td><td><span class="tag tag-n">N</span></td><td>Knowledge graph retrieval for task orchestration. Not tenant-isolated evidence stores with mandatory citation pointers.</td></tr>
+        <tr><td>US11876910B2</td><td>Salesforce</td><td><span class="tag tag-n">N</span></td><td>Blockchain audit records for AI decisions. Post-execution auditability ≠ pre-delivery citation enforcement.</td></tr>
+        <tr><td>US20240403693A1</td><td>Oracle</td><td><span class="tag tag-p">P</span></td><td>Tenant separation present but no evidence retrieval from tenant-isolated vector stores, no citation enforcement, no reject/regenerate loop.</td></tr>
+        <tr><td>US20210064953A1</td><td>Bull SAS</td><td><span class="tag tag-n">N</span></td><td>Application deployment workspace. No RAG architecture, no citation-governed output control.</td></tr>
+        <tr><td>US20250123898A1</td><td>ETRI</td><td><span class="tag tag-n">N</span></td><td>GPU-sharing optimization. No retrieval-backed generation or citation enforcement of any kind.</td></tr>
+        <tr><td>US20240220831A1</td><td>NVIDIA</td><td><span class="tag tag-n">N</span></td><td>Resource selection for AI inferencing. No citation-backed generation, no evidence retrieval, no reject/regenerate mechanism.</td></tr>
+        <tr><td>US20250168198A1</td><td>CoreStack</td><td><span class="tag tag-p">P — CLOSEST</span></td><td>Expressly uses RAG for semantic operations on cloud policies. Does NOT teach: (1) citation-pointer enforcement as mandatory structural requirement; (2) tenant-isolated vector stores as primary evidence source; (3) reject-and-regenerate loop when citations are missing.</td></tr>
+      </tbody>
+    </table>
+    <div class="highlight hl-f4" style="margin-top:1rem;"><strong>Critical Distinction from CoreStack (P8):</strong> CoreStack uses RAG to interpret policies. Higgins uses RAG to generate evidence-grounded, citation-verified enterprise responses — with a feedback loop that blocks and re-processes any response that fails citation validation. CoreStack has no citation enforcement requirement and no reject/regenerate mechanism. These are architecturally distinct systems.</div>
+  </section>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     FEATURE 5
+════════════════════════════════════════════ -->
+<div id="tab-f5" class="tab-panel">
+
+  <section>
+    <h2 class="f5">Feature 5 — Immutable Audit Ledger: Request Records, Action-Plan Hashes, Approval Tokens &amp; Execution Receipts</h2>
+    <div class="rank-strip">
+      <div class="rank-num">#5</div>
+      <div class="rank-text">Ranked <strong>#5 of 5</strong> in overall feature strength — but the screening analysis explicitly notes it is <strong>"strongest when tied to pre-execution authorization rather than generic audit logging."</strong> Feature 5 is drafted as a dependent claim on Feature 1's cryptographic gate, creating a compound limitation that no prior art reference anticipates.</div>
+    </div>
+    <div class="claim-box f5">"An audit ledger storing request records, action-plan hashes, approval tokens, and execution receipts to support traceability, replay, and forensic review."</div>
+  </section>
+
+  <section>
+    <h2 class="f5">1. The Four-Field Audit Tuple</h2>
+    <div class="grid4">
+      <div class="card gold"><div class="clabel">Field 1</div><div class="ctitle">Request Record</div><div class="cdesc">Canonical request record: request ID, tenant ID, domain label, task label, user ID. Links audit event to original user intent.</div></div>
+      <div class="card gold"><div class="clabel">Field 2</div><div class="ctitle">Action-Plan Hash</div><div class="cdesc">SHA-256 hash of JSON action plan at moment of human review. Proves plan was not modified between approval and execution.</div></div>
+      <div class="card gold"><div class="clabel">Field 3</div><div class="ctitle">Approval Token</div><div class="cdesc">Token ID + approved_by + approval_timestamp + cryptographic_signature + hash_at_approval. Full authorization record.</div></div>
+      <div class="card gold"><div class="clabel">Field 4</div><div class="ctitle">Execution Receipt</div><div class="cdesc">Tool name + write_semantics + gate_outcome (PERMITTED/BLOCKED) + execution_timestamp + external_confirmation_id + hash_verified.</div></div>
+    </div>
+  </section>
+
+  <section>
+    <h2 class="f5">2. Complete Audit Ledger Schema</h2>
+    <div class="json-block">
+{<br/>
+&nbsp;&nbsp;<span class="jk">"ledger_entry_id"</span>: <span class="js">"LED-BIO-20240317-0042-001"</span>,<br/>
+&nbsp;&nbsp;<span class="jk">"previous_entry_hash"</span>: <span class="js">"sha256:9f3a1b..."</span>, <span class="jc">// cryptographic chain link — tamper detection</span><br/>
+&nbsp;&nbsp;<span class="jk">"request_record"</span>: { <span class="jk">"request_id"</span>: <span class="js">"REQ-20240317-0317"</span>, <span class="jk">"tenant_id"</span>: <span class="js">"TEN-PHARMA-0091"</span>, <span class="jk">"domain_label"</span>: <span class="js">"BIOMEDICAL"</span>, <span class="jk">"user_id"</span>: <span class="js">"USR-QA-0044"</span> },<br/>
+&nbsp;&nbsp;<span class="jk">"action_plan_hash"</span>: <span class="js">"sha256:7c2e4f..."</span>,<br/>
+&nbsp;&nbsp;<span class="jk">"approval_token"</span>: { <span class="jk">"approved_by"</span>: <span class="js">"USR-QA-0044"</span>, <span class="jk">"approval_timestamp"</span>: <span class="js">"2024-03-17T14:27:51Z"</span>, <span class="jk">"hash_at_approval"</span>: <span class="js">"sha256:7c2e4f..."</span> },<br/>
+&nbsp;&nbsp;<span class="jk">"execution_receipt"</span>: { <span class="jk">"tool_name"</span>: <span class="js">"trackwise_deviation_write"</span>, <span class="jk">"gate_outcome"</span>: <span class="js">"PERMITTED"</span>, <span class="jk">"external_confirmation_id"</span>: <span class="js">"TW-DEV-2024-0317-009"</span>, <span class="jk">"hash_verified"</span>: <span class="jb">true</span> }<br/>
+}
+    </div>
+    <div class="grid3">
+      <div class="card gold" style="text-align:center;"><div class="icon" style="font-size:1.3rem;margin-bottom:.3rem;">📋</div><div class="ctitle">Traceability</div><div class="cdesc">Every AI action traceable from execution receipt back to original user request via request_id chain. Single ledger query for full audit.</div></div>
+      <div class="card gold" style="text-align:center;"><div class="icon" style="font-size:1.3rem;margin-bottom:.3rem;">▶️</div><div class="ctitle">Replay</div><div class="cdesc">Action-plan hash allows reconstruction of the exact approved plan. Combined with Feature 4 evidence packet, complete AI reasoning chain can be replayed.</div></div>
+      <div class="card gold" style="border-color:#c0392b;text-align:center;"><div class="icon" style="font-size:1.3rem;margin-bottom:.3rem;">🔍</div><div class="ctitle">Forensic Review</div><div class="cdesc">Cryptographic chain (previous_entry_hash) makes tampering detectable. Any modification breaks the chain. Full ledger integrity verifiable by recomputing hash chain from genesis.</div></div>
+    </div>
+  </section>
+
+  <section>
+    <h2 class="f5">3. Prior Art Distinctions</h2>
+    <table>
+      <thead><tr><th class="f5">Patent</th><th class="f5">Assignee</th><th class="f5">Rating</th><th class="f5">Key Distinction</th></tr></thead>
+      <tbody>
+        <tr><td>US20220318674A1</td><td>Microsoft</td><td><span class="tag tag-n">N</span></td><td>Multi-tenant scheduling. No audit ledger with request records, plan hashes, approval tokens, and receipts.</td></tr>
+        <tr><td>US11501177B2</td><td>Accenture</td><td><span class="tag tag-n">N</span></td><td>Stored context for task orchestration. Not cryptographically chained execution receipts for compliance verification.</td></tr>
+        <tr><td>US11876910B2</td><td>Salesforce</td><td><span class="tag tag-p">P — CLOSEST</span></td><td>Immutable blockchain audit records with decision factors, model version, training-data provenance. Records what the AI DECIDED. Higgins records whether the APPROVED PLAN was the EXECUTED PLAN — a fundamentally different security model.</td></tr>
+        <tr><td>US20240403693A1</td><td>Oracle</td><td><span class="tag tag-n">N</span></td><td>Training statistics and model lifecycle. No execution receipt mechanism or cryptographic chain linking consecutive audit events.</td></tr>
+        <tr><td>US20210064953A1</td><td>Bull SAS</td><td><span class="tag tag-n">N</span></td><td>Application design and deployment workspace. No runtime audit mechanism for individual tool-call execution events.</td></tr>
+        <tr><td>US20250123898A1</td><td>ETRI</td><td><span class="tag tag-n">N</span></td><td>Hardware resource optimization. No forensic audit ledger of any kind.</td></tr>
+        <tr><td>US20240220831A1</td><td>NVIDIA</td><td><span class="tag tag-n">N</span></td><td>Compute resource monitoring. Does not record AI tool-call execution outcomes or approval token validation results.</td></tr>
+        <tr><td>US20250168198A1</td><td>CoreStack</td><td><span class="tag tag-p">P</span></td><td>Governance and compliance for cloud policies. Does not maintain an immutable ledger of AI action-plan hashes, approval tokens, and execution receipts linked by a cryptographic chain for forensic replay.</td></tr>
+      </tbody>
+    </table>
+    <div class="highlight hl-f5" style="margin-top:1rem;"><strong>Critical Distinction from Salesforce (P3):</strong> Salesforce captures <em>what the AI model decided</em> and <em>which model version produced it</em> — a post-hoc provenance record. Higgins captures <em>whether the specific action plan approved by a human is the exact plan that executed</em> — verified by comparing the action-plan hash in the approval token against the hash at execution time. Salesforce cannot answer: "Was the action that executed the same action that was approved?" Higgins can. This is authorization integrity verification, not decision provenance logging.</div>
+  </section>
+
+  <section>
+    <h2 class="f5">4. Five-Feature Architecture Synthesis</h2>
+    <div class="grid5">
+      <div class="card red"><div class="clabel">Feature 1</div><div class="ctitle">Execution Gate</div><div class="cdesc">Cryptographic pre-execution authorization for all EXTERNAL_WRITE operations</div></div>
+      <div class="card orange"><div class="clabel">Feature 2</div><div class="ctitle">Hybrid Classifier</div><div class="cdesc">Runtime dual-classifier routing to specialized AI teams with weighted fusion</div></div>
+      <div class="card purple"><div class="clabel">Feature 3</div><div class="ctitle">JSON Action Plan</div><div class="cdesc">Structured plan with write-semantics, deadlines, concurrency, resource constraints</div></div>
+      <div class="card teal"><div class="clabel">Feature 4</div><div class="ctitle">Citation RAG</div><div class="cdesc">Tenant-isolated evidence retrieval with mandatory citation enforcement + reject/regenerate loop</div></div>
+      <div class="card gold"><div class="clabel">Feature 5</div><div class="ctitle">Audit Ledger</div><div class="cdesc">Cryptographically chained four-field tuples for traceability, replay, and forensic review</div></div>
+    </div>
+    <div class="highlight hl-f5">
+      <strong>The Complete Guarantee:</strong> Together, these five features constitute the only AI governance architecture that can make the following enterprise promise: <em>every AI-assisted action that touched your external systems was human-approved (F1), routed by the right classifier (F2), governed by a structured plan (F3), grounded in verified evidence (F4), and immutably recorded (F5) — and we can prove it.</em> This is the technical foundation of Higgins' guaranteed 130% ROI (GEN4 Package Slide) in regulated enterprise markets.
+    </div>
+  </section>
+</div>
+
+<footer>
+  Higgins.ai &nbsp;|&nbsp; higginsworkassistant.com &nbsp;|&nbsp; contact@higgins.ai &nbsp;|&nbsp; Toll Free 1.866.625.4524<br/>
+  Patent Ref: US9971979B2 &amp; Provisional 63/794177 &nbsp;|&nbsp; All five feature narratives for attorney review only — not a legal opinion &nbsp;|&nbsp; Roseboard Inc. © 2025
+</footer>
+
+<script>
+function showTab(id, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.className = 'tab-btn');
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active-' + id);
+}
+</script>
+</body>
+</html>
