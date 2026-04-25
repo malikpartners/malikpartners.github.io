@@ -1,0 +1,1512 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snap-on Tools - S.A.L.E. Client Targeting System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #000000;
+            color: #CF2030;
+            line-height: 1.6;
+        }
+
+        .header {
+            background: #CF2030;
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(207, 32, 48, 0.3);
+        }
+
+        .logo {
+            height: 60px;
+        }
+
+        .company-info {
+            text-align: right;
+        }
+
+        .company-info h1 {
+            font-size: 1.5rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .company-info p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .card {
+            background: #1a1a1a;
+            border: 2px solid #CF2030;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 15px rgba(207, 32, 48, 0.2);
+        }
+
+        .card h3 {
+            color: #CF2030;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid #CF2030;
+            padding-bottom: 0.5rem;
+        }
+
+        .scoring-form {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .score-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .score-item label {
+            color: white;
+            font-weight: 500;
+        }
+
+        .score-slider {
+            width: 150px;
+            height: 6px;
+            border-radius: 3px;
+            background: #333;
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        .score-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #CF2030;
+            cursor: pointer;
+        }
+
+        .score-slider::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #CF2030;
+            cursor: pointer;
+            border: none;
+        }
+
+        .score-value {
+            color: #CF2030;
+            font-weight: bold;
+            min-width: 20px;
+            text-align: center;
+        }
+
+        .controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .search-box, .filter-select {
+            padding: 0.75rem;
+            border: 2px solid #CF2030;
+            border-radius: 5px;
+            background: #1a1a1a;
+            color: white;
+            font-size: 1rem;
+        }
+
+        .search-box:focus, .filter-select:focus {
+            outline: none;
+            box-shadow: 0 0 10px rgba(207, 32, 48, 0.5);
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: #CF2030;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #a01820;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(207, 32, 48, 0.4);
+        }
+
+        .btn-secondary {
+            background: #333;
+            color: white;
+            border: 1px solid #CF2030;
+        }
+
+        .btn-secondary:hover {
+            background: #CF2030;
+        }
+
+        .btn-small {
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+        }
+
+        .table-container {
+            background: #1a1a1a;
+            border: 2px solid #CF2030;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table th {
+            background: #CF2030;
+            color: white;
+            padding: 1rem;
+            text-align: left;
+            font-weight: bold;
+            cursor: pointer;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .table th:hover {
+            background: #a01820;
+        }
+
+        .table td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid #333;
+            color: white;
+        }
+
+        .table tr:hover {
+            background: #2a2a2a;
+        }
+
+        .tier-1a {
+            background: linear-gradient(90deg, rgba(0, 255, 0, 0.1), transparent);
+            border-left: 4px solid #00ff00;
+        }
+
+        .tier-1b {
+            background: linear-gradient(90deg, rgba(255, 255, 0, 0.1), transparent);
+            border-left: 4px solid #ffff00;
+        }
+
+        .tier-1c {
+            background: linear-gradient(90deg, rgba(0, 150, 255, 0.1), transparent);
+            border-left: 4px solid #0096ff;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+
+        .modal-content {
+            background-color: #1a1a1a;
+            border: 2px solid #CF2030;
+            margin: 5% auto;
+            padding: 2rem;
+            width: 80%;
+            max-width: 600px;
+            border-radius: 10px;
+            color: white;
+        }
+
+        .close {
+            color: #CF2030;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: #a01820;
+        }
+
+        .email-template {
+            width: 100%;
+            min-height: 300px;
+            padding: 1rem;
+            border: 2px solid #CF2030;
+            border-radius: 5px;
+            background: #2a2a2a;
+            color: white;
+            font-family: inherit;
+            resize: vertical;
+        }
+
+        .footer {
+            background: #1a1a1a;
+            border-top: 2px solid #CF2030;
+            padding: 2rem;
+            text-align: center;
+            margin-top: 4rem;
+        }
+
+        .footer-logo {
+            height: 40px;
+            margin-bottom: 1rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: #2a2a2a;
+            border: 1px solid #CF2030;
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #CF2030;
+        }
+
+        .stat-label {
+            color: white;
+            margin-top: 0.5rem;
+        }
+
+        .tab-container {
+            margin-bottom: 2rem;
+        }
+
+        .tabs {
+            display: flex;
+            background: #2a2a2a;
+            border-radius: 8px 8px 0 0;
+            overflow: hidden;
+        }
+
+        .tab {
+            padding: 1rem 2rem;
+            background: #333;
+            border: none;
+            color: white;
+            cursor: pointer;
+            flex: 1;
+            transition: all 0.3s ease;
+        }
+
+        .tab.active {
+            background: #CF2030;
+        }
+
+        .tab-content {
+            background: #1a1a1a;
+            border: 2px solid #CF2030;
+            border-radius: 0 0 8px 8px;
+            padding: 2rem;
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+            
+            .controls {
+                flex-direction: column;
+            }
+            
+            .table-container {
+                overflow-x: auto;
+            }
+            
+            .modal-content {
+                width: 95%;
+                margin: 10% auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports" class="logo">
+        <div class="company-info">
+            <h1>Snap-on Tools Highland</h1>
+            <p>Authorized Dealer - Michael Syrko</p>
+            <p>Highland, California | michael.syrko@snapon.com</p>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Statistics Dashboard -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number" id="totalClients">50</div>
+                <div class="stat-label">Total Prospects</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="tier1aCount">12</div>
+                <div class="stat-label">Tier 1A (Premium)</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="tier1bCount">20</div>
+                <div class="stat-label">Tier 1B (High-Value)</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="tier1cCount">18</div>
+                <div class="stat-label">Tier 1C (Qualified)</div>
+            </div>
+        </div>
+
+        <!-- Tab Navigation -->
+        <div class="tab-container">
+            <div class="tabs">
+                <button class="tab active" onclick="openTab(event, 'sourcing')">S.A.L.E. Sourcing</button>
+                <button class="tab" onclick="openTab(event, 'assessing')">Assessing</button>
+                <button class="tab" onclick="openTab(event, 'listening')">Listening</button>
+                <button class="tab" onclick="openTab(event, 'empowering')">Empowering</button>
+            </div>
+
+            <!-- Sourcing Tab -->
+            <div id="sourcing" class="tab-content active">
+                <div class="dashboard">
+                    <div class="card">
+                        <h3>P.U.R.E.S. Client Scoring</h3>
+                        <div class="scoring-form">
+                            <div class="score-item">
+                                <label>Profitability:</label>
+                                <input type="range" min="1" max="5" value="3" class="score-slider" id="profitability">
+                                <span class="score-value" id="profitabilityValue">3</span>
+                            </div>
+                            <div class="score-item">
+                                <label>Urgency:</label>
+                                <input type="range" min="1" max="5" value="3" class="score-slider" id="urgency">
+                                <span class="score-value" id="urgencyValue">3</span>
+                            </div>
+                            <div class="score-item">
+                                <label>Reachability:</label>
+                                <input type="range" min="1" max="5" value="3" class="score-slider" id="reachability">
+                                <span class="score-value" id="reachabilityValue">3</span>
+                            </div>
+                            <div class="score-item">
+                                <label>Engagement:</label>
+                                <input type="range" min="1" max="5" value="3" class="score-slider" id="engagement">
+                                <span class="score-value" id="engagementValue">3</span>
+                            </div>
+                            <div class="score-item">
+                                <label>Sustainability:</label>
+                                <input type="range" min="1" max="5" value="3" class="score-slider" id="sustainability">
+                                <span class="score-value" id="sustainabilityValue">3</span>
+                            </div>
+                            <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #CF2030;">
+                                <strong>Total P.U.R.E.S. Score: <span id="totalScore">15</span>/25</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h3>Tier Classification</h3>
+                        <div style="color: white; line-height: 2;">
+                            <p><strong style="color: #00ff00;">Tier 1A (Premium):</strong> P.U.R.E.S. Score 20-25 - High-priority prospects</p>
+                            <p><strong style="color: #ffff00;">Tier 1B (High-Value):</strong> P.U.R.E.S. Score 15-19 - Strong potential clients</p>
+                            <p><strong style="color: #0096ff;">Tier 1C (Qualified):</strong> P.U.R.E.S. Score 10-14 - Qualified leads</p>
+                            <div style="margin-top: 1rem; padding: 1rem; background: #2a2a2a; border-radius: 5px;">
+                                <strong>Current Selection: <span id="currentTier">Tier 1B</span></strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Assessing Tab -->
+            <div id="assessing" class="tab-content">
+                <div class="card">
+                    <h3>Buying Pattern Analysis</h3>
+                    <div style="color: white; line-height: 2;">
+                        <p><strong>Analytical Buyers:</strong> Require detailed ROI analysis, case studies, trials</p>
+                        <p><strong>Relationship Buyers:</strong> Value trust, referrals, long-term partnerships</p>
+                        <p><strong>Efficiency Buyers:</strong> Focus on time-saving, process improvement</p>
+                        <p><strong>Innovation Buyers:</strong> Seek cutting-edge solutions, competitive advantage</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Listening Tab -->
+            <div id="listening" class="tab-content">
+                <div class="card">
+                    <h3>Feedback Tracking System</h3>
+                    <div style="color: white; line-height: 2;">
+                        <p><strong>Pre-sale:</strong> Initial needs assessment and pain point identification</p>
+                        <p><strong>During-sale:</strong> Progress tracking and objection handling</p>
+                        <p><strong>Post-sale:</strong> Satisfaction monitoring and upselling opportunities</p>
+                        <p><strong>Complaint Resolution:</strong> Real-time issue tracking and resolution</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Empowering Tab -->
+            <div id="empowering" class="tab-content">
+                <div class="card">
+                    <h3>Referral Strategy Dashboard</h3>
+                    <div style="color: white; line-height: 2;">
+                        <p><strong>Success Stories:</strong> Document and share customer wins</p>
+                        <p><strong>Referral Rewards:</strong> Track incentive programs and payouts</p>
+                        <p><strong>Client Advocacy:</strong> Develop brand ambassadors</p>
+                        <p><strong>Co-marketing:</strong> Joint promotional opportunities</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Search and Filter Controls -->
+        <div class="controls">
+            <input type="text" class="search-box" id="searchInput" placeholder="Search clients...">
+            <select class="filter-select" id="tierFilter">
+                <option value="">All Tiers</option>
+                <option value="1A">Tier 1A (Premium)</option>
+                <option value="1B">Tier 1B (High-Value)</option>
+                <option value="1C">Tier 1C (Qualified)</option>
+            </select>
+            <select class="filter-select" id="industryFilter">
+                <option value="">All Industries</option>
+                <option value="Automotive">Automotive</option>
+                <option value="Construction">Construction</option>
+                <option value="Manufacturing">Manufacturing</option>
+                <option value="Aviation">Aviation</option>
+            </select>
+            <button class="btn btn-secondary" onclick="exportData()">Export CSV</button>
+        </div>
+
+        <!-- Client Database Table -->
+        <div class="table-container">
+            <table class="table" id="clientTable">
+                <thead>
+                    <tr>
+                        <th onclick="sortTable(0)">Client Name ▼</th>
+                        <th onclick="sortTable(1)">Email</th>
+                        <th onclick="sortTable(2)">Phone</th>
+                        <th onclick="sortTable(3)">Address</th>
+                        <th onclick="sortTable(4)">P.U.R.E.S. Score</th>
+                        <th onclick="sortTable(5)">Tier</th>
+                        <th onclick="sortTable(6)">Industry</th>
+                        <th onclick="sortTable(7)">Revenue Est.</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="clientTableBody">
+                    <!-- Client data will be populated by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Email Modal -->
+    <div id="emailModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h3>Send Email to <span id="modalClientName"></span></h3>
+            <form id="emailForm">
+                <div style="margin-bottom: 1rem;">
+                    <label style="color: white; display: block; margin-bottom: 0.5rem;">Subject:</label>
+                    <input type="text" id="emailSubject" style="width: 100%; padding: 0.5rem; border: 1px solid #CF2030; border-radius: 5px; background: #2a2a2a; color: white;">
+                </div>
+                <div style="margin-bottom: 1rem;">
+                    <label style="color: white; display: block; margin-bottom: 0.5rem;">Message:</label>
+                    <textarea id="emailMessage" class="email-template"></textarea>
+                </div>
+                <div style="text-align: right;">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="sendEmail()" style="margin-left: 1rem;">Send Email</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports" class="footer-logo">
+        <p style="color: white;">© 2026 Higgins Reports. All rights reserved.</p>
+        <p style="color: #CF2030;">Powered by S.A.L.E. System for Snap-on Tools Highland</p>
+    </footer>
+
+    <script>
+        // Sample client data within 10 miles of Highland, California
+        const clients = [
+            {
+                name: "Rodriguez Auto Repair",
+                email: "carlos@rodriguezauto.com",
+                phone: "(909) 555-0101",
+                address: "1234 Baseline Rd, Highland, CA 92346",
+                puresScore: 23,
+                tier: "1A",
+                industry: "Automotive",
+                revenue: "$250K",
+                buyerType: "Efficiency",
+                contactStatus: "New",
+                lastContact: "Never",
+                nextAction: "Initial Contact"
+            },
+            {
+                name: "Mountain View Construction",
+                email: "mike@mvconst.com",
+                phone: "(909) 555-0102",
+                address: "567 Sterling Ave, San Bernardino, CA 92404",
+                puresScore: 21,
+                tier: "1A",
+                industry: "Construction",
+                revenue: "$500K",
+                buyerType: "Analytical",
+                contactStatus: "Contacted",
+                lastContact: "2026-03-20",
+                nextAction: "Follow-up"
+            },
+            {
+                name: "Valley Machine Shop",
+                email: "owner@valleymachine.com",
+                phone: "(909) 555-0103",
+                address: "890 Industrial Blvd, Redlands, CA 92373",
+                puresScore: 22,
+                tier: "1A",
+                industry: "Manufacturing",
+                revenue: "$750K",
+                buyerType: "Innovation",
+                contactStatus: "Prospect",
+                lastContact: "2026-03-15",
+                nextAction: "Demo Scheduled"
+            },
+            {
+                name: "Premier Fleet Services",
+                email: "fleet@premierfleet.com",
+                phone: "(909) 555-0104",
+                address: "2345 Hospitality Ln, San Bernardino, CA 92408",
+                puresScore: 24,
+                tier: "1A",
+                industry: "Automotive",
+                revenue: "$1.2M",
+                buyerType: "Relationship",
+                contactStatus: "Hot Lead",
+                lastContact: "2026-03-22",
+                nextAction: "Proposal Due"
+            },
+            {
+                name: "Skyline Aviation Services",
+                email: "maintenance@skylineaviation.com",
+                phone: "(909) 555-0105",
+                address: "678 Airport Way, San Bernardino, CA 92407",
+                puresScore: 20,
+                tier: "1A",
+                industry: "Aviation",
+                revenue: "$900K",
+                buyerType: "Analytical",
+                contactStatus: "Contacted",
+                lastContact: "2026-03-18",
+                nextAction: "Technical Review"
+            },
+            {
+                name: "Highland Tire & Auto",
+                email: "service@highlandtire.com",
+                phone: "(909) 555-0106",
+                address: "1567 Highland Ave, Highland, CA 92346",
+                puresScore: 18,
+                tier: "1B",
+                industry: "Automotive",
+                revenue: "$180K",
+                buyerType: "Efficiency",
+                contactStatus: "New",
+                lastContact: "Never",
+                nextAction: "Initial Contact"
+            },
+            {
+                name: "Precision Fabrication",
+                email: "info@precisionfab.com",
+                phone: "(909) 555-0107",
+                address: "3456 Factory St, Rialto, CA 92376",
+                puresScore: 19,
+                tier: "1B",
+                industry: "Manufacturing",
+                revenue: "$320K",
+                buyerType: "Innovation",
+                contactStatus: "Contacted",
+                lastContact: "2026-03-16",
+                nextAction: "Quote Requested"
+            },
+            {
+                name: "Desert Construction Co",
+                email: "projects@desertconst.com",
+                phone: "(909) 555-0108",
+                address: "789 Commerce Dr, Fontana, CA 92335",
+                puresScore: 17,
+                tier: "1B",
+                industry: "Construction",
+                revenue: "$450K",
+                buyerType: "Relationship",
+                contactStatus: "Prospect",
+                lastContact: "2026-03-12",
+                nextAction: "Site Visit"
+            },
+            {
+                name: "Rapid Repair Automotive",
+                email: "shop@rapidrepair.com",
+                phone: "(909) 555-0109",
+                address: "4567 Main St, Loma Linda, CA 92354",
+                puresScore: 16,
+                tier: "1B",
+                industry: "Automotive",
+                revenue: "$200K",
+                buyerType: "Efficiency",
+                contactStatus: "New",
+                lastContact: "Never",
+                nextAction: "Cold Call"
+            },
+            {
+                name: "Elite Manufacturing",
+                email: "purchasing@elitemfg.com",
+                phone: "(909) 555-0110",
+                address: "8901 Production Ave, Colton, CA 92324",
+                puresScore: 18,
+                tier: "1B",
+                industry: "Manufacturing",
+                revenue: "$600K",
+                buyerType: "Analytical",
+                contactStatus: "Contacted",
+                lastContact: "2026-03-14",
+                nextAction: "ROI Analysis"
+            },
+            {
+                name: "Mountain Diesel Repair",
+                email: "service@mountaindiesel.com",
+                phone: "(909) 555-0111",
+                address: "2345 Truck Route, San Bernardino, CA 92410",
+                puresScore: 19,
+                tier: "1B",
+                industry: "Automotive",
+                revenue: "$280K",
+                buyerType: "Relationship",
+                contactStatus: "Hot Lead",
+                lastContact: "2026-03-21",
+                nextAction: "Tool Demo"
+            },
+            {
+                name: "Aerodynamic Solutions",
+                email: "tech@aerodynamic.com",
+                phone: "(909) 555-0112",
+                address: "5678 Aerospace Dr, San Bernardino, CA 92407",
+                puresScore: 17,
+                tier: "1B",
+                industry: "Aviation",
+                revenue: "$400K",
+                buyerType: "Innovation",
+                contactStatus: "Contacted",
+                lastContact: "2026-03-13",
+                nextAction: "Technical Spec Review"
+            },
+            {
+                name: "Highland Metal Works",
+                email: "orders@highlandmetal.com",
+                phone: "(909) 555-0113",
+                address: "9876 Industrial Way, Highland, CA 92346",
+                puresScore: 16,
+                tier: "1B",
+                industry: "Manufacturing",
+                revenue: "$350K",
+                buyerType: "Efficiency",
+                contactStatus: "Prospect",
+                lastContact: "2026-03-10",
+                nextAction: "Efficiency Assessment"
+            },
+            {
+                name: "Quick Fix Auto",
+                email: "manager@quickfixauto.com",
+                phone: "(909) 555-0114",
+                address: "3456 Auto Mall Dr, Redlands, CA 92373",
+                puresScore: 15,
+                tier: "1B",
+                industry: "Automotive",
+                revenue: "$150K",
+                buyerType: "Relationship",
+                contactStatus: "New",
+                lastContact: "Never",
+                nextAction: "Referral Introduction"
+            },
+            {
+                name: "Builders Supply Co",
+                email: "sales@builderssupply.com",
+                phone: "(909) 555-0115",
+                address: "1234 Construction Blvd, Fontana, CA 92335",
+                puresScore: 18,
+                tier: "1B",
+                industry: "Construction",
+                revenue: "$380K",
+                buyerType: "Analytical",
+                contactStatus: "Contacted",
+                lastContact: "2026-03-17",
+                nextAction: "Contractor Meeting"
+            },
+            {
+                name: "Pro Fab Industries",
+                email: "production@profab.com",
+                phone: "(909) 555-0116",
+                address: "7890 Manufacturing Dr, Rialto, CA 92376",
+                puresScore: 17,
+                tier: "1B",
+                industry: "Manufacturing",
+                revenue: "$420K",
+                buyerType: "Innovation",
+                contactStatus: "Prospect",
+                lastContact: "2026-03-11",
+                nextAction: "Innovation Showcase"
+            },
+            {
+                name: "Fleet Maintenance Pro",
+                email: "dispatch@fleetpro.com",
+                phone: "(909) 555-0117",
+                address: "4567 Logistics Way, San Bernardino, CA 92408",
+                puresScore: 19,
+                tier: "1B",
+                industry: "Automotive",
+                revenue: "$520K",
+                buyerType: "Efficiency",
+                contactStatus: "Hot Lead",
+                lastContact: "2026-03-20",
+                nextAction: "Fleet Assessment"
+            },
+            {
+                name: "Altitude Aircraft Services",
+                email: "hangar@altitudeaircraft.com",
+                phone: "(909) 555-0118",
+                address: "8901 Runway Ave, San Bernardino, CA 92407",
+                puresScore: 16,
+                tier: "1B",
+                industry: "Aviation",
+                revenue: "$300K",
+                buyerType: "Relationship",
+                contactStatus: "Contacted",
+                lastContact: "2026-03-19",
+                nextAction: "Partnership Discussion"
+            },
+            {
+                name: "Precision Auto Works",
+                email: "shop@precisionauto.com",
+                phone: "(909) 555-0119",
+                address: "2345 Service Rd, Highland, CA 92346",
+                puresScore: 18,
+                tier: "1B",
+                industry: "Automotive",
+                revenue: "$190K",
+                buyerType: "Analytical",
+                contactStatus: "Prospect",
+                lastContact: "2026-03-08",
+                nextAction: "Diagnostic Demo"
+            },
+            {
+                name: "Reliable Construction",
+                email: "office@reliableconst.com",
+                phone: "(909) 555-0120",
+                address: "5678 Builder Ave, Colton, CA 92324",
+                puresScore: 17,
+                tier: "1B",
+                industry: "Construction",
+                revenue: "$410K",
+                buyerType: "Relationship",
+                contactStatus: "New",
+                lastContact: "Never",
+                nextAction: "Industry Introduction"
+            },
+            {
+                name: "Local Motors",
+                email: "service@localmotors.com",
+                phone: "(909) 555-0121",
+                address: "1111 Car Care Ln, Loma Linda, CA 92354",
+                puresScore: 14,
+                tier: "1C",
+                industry: "Automotive",
+                revenue: "$120K",
+                buyerType: "Efficiency",
+                contactStatus: "New",
+                lastContact: "Never",
+                nextAction: "Initial Contact"
+            },
+            {
+                name: "Basic Fabrication",
+                email: "info@basicfab.com",
+                phone: "(909) 555-0122",
+                address: "2222 Workshop St, Rialto, CA 92376",
+                puresScore: 13,
+                tier: "1C",
+                industry: "Manufacturing",
+                revenue: "$180K",
+                buyerType: "Analytical",
+                contactStatus: "Contacted",
+                lastContact: "2026-03-05",
+                nextAction: "Cost Analysis"
+            },
+            {
+                name: "Small Construction LLC",
+                email: "crew@smallconst.com",
+                phone: "(909) 555-0123",
+                address: "3333 Building Way, Fontana, CA 92335",
+                puresScore: 12,
+                tier: "1C",
+                industry: "Construction",
+                revenue: "$90K",
+                buyerType: "Relationship",
+                contactStatus: "Prospect",
+                lastContact: "2026-02-28",
+                nextAction: "Trust Building"
+            },
+            {
+                name: "Economy Auto Repair",
+                email: "mechanic@economyauto.com",
+                phone: "(909) 555-0124",
+                address: "4444 Budget Blvd, San Bernardino, CA 92404",
+                puresScore: 11,
+                tier: "1C",
+                industry: "Automotive",
+                revenue: "$75K",
+                buyerType: "Efficiency",
+                contactStatus: "New",
+                lastContact: "Never",
+                nextAction: "Value Demonstration"
+            },
+            {
+                name: "Startup Manufacturing",
+                email: "founder@startupmfg.com",
+                phone: "(909) 555-0125",
+                address: "5555 Innovation Dr, Highland, CA 92346",
+                puresScore: 14,
+                tier: "1C",
+                industry: "Manufacturing",
+                revenue: "$65K",
+                buyerType: "Innovation",
+                contactStatus: "Contacted",
+                lastContact: "2026-03-01",
+                nextAction: "Growth Planning"
+            },
+            {
+                name: "Community Auto Shop",
+                email: "owner@communityauto.com",
+                phone: "(909) 555-0126",
+                address: "6666 Neighborhood St, Redlands, CA 92373",
+                puresScore: 13,
+                tier: "1C",
+                industry: "Automotive",
+                revenue: "$100K",
+                buyerType: "Relationship",
+                contactStatus: "Prospect",
+                lastContact: "2026-02-25",
+                nextAction: "Community Outreach"
+            },
+            {
+                name: "Budget Build Co",
+                email: "estimates@budgetbuild.com",
+                phone: "(909) 555-0127",
+                address: "7777 Economy Ave, Colton, CA 92324",
+                puresScore: 10,
+                tier: "1C",
+                industry: "Construction",
+                revenue: "$85K",
+                buyerType: "Analytical",
+                contactStatus: "New",
+                lastContact: "Never",
+                nextAction: "Cost-Benefit Analysis"
+            },
+            {
+                name: "Express Oil Change",
+                email: "manager@expressoil.com",
+                phone: "(909) 555-0128",
+                address: "8888 Quick Service Rd, Loma Linda, CA 92354",
+                puresScore: 12,
+                tier: "1C",
+                industry: "Automotive",
+                revenue: "$110K",
+                buyerType: "Efficiency",
+                contactStatus: "Contacted",
+                lastContact: "2026-02-20",
+                nextAction: "Speed Optimization"
+            },
+            {
+                name: "Basic Metal Works",
+                email: "shop@basicmetal.com",
+                phone: "(909) 555-0129",
+                address: "9999 Simple St, Rialto, CA 92376",
+                puresScore: 11,
+                tier: "1C",
+                industry: "Manufacturing",
+                revenue: "$95K",
+                buyerType: "Efficiency",
+                contactStatus: "Prospect",
+                lastContact: "2026-02-15",
+                nextAction: "Process Review"
+            },
+            {
+                name: "Hometown Repair",
+                email: "service@hometownrepair.com",
+                phone: "(909) 555-0130",
+                address: "1010 Main Street, Highland, CA 92346",
+                puresScore: 13,
+                tier: "1C",
+                industry: "Automotive",
+                revenue: "$130K",
+                buyerType: "Relationship",
+                contactStatus: "New",
+                lastContact: "Never",
+                nextAction: "Local Partnership"
+            },
+            {
+                name: "Simple Construction",
+                email: "jobs@simpleconst.com",
+                phone: "(909) 555-0131",
+                address: "1111 Plain Ave, Fontana, CA 92335",
+                puresScore: 12,
+                tier: "1C",
+                industry: "Construction",
+                revenue: "$105K",
+                buyerType: "Analytical",
+                contactStatus: "Contacted",
+                lastContact: "2026-02-10",
+                nextAction: "Simple Solutions Demo"
+            },
+            {
+                name: "Quick Fix Motors",
+                email: "repair@quickfixmotors.com",
+                phone: "(909) 555-0132",
+                address: "1212 Fast Lane, San Bernardino, CA 92404",
+                puresScore: 14,
+                tier: "1C",
+                industry: "Automotive",
+                revenue: "$140K",
+                buyerType: "Innovation",
+                contactStatus: "Prospect",
+                lastContact: "2026-02-05",
+                nextAction: "Innovation Assessment"
+            },
+            {
+                name: "Standard Manufacturing",
+                email: "orders@standardmfg.com",
+                phone: "(909) 555-0133",
+                address: "1313 Standard Way, Redlands, CA 92373",
+                puresScore: 11,
+                tier: "1C",
+                industry: "Manufacturing",
+                revenue: "$115K",
+                buyerType: "Efficiency",
+                contactStatus: "New",
+                lastContact: "Never",
+                nextAction: "Efficiency Audit"
+            },
+            {
+                name: "Neighborhood Auto",
+                email: "service@neighborhoodauto.com",
+                phone: "(909) 555-0134",
+                address: "1414 Local Rd, Highland, CA 92346",
+                puresScore: 10,
+                tier: "1C",
+                industry: "Automotive",
+                revenue: "$80K",
+                buyerType: "Relationship",
+                contactStatus: "Contacted",
+                lastContact: "2026-01-30",
+                nextAction: "Relationship Building"
+            },
+            {
+                name: "Family Build Co",
+                email: "family@familybuild.com",
+                phone: "(909) 555-0135",
+                address: "1515 Family Ave, Colton, CA 92324",
+                puresScore: 13,
+                tier: "1C",
+                industry: "Construction",
+                revenue: "$125K",
+                buyerType: "Relationship",
+                contactStatus: "Prospect",
+                lastContact: "2026-01-25",
+                nextAction: "Family Business Discussion"
+            },
+            {
+                name: "City Auto Service",
+                email: "city@cityauto.com",
+                phone: "(909) 555-0136",
+                address: "1616 City Center, San Bernardino, CA 92401",
+                puresScore: 12,
+                tier: "1C",
+                industry: "Automotive",
+                revenue: "$135K",
+                buyerType: "Analytical",
+                contactStatus: "New",
+                lastContact: "Never",
+                nextAction: "City Contract Discussion"
+            },
+            {
+                name: "Essential Manufacturing",
+                email: "production@essentialmfg.com",
+                phone: "(909) 555-0137",
+                address: "1717 Essential Blvd, Loma Linda, CA 92354",
+                puresScore: 14,
+                tier: "1C",
+                industry: "Manufacturing",
+                revenue: "$145K",
+                buyerType: "Innovation",
+                contactStatus: "Contacted",
+                lastContact: "2026-01-20",
+                nextAction: "Essential Tools Review"
+            },
+            {
+                name: "Corner Auto Repair",
+                email: "corner@cornerauto.com",
+                phone: "(909) 555-0138",
+                address: "1818 Corner St, Rialto, CA 92376",
+                puresScore: 11,
+                tier: "1C",
+                industry: "Automotive",
+                revenue: "$90K",
+                buyerType: "Efficiency",
+                contactStatus: "Prospect",
+                lastContact: "2026-01-15",
+                nextAction: "Location Assessment"
+            },
+            {
+                name: "Basic Build LLC",
+                email: "basic@basicbuild.com",
+                phone: "(909) 555-0139",
+                address: "1919 Basic Way, Fontana, CA 92335",
+                puresScore: 10,
+                tier: "1C",
+                industry: "Construction",
+                revenue: "$70K",
+                buyerType: "Analytical",
+                contactStatus: "New",
+                lastContact: "Never",
+                nextAction: "Basic Needs Assessment"
+            },
+            {
+                name: "Local Manufacturing Co",
+                email: "local@localmfg.com",
+                phone: "(909) 555-0140",
+                address: "2020 Local Industry Dr, Highland, CA 92346",
+                puresScore: 12,
+                tier: "1C",
+                industry: "Manufacturing",
+                revenue: "$120K",
+                buyerType: "Relationship",
+                contactStatus: "Contacted",
+                lastContact: "2026-01-10",
+                nextAction: "Local Business Partnership"
+            }
+        ];
+
+        let currentSortColumn = 0;
+        let currentSortDirection = 'asc';
+        let filteredClients = [...clients];
+
+        // Initialize the application
+        function init() {
+            setupScoring();
+            populateTable();
+            setupEventListeners();
+            updateStats();
+        }
+
+        // Setup P.U.R.E.S. scoring sliders
+        function setupScoring() {
+            const sliders = ['profitability', 'urgency', 'reachability', 'engagement', 'sustainability'];
+            
+            sliders.forEach(slider => {
+                const element = document.getElementById(slider);
+                const valueDisplay = document.getElementById(slider + 'Value');
+                
+                element.addEventListener('input', function() {
+                    valueDisplay.textContent = this.value;
+                    updateTotalScore();
+                });
+            });
+        }
+
+        // Update total P.U.R.E.S. score and tier
+        function updateTotalScore() {
+            const sliders = ['profitability', 'urgency', 'reachability', 'engagement', 'sustainability'];
+            let total = 0;
+            
+            sliders.forEach(slider => {
+                total += parseInt(document.getElementById(slider).value);
+            });
+            
+            document.getElementById('totalScore').textContent = total;
+            
+            let tier;
+            if (total >= 20) tier = 'Tier 1A (Premium)';
+            else if (total >= 15) tier = 'Tier 1B (High-Value)';
+            else tier = 'Tier 1C (Qualified)';
+            
+            document.getElementById('currentTier').textContent = tier;
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            document.getElementById('searchInput').addEventListener('input', filterTable);
+            document.getElementById('tierFilter').addEventListener('change', filterTable);
+            document.getElementById('industryFilter').addEventListener('change', filterTable);
+        }
+
+        // Tab functionality
+        function openTab(evt, tabName) {
+            const tabcontent = document.getElementsByClassName("tab-content");
+            for (let i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].classList.remove("active");
+            }
+            
+            const tablinks = document.getElementsByClassName("tab");
+            for (let i = 0; i < tablinks.length; i++) {
+                tablinks[i].classList.remove("active");
+            }
+            
+            document.getElementById(tabName).classList.add("active");
+            evt.currentTarget.classList.add("active");
+        }
+
+        // Populate the client table
+        function populateTable() {
+            const tbody = document.getElementById('clientTableBody');
+            tbody.innerHTML = '';
+            
+            filteredClients.forEach(client => {
+                const row = document.createElement('tr');
+                row.className = `tier-${client.tier.toLowerCase()}`;
+                
+                row.innerHTML = `
+                    <td><strong>${client.name}</strong></td>
+                    <td>${client.email}</td>
+                    <td>${client.phone}</td>
+                    <td>${client.address}</td>
+                    <td><span style="font-weight: bold; color: ${getTierColor(client.tier)}">${client.puresScore}/25</span></td>
+                    <td><span class="tier-badge tier-${client.tier.toLowerCase()}">${client.tier}</span></td>
+                    <td>${client.industry}</td>
+                    <td>${client.revenue}</td>
+                    <td>
+                        <button class="btn btn-primary btn-small" onclick="openEmailModal('${client.name}', '${client.email}', '${client.industry}', '${client.buyerType}')">Email</button>
+                        <a href="tel:${client.phone}" class="btn btn-secondary btn-small" style="margin-left: 0.5rem; text-decoration: none;">Call</a>
+                    </td>
+                `;
+                
+                tbody.appendChild(row);
+            });
+        }
+
+        // Get tier color
+        function getTierColor(tier) {
+            switch(tier) {
+                case '1A': return '#00ff00';
+                case '1B': return '#ffff00';
+                case '1C': return '#0096ff';
+                default: return '#CF2030';
+            }
+        }
+
+        // Filter table based on search and filter inputs
+        function filterTable() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const tierFilter = document.getElementById('tierFilter').value;
+            const industryFilter = document.getElementById('industryFilter').value;
+            
+            filteredClients = clients.filter(client => {
+                const matchesSearch = client.name.toLowerCase().includes(searchTerm) ||
+                                    client.email.toLowerCase().includes(searchTerm) ||
+                                    client.address.toLowerCase().includes(searchTerm);
+                
+                const matchesTier = !tierFilter || client.tier === tierFilter;
+                const matchesIndustry = !industryFilter || client.industry === industryFilter;
+                
+                return matchesSearch && matchesTier && matchesIndustry;
+            });
+            
+            populateTable();
+            updateStats();
+        }
+
+        // Sort table by column
+        function sortTable(columnIndex) {
+            const fields = ['name', 'email', 'phone', 'address', 'puresScore', 'tier', 'industry', 'revenue'];
+            const field = fields[columnIndex];
+            
+            if (currentSortColumn === columnIndex) {
+                currentSortDirection = currentSortDirection === 'asc' ? 'desc' : 'asc';
+            } else {
+                currentSortDirection = 'asc';
+                currentSortColumn = columnIndex;
+            }
+            
+            filteredClients.sort((a, b) => {
+                let aVal = a[field];
+                let bVal = b[field];
+                
+                if (field === 'puresScore') {
+                    aVal = parseInt(aVal);
+                    bVal = parseInt(bVal);
+                } else if (field === 'revenue') {
+                    aVal = parseInt(aVal.replace(/[$K,]/g, ''));
+                    bVal = parseInt(bVal.replace(/[$K,]/g, ''));
+                }
+                
+                if (currentSortDirection === 'asc') {
+                    return aVal < bVal ? -1 : aVal > bVal ? 1 : 0;
+                } else {
+                    return aVal > bVal ? -1 : aVal < bVal ? 1 : 0;
+                }
+            });
+            
+            populateTable();
+        }
+
+        // Update statistics
+        function updateStats() {
+            const tier1a = filteredClients.filter(c => c.tier === '1A').length;
+            const tier1b = filteredClients.filter(c => c.tier === '1B').length;
+            const tier1c = filteredClients.filter(c => c.tier === '1C').length;
+            
+            document.getElementById('totalClients').textContent = filteredClients.length;
+            document.getElementById('tier1aCount').textContent = tier1a;
+            document.getElementById('tier1bCount').textContent = tier1b;
+            document.getElementById('tier1cCount').textContent = tier1c;
+        }
+
+        // Open email modal
+        function openEmailModal(clientName, clientEmail, industry, buyerType) {
+            document.getElementById('modalClientName').textContent = clientName;
+            
+            const subject = `Professional Tools Solutions for ${clientName}`;
+            const message = generateEmailTemplate(clientName, industry, buyerType);
+            
+            document.getElementById('emailSubject').value = subject;
+            document.getElementById('emailMessage').value = message;
+            document.getElementById('emailModal').style.display = 'block';
+            
+            // Store client email for sending
+            document.getElementById('emailForm').setAttribute('data-client-email', clientEmail);
+        }
+
+        // Generate personalized email template
+        function generateEmailTemplate(clientName, industry, buyerType) {
+            const templates = {
+                'Analytical': `Dear ${clientName} Team,
+
+I hope this message finds you well. As a Snap-on Tools Authorized Dealer serving the Highland/San Bernardino area, I've been analyzing the tool and equipment needs of successful ${industry.toLowerCase()} businesses like yours.
+
+Based on our research, companies similar to ${clientName} typically see:
+• 25-40% reduction in job completion time with professional-grade tools
+• 30% decrease in tool replacement costs with lifetime warranty coverage
+• 15-20% improvement in work quality and customer satisfaction
+
+Our ROI analysis shows that the initial investment in Snap-on professional tools typically pays for itself within 8-12 months through improved efficiency and reduced downtime.
+
+I'd be happy to provide a detailed cost-benefit analysis specific to your operations, along with case studies from similar ${industry.toLowerCase()} businesses in our area.
+
+Could we schedule a brief 15-minute consultation to review your current tool needs and discuss how Snap-on solutions might benefit ${clientName}?
+
+Best regards,
+Michael Syrko
+Snap-on Tools Highland
+(909) 555-SNAP
+michael.syrko@snapon.com`,
+
+                'Relationship': `Dear ${clientName} Team,
+
+I hope you're having a great week. My name is Michael Syrko, and I'm the Snap-on Tools Authorized Dealer here in Highland, California.
+
+I've had the privilege of serving ${industry.toLowerCase()} professionals in our community for several years, and I've built lasting relationships with shop owners and technicians who value quality, reliability, and outstanding service.
+
+What sets our partnership approach apart:
+• Personal service with a local dealer who understands your business
+• Flexible financing options tailored to your cash flow
+• Lifetime warranty support - I'm here when you need me
+• Access to our exclusive mobile service bringing tools directly to you
+
+Several of my clients in the ${industry.toLowerCase()} industry have mentioned that having a trusted tool partner has been crucial to their success. I believe in building long-term relationships based on trust, quality, and mutual success.
+
+I'd love the opportunity to stop by ${clientName} and introduce myself personally. Perhaps we could grab coffee and discuss how Snap-on might support your team's success.
+
+Would next Tuesday or Wednesday afternoon work for a brief, no-pressure introduction?
+
+Looking forward to the possibility of serving you,
+Michael Syrko
+Snap-on Tools Highland
+michael.syrko@snapon.com`,
+
+                'Efficiency': `Dear ${clientName} Team,
+
+Time is money in the ${industry.toLowerCase()} business, and I know you're always looking for ways to work smarter and faster.
+
+As your local Snap-on Tools dealer, I specialize in helping businesses like ${clientName} maximize efficiency and minimize downtime. Here's what my clients typically experience:
+
+IMMEDIATE TIME SAVERS:
+• Advanced diagnostic tools that cut troubleshooting time by 60%
+• Ergonomic hand tools that reduce fatigue and increase speed
+• Organized tool storage systems that eliminate search time
+• Mobile service that brings tools to you, saving trips to suppliers
+
+EFFICIENCY MULTIPLIERS:
+• Tools that last 3-5x longer than standard alternatives
+• Warranty coverage that eliminates replacement downtime
+• Training and support to optimize tool usage
+• Inventory management to ensure you have what you need, when you need it
+
+Many of my ${industry.toLowerCase()} clients report saving 2-4 hours per week per technician after implementing our efficiency solutions.
+
+I'd like to offer you a FREE efficiency assessment - I'll spend 30 minutes reviewing your current workflow and identify potential time-saving opportunities, with no obligation.
+
+When would be the best time to stop by ${clientName} for this complimentary assessment?
+
+Working smarter together,
+Michael Syrko
+Snap-on Tools Highland
+michael.syrko@snapon.com`,
+
+                'Innovation': `Dear ${clientName} Team,
+
+Innovation drives success in today's competitive ${industry.toLowerCase()} market, and I believe ${clientName} is positioned to lead the way.
+
+As your local Snap-on Tools dealer, I partner with forward-thinking businesses to implement cutting-edge tool technologies that create competitive advantages:
+
+INNOVATIVE SOLUTIONS:
+• Advanced diagnostic systems with cloud connectivity and real-time updates
+• Smart tools with integrated sensors and digital feedback
+• Augmented reality training and troubleshooting systems
+• IoT-enabled inventory management and tool tracking
+
+COMPETITIVE ADVANTAGES:
+• Faster problem resolution with AI-assisted diagnostics
+• Enhanced customer service through advanced capabilities
+• Improved accuracy and quality with precision instruments
+• Future-ready workforce development through technology training
+
+Leading ${industry.toLowerCase()} businesses in our area are already gaining market advantages through these innovative solutions. Early adopters report 20-35% improvements in service delivery and customer satisfaction.
+
+I'd love to show you a live demonstration of our latest innovations and discuss how they might give ${clientName} a competitive edge in your market.
+
+Would you be interested in a 45-minute innovation showcase at your facility? I can bring several cutting-edge tools for hands-on evaluation.
+
+Innovating together for success,
+Michael Syrko
+Snap-on Tools Highland
+michael.syrko@snapon.com`
+            };
+
+            return templates[buyerType] || templates['Relationship'];
+        }
+
+        // Close email modal
+        function closeModal() {
+            document.getElementById('emailModal').style.display = 'none';
+        }
+
+        // Send email (simulation)
+        function sendEmail() {
+            const clientEmail = document.getElementById('emailForm').getAttribute('data-client-email');
+            const subject = document.getElementById('emailSubject').value;
+            const message = document.getElementById('emailMessage').value;
+            
+            // Create mailto link
+            const mailtoLink = `mailto:${clientEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(message)}`;
+            window.location.href = mailtoLink;
+            
+            closeModal();
+            
+            // Show success message
+            alert('Email client opened with your personalized message!');
+        }
+
+        // Export data to CSV
+        function exportData() {
+            const headers = ['Client Name', 'Email', 'Phone', 'Address', 'P.U.R.E.S. Score', 'Tier', 'Industry', 'Revenue', 'Buyer Type', 'Contact Status', 'Last Contact', 'Next Action'];
+            
+            const csvContent = [
+                headers.join(','),
+                ...filteredClients.map(client => [
+                    `"${client.name}"`,
+                    client.email,
+                    client.phone,
+                    `"${client.address}"`,
+                    client.puresScore,
+                    client.tier,
+                    client.industry,
+                    client.revenue,
+                    client.buyerType,
+                    client.contactStatus,
+                    client.lastContact,
+                    `"${client.nextAction}"`
+                ].join(','))
+            ].join('\n');
+            
+            const blob = new Blob([csvContent], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'snapon_client_database.csv';
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('emailModal');
+            if (event.target == modal) {
+                closeModal();
+            }
+        }
+
+        // Initialize the application when page loads
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>

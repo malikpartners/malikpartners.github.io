@@ -1,0 +1,1043 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tri County Dental Supply - S.A.L.E. Client Targeting System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: black;
+            color: #CF2030;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: black;
+            padding: 20px;
+            border-bottom: 2px solid #CF2030;
+            text-align: center;
+        }
+
+        .header img {
+            max-height: 80px;
+            margin-bottom: 10px;
+        }
+
+        .header h1 {
+            color: #CF2030;
+            font-size: 2em;
+            margin-bottom: 5px;
+        }
+
+        .header p {
+            color: #888;
+            font-size: 1.1em;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .tabs {
+            display: flex;
+            background: #111;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 15px 20px;
+            background: #222;
+            color: #CF2030;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+
+        .tab:hover, .tab.active {
+            background: #CF2030;
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+            background: #111;
+            padding: 30px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .search-filter {
+            background: #222;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .search-filter input, .search-filter select {
+            background: #333;
+            color: #CF2030;
+            border: 1px solid #CF2030;
+            padding: 10px;
+            margin: 5px;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .search-filter input:focus, .search-filter select:focus {
+            outline: none;
+            border-color: #fff;
+        }
+
+        table {
+            width: 100%;
+            background: #222;
+            border-collapse: collapse;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #333;
+        }
+
+        th {
+            background: #CF2030;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            position: relative;
+        }
+
+        th:hover {
+            background: #a01020;
+        }
+
+        tr:hover {
+            background: #333;
+        }
+
+        .tier-1a {
+            background: #1a4d1a !important;
+        }
+
+        .tier-1b {
+            background: #4d4d1a !important;
+        }
+
+        .tier-1c {
+            background: #1a1a4d !important;
+        }
+
+        .btn {
+            background: #CF2030;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            margin: 2px;
+            transition: background 0.3s;
+        }
+
+        .btn:hover {
+            background: #a01020;
+        }
+
+        .btn-small {
+            padding: 4px 8px;
+            font-size: 10px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+        }
+
+        .modal-content {
+            background: #222;
+            margin: 5% auto;
+            padding: 30px;
+            border: 2px solid #CF2030;
+            border-radius: 8px;
+            width: 80%;
+            max-width: 600px;
+            color: #CF2030;
+        }
+
+        .close {
+            color: #CF2030;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: white;
+        }
+
+        .form-group {
+            margin: 15px 0;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #CF2030;
+            font-weight: bold;
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            background: #333;
+            border: 1px solid #CF2030;
+            border-radius: 4px;
+            color: #CF2030;
+            font-size: 14px;
+        }
+
+        .form-group textarea {
+            height: 120px;
+            resize: vertical;
+        }
+
+        .score-display {
+            display: inline-block;
+            background: #CF2030;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 12px;
+        }
+
+        .footer {
+            background: black;
+            padding: 20px;
+            border-top: 2px solid #CF2030;
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        .footer img {
+            max-height: 40px;
+            opacity: 0.8;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .stat-card {
+            background: #222;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #CF2030;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            color: #CF2030;
+        }
+
+        .stat-label {
+            color: #888;
+            margin-top: 5px;
+        }
+
+        .export-buttons {
+            margin: 20px 0;
+            text-align: right;
+        }
+
+        @media (max-width: 768px) {
+            .tabs {
+                flex-direction: column;
+            }
+            
+            table {
+                font-size: 12px;
+            }
+            
+            th, td {
+                padding: 8px;
+            }
+            
+            .modal-content {
+                width: 95%;
+                margin: 10% auto;
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports">
+        <h1>Tri County Dental Supply - S.A.L.E. System</h1>
+        <p>Strategic Client Acquisition, Listening & Empowerment Dashboard</p>
+    </header>
+
+    <div class="container">
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('sourcing')">S.OURCING</button>
+            <button class="tab" onclick="showTab('assessing')">A.SSESSING</button>
+            <button class="tab" onclick="showTab('listening')">L.ISTENING</button>
+            <button class="tab" onclick="showTab('empowering')">E.MPOWERING</button>
+            <button class="tab" onclick="showTab('analytics')">ANALYTICS</button>
+        </div>
+
+        <!-- SOURCING MODULE -->
+        <div id="sourcing" class="tab-content active">
+            <h2>P.U.R.E.S. Client Scoring & Database</h2>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number" id="tier1aCount">12</div>
+                    <div class="stat-label">Tier 1A Premium</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="tier1bCount">18</div>
+                    <div class="stat-label">Tier 1B High-Value</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="tier1cCount">20</div>
+                    <div class="stat-label">Tier 1C Qualified</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">$2.4M</div>
+                    <div class="stat-label">Total Pipeline Value</div>
+                </div>
+            </div>
+
+            <div class="search-filter">
+                <input type="text" id="searchInput" placeholder="Search clients..." onkeyup="filterTable()">
+                <select id="tierFilter" onchange="filterTable()">
+                    <option value="">All Tiers</option>
+                    <option value="1A">Tier 1A</option>
+                    <option value="1B">Tier 1B</option>
+                    <option value="1C">Tier 1C</option>
+                </select>
+                <select id="statusFilter" onchange="filterTable()">
+                    <option value="">All Status</option>
+                    <option value="New">New</option>
+                    <option value="Contacted">Contacted</option>
+                    <option value="Qualified">Qualified</option>
+                    <option value="Proposal">Proposal</option>
+                </select>
+                <button class="btn" onclick="showAddClientModal()">Add New Client</button>
+                <button class="btn" onclick="exportData('csv')">Export CSV</button>
+            </div>
+
+            <div class="export-buttons">
+                <button class="btn" onclick="exportData('pdf')">Export PDF</button>
+                <button class="btn" onclick="bulkEmail()">Bulk Email Campaign</button>
+            </div>
+
+            <table id="clientTable">
+                <thead>
+                    <tr>
+                        <th onclick="sortTable(0)">Client Name</th>
+                        <th onclick="sortTable(1)">Email</th>
+                        <th onclick="sortTable(2)">Phone</th>
+                        <th onclick="sortTable(3)">Address</th>
+                        <th onclick="sortTable(4)">P.U.R.E.S Score</th>
+                        <th onclick="sortTable(5)">Tier</th>
+                        <th onclick="sortTable(6)">Practice Type</th>
+                        <th onclick="sortTable(7)">Revenue Est.</th>
+                        <th onclick="sortTable(8)">Status</th>
+                        <th onclick="sortTable(9)">Last Contact</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="clientTableBody">
+                    <!-- Client data will be populated by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- ASSESSING MODULE -->
+        <div id="assessing" class="tab-content">
+            <h2>Buying Pattern Analysis & Decision Timeline</h2>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">28%</div>
+                    <div class="stat-label">Analytical Buyers</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">35%</div>
+                    <div class="stat-label">Relationship Buyers</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">22%</div>
+                    <div class="stat-label">Efficiency Buyers</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">15%</div>
+                    <div class="stat-label">Innovation Buyers</div>
+                </div>
+            </div>
+
+            <div style="background: #222; padding: 20px; border-radius: 8px; margin: 20px 0;">
+                <h3>Decision Timeline Analyzer</h3>
+                <p style="color: #888; margin: 10px 0;">Average decision timeline by practice type:</p>
+                <ul style="color: #CF2030;">
+                    <li>Private Practice: 2-4 weeks</li>
+                    <li>Group Practice: 4-8 weeks</li>
+                    <li>DSO/Corporate: 6-12 weeks</li>
+                    <li>Specialty Practice: 3-6 weeks</li>
+                </ul>
+            </div>
+
+            <div style="background: #222; padding: 20px; border-radius: 8px;">
+                <h3>Value Proposition Alignment Matrix</h3>
+                <p style="color: #888; margin: 10px 0;">Key selling points by buyer type:</p>
+                <ul style="color: #CF2030;">
+                    <li><strong>Analytical:</strong> ROI analysis, cost savings data, performance metrics</li>
+                    <li><strong>Relationship:</strong> Testimonials, referrals, long-term partnerships</li>
+                    <li><strong>Efficiency:</strong> Time-saving solutions, streamlined processes</li>
+                    <li><strong>Innovation:</strong> Latest technology, competitive advantages</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- LISTENING MODULE -->
+        <div id="listening" class="tab-content">
+            <h2>Feedback Integration & Satisfaction Monitoring</h2>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">94%</div>
+                    <div class="stat-label">Customer Satisfaction</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">87%</div>
+                    <div class="stat-label">Repeat Purchase Rate</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">4.8/5</div>
+                    <div class="stat-label">Average Rating</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">3</div>
+                    <div class="stat-label">Open Issues</div>
+                </div>
+            </div>
+
+            <div style="background: #222; padding: 20px; border-radius: 8px; margin: 20px 0;">
+                <h3>Recent Feedback</h3>
+                <div style="margin: 10px 0; padding: 10px; background: #333; border-radius: 4px;">
+                    <strong>Dr. Johnson (Smile Dental)</strong> - "Excellent service, fast delivery on emergency orders" ⭐⭐⭐⭐⭐
+                </div>
+                <div style="margin: 10px 0; padding: 10px; background: #333; border-radius: 4px;">
+                    <strong>Dr. Martinez (Bright Dentistry)</strong> - "Competitive pricing, would recommend" ⭐⭐⭐⭐⭐
+                </div>
+                <div style="margin: 10px 0; padding: 10px; background: #333; border-radius: 4px;">
+                    <strong>Dr. Lee (Family Dental Care)</strong> - "Great product quality, reliable supplier" ⭐⭐⭐⭐⭐
+                </div>
+            </div>
+
+            <button class="btn" onclick="showFeedbackModal()">Collect Feedback</button>
+        </div>
+
+        <!-- EMPOWERING MODULE -->
+        <div id="empowering" class="tab-content">
+            <h2>Referral Strategy & Client Advocacy</h2>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">23</div>
+                    <div class="stat-label">Active Referrers</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">$125K</div>
+                    <div class="stat-label">Referral Revenue</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">31%</div>
+                    <div class="stat-label">Referral Conversion</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">8</div>
+                    <div class="stat-label">Success Stories</div>
+                </div>
+            </div>
+
+            <div style="background: #222; padding: 20px; border-radius: 8px; margin: 20px 0;">
+                <h3>Top Referral Partners</h3>
+                <ol style="color: #CF2030;">
+                    <li>Dr. Sarah Chen - Valley Dental Group (8 referrals, $42K value)</li>
+                    <li>Dr. Michael Torres - Perfect Smile Dentistry (6 referrals, $28K value)</li>
+                    <li>Dr. Jennifer Walsh - Coastal Dental (5 referrals, $31K value)</li>
+                </ol>
+            </div>
+
+            <button class="btn" onclick="showReferralModal()">Track New Referral</button>
+            <button class="btn" onclick="generateSuccessStory()">Create Success Story</button>
+        </div>
+
+        <!-- ANALYTICS MODULE -->
+        <div id="analytics" class="tab-content">
+            <h2>Performance Analytics & ROI Tracking</h2>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">324%</div>
+                    <div class="stat-label">ROI on Outreach</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">42%</div>
+                    <div class="stat-label">Email Open Rate</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">18%</div>
+                    <div class="stat-label">Response Rate</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">12%</div>
+                    <div class="stat-label">Conversion Rate</div>
+                </div>
+            </div>
+
+            <div style="background: #222; padding: 20px; border-radius: 8px; margin: 20px 0;">
+                <h3>Monthly Performance Trends</h3>
+                <p style="color: #888;">Q1 2026 has shown 28% growth in new client acquisition compared to Q4 2025</p>
+                <ul style="color: #CF2030; margin-top: 10px;">
+                    <li>January: 18 new clients, $284K revenue</li>
+                    <li>February: 22 new clients, $347K revenue</li>
+                    <li>March: 27 new clients, $425K revenue</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- CLIENT CONTACT MODAL -->
+    <div id="contactModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('contactModal')">&times;</span>
+            <h3>Contact Client</h3>
+            <div class="form-group">
+                <label>Contact Method:</label>
+                <select id="contactMethod" onchange="toggleContactFields()">
+                    <option value="email">Email</option>
+                    <option value="phone">Phone Call</option>
+                    <option value="visit">Schedule Visit</option>
+                </select>
+            </div>
+            <div id="emailFields">
+                <div class="form-group">
+                    <label>Subject:</label>
+                    <input type="text" id="emailSubject" value="Exclusive Dental Supply Offers for Your Practice">
+                </div>
+                <div class="form-group">
+                    <label>Email Content:</label>
+                    <textarea id="emailContent"></textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <button class="btn" onclick="sendCommunication()">Send</button>
+                <button class="btn" onclick="closeModal('contactModal')" style="background: #666;">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ADD CLIENT MODAL -->
+    <div id="addClientModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('addClientModal')">&times;</span>
+            <h3>Add New Client</h3>
+            <div class="form-group">
+                <label>Client Name:</label>
+                <input type="text" id="newClientName">
+            </div>
+            <div class="form-group">
+                <label>Email:</label>
+                <input type="email" id="newClientEmail">
+            </div>
+            <div class="form-group">
+                <label>Phone:</label>
+                <input type="tel" id="newClientPhone">
+            </div>
+            <div class="form-group">
+                <label>Address:</label>
+                <input type="text" id="newClientAddress">
+            </div>
+            <div class="form-group">
+                <label>Practice Type:</label>
+                <select id="newClientType">
+                    <option>Private Practice</option>
+                    <option>Group Practice</option>
+                    <option>DSO/Corporate</option>
+                    <option>Specialty Practice</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <button class="btn" onclick="addNewClient()">Add Client</button>
+                <button class="btn" onclick="closeModal('addClientModal')" style="background: #666;">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports">
+        <p style="color: #666; margin-top: 10px;">Powered by Higgins Reports - Advanced Business Intelligence</p>
+    </footer>
+
+    <script>
+        // Sample client data for Tri County Dental Supply (50 dental practices within 10 miles of San Bernardino, CA)
+        let clients = [
+            {name: "Dr. Sarah Chen - Valley Dental Group", email: "schen@valleydental.com", phone: "(909) 885-2341", address: "1245 E Highland Ave, San Bernardino, CA 92404", pures: 4.8, tier: "1A", type: "Group Practice", revenue: "$850K", status: "Qualified", lastContact: "2026-03-20"},
+            {name: "Dr. Michael Torres - Perfect Smile Dentistry", email: "mtorres@perfectsmile.net", phone: "(909) 887-1567", address: "567 N Waterman Ave, San Bernardino, CA 92401", pures: 4.6, tier: "1A", type: "Private Practice", revenue: "$680K", status: "Proposal", lastContact: "2026-03-22"},
+            {name: "Dr. Jennifer Walsh - Coastal Dental", email: "jwalsh@coastaldental.org", phone: "(909) 884-7892", address: "2890 E Baseline St, San Bernardino, CA 92410", pures: 4.7, tier: "1A", type: "Specialty Practice", revenue: "$920K", status: "Contacted", lastContact: "2026-03-19"},
+            {name: "Dr. Robert Kim - Sunshine Family Dental", email: "rkim@sunshinefamily.com", phone: "(909) 886-3345", address: "1567 W 5th St, San Bernardino, CA 92411", pures: 4.2, tier: "1B", type: "Family Practice", revenue: "$540K", status: "New", lastContact: "2026-03-15"},
+            {name: "Dr. Lisa Patel - Modern Dentistry Solutions", email: "lpatel@moderndental.net", phone: "(909) 889-2156", address: "3421 N Sierra Way, San Bernardino, CA 92405", pures: 4.5, tier: "1A", type: "Group Practice", revenue: "$780K", status: "Qualified", lastContact: "2026-03-21"},
+            {name: "Dr. David Johnson - Bright Smiles Dental", email: "djohnson@brightsmiles.org", phone: "(909) 883-4567", address: "778 E 40th St, San Bernardino, CA 92404", pures: 4.0, tier: "1B", type: "Private Practice", revenue: "$465K", status: "Contacted", lastContact: "2026-03-18"},
+            {name: "Dr. Maria Rodriguez - Elite Dental Care", email: "mrodriguez@elitedental.com", phone: "(909) 881-7823", address: "2145 W Baseline Rd, San Bernardino, CA 92411", pures: 4.3, tier: "1B", type: "Specialty Practice", revenue: "$620K", status: "Proposal", lastContact: "2026-03-17"},
+            {name: "Dr. James Wilson - Wilson Family Dentistry", email: "jwilson@wilsonfamily.net", phone: "(909) 888-9012", address: "4567 N E St, San Bernardino, CA 92407", pures: 3.8, tier: "1C", type: "Family Practice", revenue: "$380K", status: "New", lastContact: "2026-03-16"},
+            {name: "Dr. Amanda Brown - Advanced Dental Group", email: "abrown@advanceddental.org", phone: "(909) 890-1234", address: "1789 S Waterman Ave, San Bernardino, CA 92408", pures: 4.4, tier: "1A", type: "Group Practice", revenue: "$720K", status: "Qualified", lastContact: "2026-03-23"},
+            {name: "Dr. Christopher Lee - Premier Oral Care", email: "clee@premieroral.com", phone: "(909) 882-5678", address: "3256 E Highland Ave, San Bernardino, CA 92404", pures: 4.1, tier: "1B", type: "Private Practice", revenue: "$510K", status: "Contacted", lastContact: "2026-03-14"},
+            {name: "Dr. Rachel Martinez - Family First Dental", email: "rmartinez@familyfirst.net", phone: "(909) 887-8901", address: "856 W 2nd St, San Bernardino, CA 92410", pures: 3.9, tier: "1C", type: "Family Practice", revenue: "$420K", status: "New", lastContact: "2026-03-13"},
+            {name: "Dr. Steven Garcia - Garcia Dental Associates", email: "sgarcia@garciadental.org", phone: "(909) 885-2345", address: "2567 N Arrowhead Ave, San Bernardino, CA 92405", pures: 4.6, tier: "1A", type: "Group Practice", revenue: "$890K", status: "Proposal", lastContact: "2026-03-24"},
+            {name: "Dr. Nicole Thompson - Smile Center", email: "nthompson@smilecenter.com", phone: "(909) 889-6789", address: "1234 E 9th St, San Bernardino, CA 92410", pures: 4.0, tier: "1B", type: "Cosmetic Practice", revenue: "$580K", status: "Qualified", lastContact: "2026-03-12"},
+            {name: "Dr. Kevin Davis - Davis Family Dentistry", email: "kdavis@davisfamily.net", phone: "(909) 884-0123", address: "4789 W Foothill Blvd, San Bernardino, CA 92407", pures: 3.7, tier: "1C", type: "Family Practice", revenue: "$340K", status: "Contacted", lastContact: "2026-03-11"},
+            {name: "Dr. Michelle Anderson - Anderson Dental Group", email: "manderson@andersondental.org", phone: "(909) 881-4567", address: "3145 S E St, San Bernardino, CA 92408", pures: 4.2, tier: "1B", type: "Group Practice", revenue: "$650K", status: "New", lastContact: "2026-03-10"},
+            {name: "Dr. Brian Taylor - Taylor Orthodontics", email: "btaylor@taylorortho.com", phone: "(909) 886-7890", address: "2678 N D St, San Bernardino, CA 92401", pures: 4.5, tier: "1A", type: "Specialty Practice", revenue: "$760K", status: "Proposal", lastContact: "2026-03-25"},
+            {name: "Dr. Jessica White - Gentle Dental Care", email: "jwhite@gentledental.net", phone: "(909) 888-1234", address: "1567 W Highland Ave, San Bernardino, CA 92405", pures: 3.8, tier: "1C", type: "Family Practice", revenue: "$390K", status: "Qualified", lastContact: "2026-03-09"},
+            {name: "Dr. Daniel Moore - Moore Dental Solutions", email: "dmoore@mooredental.org", phone: "(909) 883-5678", address: "4234 E Baseline St, San Bernardino, CA 92404", pures: 4.1, tier: "1B", type: "Private Practice", revenue: "$520K", status: "Contacted", lastContact: "2026-03-08"},
+            {name: "Dr. Laura Jackson - Jackson Family Dental", email: "ljackson@jacksonfamily.com", phone: "(909) 890-9012", address: "789 N Tippecanoe Ave, San Bernardino, CA 92410", pures: 3.9, tier: "1C", type: "Family Practice", revenue: "$430K", status: "New", lastContact: "2026-03-07"},
+            {name: "Dr. Mark Harris - Harris Endodontics", email: "mharris@harrisendo.net", phone: "(909) 885-3456", address: "3567 W 5th St, San Bernardino, CA 92407", pures: 4.4, tier: "1A", type: "Specialty Practice", revenue: "$810K", status: "Proposal", lastContact: "2026-03-26"},
+            {name: "Dr. Emily Clark - Clark Dental Associates", email: "eclark@clarkdental.org", phone: "(909) 887-6789", address: "2345 S Waterman Ave, San Bernardino, CA 92408", pures: 4.0, tier: "1B", type: "Group Practice", revenue: "$590K", status: "Qualified", lastContact: "2026-03-06"},
+            {name: "Dr. Anthony Lewis - Lewis Periodontics", email: "alewis@lewisperio.com", phone: "(909) 882-0123", address: "1678 N Sierra Way, San Bernardino, CA 92405", pures: 4.3, tier: "1B", type: "Specialty Practice", revenue: "$680K", status: "Contacted", lastContact: "2026-03-05"},
+            {name: "Dr. Samantha Walker - Walker Family Dental", email: "swalker@walkerfamily.net", phone: "(909) 889-4567", address: "4567 E 40th St, San Bernardino, CA 92404", pures: 3.6, tier: "1C", type: "Family Practice", revenue: "$320K", status: "New", lastContact: "2026-03-04"},
+            {name: "Dr. Matthew Hall - Hall Dental Group", email: "mhall@halldental.org", phone: "(909) 884-7890", address: "2789 W Baseline Rd, San Bernardino, CA 92411", pures: 4.2, tier: "1B", type: "Group Practice", revenue: "$640K", status: "Proposal", lastContact: "2026-03-03"},
+            {name: "Dr. Ashley Young - Young Orthodontics", email: "ayoung@youngortho.com", phone: "(909) 881-1234", address: "3456 N E St, San Bernardino, CA 92407", pures: 4.6, tier: "1A", type: "Specialty Practice", revenue: "$870K", status: "Qualified", lastContact: "2026-03-02"},
+            {name: "Dr. Ryan Allen - Allen Family Dentistry", email: "rallen@allenfamily.net", phone: "(909) 886-5678", address: "1234 S E St, San Bernardino, CA 92408", pures: 3.7, tier: "1C", type: "Family Practice", revenue: "$350K", status: "Contacted", lastContact: "2026-03-01"},
+            {name: "Dr. Stephanie King - King Dental Care", email: "sking@kingdental.org", phone: "(909) 888-9012", address: "4789 N D St, San Bernardino, CA 92401", pures: 4.1, tier: "1B", type: "Private Practice", revenue: "$530K", status: "New", lastContact: "2026-02-28"},
+            {name: "Dr. Timothy Wright - Wright Oral Surgery", email: "twright@wrightoral.com", phone: "(909) 883-2345", address: "2567 E Highland Ave, San Bernardino, CA 92404", pures: 4.5, tier: "1A", type: "Specialty Practice", revenue: "$790K", status: "Proposal", lastContact: "2026-02-27"},
+            {name: "Dr. Melissa Lopez - Lopez Family Dental", email: "mlopez@lopezfamily.net", phone: "(909) 890-6789", address: "3678 W Foothill Blvd, San Bernardino, CA 92407", pures: 3.8, tier: "1C", type: "Family Practice", revenue: "$400K", status: "Qualified", lastContact: "2026-02-26"},
+            {name: "Dr. Joseph Hill - Hill Dental Associates", email: "jhill@hilldental.org", phone: "(909) 885-0123", address: "1789 S Waterman Ave, San Bernardino, CA 92408", pures: 4.0, tier: "1B", type: "Group Practice", revenue: "$570K", status: "Contacted", lastContact: "2026-02-25"},
+            {name: "Dr. Katherine Scott - Scott Endodontics", email: "kscott@scottendo.com", phone: "(909) 887-4567", address: "4234 N Sierra Way, San Bernardino, CA 92405", pures: 4.4, tier: "1A", type: "Specialty Practice", revenue: "$750K", status: "New", lastContact: "2026-02-24"},
+            {name: "Dr. Andrew Green - Green Family Dentistry", email: "agreen@greenfamily.net", phone: "(909) 882-7890", address: "2345 W 5th St, San Bernardino, CA 92407", pures: 3.9, tier: "1C", type: "Family Practice", revenue: "$440K", status: "Proposal", lastContact: "2026-02-23"},
+            {name: "Dr. Megan Adams - Adams Dental Group", email: "madams@adamsdental.org", phone: "(909) 889-1234", address: "3567 E Baseline St, San Bernardino, CA 92404", pures: 4.2, tier: "1B", type: "Group Practice", revenue: "$620K", status: "Qualified", lastContact: "2026-02-22"},
+            {name: "Dr. Charles Baker - Baker Periodontics", email: "cbaker@bakerperio.com", phone: "(909) 884-5678", address: "1456 N Arrowhead Ave, San Bernardino, CA 92405", pures: 4.3, tier: "1B", type: "Specialty Practice", revenue: "$690K", status: "Contacted", lastContact: "2026-02-21"},
+            {name: "Dr. Elizabeth Gonzalez - Gonzalez Family Dental", email: "egonzalez@gonzalezfamily.net", phone: "(909) 881-9012", address: "4678 S E St, San Bernardino, CA 92408", pures: 3.6, tier: "1C", type: "Family Practice", revenue: "$330K", status: "New", lastContact: "2026-02-20"},
+            {name: "Dr. Joshua Nelson - Nelson Orthodontics", email: "jnelson@nelsonortho.org", phone: "(909) 886-2345", address: "2789 E 40th St, San Bernardino, CA 92404", pures: 4.7, tier: "1A", type: "Specialty Practice", revenue: "$920K", status: "Proposal", lastContact: "2026-02-19"},
+            {name: "Dr. Brittany Carter - Carter Dental Care", email: "bcarter@carterdental.com", phone: "(909) 888-6789", address: "3456 W Baseline Rd, San Bernardino, CA 92411", pures: 4.0, tier: "1B", type: "Private Practice", revenue: "$550K", status: "Qualified", lastContact: "2026-02-18"},
+            {name: "Dr. Nathan Mitchell - Mitchell Family Dentistry", email: "nmitchell@mitchellfamily.net", phone: "(909) 883-0123", address: "1567 N D St, San Bernardino, CA 92401", pures: 3.7, tier: "1C", type: "Family Practice", revenue: "$360K", status: "Contacted", lastContact: "2026-02-17"},
+            {name: "Dr. Courtney Perez - Perez Oral Surgery", email: "cperez@perezoral.org", phone: "(909) 890-4567", address: "4789 E Highland Ave, San Bernardino, CA 92404", pures: 4.5, tier: "1A", type: "Specialty Practice", revenue: "$820K", status: "New", lastContact: "2026-02-16"},
+            {name: "Dr. Gregory Roberts - Roberts Dental Associates", email: "groberts@robertsdental.com", phone: "(909) 885-7890", address: "2567 S Waterman Ave, San Bernardino, CA 92408", pures: 4.1, tier: "1B", type: "Group Practice", revenue: "$600K", status: "Proposal", lastContact: "2026-02-15"},
+            {name: "Dr. Vanessa Turner - Turner Family Dental", email: "vturner@turnerfamily.net", phone: "(909) 887-1234", address: "3678 N Sierra Way, San Bernardino, CA 92405", pures: 3.8, tier: "1C", type: "Family Practice", revenue: "$410K", status: "Qualified", lastContact: "2026-02-14"},
+            {name: "Dr. Alexander Phillips - Phillips Endodontics", email: "aphillips@phillipsendo.org", phone: "(909) 882-5678", address: "1789 W Foothill Blvd, San Bernardino, CA 92407", pures: 4.4, tier: "1A", type: "Specialty Practice", revenue: "$770K", status: "Contacted", lastContact: "2026-02-13"},
+            {name: "Dr. Madison Campbell - Campbell Dental Group", email: "mcampbell@campbelldental.com", phone: "(909) 889-9012", address: "4234 W 5th St, San Bernardino, CA 92407", pures: 4.2, tier: "1B", type: "Group Practice", revenue: "$630K", status: "New", lastContact: "2026-02-12"},
+            {name: "Dr. Jordan Parker - Parker Periodontics", email: "jparker@parkerperio.net", phone: "(909) 884-2345", address: "2345 N E St, San Bernardino, CA 92401", pures: 4.3, tier: "1B", type: "Specialty Practice", revenue: "$700K", status: "Proposal", lastContact: "2026-02-11"},
+            {name: "Dr. Alexis Evans - Evans Family Dentistry", email: "aevans@evansfamily.org", phone: "(909) 881-6789", address: "3567 S E St, San Bernardino, CA 92408", pures: 3.9, tier: "1C", type: "Family Practice", revenue: "$450K", status: "Qualified", lastContact: "2026-02-10"},
+            {name: "Dr. Benjamin Edwards - Edwards Oral Surgery", email: "bedwards@edwardsoral.com", phone: "(909) 886-0123", address: "1456 E Baseline St, San Bernardino, CA 92404", pures: 4.6, tier: "1A", type: "Specialty Practice", revenue: "$860K", status: "Contacted", lastContact: "2026-02-09"},
+            {name: "Dr. Taylor Collins - Collins Dental Care", email: "tcollins@collinsdental.net", phone: "(909) 888-4567", address: "4567 N Arrowhead Ave, San Bernardino, CA 92405", pures: 4.0, tier: "1B", type: "Private Practice", revenue: "$560K", status: "New", lastContact: "2026-02-08"},
+            {name: "Dr. Austin Stewart - Stewart Family Dental", email: "astewart@stewartfamily.org", phone: "(909) 883-7890", address: "2678 W Baseline Rd, San Bernardino, CA 92411", pures: 3.7, tier: "1C", type: "Family Practice", revenue: "$370K", status: "Proposal", lastContact: "2026-02-07"},
+            {name: "Dr. Paige Sanchez - Sanchez Orthodontics", email: "psanchez@sanchezortho.com", phone: "(909) 890-1234", address: "3789 E 40th St, San Bernardino, CA 92404", pures: 4.8, tier: "1A", type: "Specialty Practice", revenue: "$950K", status: "Qualified", lastContact: "2026-02-06"},
+            {name: "Dr. Caleb Morris - Morris Dental Associates", email: "cmorris@morrisdental.net", phone: "(909) 885-5678", address: "1234 N D St, San Bernardino, CA 92401", pures: 4.1, tier: "1B", type: "Group Practice", revenue: "$580K", status: "Contacted", lastContact: "2026-02-05"},
+            {name: "Dr. Isabella Rogers - Rogers Family Dentistry", email: "irogers@rogersfamily.org", phone: "(909) 887-9012", address: "4890 S Waterman Ave, San Bernardino, CA 92408", pures: 3.8, tier: "1C", type: "Family Practice", revenue: "$420K", status: "New", lastContact: "2026-02-04"},
+            {name: "Dr. Ethan Reed - Reed Endodontics", email: "ereed@reedendo.com", phone: "(909) 882-2345", address: "2456 W Highland Ave, San Bernardino, CA 92405", pures: 4.4, tier: "1A", type: "Specialty Practice", revenue: "$780K", status: "Proposal", lastContact: "2026-02-03"}
+        ];
+
+        let currentClient = null;
+
+        // Initialize the table
+        function initializeTable() {
+            populateTable(clients);
+            updateStats();
+        }
+
+        // Populate table with client data
+        function populateTable(data) {
+            const tbody = document.getElementById('clientTableBody');
+            tbody.innerHTML = '';
+
+            data.forEach((client, index) => {
+                const row = tbody.insertRow();
+                const tierClass = `tier-${client.tier.toLowerCase()}`;
+                row.className = tierClass;
+
+                row.innerHTML = `
+                    <td>${client.name}</td>
+                    <td>${client.email}</td>
+                    <td>${client.phone}</td>
+                    <td>${client.address}</td>
+                    <td><span class="score-display">${client.pures}</span></td>
+                    <td>${client.tier}</td>
+                    <td>${client.type}</td>
+                    <td>${client.revenue}</td>
+                    <td>${client.status}</td>
+                    <td>${client.lastContact}</td>
+                    <td>
+                        <button class="btn btn-small" onclick="contactClient(${index})">Contact</button>
+                        <button class="btn btn-small" onclick="updatePures(${index})">Score</button>
+                    </td>
+                `;
+            });
+        }
+
+        // Filter table based on search and filters
+        function filterTable() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const tierFilter = document.getElementById('tierFilter').value;
+            const statusFilter = document.getElementById('statusFilter').value;
+
+            const filteredData = clients.filter(client => {
+                const matchesSearch = client.name.toLowerCase().includes(searchTerm) || 
+                                    client.email.toLowerCase().includes(searchTerm) ||
+                                    client.address.toLowerCase().includes(searchTerm);
+                const matchesTier = !tierFilter || client.tier === tierFilter;
+                const matchesStatus = !statusFilter || client.status === statusFilter;
+                
+                return matchesSearch && matchesTier && matchesStatus;
+            });
+
+            populateTable(filteredData);
+        }
+
+        // Sort table by column
+        function sortTable(columnIndex) {
+            const table = document.getElementById('clientTable');
+            const tbody = table.tBodies[0];
+            const rows = Array.from(tbody.rows);
+
+            rows.sort((a, b) => {
+                const aText = a.cells[columnIndex].textContent.trim();
+                const bText = b.cells[columnIndex].textContent.trim();
+
+                // Handle numeric sorting for PURES score
+                if (columnIndex === 4) {
+                    return parseFloat(bText) - parseFloat(aText);
+                }
+
+                // Handle date sorting
+                if (columnIndex === 9) {
+                    return new Date(bText) - new Date(aText);
+                }
+
+                return aText.localeCompare(bText);
+            });
+
+            tbody.innerHTML = '';
+            rows.forEach(row => tbody.appendChild(row));
+        }
+
+        // Contact client
+        function contactClient(index) {
+            currentClient = clients[index];
+            document.getElementById('emailSubject').value = `Exclusive Dental Supply Offers for ${currentClient.name.split(' - ')[1] || 'Your Practice'}`;
+            
+            // Generate personalized email content
+            const emailContent = generateEmailContent(currentClient);
+            document.getElementById('emailContent').value = emailContent;
+            
+            document.getElementById('contactModal').style.display = 'block';
+        }
+
+        // Generate personalized email content
+        function generateEmailContent(client) {
+            const practiceType = client.type.toLowerCase();
+            let customContent = '';
+
+            if (practiceType.includes('group')) {
+                customContent = `As a group practice, you understand the importance of reliable suppliers who can handle volume orders efficiently. Our bulk pricing and dedicated account management ensure your multiple locations are always well-stocked.`;
+            } else if (practiceType.includes('specialty')) {
+                customContent = `For specialty practices like yours, we offer specialized instruments and materials that meet the unique demands of your field. Our technical support team understands the precision required in your practice.`;
+            } else if (practiceType.includes('family')) {
+                customContent = `Family practices need versatile supplies for patients of all ages. Our comprehensive inventory covers everything from pediatric to geriatric dentistry, helping you provide excellent care for every family member.`;
+            } else {
+                customContent = `Your practice deserves a dental supply partner that understands your specific needs and delivers consistent quality products on time, every time.`;
+            }
+
+            return `Dear ${client.name.split(' - ')[0]},
+
+I hope this message finds you well. I'm reaching out from Tri County Dental Supply, California's premier dental equipment and supplies provider with over 20 years of experience serving dental professionals.
+
+${customContent}
+
+Why choose Tri County Dental Supply for your practice?
+
+• 20+ Years of Trusted Service: Since 2000, we've been the reliable partner dentists trust
+• Comprehensive Inventory: From anesthetics and burs to X-ray equipment and infection control products
+• Top Brand Partners: 3M, Dentsply Sirona, Kerr, Ultradent, and 100+ other leading brands
+• Competitive Pricing: Discounted prices on all products without compromising quality
+• Local Service: Based in San Bernardino, we understand the local market and provide personalized service
+• Secure Transactions: 100% secure payment processing for your peace of mind
+
+Current Special Offers:
+• Q1 2026 Equipment Special: Up to 37% off select dental chairs and equipment
+• New Customer Bonus: 15% off your first order over $500
+• Free Delivery: On orders over $250 within 10 miles
+
+I'd love to schedule a brief consultation to discuss how we can support your practice's supply needs and potentially save you money while improving your inventory management.
+
+Would you be available for a 15-minute call this week to explore how Tri County Dental Supply can enhance your practice operations?
+
+Best regards,
+
+Rashmi Mehta
+Business Owner
+Tri County Dental Supply
+4260 Hallmark Pkwy, San Bernardino, CA 92407
+Phone: (909) 880-9555
+Email: rashmi@tricountydental.com
+Website: www.tricountydental.com
+
+P.S. Ask me about our exclusive loyalty program that offers additional discounts and priority ordering for our regular customers!`;
+        }
+
+        // Update PURES score
+        function updatePures(index) {
+            const newScore = prompt(`Update P.U.R.E.S. score for ${clients[index].name}:`, clients[index].pures);
+            if (newScore && !isNaN(newScore) && newScore >= 1 && newScore <= 5) {
+                clients[index].pures = parseFloat(newScore);
+                
+                // Update tier based on new score
+                if (newScore >= 4.5) {
+                    clients[index].tier = '1A';
+                } else if (newScore >= 4.0) {
+                    clients[index].tier = '1B';
+                } else {
+                    clients[index].tier = '1C';
+                }
+                
+                populateTable(clients);
+                updateStats();
+            }
+        }
+
+        // Send communication
+        function sendCommunication() {
+            const method = document.getElementById('contactMethod').value;
+            const subject = document.getElementById('emailSubject').value;
+            const content = document.getElementById('emailContent').value;
+
+            if (method === 'email') {
+                // Create mailto link
+                const mailto = `mailto:${currentClient.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(content)}`;
+                window.location.href = mailto;
+            }
+
+            // Update client status
+            const clientIndex = clients.findIndex(c => c.email === currentClient.email);
+            if (clientIndex !== -1) {
+                clients[clientIndex].status = 'Contacted';
+                clients[clientIndex].lastContact = new Date().toISOString().split('T')[0];
+            }
+
+            closeModal('contactModal');
+            populateTable(clients);
+            alert(`Communication sent to ${currentClient.name}!`);
+        }
+
+        // Show add client modal
+        function showAddClientModal() {
+            document.getElementById('addClientModal').style.display = 'block';
+        }
+
+        // Add new client
+        function addNewClient() {
+            const name = document.getElementById('newClientName').value;
+            const email = document.getElementById('newClientEmail').value;
+            const phone = document.getElementById('newClientPhone').value;
+            const address = document.getElementById('newClientAddress').value;
+            const type = document.getElementById('newClientType').value;
+
+            if (name && email && phone && address) {
+                const newClient = {
+                    name: name,
+                    email: email,
+                    phone: phone,
+                    address: address,
+                    pures: 3.5,
+                    tier: '1C',
+                    type: type,
+                    revenue: '$300K',
+                    status: 'New',
+                    lastContact: new Date().toISOString().split('T')[0]
+                };
+
+                clients.push(newClient);
+                populateTable(clients);
+                updateStats();
+                closeModal('addClientModal');
+                alert('New client added successfully!');
+
+                // Clear form
+                document.getElementById('newClientName').value = '';
+                document.getElementById('newClientEmail').value = '';
+                document.getElementById('newClientPhone').value = '';
+                document.getElementById('newClientAddress').value = '';
+            } else {
+                alert('Please fill in all required fields.');
+            }
+        }
+
+        // Toggle contact fields based on method
+        function toggleContactFields() {
+            const method = document.getElementById('contactMethod').value;
+            const emailFields = document.getElementById('emailFields');
+            emailFields.style.display = method === 'email' ? 'block' : 'none';
+        }
+
+        // Export data
+        function exportData(format) {
+            if (format === 'csv') {
+                exportToCSV();
+            } else if (format === 'pdf') {
+                exportToPDF();
+            }
+        }
+
+        // Export to CSV
+        function exportToCSV() {
+            const headers = ['Client Name', 'Email', 'Phone', 'Address', 'PURES Score', 'Tier', 'Practice Type', 'Revenue', 'Status', 'Last Contact'];
+            const csvContent = [headers.join(',')];
+
+            clients.forEach(client => {
+                const row = [
+                    `"${client.name}"`,
+                    client.email,
+                    `"${client.phone}"`,
+                    `"${client.address}"`,
+                    client.pures,
+                    client.tier,
+                    `"${client.type}"`,
+                    client.revenue,
+                    client.status,
+                    client.lastContact
+                ];
+                csvContent.push(row.join(','));
+            });
+
+            const blob = new Blob([csvContent.join('\n')], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'tricounty_dental_clients.csv';
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+
+        // Bulk email campaign
+        function bulkEmail() {
+            const tierFilter = prompt('Send to which tier? (1A, 1B, 1C, or ALL):', 'ALL');
+            if (!tierFilter) return;
+
+            const targetClients = tierFilter === 'ALL' ? 
+                clients : 
+                clients.filter(c => c.tier === tierFilter);
+
+            const emailList = targetClients.map(c => c.email).join(',');
+            const subject = 'Exclusive Dental Supply Offers - Tri County Dental Supply';
+            const body = `Dear Valued Dental Professional,
+
+We're excited to share our latest offers and product updates with you!
+
+Visit our website at www.tricountydental.com to explore our full range of dental supplies and equipment.
+
+Best regards,
+Tri County Dental Supply Team`;
+
+            const mailto = `mailto:?bcc=${emailList}&subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+            window.location.href = mailto;
+        }
+
+        // Update statistics
+        function updateStats() {
+            const tier1A = clients.filter(c => c.tier === '1A').length;
+            const tier1B = clients.filter(c => c.tier === '1B').length;
+            const tier1C = clients.filter(c => c.tier === '1C').length;
+
+            document.getElementById('tier1aCount').textContent = tier1A;
+            document.getElementById('tier1bCount').textContent = tier1B;
+            document.getElementById('tier1cCount').textContent = tier1C;
+        }
+
+        // Show/hide tabs
+        function showTab(tabName) {
+            // Hide all tab contents
+            const tabContents = document.getElementsByClassName('tab-content');
+            for (let i = 0; i < tabContents.length; i++) {
+                tabContents[i].classList.remove('active');
+            }
+
+            // Remove active class from all tabs
+            const tabs = document.getElementsByClassName('tab');
+            for (let i = 0; i < tabs.length; i++) {
+                tabs[i].classList.remove('active');
+            }
+
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // Modal functions
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        function showFeedbackModal() {
+            alert('Feedback collection form would open here. This would integrate with your CRM system.');
+        }
+
+        function showReferralModal() {
+            alert('Referral tracking form would open here. This would help track new referrals and their sources.');
+        }
+
+        function generateSuccessStory() {
+            alert('Success story generator would open here. This would help create compelling case studies from satisfied clients.');
+        }
+
+        // Close modals when clicking outside
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = 'none';
+            }
+        }
+
+        // Initialize the application
+        window.onload = function() {
+            initializeTable();
+        };
+    </script>
+</body>
+</html>

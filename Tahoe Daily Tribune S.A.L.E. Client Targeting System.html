@@ -1,0 +1,838 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tahoe Daily Tribune - S.A.L.E. Client Targeting System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #000000;
+            color: #ffffff;
+            line-height: 1.6;
+        }
+
+        .header {
+            background-color: #CF2030;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(207, 32, 48, 0.3);
+        }
+
+        .logo {
+            height: 60px;
+        }
+
+        .header-text {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .module {
+            background: linear-gradient(135deg, #1a1a1a, #2a2a2a);
+            border: 1px solid #CF2030;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 15px rgba(207, 32, 48, 0.2);
+        }
+
+        .module h3 {
+            color: #CF2030;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+            border-bottom: 2px solid #CF2030;
+            padding-bottom: 0.5rem;
+        }
+
+        .pures-scoring {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .score-item {
+            background-color: #333;
+            padding: 1rem;
+            border-radius: 5px;
+            border-left: 4px solid #CF2030;
+        }
+
+        .score-item label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #CF2030;
+            font-weight: bold;
+        }
+
+        .score-slider {
+            width: 100%;
+            height: 5px;
+            border-radius: 5px;
+            background: #555;
+            outline: none;
+        }
+
+        .score-slider::-webkit-slider-thumb {
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #CF2030;
+            cursor: pointer;
+        }
+
+        .controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .search-input, .filter-select {
+            padding: 0.5rem;
+            border: 1px solid #CF2030;
+            border-radius: 5px;
+            background-color: #333;
+            color: white;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            background-color: #CF2030;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #a01828;
+        }
+
+        .client-table-container {
+            background: linear-gradient(135deg, #1a1a1a, #2a2a2a);
+            border: 1px solid #CF2030;
+            border-radius: 10px;
+            padding: 1.5rem;
+            overflow-x: auto;
+            box-shadow: 0 4px 15px rgba(207, 32, 48, 0.2);
+        }
+
+        .client-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .client-table th {
+            background-color: #CF2030;
+            color: white;
+            padding: 0.75rem;
+            text-align: left;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .client-table th:hover {
+            background-color: #a01828;
+        }
+
+        .client-table td {
+            padding: 0.75rem;
+            border-bottom: 1px solid #444;
+        }
+
+        .client-table tr:nth-child(even) {
+            background-color: #222;
+        }
+
+        .client-table tr:hover {
+            background-color: #333;
+        }
+
+        .tier-1a { background-color: #4CAF50 !important; color: white; }
+        .tier-1b { background-color: #FF9800 !important; color: white; }
+        .tier-1c { background-color: #2196F3 !important; color: white; }
+
+        .contact-btn {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 0.3rem 0.8rem;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+
+        .contact-btn:hover {
+            background-color: #45a049;
+        }
+
+        .footer {
+            background-color: #CF2030;
+            padding: 1rem;
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        .footer-logo {
+            height: 30px;
+            margin-bottom: 0.5rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #CF2030, #a01828);
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: white;
+        }
+
+        .stat-label {
+            color: rgba(255,255,255,0.9);
+            margin-top: 0.5rem;
+        }
+
+        .email-template {
+            background-color: #333;
+            border: 1px solid #CF2030;
+            border-radius: 5px;
+            padding: 1rem;
+            margin-top: 1rem;
+            display: none;
+        }
+
+        .tab-container {
+            display: flex;
+            margin-bottom: 1rem;
+        }
+
+        .tab {
+            background-color: #333;
+            color: white;
+            border: 1px solid #CF2030;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            border-bottom: none;
+        }
+
+        .tab.active {
+            background-color: #CF2030;
+        }
+
+        .tab-content {
+            display: none;
+            background: linear-gradient(135deg, #1a1a1a, #2a2a2a);
+            border: 1px solid #CF2030;
+            padding: 1.5rem;
+            border-radius: 0 10px 10px 10px;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports Logo" class="logo">
+        <div class="header-text">Tahoe Daily Tribune - S.A.L.E. Client Targeting System</div>
+    </header>
+
+    <div class="container">
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number" id="totalClients">50</div>
+                <div class="stat-label">Total Prospects</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="tier1aCount">12</div>
+                <div class="stat-label">Tier 1A (Premium)</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="tier1bCount">18</div>
+                <div class="stat-label">Tier 1B (High-Value)</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="tier1cCount">20</div>
+                <div class="stat-label">Tier 1C (Qualified)</div>
+            </div>
+        </div>
+
+        <div class="tab-container">
+            <div class="tab active" onclick="showTab('sourcing')">S.A.L.E. Sourcing</div>
+            <div class="tab" onclick="showTab('assessing')">Assessing</div>
+            <div class="tab" onclick="showTab('listening')">Listening</div>
+            <div class="tab" onclick="showTab('empowering')">Empowering</div>
+            <div class="tab" onclick="showTab('clients')">Client Database</div>
+        </div>
+
+        <div id="sourcing" class="tab-content active">
+            <div class="module">
+                <h3>🎯 P.U.R.E.S. Client Scoring System</h3>
+                <div class="pures-scoring">
+                    <div class="score-item">
+                        <label>Profitability (1-5):</label>
+                        <input type="range" min="1" max="5" value="3" class="score-slider" id="profitability">
+                        <span id="profitabilityValue">3</span>
+                    </div>
+                    <div class="score-item">
+                        <label>Urgency (1-5):</label>
+                        <input type="range" min="1" max="5" value="3" class="score-slider" id="urgency">
+                        <span id="urgencyValue">3</span>
+                    </div>
+                    <div class="score-item">
+                        <label>Reachability (1-5):</label>
+                        <input type="range" min="1" max="5" value="3" class="score-slider" id="reachability">
+                        <span id="reachabilityValue">3</span>
+                    </div>
+                    <div class="score-item">
+                        <label>Engagement (1-5):</label>
+                        <input type="range" min="1" max="5" value="3" class="score-slider" id="engagement">
+                        <span id="engagementValue">3</span>
+                    </div>
+                    <div class="score-item">
+                        <label>Sustainability (1-5):</label>
+                        <input type="range" min="1" max="5" value="3" class="score-slider" id="sustainability">
+                        <span id="sustainabilityValue">3</span>
+                    </div>
+                </div>
+                <div style="text-align: center; margin-top: 1rem;">
+                    <div style="font-size: 1.5rem; color: #CF2030;">
+                        Total P.U.R.E.S. Score: <span id="totalScore">15</span>/25
+                        | Tier: <span id="tierLevel">1C</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="assessing" class="tab-content">
+            <div class="module">
+                <h3>📊 Buying Pattern Analysis</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+                    <div class="score-item">
+                        <label>Analytical Buyers</label>
+                        <p>Require detailed ROI analysis, case studies, advertising performance data</p>
+                    </div>
+                    <div class="score-item">
+                        <label>Relationship Buyers</label>
+                        <p>Value trust, local partnerships, long-term advertising relationships</p>
+                    </div>
+                    <div class="score-item">
+                        <label>Efficiency Buyers</label>
+                        <p>Focus on streamlined ad placement, quick turnaround, cost-effective solutions</p>
+                    </div>
+                    <div class="score-item">
+                        <label>Innovation Buyers</label>
+                        <p>Seek cutting-edge digital advertising, social media integration, new marketing channels</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="listening" class="tab-content">
+            <div class="module">
+                <h3>👂 Feedback Integration System</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+                    <div class="score-item">
+                        <label>Pre-Sale Feedback</label>
+                        <textarea placeholder="Client needs assessment..." style="width: 100%; background: #222; color: white; border: 1px solid #CF2030; border-radius: 3px; padding: 0.5rem;"></textarea>
+                    </div>
+                    <div class="score-item">
+                        <label>During-Sale Progress</label>
+                        <textarea placeholder="Campaign performance tracking..." style="width: 100%; background: #222; color: white; border: 1px solid #CF2030; border-radius: 3px; padding: 0.5rem;"></textarea>
+                    </div>
+                    <div class="score-item">
+                        <label>Post-Sale Satisfaction</label>
+                        <textarea placeholder="Campaign results and satisfaction..." style="width: 100%; background: #222; color: white; border: 1px solid #CF2030; border-radius: 3px; padding: 0.5rem;"></textarea>
+                    </div>
+                    <div class="score-item">
+                        <label>Complaint Resolution</label>
+                        <textarea placeholder="Issue resolution tracking..." style="width: 100%; background: #222; color: white; border: 1px solid #CF2030; border-radius: 3px; padding: 0.5rem;"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="empowering" class="tab-content">
+            <div class="module">
+                <h3>🚀 Referral Strategy Management</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+                    <div class="score-item">
+                        <label>Success Stories</label>
+                        <p>Document successful advertising campaigns and client growth stories for case studies</p>
+                        <button class="btn" style="margin-top: 0.5rem;">Add Success Story</button>
+                    </div>
+                    <div class="score-item">
+                        <label>Referral Rewards</label>
+                        <p>Track referral bonuses and client advocacy program participation</p>
+                        <button class="btn" style="margin-top: 0.5rem;">Manage Rewards</button>
+                    </div>
+                    <div class="score-item">
+                        <label>Co-Marketing</label>
+                        <p>Plan joint marketing initiatives with local business partners</p>
+                        <button class="btn" style="margin-top: 0.5rem;">Plan Campaign</button>
+                    </div>
+                    <div class="score-item">
+                        <label>Client Advocacy</label>
+                        <p>Manage client testimonials and community engagement programs</p>
+                        <button class="btn" style="margin-top: 0.5rem;">View Testimonials</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="clients" class="tab-content">
+            <div class="controls">
+                <input type="text" id="searchInput" class="search-input" placeholder="Search clients..." onkeyup="filterTable()">
+                <select id="tierFilter" class="filter-select" onchange="filterTable()">
+                    <option value="">All Tiers</option>
+                    <option value="1A">Tier 1A (Premium)</option>
+                    <option value="1B">Tier 1B (High-Value)</option>
+                    <option value="1C">Tier 1C (Qualified)</option>
+                </select>
+                <select id="industryFilter" class="filter-select" onchange="filterTable()">
+                    <option value="">All Industries</option>
+                    <option value="Restaurant">Restaurant</option>
+                    <option value="Retail">Retail</option>
+                    <option value="Tourism">Tourism</option>
+                    <option value="Real Estate">Real Estate</option>
+                    <option value="Health & Wellness">Health & Wellness</option>
+                    <option value="Professional Services">Professional Services</option>
+                </select>
+                <button class="btn" onclick="exportData()">Export CSV</button>
+            </div>
+
+            <div class="client-table-container">
+                <h3 style="color: #CF2030; margin-bottom: 1rem;">South Lake Tahoe Business Prospects (Within 10 Miles)</h3>
+                <table class="client-table" id="clientTable">
+                    <thead>
+                        <tr>
+                            <th onclick="sortTable(0)">Client Name ↕</th>
+                            <th onclick="sortTable(1)">Email ↕</th>
+                            <th onclick="sortTable(2)">Phone ↕</th>
+                            <th onclick="sortTable(3)">Address ↕</th>
+                            <th onclick="sortTable(4)">P.U.R.E.S. Score ↕</th>
+                            <th onclick="sortTable(5)">Tier ↕</th>
+                            <th onclick="sortTable(6)">Industry ↕</th>
+                            <th onclick="sortTable(7)">Revenue Est. ↕</th>
+                            <th onclick="sortTable(8)">Contact Status ↕</th>
+                            <th onclick="sortTable(9)">Last Contact ↕</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="clientTableBody">
+                        <!-- Client data will be populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="email-template" id="emailTemplate">
+            <h4 style="color: #CF2030; margin-bottom: 1rem;">Email Template</h4>
+            <div style="background: #222; padding: 1rem; border-radius: 5px;">
+                <p><strong>Subject:</strong> <span id="emailSubject"></span></p>
+                <p><strong>To:</strong> <span id="emailRecipient"></span></p>
+                <hr style="margin: 1rem 0; border-color: #444;">
+                <div id="emailBody" style="white-space: pre-line;"></div>
+                <button class="btn" onclick="sendEmail()" style="margin-top: 1rem;">Send Email</button>
+                <button class="btn" onclick="closeEmailTemplate()" style="background-color: #666; margin-left: 0.5rem;">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports Logo" class="footer-logo">
+        <p>&copy; 2024 Higgins Reports - S.A.L.E. Client Targeting System for Tahoe Daily Tribune</p>
+    </footer>
+
+    <script>
+        // Sample client data for South Lake Tahoe area businesses
+        const clients = [
+            {name: "Sarah Johnson", email: "sarah@lakeviewbistro.com", phone: "(530) 544-2233", address: "3489 Lake Tahoe Blvd, South Lake Tahoe, CA", puresScore: 22, tier: "1A", industry: "Restaurant", revenue: "$850K", status: "Initial Contact", lastContact: "2024-01-15", notes: "Interested in summer advertising package"},
+            {name: "Michael Chen", email: "mike@tahoesports.com", phone: "(530) 541-7890", address: "1001 Heavenly Village Way, South Lake Tahoe, CA", puresScore: 20, tier: "1A", industry: "Retail", revenue: "$1.2M", status: "Proposal Sent", lastContact: "2024-01-18", notes: "Reviewing winter sports advertising options"},
+            {name: "Amanda Rodriguez", email: "amanda@tahoeadventures.net", phone: "(530) 542-1234", address: "2435 Venice Dr E, South Lake Tahoe, CA", puresScore: 21, tier: "1A", industry: "Tourism", revenue: "$950K", status: "Follow-up Needed", lastContact: "2024-01-12", notes: "Wants outdoor activity campaign"},
+            {name: "David Thompson", email: "david@lakesiderealty.com", phone: "(530) 543-5678", address: "4000 Lake Tahoe Blvd #5, South Lake Tahoe, CA", puresScore: 19, tier: "1A", industry: "Real Estate", revenue: "$1.5M", status: "Negotiating", lastContact: "2024-01-20", notes: "Discussing annual advertising contract"},
+            {name: "Lisa Park", email: "lisa@tahoehealing.com", phone: "(530) 545-9012", address: "1169 Ski Run Blvd, South Lake Tahoe, CA", puresScore: 18, tier: "1B", industry: "Health & Wellness", revenue: "$650K", status: "Interested", lastContact: "2024-01-14", notes: "Wants wellness-focused advertising"},
+            {name: "Robert Kim", email: "robert@mountainlaw.net", phone: "(530) 544-3456", address: "2180 Lake Tahoe Blvd, South Lake Tahoe, CA", puresScore: 17, tier: "1B", industry: "Professional Services", revenue: "$800K", status: "Initial Contact", lastContact: "2024-01-16", notes: "Legal services advertising inquiry"},
+            {name: "Jennifer Walsh", email: "jen@tahoeflowers.com", phone: "(530) 541-2345", address: "3140 Lake Tahoe Blvd, South Lake Tahoe, CA", puresScore: 16, tier: "1B", industry: "Retail", revenue: "$420K", status: "Follow-up Needed", lastContact: "2024-01-11", notes: "Seasonal flower shop advertising"},
+            {name: "Mark Stevens", email: "mark@lakeshore.cafe", phone: "(530) 542-6789", address: "8544 Emerald Bay Rd, South Lake Tahoe, CA", puresScore: 18, tier: "1B", industry: "Restaurant", revenue: "$560K", status: "Proposal Review", lastContact: "2024-01-19", notes: "Considering breakfast advertising package"},
+            {name: "Maria Gonzalez", email: "maria@tahoetravel.com", phone: "(530) 543-1234", address: "1001 Park Ave, South Lake Tahoe, CA", puresScore: 19, tier: "1B", industry: "Tourism", revenue: "$720K", status: "Interested", lastContact: "2024-01-13", notes: "Travel agency partnership discussion"},
+            {name: "James Wilson", email: "james@alpinehomes.net", phone: "(530) 544-5678", address: "1210 Ski Run Blvd #12, South Lake Tahoe, CA", puresScore: 17, tier: "1B", industry: "Real Estate", revenue: "$890K", status: "Initial Contact", lastContact: "2024-01-17", notes: "Luxury home marketing interest"},
+            {name: "Karen Foster", email: "karen@tahoemassage.com", phone: "(530) 545-2345", address: "2543 Lake Tahoe Blvd, South Lake Tahoe, CA", puresScore: 15, tier: "1C", industry: "Health & Wellness", revenue: "$280K", status: "Follow-up Needed", lastContact: "2024-01-10", notes: "Spa advertising consultation"},
+            {name: "Thomas Lee", email: "tom@accountingplus.com", phone: "(530) 541-3456", address: "3679 Lake Tahoe Blvd #8, South Lake Tahoe, CA", puresScore: 16, tier: "1B", industry: "Professional Services", revenue: "$520K", status: "Proposal Sent", lastContact: "2024-01-18", notes: "Tax season advertising campaign"},
+            {name: "Rachel Adams", email: "rachel@tahoegear.com", phone: "(530) 542-4567", address: "1776 Lake Tahoe Blvd, South Lake Tahoe, CA", puresScore: 18, tier: "1B", industry: "Retail", revenue: "$640K", status: "Negotiating", lastContact: "2024-01-20", notes: "Outdoor gear store promotion"},
+            {name: "Daniel Brooks", email: "dan@lakeviewgrill.com", phone: "(530) 543-5678", address: "941 Emerald Bay Rd, South Lake Tahoe, CA", puresScore: 17, tier: "1B", industry: "Restaurant", revenue: "$590K", status: "Interested", lastContact: "2024-01-15", notes: "Fine dining advertising package"},
+            {name: "Nicole Turner", email: "nicole@tahoeescapes.net", phone: "(530) 544-6789", address: "4130 Lake Tahoe Blvd, South Lake Tahoe, CA", puresScore: 19, tier: "1B", industry: "Tourism", revenue: "$750K", status: "Follow-up Needed", lastContact: "2024-01-12", notes: "Vacation rental advertising"},
+            {name: "Kevin Martinez", email: "kevin@lakehomes.com", phone: "(530) 545-7890", address: "2180 Lake Tahoe Blvd #3, South Lake Tahoe, CA", puresScore: 18, tier: "1B", industry: "Real Estate", revenue: "$920K", status: "Initial Contact", lastContact: "2024-01-19", notes: "Residential real estate marketing"},
+            {name: "Stephanie Clark", email: "steph@tahoefit.com", phone: "(530) 541-8901", address: "1001 Emerald Bay Rd #5, South Lake Tahoe, CA", puresScore: 15, tier: "1C", industry: "Health & Wellness", revenue: "$320K", status: "Follow-up Needed", lastContact: "2024-01-11", notes: "Fitness studio advertising"},
+            {name: "Brian Taylor", email: "brian@mountaincpa.net", phone: "(530) 542-9012", address: "3489 Lake Tahoe Blvd #11, South Lake Tahoe, CA", puresScore: 16, tier: "1C", industry: "Professional Services", revenue: "$450K", status: "Proposal Review", lastContact: "2024-01-16", notes: "CPA services advertising"},
+            {name: "Andrea White", email: "andrea@tahoeoutfitters.com", phone: "(530) 543-0123", address: "1210 Ski Run Blvd, South Lake Tahoe, CA", puresScore: 17, tier: "1B", industry: "Retail", revenue: "$580K", status: "Interested", lastContact: "2024-01-14", notes: "Outdoor clothing store promotion"},
+            {name: "Christopher Davis", email: "chris@lakeviewdiner.com", phone: "(530) 544-1234", address: "2435 Venice Dr E #2, South Lake Tahoe, CA", puresScore: 15, tier: "1C", industry: "Restaurant", revenue: "$380K", status: "Initial Contact", lastContact: "2024-01-17", notes: "Family restaurant advertising"},
+            {name: "Melissa Garcia", email: "melissa@tahoegetaways.net", phone: "(530) 545-2345", address: "4000 Lake Tahoe Blvd, South Lake Tahoe, CA", puresScore: 18, tier: "1B", industry: "Tourism", revenue: "$680K", status: "Follow-up Needed", lastContact: "2024-01-13", notes: "Vacation package advertising"},
+            {name: "Jason Moore", email: "jason@alpinerealty.com", phone: "(530) 541-3456", address: "1169 Ski Run Blvd #7, South Lake Tahoe, CA", puresScore: 19, tier: "1B", industry: "Real Estate", revenue: "$1.1M", status: "Proposal Sent", lastContact: "2024-01-18", notes: "Luxury real estate marketing"},
+            {name: "Tiffany Anderson", email: "tiffany@tahoewellness.com", phone: "(530) 542-4567", address: "3140 Lake Tahoe Blvd #4, South Lake Tahoe, CA", puresScore: 14, tier: "1C", industry: "Health & Wellness", revenue: "$240K", status: "Follow-up Needed", lastContact: "2024-01-10", notes: "Wellness center advertising"},
+            {name: "Scott Jackson", email: "scott@legalservices.net", phone: "(530) 543-5678", address: "8544 Emerald Bay Rd #6, South Lake Tahoe, CA", puresScore: 16, tier: "1C", industry: "Professional Services", revenue: "$480K", status: "Interested", lastContact: "2024-01-15", notes: "Legal practice advertising"},
+            {name: "Angela Harris", email: "angela@tahoeartisan.com", phone: "(530) 544-6789", address: "1001 Park Ave #9, South Lake Tahoe, CA", puresScore: 15, tier: "1C", industry: "Retail", revenue: "$350K", status: "Initial Contact", lastContact: "2024-01-12", notes: "Artisan craft store promotion"},
+            {name: "Nathan Phillips", email: "nathan@mountainbrew.com", phone: "(530) 545-7890", address: "1210 Ski Run Blvd #15, South Lake Tahoe, CA", puresScore: 17, tier: "1B", industry: "Restaurant", revenue: "$620K", status: "Proposal Review", lastContact: "2024-01-19", notes: "Brewery advertising campaign"},
+            {name: "Samantha Evans", email: "sam@tahoeadventures.com", phone: "(530) 541-8901", address: "2543 Lake Tahoe Blvd #8, South Lake Tahoe, CA", puresScore: 18, tier: "1B", industry: "Tourism", revenue: "$710K", status: "Negotiating", lastContact: "2024-01-20", notes: "Adventure tour advertising"},
+            {name: "Patrick Campbell", email: "pat@lakesideprops.com", phone: "(530) 542-9012", address: "3679 Lake Tahoe Blvd, South Lake Tahoe, CA", puresScore: 17, tier: "1B", industry: "Real Estate", revenue: "$830K", status: "Follow-up Needed", lastContact: "2024-01-11", notes: "Property management advertising"},
+            {name: "Vanessa Lopez", email: "vanessa@tahoeyoga.com", phone: "(530) 543-0123", address: "1776 Lake Tahoe Blvd #12, South Lake Tahoe, CA", puresScore: 14, tier: "1C", industry: "Health & Wellness", revenue: "$190K", status: "Initial Contact", lastContact: "2024-01-14", notes: "Yoga studio marketing"},
+            {name: "Gregory Young", email: "greg@financialplan.net", phone: "(530) 544-1234", address: "941 Emerald Bay Rd #3, South Lake Tahoe, CA", puresScore: 16, tier: "1C", industry: "Professional Services", revenue: "$420K", status: "Proposal Sent", lastContact: "2024-01-16", notes: "Financial planning services ad"},
+            {name: "Michelle King", email: "michelle@tahoesweets.com", phone: "(530) 545-2345", address: "4130 Lake Tahoe Blvd #6, South Lake Tahoe, CA", puresScore: 15, tier: "1C", industry: "Retail", revenue: "$280K", status: "Interested", lastContact: "2024-01-13", notes: "Bakery advertising inquiry"},
+            {name: "Timothy Wright", email: "tim@lakeviewpub.com", phone: "(530) 541-3456", address: "2180 Lake Tahoe Blvd #9, South Lake Tahoe, CA", puresScore: 16, tier: "1C", industry: "Restaurant", revenue: "$410K", status: "Follow-up Needed", lastContact: "2024-01-17", notes: "Pub advertising package"},
+            {name: "Catherine Scott", email: "cathy@tahoetouring.net", phone: "(530) 542-4567", address: "1001 Emerald Bay Rd, South Lake Tahoe, CA", puresScore: 17, tier: "1B", industry: "Tourism", revenue: "$560K", status: "Initial Contact", lastContact: "2024-01-18", notes: "Tour company advertising"},
+            {name: "Ryan Robinson", email: "ryan@mountainhomes.com", phone: "(530) 543-5678", address: "3489 Lake Tahoe Blvd #14, South Lake Tahoe, CA", puresScore: 18, tier: "1B", industry: "Real Estate", revenue: "$970K", status: "Proposal Review", lastContact: "2024-01-15", notes: "Custom home builder marketing"},
+            {name: "Heather Green", email: "heather@tahoeday.spa", phone: "(530) 544-6789", address: "1210 Ski Run Blvd #18, South Lake Tahoe, CA", puresScore: 15, tier: "1C", industry: "Health & Wellness", revenue: "$310K", status: "Follow-up Needed", lastContact: "2024-01-12", notes: "Day spa advertising"},
+            {name: "Jonathan Baker", email: "jon@consultingpro.net", phone: "(530) 545-7890", address: "2435 Venice Dr E #7, South Lake Tahoe, CA", puresScore: 16, tier: "1C", industry: "Professional Services", revenue: "$390K", status: "Interested", lastContact: "2024-01-19", notes: "Business consulting advertising"},
+            {name: "Rebecca Adams", email: "rebecca@tahoeoutdoor.com", phone: "(530) 541-8901", address: "4000 Lake Tahoe Blvd #11, South Lake Tahoe, CA", puresScore: 17, tier: "1B", industry: "Retail", revenue: "$490K", status: "Initial Contact", lastContact: "2024-01-14", notes: "Outdoor equipment store"},
+            {name: "Aaron Nelson", email: "aaron@lakehouse.cafe", phone: "(530) 542-9012", address: "1169 Ski Run Blvd #20, South Lake Tahoe, CA", puresScore: 15, tier: "1C", industry: "Restaurant", revenue: "$340K", status: "Proposal Sent", lastContact: "2024-01-16", notes: "Coffeehouse advertising"},
+            {name: "Lauren Carter", email: "lauren@tahoeexperts.net", phone: "(530) 543-0123", address: "3140 Lake Tahoe Blvd #13, South Lake Tahoe, CA", puresScore: 18, tier: "1B", industry: "Tourism", revenue: "$640K", status: "Negotiating", lastContact: "2024-01-20", notes: "Tourism consulting services"},
+            {name: "Benjamin Hall", email: "ben@alpinesales.com", phone: "(530) 544-1234", address: "8544 Emerald Bay Rd #10, South Lake Tahoe, CA", puresScore: 17, tier: "1B", industry: "Real Estate", revenue: "$780K", status: "Follow-up Needed", lastContact: "2024-01-11", notes: "Real estate sales advertising"},
+            {name: "Natalie Rivera", email: "natalie@tahoebeauty.com", phone: "(530) 545-2345", address: "1001 Park Ave #16, South Lake Tahoe, CA", puresScore: 14, tier: "1C", industry: "Health & Wellness", revenue: "$220K", status: "Initial Contact", lastContact: "2024-01-13", notes: "Beauty salon advertising"},
+            {name: "Sean Cooper", email: "sean@businesslaw.net", phone: "(530) 541-3456", address: "1210 Ski Run Blvd #22, South Lake Tahoe, CA", puresScore: 16, tier: "1C", industry: "Professional Services", revenue: "$460K", status: "Proposal Review", lastContact: "2024-01-17", notes: "Corporate law advertising"},
+            {name: "Crystal Reed", email: "crystal@tahoelifestyle.com", phone: "(530) 542-4567", address: "2543 Lake Tahoe Blvd #15, South Lake Tahoe, CA", puresScore: 15, tier: "1C", industry: "Retail", revenue: "$320K", status: "Interested", lastContact: "2024-01-18", notes: "Lifestyle boutique advertising"},
+            {name: "Victor Murphy", email: "victor@grillmaster.com", phone: "(530) 543-5678", address: "3679 Lake Tahoe Blvd #17, South Lake Tahoe, CA", puresScore: 16, tier: "1C", industry: "Restaurant", revenue: "$380K", status: "Follow-up Needed", lastContact: "2024-01-15", notes: "BBQ restaurant advertising"},
+            {name: "Diana Powell", email: "diana@tahoeexcursions.net", phone: "(530) 544-6789", address: "1776 Lake Tahoe Blvd #19, South Lake Tahoe, CA", puresScore: 17, tier: "1B", industry: "Tourism", revenue: "$590K", status: "Initial Contact", lastContact: "2024-01-12", notes: "Excursion company advertising"},
+            {name: "Keith Barnes", email: "keith@lakefront.properties", phone: "(530) 545-7890", address: "941 Emerald Bay Rd #21, South Lake Tahoe, CA", puresScore: 18, tier: "1B", industry: "Real Estate", revenue: "$890K", status: "Proposal Sent", lastContact: "2024-01-19", notes: "Lakefront property specialist"},
+            {name: "April Collins", email: "april@tahoehealth.com", phone: "(530) 541-8901", address: "4130 Lake Tahoe Blvd #23, South Lake Tahoe, CA", puresScore: 15, tier: "1C", industry: "Health & Wellness", revenue: "$290K", status: "Follow-up Needed", lastContact: "2024-01-14", notes: "Health clinic advertising"},
+            {name: "Jordan Stewart", email: "jordan@consultinggroup.net", phone: "(530) 542-9012", address: "2180 Lake Tahoe Blvd #25, South Lake Tahoe, CA", puresScore: 16, tier: "1C", industry: "Professional Services", revenue: "$410K", status: "Interested", lastContact: "2024-01-16", notes: "Management consulting ads"},
+            {name: "Whitney Morris", email: "whitney@tahoetrends.com", phone: "(530) 543-0123", address: "1001 Emerald Bay Rd #27, South Lake Tahoe, CA", puresScore: 15, tier: "1C", industry: "Retail", revenue: "$350K", status: "Initial Contact", lastContact: "2024-01-11", notes: "Fashion boutique advertising"},
+            {name: "Austin Rogers", email: "austin@alpinecafe.com", phone: "(530) 544-1234", address: "3489 Lake Tahoe Blvd #29, South Lake Tahoe, CA", puresScore: 16, tier: "1C", industry: "Restaurant", revenue: "$420K", status: "Proposal Review", lastContact: "2024-01-18", notes: "Casual dining advertising"},
+            {name: "Brooke Hughes", email: "brooke@tahoeadventure.net", phone: "(530) 545-2345", address: "1210 Ski Run Blvd #31, South Lake Tahoe, CA", puresScore: 17, tier: "1B", industry: "Tourism", revenue: "$610K", status: "Negotiating", lastContact: "2024-01-20", notes: "Adventure sports company"}
+        ];
+
+        // Initialize the table
+        function populateTable() {
+            const tbody = document.getElementById('clientTableBody');
+            tbody.innerHTML = '';
+            
+            clients.forEach((client, index) => {
+                const row = tbody.insertRow();
+                row.className = `tier-${client.tier.toLowerCase()}`;
+                
+                row.innerHTML = `
+                    <td>${client.name}</td>
+                    <td>${client.email}</td>
+                    <td>${client.phone}</td>
+                    <td>${client.address}</td>
+                    <td>${client.puresScore}</td>
+                    <td class="tier-${client.tier.toLowerCase()}">${client.tier}</td>
+                    <td>${client.industry}</td>
+                    <td>${client.revenue}</td>
+                    <td>${client.status}</td>
+                    <td>${client.lastContact}</td>
+                    <td>
+                        <button class="contact-btn" onclick="contactClient(${index}, 'email')">Email</button>
+                        <button class="contact-btn" onclick="contactClient(${index}, 'call')" style="background-color: #2196F3; margin-left: 0.3rem;">Call</button>
+                    </td>
+                `;
+            });
+        }
+
+        // Contact client function
+        function contactClient(index, method) {
+            const client = clients[index];
+            
+            if (method === 'email') {
+                showEmailTemplate(client);
+            } else if (method === 'call') {
+                window.open(`tel:${client.phone}`, '_self');
+            }
+        }
+
+        // Show email template
+        function showEmailTemplate(client) {
+            const template = document.getElementById('emailTemplate');
+            const subject = document.getElementById('emailSubject');
+            const recipient = document.getElementById('emailRecipient');
+            const body = document.getElementById('emailBody');
+            
+            subject.textContent = `Boost Your ${client.industry} Business with Tahoe Daily Tribune`;
+            recipient.textContent = client.email;
+            
+            let emailContent = `Dear ${client.name},
+
+I hope this email finds you well. I'm reaching out from the Tahoe Daily Tribune, South Lake Tahoe's premier local news and advertising platform.
+
+Based on our research, ${client.name} appears to be a thriving ${client.industry} business in our community. We'd love to help you reach more local customers and tourists who are actively seeking ${client.industry.toLowerCase()} services in the Lake Tahoe area.
+
+Here's what Tahoe Daily Tribune can offer your business:
+
+✨ Local Market Dominance: Reach over 50,000 daily readers including locals and tourists
+📱 Multi-Platform Exposure: Print, digital, and social media advertising options
+🎯 Targeted Demographics: Connect with your ideal customers through our diverse readership
+📈 Proven Results: Our clients typically see 25-40% increase in local brand awareness
+
+Special Opportunities for ${client.industry} Businesses:
+`;
+
+            if (client.industry === 'Restaurant') {
+                emailContent += `• Featured dining sections and restaurant reviews
+• Seasonal dining guides for tourists
+• Special event and menu promotion features
+• Food festival and local event sponsorships`;
+            } else if (client.industry === 'Retail') {
+                emailContent += `• Shopping guides and seasonal promotions
+• New arrival and sale announcements
+• Local business spotlight features
+• Tourist shopping recommendations`;
+            } else if (client.industry === 'Tourism') {
+                emailContent += `• Activity and adventure guides
+• Seasonal tourism features
+• Visitor guide advertising placements
+• Partnership opportunities with travel content`;
+            } else if (client.industry === 'Real Estate') {
+                emailContent += `• Real estate market updates and trends
+• Featured property listings and open house promotions
+• Market analysis article sponsorships
+• Community and neighborhood spotlight features`;
+            } else if (client.industry === 'Health & Wellness') {
+                emailContent += `• Health and wellness article sponsorships
+• Seasonal wellness guides and tips
+• Local fitness and wellness event coverage
+• Community health initiative partnerships`;
+            } else if (client.industry === 'Professional Services') {
+                emailContent += `• Professional services directory listings
+• Business and legal article sponsorships
+• Community business leader features
+• Networking event coverage and sponsorships`;
+            }
+
+            emailContent += `
+
+Given your business's strong presence in the community (estimated ${client.revenue} annual revenue), I believe a strategic advertising partnership with Tahoe Daily Tribune could significantly enhance your local market reach.
+
+I'd love to schedule a brief 15-minute call to discuss:
+• Customized advertising packages for your business
+• Current promotional opportunities
+• Success stories from similar ${client.industry.toLowerCase()} businesses
+• Special introductory rates for new partners
+
+Would you be available for a quick call this week? I'm confident we can create a marketing strategy that delivers real results for your business.
+
+Best regards,
+
+Mike Peron
+Marketing & Sales Director
+Tahoe Daily Tribune
+📞 (530) 544-3800
+✉️ mperon@tahoedailytribune.com
+🌐 www.tahoedailytribune.com
+
+P.S. As a local business ourselves, we understand the unique challenges and opportunities in the Lake Tahoe market. Let's work together to grow our community and your business!`;
+
+            body.textContent = emailContent;
+            template.style.display = 'block';
+            template.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Close email template
+        function closeEmailTemplate() {
+            document.getElementById('emailTemplate').style.display = 'none';
+        }
+
+        // Send email function
+        function sendEmail() {
+            const recipient = document.getElementById('emailRecipient').textContent;
+            const subject = document.getElementById('emailSubject').textContent;
+            const body = document.getElementById('emailBody').textContent;
+            
+            const mailtoLink = `mailto:${recipient}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+            window.open(mailtoLink, '_blank');
+            closeEmailTemplate();
+        }
+
+        // P.U.R.E.S. scoring system
+        document.addEventListener('DOMContentLoaded', function() {
+            const sliders = ['profitability', 'urgency', 'reachability', 'engagement', 'sustainability'];
+            
+            sliders.forEach(slider => {
+                const input = document.getElementById(slider);
+                const display = document.getElementById(slider + 'Value');
+                
+                input.addEventListener('input', function() {
+                    display.textContent = this.value;
+                    updateTotalScore();
+                });
+            });
+        });
+
+        function updateTotalScore() {
+            const sliders = ['profitability', 'urgency', 'reachability', 'engagement', 'sustainability'];
+            let total = 0;
+            
+            sliders.forEach(slider => {
+                total += parseInt(document.getElementById(slider).value);
+            });
+            
+            document.getElementById('totalScore').textContent = total;
+            
+            let tier;
+            if (total >= 20) tier = '1A';
+            else if (total >= 16) tier = '1B';
+            else tier = '1C';
+            
+            document.getElementById('tierLevel').textContent = tier;
+        }
+
+        // Tab functionality
+        function showTab(tabName) {
+            // Hide all tab contents
+            const contents = document.getElementsByClassName('tab-content');
+            for (let i = 0; i < contents.length; i++) {
+                contents[i].classList.remove('active');
+            }
+            
+            // Remove active class from all tabs
+            const tabs = document.getElementsByClassName('tab');
+            for (let i = 0; i < tabs.length; i++) {
+                tabs[i].classList.remove('active');
+            }
+            
+            // Show selected tab content
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+        }
+
+        // Filter table function
+        function filterTable() {
+            const searchInput = document.getElementById('searchInput').value.toLowerCase();
+            const tierFilter = document.getElementById('tierFilter').value;
+            const industryFilter = document.getElementById('industryFilter').value;
+            const table = document.getElementById('clientTable');
+            const rows = table.getElementsByTagName('tr');
+
+            for (let i = 1; i < rows.length; i++) {
+                const row = rows[i];
+                const cells = row.getElementsByTagName('td');
+                let showRow = true;
+
+                // Search filter
+                if (searchInput) {
+                    let found = false;
+                    for (let j = 0; j < cells.length - 1; j++) {
+                        if (cells[j].textContent.toLowerCase().includes(searchInput)) {
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (!found) showRow = false;
+                }
+
+                // Tier filter
+                if (tierFilter && cells[5].textContent !== tierFilter) {
+                    showRow = false;
+                }
+
+                // Industry filter
+                if (industryFilter && cells[6].textContent !== industryFilter) {
+                    showRow = false;
+                }
+
+                row.style.display = showRow ? '' : 'none';
+            }
+        }
+
+        // Sort table function
+        function sortTable(columnIndex) {
+            const table = document.getElementById('clientTable');
+            const tbody = table.tBodies[0];
+            const rows = Array.from(tbody.rows);
+            
+            rows.sort((a, b) => {
+                const aText = a.cells[columnIndex].textContent.trim();
+                const bText = b.cells[columnIndex].textContent.trim();
+                
+                // Handle numeric columns
+                if (columnIndex === 4 || columnIndex === 7) { // P.U.R.E.S. Score or Revenue
+                    const aNum = parseFloat(aText.replace(/[^\d.-]/g, ''));
+                    const bNum = parseFloat(bText.replace(/[^\d.-]/g, ''));
+                    return aNum - bNum;
+                }
+                
+                return aText.localeCompare(bText);
+            });
+            
+            tbody.innerHTML = '';
+            rows.forEach(row => tbody.appendChild(row));
+        }
+
+        // Export data function
+        function exportData() {
+            const headers = ['Client Name', 'Email', 'Phone', 'Address', 'P.U.R.E.S. Score', 'Tier', 'Industry', 'Revenue Est.', 'Contact Status', 'Last Contact', 'Notes'];
+            let csv = headers.join(',') + '\n';
+            
+            clients.forEach(client => {
+                const row = [
+                    client.name,
+                    client.email,
+                    client.phone,
+                    `"${client.address}"`,
+                    client.puresScore,
+                    client.tier,
+                    client.industry,
+                    client.revenue,
+                    client.status,
+                    client.lastContact,
+                    `"${client.notes}"`
+                ];
+                csv += row.join(',') + '\n';
+            });
+            
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'tahoe_tribune_prospects.csv';
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            populateTable();
+            updateTotalScore();
+        });
+    </script>
+</body>
+</html>

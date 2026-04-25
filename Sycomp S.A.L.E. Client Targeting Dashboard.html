@@ -1,0 +1,1143 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sycomp - S.A.L.E. Client Targeting Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #000000;
+            color: #ffffff;
+            line-height: 1.6;
+        }
+
+        .header {
+            background-color: #CF2030;
+            padding: 15px 0;
+            box-shadow: 0 2px 10px rgba(207, 32, 48, 0.3);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .logo {
+            height: 60px;
+            margin-right: 20px;
+        }
+
+        .header-title {
+            color: #ffffff;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            border: 1px solid #CF2030;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .card h3 {
+            color: #CF2030;
+            margin-bottom: 15px;
+            font-size: 18px;
+            border-bottom: 2px solid #CF2030;
+            padding-bottom: 10px;
+        }
+
+        .pures-form {
+            display: grid;
+            gap: 15px;
+        }
+
+        .pures-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background: rgba(207, 32, 48, 0.1);
+            border-radius: 5px;
+        }
+
+        .pures-item label {
+            font-weight: 500;
+            flex: 1;
+        }
+
+        .rating-buttons {
+            display: flex;
+            gap: 5px;
+        }
+
+        .rating-btn {
+            width: 30px;
+            height: 30px;
+            border: 1px solid #CF2030;
+            background: transparent;
+            color: #ffffff;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .rating-btn:hover {
+            background: #CF2030;
+        }
+
+        .rating-btn.active {
+            background: #CF2030;
+            font-weight: bold;
+        }
+
+        .tier-display {
+            text-align: center;
+            padding: 20px;
+            border: 2px solid #CF2030;
+            border-radius: 10px;
+            margin-top: 15px;
+        }
+
+        .tier-1a { background: linear-gradient(135deg, #00ff00, #008000); }
+        .tier-1b { background: linear-gradient(135deg, #ffff00, #ffa500); }
+        .tier-1c { background: linear-gradient(135deg, #0099ff, #0066cc); }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 20px 0;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .search-box {
+            background: #2d2d2d;
+            border: 1px solid #CF2030;
+            color: #ffffff;
+            padding: 10px;
+            border-radius: 5px;
+            width: 300px;
+        }
+
+        .filter-select {
+            background: #2d2d2d;
+            border: 1px solid #CF2030;
+            color: #ffffff;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .btn {
+            background: #CF2030;
+            color: #ffffff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            background: #a91a27;
+            transform: translateY(-2px);
+        }
+
+        .btn-small {
+            padding: 5px 10px;
+            font-size: 12px;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            background: #1a1a1a;
+            border-radius: 10px;
+            border: 1px solid #CF2030;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 1000px;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #333;
+        }
+
+        th {
+            background: #CF2030;
+            color: #ffffff;
+            font-weight: bold;
+            cursor: pointer;
+            position: sticky;
+            top: 0;
+        }
+
+        th:hover {
+            background: #a91a27;
+        }
+
+        tr:hover {
+            background: rgba(207, 32, 48, 0.1);
+        }
+
+        .tier-1a-row { border-left: 4px solid #00ff00; }
+        .tier-1b-row { border-left: 4px solid #ffff00; }
+        .tier-1c-row { border-left: 4px solid #0099ff; }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+        }
+
+        .modal-content {
+            background: #1a1a1a;
+            margin: 5% auto;
+            padding: 20px;
+            border: 2px solid #CF2030;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 600px;
+            max-height: 80%;
+            overflow-y: auto;
+        }
+
+        .close {
+            color: #CF2030;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: #ffffff;
+        }
+
+        .email-template {
+            background: #2d2d2d;
+            border: 1px solid #CF2030;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 10px 0;
+        }
+
+        .footer {
+            background: #1a1a1a;
+            border-top: 1px solid #CF2030;
+            padding: 20px 0;
+            margin-top: 50px;
+            text-align: center;
+        }
+
+        .footer-logo {
+            height: 40px;
+            margin-bottom: 10px;
+        }
+
+        .marketing-schedule {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .schedule-item {
+            background: rgba(207, 32, 48, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #CF2030;
+        }
+
+        .analytics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .metric-card {
+            background: linear-gradient(135deg, #2d2d2d, #1a1a1a);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            border: 1px solid #CF2030;
+        }
+
+        .metric-value {
+            font-size: 2em;
+            font-weight: bold;
+            color: #CF2030;
+        }
+
+        .metric-label {
+            font-size: 0.9em;
+            color: #cccccc;
+            margin-top: 5px;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .search-box {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="HigginsReports Logo" class="logo">
+            <h1 class="header-title">Sycomp S.A.L.E. Client Targeting Dashboard</h1>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Analytics Overview -->
+        <div class="analytics-grid">
+            <div class="metric-card">
+                <div class="metric-value">50</div>
+                <div class="metric-label">Total Prospects</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value">12</div>
+                <div class="metric-label">Tier 1A Prospects</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value">18</div>
+                <div class="metric-label">Tier 1B Prospects</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value">$2.4M</div>
+                <div class="metric-label">Pipeline Value</div>
+            </div>
+        </div>
+
+        <!-- S.A.L.E. Dashboard -->
+        <div class="dashboard-grid">
+            <!-- P.U.R.E.S. Scoring Module -->
+            <div class="card">
+                <h3>S.A.L.E. SOURCING - P.U.R.E.S. Client Scoring</h3>
+                <form class="pures-form" id="puresForm">
+                    <div class="pures-item">
+                        <label>Profitability (Budget Capacity):</label>
+                        <div class="rating-buttons" data-rating="profitability">
+                            <button type="button" class="rating-btn" data-value="1">1</button>
+                            <button type="button" class="rating-btn" data-value="2">2</button>
+                            <button type="button" class="rating-btn" data-value="3">3</button>
+                            <button type="button" class="rating-btn" data-value="4">4</button>
+                            <button type="button" class="rating-btn" data-value="5">5</button>
+                        </div>
+                    </div>
+                    
+                    <div class="pures-item">
+                        <label>Urgency (Pain Points):</label>
+                        <div class="rating-buttons" data-rating="urgency">
+                            <button type="button" class="rating-btn" data-value="1">1</button>
+                            <button type="button" class="rating-btn" data-value="2">2</button>
+                            <button type="button" class="rating-btn" data-value="3">3</button>
+                            <button type="button" class="rating-btn" data-value="4">4</button>
+                            <button type="button" class="rating-btn" data-value="5">5</button>
+                        </div>
+                    </div>
+                    
+                    <div class="pures-item">
+                        <label>Reachability (Decision Makers):</label>
+                        <div class="rating-buttons" data-rating="reachability">
+                            <button type="button" class="rating-btn" data-value="1">1</button>
+                            <button type="button" class="rating-btn" data-value="2">2</button>
+                            <button type="button" class="rating-btn" data-value="3">3</button>
+                            <button type="button" class="rating-btn" data-value="4">4</button>
+                            <button type="button" class="rating-btn" data-value="5">5</button>
+                        </div>
+                    </div>
+                    
+                    <div class="pures-item">
+                        <label>Engagement (Innovation Openness):</label>
+                        <div class="rating-buttons" data-rating="engagement">
+                            <button type="button" class="rating-btn" data-value="1">1</button>
+                            <button type="button" class="rating-btn" data-value="2">2</button>
+                            <button type="button" class="rating-btn" data-value="3">3</button>
+                            <button type="button" class="rating-btn" data-value="4">4</button>
+                            <button type="button" class="rating-btn" data-value="5">5</button>
+                        </div>
+                    </div>
+                    
+                    <div class="pures-item">
+                        <label>Sustainability (Growth Potential):</label>
+                        <div class="rating-buttons" data-rating="sustainability">
+                            <button type="button" class="rating-btn" data-value="1">1</button>
+                            <button type="button" class="rating-btn" data-value="2">2</button>
+                            <button type="button" class="rating-btn" data-value="3">3</button>
+                            <button type="button" class="rating-btn" data-value="4">4</button>
+                            <button type="button" class="rating-btn" data-value="5">5</button>
+                        </div>
+                    </div>
+                </form>
+                
+                <div class="tier-display" id="tierDisplay">
+                    <h4>Select ratings to see tier classification</h4>
+                </div>
+            </div>
+
+            <!-- Marketing Schedule -->
+            <div class="card">
+                <h3>E.MPOWERING - Marketing Campaign Schedule</h3>
+                <div class="marketing-schedule">
+                    <div class="schedule-item">
+                        <h4>Week 1: Tier 1A Outreach</h4>
+                        <p>• Executive-level email campaign<br>• LinkedIn targeted messaging<br>• Strategic account mapping</p>
+                    </div>
+                    <div class="schedule-item">
+                        <h4>Week 2: Tier 1B Engagement</h4>
+                        <p>• Solution-focused webinar invites<br>• Case study distribution<br>• Follow-up phone campaigns</p>
+                    </div>
+                    <div class="schedule-item">
+                        <h4>Week 3: Content Marketing</h4>
+                        <p>• Industry thought leadership articles<br>• Technology trend reports<br>• Client success stories</p>
+                    </div>
+                    <div class="schedule-item">
+                        <h4>Week 4: Relationship Building</h4>
+                        <p>• Industry event invitations<br>• Partnership discussions<br>• Referral program launch</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Client Database Controls -->
+        <div class="controls">
+            <input type="text" class="search-box" id="searchBox" placeholder="Search clients by name, company, or location...">
+            
+            <select class="filter-select" id="tierFilter">
+                <option value="">All Tiers</option>
+                <option value="1A">Tier 1A (Premium)</option>
+                <option value="1B">Tier 1B (High-Value)</option>
+                <option value="1C">Tier 1C (Qualified)</option>
+            </select>
+            
+            <select class="filter-select" id="industryFilter">
+                <option value="">All Industries</option>
+                <option value="Technology">Technology</option>
+                <option value="Healthcare">Healthcare</option>
+                <option value="Financial Services">Financial Services</option>
+                <option value="Manufacturing">Manufacturing</option>
+                <option value="Retail">Retail</option>
+            </select>
+            
+            <button class="btn" onclick="exportData()">Export CSV</button>
+        </div>
+
+        <!-- Client Database Table -->
+        <div class="table-container">
+            <table id="clientTable">
+                <thead>
+                    <tr>
+                        <th onclick="sortTable(0)">Client Name ↕</th>
+                        <th onclick="sortTable(1)">Company</th>
+                        <th onclick="sortTable(2)">Email ↕</th>
+                        <th onclick="sortTable(3)">Phone ↕</th>
+                        <th onclick="sortTable(4)">Address ↕</th>
+                        <th onclick="sortTable(5)">P.U.R.E.S. Score ↕</th>
+                        <th onclick="sortTable(6)">Tier ↕</th>
+                        <th onclick="sortTable(7)">Industry ↕</th>
+                        <th onclick="sortTable(8)">Revenue Est. ↕</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="clientTableBody">
+                    <!-- Client data will be populated by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Email Modal -->
+    <div id="emailModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h3>Send Personalized Email</h3>
+            <div class="email-template" id="emailTemplate">
+                <!-- Email content will be populated by JavaScript -->
+            </div>
+            <button class="btn" onclick="sendEmail()">Send Email</button>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="HigginsReports Logo" class="footer-logo">
+        <p>&copy; 2024 HigginsReports. Powered by Sycomp S.A.L.E. Methodology.</p>
+    </footer>
+
+    <script>
+        // Sample client data (50 prospects within 10 miles of Belmont, CA)
+        const clientData = [
+            {
+                name: "Michael Chen", company: "TechFlow Solutions", email: "mchen@techflow.com", phone: "(650) 555-0101", 
+                address: "1234 Innovation Dr, San Mateo, CA 94403", puresScore: 4.6, tier: "1A", industry: "Technology", revenue: "$5M+"
+            },
+            {
+                name: "Sarah Rodriguez", company: "DataVision Corp", email: "srodriguez@datavision.com", phone: "(650) 555-0102",
+                address: "5678 Enterprise Blvd, Foster City, CA 94404", puresScore: 4.4, tier: "1A", industry: "Technology", revenue: "$8M+"
+            },
+            {
+                name: "David Kim", company: "CloudFirst Systems", email: "dkim@cloudfirst.com", phone: "(650) 555-0103",
+                address: "9012 Silicon Way, Redwood City, CA 94065", puresScore: 4.8, tier: "1A", industry: "Technology", revenue: "$12M+"
+            },
+            {
+                name: "Lisa Thompson", company: "MedTech Innovations", email: "lthompson@medtech.com", phone: "(650) 555-0104",
+                address: "3456 Biotech Ave, South San Francisco, CA 94080", puresScore: 4.2, tier: "1A", industry: "Healthcare", revenue: "$15M+"
+            },
+            {
+                name: "Robert Martinez", company: "Financial Futures Inc", email: "rmartinez@finfutures.com", phone: "(650) 555-0105",
+                address: "7890 Finance Plaza, San Carlos, CA 94070", puresScore: 4.5, tier: "1A", industry: "Financial Services", revenue: "$25M+"
+            },
+            {
+                name: "Jennifer Wu", company: "Manufacturing Pro", email: "jwu@mfgpro.com", phone: "(650) 555-0106",
+                address: "2345 Industrial Pkwy, San Bruno, CA 94066", puresScore: 4.3, tier: "1A", industry: "Manufacturing", revenue: "$18M+"
+            },
+            {
+                name: "Thomas Anderson", company: "RetailMax Solutions", email: "tanderson@retailmax.com", phone: "(650) 555-0107",
+                address: "6789 Commerce St, Millbrae, CA 94030", puresScore: 4.1, tier: "1A", industry: "Retail", revenue: "$10M+"
+            },
+            {
+                name: "Amanda Foster", company: "HealthCare Systems", email: "afoster@healthcare.com", phone: "(650) 555-0108",
+                address: "1357 Medical Center Dr, Burlingame, CA 94010", puresScore: 4.7, tier: "1A", industry: "Healthcare", revenue: "$22M+"
+            },
+            {
+                name: "Kevin O'Brien", company: "TechStart Ventures", email: "kobrien@techstart.com", phone: "(650) 555-0109",
+                address: "2468 Startup Ave, Half Moon Bay, CA 94019", puresScore: 4.4, tier: "1A", industry: "Technology", revenue: "$7M+"
+            },
+            {
+                name: "Maria Gonzalez", company: "Global Finance Corp", email: "mgonzalez@globalfinance.com", phone: "(650) 555-0110",
+                address: "1111 Financial Blvd, San Mateo, CA 94402", puresScore: 4.6, tier: "1A", industry: "Financial Services", revenue: "$30M+"
+            },
+            {
+                name: "James Wilson", company: "Advanced Manufacturing", email: "jwilson@advmfg.com", phone: "(650) 555-0111",
+                address: "3333 Production Way, Redwood City, CA 94063", puresScore: 4.2, tier: "1A", industry: "Manufacturing", revenue: "$14M+"
+            },
+            {
+                name: "Nicole Smith", company: "Smart Retail Tech", email: "nsmith@smartretail.com", phone: "(650) 555-0112",
+                address: "5555 Shopping Plaza, Foster City, CA 94404", puresScore: 4.3, tier: "1A", industry: "Retail", revenue: "$9M+"
+            },
+            {
+                name: "Brian Johnson", company: "CloudNet Solutions", email: "bjohnson@cloudnet.com", phone: "(650) 555-0113",
+                address: "777 Network Dr, San Carlos, CA 94070", puresScore: 3.8, tier: "1B", industry: "Technology", revenue: "$4M+"
+            },
+            {
+                name: "Rachel Davis", company: "HealthFirst Technology", email: "rdavis@healthfirst.com", phone: "(650) 555-0114",
+                address: "888 Wellness Way, South San Francisco, CA 94080", puresScore: 3.9, tier: "1B", industry: "Healthcare", revenue: "$6M+"
+            },
+            {
+                name: "Christopher Lee", company: "FinanceFlow Corp", email: "clee@financeflow.com", phone: "(650) 555-0115",
+                address: "999 Banking Blvd, San Bruno, CA 94066", puresScore: 3.7, tier: "1B", industry: "Financial Services", revenue: "$11M+"
+            },
+            {
+                name: "Jessica Brown", company: "Manufacturing Plus", email: "jbrown@mfgplus.com", phone: "(650) 555-0116",
+                address: "1212 Factory Rd, Millbrae, CA 94030", puresScore: 3.6, tier: "1B", industry: "Manufacturing", revenue: "$8M+"
+            },
+            {
+                name: "Matthew Taylor", company: "Retail Innovation", email: "mtaylor@retailinnovation.com", phone: "(650) 555-0117",
+                address: "1313 Store Front Ave, Belmont, CA 94002", puresScore: 3.8, tier: "1B", industry: "Retail", revenue: "$5M+"
+            },
+            {
+                name: "Lauren White", company: "TechAdvance Systems", email: "lwhite@techadvance.com", phone: "(650) 555-0118",
+                address: "1414 Progress Dr, San Mateo, CA 94403", puresScore: 3.9, tier: "1B", industry: "Technology", revenue: "$7M+"
+            },
+            {
+                name: "Daniel Garcia", company: "MedTech Solutions", email: "dgarcia@medtechsol.com", phone: "(650) 555-0119",
+                address: "1515 Research Blvd, Redwood City, CA 94065", puresScore: 3.7, tier: "1B", industry: "Healthcare", revenue: "$12M+"
+            },
+            {
+                name: "Stephanie Miller", company: "Financial Partners", email: "smiller@finpartners.com", phone: "(650) 555-0120",
+                address: "1616 Investment Way, Foster City, CA 94404", puresScore: 3.8, tier: "1B", industry: "Financial Services", revenue: "$16M+"
+            },
+            {
+                name: "Ryan Clark", company: "Industrial Tech", email: "rclark@industrialtech.com", phone: "(650) 555-0121",
+                address: "1717 Manufacturing St, San Carlos, CA 94070", puresScore: 3.6, tier: "1B", industry: "Manufacturing", revenue: "$9M+"
+            },
+            {
+                name: "Emily Rodriguez", company: "Retail Systems Pro", email: "erodriguez@retailsys.com", phone: "(650) 555-0122",
+                address: "1818 Commerce Dr, South San Francisco, CA 94080", puresScore: 3.9, tier: "1B", industry: "Retail", revenue: "$6M+"
+            },
+            {
+                name: "Jonathan Moore", company: "NextGen Technology", email: "jmoore@nextgentech.com", phone: "(650) 555-0123",
+                address: "1919 Future Ave, San Bruno, CA 94066", puresScore: 3.7, tier: "1B", industry: "Technology", revenue: "$8M+"
+            },
+            {
+                name: "Ashley Jackson", company: "HealthTech Plus", email: "ajackson@healthtechplus.com", phone: "(650) 555-0124",
+                address: "2020 Medical Plaza, Millbrae, CA 94030", puresScore: 3.8, tier: "1B", industry: "Healthcare", revenue: "$10M+"
+            },
+            {
+                name: "Joshua Martin", company: "Capital Solutions", email: "jmartin@capitalsol.com", phone: "(650) 555-0125",
+                address: "2121 Finance Center, Burlingame, CA 94010", puresScore: 3.6, tier: "1B", industry: "Financial Services", revenue: "$13M+"
+            },
+            {
+                name: "Megan Thompson", company: "Production Systems", email: "mthompson@prodsys.com", phone: "(650) 555-0126",
+                address: "2222 Assembly Line Dr, Half Moon Bay, CA 94019", puresScore: 3.9, tier: "1B", industry: "Manufacturing", revenue: "$7M+"
+            },
+            {
+                name: "Tyler Wilson", company: "Smart Commerce", email: "twilson@smartcommerce.com", phone: "(650) 555-0127",
+                address: "2323 Retail Hub, San Mateo, CA 94402", puresScore: 3.7, tier: "1B", industry: "Retail", revenue: "$11M+"
+            },
+            {
+                name: "Samantha Davis", company: "TechFlow Pro", email: "sdavis@techflowpro.com", phone: "(650) 555-0128",
+                address: "2424 Digital Way, Redwood City, CA 94063", puresScore: 3.8, tier: "1B", industry: "Technology", revenue: "$9M+"
+            },
+            {
+                name: "Alexander Lee", company: "Medical Innovations", email: "alee@medinnovations.com", phone: "(650) 555-0129",
+                address: "2525 Healthcare Blvd, Foster City, CA 94404", puresScore: 3.6, tier: "1B", industry: "Healthcare", revenue: "$14M+"
+            },
+            {
+                name: "Olivia Brown", company: "Financial Tech Corp", email: "obrown@fintech.com", phone: "(650) 555-0130",
+                address: "2626 Banking Plaza, San Carlos, CA 94070", puresScore: 3.9, tier: "1B", industry: "Financial Services", revenue: "$8M+"
+            },
+            {
+                name: "Ethan Taylor", company: "Manufacturing Edge", email: "etaylor@mfgedge.com", phone: "(650) 555-0131",
+                address: "2727 Industrial Blvd, South San Francisco, CA 94080", puresScore: 3.5, tier: "1C", industry: "Manufacturing", revenue: "$5M+"
+            },
+            {
+                name: "Hannah White", company: "Retail Dynamics", email: "hwhite@retaildynamics.com", phone: "(650) 555-0132",
+                address: "2828 Shopping Center, San Bruno, CA 94066", puresScore: 3.4, tier: "1C", industry: "Retail", revenue: "$4M+"
+            },
+            {
+                name: "Noah Garcia", company: "Tech Solutions Inc", email: "ngarcia@techsolutions.com", phone: "(650) 555-0133",
+                address: "2929 Software Dr, Millbrae, CA 94030", puresScore: 3.6, tier: "1C", industry: "Technology", revenue: "$6M+"
+            },
+            {
+                name: "Grace Miller", company: "Health Systems Co", email: "gmiller@healthsystems.com", phone: "(650) 555-0134",
+                address: "3030 Clinic Ave, Belmont, CA 94002", puresScore: 3.3, tier: "1C", industry: "Healthcare", revenue: "$7M+"
+            },
+            {
+                name: "William Clark", company: "Finance Pro", email: "wclark@financepro.com", phone: "(650) 555-0135",
+                address: "3131 Money St, San Mateo, CA 94403", puresScore: 3.5, tier: "1C", industry: "Financial Services", revenue: "$9M+"
+            },
+            {
+                name: "Sophia Rodriguez", company: "Industrial Solutions", email: "srodriguez@indsol.com", phone: "(650) 555-0136",
+                address: "3232 Factory Way, Redwood City, CA 94065", puresScore: 3.4, tier: "1C", industry: "Manufacturing", revenue: "$3M+"
+            },
+            {
+                name: "Mason Moore", company: "Retail Connect", email: "mmoore@retailconnect.com", phone: "(650) 555-0137",
+                address: "3333 Store Dr, Foster City, CA 94404", puresScore: 3.6, tier: "1C", industry: "Retail", revenue: "$5M+"
+            },
+            {
+                name: "Isabella Jackson", company: "Digital Systems", email: "ijackson@digitalsys.com", phone: "(650) 555-0138",
+                address: "3434 Computer Ave, San Carlos, CA 94070", puresScore: 3.3, tier: "1C", industry: "Technology", revenue: "$4M+"
+            },
+            {
+                name: "Jacob Martin", company: "Medical Tech", email: "jmartin@medicaltech.com", phone: "(650) 555-0139",
+                address: "3535 Hospital Rd, South San Francisco, CA 94080", puresScore: 3.5, tier: "1C", industry: "Healthcare", revenue: "$8M+"
+            },
+            {
+                name: "Emma Thompson", company: "Banking Solutions", email: "ethompson@bankingsol.com", phone: "(650) 555-0140",
+                address: "3636 Credit Union Way, San Bruno, CA 94066", puresScore: 3.4, tier: "1C", industry: "Financial Services", revenue: "$6M+"
+            },
+            {
+                name: "Michael Wilson", company: "Manufacturing Corp", email: "mwilson@mfgcorp.com", phone: "(650) 555-0141",
+                address: "3737 Production Ave, Millbrae, CA 94030", puresScore: 3.6, tier: "1C", industry: "Manufacturing", revenue: "$7M+"
+            },
+            {
+                name: "Ava Davis", company: "Retail Tech", email: "adavis@retailtech.com", phone: "(650) 555-0142",
+                address: "3838 Commerce Blvd, Burlingame, CA 94010", puresScore: 3.3, tier: "1C", industry: "Retail", revenue: "$4M+"
+            },
+            {
+                name: "Liam Lee", company: "Software Systems", email: "llee@softwaresys.com", phone: "(650) 555-0143",
+                address: "3939 Code St, Half Moon Bay, CA 94019", puresScore: 3.5, tier: "1C", industry: "Technology", revenue: "$5M+"
+            },
+            {
+                name: "Charlotte Brown", company: "Healthcare Plus", email: "cbrown@healthcareplus.com", phone: "(650) 555-0144",
+                address: "4040 Wellness Dr, San Mateo, CA 94402", puresScore: 3.4, tier: "1C", industry: "Healthcare", revenue: "$9M+"
+            },
+            {
+                name: "Benjamin Taylor", company: "Investment Group", email: "btaylor@investgroup.com", phone: "(650) 555-0145",
+                address: "4141 Portfolio Way, Redwood City, CA 94063", puresScore: 3.6, tier: "1C", industry: "Financial Services", revenue: "$11M+"
+            },
+            {
+                name: "Amelia White", company: "Production Plus", email: "awhite@productionplus.com", phone: "(650) 555-0146",
+                address: "4242 Assembly Dr, Foster City, CA 94404", puresScore: 3.3, tier: "1C", industry: "Manufacturing", revenue: "$4M+"
+            },
+            {
+                name: "Lucas Garcia", company: "Commerce Solutions", email: "lgarcia@commercesol.com", phone: "(650) 555-0147",
+                address: "4343 Market St, San Carlos, CA 94070", puresScore: 3.5, tier: "1C", industry: "Retail", revenue: "$6M+"
+            },
+            {
+                name: "Harper Miller", company: "Tech Innovations", email: "hmiller@techinnovations.com", phone: "(650) 555-0148",
+                address: "4444 Innovation Blvd, South San Francisco, CA 94080", puresScore: 3.4, tier: "1C", industry: "Technology", revenue: "$7M+"
+            },
+            {
+                name: "Henry Clark", company: "Medical Solutions", email: "hclark@medicalsol.com", phone: "(650) 555-0149",
+                address: "4545 Treatment Ave, San Bruno, CA 94066", puresScore: 3.6, tier: "1C", industry: "Healthcare", revenue: "$8M+"
+            },
+            {
+                name: "Evelyn Rodriguez", company: "Financial Systems", email: "erodriguez@finsys.com", phone: "(650) 555-0150",
+                address: "4646 Banking Dr, Millbrae, CA 94030", puresScore: 3.3, tier: "1C", industry: "Financial Services", revenue: "$5M+"
+            },
+            {
+                name: "Sebastian Moore", company: "Industrial Pro", email: "smoore@industrialpro.com", phone: "(650) 555-0151",
+                address: "4747 Factory Plaza, Belmont, CA 94002", puresScore: 3.5, tier: "1C", industry: "Manufacturing", revenue: "$6M+"
+            }
+        ];
+
+        let currentSort = { column: -1, ascending: true };
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            setupEventListeners();
+            populateTable();
+        });
+
+        function setupEventListeners() {
+            // P.U.R.E.S. rating buttons
+            document.querySelectorAll('.rating-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const ratingGroup = this.closest('.rating-buttons');
+                    const category = ratingGroup.dataset.rating;
+                    const value = parseInt(this.dataset.value);
+                    
+                    // Clear previous selections in this group
+                    ratingGroup.querySelectorAll('.rating-btn').forEach(b => b.classList.remove('active'));
+                    
+                    // Activate selected button
+                    this.classList.add('active');
+                    
+                    updateTierDisplay();
+                });
+            });
+
+            // Search functionality
+            document.getElementById('searchBox').addEventListener('input', function() {
+                filterTable();
+            });
+
+            // Filter functionality
+            document.getElementById('tierFilter').addEventListener('change', filterTable);
+            document.getElementById('industryFilter').addEventListener('change', filterTable);
+
+            // Modal functionality
+            const modal = document.getElementById('emailModal');
+            const span = document.getElementsByClassName('close')[0];
+            
+            span.onclick = function() {
+                modal.style.display = 'none';
+            }
+            
+            window.onclick = function(event) {
+                if (event.target == modal) {
+                    modal.style.display = 'none';
+                }
+            }
+        }
+
+        function updateTierDisplay() {
+            const ratings = {};
+            let totalScore = 0;
+            let ratingCount = 0;
+
+            document.querySelectorAll('.rating-buttons').forEach(group => {
+                const category = group.dataset.rating;
+                const activeBtn = group.querySelector('.rating-btn.active');
+                if (activeBtn) {
+                    const value = parseInt(activeBtn.dataset.value);
+                    ratings[category] = value;
+                    totalScore += value;
+                    ratingCount++;
+                }
+            });
+
+            const tierDisplay = document.getElementById('tierDisplay');
+            
+            if (ratingCount === 5) {
+                const averageScore = totalScore / 5;
+                let tier, tierClass, tierDescription;
+                
+                if (averageScore >= 4.0) {
+                    tier = 'Tier 1A (Premium)';
+                    tierClass = 'tier-1a';
+                    tierDescription = 'High-priority prospect with excellent fit across all criteria';
+                } else if (averageScore >= 3.0) {
+                    tier = 'Tier 1B (High-Value)';
+                    tierClass = 'tier-1b';
+                    tierDescription = 'Strong prospect with good fit on most criteria';
+                } else {
+                    tier = 'Tier 1C (Qualified)';
+                    tierClass = 'tier-1c';
+                    tierDescription = 'Qualified prospect worth nurturing';
+                }
+
+                tierDisplay.className = `tier-display ${tierClass}`;
+                tierDisplay.innerHTML = `
+                    <h4>${tier}</h4>
+                    <p>Average Score: ${averageScore.toFixed(1)}/5.0</p>
+                    <p>${tierDescription}</p>
+                `;
+            } else {
+                tierDisplay.className = 'tier-display';
+                tierDisplay.innerHTML = '<h4>Complete all ratings to see tier classification</h4>';
+            }
+        }
+
+        function populateTable() {
+            const tbody = document.getElementById('clientTableBody');
+            tbody.innerHTML = '';
+
+            clientData.forEach((client, index) => {
+                const row = document.createElement('tr');
+                const tierClass = `tier-${client.tier.toLowerCase()}-row`;
+                row.className = tierClass;
+
+                row.innerHTML = `
+                    <td>${client.name}</td>
+                    <td>${client.company}</td>
+                    <td>${client.email}</td>
+                    <td>${client.phone}</td>
+                    <td>${client.address}</td>
+                    <td>${client.puresScore}/5.0</td>
+                    <td><span class="tier-badge tier-${client.tier.toLowerCase()}">${client.tier}</span></td>
+                    <td>${client.industry}</td>
+                    <td>${client.revenue}</td>
+                    <td>
+                        <button class="btn btn-small" onclick="openEmailModal(${index})">Email</button>
+                        <button class="btn btn-small" onclick="callClient('${client.phone}')">Call</button>
+                    </td>
+                `;
+
+                tbody.appendChild(row);
+            });
+        }
+
+        function filterTable() {
+            const searchTerm = document.getElementById('searchBox').value.toLowerCase();
+            const tierFilter = document.getElementById('tierFilter').value;
+            const industryFilter = document.getElementById('industryFilter').value;
+
+            const rows = document.querySelectorAll('#clientTableBody tr');
+            
+            rows.forEach(row => {
+                const cells = row.querySelectorAll('td');
+                const name = cells[0].textContent.toLowerCase();
+                const company = cells[1].textContent.toLowerCase();
+                const email = cells[2].textContent.toLowerCase();
+                const address = cells[4].textContent.toLowerCase();
+                const tier = cells[6].textContent;
+                const industry = cells[7].textContent;
+
+                const matchesSearch = !searchTerm || 
+                    name.includes(searchTerm) || 
+                    company.includes(searchTerm) || 
+                    email.includes(searchTerm) || 
+                    address.includes(searchTerm);
+
+                const matchesTier = !tierFilter || tier.includes(tierFilter);
+                const matchesIndustry = !industryFilter || industry === industryFilter;
+
+                row.style.display = (matchesSearch && matchesTier && matchesIndustry) ? '' : 'none';
+            });
+        }
+
+        function sortTable(columnIndex) {
+            const table = document.getElementById('clientTable');
+            const tbody = table.querySelector('tbody');
+            const rows = Array.from(tbody.querySelectorAll('tr'));
+
+            const ascending = currentSort.column === columnIndex ? !currentSort.ascending : true;
+            currentSort = { column: columnIndex, ascending };
+
+            rows.sort((a, b) => {
+                const aValue = a.cells[columnIndex].textContent.trim();
+                const bValue = b.cells[columnIndex].textContent.trim();
+
+                let comparison = 0;
+                
+                // Handle numeric sorting for P.U.R.E.S. score
+                if (columnIndex === 5) {
+                    const aNum = parseFloat(aValue);
+                    const bNum = parseFloat(bValue);
+                    comparison = aNum - bNum;
+                } else {
+                    comparison = aValue.localeCompare(bValue);
+                }
+
+                return ascending ? comparison : -comparison;
+            });
+
+            // Clear tbody and re-append sorted rows
+            tbody.innerHTML = '';
+            rows.forEach(row => tbody.appendChild(row));
+
+            // Update sort indicators in header
+            document.querySelectorAll('th').forEach((th, index) => {
+                const arrow = index === columnIndex ? (ascending ? ' ↑' : ' ↓') : ' ↕';
+                th.textContent = th.textContent.replace(/ [↕↑↓]$/, '') + arrow;
+            });
+        }
+
+        function openEmailModal(clientIndex) {
+            const client = clientData[clientIndex];
+            const modal = document.getElementById('emailModal');
+            const emailTemplate = document.getElementById('emailTemplate');
+
+            const emailContent = generatePersonalizedEmail(client);
+            
+            emailTemplate.innerHTML = `
+                <h4>To: ${client.email}</h4>
+                <h4>Subject: Transform Your IT Infrastructure with Sycomp's Global Expertise</h4>
+                <div style="background: #333; padding: 15px; border-radius: 5px; margin: 10px 0;">
+                    <pre style="color: #ffffff; font-family: inherit; white-space: pre-wrap;">${emailContent}</pre>
+                </div>
+                <button class="btn" onclick="copyToClipboard(\`${emailContent.replace(/`/g, '\\`')}\`)">Copy Email Content</button>
+            `;
+
+            modal.style.display = 'block';
+        }
+
+        function generatePersonalizedEmail(client) {
+            const templates = {
+                'Technology': `Dear ${client.name},
+
+I hope this message finds you well. As a technology leader at ${client.company}, you understand the critical importance of robust IT infrastructure in driving business growth and innovation.
+
+At Sycomp, we've been helping technology companies like yours navigate complex global IT challenges for over 30 years. Our comprehensive suite of services includes:
+
+🌐 Global Integration & Logistics - Seamless technology deployment across 55+ worldwide locations
+☁️ Cloud Solutions - Advanced cloud architecture and migration services
+🔒 Cybersecurity - Enterprise-grade security solutions and managed services
+🛠️ Managed IT Services - 24/7 monitoring and support for your critical systems
+
+Given ${client.company}'s position in the technology sector, I believe our global expertise could help you:
+• Accelerate your digital transformation initiatives
+• Reduce IT complexity while improving scalability
+• Ensure seamless technology integration across multiple locations
+• Optimize your IT budget with our cost-effective solutions
+
+I'd love to schedule a brief 15-minute discovery call to discuss how Sycomp can support ${client.company}'s technology goals. Are you available for a conversation this week?
+
+Best regards,
+Jean Symons
+Director of Business Development
+Sycomp | A Technology Company
+Email: jsymons@sycomp.com
+Phone: +1 (877) 901-7416
+Website: www.sycomp.com`,
+
+                'Healthcare': `Dear ${client.name},
+
+Healthcare technology demands the highest levels of reliability, security, and compliance. At ${client.company}, you're at the forefront of improving patient care through innovative technology solutions.
+
+Sycomp specializes in supporting healthcare organizations with mission-critical IT infrastructure. Our HIPAA-compliant solutions include:
+
+🏥 Healthcare IT Solutions - Specialized technology for medical environments
+🔐 Security & Compliance - Meeting healthcare regulatory requirements
+📊 Data Management - Secure handling of sensitive patient information
+🌐 Global Support - Reliable IT infrastructure across multiple facilities
+
+Healthcare organizations choose Sycomp because we understand:
+• The critical nature of 24/7 healthcare operations
+• Strict compliance requirements (HIPAA, HITECH, FDA)
+• The need for seamless integration with medical devices
+• Scalability requirements for growing healthcare networks
+
+I'd appreciate the opportunity to discuss how Sycomp can enhance ${client.company}'s IT infrastructure while ensuring compliance and improving patient care outcomes.
+
+Could we schedule a brief consultation to explore potential collaboration opportunities?
+
+Best regards,
+Jean Symons
+Healthcare Technology Specialist
+Sycomp | A Technology Company
+Email: jsymons@sycomp.com
+Phone: +1 (877) 901-7416`,
+
+                'Financial Services': `Dear ${client.name},
+
+In today's rapidly evolving financial landscape, ${client.company} needs technology partners who understand the unique challenges of the financial services industry.
+
+Sycomp provides secure, compliant IT solutions specifically designed for financial institutions:
+
+💰 Financial Technology Solutions - Specialized IT infrastructure for banking and finance
+🛡️ Advanced Security - Multi-layered protection for sensitive financial data
+📋 Regulatory Compliance - SOX, PCI DSS, and other financial regulations
+🌍 Global Deployment - Consistent technology delivery across international markets
+
+Our financial services clients rely on Sycomp for:
+• High-availability trading systems and real-time processing
+• Secure data centers with redundancy and disaster recovery
+• Compliance-ready infrastructure and documentation
+• 24/7 monitoring of mission-critical financial systems
+
+Given the complexity of modern financial technology, I believe ${client.company} would benefit from our proven track record of supporting leading financial institutions worldwide.
+
+Would you be interested in a brief discussion about how Sycomp can strengthen your IT infrastructure while ensuring regulatory compliance?
+
+Best regards,
+Jean Symons
+Financial Services Technology Advisor
+Sycomp | A Technology Company
+Email: jsymons@sycomp.com
+Phone: +1 (877) 901-7416`,
+
+                'Manufacturing': `Dear ${client.name},
+
+Manufacturing excellence depends on reliable, integrated technology systems. At ${client.company}, you're driving operational efficiency and innovation in today's competitive manufacturing landscape.
+
+Sycomp understands the unique IT requirements of manufacturing organizations:
+
+🏭 Industrial IT Solutions - Technology designed for manufacturing environments
+📊 IoT & Analytics - Connected systems for operational intelligence
+🌐 Supply Chain Technology - Integrated systems for global manufacturing
+🔧 Operational Technology - Bridging IT and OT for Industry 4.0
+
+Our manufacturing clients benefit from:
+• Robust IT infrastructure that withstands industrial environments
+• Global deployment capabilities for multinational operations
+• Integration with manufacturing execution systems (MES)
+• Real-time monitoring and predictive maintenance solutions
+
+${client.company} could leverage our expertise to:
+• Modernize manufacturing IT infrastructure
+• Implement smart factory technologies
+• Improve supply chain visibility and efficiency
+• Ensure seamless integration across global facilities
+
+I'd welcome the opportunity to discuss how Sycomp can support ${client.company}'s manufacturing technology initiatives.
+
+Are you available for a brief conversation this week?
+
+Best regards,
+Jean Symons
+Manufacturing Technology Consultant
+Sycomp | A Technology Company
+Email: jsymons@sycomp.com
+Phone: +1 (877) 901-7416`,
+
+                'Retail': `Dear ${client.name},
+
+The retail industry continues to evolve rapidly, and ${client.company} needs technology solutions that can adapt to changing consumer demands and market conditions.
+
+Sycomp provides comprehensive IT solutions tailored for retail organizations:
+
+🛍️ Retail Technology Solutions - Point-of-sale, inventory, and customer management systems
+🌐 Omnichannel Integration - Seamless online and in-store experiences
+📱 Digital Commerce - E-commerce platforms and mobile solutions
+📊 Retail Analytics - Data-driven insights for better business decisions
+
+Retail leaders choose Sycomp for:
+• Reliable POS and payment processing systems
+• Integration across multiple retail locations
+• Scalable e-commerce and digital platforms
+• Real-time inventory and supply chain management
+
+${client.company} could benefit from our retail expertise to:
+• Enhance customer experience across all channels
+• Improve operational efficiency and cost management
+• Implement advanced analytics for better decision-making
+• Scale technology infrastructure as your business grows
+
+I'd appreciate the opportunity to discuss how Sycomp can help ${client.company} stay competitive in the evolving retail landscape.
+
+Would you be available for a brief consultation this week?
+
+Best regards,
+Jean Symons
+Retail Technology Specialist
+Sycomp | A Technology Company
+Email: jsymons@sycomp.com
+Phone: +1 (877) 901-7416`
+            };
+
+            return templates[client.industry] || templates['Technology'];
+        }
+
+        function callClient(phoneNumber) {
+            // In a real application, this could integrate with a phone system
+            alert(`Initiating call to ${phoneNumber}\n\nIn a live system, this would connect to your business phone system or CRM dialer.`);
+        }
+
+        function sendEmail() {
+            alert('Email template copied to clipboard! Open your email client to send.');
+            document.getElementById('emailModal').style.display = 'none';
+        }
+
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                alert('Email content copied to clipboard!');
+            }).catch(err => {
+                console.error('Failed to copy text: ', err);
+            });
+        }
+
+        function exportData() {
+            const headers = ['Client Name', 'Company', 'Email', 'Phone', 'Address', 'P.U.R.E.S. Score', 'Tier', 'Industry', 'Revenue Estimate'];
+            let csvContent = headers.join(',') + '\n';
+
+            clientData.forEach(client => {
+                const row = [
+                    `"${client.name}"`,
+                    `"${client.company}"`,
+                    `"${client.email}"`,
+                    `"${client.phone}"`,
+                    `"${client.address}"`,
+                    client.puresScore,
+                    client.tier,
+                    `"${client.industry}"`,
+                    `"${client.revenue}"`
+                ].join(',');
+                csvContent += row + '\n';
+            });
+
+            const blob = new Blob([csvContent], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'sycomp-client-prospects.csv';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+        }
+    </script>
+</body>
+</html>
