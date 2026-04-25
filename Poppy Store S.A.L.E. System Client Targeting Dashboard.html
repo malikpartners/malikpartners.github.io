@@ -1,0 +1,1413 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Poppy Store - S.A.L.E. System Client Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background-color: #000000;
+            color: #ffffff;
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+        }
+        
+        .header {
+            background-color: #CF2030;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .header img {
+            height: 60px;
+        }
+        
+        .header h1 {
+            color: white;
+            font-size: 1.5rem;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .dashboard-nav {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .nav-btn {
+            background-color: #CF2030;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+        
+        .nav-btn:hover, .nav-btn.active {
+            background-color: #a01828;
+            transform: translateY(-2px);
+        }
+        
+        .module {
+            background-color: #1a1a1a;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid #333;
+        }
+        
+        .module.hidden {
+            display: none;
+        }
+        
+        .module h2 {
+            color: #CF2030;
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+        }
+        
+        .search-filters {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .search-input {
+            flex: 1;
+            min-width: 200px;
+            padding: 0.75rem;
+            border: 1px solid #555;
+            border-radius: 8px;
+            background-color: #333;
+            color: white;
+            font-size: 0.9rem;
+        }
+        
+        .filter-select {
+            padding: 0.75rem;
+            border: 1px solid #555;
+            border-radius: 8px;
+            background-color: #333;
+            color: white;
+            font-size: 0.9rem;
+        }
+        
+        .client-table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #2a2a2a;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .client-table th {
+            background-color: #CF2030;
+            color: white;
+            padding: 1rem 0.75rem;
+            text-align: left;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .client-table th:hover {
+            background-color: #a01828;
+        }
+        
+        .client-table td {
+            padding: 0.75rem;
+            border-bottom: 1px solid #444;
+        }
+        
+        .client-table tr:hover {
+            background-color: #333;
+        }
+        
+        .tier-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        
+        .tier-1a {
+            background-color: #28a745;
+            color: white;
+        }
+        
+        .tier-1b {
+            background-color: #ffc107;
+            color: black;
+        }
+        
+        .tier-1c {
+            background-color: #17a2b8;
+            color: white;
+        }
+        
+        .contact-btn {
+            background-color: #CF2030;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            margin-right: 0.5rem;
+            transition: all 0.3s;
+        }
+        
+        .contact-btn:hover {
+            background-color: #a01828;
+            transform: scale(1.05);
+        }
+        
+        .pures-form {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .pures-section {
+            background-color: #333;
+            padding: 1.5rem;
+            border-radius: 8px;
+        }
+        
+        .pures-section h3 {
+            color: #CF2030;
+            margin-bottom: 1rem;
+        }
+        
+        .score-slider {
+            width: 100%;
+            margin: 0.5rem 0;
+        }
+        
+        .score-display {
+            color: #CF2030;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        
+        .analytics-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .analytics-card {
+            background-color: #333;
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .analytics-card h3 {
+            color: #CF2030;
+            margin-bottom: 0.5rem;
+        }
+        
+        .analytics-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: white;
+        }
+        
+        .footer {
+            background-color: #1a1a1a;
+            padding: 2rem;
+            text-align: center;
+            border-top: 1px solid #333;
+            margin-top: 3rem;
+        }
+        
+        .footer img {
+            height: 30px;
+            margin-bottom: 1rem;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+        }
+        
+        .modal-content {
+            background-color: #1a1a1a;
+            margin: 10% auto;
+            padding: 2rem;
+            border-radius: 12px;
+            width: 80%;
+            max-width: 600px;
+            border: 1px solid #333;
+        }
+        
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .close:hover {
+            color: #CF2030;
+        }
+        
+        .email-template {
+            background-color: #333;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background-color: #333;
+            border-radius: 4px;
+            margin: 0.5rem 0;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background-color: #CF2030;
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="HigginsReports Logo">
+        <h1>Poppy Store - S.A.L.E. System Client Dashboard</h1>
+        <div>
+            <strong>Jenny Belushi</strong><br>
+            <small>jenny@poppystores.com</small>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Navigation -->
+        <div class="dashboard-nav">
+            <button class="nav-btn active" onclick="showModule('sourcing')">SOURCING</button>
+            <button class="nav-btn" onclick="showModule('assessing')">ASSESSING</button>
+            <button class="nav-btn" onclick="showModule('listening')">LISTENING</button>
+            <button class="nav-btn" onclick="showModule('empowering')">EMPOWERING</button>
+            <button class="nav-btn" onclick="showModule('analytics')">ANALYTICS</button>
+        </div>
+
+        <!-- SOURCING Module -->
+        <div id="sourcing" class="module">
+            <h2>S.A.L.E. SOURCING - P.U.R.E.S. Client Analysis</h2>
+            
+            <!-- Analytics Cards -->
+            <div class="analytics-cards">
+                <div class="analytics-card">
+                    <h3>Total Prospects</h3>
+                    <div class="analytics-number">50</div>
+                </div>
+                <div class="analytics-card">
+                    <h3>Tier 1A (Premium)</h3>
+                    <div class="analytics-number">12</div>
+                </div>
+                <div class="analytics-card">
+                    <h3>Tier 1B (High-Value)</h3>
+                    <div class="analytics-number">23</div>
+                </div>
+                <div class="analytics-card">
+                    <h3>Tier 1C (Qualified)</h3>
+                    <div class="analytics-number">15</div>
+                </div>
+            </div>
+
+            <!-- Search and Filters -->
+            <div class="search-filters">
+                <input type="text" class="search-input" id="searchInput" placeholder="Search clients..." onkeyup="filterTable()">
+                <select class="filter-select" id="tierFilter" onchange="filterTable()">
+                    <option value="">All Tiers</option>
+                    <option value="1A">Tier 1A</option>
+                    <option value="1B">Tier 1B</option>
+                    <option value="1C">Tier 1C</option>
+                </select>
+                <select class="filter-select" id="statusFilter" onchange="filterTable()">
+                    <option value="">All Statuses</option>
+                    <option value="New">New</option>
+                    <option value="Contacted">Contacted</option>
+                    <option value="Follow-up">Follow-up</option>
+                    <option value="Qualified">Qualified</option>
+                </select>
+            </div>
+
+            <!-- Client Table -->
+            <table class="client-table" id="clientTable">
+                <thead>
+                    <tr>
+                        <th onclick="sortTable(0)">Client Name</th>
+                        <th onclick="sortTable(1)">Email</th>
+                        <th onclick="sortTable(2)">Phone</th>
+                        <th onclick="sortTable(3)">Address</th>
+                        <th onclick="sortTable(4)">P.U.R.E.S Score</th>
+                        <th onclick="sortTable(5)">Tier</th>
+                        <th onclick="sortTable(6)">Revenue Estimate</th>
+                        <th onclick="sortTable(7)">Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="clientTableBody">
+                    <!-- Client data will be inserted here -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- ASSESSING Module -->
+        <div id="assessing" class="module hidden">
+            <h2>A.SSESSING - Buying Pattern Analysis</h2>
+            
+            <div class="pures-form">
+                <div class="pures-section">
+                    <h3>Analytical Buyers</h3>
+                    <p>Require detailed ROI analysis, case studies, trials</p>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 35%"></div>
+                    </div>
+                    <p>35% of prospects - Focus on product quality, brand heritage, and investment value</p>
+                </div>
+                
+                <div class="pures-section">
+                    <h3>Relationship Buyers</h3>
+                    <p>Value trust, referrals, long-term partnerships</p>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 45%"></div>
+                    </div>
+                    <p>45% of prospects - Emphasize personal styling, community, and brand story</p>
+                </div>
+                
+                <div class="pures-section">
+                    <h3>Efficiency Buyers</h3>
+                    <p>Focus on time-saving, process improvement</p>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 15%"></div>
+                    </div>
+                    <p>15% of prospects - Highlight convenience, online shopping, and curation</p>
+                </div>
+                
+                <div class="pures-section">
+                    <h3>Innovation Buyers</h3>
+                    <p>Seek cutting-edge solutions, competitive advantage</p>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 5%"></div>
+                    </div>
+                    <p>5% of prospects - Focus on exclusive items, new collections, and trendsetting</p>
+                </div>
+            </div>
+
+            <div class="pures-form">
+                <div class="pures-section">
+                    <h3>Decision Timeline Analyzer</h3>
+                    <p><strong>Immediate (0-30 days):</strong> 20% - Special occasions, gifts</p>
+                    <p><strong>Short-term (1-3 months):</strong> 45% - Seasonal shopping, wardrobe updates</p>
+                    <p><strong>Long-term (3+ months):</strong> 35% - Ongoing relationship building</p>
+                </div>
+                
+                <div class="pures-section">
+                    <h3>Value Proposition Alignment</h3>
+                    <p><strong>Quality & Craftsmanship:</strong> 85% alignment</p>
+                    <p><strong>Exclusive European Brands:</strong> 75% alignment</p>
+                    <p><strong>Nostalgic Experience:</strong> 70% alignment</p>
+                    <p><strong>Personal Service:</strong> 90% alignment</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- LISTENING Module -->
+        <div id="listening" class="module hidden">
+            <h2>L.ISTENING - Feedback Integration System</h2>
+            
+            <div class="pures-form">
+                <div class="pures-section">
+                    <h3>Pre-Sale Feedback Collection</h3>
+                    <p><strong>Brand Awareness:</strong> 65% familiar with luxury children's brands</p>
+                    <p><strong>Shopping Preferences:</strong> 70% prefer in-store experience</p>
+                    <p><strong>Price Sensitivity:</strong> 40% budget-conscious, 60% quality-focused</p>
+                    <p><strong>Decision Factors:</strong> Quality (85%), Uniqueness (75%), Brand story (60%)</p>
+                </div>
+                
+                <div class="pures-section">
+                    <h3>During-Sale Progress Tracking</h3>
+                    <p><strong>Store Visit Conversion:</strong> 75%</p>
+                    <p><strong>Average Basket Size:</strong> $245</p>
+                    <p><strong>Styling Consultation Uptake:</strong> 55%</p>
+                    <p><strong>Cross-sell Success Rate:</strong> 40%</p>
+                </div>
+                
+                <div class="pures-section">
+                    <h3>Post-Sale Satisfaction Monitoring</h3>
+                    <p><strong>Overall Satisfaction:</strong> 4.7/5</p>
+                    <p><strong>Product Quality Rating:</strong> 4.8/5</p>
+                    <p><strong>Service Experience:</strong> 4.6/5</p>
+                    <p><strong>Likelihood to Recommend:</strong> 85%</p>
+                </div>
+                
+                <div class="pures-section">
+                    <h3>Real-time Complaint Resolution</h3>
+                    <p><strong>Response Time:</strong> < 2 hours</p>
+                    <p><strong>Resolution Rate:</strong> 95%</p>
+                    <p><strong>Common Issues:</strong> Sizing (40%), Delivery (30%), Product care (30%)</p>
+                    <p><strong>Improvement Actions:</strong> Enhanced size guides, delivery tracking, care instructions</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- EMPOWERING Module -->
+        <div id="empowering" class="module hidden">
+            <h2>E.MPOWERING - Referral Strategy Dashboard</h2>
+            
+            <div class="pures-form">
+                <div class="pures-section">
+                    <h3>Success Story Documentation</h3>
+                    <p><strong>Customer Testimonials:</strong> 25 collected this quarter</p>
+                    <p><strong>Before/After Styling Stories:</strong> 15 documented</p>
+                    <p><strong>Social Media Features:</strong> 40 customer posts shared</p>
+                    <p><strong>Case Studies:</strong> 8 detailed family style transformations</p>
+                </div>
+                
+                <div class="pures-section">
+                    <h3>Referral Reward Tracking</h3>
+                    <p><strong>Active Referral Program:</strong> 20% discount for referrer & referee</p>
+                    <p><strong>Referrals This Month:</strong> 23</p>
+                    <p><strong>Conversion Rate:</strong> 65%</p>
+                    <p><strong>Top Referrers:</strong> VIP customers with 3+ referrals</p>
+                </div>
+                
+                <div class="pures-section">
+                    <h3>Client Advocacy Program</h3>
+                    <p><strong>Brand Ambassador Network:</strong> 12 active participants</p>
+                    <p><strong>Exclusive Events:</strong> Quarterly trunk shows & previews</p>
+                    <p><strong>Early Access Program:</strong> 48 hours before public launch</p>
+                    <p><strong>Loyalty Tiers:</strong> Silver, Gold, Platinum based on annual spend</p>
+                </div>
+                
+                <div class="pures-section">
+                    <h3>Co-Marketing Opportunities</h3>
+                    <p><strong>Local Partnerships:</strong> Schools, community events, charities</p>
+                    <p><strong>Influencer Collaborations:</strong> Mom bloggers, style influencers</p>
+                    <p><strong>Cross-brand Promotions:</strong> Children's photographers, toy stores</p>
+                    <p><strong>Seasonal Campaigns:</strong> Back-to-school, holidays, birthdays</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ANALYTICS Module -->
+        <div id="analytics" class="module hidden">
+            <h2>S.A.L.E. Performance Analytics</h2>
+            
+            <div class="analytics-cards">
+                <div class="analytics-card">
+                    <h3>Sourcing Metrics</h3>
+                    <div class="analytics-number">82%</div>
+                    <p>P.U.R.E.S. Score Accuracy</p>
+                </div>
+                <div class="analytics-card">
+                    <h3>Assessment Metrics</h3>
+                    <div class="analytics-number">88%</div>
+                    <p>Needs Assessment Accuracy</p>
+                </div>
+                <div class="analytics-card">
+                    <h3>Listening Metrics</h3>
+                    <div class="analytics-number">73%</div>
+                    <p>Feedback Collection Rate</p>
+                </div>
+                <div class="analytics-card">
+                    <h3>Empowerment Metrics</h3>
+                    <div class="analytics-number">2.3</div>
+                    <p>Average Referrals per Client</p>
+                </div>
+            </div>
+
+            <div class="pures-form">
+                <div class="pures-section">
+                    <h3>Geographic Intelligence</h3>
+                    <p><strong>Primary Service Area:</strong> 10-mile radius from Santa Monica</p>
+                    <p><strong>Top Neighborhoods:</strong> Brentwood (25%), Pacific Palisades (20%), Manhattan Beach (15%)</p>
+                    <p><strong>Demographic Match:</strong> High-income families with children 0-12</p>
+                    <p><strong>Competition Analysis:</strong> 3 direct competitors identified</p>
+                </div>
+                
+                <div class="pures-section">
+                    <h3>Revenue Impact Tracking</h3>
+                    <p><strong>S.A.L.E. Generated Revenue:</strong> $125,000 this quarter</p>
+                    <p><strong>Average Deal Size:</strong> $385</p>
+                    <p><strong>Client Lifetime Value:</strong> $2,850</p>
+                    <p><strong>ROI on Outreach:</strong> 450%</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Email Modal -->
+    <div id="emailModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeEmailModal()">&times;</span>
+            <h2>Send Email to <span id="clientNameModal"></span></h2>
+            <div class="email-template">
+                <p><strong>Subject:</strong> Discover European Children's Fashion at Poppy Store</p>
+                <div id="emailContent">
+                    <!-- Email content will be inserted here -->
+                </div>
+                <button class="contact-btn" onclick="sendEmail()">Send Email</button>
+                <button class="contact-btn" onclick="closeEmailModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="HigginsReports Logo">
+        <p>&copy; 2026 HigginsReports - S.A.L.E. System Integration for Poppy Store</p>
+        <p>Santa Monica, California | jenny@poppystores.com | Luxury Children's Fashion</p>
+    </footer>
+
+    <script>
+        // Sample client data for Santa Monica area (10-mile radius)
+        const clientData = [
+            {
+                name: "Sarah Mitchell",
+                email: "sarah.mitchell@gmail.com", 
+                phone: "(310) 555-0123",
+                address: "1234 Montana Ave, Santa Monica, CA 90403",
+                puresScore: 4.2,
+                tier: "1A",
+                revenue: "$15,000",
+                status: "New",
+                buyerType: "Relationship",
+                notes: "High-end fashion enthusiast, 2 children"
+            },
+            {
+                name: "Amanda Rodriguez",
+                email: "amanda.rodriguez@outlook.com",
+                phone: "(310) 555-0124", 
+                address: "5678 Wilshire Blvd, Beverly Hills, CA 90210",
+                puresScore: 4.5,
+                tier: "1A",
+                revenue: "$18,000",
+                status: "Contacted",
+                buyerType: "Analytical",
+                notes: "Fashion blogger, values quality and authenticity"
+            },
+            {
+                name: "Jessica Chen",
+                email: "jessica.chen@yahoo.com",
+                phone: "(310) 555-0125",
+                address: "9012 Olympic Blvd, Beverly Hills, CA 90211",
+                puresScore: 3.8,
+                tier: "1B",
+                revenue: "$12,000",
+                status: "Follow-up",
+                buyerType: "Relationship",
+                notes: "Pediatric dentist, appreciates European brands"
+            },
+            {
+                name: "Emily Johnson",
+                email: "emily.johnson@gmail.com",
+                phone: "(424) 555-0126",
+                address: "3456 Main St, Venice, CA 90291", 
+                puresScore: 4.1,
+                tier: "1A",
+                revenue: "$16,500",
+                status: "Qualified",
+                buyerType: "Innovation",
+                notes: "Tech executive, early adopter of trends"
+            },
+            {
+                name: "Nicole Thompson",
+                email: "nicole.thompson@hotmail.com",
+                phone: "(310) 555-0127",
+                address: "7890 Sunset Blvd, West Hollywood, CA 90069",
+                puresScore: 3.9,
+                tier: "1B",
+                revenue: "$14,200",
+                status: "New",
+                buyerType: "Analytical",
+                notes: "Fashion designer, values craftsmanship"
+            },
+            {
+                name: "Lauren Davis",
+                email: "lauren.davis@gmail.com",
+                phone: "(323) 555-0128",
+                address: "1357 Beverly Blvd, Los Angeles, CA 90048",
+                puresScore: 3.6,
+                tier: "1B",
+                revenue: "$11,800",
+                status: "Contacted",
+                buyerType: "Relationship",
+                notes: "Interior designer, aesthetic-focused"
+            },
+            {
+                name: "Stephanie Wilson",
+                email: "stephanie.wilson@outlook.com",
+                phone: "(310) 555-0129",
+                address: "2468 Pacific Coast Hwy, Malibu, CA 90265",
+                puresScore: 4.3,
+                tier: "1A",
+                revenue: "$17,800",
+                status: "Follow-up",
+                buyerType: "Relationship",
+                notes: "Actress, values unique pieces"
+            },
+            {
+                name: "Michelle Garcia",
+                email: "michelle.garcia@yahoo.com",
+                phone: "(424) 555-0130",
+                address: "1111 Lincoln Blvd, Santa Monica, CA 90401",
+                puresScore: 3.5,
+                tier: "1C",
+                revenue: "$9,500",
+                status: "New",
+                buyerType: "Efficiency",
+                notes: "Busy mom, values convenience"
+            },
+            {
+                name: "Kimberly Brown",
+                email: "kimberly.brown@gmail.com",
+                phone: "(310) 555-0131",
+                address: "4444 Melrose Ave, Los Angeles, CA 90029",
+                puresScore: 3.7,
+                tier: "1B",
+                revenue: "$13,200",
+                status: "Qualified",
+                buyerType: "Analytical",
+                notes: "Lawyer, detail-oriented shopper"
+            },
+            {
+                name: "Ashley Martinez",
+                email: "ashley.martinez@hotmail.com",
+                phone: "(323) 555-0132",
+                address: "5555 Hollywood Blvd, Hollywood, CA 90028",
+                puresScore: 3.4,
+                tier: "1C",
+                revenue: "$8,800",
+                status: "Contacted",
+                buyerType: "Innovation",
+                notes: "Music producer, trend-conscious"
+            },
+            {
+                name: "Rachel Anderson",
+                email: "rachel.anderson@outlook.com",
+                phone: "(310) 555-0133",
+                address: "6666 Santa Monica Blvd, West Hollywood, CA 90069",
+                puresScore: 4.0,
+                tier: "1A",
+                revenue: "$15,600",
+                status: "Follow-up",
+                buyerType: "Relationship",
+                notes: "Philanthropist, values brand story"
+            },
+            {
+                name: "Megan Taylor",
+                email: "megan.taylor@gmail.com",
+                phone: "(424) 555-0134",
+                address: "7777 Rodeo Dr, Beverly Hills, CA 90210",
+                puresScore: 4.4,
+                tier: "1A",
+                revenue: "$19,200",
+                status: "New",
+                buyerType: "Analytical",
+                notes: "Investment banker, luxury focused"
+            },
+            {
+                name: "Samantha White",
+                email: "samantha.white@yahoo.com",
+                phone: "(310) 555-0135",
+                address: "8888 Ocean Ave, Santa Monica, CA 90402",
+                puresScore: 3.3,
+                tier: "1C",
+                revenue: "$8,200",
+                status: "Contacted",
+                buyerType: "Efficiency",
+                notes: "Real estate agent, time-pressed"
+            },
+            {
+                name: "Rebecca Lee",
+                email: "rebecca.lee@hotmail.com",
+                phone: "(323) 555-0136",
+                address: "9999 Fairfax Ave, Los Angeles, CA 90048",
+                puresScore: 3.8,
+                tier: "1B",
+                revenue: "$12,800",
+                status: "Qualified",
+                buyerType: "Relationship",
+                notes: "Art gallery owner, aesthetic sense"
+            },
+            {
+                name: "Jennifer Clark",
+                email: "jennifer.clark@gmail.com",
+                phone: "(310) 555-0137",
+                address: "1010 Pico Blvd, Santa Monica, CA 90405",
+                puresScore: 3.6,
+                tier: "1B",
+                revenue: "$11,400",
+                status: "New",
+                buyerType: "Innovation",
+                notes: "Tech startup founder, forward-thinking"
+            },
+            {
+                name: "Lisa Harris",
+                email: "lisa.harris@outlook.com",
+                phone: "(424) 555-0138",
+                address: "1212 Abbott Kinney, Venice, CA 90291",
+                puresScore: 3.9,
+                tier: "1B",
+                revenue: "$14,600",
+                status: "Follow-up",
+                buyerType: "Analytical",
+                notes: "Fashion consultant, industry expertise"
+            },
+            {
+                name: "Christina Lewis",
+                email: "christina.lewis@yahoo.com",
+                phone: "(310) 555-0139",
+                address: "1313 Robertson Blvd, West Hollywood, CA 90048",
+                puresScore: 3.2,
+                tier: "1C",
+                revenue: "$7,900",
+                status: "Contacted",
+                buyerType: "Efficiency",
+                notes: "Doctor, values quality over trends"
+            },
+            {
+                name: "Karen Walker",
+                email: "karen.walker@hotmail.com",
+                phone: "(323) 555-0140",
+                address: "1414 La Brea Ave, Los Angeles, CA 90036",
+                puresScore: 3.7,
+                tier: "1B",
+                revenue: "$13,500",
+                status: "New",
+                buyerType: "Relationship",
+                notes: "Event planner, style-conscious"
+            },
+            {
+                name: "Amy Young",
+                email: "amy.young@gmail.com",
+                phone: "(310) 555-0141",
+                address: "1515 San Vicente Blvd, Brentwood, CA 90049",
+                puresScore: 4.2,
+                tier: "1A",
+                revenue: "$16,800",
+                status: "Qualified",
+                buyerType: "Innovation",
+                notes: "Marketing executive, trendsetter"
+            },
+            {
+                name: "Julie Hall",
+                email: "julie.hall@outlook.com",
+                phone: "(424) 555-0142",
+                address: "1616 26th St, Santa Monica, CA 90404",
+                puresScore: 3.5,
+                tier: "1C",
+                revenue: "$9,800",
+                status: "Follow-up",
+                buyerType: "Efficiency",
+                notes: "Finance manager, practical shopper"
+            },
+            {
+                name: "Diana Allen",
+                email: "diana.allen@yahoo.com",
+                phone: "(310) 555-0143",
+                address: "1717 Burton Way, Beverly Hills, CA 90210",
+                puresScore: 4.1,
+                tier: "1A",
+                revenue: "$15,900",
+                status: "Contacted",
+                buyerType: "Analytical",
+                notes: "Luxury brand executive, quality-focused"
+            },
+            {
+                name: "Carol King",
+                email: "carol.king@hotmail.com",
+                phone: "(323) 555-0144",
+                address: "1818 Vine St, Hollywood, CA 90028",
+                puresScore: 3.4,
+                tier: "1C",
+                revenue: "$8,600",
+                status: "New",
+                buyerType: "Relationship",
+                notes: "Music teacher, values tradition"
+            },
+            {
+                name: "Susan Wright",
+                email: "susan.wright@gmail.com",
+                phone: "(310) 555-0145",
+                address: "1919 Sepulveda Blvd, Manhattan Beach, CA 90266",
+                puresScore: 3.8,
+                tier: "1B",
+                revenue: "$12,400",
+                status: "Qualified",
+                buyerType: "Innovation",
+                notes: "Tech entrepreneur, early adopter"
+            },
+            {
+                name: "Laura Lopez",
+                email: "laura.lopez@outlook.com",
+                phone: "(424) 555-0146",
+                address: "2020 Highland Ave, Los Angeles, CA 90068",
+                puresScore: 3.6,
+                tier: "1B",
+                revenue: "$11,200",
+                status: "Follow-up",
+                buyerType: "Efficiency",
+                notes: "Veterinarian, animal lover"
+            },
+            {
+                name: "Patricia Hill",
+                email: "patricia.hill@yahoo.com",
+                phone: "(310) 555-0147",
+                address: "2121 Doheny Dr, Beverly Hills, CA 90210",
+                puresScore: 4.0,
+                tier: "1A",
+                revenue: "$15,300",
+                status: "Contacted",
+                buyerType: "Relationship",
+                notes: "Interior designer, sophisticated taste"
+            },
+            {
+                name: "Michelle Scott",
+                email: "michelle.scott@hotmail.com",
+                phone: "(323) 555-0148",
+                address: "2222 Fountain Ave, West Hollywood, CA 90046",
+                puresScore: 3.3,
+                tier: "1C",
+                revenue: "$8,400",
+                status: "New",
+                buyerType: "Analytical",
+                notes: "Research scientist, detail-oriented"
+            },
+            {
+                name: "Helen Green",
+                email: "helen.green@gmail.com",
+                phone: "(310) 555-0149",
+                address: "2323 4th St, Santa Monica, CA 90405",
+                puresScore: 3.9,
+                tier: "1B",
+                revenue: "$14,100",
+                status: "Qualified",
+                buyerType: "Innovation",
+                notes: "Fashion buyer, industry connections"
+            },
+            {
+                name: "Sandra Adams",
+                email: "sandra.adams@outlook.com",
+                phone: "(424) 555-0150",
+                address: "2424 Venice Blvd, Venice, CA 90291",
+                puresScore: 3.5,
+                tier: "1C",
+                revenue: "$9,200",
+                status: "Follow-up",
+                buyerType: "Efficiency",
+                notes: "Nurse, values comfort and durability"
+            },
+            {
+                name: "Donna Baker",
+                email: "donna.baker@yahoo.com",
+                phone: "(310) 555-0151",
+                address: "2525 Overland Ave, West Los Angeles, CA 90064",
+                puresScore: 3.7,
+                tier: "1B",
+                revenue: "$12,900",
+                status: "Contacted",
+                buyerType: "Relationship",
+                notes: "School administrator, community-minded"
+            },
+            {
+                name: "Ruth Gonzalez",
+                email: "ruth.gonzalez@hotmail.com",
+                phone: "(323) 555-0152",
+                address: "2626 Cahuenga Blvd, Los Angeles, CA 90068",
+                puresScore: 3.4,
+                tier: "1C",
+                revenue: "$8,700",
+                status: "New",
+                buyerType: "Analytical",
+                notes: "Accountant, budget-conscious"
+            },
+            {
+                name: "Sharon Nelson",
+                email: "sharon.nelson@gmail.com",
+                phone: "(310) 555-0153",
+                address: "2727 Centinela Ave, Santa Monica, CA 90404",
+                puresScore: 4.2,
+                tier: "1A",
+                revenue: "$16,700",
+                status: "Qualified",
+                buyerType: "Innovation",
+                notes: "Media executive, trendsetting mom"
+            },
+            {
+                name: "Cynthia Carter",
+                email: "cynthia.carter@outlook.com",
+                phone: "(424) 555-0154",
+                address: "2828 Olympic Blvd, Santa Monica, CA 90404",
+                puresScore: 3.6,
+                tier: "1B",
+                revenue: "$11,600",
+                status: "Follow-up",
+                buyerType: "Efficiency",
+                notes: "PR executive, image-conscious"
+            },
+            {
+                name: "Angela Mitchell",
+                email: "angela.mitchell@yahoo.com",
+                phone: "(310) 555-0155",
+                address: "2929 Bundy Dr, Brentwood, CA 90049",
+                puresScore: 4.1,
+                tier: "1A",
+                revenue: "$15,800",
+                status: "Contacted",
+                buyerType: "Relationship",
+                notes: "Wellness coach, holistic lifestyle"
+            },
+            {
+                name: "Brenda Perez",
+                email: "brenda.perez@hotmail.com",
+                phone: "(323) 555-0156",
+                address: "3030 Sunset Blvd, Silver Lake, CA 90026",
+                puresScore: 3.3,
+                tier: "1C",
+                revenue: "$8,300",
+                status: "New",
+                buyerType: "Innovation",
+                notes: "Artist, creative and unique style"
+            },
+            {
+                name: "Emma Roberts",
+                email: "emma.roberts@gmail.com",
+                phone: "(310) 555-0157",
+                address: "3131 Cloverfield Blvd, Santa Monica, CA 90404",
+                puresScore: 3.8,
+                tier: "1B",
+                revenue: "$13,400",
+                status: "Qualified",
+                buyerType: "Analytical",
+                notes: "Psychologist, child development focus"
+            },
+            {
+                name: "Frances Turner",
+                email: "frances.turner@outlook.com",
+                phone: "(424) 555-0158",
+                address: "3232 Washington Blvd, Marina del Rey, CA 90292",
+                puresScore: 3.5,
+                tier: "1C",
+                revenue: "$9,400",
+                status: "Follow-up",
+                buyerType: "Efficiency",
+                notes: "Real estate developer, practical"
+            },
+            {
+                name: "Cheryl Phillips",
+                email: "cheryl.phillips@yahoo.com",
+                phone: "(310) 555-0159",
+                address: "3333 Motor Ave, Palms, CA 90034",
+                puresScore: 3.7,
+                tier: "1B",
+                revenue: "$12,700",
+                status: "Contacted",
+                buyerType: "Relationship",
+                notes: "Nonprofit director, values ethics"
+            },
+            {
+                name: "Mildred Campbell",
+                email: "mildred.campbell@hotmail.com",
+                phone: "(323) 555-0160",
+                address: "3434 Temple St, Los Angeles, CA 90026",
+                puresScore: 3.2,
+                tier: "1C",
+                revenue: "$7,800",
+                status: "New",
+                buyerType: "Analytical",
+                notes: "University professor, intellectual"
+            },
+            {
+                name: "Lillian Parker",
+                email: "lillian.parker@gmail.com",
+                phone: "(310) 555-0161",
+                address: "3535 Lincoln Blvd, Marina del Rey, CA 90292",
+                puresScore: 4.0,
+                tier: "1A",
+                revenue: "$15,500",
+                status: "Qualified",
+                buyerType: "Innovation",
+                notes: "Tech CEO, cutting-edge lifestyle"
+            },
+            {
+                name: "Beverly Evans",
+                email: "beverly.evans@outlook.com",
+                phone: "(424) 555-0162",
+                address: "3636 Sawtelle Blvd, West Los Angeles, CA 90064",
+                puresScore: 3.6,
+                tier: "1B",
+                revenue: "$11,300",
+                status: "Follow-up",
+                buyerType: "Efficiency",
+                notes: "Dentist, health-conscious family"
+            },
+            {
+                name: "Catherine Edwards",
+                email: "catherine.edwards@yahoo.com",
+                phone: "(310) 555-0163",
+                address: "3737 Barrington Ave, Brentwood, CA 90049",
+                puresScore: 4.3,
+                tier: "1A",
+                revenue: "$17,200",
+                status: "Contacted",
+                buyerType: "Relationship",
+                notes: "Luxury real estate agent, high-end clients"
+            },
+            {
+                name: "Frances Collins",
+                email: "frances.collins@hotmail.com",
+                phone: "(323) 555-0164",
+                address: "3838 Beverly Dr, Beverly Hills, CA 90210",
+                puresScore: 4.4,
+                tier: "1A",
+                revenue: "$18,600",
+                status: "New",
+                buyerType: "Analytical",
+                notes: "Fashion executive, industry insider"
+            },
+            {
+                name: "Samantha Stewart",
+                email: "samantha.stewart@gmail.com",
+                phone: "(310) 555-0165",
+                address: "3939 Admiralty Way, Marina del Rey, CA 90292",
+                puresScore: 3.4,
+                tier: "1C",
+                revenue: "$8,900",
+                status: "Qualified",
+                buyerType: "Innovation",
+                notes: "Architecture firm owner, design-focused"
+            },
+            {
+                name: "Debra Sanchez",
+                email: "debra.sanchez@outlook.com",
+                phone: "(424) 555-0166",
+                address: "4040 Inglewood Blvd, Culver City, CA 90230",
+                puresScore: 3.5,
+                tier: "1C",
+                revenue: "$9,100",
+                status: "Follow-up",
+                buyerType: "Efficiency",
+                notes: "Entertainment lawyer, busy schedule"
+            },
+            {
+                name: "Rachel Morris",
+                email: "rachel.morris@yahoo.com",
+                phone: "(310) 555-0167",
+                address: "4141 Sepulveda Blvd, Culver City, CA 90230",
+                puresScore: 3.8,
+                tier: "1B",
+                revenue: "$13,100",
+                status: "Contacted",
+                buyerType: "Relationship",
+                notes: "Film producer, creative industry"
+            },
+            {
+                name: "Carolyn Rogers",
+                email: "carolyn.rogers@hotmail.com",
+                phone: "(323) 555-0168",
+                address: "4242 Melrose Ave, Los Angeles, CA 90029",
+                puresScore: 3.6,
+                tier: "1B",
+                revenue: "$11,700",
+                status: "New",
+                buyerType: "Innovation",
+                notes: "Fashion stylist, trend expert"
+            },
+            {
+                name: "Janet Reed",
+                email: "janet.reed@gmail.com",
+                phone: "(310) 555-0169",
+                address: "4343 Overland Ave, Culver City, CA 90230",
+                puresScore: 3.9,
+                tier: "1B",
+                revenue: "$14,300",
+                status: "Qualified",
+                buyerType: "Analytical",
+                notes: "Investment advisor, quality-focused"
+            },
+            {
+                name: "Maria Cook",
+                email: "maria.cook@outlook.com",
+                phone: "(424) 555-0170",
+                address: "4444 Jefferson Blvd, Culver City, CA 90232",
+                puresScore: 3.3,
+                tier: "1C",
+                revenue: "$8,500",
+                status: "Follow-up",
+                buyerType: "Efficiency",
+                notes: "Pediatric nurse, child-focused"
+            },
+            {
+                name: "Heather Bailey",
+                email: "heather.bailey@yahoo.com",
+                phone: "(310) 555-0171",
+                address: "4545 Venice Blvd, Culver City, CA 90232",
+                puresScore: 4.1,
+                tier: "1A",
+                revenue: "$16,200",
+                status: "Contacted",
+                buyerType: "Relationship",
+                notes: "Boutique hotel owner, hospitality focus"
+            },
+            {
+                name: "Diane Rivera",
+                email: "diane.rivera@hotmail.com",
+                phone: "(323) 555-0172",
+                address: "4646 Washington Blvd, Los Angeles, CA 90016",
+                puresScore: 3.4,
+                tier: "1C",
+                revenue: "$8,700",
+                status: "New",
+                buyerType: "Innovation",
+                notes: "Graphic designer, creative professional"
+            },
+            {
+                name: "Julie Cooper",
+                email: "julie.cooper@gmail.com",
+                phone: "(310) 555-0173",
+                address: "4747 National Blvd, Palms, CA 90034",
+                puresScore: 3.7,
+                tier: "1B",
+                revenue: "$12,600",
+                status: "Qualified",
+                buyerType: "Efficiency",
+                notes: "Business consultant, professional mom"
+            }
+        ];
+
+        let currentSortColumn = -1;
+        let sortDirection = 1;
+
+        function populateTable() {
+            const tbody = document.getElementById('clientTableBody');
+            tbody.innerHTML = '';
+            
+            clientData.forEach((client, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${client.name}</td>
+                    <td>${client.email}</td>
+                    <td>${client.phone}</td>
+                    <td>${client.address}</td>
+                    <td>${client.puresScore}</td>
+                    <td><span class="tier-badge tier-${client.tier.toLowerCase()}">${client.tier}</span></td>
+                    <td>${client.revenue}</td>
+                    <td>${client.status}</td>
+                    <td>
+                        <button class="contact-btn" onclick="openEmailModal('${client.name}', '${client.email}', '${client.buyerType}')">Email</button>
+                        <button class="contact-btn" onclick="callClient('${client.phone}')">Call</button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function showModule(moduleId) {
+            // Hide all modules
+            document.querySelectorAll('.module').forEach(module => {
+                module.classList.add('hidden');
+            });
+            
+            // Remove active class from all nav buttons
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected module
+            document.getElementById(moduleId).classList.remove('hidden');
+            
+            // Add active class to clicked button
+            event.target.classList.add('active');
+        }
+
+        function filterTable() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const tierFilter = document.getElementById('tierFilter').value;
+            const statusFilter = document.getElementById('statusFilter').value;
+            
+            const tbody = document.getElementById('clientTableBody');
+            const rows = tbody.getElementsByTagName('tr');
+            
+            for (let i = 0; i < rows.length; i++) {
+                const row = rows[i];
+                const cells = row.getElementsByTagName('td');
+                let showRow = true;
+                
+                // Text search
+                if (searchTerm) {
+                    const rowText = Array.from(cells).slice(0, -1).map(cell => cell.textContent.toLowerCase()).join(' ');
+                    showRow = showRow && rowText.includes(searchTerm);
+                }
+                
+                // Tier filter
+                if (tierFilter && showRow) {
+                    const tierCell = cells[5];
+                    showRow = showRow && tierCell.textContent.includes(tierFilter);
+                }
+                
+                // Status filter
+                if (statusFilter && showRow) {
+                    const statusCell = cells[7];
+                    showRow = showRow && statusCell.textContent === statusFilter;
+                }
+                
+                row.style.display = showRow ? '' : 'none';
+            }
+        }
+
+        function sortTable(columnIndex) {
+            const table = document.getElementById('clientTable');
+            const tbody = table.getElementsByTagName('tbody')[0];
+            const rows = Array.from(tbody.getElementsByTagName('tr'));
+            
+            if (currentSortColumn === columnIndex) {
+                sortDirection *= -1;
+            } else {
+                sortDirection = 1;
+                currentSortColumn = columnIndex;
+            }
+            
+            rows.sort((a, b) => {
+                const aText = a.cells[columnIndex].textContent.trim();
+                const bText = b.cells[columnIndex].textContent.trim();
+                
+                // Handle numeric sorting for P.U.R.E.S score
+                if (columnIndex === 4) {
+                    return (parseFloat(aText) - parseFloat(bText)) * sortDirection;
+                }
+                
+                return aText.localeCompare(bText) * sortDirection;
+            });
+            
+            tbody.innerHTML = '';
+            rows.forEach(row => tbody.appendChild(row));
+        }
+
+        function openEmailModal(clientName, clientEmail, buyerType) {
+            document.getElementById('clientNameModal').textContent = clientName;
+            
+            const emailContent = generateEmailContent(clientName, buyerType);
+            document.getElementById('emailContent').innerHTML = emailContent;
+            
+            document.getElementById('emailModal').style.display = 'block';
+            
+            // Store client email for sending
+            document.getElementById('emailModal').setAttribute('data-email', clientEmail);
+        }
+
+        function generateEmailContent(clientName, buyerType) {
+            const baseContent = `
+                <p>Dear ${clientName},</p>
+                <p>I hope this message finds you well. I'm Jenny Belushi from Poppy Store, and I wanted to personally reach out because I believe our carefully curated collection of European children's fashion would be perfect for your family.</p>
+            `;
+            
+            let personalizedContent = '';
+            
+            switch(buyerType) {
+                case 'Analytical':
+                    personalizedContent = `
+                        <p>As someone who appreciates quality and craftsmanship, you'll love our selection of premium brands like Bonpoint, Bonton, and Petit Bateau - labels known for their exceptional construction and timeless design. Each piece in our collection is chosen for its superior fabrics and attention to detail.</p>
+                        <p>Our brands represent generations of French and European expertise in children's fashion, with proven durability that makes each investment piece last through multiple children or years of wear.</p>
+                    `;
+                    break;
+                case 'Relationship':
+                    personalizedContent = `
+                        <p>At Poppy Store, we believe in creating lasting relationships with families who share our passion for dressing children like children. Our three locations in Santa Monica, Larkspur, and Montecito have become community gathering places where parents discover the joy of nostalgic, beautiful clothing.</p>
+                        <p>Many of our clients tell us they love dressing their little ones in the same timeless labels they once wore, creating beautiful family traditions and memories.</p>
+                    `;
+                    break;
+                case 'Efficiency':
+                    personalizedContent = `
+                        <p>I understand how precious your time is, which is why we've made shopping at Poppy Store effortless and enjoyable. Our expert team curates each collection so you can trust that every piece meets our high standards for quality and style.</p>
+                        <p>With our personal styling services and carefully organized collections, you can quickly find exactly what you need without the overwhelming choices found elsewhere.</p>
+                    `;
+                    break;
+                case 'Innovation':
+                    personalizedContent = `
+                        <p>You'll be excited to discover our exclusive partnerships with cutting-edge European designers and our newest addition - La Coqueta - available exclusively at Poppy as the sole U.S. retailer.</p>
+                        <p>We're always first to bring the latest trends from Paris and European fashion weeks, offering pieces you won't find anywhere else in the area.</p>
+                    `;
+                    break;
+                default:
+                    personalizedContent = `
+                        <p>Our collection features carefully selected merchandise from Paris and New York, offering the latest fashions in the highest-quality fabrics while maintaining a youthful appeal.</p>
+                    `;
+            }
+            
+            const closingContent = `
+                ${personalizedContent}
+                <p>I'd love to invite you to visit our Santa Monica location in the Brentwood Country Mart to experience our collection firsthand. We offer complimentary personal styling consultations and would be delighted to help create the perfect wardrobe for your children.</p>
+                <p>Please feel free to reply to this email or call us at (310) 555-POPPY to schedule a private appointment.</p>
+                <p>Looking forward to welcoming you to the Poppy Store family!</p>
+                <p>Warmly,<br>Jenny Belushi<br>Poppy Store<br>jenny@poppystores.com</p>
+            `;
+            
+            return baseContent + closingContent;
+        }
+
+        function sendEmail() {
+            const email = document.getElementById('emailModal').getAttribute('data-email');
+            const subject = "Discover European Children's Fashion at Poppy Store";
+            const body = document.getElementById('emailContent').textContent;
+            
+            window.location.href = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+            closeEmailModal();
+        }
+
+        function callClient(phone) {
+            window.location.href = `tel:${phone}`;
+        }
+
+        function closeEmailModal() {
+            document.getElementById('emailModal').style.display = 'none';
+        }
+
+        // Initialize the dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            populateTable();
+        });
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('emailModal');
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>

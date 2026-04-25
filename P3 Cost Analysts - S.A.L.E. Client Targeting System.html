@@ -1,0 +1,1018 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>P3 Cost Analysts - S.A.L.E. Client Targeting System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #000000;
+            color: #CF2030;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: linear-gradient(135deg, #000000 0%, #333333 100%);
+            padding: 20px 0;
+            border-bottom: 3px solid #CF2030;
+            margin-bottom: 30px;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .logo {
+            height: 60px;
+            background: #CF2030;
+            padding: 10px 20px;
+            border-radius: 5px;
+            color: white;
+            font-weight: bold;
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+        }
+
+        .header-info {
+            text-align: right;
+            color: #CF2030;
+        }
+
+        .header-info h1 {
+            font-size: 28px;
+            margin-bottom: 5px;
+        }
+
+        .header-info p {
+            font-size: 14px;
+            opacity: 0.8;
+        }
+
+        .tabs {
+            display: flex;
+            background: #333333;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .tab-button {
+            flex: 1;
+            padding: 15px;
+            background: #333333;
+            color: #CF2030;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .tab-button.active {
+            background: #CF2030;
+            color: white;
+        }
+
+        .tab-button:hover {
+            background: #555555;
+        }
+
+        .tab-button.active:hover {
+            background: #CF2030;
+        }
+
+        .tab-content {
+            display: none;
+            background: #1a1a1a;
+            border-radius: 10px;
+            padding: 20px;
+            border: 2px solid #CF2030;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .search-controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+            padding: 20px;
+            background: #2a2a2a;
+            border-radius: 10px;
+            border: 1px solid #CF2030;
+        }
+
+        .search-controls input, 
+        .search-controls select {
+            padding: 10px;
+            background: #333333;
+            border: 1px solid #CF2030;
+            border-radius: 5px;
+            color: #CF2030;
+            font-size: 14px;
+        }
+
+        .search-controls input::placeholder {
+            color: #999999;
+        }
+
+        .client-table {
+            width: 100%;
+            background: #2a2a2a;
+            border-collapse: collapse;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(207, 32, 48, 0.3);
+        }
+
+        .client-table th {
+            background: #CF2030;
+            color: white;
+            padding: 15px 10px;
+            text-align: left;
+            font-weight: bold;
+            cursor: pointer;
+            user-select: none;
+            position: relative;
+        }
+
+        .client-table th:hover {
+            background: #b01d2a;
+        }
+
+        .client-table th::after {
+            content: ' ↕';
+            position: absolute;
+            right: 5px;
+        }
+
+        .client-table td {
+            padding: 12px 10px;
+            border-bottom: 1px solid #444444;
+            color: #CF2030;
+        }
+
+        .client-table tbody tr:hover {
+            background: #333333;
+        }
+
+        .tier-badge {
+            padding: 4px 8px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            text-align: center;
+            color: white;
+        }
+
+        .tier-1a { background: #28a745; }
+        .tier-1b { background: #ffc107; color: #000; }
+        .tier-1c { background: #007bff; }
+
+        .contact-btn, .email-btn, .pures-btn {
+            padding: 8px 12px;
+            margin: 2px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .contact-btn {
+            background: #28a745;
+            color: white;
+        }
+
+        .contact-btn:hover {
+            background: #218838;
+        }
+
+        .email-btn {
+            background: #CF2030;
+            color: white;
+        }
+
+        .email-btn:hover {
+            background: #b01d2a;
+        }
+
+        .pures-btn {
+            background: #007bff;
+            color: white;
+        }
+
+        .pures-btn:hover {
+            background: #0056b3;
+        }
+
+        .pures-modal, .assessment-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #1a1a1a;
+            padding: 30px;
+            border-radius: 10px;
+            border: 2px solid #CF2030;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #CF2030;
+            padding-bottom: 10px;
+        }
+
+        .modal-header h2 {
+            color: #CF2030;
+        }
+
+        .close-btn {
+            background: #CF2030;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .pures-form {
+            display: grid;
+            gap: 15px;
+        }
+
+        .pures-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background: #2a2a2a;
+            border-radius: 5px;
+        }
+
+        .pures-item label {
+            color: #CF2030;
+            font-weight: bold;
+            flex: 1;
+        }
+
+        .pures-score {
+            display: flex;
+            gap: 10px;
+        }
+
+        .score-btn {
+            width: 30px;
+            height: 30px;
+            border: 2px solid #CF2030;
+            background: #333333;
+            color: #CF2030;
+            border-radius: 50%;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .score-btn.selected {
+            background: #CF2030;
+            color: white;
+        }
+
+        .save-btn {
+            background: #28a745;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: #2a2a2a;
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid #CF2030;
+            text-align: center;
+        }
+
+        .stat-card h3 {
+            color: #CF2030;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .stat-card p {
+            color: #999999;
+        }
+
+        .footer {
+            margin-top: 50px;
+            padding: 20px;
+            background: #1a1a1a;
+            border-top: 2px solid #CF2030;
+            text-align: center;
+            border-radius: 10px;
+        }
+
+        .footer-logo {
+            height: 30px;
+            background: #CF2030;
+            padding: 5px 10px;
+            border-radius: 3px;
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+            display: inline-flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .export-btn {
+            background: #6c757d;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+            font-weight: bold;
+        }
+
+        .export-btn:hover {
+            background: #5a6268;
+        }
+
+        @media (max-width: 768px) {
+            .client-table {
+                font-size: 12px;
+            }
+            
+            .client-table th,
+            .client-table td {
+                padding: 8px 5px;
+            }
+            
+            .search-controls {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <div class="logo">HigginsReports</div>
+            <div class="header-info">
+                <h1>P3 Cost Analysts - S.A.L.E. System</h1>
+                <p>Advanced Client Targeting & Outreach Platform</p>
+                <p>Fayetteville, Arkansas | Management Consulting</p>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Statistics Dashboard -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3 id="totalClients">50</h3>
+                <p>Total Prospects</p>
+            </div>
+            <div class="stat-card">
+                <h3 id="tier1aCount">15</h3>
+                <p>Tier 1A (Premium)</p>
+            </div>
+            <div class="stat-card">
+                <h3 id="tier1bCount">20</h3>
+                <p>Tier 1B (High-Value)</p>
+            </div>
+            <div class="stat-card">
+                <h3 id="tier1cCount">15</h3>
+                <p>Tier 1C (Qualified)</p>
+            </div>
+        </div>
+
+        <!-- Navigation Tabs -->
+        <div class="tabs">
+            <button class="tab-button active" onclick="switchTab('sourcing')">S.OURCING</button>
+            <button class="tab-button" onclick="switchTab('assessing')">A.SSESSING</button>
+            <button class="tab-button" onclick="switchTab('listening')">L.ISTENING</button>
+            <button class="tab-button" onclick="switchTab('empowering')">E.MPOWERING</button>
+        </div>
+
+        <!-- SOURCING Tab -->
+        <div id="sourcing" class="tab-content active">
+            <h2 style="color: #CF2030; margin-bottom: 20px;">S.OURCING - P.U.R.E.S. Client Targeting</h2>
+            
+            <!-- Search Controls -->
+            <div class="search-controls">
+                <input type="text" id="searchName" placeholder="Search by name..." oninput="filterTable()">
+                <input type="text" id="searchIndustry" placeholder="Search by industry..." oninput="filterTable()">
+                <select id="filterTier" onchange="filterTable()">
+                    <option value="">All Tiers</option>
+                    <option value="1A">Tier 1A (Premium)</option>
+                    <option value="1B">Tier 1B (High-Value)</option>
+                    <option value="1C">Tier 1C (Qualified)</option>
+                </select>
+                <select id="sortBy" onchange="sortTable()">
+                    <option value="">Sort by...</option>
+                    <option value="name">Name</option>
+                    <option value="industry">Industry</option>
+                    <option value="revenue">Revenue</option>
+                    <option value="pures">P.U.R.E.S. Score</option>
+                </select>
+                <button class="export-btn" onclick="exportToCSV()">Export CSV</button>
+            </div>
+
+            <!-- Client Table -->
+            <table class="client-table" id="clientTable">
+                <thead>
+                    <tr>
+                        <th onclick="sortTable('name')">Client Name</th>
+                        <th onclick="sortTable('email')">Email</th>
+                        <th onclick="sortTable('phone')">Phone</th>
+                        <th onclick="sortTable('industry')">Industry</th>
+                        <th onclick="sortTable('revenue')">Est. Revenue</th>
+                        <th onclick="sortTable('pures')">P.U.R.E.S.</th>
+                        <th onclick="sortTable('tier')">Tier</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="clientTableBody">
+                    <!-- Client data will be inserted here by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- ASSESSING Tab -->
+        <div id="assessing" class="tab-content">
+            <h2 style="color: #CF2030; margin-bottom: 20px;">A.SSESSING - Buying Pattern Analysis</h2>
+            <div style="background: #2a2a2a; padding: 20px; border-radius: 10px; border: 1px solid #CF2030;">
+                <h3 style="color: #CF2030; margin-bottom: 15px;">Client Buying Profiles</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px;">
+                    <div style="background: #333333; padding: 15px; border-radius: 8px; border-left: 4px solid #28a745;">
+                        <h4 style="color: #28a745; margin-bottom: 8px;">Analytical Buyers (35%)</h4>
+                        <p style="color: #CF2030; font-size: 14px;">Require detailed ROI analysis, case studies, and trial periods. Focus on data-driven value propositions.</p>
+                    </div>
+                    <div style="background: #333333; padding: 15px; border-radius: 8px; border-left: 4px solid #ffc107;">
+                        <h4 style="color: #ffc107; margin-bottom: 8px;">Relationship Buyers (30%)</h4>
+                        <p style="color: #CF2030; font-size: 14px;">Value trust, referrals, and long-term partnerships. Prioritize relationship building and testimonials.</p>
+                    </div>
+                    <div style="background: #333333; padding: 15px; border-radius: 8px; border-left: 4px solid #007bff;">
+                        <h4 style="color: #007bff; margin-bottom: 8px;">Efficiency Buyers (20%)</h4>
+                        <p style="color: #CF2030; font-size: 14px;">Focus on time-saving and process improvement. Emphasize quick wins and operational efficiency.</p>
+                    </div>
+                    <div style="background: #333333; padding: 15px; border-radius: 8px; border-left: 4px solid #6f42c1;">
+                        <h4 style="color: #6f42c1; margin-bottom: 8px;">Innovation Buyers (15%)</h4>
+                        <p style="color: #CF2030; font-size: 14px;">Seek cutting-edge solutions and competitive advantages. Present unique methodologies and industry leadership.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- LISTENING Tab -->
+        <div id="listening" class="tab-content">
+            <h2 style="color: #CF2030; margin-bottom: 20px;">L.ISTENING - Feedback Integration</h2>
+            <div style="background: #2a2a2a; padding: 20px; border-radius: 10px; border: 1px solid #CF2030;">
+                <h3 style="color: #CF2030; margin-bottom: 15px;">Feedback Tracking System</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+                    <div style="background: #333333; padding: 20px; border-radius: 8px;">
+                        <h4 style="color: #28a745; margin-bottom: 15px;">Pre-Sale Feedback</h4>
+                        <ul style="color: #CF2030; line-height: 1.8;">
+                            <li>Initial needs assessment surveys</li>
+                            <li>Pain point identification questionnaires</li>
+                            <li>Budget and timeline discovery</li>
+                            <li>Decision-maker mapping</li>
+                        </ul>
+                    </div>
+                    <div style="background: #333333; padding: 20px; border-radius: 8px;">
+                        <h4 style="color: #ffc107; margin-bottom: 15px;">During-Sale Progress</h4>
+                        <ul style="color: #CF2030; line-height: 1.8;">
+                            <li>Proposal feedback collection</li>
+                            <li>Objection tracking and responses</li>
+                            <li>Stakeholder engagement monitoring</li>
+                            <li>Timeline and milestone updates</li>
+                        </ul>
+                    </div>
+                    <div style="background: #333333; padding: 20px; border-radius: 8px;">
+                        <h4 style="color: #007bff; margin-bottom: 15px;">Post-Sale Monitoring</h4>
+                        <ul style="color: #CF2030; line-height: 1.8;">
+                            <li>Satisfaction surveys and NPS tracking</li>
+                            <li>Implementation success metrics</li>
+                            <li>Ongoing savings validation</li>
+                            <li>Expansion opportunity identification</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- EMPOWERING Tab -->
+        <div id="empowering" class="tab-content">
+            <h2 style="color: #CF2030; margin-bottom: 20px;">E.MPOWERING - Referral Strategy</h2>
+            <div style="background: #2a2a2a; padding: 20px; border-radius: 10px; border: 1px solid #CF2030;">
+                <h3 style="color: #CF2030; margin-bottom: 15px;">Client Advocacy Program</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px;">
+                    <div style="background: #333333; padding: 15px; border-radius: 8px;">
+                        <h4 style="color: #28a745; margin-bottom: 10px;">Success Story Documentation</h4>
+                        <ul style="color: #CF2030; font-size: 14px; line-height: 1.6;">
+                            <li>Case study development</li>
+                            <li>ROI documentation</li>
+                            <li>Client testimonial videos</li>
+                            <li>Industry-specific examples</li>
+                        </ul>
+                    </div>
+                    <div style="background: #333333; padding: 15px; border-radius: 8px;">
+                        <h4 style="color: #ffc107; margin-bottom: 10px;">Referral Reward Tracking</h4>
+                        <ul style="color: #CF2030; font-size: 14px; line-height: 1.6;">
+                            <li>Referral source attribution</li>
+                            <li>Reward program management</li>
+                            <li>Partner incentive tracking</li>
+                            <li>Success rate analytics</li>
+                        </ul>
+                    </div>
+                    <div style="background: #333333; padding: 15px; border-radius: 8px;">
+                        <h4 style="color: #007bff; margin-bottom: 10px;">Co-Marketing Opportunities</h4>
+                        <ul style="color: #CF2030; font-size: 14px; line-height: 1.6;">
+                            <li>Joint webinars and events</li>
+                            <li>Industry conference presentations</li>
+                            <li>Shared content development</li>
+                            <li>Cross-promotion campaigns</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- P.U.R.E.S. Scoring Modal -->
+    <div id="puresModal" class="pures-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>P.U.R.E.S. Client Scoring</h2>
+                <button class="close-btn" onclick="closePuresModal()">&times;</button>
+            </div>
+            <div id="puresForm" class="pures-form">
+                <div class="pures-item">
+                    <label>Profitability: Annual revenue threshold and budget capacity</label>
+                    <div class="pures-score">
+                        <button class="score-btn" data-score="1">1</button>
+                        <button class="score-btn" data-score="2">2</button>
+                        <button class="score-btn" data-score="3">3</button>
+                        <button class="score-btn" data-score="4">4</button>
+                        <button class="score-btn" data-score="5">5</button>
+                    </div>
+                </div>
+                <div class="pures-item">
+                    <label>Urgency: Active pain points requiring immediate solutions</label>
+                    <div class="pures-score">
+                        <button class="score-btn" data-score="1">1</button>
+                        <button class="score-btn" data-score="2">2</button>
+                        <button class="score-btn" data-score="3">3</button>
+                        <button class="score-btn" data-score="4">4</button>
+                        <button class="score-btn" data-score="5">5</button>
+                    </div>
+                </div>
+                <div class="pures-item">
+                    <label>Reachability: Accessible decision makers with clear contact paths</label>
+                    <div class="pures-score">
+                        <button class="score-btn" data-score="1">1</button>
+                        <button class="score-btn" data-score="2">2</button>
+                        <button class="score-btn" data-score="3">3</button>
+                        <button class="score-btn" data-score="4">4</button>
+                        <button class="score-btn" data-score="5">5</button>
+                    </div>
+                </div>
+                <div class="pures-item">
+                    <label>Engagement: Openness to innovation and partnerships</label>
+                    <div class="pures-score">
+                        <button class="score-btn" data-score="1">1</button>
+                        <button class="score-btn" data-score="2">2</button>
+                        <button class="score-btn" data-score="3">3</button>
+                        <button class="score-btn" data-score="4">4</button>
+                        <button class="score-btn" data-score="5">5</button>
+                    </div>
+                </div>
+                <div class="pures-item">
+                    <label>Sustainability: Long-term partnership potential with growth trajectory</label>
+                    <div class="pures-score">
+                        <button class="score-btn" data-score="1">1</button>
+                        <button class="score-btn" data-score="2">2</button>
+                        <button class="score-btn" data-score="3">3</button>
+                        <button class="score-btn" data-score="4">4</button>
+                        <button class="score-btn" data-score="5">5</button>
+                    </div>
+                </div>
+            </div>
+            <button class="save-btn" onclick="savePuresScore()">Save P.U.R.E.S. Score</button>
+        </div>
+    </div>
+
+    <div class="footer">
+        <div class="footer-logo">HigginsReports</div>
+        <p style="color: #999999; font-size: 12px;">
+            © 2024 HigginsReports. Advanced AI-Powered Business Intelligence Solutions.
+        </p>
+    </div>
+
+    <script>
+        // Client Database - 50 Prospects in Fayetteville, Arkansas Area
+        const clientDatabase = [
+            {name: "Walmart Stores Inc", email: "procurement@walmart.com", phone: "(479) 273-4000", address: "702 SW 8th St, Bentonville, AR 72716", industry: "Retail", revenue: "$523B", pures: 4.8, tier: "1A", lastContact: "2024-01-15", nextAction: "Schedule Cost Analysis", notes: "Major telecom and utilities spend"},
+            {name: "Tyson Foods Inc", email: "sourcing@tyson.com", phone: "(479) 290-4000", address: "2200 W Don Tyson Pkwy, Springdale, AR 72762", industry: "Food Processing", revenue: "$53B", pures: 4.6, tier: "1A", lastContact: "2024-01-10", nextAction: "Present Waste Audit", notes: "Multi-location manufacturing"},
+            {name: "J.B. Hunt Transport", email: "operations@jbhunt.com", phone: "(479) 820-0000", address: "615 J.B. Hunt Corporate Dr, Lowell, AR 72745", industry: "Transportation", revenue: "$12B", pures: 4.4, tier: "1A", lastContact: "2024-01-20", nextAction: "Fuel Cost Analysis", notes: "Fleet management opportunities"},
+            {name: "University of Arkansas", email: "procurement@uark.edu", phone: "(479) 575-2000", address: "1 University of Arkansas, Fayetteville, AR 72701", industry: "Education", revenue: "$1.2B", pures: 4.2, tier: "1A", lastContact: "2024-01-05", nextAction: "Utility Audit Proposal", notes: "Large campus operations"},
+            {name: "Washington Regional Medical", email: "finance@wregional.com", phone: "(479) 463-1000", address: "3215 N Northhills Blvd, Fayetteville, AR 72703", industry: "Healthcare", revenue: "$800M", pures: 4.0, tier: "1A", lastContact: "2024-01-12", nextAction: "Medical Waste Review", notes: "Multiple facility locations"},
+            
+            {name: "Simmons Foods", email: "admin@simmonsfoods.com", phone: "(479) 273-6100", address: "4500 Johnson Rd, Springdale, AR 72762", industry: "Food Processing", revenue: "$2B", pures: 3.8, tier: "1B", lastContact: "2024-01-18", nextAction: "Initial Consultation", notes: "Poultry processing facilities"},
+            {name: "Mercy Health System", email: "purchasing@mercy.net", phone: "(479) 338-8000", address: "2710 Rife Medical Ln, Rogers, AR 72758", industry: "Healthcare", revenue: "$1.5B", pures: 3.9, tier: "1B", lastContact: "2024-01-08", nextAction: "Healthcare Cost Analysis", notes: "Regional hospital network"},
+            {name: "ConAgra Brands", email: "procurement@conagra.com", phone: "(479) 968-5100", address: "1 ConAgra Dr, Bentonville, AR 72712", industry: "Food Manufacturing", revenue: "$11B", pures: 3.7, tier: "1B", lastContact: "2024-01-25", nextAction: "Manufacturing Audit", notes: "Food production facility"},
+            {name: "Cargill Inc", email: "operations@cargill.com", phone: "(479) 524-6000", address: "200 Cargill Way, Springdale, AR 72764", industry: "Agriculture", revenue: "$134B", pures: 3.8, tier: "1B", lastContact: "2024-01-14", nextAction: "Agricultural Waste Review", notes: "Large processing operations"},
+            {name: "Ozark Regional Transit", email: "admin@ozarktransit.org", phone: "(479) 443-4040", address: "1617 E Joyce Blvd, Fayetteville, AR 72703", industry: "Transportation", revenue: "$50M", pures: 3.6, tier: "1B", lastContact: "2024-01-22", nextAction: "Fleet Analysis", notes: "Public transportation system"},
+            
+            {name: "First Security Bank", email: "operations@fsbark.com", phone: "(479) 521-1400", address: "123 W Mountain St, Fayetteville, AR 72701", industry: "Banking", revenue: "$200M", pures: 3.5, tier: "1B", lastContact: "2024-01-16", nextAction: "Branch Operations Review", notes: "Multiple branch locations"},
+            {name: "Rogers Public Schools", email: "business@rps.k12.ar.us", phone: "(479) 636-3910", address: "500 W Walnut St, Rogers, AR 72756", industry: "Education", revenue: "$180M", pures: 3.4, tier: "1B", lastContact: "2024-01-11", nextAction: "School District Audit", notes: "Large school district"},
+            {name: "Pinnacle Foods", email: "facilities@pinnaclefoods.com", phone: "(479) 246-8000", address: "800 Industrial Blvd, Springdale, AR 72764", industry: "Food Processing", revenue: "$3B", pures: 3.6, tier: "1B", lastContact: "2024-01-19", nextAction: "Processing Cost Review", notes: "Food manufacturing plant"},
+            {name: "Arkansas Children's NW", email: "procurement@archildrens.org", phone: "(479) 725-6800", address: "2601 Gene George Blvd, Rogers, AR 72758", industry: "Healthcare", revenue: "$500M", pures: 3.7, tier: "1B", lastContact: "2024-01-13", nextAction: "Medical Facility Audit", notes: "Pediatric hospital"},
+            {name: "Bentonville Schools", email: "finance@bentonvillek12.org", phone: "(479) 254-5000", address: "1600 SE 14th St, Bentonville, AR 72712", industry: "Education", revenue: "$150M", pures: 3.3, tier: "1B", lastContact: "2024-01-07", nextAction: "Educational Facility Review", notes: "Growing school district"},
+            
+            {name: "Springdale Schools", email: "operations@sdale.org", phone: "(479) 750-8800", address: "800 W Emma Ave, Springdale, AR 72764", industry: "Education", revenue: "$120M", pures: 3.2, tier: "1B", lastContact: "2024-01-21", nextAction: "School Operations Audit", notes: "Large student population"},
+            {name: "Fayetteville Schools", email: "business@fayar.net", phone: "(479) 444-3000", address: "1000 W Stone St, Fayetteville, AR 72701", industry: "Education", revenue: "$110M", pures: 3.1, tier: "1B", lastContact: "2024-01-09", nextAction: "District Cost Review", notes: "Urban school district"},
+            {name: "Beaver Water District", email: "admin@bwdh2o.org", phone: "(479) 846-4448", address: "5300 Beaver Water Dr, Lowell, AR 72745", industry: "Utilities", revenue: "$60M", pures: 3.0, tier: "1B", lastContact: "2024-01-17", nextAction: "Water System Audit", notes: "Regional water provider"},
+            {name: "City of Fayetteville", email: "purchasing@fayar.net", phone: "(479) 575-8200", address: "113 W Mountain St, Fayetteville, AR 72701", industry: "Government", revenue: "$80M", pures: 3.4, tier: "1B", lastContact: "2024-01-23", nextAction: "Municipal Services Review", notes: "City government operations"},
+            {name: "Benton County", email: "purchasing@bentoncountyar.gov", phone: "(479) 271-1013", address: "215 E Central Ave, Bentonville, AR 72712", industry: "Government", revenue: "$70M", pures: 3.2, tier: "1B", lastContact: "2024-01-06", nextAction: "County Operations Audit", notes: "County government"},
+            
+            {name: "SWEPCO Electric", email: "commercial@swepco.com", phone: "(479) 783-2900", address: "1000 Olivia Dr, Rogers, AR 72756", industry: "Utilities", revenue: "$2B", pures: 2.9, tier: "1C", lastContact: "2024-01-24", nextAction: "Utility Cost Analysis", notes: "Electric utility provider"},
+            {name: "Arkansas Gas Corp", email: "business@arkansasgas.com", phone: "(479) 521-3500", address: "400 Main St, Fayetteville, AR 72701", industry: "Utilities", revenue: "$300M", pures: 2.8, tier: "1C", lastContact: "2024-01-04", nextAction: "Gas Service Review", notes: "Natural gas provider"},
+            {name: "Northwest Arkansas Mall", email: "management@nwamall.com", phone: "(479) 636-0294", address: "4201 N Shiloh Dr, Fayetteville, AR 72703", industry: "Retail", revenue: "$40M", pures: 2.7, tier: "1C", lastContact: "2024-01-26", nextAction: "Mall Operations Audit", notes: "Shopping center management"},
+            {name: "Razorback Regional Greenway", email: "info@razorbackgreenway.com", phone: "(479) 571-2706", address: "1000 SE 14th St, Bentonville, AR 72712", industry: "Recreation", revenue: "$15M", pures: 2.6, tier: "1C", lastContact: "2024-01-15", nextAction: "Facilities Review", notes: "Regional trail system"},
+            {name: "Crystal Bridges Museum", email: "operations@crystalbridges.org", phone: "(479) 418-5700", address: "600 Museum Way, Bentonville, AR 72712", industry: "Arts/Culture", revenue: "$25M", pures: 2.8, tier: "1C", lastContact: "2024-01-20", nextAction: "Museum Operations Review", notes: "Art museum operations"},
+            
+            {name: "War Memorial Stadium", email: "events@warmemorialstadium.com", phone: "(479) 575-4952", address: "1 Razorback Rd, Fayetteville, AR 72701", industry: "Entertainment", revenue: "$30M", pures: 2.9, tier: "1C", lastContact: "2024-01-12", nextAction: "Stadium Operations Audit", notes: "Sports venue management"},
+            {name: "Northwest Arkansas Regional", email: "admin@flyxna.com", phone: "(479) 205-1000", address: "1 Airport Blvd, Bentonville, AR 72712", industry: "Transportation", revenue: "$45M", pures: 3.0, tier: "1C", lastContact: "2024-01-18", nextAction: "Airport Operations Review", notes: "Regional airport"},
+            {name: "Amazeum Interactive", email: "operations@amazeum.org", phone: "(479) 696-9280", address: "1009 Museum Way, Bentonville, AR 72712", industry: "Education", revenue: "$20M", pures: 2.7, tier: "1C", lastContact: "2024-01-08", nextAction: "Interactive Museum Review", notes: "Science museum"},
+            {name: "Centerton Water Dept", email: "utilities@centerton.org", phone: "(479) 795-0881", address: "136 W Main St, Centerton, AR 72719", industry: "Utilities", revenue: "$12M", pures: 2.5, tier: "1C", lastContact: "2024-01-25", nextAction: "Municipal Water Review", notes: "City water department"},
+            {name: "Bella Vista Property", email: "admin@bellavistapoa.com", phone: "(479) 855-2200", address: "120 Centrum Dr, Bella Vista, AR 72714", industry: "Real Estate", revenue: "$35M", pures: 2.6, tier: "1C", lastContact: "2024-01-14", nextAction: "Property Management Review", notes: "Community association"},
+            
+            {name: "Arvest Bank Operations", email: "facilities@arvest.com", phone: "(479) 443-4000", address: "200 Towncenter Dr, Fayetteville, AR 72703", industry: "Banking", revenue: "$2B", pures: 2.8, tier: "1C", lastContact: "2024-01-22", nextAction: "Banking Operations Audit", notes: "Regional bank headquarters"},
+            {name: "Walmart Technology", email: "operations@walmartlabs.com", phone: "(479) 273-1000", address: "850 SE 8th St, Bentonville, AR 72716", industry: "Technology", revenue: "$1B", pures: 2.9, tier: "1C", lastContact: "2024-01-16", nextAction: "Tech Facility Review", notes: "Technology division"},
+            {name: "FedEx Ground Hub", email: "operations@fedex.com", phone: "(479) 756-2200", address: "3000 SE J St, Bentonville, AR 72712", industry: "Logistics", revenue: "$100M", pures: 2.7, tier: "1C", lastContact: "2024-01-11", nextAction: "Logistics Operations Review", notes: "Distribution hub"},
+            {name: "UPS Distribution", email: "facilities@ups.com", phone: "(479) 271-8800", address: "2000 SE Walton Blvd, Bentonville, AR 72712", industry: "Logistics", revenue: "$80M", pures: 2.6, tier: "1C", lastContact: "2024-01-19", nextAction: "Distribution Center Audit", notes: "Package distribution"},
+            {name: "DHL Supply Chain", email: "operations@dhl.com", phone: "(479) 464-5500", address: "1500 SE 14th St, Bentonville, AR 72712", industry: "Logistics", revenue: "$60M", pures: 2.5, tier: "1C", lastContact: "2024-01-13", nextAction: "Supply Chain Review", notes: "Logistics services"},
+            
+            {name: "Home Depot Distribution", email: "facilities@homedepot.com", phone: "(479) 633-4300", address: "4000 W Walnut St, Rogers, AR 72756", industry: "Retail", revenue: "$150M", pures: 2.8, tier: "1C", lastContact: "2024-01-07", nextAction: "Retail Operations Review", notes: "Distribution center"},
+            {name: "Lowe's Regional DC", email: "operations@lowes.com", phone: "(479) 636-7000", address: "3500 N Dixieland Rd, Rogers, AR 72756", industry: "Retail", revenue: "$120M", pures: 2.7, tier: "1C", lastContact: "2024-01-21", nextAction: "DC Operations Audit", notes: "Distribution operations"},
+            {name: "Sam's Club Distribution", email: "facilities@samsclub.com", phone: "(479) 277-7000", address: "2000 SE Walton Blvd, Bentonville, AR 72712", industry: "Retail", revenue: "$200M", pures: 2.9, tier: "1C", lastContact: "2024-01-09", nextAction: "Warehouse Operations Review", notes: "Warehouse distribution"},
+            {name: "Target Distribution", email: "operations@target.com", phone: "(479) 619-5000", address: "1000 Target Way, Bentonville, AR 72712", industry: "Retail", revenue: "$100M", pures: 2.6, tier: "1C", lastContact: "2024-01-17", nextAction: "Retail Distribution Audit", notes: "Regional distribution"},
+            {name: "Costco Wholesale", email: "management@costco.com", phone: "(479) 271-4000", address: "1919 SE Walton Blvd, Bentonville, AR 72712", industry: "Retail", revenue: "$80M", pures: 2.5, tier: "1C", lastContact: "2024-01-23", nextAction: "Wholesale Operations Review", notes: "Warehouse club operations"},
+            
+            {name: "Arkansas Electric Coop", email: "operations@aecc.com", phone: "(479) 443-4100", address: "1000 Cooperative Way, Little Rock, AR 72201", industry: "Utilities", revenue: "$500M", pures: 2.8, tier: "1C", lastContact: "2024-01-06", nextAction: "Cooperative Utility Review", notes: "Electric cooperative"},
+            {name: "Carroll Electric Coop", email: "admin@carreco.com", phone: "(479) 253-5644", address: "1-3 Service Dr, Berryville, AR 72616", industry: "Utilities", revenue: "$40M", pures: 2.4, tier: "1C", lastContact: "2024-01-24", nextAction: "Rural Electric Review", notes: "Rural electric service"},
+            {name: "North Arkansas Electric", email: "operations@naeci.com", phone: "(479) 895-3221", address: "1000 NAEC Dr, Salem, AR 72576", industry: "Utilities", revenue: "$35M", pures: 2.3, tier: "1C", lastContact: "2024-01-04", nextAction: "Electric Coop Audit", notes: "Member-owned utility"},
+            {name: "White River Electric", email: "info@wrecc.org", phone: "(479) 269-4721", address: "2000 Batesville Blvd, Batesville, AR 72501", industry: "Utilities", revenue: "$30M", pures: 2.2, tier: "1C", lastContact: "2024-01-26", nextAction: "Rural Utility Review", notes: "Rural electric cooperative"},
+            {name: "Ozarks Electric Coop", email: "operations@ozarksecc.com", phone: "(479) 667-2030", address: "1000 W Commercial St, Ozark, AR 72949", industry: "Utilities", revenue: "$45M", pures: 2.5, tier: "1C", lastContact: "2024-01-15", nextAction: "Cooperative Operations Review", notes: "Electric cooperative"},
+            
+            {name: "First National Bank", email: "operations@fnb-arkansas.com", phone: "(479) 443-8000", address: "200 W Mountain St, Fayetteville, AR 72701", industry: "Banking", revenue: "$150M", pures: 2.6, tier: "1C", lastContact: "2024-01-20", nextAction: "Banking Operations Review", notes: "Community bank"},
+            {name: "Regions Bank", email: "commercial@regions.com", phone: "(479) 521-5000", address: "300 W Dickson St, Fayetteville, AR 72701", industry: "Banking", revenue: "$100M", pures: 2.4, tier: "1C", lastContact: "2024-01-12", nextAction: "Regional Banking Review", notes: "Regional bank operations"},
+            {name: "Bank of Fayetteville", email: "admin@bankoffayetteville.com", phone: "(479) 521-2000", address: "100 N East Ave, Fayetteville, AR 72701", industry: "Banking", revenue: "$80M", pures: 2.3, tier: "1C", lastContact: "2024-01-18", nextAction: "Community Bank Audit", notes: "Local community bank"},
+            {name: "Centennial Bank", email: "operations@my100bank.com", phone: "(479) 443-3000", address: "500 W Dickson St, Fayetteville, AR 72701", industry: "Banking", revenue: "$120M", pures: 2.5, tier: "1C", lastContact: "2024-01-08", nextAction: "Bank Operations Review", notes: "Regional banking services"},
+            {name: "Simmons First Bank", email: "commercial@simmonsbank.com", phone: "(479) 464-5600", address: "400 W Walnut St, Rogers, AR 72756", industry: "Banking", revenue: "$200M", pures: 2.7, tier: "1C", lastContact: "2024-01-25", nextAction: "Banking Facility Review", notes: "Multi-state banking"},
+            {name: "Liberty Bank", email: "operations@libertybank.net", phone: "(479) 633-2500", address: "1000 W Walnut St, Rogers, AR 72756", industry: "Banking", revenue: "$90M", pures: 2.4, tier: "1C", lastContact: "2024-01-14", nextAction: "Community Banking Review", notes: "Local banking operations"}
+        ];
+
+        let filteredData = [...clientDatabase];
+        let currentClient = null;
+        let currentPuresScores = {profitability: 0, urgency: 0, reachability: 0, engagement: 0, sustainability: 0};
+
+        // Initialize the application
+        function initializeApp() {
+            renderClientTable();
+            updateStatistics();
+            setupEventListeners();
+        }
+
+        // Render the client table
+        function renderClientTable() {
+            const tbody = document.getElementById('clientTableBody');
+            tbody.innerHTML = '';
+
+            filteredData.forEach(client => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td><strong>${client.name}</strong><br><small>${client.address}</small></td>
+                    <td>${client.email}</td>
+                    <td>${client.phone}</td>
+                    <td>${client.industry}</td>
+                    <td>${client.revenue}</td>
+                    <td><strong>${client.pures}</strong>/5</td>
+                    <td><span class="tier-badge tier-${client.tier.toLowerCase()}">${client.tier}</span></td>
+                    <td>
+                        <button class="contact-btn" onclick="contactClient('${client.phone}')">Call</button>
+                        <button class="email-btn" onclick="emailClient('${client.email}', '${client.name}', '${client.industry}')">Email</button>
+                        <button class="pures-btn" onclick="openPuresModal('${client.name}')">P.U.R.E.S.</button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // Filter table based on search inputs
+        function filterTable() {
+            const nameSearch = document.getElementById('searchName').value.toLowerCase();
+            const industrySearch = document.getElementById('searchIndustry').value.toLowerCase();
+            const tierFilter = document.getElementById('filterTier').value;
+
+            filteredData = clientDatabase.filter(client => {
+                const matchesName = client.name.toLowerCase().includes(nameSearch);
+                const matchesIndustry = client.industry.toLowerCase().includes(industrySearch);
+                const matchesTier = !tierFilter || client.tier === tierFilter;
+                
+                return matchesName && matchesIndustry && matchesTier;
+            });
+
+            renderClientTable();
+            updateStatistics();
+        }
+
+        // Sort table by column
+        function sortTable(column) {
+            const sortBy = document.getElementById('sortBy');
+            if (column) sortBy.value = column;
+            
+            const selectedColumn = sortBy.value || column;
+            if (!selectedColumn) return;
+
+            filteredData.sort((a, b) => {
+                let valueA = a[selectedColumn];
+                let valueB = b[selectedColumn];
+
+                if (selectedColumn === 'revenue') {
+                    valueA = parseFloat(valueA.replace(/[$B,M]/g, ''));
+                    valueB = parseFloat(valueB.replace(/[$B,M]/g, ''));
+                } else if (selectedColumn === 'pures') {
+                    valueA = parseFloat(valueA);
+                    valueB = parseFloat(valueB);
+                } else {
+                    valueA = valueA.toString().toLowerCase();
+                    valueB = valueB.toString().toLowerCase();
+                }
+
+                if (valueA < valueB) return -1;
+                if (valueA > valueB) return 1;
+                return 0;
+            });
+
+            renderClientTable();
+        }
+
+        // Update statistics
+        function updateStatistics() {
+            document.getElementById('totalClients').textContent = filteredData.length;
+            document.getElementById('tier1aCount').textContent = filteredData.filter(c => c.tier === '1A').length;
+            document.getElementById('tier1bCount').textContent = filteredData.filter(c => c.tier === '1B').length;
+            document.getElementById('tier1cCount').textContent = filteredData.filter(c => c.tier === '1C').length;
+        }
+
+        // Contact client via phone
+        function contactClient(phone) {
+            alert(`Calling ${phone}...`);
+            // In a real application, this would integrate with a phone system
+        }
+
+        // Email client with pre-populated message
+        function emailClient(email, name, industry) {
+            const subject = encodeURIComponent(`Cost Reduction Opportunity - ${name}`);
+            const body = encodeURIComponent(`Dear ${name} Team,
+
+I hope this email finds you well. I'm reaching out from P3 Cost Analysts, Arkansas's leading cost reduction consulting firm specializing in helping ${industry.toLowerCase()} businesses uncover hidden savings in their operational expenses.
+
+Based on our research, businesses in the ${industry.toLowerCase()} sector typically overpay 20-40% on vendor expenses like:
+• Utilities (Electric, Gas, Water)
+• Telecommunications (Phone, Internet, Data)
+• Waste Management and Recycling
+• Merchant Processing Fees
+• Maintenance Contracts
+• Small Parcel Shipping
+
+Our risk-free audit process has helped thousands of companies save millions of dollars without changing vendors or disrupting operations. We only get paid if we save you money - no savings, no fee.
+
+Would you be interested in a brief 15-minute conversation to discuss how we might help ${name} reduce operational costs and improve your bottom line?
+
+Key Benefits:
+✓ No upfront costs or obligations
+✓ 90% of clients see savings within 30 days
+✓ Average savings of 20-40% in audited categories
+✓ Keep your current vendors
+✓ 100% risk-free model
+
+I'd love to schedule a brief call at your convenience to discuss potential opportunities.
+
+Best regards,
+
+Morgan Higham, PMP
+P3 Cost Analysts
+Phone: (479) 443-4000
+Email: mhigham@costanalysts.com
+Website: www.costanalysts.com
+
+P.S. We've helped companies like yours save hundreds of thousands of dollars annually. Let's explore what we can do for ${name}.`);
+
+            window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
+        }
+
+        // Open P.U.R.E.S. scoring modal
+        function openPuresModal(clientName) {
+            currentClient = clientName;
+            document.getElementById('puresModal').style.display = 'block';
+            
+            // Reset scores
+            document.querySelectorAll('.score-btn').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+        }
+
+        // Close P.U.R.E.S. modal
+        function closePuresModal() {
+            document.getElementById('puresModal').style.display = 'none';
+            currentClient = null;
+            currentPuresScores = {profitability: 0, urgency: 0, reachability: 0, engagement: 0, sustainability: 0};
+        }
+
+        // Save P.U.R.E.S. score
+        function savePuresScore() {
+            if (!currentClient) return;
+            
+            const scores = Object.values(currentPuresScores).filter(score => score > 0);
+            if (scores.length !== 5) {
+                alert('Please rate all 5 P.U.R.E.S. criteria before saving.');
+                return;
+            }
+
+            const averageScore = (scores.reduce((a, b) => a + b, 0) / scores.length).toFixed(1);
+            
+            // Update client in database
+            const clientIndex = clientDatabase.findIndex(c => c.name === currentClient);
+            if (clientIndex !== -1) {
+                clientDatabase[clientIndex].pures = parseFloat(averageScore);
+                
+                // Determine new tier based on score
+                if (averageScore >= 4.0) {
+                    clientDatabase[clientIndex].tier = '1A';
+                } else if (averageScore >= 3.0) {
+                    clientDatabase[clientIndex].tier = '1B';
+                } else {
+                    clientDatabase[clientIndex].tier = '1C';
+                }
+            }
+
+            alert(`P.U.R.E.S. score saved for ${currentClient}: ${averageScore}/5`);
+            closePuresModal();
+            filterTable(); // Refresh the table
+        }
+
+        // Switch tabs
+        function switchTab(tabName) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // Remove active class from all tab buttons
+            document.querySelectorAll('.tab-button').forEach(button => {
+                button.classList.remove('active');
+            });
+            
+            // Show selected tab content
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked tab button
+            event.target.classList.add('active');
+        }
+
+        // Export data to CSV
+        function exportToCSV() {
+            const headers = ['Client Name', 'Email', 'Phone', 'Address', 'Industry', 'Revenue', 'P.U.R.E.S. Score', 'Tier', 'Last Contact', 'Next Action', 'Notes'];
+            const csvContent = [
+                headers.join(','),
+                ...filteredData.map(client => [
+                    `"${client.name}"`,
+                    client.email,
+                    client.phone,
+                    `"${client.address}"`,
+                    client.industry,
+                    client.revenue,
+                    client.pures,
+                    client.tier,
+                    client.lastContact,
+                    `"${client.nextAction}"`,
+                    `"${client.notes}"`
+                ].join(','))
+            ].join('\n');
+
+            const blob = new Blob([csvContent], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `P3_Cost_Analysts_Client_Database_${new Date().toISOString().split('T')[0]}.csv`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // P.U.R.E.S. score button listeners
+            document.addEventListener('click', function(e) {
+                if (e.target.classList.contains('score-btn')) {
+                    const puresItem = e.target.closest('.pures-item');
+                    const criteria = puresItem.querySelector('label').textContent.toLowerCase();
+                    const score = parseInt(e.target.dataset.score);
+                    
+                    // Remove selected class from siblings
+                    puresItem.querySelectorAll('.score-btn').forEach(btn => {
+                        btn.classList.remove('selected');
+                    });
+                    
+                    // Add selected class to clicked button
+                    e.target.classList.add('selected');
+                    
+                    // Store score
+                    if (criteria.includes('profitability')) {
+                        currentPuresScores.profitability = score;
+                    } else if (criteria.includes('urgency')) {
+                        currentPuresScores.urgency = score;
+                    } else if (criteria.includes('reachability')) {
+                        currentPuresScores.reachability = score;
+                    } else if (criteria.includes('engagement')) {
+                        currentPuresScores.engagement = score;
+                    } else if (criteria.includes('sustainability')) {
+                        currentPuresScores.sustainability = score;
+                    }
+                }
+            });
+
+            // Close modal when clicking outside
+            window.addEventListener('click', function(e) {
+                if (e.target.classList.contains('pures-modal')) {
+                    closePuresModal();
+                }
+            });
+        }
+
+        // Initialize the application when the page loads
+        document.addEventListener('DOMContentLoaded', initializeApp);
+    </script>
+</body>
+</html>
