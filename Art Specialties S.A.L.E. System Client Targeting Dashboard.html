@@ -1,0 +1,748 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Art Specialties Inc - S.A.L.E. System Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #000000;
+            color: #ffffff;
+            line-height: 1.6;
+        }
+
+        .header {
+            background-color: #CF2030;
+            padding: 1rem;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(207, 32, 48, 0.3);
+        }
+
+        .header img {
+            max-height: 60px;
+            width: auto;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .business-info {
+            background-color: #1a1a1a;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            border: 2px solid #CF2030;
+        }
+
+        .tabs {
+            display: flex;
+            background-color: #2a2a2a;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 15px;
+            text-align: center;
+            background-color: #2a2a2a;
+            border: none;
+            color: #ffffff;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .tab.active {
+            background-color: #CF2030;
+        }
+
+        .tab:hover {
+            background-color: #CF2030;
+        }
+
+        .tab-content {
+            display: none;
+            background-color: #1a1a1a;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .control-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        input, select, button {
+            padding: 8px 12px;
+            border: 1px solid #CF2030;
+            border-radius: 5px;
+            background-color: #2a2a2a;
+            color: #ffffff;
+        }
+
+        button {
+            background-color: #CF2030;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #a01824;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            background-color: #2a2a2a;
+            border-radius: 10px;
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 1200px;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #444;
+        }
+
+        th {
+            background-color: #CF2030;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        th:hover {
+            background-color: #a01824;
+        }
+
+        tr:nth-child(even) {
+            background-color: #333;
+        }
+
+        tr:hover {
+            background-color: #444;
+        }
+
+        .tier-1a {
+            background-color: #065f46 !important;
+        }
+
+        .tier-1b {
+            background-color: #374151 !important;
+        }
+
+        .tier-1c {
+            background-color: #1f2937 !important;
+        }
+
+        .pures-form {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            background-color: #2a2a2a;
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #CF2030;
+        }
+
+        .score-input {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .score-description {
+            font-size: 12px;
+            color: #ccc;
+        }
+
+        .contact-btn {
+            background-color: #CF2030;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .contact-btn:hover {
+            background-color: #a01824;
+        }
+
+        .metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .metric-card {
+            background-color: #2a2a2a;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            border: 1px solid #CF2030;
+        }
+
+        .metric-number {
+            font-size: 2em;
+            font-weight: bold;
+            color: #CF2030;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+            background-color: #1a1a1a;
+            border-top: 2px solid #CF2030;
+        }
+
+        .footer img {
+            max-height: 40px;
+            width: auto;
+            opacity: 0.8;
+        }
+
+        .email-template {
+            background-color: #2a2a2a;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+            display: none;
+        }
+
+        .sort-indicator {
+            font-size: 12px;
+            margin-left: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="HigginsReports">
+    </div>
+
+    <div class="container">
+        <div class="business-info">
+            <h1>Art Specialties Inc - S.A.L.E. System Dashboard</h1>
+            <p><strong>Business:</strong> Art Specialties Inc - School Branding & Campus Transformation</p>
+            <p><strong>Address:</strong> 8390 Maple Pl #130, Rancho Cucamonga, CA 91730</p>
+            <p><strong>Contact:</strong> Tim Edmonson - tim@artspecialtiesinc.com | (909) 987-3355</p>
+            <p><strong>Specialization:</strong> Custom graphics, signage, installations, murals, way-finding signage for schools</p>
+        </div>
+
+        <div class="metrics">
+            <div class="metric-card">
+                <div class="metric-number" id="totalProspects">50</div>
+                <div>Total Prospects</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-number" id="tier1aCount">12</div>
+                <div>Tier 1A (Premium)</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-number" id="tier1bCount">18</div>
+                <div>Tier 1B (High-Value)</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-number" id="tier1cCount">20</div>
+                <div>Tier 1C (Qualified)</div>
+            </div>
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="openTab(event, 'sourcing')">SOURCING</button>
+            <button class="tab" onclick="openTab(event, 'assessing')">ASSESSING</button>
+            <button class="tab" onclick="openTab(event, 'listening')">LISTENING</button>
+            <button class="tab" onclick="openTab(event, 'empowering')">EMPOWERING</button>
+        </div>
+
+        <div id="sourcing" class="tab-content active">
+            <h2>P.U.R.E.S. Client Scoring & Database</h2>
+            
+            <div class="controls">
+                <div class="control-group">
+                    <label>Search:</label>
+                    <input type="text" id="searchInput" placeholder="Search clients..." onkeyup="searchTable()">
+                </div>
+                <div class="control-group">
+                    <label>Tier Filter:</label>
+                    <select id="tierFilter" onchange="filterTable()">
+                        <option value="">All Tiers</option>
+                        <option value="1A">Tier 1A (Premium)</option>
+                        <option value="1B">Tier 1B (High-Value)</option>
+                        <option value="1C">Tier 1C (Qualified)</option>
+                    </select>
+                </div>
+                <button onclick="exportData()">Export CSV</button>
+                <button onclick="showEmailTemplate()">Email Templates</button>
+            </div>
+
+            <div class="table-container">
+                <table id="clientTable">
+                    <thead>
+                        <tr>
+                            <th onclick="sortTable(0)">Client Name <span class="sort-indicator">▲▼</span></th>
+                            <th onclick="sortTable(1)">Email <span class="sort-indicator">▲▼</span></th>
+                            <th onclick="sortTable(2)">Phone <span class="sort-indicator">▲▼</span></th>
+                            <th onclick="sortTable(3)">Address <span class="sort-indicator">▲▼</span></th>
+                            <th onclick="sortTable(4)">P.U.R.E.S Score <span class="sort-indicator">▲▼</span></th>
+                            <th onclick="sortTable(5)">Tier Level <span class="sort-indicator">▲▼</span></th>
+                            <th onclick="sortTable(6)">Institution Type <span class="sort-indicator">▲▼</span></th>
+                            <th onclick="sortTable(7)">Budget Estimate <span class="sort-indicator">▲▼</span></th>
+                            <th onclick="sortTable(8)">Contact Status <span class="sort-indicator">▲▼</span></th>
+                            <th onclick="sortTable(9)">Last Contact <span class="sort-indicator">▲▼</span></th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="clientTableBody">
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="email-template" id="emailTemplate">
+                <h3>Email Template Preview</h3>
+                <div id="emailContent"></div>
+                <button onclick="hideEmailTemplate()">Close</button>
+            </div>
+        </div>
+
+        <div id="assessing" class="tab-content">
+            <h2>Buying Pattern Analysis</h2>
+            <div class="pures-form">
+                <div class="form-group">
+                    <label>Profitability Assessment</label>
+                    <input type="range" min="1" max="5" value="3" class="score-input" id="profitability">
+                    <div class="score-description">Annual budget capacity for graphics/signage projects</div>
+                </div>
+                <div class="form-group">
+                    <label>Urgency Analysis</label>
+                    <input type="range" min="1" max="5" value="3" class="score-input" id="urgency">
+                    <div class="score-description">Immediate need for campus transformation</div>
+                </div>
+                <div class="form-group">
+                    <label>Reachability Score</label>
+                    <input type="range" min="1" max="5" value="3" class="score-input" id="reachability">
+                    <div class="score-description">Access to decision makers (principals, superintendents)</div>
+                </div>
+                <div class="form-group">
+                    <label>Engagement Level</label>
+                    <input type="range" min="1" max="5" value="3" class="score-input" id="engagement">
+                    <div class="score-description">Openness to innovative school branding solutions</div>
+                </div>
+                <div class="form-group">
+                    <label>Sustainability Potential</label>
+                    <input type="range" min="1" max="5" value="3" class="score-input" id="sustainability">
+                    <div class="score-description">Long-term partnership potential with district</div>
+                </div>
+            </div>
+            
+            <h3>Buyer Categories</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+                <div class="form-group">
+                    <label>Analytical Buyers (25%)</label>
+                    <p>Require detailed ROI analysis, case studies, budget breakdowns</p>
+                </div>
+                <div class="form-group">
+                    <label>Relationship Buyers (35%)</label>
+                    <p>Value trust, referrals from other schools, long-term partnerships</p>
+                </div>
+                <div class="form-group">
+                    <label>Efficiency Buyers (25%)</label>
+                    <p>Focus on quick installation, minimal disruption, maintenance-free solutions</p>
+                </div>
+                <div class="form-group">
+                    <label>Innovation Buyers (15%)</label>
+                    <p>Seek cutting-edge design, unique campus transformation, competitive advantage</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="listening" class="tab-content">
+            <h2>Feedback Integration System</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+                <div class="form-group">
+                    <label>Pre-Sale Feedback</label>
+                    <p>Campus assessment forms, vision alignment surveys, budget discussions</p>
+                    <button>View Forms</button>
+                </div>
+                <div class="form-group">
+                    <label>During-Sale Progress</label>
+                    <p>Design approval stages, installation updates, timeline tracking</p>
+                    <button>Track Progress</button>
+                </div>
+                <div class="form-group">
+                    <label>Post-Sale Monitoring</label>
+                    <p>Satisfaction surveys, maintenance requests, expansion opportunities</p>
+                    <button>Monitor Satisfaction</button>
+                </div>
+                <div class="form-group">
+                    <label>Complaint Resolution</label>
+                    <p>Real-time issue tracking, warranty claims, quality assurance</p>
+                    <button>View Issues</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="empowering" class="tab-content">
+            <h2>Referral Strategy & Success Stories</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+                <div class="form-group">
+                    <label>Success Stories</label>
+                    <p>70+ school districts served, campus transformations, before/after galleries</p>
+                    <button>Manage Stories</button>
+                </div>
+                <div class="form-group">
+                    <label>Referral Tracking</label>
+                    <p>Principal network, superintendent recommendations, district partnerships</p>
+                    <button>Track Referrals</button>
+                </div>
+                <div class="form-group">
+                    <label>Client Advocacy</label>
+                    <p>Testimonial collection, case study development, reference programs</p>
+                    <button>Advocacy Program</button>
+                </div>
+                <div class="form-group">
+                    <label>Co-Marketing</label>
+                    <p>District partnership opportunities, educational conference presence</p>
+                    <button>Marketing Plans</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="HigginsReports">
+        <p>© 2024 HigginsReports - Advanced Business Intelligence Solutions</p>
+    </div>
+
+    <script>
+        // Sample data for 50 educational prospects within 10 miles of Rancho Cucamonga, CA
+        const clientData = [
+            // Tier 1A (Premium) - 12 prospects
+            {name: "Dr. Sarah Martinez", email: "smartinez@cvusd.k12.ca.us", phone: "(909) 555-0101", address: "9139 Baseline Rd, Rancho Cucamonga, CA", puresScore: "4.6", tierLevel: "1A", institutionType: "Elementary School", budgetEstimate: "$45,000", contactStatus: "Initial Contact", lastContact: "2024-03-15", notes: "New principal, interested in campus transformation"},
+            {name: "Mark Thompson", email: "mthompson@etiwanda.k12.ca.us", phone: "(909) 555-0102", address: "13500 Victoria Ave, Rancho Cucamonga, CA", puresScore: "4.8", tierLevel: "1A", institutionType: "High School", budgetEstimate: "$75,000", contactStatus: "Proposal Sent", lastContact: "2024-03-18", notes: "Approved budget for gymnasium branding"},
+            {name: "Dr. Lisa Chen", email: "lchen@uplandschools.net", phone: "(909) 555-0103", address: "390 N Euclid Ave, Upland, CA", puresScore: "4.7", tierLevel: "1A", institutionType: "District Office", budgetEstimate: "$120,000", contactStatus: "Follow-up Scheduled", lastContact: "2024-03-20", notes: "District-wide branding initiative planned"},
+            {name: "Robert Garcia", email: "rgarcia@fontana.k12.ca.us", phone: "(909) 555-0104", address: "9680 Citrus Ave, Fontana, CA", puresScore: "4.5", tierLevel: "1A", institutionType: "Middle School", budgetEstimate: "$35,000", contactStatus: "Consultation Complete", lastContact: "2024-03-22", notes: "PBIS program graphics needed"},
+            {name: "Jennifer Wilson", email: "jwilson@rialto.k12.ca.us", phone: "(909) 555-0105", address: "182 E Walnut Ave, Rialto, CA", puresScore: "4.6", tierLevel: "1A", institutionType: "Elementary School", budgetEstimate: "$28,000", contactStatus: "Quoted", lastContact: "2024-03-25", notes: "Wellness center signage project"},
+            {name: "Dr. Michael Brown", email: "mbrown@pomona.k12.ca.us", phone: "(909) 555-0106", address: "800 S Garey Ave, Pomona, CA", puresScore: "4.9", tierLevel: "1A", institutionType: "High School", budgetEstimate: "$85,000", contactStatus: "Negotiating", lastContact: "2024-03-28", notes: "Complete campus rebrand approved"},
+            {name: "Amanda Rodriguez", email: "arodriguez@ontario.k12.ca.us", phone: "(909) 555-0107", address: "950 W D St, Ontario, CA", puresScore: "4.4", tierLevel: "1A", institutionType: "Elementary School", budgetEstimate: "$32,000", contactStatus: "Interested", lastContact: "2024-03-12", notes: "Looking for multicultural graphics"},
+            {name: "Dr. David Kim", email: "dkim@claremont.k12.ca.us", phone: "(909) 555-0108", address: "170 W San Jose Ave, Claremont, CA", puresScore: "4.7", tierLevel: "1A", institutionType: "High School", budgetEstimate: "$55,000", contactStatus: "Site Visit Scheduled", lastContact: "2024-03-30", notes: "Athletic facilities upgrade needed"},
+            {name: "Carol Peters", email: "cpeters@laverne.k12.ca.us", phone: "(909) 555-0109", address: "3838 D St, La Verne, CA", puresScore: "4.5", tierLevel: "1A", institutionType: "Elementary School", budgetEstimate: "$25,000", contactStatus: "Initial Contact", lastContact: "2024-03-10", notes: "Playground safety signage priority"},
+            {name: "Dr. James Anderson", email: "janderson@azusa.k12.ca.us", phone: "(909) 555-0110", address: "546 S Citrus Ave, Azusa, CA", puresScore: "4.6", tierLevel: "1A", institutionType: "Middle School", budgetEstimate: "$42,000", contactStatus: "Proposal Requested", lastContact: "2024-03-16", notes: "STEM program visual identity needed"},
+            {name: "Michelle Torres", email: "mtorres@glendale.k12.ca.us", phone: "(909) 555-0111", address: "223 N Jackson St, Glendale, CA", puresScore: "4.8", tierLevel: "1A", institutionType: "District Office", budgetEstimate: "$95,000", contactStatus: "Budget Approved", lastContact: "2024-04-01", notes: "Multi-school district project"},
+            {name: "Dr. Susan Lee", email: "slee@monrovia.k12.ca.us", phone: "(909) 555-0112", address: "325 E Huntington Dr, Monrovia, CA", puresScore: "4.7", tierLevel: "1A", institutionType: "High School", budgetEstimate: "$68,000", contactStatus: "Contract Review", lastContact: "2024-04-03", notes: "Graduation ceremony backdrop needed"},
+
+            // Tier 1B (High-Value) - 18 prospects
+            {name: "Patricia Johnson", email: "pjohnson@norwalk.k12.ca.us", phone: "(909) 555-0201", address: "12820 Pioneer Blvd, Norwalk, CA", puresScore: "3.8", tierLevel: "1B", institutionType: "Elementary School", budgetEstimate: "$22,000", contactStatus: "Information Sent", lastContact: "2024-03-08", notes: "Considering vinyl graphics for halls"},
+            {name: "Thomas White", email: "twhite@downey.k12.ca.us", phone: "(909) 555-0202", address: "11627 Brookshire Ave, Downey, CA", puresScore: "3.9", tierLevel: "1B", institutionType: "Middle School", budgetEstimate: "$18,000", contactStatus: "Exploring Options", lastContact: "2024-03-14", notes: "Budget constraints, phased approach"},
+            {name: "Dr. Karen Davis", email: "kdavis@whittier.k12.ca.us", phone: "(909) 555-0203", address: "7211 Bright Ave, Whittier, CA", puresScore: "3.7", tierLevel: "1B", institutionType: "High School", budgetEstimate: "$35,000", contactStatus: "Waiting for Approval", lastContact: "2024-03-19", notes: "Board meeting scheduled next month"},
+            {name: "Brian Miller", email: "bmiller@baldwin.k12.ca.us", phone: "(909) 555-0204", address: "4490 N Maine Ave, Baldwin Park, CA", puresScore: "3.6", tierLevel: "1B", institutionType: "Elementary School", budgetEstimate: "$15,000", contactStatus: "Quote Requested", lastContact: "2024-03-21", notes: "Focus on entrance area only"},
+            {name: "Linda Taylor", email: "ltaylor@westcovina.k12.ca.us", phone: "(909) 555-0205", address: "1717 W Merced Ave, West Covina, CA", puresScore: "3.8", tierLevel: "1B", institutionType: "Middle School", budgetEstimate: "$28,000", contactStatus: "Comparing Vendors", lastContact: "2024-03-23", notes: "Competitive bidding process"},
+            {name: "Dr. Steven Clark", email: "sclark@covina.k12.ca.us", phone: "(909) 555-0206", address: "519 E Badillo St, Covina, CA", puresScore: "3.9", tierLevel: "1B", institutionType: "High School", budgetEstimate: "$42,000", contactStatus: "Site Survey Completed", lastContact: "2024-03-26", notes: "Interested in anti-graffiti coating"},
+            {name: "Nancy Lewis", email: "nlewis@glendora.k12.ca.us", phone: "(909) 555-0207", address: "500 N Loraine Ave, Glendora, CA", puresScore: "3.7", tierLevel: "1B", institutionType: "Elementary School", budgetEstimate: "$20,000", contactStatus: "Decision Pending", lastContact: "2024-03-29", notes: "Waiting for PTA fundraising results"},
+            {name: "Richard Walker", email: "rwalker@charter.edu", phone: "(909) 555-0208", address: "1250 E Baseline Rd, San Bernardino, CA", puresScore: "3.6", tierLevel: "1B", institutionType: "Charter School", budgetEstimate: "$12,000", contactStatus: "Initial Interest", lastContact: "2024-03-11", notes: "New charter school opening"},
+            {name: "Dr. Mary Hall", email: "mhall@mountainview.k12.ca.us", phone: "(909) 555-0209", address: "3200 E Highland Ave, Highland, CA", puresScore: "3.8", tierLevel: "1B", institutionType: "Middle School", budgetEstimate: "$25,000", contactStatus: "Proposal Review", lastContact: "2024-03-17", notes: "Looking for outdoor signage solutions"},
+            {name: "Paul Young", email: "pyoung@redlands.k12.ca.us", phone: "(909) 555-0210", address: "20 W Lugonia Ave, Redlands, CA", puresScore: "3.9", tierLevel: "1B", institutionType: "High School", budgetEstimate: "$38,000", contactStatus: "Budget Discussion", lastContact: "2024-03-24", notes: "Considering summer installation"},
+            {name: "Elizabeth King", email: "eking@sanbernardino.k12.ca.us", phone: "(909) 555-0211", address: "777 North F St, San Bernardino, CA", puresScore: "3.7", tierLevel: "1B", institutionType: "Elementary School", budgetEstimate: "$16,000", contactStatus: "Information Gathering", lastContact: "2024-03-27", notes: "Title I school funding available"},
+            {name: "Dr. John Scott", email: "jscott@colton.k12.ca.us", phone: "(909) 555-0212", address: "1212 Valencia Dr, Colton, CA", puresScore: "3.8", tierLevel: "1B", institutionType: "Middle School", budgetEstimate: "$30,000", contactStatus: "Vendor Meeting Set", lastContact: "2024-04-02", notes: "Multi-phase renovation project"},
+            {name: "Sandra Green", email: "sgreen@rialtoelem.net", phone: "(909) 555-0213", address: "820 S Riverside Ave, Rialto, CA", puresScore: "3.6", tierLevel: "1B", institutionType: "Elementary School", budgetEstimate: "$18,000", contactStatus: "Design Discussion", lastContact: "2024-03-13", notes: "Focus on reading corner graphics"},
+            {name: "William Adams", email: "wadams@loma-linda.k12.ca.us", phone: "(909) 555-0214", address: "25541 Barton Rd, Loma Linda, CA", puresScore: "3.9", tierLevel: "1B", institutionType: "High School", budgetEstimate: "$45,000", contactStatus: "Timeline Discussion", lastContact: "2024-03-31", notes: "Summer break installation preferred"},
+            {name: "Dr. Julie Baker", email: "jbaker@yucaipa.k12.ca.us", phone: "(909) 555-0215", address: "12797 3rd St, Yucaipa, CA", puresScore: "3.7", tierLevel: "1B", institutionType: "Middle School", budgetEstimate: "$22,000", contactStatus: "Cost Analysis", lastContact: "2024-03-09", notes: "Comparing costs with paint alternative"},
+            {name: "Kenneth Hill", email: "khill@montclair.k12.ca.us", phone: "(909) 555-0216", address: "5025 Benito St, Montclair, CA", puresScore: "3.8", tierLevel: "1B", institutionType: "Elementary School", budgetEstimate: "$14,000", contactStatus: "Approval Process", lastContact: "2024-03-25", notes: "District approval required"},
+            {name: "Margaret Wright", email: "mwright@chino.k12.ca.us", phone: "(909) 555-0217", address: "5130 Riverside Dr, Chino, CA", puresScore: "3.6", tierLevel: "1B", institutionType: "High School", budgetEstimate: "$52,000", contactStatus: "Committee Review", lastContact: "2024-04-04", notes: "School board review next week"},
+            {name: "Donald Lopez", email: "dlopez@chinohills.k12.ca.us", phone: "(909) 555-0218", address: "4080 Carbon Canyon Rd, Chino Hills, CA", puresScore: "3.9", tierLevel: "1B", institutionType: "Middle School", budgetEstimate: "$33,000", contactStatus: "Feasibility Study", lastContact: "2024-03-28", notes: "Evaluating ROI for school spirit"},
+
+            // Tier 1C (Qualified) - 20 prospects
+            {name: "Lisa Gonzalez", email: "lgonzalez@riverside.k12.ca.us", phone: "(909) 555-0301", address: "3380 14th St, Riverside, CA", puresScore: "3.2", tierLevel: "1C", institutionType: "Elementary School", budgetEstimate: "$8,000", contactStatus: "Early Interest", lastContact: "2024-03-05", notes: "Small budget, basic signage only"},
+            {name: "Christopher Nelson", email: "cnelson@moreno.k12.ca.us", phone: "(909) 555-0302", address: "25634 Alessandro Blvd, Moreno Valley, CA", puresScore: "3.4", tierLevel: "1C", institutionType: "Middle School", budgetEstimate: "$12,000", contactStatus: "Information Request", lastContact: "2024-03-12", notes: "New administration exploring options"},
+            {name: "Dr. Rebecca Carter", email: "rcarter@perris.k12.ca.us", phone: "(909) 555-0303", address: "1151 N A St, Perris, CA", puresScore: "3.1", tierLevel: "1C", institutionType: "High School", budgetEstimate: "$15,000", contactStatus: "Budget Planning", lastContact: "2024-03-18", notes: "Next fiscal year consideration"},
+            {name: "Joseph Mitchell", email: "jmitchell@hemet.k12.ca.us", phone: "(909) 555-0304", address: "1791 W Acacia Ave, Hemet, CA", puresScore: "3.3", tierLevel: "1C", institutionType: "Elementary School", budgetEstimate: "$6,000", contactStatus: "Cost Concerns", lastContact: "2024-03-15", notes: "Looking for most affordable option"},
+            {name: "Sharon Perez", email: "sperez@banning.k12.ca.us", phone: "(909) 555-0305", address: "161 W Williams St, Banning, CA", puresScore: "3.2", tierLevel: "1C", institutionType: "Middle School", budgetEstimate: "$10,000", contactStatus: "Grant Application", lastContact: "2024-03-22", notes: "Waiting for grant funding approval"},
+            {name: "Dr. Kevin Roberts", email: "kroberts@beaumont.k12.ca.us", phone: "(909) 555-0306", address: "500 Magnolia Ave, Beaumont, CA", puresScore: "3.4", tierLevel: "1C", institutionType: "High School", budgetEstimate: "$18,000", contactStatus: "Phase Planning", lastContact: "2024-03-20", notes: "Considering multi-year implementation"},
+            {name: "Angela Phillips", email: "aphillips@cabazon.k12.ca.us", phone: "(909) 555-0307", address: "50900 Carmen Ave, Cabazon, CA", puresScore: "3.1", tierLevel: "1C", institutionType: "Elementary School", budgetEstimate: "$4,000", contactStatus: "Basic Needs", lastContact: "2024-03-08", notes: "Rural school, basic safety signage"},
+            {name: "Charles Campbell", email: "ccampbell@desert.k12.ca.us", phone: "(909) 555-0308", address: "47-950 Dune Palms Rd, La Quinta, CA", puresScore: "3.3", tierLevel: "1C", institutionType: "Middle School", budgetEstimate: "$11,000", contactStatus: "Exploring Options", lastContact: "2024-03-25", notes: "First-time graphics consideration"},
+            {name: "Dr. Dorothy Parker", email: "dparker@indio.k12.ca.us", phone: "(909) 555-0309", address: "82-750 Miles Ave, Indio, CA", puresScore: "3.2", tierLevel: "1C", institutionType: "High School", budgetEstimate: "$14,000", contactStatus: "Vendor Research", lastContact: "2024-03-30", notes: "Researching multiple vendors"},
+            {name: "Mark Evans", email: "mevans@coachella.k12.ca.us", phone: "(909) 555-0310", address: "83-176 Bagdad Ave, Coachella, CA", puresScore: "3.4", tierLevel: "1C", institutionType: "Elementary School", budgetEstimate: "$7,000", contactStatus: "Community Input", lastContact: "2024-03-14", notes: "Seeking parent committee approval"},
+            {name: "Helen Edwards", email: "hedwards@desert-sands.k12.ca.us", phone: "(909) 555-0311", address: "47-700 Dune Palms Rd, La Quinta, CA", puresScore: "3.1", tierLevel: "1C", institutionType: "Middle School", budgetEstimate: "$9,000", contactStatus: "Initial Inquiry", lastContact: "2024-03-17", notes: "Gathering preliminary information"},
+            {name: "Dr. Frank Collins", email: "fcollins@palmsprings.k12.ca.us", phone: "(909) 555-0312", address: "150 District Way, Palm Springs, CA", puresScore: "3.3", tierLevel: "1C", institutionType: "High School", budgetEstimate: "$16,000", contactStatus: "Evaluation Phase", lastContact: "2024-03-26", notes: "Evaluating vs traditional paint"},
+            {name: "Cynthia Stewart", email: "cstewart@cathedral.k12.ca.us", phone: "(909) 555-0313", address: "68700 Thirty One Palms Hwy, Cathedral City, CA", puresScore: "3.2", tierLevel: "1C", institutionType: "Elementary School", budgetEstimate: "$5,500", contactStatus: "Budget Constraints", lastContact: "2024-03-11", notes: "Very limited budget available"},
+            {name: "Gregory Morris", email: "gmorris@twentyninepalms.k12.ca.us", phone: "(909) 555-0314", address: "6968 Sunrise Dr, Twentynine Palms, CA", puresScore: "3.4", tierLevel: "1C", institutionType: "Middle School", budgetEstimate: "$8,500", contactStatus: "Funding Search", lastContact: "2024-03-29", notes: "Seeking alternative funding sources"},
+            {name: "Dr. Deborah Reed", email: "dreed@joshua.k12.ca.us", phone: "(909) 555-0315", address: "56150 Mountain View Trail, Joshua Tree, CA", puresScore: "3.1", tierLevel: "1C", institutionType: "High School", budgetEstimate: "$13,000", contactStatus: "Long-term Planning", lastContact: "2024-03-07", notes: "Part of 5-year improvement plan"},
+            {name: "Raymond Cook", email: "rcook@yucca.k12.ca.us", phone: "(909) 555-0316", address: "57090 Twentynine Palms Hwy, Yucca Valley, CA", puresScore: "3.3", tierLevel: "1C", institutionType: "Elementary School", budgetEstimate: "$6,500", contactStatus: "Price Shopping", lastContact: "2024-03-23", notes: "Comparing with local competitors"},
+            {name: "Brenda Bailey", email: "bbailey@landers.k12.ca.us", phone: "(909) 555-0317", address: "33133 Old Woman Springs Rd, Landers, CA", puresScore: "3.2", tierLevel: "1C", institutionType: "Middle School", budgetEstimate: "$7,500", contactStatus: "Seasonal Planning", lastContact: "2024-03-31", notes: "Planning for next school year"},
+            {name: "Dr. Scott Cooper", email: "scooper@flamingo.k12.ca.us", phone: "(909) 555-0318", address: "48250 60th St W, Lancaster, CA", puresScore: "3.4", tierLevel: "1C", institutionType: "High School", budgetEstimate: "$17,000", contactStatus: "Committee Formation", lastContact: "2024-04-01", notes: "Forming decision committee"},
+            {name: "Joyce Richardson", email: "jrichardson@acton.k12.ca.us", phone: "(909) 555-0319", address: "4004 Crown Valley Rd, Acton, CA", puresScore: "3.1", tierLevel: "1C", institutionType: "Elementary School", budgetEstimate: "$5,000", contactStatus: "Needs Assessment", lastContact: "2024-03-16", notes: "Identifying highest priority areas"},
+            {name: "Albert Cox", email: "acox@agua-dulce.k12.ca.us", phone: "(909) 555-0320", address: "33201 Agua Dulce Canyon Rd, Agua Dulce, CA", puresScore: "3.3", tierLevel: "1C", institutionType: "Middle School", budgetEstimate: "$9,500", contactStatus: "Research Phase", lastContact: "2024-03-28", notes: "Researching durability and maintenance"}
+        ];
+
+        let currentData = [...clientData];
+        let sortDirection = {};
+
+        // Initialize the table
+        function initializeTable() {
+            populateTable(currentData);
+            updateMetrics();
+        }
+
+        function populateTable(data) {
+            const tbody = document.getElementById('clientTableBody');
+            tbody.innerHTML = '';
+            
+            data.forEach((client, index) => {
+                const row = document.createElement('tr');
+                row.className = `tier-${client.tierLevel.toLowerCase()}`;
+                
+                row.innerHTML = `
+                    <td>${client.name}</td>
+                    <td>${client.email}</td>
+                    <td>${client.phone}</td>
+                    <td>${client.address}</td>
+                    <td>${client.puresScore}</td>
+                    <td>Tier ${client.tierLevel}</td>
+                    <td>${client.institutionType}</td>
+                    <td>${client.budgetEstimate}</td>
+                    <td>${client.contactStatus}</td>
+                    <td>${client.lastContact}</td>
+                    <td>
+                        <button class="contact-btn" onclick="contactClient('${client.email}', '${client.name}', '${client.institutionType}', '${client.tierLevel}')">Email</button>
+                        <button class="contact-btn" onclick="window.open('tel:${client.phone}')">Call</button>
+                    </td>
+                `;
+                
+                tbody.appendChild(row);
+            });
+        }
+
+        function searchTable() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const filteredData = currentData.filter(client =>
+                client.name.toLowerCase().includes(searchTerm) ||
+                client.email.toLowerCase().includes(searchTerm) ||
+                client.institutionType.toLowerCase().includes(searchTerm) ||
+                client.address.toLowerCase().includes(searchTerm)
+            );
+            populateTable(filteredData);
+        }
+
+        function filterTable() {
+            const tierFilter = document.getElementById('tierFilter').value;
+            let filteredData = [...clientData];
+            
+            if (tierFilter) {
+                filteredData = filteredData.filter(client => client.tierLevel === tierFilter);
+            }
+            
+            currentData = filteredData;
+            populateTable(filteredData);
+            updateMetrics();
+        }
+
+        function sortTable(columnIndex) {
+            const column = ['name', 'email', 'phone', 'address', 'puresScore', 'tierLevel', 'institutionType', 'budgetEstimate', 'contactStatus', 'lastContact'][columnIndex];
+            const isAsc = sortDirection[column] !== true;
+            sortDirection[column] = isAsc;
+            
+            currentData.sort((a, b) => {
+                let aVal = a[column];
+                let bVal = b[column];
+                
+                if (column === 'puresScore') {
+                    aVal = parseFloat(aVal);
+                    bVal = parseFloat(bVal);
+                } else if (column === 'lastContact') {
+                    aVal = new Date(aVal);
+                    bVal = new Date(bVal);
+                } else if (column === 'budgetEstimate') {
+                    aVal = parseInt(aVal.replace(/\$|,/g, ''));
+                    bVal = parseInt(bVal.replace(/\$|,/g, ''));
+                } else {
+                    aVal = aVal.toString().toLowerCase();
+                    bVal = bVal.toString().toLowerCase();
+                }
+                
+                if (aVal < bVal) return isAsc ? -1 : 1;
+                if (aVal > bVal) return isAsc ? 1 : -1;
+                return 0;
+            });
+            
+            populateTable(currentData);
+        }
+
+        function updateMetrics() {
+            const tier1a = currentData.filter(client => client.tierLevel === '1A').length;
+            const tier1b = currentData.filter(client => client.tierLevel === '1B').length;
+            const tier1c = currentData.filter(client => client.tierLevel === '1C').length;
+            
+            document.getElementById('totalProspects').textContent = currentData.length;
+            document.getElementById('tier1aCount').textContent = tier1a;
+            document.getElementById('tier1bCount').textContent = tier1b;
+            document.getElementById('tier1cCount').textContent = tier1c;
+        }
+
+        function contactClient(email, name, institutionType, tier) {
+            const emailTemplate = generateEmailTemplate(name, institutionType, tier);
+            const subject = `Transform ${institutionType} Campus - Art Specialties Consultation`;
+            const mailtoLink = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(emailTemplate)}`;
+            window.open(mailtoLink);
+        }
+
+        function generateEmailTemplate(name, institutionType, tier) {
+            let template = `Dear ${name},
+
+I hope this email finds you well. My name is Tim Edmonson, and I'm the Owner/President of Art Specialties Inc, California's premier school branding and campus transformation company.
+
+Having served over 70 school districts across California for the past 20 years, we specialize in transforming educational environments through custom graphics, signage, and installations that enhance school spirit, safety, and student engagement.
+
+For ${institutionType} like yours, we typically provide:
+
+🎨 Custom Murals & Wall Graphics that inspire and motivate students daily
+📍 Wayfinding Signage Systems for improved navigation and safety  
+🏫 School Branding Elements that build pride and community connection
+🛡️ Safety & PBIS Graphics that support positive behavior programs
+🚪 Entrance Transformations that create powerful first impressions
+🏃 Gymnasium & Athletic Graphics that boost school spirit
+
+`;
+
+            // Tier-specific messaging
+            if (tier === '1A') {
+                template += `As a premium educational institution, we'd love to discuss our comprehensive campus transformation packages, including:
+- Complete design consultation and 3D renderings
+- Premium materials with graffiti-resistant coatings
+- Expedited installation with minimal disruption
+- Extended warranty and maintenance programs
+
+`;
+            } else if (tier === '1B') {
+                template += `We understand the importance of maximizing your investment. Our solutions offer:
+- Flexible budget options and phased implementation
+- High-quality, durable materials built to last
+- Professional design service included
+- Quick turnaround and summer installation availability
+
+`;
+            } else {
+                template += `We work with schools of all budget levels and offer:
+- Cost-effective solutions without compromising quality
+- Flexible payment terms and grant funding assistance
+- Essential signage packages for immediate impact
+- Scalable designs for future expansion
+
+`;
+            }
+
+            template += `What sets Art Specialties apart:
+✓ DIR Contract Compliance & 3M Certification
+✓ In-house design, production, and installation teams
+✓ Fully insured with comprehensive warranties
+✓ Proven track record with glowing testimonials
+
+I'd love to schedule a complimentary consultation to walk through your campus, understand your vision, and provide customized recommendations with detailed renderings and cost breakdowns.
+
+Would you be available for a brief call this week to discuss how we can help transform your campus into an inspiring learning environment?
+
+Best regards,
+
+Tim Edmonson
+Owner/President
+Art Specialties Inc.
+📞 (909) 987-3355
+📧 tim@artspecialtiesinc.com
+🌐 artspecialtiesinc.com
+
+P.S. We're currently offering special pricing for summer 2024 installations. Let's discuss how we can bring your campus vision to life!`;
+
+            return template;
+        }
+
+        function showEmailTemplate() {
+            const template = generateEmailTemplate('[Client Name]', '[Institution Type]', '1A');
+            document.getElementById('emailContent').innerHTML = `<pre style="white-space: pre-wrap; font-family: Arial, sans-serif;">${template}</pre>`;
+            document.getElementById('emailTemplate').style.display = 'block';
+        }
+
+        function hideEmailTemplate() {
+            document.getElementById('emailTemplate').style.display = 'none';
+        }
+
+        function exportData() {
+            let csv = 'Client Name,Email,Phone,Address,PURES Score,Tier Level,Institution Type,Budget Estimate,Contact Status,Last Contact\n';
+            currentData.forEach(client => {
+                csv += `"${client.name}","${client.email}","${client.phone}","${client.address}","${client.puresScore}","Tier ${client.tierLevel}","${client.institutionType}","${client.budgetEstimate}","${client.contactStatus}","${client.lastContact}"\n`;
+            });
+            
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.style.display = 'none';
+            a.href = url;
+            a.download = 'art_specialties_prospects.csv';
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+
+        function openTab(evt, tabName) {
+            const tabcontent = document.getElementsByClassName("tab-content");
+            for (let i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].classList.remove("active");
+            }
+            
+            const tabs = document.getElementsByClassName("tab");
+            for (let i = 0; i < tabs.length; i++) {
+                tabs[i].classList.remove("active");
+            }
+            
+            document.getElementById(tabName).classList.add("active");
+            evt.currentTarget.classList.add("active");
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', initializeTable);
+    </script>
+</body>
+</html>

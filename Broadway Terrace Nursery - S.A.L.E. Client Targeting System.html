@@ -1,0 +1,980 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Broadway Terrace Nursery - S.A.L.E. Client Targeting System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #000000;
+            color: #ffffff;
+            line-height: 1.6;
+        }
+
+        .header {
+            background-color: #000000;
+            padding: 1rem 2rem;
+            border-bottom: 2px solid #CF2030;
+        }
+
+        .header img {
+            height: 60px;
+            width: auto;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .section {
+            background-color: #1a1a1a;
+            margin: 1rem 0;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid #CF2030;
+        }
+
+        .section h2 {
+            color: #CF2030;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .search-box {
+            padding: 0.5rem;
+            border: 1px solid #CF2030;
+            border-radius: 4px;
+            background-color: #000000;
+            color: #ffffff;
+            min-width: 200px;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border: 1px solid #CF2030;
+            background-color: #CF2030;
+            color: #ffffff;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #a91a27;
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: #CF2030;
+        }
+
+        .btn-secondary:hover {
+            background-color: #CF2030;
+            color: #ffffff;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            border-radius: 8px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #000000;
+            border: 1px solid #CF2030;
+        }
+
+        th, td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #333;
+            white-space: nowrap;
+        }
+
+        th {
+            background-color: #CF2030;
+            color: #ffffff;
+            font-weight: 600;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        th:hover {
+            background-color: #a91a27;
+        }
+
+        tr:hover {
+            background-color: #1a1a1a;
+        }
+
+        .tier-1a { background-color: #1b4332; }
+        .tier-1b { background-color: #2d4a14; }
+        .tier-1c { background-color: #1e3a8a; }
+
+        .score-input {
+            width: 60px;
+            padding: 0.3rem;
+            border: 1px solid #CF2030;
+            border-radius: 4px;
+            background-color: #000000;
+            color: #ffffff;
+            text-align: center;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+        }
+
+        .modal-content {
+            background-color: #1a1a1a;
+            margin: 5% auto;
+            padding: 2rem;
+            border: 2px solid #CF2030;
+            border-radius: 8px;
+            width: 80%;
+            max-width: 600px;
+            color: #ffffff;
+        }
+
+        .close {
+            color: #CF2030;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: #ffffff;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #CF2030;
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #CF2030;
+            border-radius: 4px;
+            background-color: #000000;
+            color: #ffffff;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background-color: #1a1a1a;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid #CF2030;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #CF2030;
+        }
+
+        .footer {
+            background-color: #000000;
+            text-align: center;
+            padding: 1rem;
+            border-top: 2px solid #CF2030;
+            margin-top: 2rem;
+        }
+
+        .footer img {
+            height: 30px;
+            width: auto;
+            margin-bottom: 0.5rem;
+        }
+
+        .tabs {
+            display: flex;
+            margin-bottom: 1rem;
+        }
+
+        .tab {
+            padding: 0.75rem 1.5rem;
+            background-color: #333;
+            color: #ffffff;
+            border: 1px solid #CF2030;
+            cursor: pointer;
+            border-bottom: none;
+        }
+
+        .tab.active {
+            background-color: #CF2030;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .search-box {
+                min-width: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports Logo">
+    </header>
+
+    <div class="container">
+        <div class="section">
+            <h1 style="color: #CF2030; text-align: center; margin-bottom: 2rem;">Broadway Terrace Nursery - S.A.L.E. Client Targeting System</h1>
+            
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="stat-number" id="totalClients">50</div>
+                    <div>Total Prospects</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="tier1ACount">15</div>
+                    <div>Tier 1A (Premium)</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="tier1BCount">20</div>
+                    <div>Tier 1B (High-Value)</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="tier1CCount">15</div>
+                    <div>Tier 1C (Qualified)</div>
+                </div>
+            </div>
+
+            <div class="tabs">
+                <div class="tab active" onclick="showTab('clients')">Client Database</div>
+                <div class="tab" onclick="showTab('pures')">P.U.R.E.S. Scoring</div>
+                <div class="tab" onclick="showTab('assessment')">Assessment</div>
+                <div class="tab" onclick="showTab('listening')">Listening</div>
+                <div class="tab" onclick="showTab('empowering')">Empowering</div>
+            </div>
+
+            <div id="clients" class="tab-content active">
+                <h2>Client Database & Outreach</h2>
+                
+                <div class="controls">
+                    <input type="text" id="searchInput" class="search-box" placeholder="Search clients..." onkeyup="filterTable()">
+                    <select id="tierFilter" class="search-box" onchange="filterTable()">
+                        <option value="">All Tiers</option>
+                        <option value="1A">Tier 1A (Premium)</option>
+                        <option value="1B">Tier 1B (High-Value)</option>
+                        <option value="1C">Tier 1C (Qualified)</option>
+                    </select>
+                    <button class="btn" onclick="exportToCSV()">Export CSV</button>
+                    <button class="btn btn-secondary" onclick="openBulkEmail()">Bulk Email</button>
+                </div>
+
+                <div class="table-container">
+                    <table id="clientTable">
+                        <thead>
+                            <tr>
+                                <th onclick="sortTable(0)">Client Name ↕</th>
+                                <th onclick="sortTable(1)">Email ↕</th>
+                                <th onclick="sortTable(2)">Phone ↕</th>
+                                <th onclick="sortTable(3)">Address ↕</th>
+                                <th onclick="sortTable(4)">P.U.R.E.S. Score ↕</th>
+                                <th onclick="sortTable(5)">Tier Level ↕</th>
+                                <th onclick="sortTable(6)">Industry ↕</th>
+                                <th onclick="sortTable(7)">Est. Budget ↕</th>
+                                <th onclick="sortTable(8)">Contact Status ↕</th>
+                                <th onclick="sortTable(9)">Last Contact ↕</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="clientTableBody">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="pures" class="tab-content">
+                <h2>P.U.R.E.S. Client Scoring System</h2>
+                <p>Rate each criterion on a scale of 1-5 to determine client tier classification:</p>
+                
+                <div class="form-group">
+                    <label>Select Client:</label>
+                    <select id="clientSelect" onchange="loadClientScores()">
+                        <option value="">Choose a client...</option>
+                    </select>
+                </div>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem; margin-top: 1rem;">
+                    <div class="form-group">
+                        <label>Profitability (Annual Budget Capacity): <span id="profitabilityValue">3</span></label>
+                        <input type="range" id="profitability" min="1" max="5" value="3" oninput="updateScore(this)">
+                    </div>
+                    <div class="form-group">
+                        <label>Urgency (Active Pain Points): <span id="urgencyValue">3</span></label>
+                        <input type="range" id="urgency" min="1" max="5" value="3" oninput="updateScore(this)">
+                    </div>
+                    <div class="form-group">
+                        <label>Reachability (Decision Maker Access): <span id="reachabilityValue">3</span></label>
+                        <input type="range" id="reachability" min="1" max="5" value="3" oninput="updateScore(this)">
+                    </div>
+                    <div class="form-group">
+                        <label>Engagement (Innovation Openness): <span id="engagementValue">3</span></label>
+                        <input type="range" id="engagement" min="1" max="5" value="3" oninput="updateScore(this)">
+                    </div>
+                    <div class="form-group">
+                        <label>Sustainability (Long-term Potential): <span id="sustainabilityValue">3</span></label>
+                        <input type="range" id="sustainability" min="1" max="5" value="3" oninput="updateScore(this)">
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalPURESScore">15</div>
+                        <div>Total P.U.R.E.S. Score</div>
+                        <div style="margin-top: 0.5rem; color: #CF2030;" id="tierClassification">Tier 1C</div>
+                    </div>
+                </div>
+
+                <button class="btn" onclick="saveClientScores()" style="margin-top: 1rem;">Save Scores</button>
+            </div>
+
+            <div id="assessment" class="tab-content">
+                <h2>Assessment Module - Buying Pattern Analysis</h2>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+                    <div class="stat-card">
+                        <h3 style="color: #CF2030;">Analytical Buyers</h3>
+                        <p>Require detailed plant care guides, growing success rates, and soil analysis</p>
+                        <div class="stat-number" id="analyticalCount">12</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3 style="color: #CF2030;">Relationship Buyers</h3>
+                        <p>Value personal service, referrals, and long-term garden partnerships</p>
+                        <div class="stat-number" id="relationshipCount">18</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3 style="color: #CF2030;">Efficiency Buyers</h3>
+                        <p>Focus on low-maintenance plants, time-saving garden solutions</p>
+                        <div class="stat-number" id="efficiencyCount">15</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3 style="color: #CF2030;">Innovation Buyers</h3>
+                        <p>Seek cutting-edge plant varieties, smart irrigation, unique designs</p>
+                        <div class="stat-number" id="innovationCount">5</div>
+                    </div>
+                </div>
+
+                <div style="margin-top: 2rem;">
+                    <h3 style="color: #CF2030;">Decision Timeline Analysis</h3>
+                    <div class="table-container">
+                        <table>
+                            <tr><th>Decision Factor</th><th>Average Timeline</th><th>Key Influencers</th></tr>
+                            <tr><td>Houseplant Purchase</td><td>Same day - 1 week</td><td>Plant health, aesthetic appeal</td></tr>
+                            <tr><td>Garden Renovation</td><td>2-6 months</td><td>Seasonal planning, budget approval</td></tr>
+                            <tr><td>Landscape Design</td><td>3-12 months</td><td>Multiple consultations, permits</td></tr>
+                            <tr><td>Corporate Plantscaping</td><td>1-3 months</td><td>Committee approval, maintenance contracts</td></tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div id="listening" class="tab-content">
+                <h2>Listening Module - Feedback Integration</h2>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem;">
+                    <div class="stat-card">
+                        <h3 style="color: #CF2030;">Customer Satisfaction</h3>
+                        <div class="stat-number">4.8/5.0</div>
+                        <p>Based on 127 reviews</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 style="color: #CF2030;">Feedback Collection Rate</h3>
+                        <div class="stat-number">73%</div>
+                        <p>Target: >70%</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 style="color: #CF2030;">Response Time</h3>
+                        <div class="stat-number">2.1 hrs</div>
+                        <p>Average response to inquiries</p>
+                    </div>
+                </div>
+
+                <div style="margin-top: 2rem;">
+                    <h3 style="color: #CF2030;">Recent Feedback Themes</h3>
+                    <div class="table-container">
+                        <table>
+                            <tr><th>Theme</th><th>Frequency</th><th>Action Items</th></tr>
+                            <tr><td>Excellent plant selection</td><td>45%</td><td>Continue diverse inventory</td></tr>
+                            <tr><td>Helpful staff knowledge</td><td>38%</td><td>Maintain training programs</td></tr>
+                            <tr><td>Competitive pricing</td><td>28%</td><td>Review pricing strategy</td></tr>
+                            <tr><td>More native plant options</td><td>22%</td><td>Expand native plant section</td></tr>
+                            <tr><td>Extended weekend hours</td><td>15%</td><td>Consider Sunday extended hours</td></tr>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="form-group" style="margin-top: 2rem;">
+                    <label>Add New Feedback:</label>
+                    <textarea placeholder="Enter customer feedback..." rows="3"></textarea>
+                    <button class="btn" style="margin-top: 0.5rem;">Submit Feedback</button>
+                </div>
+            </div>
+
+            <div id="empowering" class="tab-content">
+                <h2>Empowering Module - Referral Strategy</h2>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem;">
+                    <div class="stat-card">
+                        <h3 style="color: #CF2030;">Active Referrers</h3>
+                        <div class="stat-number">24</div>
+                        <p>Customers who provided referrals</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 style="color: #CF2030;">Referral Success Rate</h3>
+                        <div class="stat-number">67%</div>
+                        <p>Referrals that became customers</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 style="color: #CF2030;">Average Referrals</h3>
+                        <div class="stat-number">2.3</div>
+                        <p>Per satisfied customer</p>
+                    </div>
+                </div>
+
+                <div style="margin-top: 2rem;">
+                    <h3 style="color: #CF2030;">Referral Reward Program</h3>
+                    <div class="table-container">
+                        <table>
+                            <tr><th>Referral Type</th><th>Reward</th><th>Requirements</th></tr>
+                            <tr><td>New Customer</td><td>$25 store credit</td><td>Friend spends $100+</td></tr>
+                            <tr><td>Landscaping Client</td><td>$100 store credit</td><td>Project value $1000+</td></tr>
+                            <tr><td>Corporate Account</td><td>$200 store credit</td><td>Monthly service contract</td></tr>
+                            <tr><td>Social Media Share</td><td>10% next purchase</td><td>Tag @broadwayterrace</td></tr>
+                        </table>
+                    </div>
+                </div>
+
+                <div style="margin-top: 2rem;">
+                    <h3 style="color: #CF2030;">Success Stories</h3>
+                    <div style="background-color: #333; padding: 1rem; border-radius: 8px; border-left: 4px solid #CF2030;">
+                        <p><strong>Maria Santos</strong> - Transformed her patio garden with our succulent collection, leading to 5 neighbor referrals</p>
+                    </div>
+                    <div style="background-color: #333; padding: 1rem; border-radius: 8px; border-left: 4px solid #CF2030; margin-top: 1rem;">
+                        <p><strong>Oakland Hills HOA</strong> - Community garden project resulted in 15 new residential customers</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Modal -->
+    <div id="contactModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2 style="color: #CF2030;">Contact Client</h2>
+            <div class="form-group">
+                <label>Contact Method:</label>
+                <select id="contactMethod" onchange="showContactForm()">
+                    <option value="email">Email</option>
+                    <option value="phone">Phone Call</option>
+                    <option value="visit">Schedule Visit</option>
+                </select>
+            </div>
+            <div id="emailForm">
+                <div class="form-group">
+                    <label>To:</label>
+                    <input type="email" id="clientEmail" readonly>
+                </div>
+                <div class="form-group">
+                    <label>Subject:</label>
+                    <input type="text" id="emailSubject" value="Transform Your Space with Broadway Terrace Nursery">
+                </div>
+                <div class="form-group">
+                    <label>Message:</label>
+                    <textarea id="emailMessage" rows="8"></textarea>
+                </div>
+                <button class="btn" onclick="sendEmail()">Send Email</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bulk Email Modal -->
+    <div id="bulkEmailModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeBulkEmailModal()">&times;</span>
+            <h2 style="color: #CF2030;">Bulk Email Campaign</h2>
+            <div class="form-group">
+                <label>Target Tier:</label>
+                <select id="bulkTier">
+                    <option value="all">All Clients</option>
+                    <option value="1A">Tier 1A Only</option>
+                    <option value="1B">Tier 1B Only</option>
+                    <option value="1C">Tier 1C Only</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Campaign Type:</label>
+                <select id="campaignType" onchange="updateBulkMessage()">
+                    <option value="seasonal">Seasonal Plant Collection</option>
+                    <option value="houseplants">Houseplant Special</option>
+                    <option value="landscaping">Landscaping Services</option>
+                    <option value="sustainability">Eco-Friendly Options</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Subject:</label>
+                <input type="text" id="bulkSubject" value="Discover Oakland's Premier Plant Destination">
+            </div>
+            <div class="form-group">
+                <label>Message:</label>
+                <textarea id="bulkMessage" rows="10"></textarea>
+            </div>
+            <button class="btn" onclick="sendBulkEmail()">Send Campaign</button>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports Logo">
+        <p>&copy; 2024 Higgins Reports. Powered by S.A.L.E. Methodology.</p>
+    </footer>
+
+    <script>
+        // Sample client data for Broadway Terrace Nursery
+        const clientData = [
+            {name: "Maria Santos", email: "maria.santos@email.com", phone: "(510) 555-0101", address: "1234 Elm St, Oakland, CA 94618", puresScore: 22, tier: "1A", industry: "Residential", budget: "$2,000", status: "New Lead", lastContact: "2024-01-15", buyerType: "Relationship"},
+            {name: "David Chen", email: "david.chen@techcorp.com", phone: "(510) 555-0102", address: "5678 Oak Ave, Berkeley, CA 94710", puresScore: 20, tier: "1A", industry: "Corporate", budget: "$5,000", status: "Qualified", lastContact: "2024-01-10", buyerType: "Efficiency"},
+            {name: "Sarah Williams", email: "sarah.w@gmail.com", phone: "(510) 555-0103", address: "910 Pine St, Piedmont, CA 94611", puresScore: 18, tier: "1B", industry: "Residential", budget: "$1,500", status: "Engaged", lastContact: "2024-01-12", buyerType: "Analytical"},
+            {name: "James Rodriguez", email: "j.rodriguez@gmail.com", phone: "(510) 555-0104", address: "1122 Cedar Ln, Oakland, CA 94619", puresScore: 16, tier: "1B", industry: "Residential", budget: "$800", status: "Follow-up", lastContact: "2024-01-08", buyerType: "Relationship"},
+            {name: "Emily Foster", email: "emily.foster@design.com", phone: "(510) 555-0105", address: "3344 Maple Dr, San Leandro, CA 94577", puresScore: 19, tier: "1A", industry: "Landscape Design", budget: "$3,000", status: "Proposal Sent", lastContact: "2024-01-14", buyerType: "Innovation"},
+            {name: "Michael Thompson", email: "mthompson@realty.com", phone: "(510) 555-0106", address: "5566 Birch St, Albany, CA 94706", puresScore: 17, tier: "1B", industry: "Real Estate", budget: "$1,200", status: "Meeting Scheduled", lastContact: "2024-01-11", buyerType: "Efficiency"},
+            {name: "Lisa Park", email: "lisa.park@email.com", phone: "(510) 555-0107", address: "7788 Willow Ave, El Cerrito, CA 94530", puresScore: 15, tier: "1C", industry: "Residential", budget: "$600", status: "Initial Contact", lastContact: "2024-01-13", buyerType: "Relationship"},
+            {name: "Robert Kim", email: "robert.kim@startup.com", phone: "(510) 555-0108", address: "9900 Redwood Blvd, Castro Valley, CA 94546", puresScore: 21, tier: "1A", industry: "Tech Startup", budget: "$2,500", status: "Negotiation", lastContact: "2024-01-09", buyerType: "Innovation"},
+            {name: "Jennifer Lee", email: "jennifer.lee@school.edu", phone: "(510) 555-0109", address: "1357 Magnolia St, Richmond, CA 94804", puresScore: 14, tier: "1C", industry: "Education", budget: "$500", status: "Budget Review", lastContact: "2024-01-07", buyerType: "Analytical"},
+            {name: "Christopher Wong", email: "c.wong@healthcare.org", phone: "(510) 555-0110", address: "2468 Poplar Rd, Hayward, CA 94541", puresScore: 18, tier: "1B", industry: "Healthcare", budget: "$1,800", status: "Site Visit", lastContact: "2024-01-16", buyerType: "Efficiency"},
+            {name: "Amanda Johnson", email: "amanda.j@consulting.com", phone: "(510) 555-0111", address: "1111 Sycamore St, Oakland, CA 94609", puresScore: 16, tier: "1B", industry: "Consulting", budget: "$1,000", status: "Qualified Lead", lastContact: "2024-01-05", buyerType: "Analytical"},
+            {name: "Kevin Martinez", email: "kevin.m@restaurant.com", phone: "(510) 555-0112", address: "2222 Ash St, San Lorenzo, CA 94580", puresScore: 13, tier: "1C", industry: "Restaurant", budget: "$400", status: "Cold Lead", lastContact: "2024-01-04", buyerType: "Relationship"},
+            {name: "Rachel Green", email: "rachel.green@nonprofit.org", phone: "(510) 555-0113", address: "3333 Hickory Ave, Union City, CA 94587", puresScore: 15, tier: "1C", industry: "Non-profit", budget: "$700", status: "Grant Pending", lastContact: "2024-01-06", buyerType: "Relationship"},
+            {name: "Daniel Brown", email: "d.brown@law.com", phone: "(510) 555-0114", address: "4444 Chestnut Dr, Fremont, CA 94538", puresScore: 19, tier: "1A", industry: "Legal", budget: "$2,200", status: "Contract Review", lastContact: "2024-01-12", buyerType: "Analytical"},
+            {name: "Michelle Davis", email: "michelle.d@hotel.com", phone: "(510) 555-0115", address: "5555 Walnut St, Dublin, CA 94568", puresScore: 17, tier: "1B", industry: "Hospitality", budget: "$1,600", status: "Proposal Pending", lastContact: "2024-01-08", buyerType: "Efficiency"},
+            {name: "Steven Wilson", email: "s.wilson@finance.com", phone: "(510) 555-0116", address: "6666 Beech Ln, Pleasanton, CA 94566", puresScore: 20, tier: "1A", industry: "Finance", budget: "$3,500", status: "Decision Phase", lastContact: "2024-01-15", buyerType: "Analytical"},
+            {name: "Nicole Taylor", email: "nicole.t@spa.com", phone: "(510) 555-0117", address: "7777 Spruce St, San Ramon, CA 94583", puresScore: 14, tier: "1C", industry: "Wellness", budget: "$900", status: "Quote Requested", lastContact: "2024-01-10", buyerType: "Innovation"},
+            {name: "Gregory Clark", email: "g.clark@manufacturing.com", phone: "(510) 555-0118", address: "8888 Fir Ave, Danville, CA 94526", puresScore: 16, tier: "1B", industry: "Manufacturing", budget: "$1,300", status: "Technical Review", lastContact: "2024-01-11", buyerType: "Efficiency"},
+            {name: "Stephanie Lewis", email: "stephanie.l@gallery.com", phone: "(510) 555-0119", address: "9999 Palm Dr, Livermore, CA 94551", puresScore: 18, tier: "1B", industry: "Arts", budget: "$1,100", status: "Design Phase", lastContact: "2024-01-13", buyerType: "Innovation"},
+            {name: "Brian Hall", email: "b.hall@construction.com", phone: "(510) 555-0120", address: "1010 Cypress St, Martinez, CA 94553", puresScore: 15, tier: "1C", industry: "Construction", budget: "$800", status: "Bid Submitted", lastContact: "2024-01-07", buyerType: "Efficiency"},
+            {name: "Laura Young", email: "laura.young@boutique.com", phone: "(510) 555-0121", address: "1212 Sequoia Rd, Concord, CA 94520", puresScore: 17, tier: "1B", industry: "Retail", budget: "$1,400", status: "Store Visit", lastContact: "2024-01-09", buyerType: "Relationship"},
+            {name: "Andrew King", email: "a.king@dental.com", phone: "(510) 555-0122", address: "1414 Eucalyptus Ave, Walnut Creek, CA 94597", puresScore: 19, tier: "1A", industry: "Healthcare", budget: "$2,800", status: "Final Approval", lastContact: "2024-01-14", buyerType: "Analytical"},
+            {name: "Patricia Wright", email: "patricia.w@library.org", phone: "(510) 555-0123", address: "1616 Acacia St, Lafayette, CA 94549", puresScore: 13, tier: "1C", industry: "Public Service", budget: "$600", status: "Committee Review", lastContact: "2024-01-05", buyerType: "Relationship"},
+            {name: "Jonathan Lopez", email: "j.lopez@fitness.com", phone: "(510) 555-0124", address: "1818 Juniper Dr, Orinda, CA 94563", puresScore: 16, tier: "1B", industry: "Fitness", budget: "$1,700", status: "Equipment Review", lastContact: "2024-01-12", buyerType: "Innovation"},
+            {name: "Karen Hill", email: "karen.h@veterinary.com", phone: "(510) 555-0125", address: "2020 Rosewood Ln, Moraga, CA 94556", puresScore: 18, tier: "1B", industry: "Veterinary", budget: "$1,500", status: "Space Planning", lastContact: "2024-01-08", buyerType: "Efficiency"},
+            {name: "Timothy Scott", email: "t.scott@insurance.com", phone: "(510) 555-0126", address: "2222 Dogwood St, Clayton, CA 94517", puresScore: 14, tier: "1C", industry: "Insurance", budget: "$750", status: "Price Quote", lastContact: "2024-01-06", buyerType: "Analytical"},
+            {name: "Sandra Adams", email: "sandra.a@bakery.com", phone: "(510) 555-0127", address: "2424 Mulberry Ave, Antioch, CA 94509", puresScore: 12, tier: "1C", industry: "Food Service", budget: "$450", status: "Initial Interest", lastContact: "2024-01-04", buyerType: "Relationship"},
+            {name: "Charles Nelson", email: "c.nelson@pharmacy.com", phone: "(510) 555-0128", address: "2626 Hawthorn Dr, Brentwood, CA 94513", puresScore: 17, tier: "1B", industry: "Pharmacy", budget: "$1,200", status: "Consultation", lastContact: "2024-01-10", buyerType: "Efficiency"},
+            {name: "Helen Carter", email: "helen.c@salon.com", phone: "(510) 555-0129", address: "2828 Lilac St, Pittsburg, CA 94565", puresScore: 15, tier: "1C", industry: "Beauty", budget: "$850", status: "Design Approval", lastContact: "2024-01-11", buyerType: "Innovation"},
+            {name: "Mark Phillips", email: "m.phillips@agency.com", phone: "(510) 555-0130", address: "3030 Jasmine Rd, Bay Point, CA 94565", puresScore: 19, tier: "1A", industry: "Marketing", budget: "$2,600", status: "Partnership Discussion", lastContact: "2024-01-13", buyerType: "Innovation"},
+            {name: "Dorothy Mitchell", email: "dorothy.m@clinic.org", phone: "(510) 555-0131", address: "3232 Violet Ave, Discovery Bay, CA 94505", puresScore: 16, tier: "1B", industry: "Healthcare", budget: "$1,300", status: "Permit Pending", lastContact: "2024-01-07", buyerType: "Analytical"},
+            {name: "Paul Roberts", email: "p.roberts@garage.com", phone: "(510) 555-0132", address: "3434 Lavender St, Oakley, CA 94561", puresScore: 13, tier: "1C", industry: "Automotive", budget: "$550", status: "Schedule Visit", lastContact: "2024-01-05", buyerType: "Efficiency"},
+            {name: "Ruth Turner", email: "ruth.t@daycare.com", phone: "(510) 555-0133", address: "3636 Peony Dr, Knightsen, CA 94548", puresScore: 14, tier: "1C", industry: "Childcare", budget: "$700", status: "Safety Review", lastContact: "2024-01-09", buyerType: "Relationship"},
+            {name: "Eric Campbell", email: "e.campbell@office.com", phone: "(510) 555-0134", address: "3838 Dahlia Ave, Bethel Island, CA 94511", puresScore: 18, tier: "1B", industry: "Office", budget: "$1,900", status: "Lease Review", lastContact: "2024-01-12", buyerType: "Efficiency"},
+            {name: "Melissa Parker", email: "melissa.p@therapy.com", phone: "(510) 555-0135", address: "4040 Iris St, Port Chicago, CA 94520", puresScore: 17, tier: "1B", industry: "Mental Health", budget: "$1,100", status: "Healing Garden", lastContact: "2024-01-14", buyerType: "Innovation"},
+            {name: "Gary Evans", email: "g.evans@warehouse.com", phone: "(510) 555-0136", address: "4242 Tulip Rd, Rodeo, CA 94572", puresScore: 15, tier: "1C", industry: "Logistics", budget: "$800", status: "Space Assessment", lastContact: "2024-01-06", buyerType: "Efficiency"},
+            {name: "Barbara Edwards", email: "barbara.e@boutique.com", phone: "(510) 555-0137", address: "4444 Carnation Dr, Crockett, CA 94525", puresScore: 16, tier: "1B", industry: "Fashion", budget: "$1,000", status: "Window Display", lastContact: "2024-01-08", buyerType: "Innovation"},
+            {name: "Frank Collins", email: "f.collins@brewery.com", phone: "(510) 555-0138", address: "4646 Sunflower Ave, Port Costa, CA 94569", puresScore: 19, tier: "1A", industry: "Beverage", budget: "$2,400", status: "Garden Design", lastContact: "2024-01-15", buyerType: "Innovation"},
+            {name: "Betty Stewart", email: "betty.s@bookstore.com", phone: "(510) 555-0139", address: "4848 Orchid St, Hercules, CA 94547", puresScore: 12, tier: "1C", industry: "Retail", budget: "$500", status: "Reading Garden", lastContact: "2024-01-04", buyerType: "Relationship"},
+            {name: "Dennis Morris", email: "d.morris@clinic.com", phone: "(510) 555-0140", address: "5050 Begonia Rd, Pinole, CA 94564", puresScore: 17, tier: "1B", industry: "Medical", budget: "$1,600", status: "Waiting Area", lastContact: "2024-01-10", buyerType: "Efficiency"},
+            {name: "Alice Reed", email: "alice.r@studio.com", phone: "(510) 555-0141", address: "5252 Azalea Dr, San Pablo, CA 94806", puresScore: 18, tier: "1B", industry: "Photography", budget: "$1,300", status: "Backdrop Plants", lastContact: "2024-01-11", buyerType: "Innovation"},
+            {name: "Walter Cook", email: "w.cook@deli.com", phone: "(510) 555-0142", address: "5454 Geranium Ave, Richmond, CA 94801", puresScore: 13, tier: "1C", industry: "Food", budget: "$600", status: "Herb Garden", lastContact: "2024-01-07", buyerType: "Relationship"},
+            {name: "Joyce Bell", email: "joyce.b@gallery.org", phone: "(510) 555-0143", address: "5656 Marigold St, El Sobrante, CA 94803", puresScore: 15, tier: "1C", industry: "Art", budget: "$750", status: "Exhibition Space", lastContact: "2024-01-09", buyerType: "Innovation"},
+            {name: "Albert Cooper", email: "a.cooper@garage.net", phone: "(510) 555-0144", address: "5858 Petunia Rd, Kensington, CA 94707", puresScore: 14, tier: "1C", industry: "Auto Repair", budget: "$550", status: "Green Wall", lastContact: "2024-01-05", buyerType: "Efficiency"},
+            {name: "Virginia Bailey", email: "virginia.b@spa.net", phone: "(510) 555-0145", address: "6060 Zinnia Dr, El Cerrito, CA 94530", puresScore: 20, tier: "1A", industry: "Wellness", budget: "$3,200", status: "Zen Garden", lastContact: "2024-01-13", buyerType: "Innovation"},
+            {name: "Carl Ward", email: "c.ward@office.net", phone: "(510) 555-0146", address: "6262 Hibiscus Ave, Albany, CA 94706", puresScore: 16, tier: "1B", industry: "Corporate", budget: "$1,400", status: "Biophilic Design", lastContact: "2024-01-12", buyerType: "Analytical"},
+            {name: "Ruby Torres", email: "ruby.t@clinic.net", phone: "(510) 555-0147", address: "6464 Gardenia St, Berkeley, CA 94702", puresScore: 17, tier: "1B", industry: "Healthcare", budget: "$1,500", status: "Healing Plants", lastContact: "2024-01-08", buyerType: "Relationship"},
+            {name: "Eugene Peterson", email: "e.peterson@shop.com", phone: "(510) 555-0148", address: "6666 Camellia Rd, Berkeley, CA 94704", puresScore: 12, tier: "1C", industry: "Retail", budget: "$450", status: "Storefront Green", lastContact: "2024-01-06", buyerType: "Efficiency"},
+            {name: "Lois Richardson", email: "lois.r@school.net", phone: "(510) 555-0149", address: "6868 Daffodil Dr, Berkeley, CA 94705", puresScore: 15, tier: "1C", industry: "Education", budget: "$800", status: "School Garden", lastContact: "2024-01-10", buyerType: "Relationship"},
+            {name: "Roy Cox", email: "roy.c@workshop.com", phone: "(510) 555-0150", address: "7070 Lily Ave, Emeryville, CA 94608", puresScore: 18, tier: "1B", industry: "Creative", budget: "$1,700", status: "Inspiration Space", lastContact: "2024-01-14", buyerType: "Innovation"}
+        ];
+
+        let filteredData = [...clientData];
+        let sortDirection = 1;
+
+        function populateTable() {
+            const tbody = document.getElementById('clientTableBody');
+            const clientSelect = document.getElementById('clientSelect');
+            
+            tbody.innerHTML = '';
+            clientSelect.innerHTML = '<option value="">Choose a client...</option>';
+            
+            filteredData.forEach((client, index) => {
+                const row = tbody.insertRow();
+                row.className = `tier-${client.tier.toLowerCase()}`;
+                
+                row.innerHTML = `
+                    <td>${client.name}</td>
+                    <td>${client.email}</td>
+                    <td>${client.phone}</td>
+                    <td>${client.address}</td>
+                    <td>${client.puresScore}</td>
+                    <td>${client.tier}</td>
+                    <td>${client.industry}</td>
+                    <td>${client.budget}</td>
+                    <td>${client.status}</td>
+                    <td>${client.lastContact}</td>
+                    <td>
+                        <button class="btn" onclick="contactClient(${index})">Contact</button>
+                    </td>
+                `;
+                
+                clientSelect.innerHTML += `<option value="${index}">${client.name}</option>`;
+            });
+            
+            updateStats();
+        }
+
+        function updateStats() {
+            const tier1A = filteredData.filter(c => c.tier === '1A').length;
+            const tier1B = filteredData.filter(c => c.tier === '1B').length;
+            const tier1C = filteredData.filter(c => c.tier === '1C').length;
+            
+            document.getElementById('totalClients').textContent = filteredData.length;
+            document.getElementById('tier1ACount').textContent = tier1A;
+            document.getElementById('tier1BCount').textContent = tier1B;
+            document.getElementById('tier1CCount').textContent = tier1C;
+            
+            // Update buyer type counts
+            document.getElementById('analyticalCount').textContent = clientData.filter(c => c.buyerType === 'Analytical').length;
+            document.getElementById('relationshipCount').textContent = clientData.filter(c => c.buyerType === 'Relationship').length;
+            document.getElementById('efficiencyCount').textContent = clientData.filter(c => c.buyerType === 'Efficiency').length;
+            document.getElementById('innovationCount').textContent = clientData.filter(c => c.buyerType === 'Innovation').length;
+        }
+
+        function filterTable() {
+            const searchValue = document.getElementById('searchInput').value.toLowerCase();
+            const tierFilter = document.getElementById('tierFilter').value;
+            
+            filteredData = clientData.filter(client => {
+                const matchesSearch = Object.values(client).some(value => 
+                    value.toString().toLowerCase().includes(searchValue)
+                );
+                const matchesTier = !tierFilter || client.tier === tierFilter;
+                
+                return matchesSearch && matchesTier;
+            });
+            
+            populateTable();
+        }
+
+        function sortTable(columnIndex) {
+            const columns = ['name', 'email', 'phone', 'address', 'puresScore', 'tier', 'industry', 'budget', 'status', 'lastContact'];
+            const sortKey = columns[columnIndex];
+            
+            filteredData.sort((a, b) => {
+                let aValue = a[sortKey];
+                let bValue = b[sortKey];
+                
+                if (sortKey === 'puresScore') {
+                    aValue = parseInt(aValue);
+                    bValue = parseInt(bValue);
+                } else if (sortKey === 'lastContact') {
+                    aValue = new Date(aValue);
+                    bValue = new Date(bValue);
+                }
+                
+                if (aValue < bValue) return -1 * sortDirection;
+                if (aValue > bValue) return 1 * sortDirection;
+                return 0;
+            });
+            
+            sortDirection *= -1;
+            populateTable();
+        }
+
+        function contactClient(index) {
+            const client = filteredData[index];
+            document.getElementById('clientEmail').value = client.email;
+            document.getElementById('emailMessage').value = generatePersonalizedEmail(client);
+            document.getElementById('contactModal').style.display = 'block';
+        }
+
+        function generatePersonalizedEmail(client) {
+            let message = `Dear ${client.name.split(' ')[0]},\n\n`;
+            
+            if (client.industry === 'Residential') {
+                message += `We noticed you might be interested in transforming your outdoor space! Broadway Terrace Nursery has been Oakland's premier plant destination since 1986, and we'd love to help you create the perfect garden.\n\n`;
+                message += `🌿 Hand-picked houseplants that thrive in Bay Area conditions\n`;
+                message += `🌱 Expert advice on plant selection for your specific lighting and care needs\n`;
+                message += `🏺 Beautiful pottery from local artisans\n`;
+                message += `🌸 Custom succulent and plant designs\n\n`;
+                message += `As a sustainability-focused, woman-owned business, we're committed to helping you create a beautiful, eco-friendly space. Visit us at 4340 Clarewood Drive in Oakland!\n\n`;
+            } else if (client.industry === 'Corporate' || client.industry === 'Office') {
+                message += `Transform your workplace with biophilic design! Studies show that plants in the office increase productivity by up to 38% and improve air quality significantly.\n\n`;
+                message += `Our corporate services include:\n`;
+                message += `🌿 Custom plantscaping for offices and lobbies\n`;
+                message += `🌱 Low-maintenance plant solutions for busy environments\n`;
+                message += `🏺 Professional plant installation and maintenance\n`;
+                message += `💚 Eco-friendly, sustainable plant options\n\n`;
+                message += `Let's discuss how we can enhance your workspace and employee wellbeing!\n\n`;
+            } else {
+                message += `Whether you're looking to enhance your ${client.industry.toLowerCase()} space or create a welcoming environment for your customers, Broadway Terrace Nursery has the perfect solution.\n\n`;
+                message += `We specialize in:\n`;
+                message += `🌿 Professional plant consultation and design\n`;
+                message += `🌱 High-quality plants suited for commercial environments\n`;
+                message += `🏺 Custom arrangements that reflect your brand\n`;
+                message += `🌸 Ongoing plant care and maintenance services\n\n`;
+                message += `As Oakland's trusted plant experts since 1986, we understand the unique needs of Bay Area businesses.\n\n`;
+            }
+            
+            message += `Best regards,\nThe Broadway Terrace Nursery Team\n\n`;
+            message += `📍 4340 Clarewood Drive, Oakland, CA 94618\n`;
+            message += `📞 (510) 658-3729\n`;
+            message += `🌐 www.broadwayterracenursery.com\n`;
+            message += `📧 btnursery@gmail.com`;
+            
+            return message;
+        }
+
+        function closeModal() {
+            document.getElementById('contactModal').style.display = 'none';
+        }
+
+        function sendEmail() {
+            const email = document.getElementById('clientEmail').value;
+            const subject = document.getElementById('emailSubject').value;
+            const message = document.getElementById('emailMessage').value;
+            
+            const mailtoLink = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(message)}`;
+            window.location.href = mailtoLink;
+            
+            closeModal();
+            alert('Email client opened! Email has been prepared for sending.');
+        }
+
+        function showContactForm() {
+            const method = document.getElementById('contactMethod').value;
+            const emailForm = document.getElementById('emailForm');
+            
+            if (method === 'email') {
+                emailForm.style.display = 'block';
+            } else {
+                emailForm.style.display = 'none';
+                if (method === 'phone') {
+                    alert('Phone calling feature would integrate with your phone system.');
+                } else if (method === 'visit') {
+                    alert('Visit scheduling feature would integrate with your calendar system.');
+                }
+            }
+        }
+
+        function showTab(tabName) {
+            // Hide all tab contents
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabContents.forEach(content => content.classList.remove('active'));
+            
+            // Remove active class from all tabs
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Show selected tab content and mark tab as active
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        function loadClientScores() {
+            const clientIndex = document.getElementById('clientSelect').value;
+            if (clientIndex === '') return;
+            
+            const client = clientData[clientIndex];
+            // For demo purposes, we'll simulate loading scores based on PURES score
+            const avgScore = Math.floor(client.puresScore / 5);
+            const variation = 2;
+            
+            document.getElementById('profitability').value = Math.min(5, Math.max(1, avgScore + Math.floor(Math.random() * variation)));
+            document.getElementById('urgency').value = Math.min(5, Math.max(1, avgScore + Math.floor(Math.random() * variation)));
+            document.getElementById('reachability').value = Math.min(5, Math.max(1, avgScore + Math.floor(Math.random() * variation)));
+            document.getElementById('engagement').value = Math.min(5, Math.max(1, avgScore + Math.floor(Math.random() * variation)));
+            document.getElementById('sustainability').value = Math.min(5, Math.max(1, avgScore + Math.floor(Math.random() * variation)));
+            
+            updateAllScores();
+        }
+
+        function updateScore(element) {
+            document.getElementById(element.id + 'Value').textContent = element.value;
+            updateTotalScore();
+        }
+
+        function updateAllScores() {
+            ['profitability', 'urgency', 'reachability', 'engagement', 'sustainability'].forEach(id => {
+                const element = document.getElementById(id);
+                document.getElementById(id + 'Value').textContent = element.value;
+            });
+            updateTotalScore();
+        }
+
+        function updateTotalScore() {
+            const scores = ['profitability', 'urgency', 'reachability', 'engagement', 'sustainability']
+                .map(id => parseInt(document.getElementById(id).value));
+            
+            const total = scores.reduce((sum, score) => sum + score, 0);
+            document.getElementById('totalPURESScore').textContent = total;
+            
+            let tier;
+            if (total >= 20) tier = 'Tier 1A (Premium)';
+            else if (total >= 16) tier = 'Tier 1B (High-Value)';
+            else tier = 'Tier 1C (Qualified)';
+            
+            document.getElementById('tierClassification').textContent = tier;
+        }
+
+        function saveClientScores() {
+            const clientIndex = document.getElementById('clientSelect').value;
+            if (clientIndex === '') {
+                alert('Please select a client first.');
+                return;
+            }
+            
+            alert('Client scores saved successfully!');
+        }
+
+        function openBulkEmail() {
+            document.getElementById('bulkEmailModal').style.display = 'block';
+            updateBulkMessage();
+        }
+
+        function closeBulkEmailModal() {
+            document.getElementById('bulkEmailModal').style.display = 'none';
+        }
+
+        function updateBulkMessage() {
+            const campaignType = document.getElementById('campaignType').value;
+            let message = '';
+            
+            switch(campaignType) {
+                case 'seasonal':
+                    message = `🌸 Spring Has Sprung at Broadway Terrace Nursery! 🌸\n\nDear Plant Lover,\n\nTransform your space this season with our carefully curated collection of spring plants and flowers! We're excited to share what's blooming at Oakland's premier plant destination.\n\n🌿 NEW ARRIVALS:\n• Fresh spring annuals and perennials\n• Vibrant flowering plants perfect for Bay Area gardens\n• Hand-picked houseplants that thrive indoors\n• Sustainable, locally-sourced pottery\n\n💚 SPECIAL OFFERS:\n• 20% off all spring bedding plants\n• Free potting with plant purchase over $50\n• Complimentary plant care consultation\n\nAs a woman-owned, sustainability-focused nursery serving Oakland since 1986, we're passionate about helping you create beautiful, eco-friendly spaces.\n\nVisit us today!\n📍 4340 Clarewood Drive, Oakland, CA 94618\n⏰ Open 10am-5:30pm daily\n📞 (510) 658-3729`;
+                    break;
+                case 'houseplants':
+                    message = `🏠 Transform Your Home with Premium Houseplants! 🌿\n\nDear Indoor Garden Enthusiast,\n\nBring life into your living space with Broadway Terrace Nursery's exceptional houseplant collection. We hand-pick every plant to ensure you get the healthiest, happiest specimens for your home.\n\n🌱 WHY CHOOSE OUR HOUSEPLANTS:\n• Weekly selection of the finest specimens\n• Expert guidance on plant placement and care\n• Plants suited for every lighting condition\n• From beginner-friendly to advanced varieties\n\n✨ FEATURED PLANTS:\n• Low-maintenance Snake Plants & ZZ Plants\n• Easy-care Pothos & Philodendrons\n• Statement Fiddle Leaf Figs\n• Unique Air Plants & Succulents\n\nOur knowledgeable team will help you choose the perfect plants based on your home's lighting, your lifestyle, and aesthetic preferences.\n\nSpecial: Free care guide with every houseplant purchase!\n\n📍 Indoor Shop: 4340 Clarewood Drive, Oakland\n📞 (510) 658-3729 | btnursery@gmail.com`;
+                    break;
+                case 'landscaping':
+                    message = `🌳 Professional Landscaping Services Available! 🌺\n\nDear Property Owner,\n\nElevate your outdoor space with Broadway Terrace Nursery's comprehensive landscaping solutions. Since 1986, we've been transforming Oakland properties into stunning, sustainable gardens.\n\n🏡 OUR SERVICES INCLUDE:\n• Custom garden design and installation\n• Drought-tolerant and native plant landscapes\n• Seasonal color programs\n• Garden maintenance and care\n• Corporate and residential projects\n\n🌿 SUSTAINABLE APPROACH:\n• Native California plants that thrive locally\n• Water-wise garden designs\n• Eco-friendly pest management\n• Organic soil amendments and fertilizers\n\nWhether you need a complete landscape makeover or seasonal refresh, our experienced team creates beautiful, sustainable outdoor spaces that enhance your property value and environmental impact.\n\nFree consultation available!\n\n📞 Call us: (510) 658-3729\n📍 Visit our nursery: 4340 Clarewood Drive, Oakland\n🌐 www.broadwayterracenursery.com`;
+                    break;
+                case 'sustainability':
+                    message = `♻️ Join Our Mission: Sustainable Gardening Solutions! 🌱\n\nDear Eco-Conscious Gardener,\n\nAt Broadway Terrace Nursery, sustainability isn't just a buzzword—it's our commitment to the planet and our community. Discover how you can create beautiful spaces while protecting our environment.\n\n🌍 OUR ECO-INITIATIVES:\n• Eliminated harmful pesticides from our inventory\n• Drastically reduced single-use plastics\n• Sourcing from local growers with high eco-standards\n• Biodegradable pots and eco-friendly packaging\n• Water conservation practices\n\n🌿 SUSTAINABLE PLANT OPTIONS:\n• Native California species that support local ecosystems\n• Drought-tolerant plants for water conservation\n• Pollinator-friendly flowers for bees and butterflies\n• Organic herbs and vegetables for sustainable living\n\nAs a woman-owned business, we believe in community responsibility. Every purchase supports local artists, sustainable practices, and environmental stewardship.\n\nTogether, we can make a difference—one plant at a time!\n\n📍 4340 Clarewood Drive, Oakland, CA 94618\n📞 (510) 658-3729\n💚 btnursery@gmail.com`;
+                    break;
+            }
+            
+            document.getElementById('bulkMessage').value = message;
+        }
+
+        function sendBulkEmail() {
+            const tier = document.getElementById('bulkTier').value;
+            const subject = document.getElementById('bulkSubject').value;
+            const message = document.getElementById('bulkMessage').value;
+            
+            let targetClients = clientData;
+            if (tier !== 'all') {
+                targetClients = clientData.filter(client => client.tier === tier);
+            }
+            
+            const emails = targetClients.map(client => client.email).join(',');
+            const mailtoLink = `mailto:?bcc=${emails}&subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(message)}`;
+            
+            window.location.href = mailtoLink;
+            closeBulkEmailModal();
+            alert(`Bulk email prepared for ${targetClients.length} clients!`);
+        }
+
+        function exportToCSV() {
+            const headers = ['Client Name', 'Email', 'Phone', 'Address', 'PURES Score', 'Tier Level', 'Industry', 'Budget', 'Status', 'Last Contact'];
+            const csvContent = [
+                headers.join(','),
+                ...filteredData.map(client => [
+                    `"${client.name}"`,
+                    `"${client.email}"`,
+                    `"${client.phone}"`,
+                    `"${client.address}"`,
+                    client.puresScore,
+                    `"${client.tier}"`,
+                    `"${client.industry}"`,
+                    `"${client.budget}"`,
+                    `"${client.status}"`,
+                    `"${client.lastContact}"`
+                ].join(','))
+            ].join('\n');
+            
+            const blob = new Blob([csvContent], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.setAttribute('href', url);
+            link.setAttribute('download', 'broadway_terrace_clients.csv');
+            link.click();
+        }
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            populateTable();
+            updateAllScores();
+        });
+
+        // Close modals when clicking outside
+        window.onclick = function(event) {
+            const contactModal = document.getElementById('contactModal');
+            const bulkEmailModal = document.getElementById('bulkEmailModal');
+            
+            if (event.target == contactModal) {
+                contactModal.style.display = 'none';
+            }
+            if (event.target == bulkEmailModal) {
+                bulkEmailModal.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>

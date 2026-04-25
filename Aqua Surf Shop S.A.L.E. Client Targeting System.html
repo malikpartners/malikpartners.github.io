@@ -1,0 +1,1002 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aqua Surf Shop - S.A.L.E. Client Targeting System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #000000;
+            color: #ffffff;
+            line-height: 1.6;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #CF2030, #a01828);
+            padding: 1rem 0;
+            box-shadow: 0 2px 10px rgba(207, 32, 48, 0.3);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            height: 60px;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-menu a {
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-menu a:hover {
+            color: #ffcccc;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .dashboard-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .dashboard-header h1 {
+            color: #CF2030;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .dashboard-header p {
+            font-size: 1.1rem;
+            color: #cccccc;
+        }
+
+        .system-tabs {
+            display: flex;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid #333;
+        }
+
+        .tab-button {
+            background: none;
+            border: none;
+            color: #ffffff;
+            padding: 1rem 2rem;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+            font-size: 1rem;
+        }
+
+        .tab-button.active {
+            border-bottom-color: #CF2030;
+            background: rgba(207, 32, 48, 0.1);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .control-group label {
+            margin-bottom: 0.5rem;
+            color: #CF2030;
+            font-weight: 500;
+        }
+
+        input, select {
+            padding: 0.5rem;
+            border: 1px solid #333;
+            border-radius: 4px;
+            background: #1a1a1a;
+            color: #ffffff;
+            font-size: 0.9rem;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #CF2030;
+        }
+
+        .btn {
+            background: #CF2030;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn:hover {
+            background: #a01828;
+        }
+
+        .btn-small {
+            padding: 0.3rem 0.6rem;
+            font-size: 0.8rem;
+        }
+
+        .btn-secondary {
+            background: #666;
+        }
+
+        .btn-secondary:hover {
+            background: #555;
+        }
+
+        .client-table {
+            background: #1a1a1a;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #333;
+            font-size: 0.9rem;
+        }
+
+        th {
+            background: #CF2030;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            position: relative;
+        }
+
+        th:hover {
+            background: #a01828;
+        }
+
+        tr:hover {
+            background: rgba(207, 32, 48, 0.1);
+        }
+
+        .tier-1a { background: rgba(34, 197, 94, 0.2); }
+        .tier-1b { background: rgba(234, 179, 8, 0.2); }
+        .tier-1c { background: rgba(59, 130, 246, 0.2); }
+
+        .score-badge {
+            padding: 0.2rem 0.5rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .score-high { background: #22c55e; color: #000; }
+        .score-medium { background: #eab308; color: #000; }
+        .score-low { background: #ef4444; color: #fff; }
+
+        .pure-scoring {
+            background: #1a1a1a;
+            padding: 2rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+        }
+
+        .scoring-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .score-item {
+            background: #2a2a2a;
+            padding: 1rem;
+            border-radius: 6px;
+            border-left: 4px solid #CF2030;
+        }
+
+        .score-item h4 {
+            color: #CF2030;
+            margin-bottom: 0.5rem;
+        }
+
+        .score-slider {
+            width: 100%;
+            margin: 0.5rem 0;
+        }
+
+        .analytics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .analytics-card {
+            background: #1a1a1a;
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid #333;
+        }
+
+        .analytics-card h3 {
+            color: #CF2030;
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .email-template {
+            background: #1a1a1a;
+            padding: 2rem;
+            border-radius: 8px;
+            margin-top: 2rem;
+        }
+
+        .footer {
+            background: #111;
+            padding: 2rem 0;
+            margin-top: 4rem;
+            text-align: center;
+            border-top: 1px solid #333;
+        }
+
+        .footer-logo {
+            height: 30px;
+            margin-bottom: 1rem;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #1a1a1a;
+            padding: 2rem;
+            border-radius: 8px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80%;
+            overflow-y: auto;
+        }
+
+        .close {
+            float: right;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #CF2030;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .controls {
+                flex-direction: column;
+            }
+            
+            table {
+                font-size: 0.8rem;
+            }
+            
+            .analytics-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports" class="logo">
+            <nav class="nav-menu">
+                <a href="#sourcing">Sourcing</a>
+                <a href="#assessing">Assessing</a>
+                <a href="#listening">Listening</a>
+                <a href="#empowering">Empowering</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Dashboard Header -->
+        <div class="dashboard-header">
+            <h1>Aqua Surf Shop - S.A.L.E. Client Targeting System</h1>
+            <p>Strategic client acquisition for San Francisco's premier surf & skate retail destination</p>
+            <p><strong>Location:</strong> 3847 Judah St, San Francisco, CA 94122 | <strong>Target Radius:</strong> 10 miles</p>
+        </div>
+
+        <!-- System Tabs -->
+        <div class="system-tabs">
+            <button class="tab-button active" onclick="showTab('sourcing')">S.OURCING</button>
+            <button class="tab-button" onclick="showTab('assessing')">A.SSESSING</button>
+            <button class="tab-button" onclick="showTab('listening')">L.ISTENING</button>
+            <button class="tab-button" onclick="showTab('empowering')">E.MPOWERING</button>
+            <button class="tab-button" onclick="showTab('analytics')">Analytics</button>
+        </div>
+
+        <!-- SOURCING Tab -->
+        <div id="sourcing" class="tab-content active">
+            <h2>P.U.R.E.S. Client Scoring & Database</h2>
+            
+            <!-- Controls -->
+            <div class="controls">
+                <div class="control-group">
+                    <label for="searchInput">Search Clients:</label>
+                    <input type="text" id="searchInput" placeholder="Search by name, email, or industry..." onkeyup="filterTable()">
+                </div>
+                <div class="control-group">
+                    <label for="tierFilter">Filter by Tier:</label>
+                    <select id="tierFilter" onchange="filterTable()">
+                        <option value="">All Tiers</option>
+                        <option value="1A">Tier 1A (Premium)</option>
+                        <option value="1B">Tier 1B (High-Value)</option>
+                        <option value="1C">Tier 1C (Qualified)</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label for="industryFilter">Filter by Category:</label>
+                    <select id="industryFilter" onchange="filterTable()">
+                        <option value="">All Categories</option>
+                        <option value="Professional Surfer">Professional Surfer</option>
+                        <option value="Surf Instructor">Surf Instructor</option>
+                        <option value="Tech Professional">Tech Professional</option>
+                        <option value="Healthcare">Healthcare</option>
+                        <option value="Education">Education</option>
+                        <option value="Hospitality">Hospitality</option>
+                        <option value="Real Estate">Real Estate</option>
+                        <option value="Finance">Finance</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label>&nbsp;</label>
+                    <button class="btn" onclick="exportData()">Export CSV</button>
+                </div>
+            </div>
+
+            <!-- Client Database Table -->
+            <div class="client-table">
+                <table id="clientTable">
+                    <thead>
+                        <tr>
+                            <th onclick="sortTable(0)">Client Name</th>
+                            <th onclick="sortTable(1)">Email</th>
+                            <th onclick="sortTable(2)">Phone</th>
+                            <th onclick="sortTable(3)">Address</th>
+                            <th onclick="sortTable(4)">P.U.R.E.S. Score</th>
+                            <th onclick="sortTable(5)">Tier Level</th>
+                            <th onclick="sortTable(6)">Category</th>
+                            <th onclick="sortTable(7)">Revenue Est.</th>
+                            <th onclick="sortTable(8)">Contact Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="clientTableBody">
+                        <!-- Client data will be populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- ASSESSING Tab -->
+        <div id="assessing" class="tab-content">
+            <h2>Buying Pattern Analysis & P.U.R.E.S. Scoring</h2>
+            
+            <div class="pure-scoring">
+                <h3>P.U.R.E.S. Client Evaluation System</h3>
+                <div class="scoring-grid">
+                    <div class="score-item">
+                        <h4>Profitability</h4>
+                        <p>Budget capacity for surf/skate gear</p>
+                        <input type="range" class="score-slider" min="1" max="5" value="3" id="profitability">
+                        <span id="profitabilityValue">3</span>/5
+                    </div>
+                    <div class="score-item">
+                        <h4>Urgency</h4>
+                        <p>Immediate need for equipment</p>
+                        <input type="range" class="score-slider" min="1" max="5" value="3" id="urgency">
+                        <span id="urgencyValue">3</span>/5
+                    </div>
+                    <div class="score-item">
+                        <h4>Reachability</h4>
+                        <p>Accessibility for contact</p>
+                        <input type="range" class="score-slider" min="1" max="5" value="3" id="reachability">
+                        <span id="reachabilityValue">3</span>/5
+                    </div>
+                    <div class="score-item">
+                        <h4>Engagement</h4>
+                        <p>Interest in surf culture & community</p>
+                        <input type="range" class="score-slider" min="1" max="5" value="3" id="engagement">
+                        <span id="engagementValue">3</span>/5
+                    </div>
+                    <div class="score-item">
+                        <h4>Sustainability</h4>
+                        <p>Long-term customer potential</p>
+                        <input type="range" class="score-slider" min="1" max="5" value="3" id="sustainability">
+                        <span id="sustainabilityValue">3</span>/5
+                    </div>
+                </div>
+                <div style="text-align: center; margin-top: 2rem;">
+                    <h3>Total P.U.R.E.S. Score: <span id="totalScore" style="color: #CF2030;">15</span>/25</h3>
+                    <p>Tier Classification: <span id="tierClassification" style="color: #CF2030;">1C - Qualified</span></p>
+                </div>
+            </div>
+
+            <div class="analytics-grid">
+                <div class="analytics-card">
+                    <h4>Buyer Personas</h4>
+                    <ul style="text-align: left;">
+                        <li><strong>Wave Riders:</strong> Experienced surfers seeking performance gear</li>
+                        <li><strong>Beach Lifestyle:</strong> Fashion-focused coastal living enthusiasts</li>
+                        <li><strong>New Boarders:</strong> Beginners needing complete setups</li>
+                        <li><strong>Local Legends:</strong> Community members supporting local business</li>
+                    </ul>
+                </div>
+                <div class="analytics-card">
+                    <h4>Seasonal Patterns</h4>
+                    <ul style="text-align: left;">
+                        <li><strong>Spring:</strong> Wetsuit season prep</li>
+                        <li><strong>Summer:</strong> Peak board & accessory sales</li>
+                        <li><strong>Fall:</strong> Back-to-school skate gear</li>
+                        <li><strong>Winter:</strong> Holiday gifts & storm gear</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- LISTENING Tab -->
+        <div id="listening" class="tab-content">
+            <h2>Customer Feedback Integration</h2>
+            
+            <div class="analytics-grid">
+                <div class="analytics-card">
+                    <h3>92%</h3>
+                    <p>Customer Satisfaction</p>
+                </div>
+                <div class="analytics-card">
+                    <h3>4.8/5</h3>
+                    <p>Average Rating</p>
+                </div>
+                <div class="analytics-card">
+                    <h3>78%</h3>
+                    <p>Repeat Customers</p>
+                </div>
+                <div class="analytics-card">
+                    <h3>156</h3>
+                    <p>Reviews This Month</p>
+                </div>
+            </div>
+
+            <div style="background: #1a1a1a; padding: 2rem; border-radius: 8px;">
+                <h3>Recent Feedback Highlights</h3>
+                <div style="display: grid; gap: 1rem; margin-top: 1rem;">
+                    <div style="background: #2a2a2a; padding: 1rem; border-radius: 6px; border-left: 4px solid #22c55e;">
+                        <p><strong>Sarah M.:</strong> "Amazing selection of boards! Staff helped me find the perfect setup for Ocean Beach conditions."</p>
+                    </div>
+                    <div style="background: #2a2a2a; padding: 1rem; border-radius: 6px; border-left: 4px solid #22c55e;">
+                        <p><strong>Mike T.:</strong> "Best wetsuit fit I've ever had. No-pressure sales approach really appreciated."</p>
+                    </div>
+                    <div style="background: #2a2a2a; padding: 1rem; border-radius: 6px; border-left: 4px solid #eab308;">
+                        <p><strong>Alex R.:</strong> "Great shop, would love to see more skate deck options."</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- EMPOWERING Tab -->
+        <div id="empowering" class="tab-content">
+            <h2>Referral Strategy & Community Building</h2>
+            
+            <div class="analytics-grid">
+                <div class="analytics-card">
+                    <h3>34</h3>
+                    <p>Active Referrers</p>
+                </div>
+                <div class="analytics-card">
+                    <h3>$2,840</h3>
+                    <p>Monthly Referral Revenue</p>
+                </div>
+                <div class="analytics-card">
+                    <h3>23%</h3>
+                    <p>Referral Conversion Rate</p>
+                </div>
+                <div class="analytics-card">
+                    <h3>67</h3>
+                    <p>Referrals This Quarter</p>
+                </div>
+            </div>
+
+            <div style="background: #1a1a1a; padding: 2rem; border-radius: 8px;">
+                <h3>Referral Programs</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 1rem;">
+                    <div style="background: #2a2a2a; padding: 1rem; border-radius: 6px;">
+                        <h4 style="color: #CF2030;">Surf Squad Rewards</h4>
+                        <p>Refer a friend, get 15% off next purchase</p>
+                        <p><strong>Active Members:</strong> 89</p>
+                    </div>
+                    <div style="background: #2a2a2a; padding: 1rem; border-radius: 6px;">
+                        <h4 style="color: #CF2030;">Local Legend Program</h4>
+                        <p>Exclusive access to new arrivals & events</p>
+                        <p><strong>Active Members:</strong> 45</p>
+                    </div>
+                    <div style="background: #2a2a2a; padding: 1rem; border-radius: 6px;">
+                        <h4 style="color: #CF2030;">Instructor Network</h4>
+                        <p>Special rates for surf/skate instructors</p>
+                        <p><strong>Active Members:</strong> 12</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ANALYTICS Tab -->
+        <div id="analytics" class="tab-content">
+            <h2>S.A.L.E. Performance Dashboard</h2>
+            
+            <div class="analytics-grid">
+                <div class="analytics-card">
+                    <h3>127</h3>
+                    <p>Total Prospects</p>
+                </div>
+                <div class="analytics-card">
+                    <h3>31</h3>
+                    <p>Tier 1A Clients</p>
+                </div>
+                <div class="analytics-card">
+                    <h3>89%</h3>
+                    <p>P.U.R.E.S. Accuracy</p>
+                </div>
+                <div class="analytics-card">
+                    <h3>$18,450</h3>
+                    <p>Pipeline Value</p>
+                </div>
+            </div>
+
+            <div style="background: #1a1a1a; padding: 2rem; border-radius: 8px; margin-top: 2rem;">
+                <h3>Client Distribution by Area</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem;">
+                    <div>Richmond District: 18 clients</div>
+                    <div>Sunset District: 24 clients</div>
+                    <div>Mission District: 12 clients</div>
+                    <div>Marina District: 8 clients</div>
+                    <div>SOMA: 15 clients</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Email Modal -->
+    <div id="emailModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2>Send Email</h2>
+            <div id="emailContent">
+                <!-- Email content will be populated by JavaScript -->
+            </div>
+            <button class="btn" onclick="sendEmail()">Send Email</button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports" class="footer-logo">
+        <p>&copy; 2024 Higgins Reports. Advanced AI-Powered Business Intelligence.</p>
+    </footer>
+
+    <script>
+        // Sample client data for Aqua Surf Shop (50 prospects within 10 miles)
+        const clientData = [
+            {name: "Marcus Chen", email: "marcus.chen@email.com", phone: "(415) 555-0123", address: "1234 Irving St, San Francisco, CA", puresScore: 22, tier: "1A", category: "Professional Surfer", revenue: "$85K", status: "New Lead", lastContact: "2024-01-15", notes: "Sponsored athlete, high-end gear needs"},
+            {name: "Sarah Martinez", email: "sarah.martinez@gmail.com", phone: "(415) 555-0124", address: "5678 Balboa St, San Francisco, CA", puresScore: 19, tier: "1B", category: "Surf Instructor", revenue: "$52K", status: "In Progress", lastContact: "2024-01-10", notes: "Teaches at Ocean Beach, bulk purchase potential"},
+            {name: "David Kim", email: "d.kim@techcorp.com", phone: "(415) 555-0125", address: "910 Geary Blvd, San Francisco, CA", puresScore: 18, tier: "1B", category: "Tech Professional", revenue: "$150K", status: "Warm Lead", lastContact: "2024-01-08", notes: "New to surfing, premium budget"},
+            {name: "Jennifer Walsh", email: "jen.walsh@hospital.org", phone: "(415) 555-0126", address: "2468 Clement St, San Francisco, CA", puresScore: 16, tier: "1C", category: "Healthcare", revenue: "$78K", status: "Follow-up", lastContact: "2024-01-05", notes: "Weekend warrior, wetsuit focus"},
+            {name: "Carlos Rodriguez", email: "carlos.r@school.edu", phone: "(415) 555-0127", address: "1357 Taraval St, San Francisco, CA", puresScore: 15, tier: "1C", category: "Education", revenue: "$45K", status: "New Lead", lastContact: "2024-01-12", notes: "Skate instructor, needs safety gear"},
+            {name: "Lisa Thompson", email: "lisa.t@hotel.com", phone: "(415) 555-0128", address: "3691 Noriega St, San Francisco, CA", puresScore: 20, tier: "1A", category: "Hospitality", revenue: "$95K", status: "Hot Lead", lastContact: "2024-01-14", notes: "Hotel manager, corporate purchases"},
+            {name: "Michael O'Brien", email: "mike.obrien@realty.com", phone: "(415) 555-0129", address: "802 Vicente St, San Francisco, CA", puresScore: 17, tier: "1B", category: "Real Estate", revenue: "$120K", status: "Contacted", lastContact: "2024-01-09", notes: "Longboard enthusiast, vintage style"},
+            {name: "Amanda Foster", email: "a.foster@bank.com", phone: "(415) 555-0130", address: "456 Santiago St, San Francisco, CA", puresScore: 21, tier: "1A", category: "Finance", revenue: "$180K", status: "Qualified", lastContact: "2024-01-11", notes: "High-end board collector"},
+            {name: "Jason Lee", email: "jason.lee@startup.io", phone: "(415) 555-0131", address: "789 Ulloa St, San Francisco, CA", puresScore: 14, tier: "1C", category: "Tech Professional", revenue: "$68K", status: "New Lead", lastContact: "2024-01-07", notes: "Beginner surfer, complete setup needed"},
+            {name: "Rachel Green", email: "rachel.g@clinic.com", phone: "(415) 555-0132", address: "1122 Wawona St, San Francisco, CA", puresScore: 19, tier: "1B", category: "Healthcare", revenue: "$89K", status: "Warm Lead", lastContact: "2024-01-13", notes: "Yoga instructor, SUP interest"},
+            {name: "Brandon Smith", email: "brandon.smith@gmail.com", phone: "(415) 555-0133", address: "567 Quintara St, San Francisco, CA", puresScore: 23, tier: "1A", category: "Professional Surfer", revenue: "$110K", status: "Hot Lead", lastContact: "2024-01-16", notes: "Pro circuit, sponsorship opportunity"},
+            {name: "Michelle Davis", email: "m.davis@school.org", phone: "(415) 555-0134", address: "234 Rivera St, San Francisco, CA", puresScore: 16, tier: "1C", category: "Education", revenue: "$55K", status: "Follow-up", lastContact: "2024-01-06", notes: "PE teacher, group purchases"},
+            {name: "Robert Taylor", email: "rob.taylor@restaurant.com", phone: "(415) 555-0135", address: "890 Ortega St, San Francisco, CA", puresScore: 18, tier: "1B", category: "Hospitality", revenue: "$72K", status: "In Progress", lastContact: "2024-01-09", notes: "Restaurant owner, weekend surfer"},
+            {name: "Kelly Anderson", email: "kelly.a@property.com", phone: "(415) 555-0136", address: "345 Moraga St, San Francisco, CA", puresScore: 20, tier: "1A", category: "Real Estate", revenue: "$145K", status: "Qualified", lastContact: "2024-01-12", notes: "Luxury property agent, image conscious"},
+            {name: "Steven Wilson", email: "steve.w@bank.net", phone: "(415) 555-0137", address: "678 Lawton St, San Francisco, CA", puresScore: 17, tier: "1B", category: "Finance", revenue: "$98K", status: "Contacted", lastContact: "2024-01-08", notes: "Investment banker, performance boards"},
+            {name: "Nancy Johnson", email: "nancy.j@tech.com", phone: "(415) 555-0138", address: "123 Kirkham St, San Francisco, CA", puresScore: 15, tier: "1C", category: "Tech Professional", revenue: "$82K", status: "New Lead", lastContact: "2024-01-14", notes: "Software engineer, eco-friendly gear"},
+            {name: "Peter Brown", email: "peter.brown@hospital.com", phone: "(415) 555-0139", address: "456 Judah St, San Francisco, CA", puresScore: 19, tier: "1B", category: "Healthcare", revenue: "$105K", status: "Warm Lead", lastContact: "2024-01-10", notes: "Surgeon, stress relief surfing"},
+            {name: "Diana Clark", email: "diana.c@hotel.org", phone: "(415) 555-0140", address: "789 Irving St, San Francisco, CA", puresScore: 22, tier: "1A", category: "Hospitality", revenue: "$88K", status: "Hot Lead", lastContact: "2024-01-15", notes: "Event coordinator, team building"},
+            {name: "Chris Evans", email: "chris.evans@school.com", phone: "(415) 555-0141", address: "234 Hugo St, San Francisco, CA", puresScore: 14, tier: "1C", category: "Education", revenue: "$48K", status: "Follow-up", lastContact: "2024-01-05", notes: "High school coach, team discounts"},
+            {name: "Laura Miller", email: "laura.m@realty.org", phone: "(415) 555-0142", address: "567 Greenwich St, San Francisco, CA", puresScore: 21, tier: "1A", category: "Real Estate", revenue: "$165K", status: "Qualified", lastContact: "2024-01-13", notes: "Commercial real estate, networking"},
+            {name: "Thomas Garcia", email: "tom.garcia@startup.com", phone: "(415) 555-0143", address: "890 Fulton St, San Francisco, CA", puresScore: 16, tier: "1C", category: "Tech Professional", revenue: "$75K", status: "New Lead", lastContact: "2024-01-07", notes: "Startup founder, lifestyle brand"},
+            {name: "Susan Martinez", email: "susan.m@clinic.org", phone: "(415) 555-0144", address: "345 Ellis St, San Francisco, CA", puresScore: 18, tier: "1B", category: "Healthcare", revenue: "$92K", status: "Contacted", lastContact: "2024-01-11", notes: "Physical therapist, rehab focus"},
+            {name: "Andrew Wilson", email: "andrew.w@restaurant.net", phone: "(415) 555-0145", address: "678 Eddy St, San Francisco, CA", puresScore: 17, tier: "1B", category: "Hospitality", revenue: "$65K", status: "In Progress", lastContact: "2024-01-09", notes: "Chef, early morning sessions"},
+            {name: "Maria Rodriguez", email: "maria.r@bank.com", phone: "(415) 555-0146", address: "123 Turk St, San Francisco, CA", puresScore: 20, tier: "1A", category: "Finance", revenue: "$132K", status: "Hot Lead", lastContact: "2024-01-14", notes: "Financial advisor, client gifts"},
+            {name: "Jonathan Lee", email: "jon.lee@school.edu", phone: "(415) 555-0147", address: "456 Golden Gate Ave, San Francisco, CA", puresScore: 15, tier: "1C", category: "Education", revenue: "$52K", status: "Follow-up", lastContact: "2024-01-06", notes: "University professor, research interest"},
+            {name: "Elizabeth Smith", email: "liz.smith@property.com", phone: "(415) 555-0148", address: "789 McAllister St, San Francisco, CA", puresScore: 19, tier: "1B", category: "Real Estate", revenue: "$118K", status: "Warm Lead", lastContact: "2024-01-12", notes: "Property manager, bulk wetsuit orders"},
+            {name: "Kevin Davis", email: "kevin.d@tech.net", phone: "(415) 555-0149", address: "234 Grove St, San Francisco, CA", puresScore: 18, tier: "1B", category: "Tech Professional", revenue: "$95K", status: "Contacted", lastContact: "2024-01-08", notes: "Product manager, team outings"},
+            {name: "Amy Johnson", email: "amy.j@hospital.org", phone: "(415) 555-0150", address: "567 Hayes St, San Francisco, CA", puresScore: 16, tier: "1C", category: "Healthcare", revenue: "$78K", status: "New Lead", lastContact: "2024-01-15", notes: "Nurse, work-life balance"},
+            {name: "Daniel Brown", email: "daniel.b@hotel.com", phone: "(415) 555-0151", address: "890 Fell St, San Francisco, CA", puresScore: 22, tier: "1A", category: "Hospitality", revenue: "$87K", status: "Qualified", lastContact: "2024-01-10", notes: "Tourism director, promotional gear"},
+            {name: "Catherine White", email: "cat.white@startup.io", phone: "(415) 555-0152", address: "345 Oak St, San Francisco, CA", puresScore: 17, tier: "1B", category: "Tech Professional", revenue: "$88K", status: "In Progress", lastContact: "2024-01-13", notes: "Marketing exec, brand partnerships"},
+            {name: "Ryan Thompson", email: "ryan.t@school.com", phone: "(415) 555-0153", address: "678 Page St, San Francisco, CA", puresScore: 14, tier: "1C", category: "Education", revenue: "$46K", status: "Follow-up", lastContact: "2024-01-05", notes: "Art teacher, creative boards"},
+            {name: "Patricia Garcia", email: "patricia.g@realty.net", phone: "(415) 555-0154", address: "123 Haight St, San Francisco, CA", puresScore: 21, tier: "1A", category: "Real Estate", revenue: "$155K", status: "Hot Lead", lastContact: "2024-01-14", notes: "Luxury homes, high-end clientele"},
+            {name: "James Martinez", email: "james.m@bank.org", phone: "(415) 555-0155", address: "456 Fillmore St, San Francisco, CA", puresScore: 19, tier: "1B", category: "Finance", revenue: "$112K", status: "Warm Lead", lastContact: "2024-01-11", notes: "Mortgage broker, weekend warrior"},
+            {name: "Jennifer Wilson", email: "jen.w@clinic.com", phone: "(415) 555-0156", address: "789 Divisadero St, San Francisco, CA", puresScore: 18, tier: "1B", category: "Healthcare", revenue: "$85K", status: "Contacted", lastContact: "2024-01-09", notes: "Dentist, family activities"},
+            {name: "Mark Anderson", email: "mark.a@restaurant.com", phone: "(415) 555-0157", address: "234 Broderick St, San Francisco, CA", puresScore: 16, tier: "1C", category: "Hospitality", revenue: "$68K", status: "New Lead", lastContact: "2024-01-07", notes: "Bartender, longboard style"},
+            {name: "Sarah Davis", email: "sarah.d@tech.com", phone: "(415) 555-0158", address: "567 Scott St, San Francisco, CA", puresScore: 20, tier: "1A", category: "Tech Professional", revenue: "$140K", status: "Qualified", lastContact: "2024-01-12", notes: "Tech exec, performance gear"},
+            {name: "Paul Johnson", email: "paul.j@school.edu", phone: "(415) 555-0159", address: "890 Pierce St, San Francisco, CA", puresScore: 15, tier: "1C", category: "Education", revenue: "$51K", status: "Follow-up", lastContact: "2024-01-06", notes: "Librarian, quiet beaches"},
+            {name: "Linda Brown", email: "linda.b@property.org", phone: "(415) 555-0160", address: "345 Steiner St, San Francisco, CA", puresScore: 19, tier: "1B", category: "Real Estate", revenue: "$125K", status: "Warm Lead", lastContact: "2024-01-13", notes: "Property developer, team gear"},
+            {name: "Robert Clark", email: "rob.c@hospital.net", phone: "(415) 555-0161", address: "678 Buchanan St, San Francisco, CA", puresScore: 17, tier: "1B", category: "Healthcare", revenue: "$98K", status: "In Progress", lastContact: "2024-01-08", notes: "Radiologist, stress relief"},
+            {name: "Mary Evans", email: "mary.e@hotel.org", phone: "(415) 555-0162", address: "123 Webster St, San Francisco, CA", puresScore: 22, tier: "1A", category: "Hospitality", revenue: "$89K", status: "Hot Lead", lastContact: "2024-01-15", notes: "Conference manager, corporate events"},
+            {name: "William Garcia", email: "will.g@startup.com", phone: "(415) 555-0163", address: "456 Laguna St, San Francisco, CA", puresScore: 18, tier: "1B", category: "Tech Professional", revenue: "$92K", status: "Contacted", lastContact: "2024-01-10", notes: "UX designer, aesthetic focus"},
+            {name: "Nancy Martinez", email: "nancy.m@bank.com", phone: "(415) 555-0164", address: "789 Octavia St, San Francisco, CA", puresScore: 16, tier: "1C", category: "Finance", revenue: "$76K", status: "New Lead", lastContact: "2024-01-14", notes: "Bank teller, budget conscious"},
+            {name: "Charles Wilson", email: "charles.w@school.com", phone: "(415) 555-0165", address: "234 Gough St, San Francisco, CA", puresScore: 21, tier: "1A", category: "Education", revenue: "$85K", status: "Qualified", lastContact: "2024-01-11", notes: "Principal, student programs"},
+            {name: "Helen Rodriguez", email: "helen.r@clinic.org", phone: "(415) 555-0166", address: "567 Franklin St, San Francisco, CA", puresScore: 19, tier: "1B", category: "Healthcare", revenue: "$94K", status: "Warm Lead", lastContact: "2024-01-09", notes: "Pharmacist, health-conscious"},
+            {name: "Joseph Smith", email: "joe.smith@realty.com", phone: "(415) 555-0167", address: "890 Van Ness Ave, San Francisco, CA", puresScore: 17, tier: "1B", category: "Real Estate", revenue: "$108K", status: "Follow-up", lastContact: "2024-01-07", notes: "Commercial agent, networking"},
+            {name: "Carol Davis", email: "carol.d@restaurant.net", phone: "(415) 555-0168", address: "345 Polk St, San Francisco, CA", puresScore: 15, tier: "1C", category: "Hospitality", revenue: "$58K", status: "New Lead", lastContact: "2024-01-12", notes: "Server, part-time surfer"},
+            {name: "Edward Johnson", email: "ed.j@tech.org", phone: "(415) 555-0169", address: "678 Larkin St, San Francisco, CA", puresScore: 20, tier: "1A", category: "Tech Professional", revenue: "$135K", status: "Hot Lead", lastContact: "2024-01-13", notes: "Engineering manager, premium quality"},
+            {name: "Betty Brown", email: "betty.b@hospital.com", phone: "(415) 555-0170", address: "123 Hyde St, San Francisco, CA", puresScore: 18, tier: "1B", category: "Healthcare", revenue: "$87K", status: "In Progress", lastContact: "2024-01-08", notes: "Therapist, mindfulness approach"},
+            {name: "Frank Martinez", email: "frank.m@hotel.edu", phone: "(415) 555-0171", address: "456 Leavenworth St, San Francisco, CA", puresScore: 14, tier: "1C", category: "Education", revenue: "$49K", status: "Follow-up", lastContact: "2024-01-06", notes: "Maintenance, practical gear"},
+            {name: "Dorothy Wilson", email: "dot.w@property.com", phone: "(415) 555-0172", address: "789 Jones St, San Francisco, CA", puresScore: 23, tier: "1A", category: "Real Estate", revenue: "$175K", status: "Qualified", lastContact: "2024-01-15", notes: "Top agent, luxury focus"}
+        ];
+
+        let currentSort = {column: -1, direction: 'asc'};
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            populateTable();
+            setupScoreSliders();
+        });
+
+        // Populate the client table
+        function populateTable() {
+            const tbody = document.getElementById('clientTableBody');
+            tbody.innerHTML = '';
+            
+            clientData.forEach((client, index) => {
+                const row = tbody.insertRow();
+                row.className = `tier-${client.tier.toLowerCase()}`;
+                
+                const scoreClass = client.puresScore >= 20 ? 'score-high' : client.puresScore >= 16 ? 'score-medium' : 'score-low';
+                
+                row.innerHTML = `
+                    <td>${client.name}</td>
+                    <td>${client.email}</td>
+                    <td>${client.phone}</td>
+                    <td>${client.address}</td>
+                    <td><span class="score-badge ${scoreClass}">${client.puresScore}/25</span></td>
+                    <td>Tier ${client.tier}</td>
+                    <td>${client.category}</td>
+                    <td>${client.revenue}</td>
+                    <td>${client.status}</td>
+                    <td>
+                        <button class="btn btn-small" onclick="contactClient('${client.email}', '${client.name}', '${client.category}')">Email</button>
+                        <button class="btn btn-small btn-secondary" onclick="callClient('${client.phone}')">Call</button>
+                    </td>
+                `;
+            });
+        }
+
+        // Setup score sliders
+        function setupScoreSliders() {
+            const sliders = ['profitability', 'urgency', 'reachability', 'engagement', 'sustainability'];
+            
+            sliders.forEach(slider => {
+                document.getElementById(slider).addEventListener('input', function() {
+                    document.getElementById(slider + 'Value').textContent = this.value;
+                    updateTotalScore();
+                });
+            });
+        }
+
+        // Update total P.U.R.E.S. score
+        function updateTotalScore() {
+            const profitability = parseInt(document.getElementById('profitability').value);
+            const urgency = parseInt(document.getElementById('urgency').value);
+            const reachability = parseInt(document.getElementById('reachability').value);
+            const engagement = parseInt(document.getElementById('engagement').value);
+            const sustainability = parseInt(document.getElementById('sustainability').value);
+            
+            const total = profitability + urgency + reachability + engagement + sustainability;
+            document.getElementById('totalScore').textContent = total;
+            
+            let tier, classification;
+            if (total >= 20) {
+                tier = '1A';
+                classification = '1A - Premium';
+            } else if (total >= 16) {
+                tier = '1B';
+                classification = '1B - High-Value';
+            } else {
+                tier = '1C';
+                classification = '1C - Qualified';
+            }
+            
+            document.getElementById('tierClassification').textContent = classification;
+        }
+
+        // Filter table based on search and filters
+        function filterTable() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const tierFilter = document.getElementById('tierFilter').value;
+            const industryFilter = document.getElementById('industryFilter').value;
+            
+            const tbody = document.getElementById('clientTableBody');
+            const rows = tbody.getElementsByTagName('tr');
+            
+            for (let i = 0; i < rows.length; i++) {
+                const row = rows[i];
+                const cells = row.getElementsByTagName('td');
+                
+                let showRow = true;
+                
+                // Search filter
+                if (searchTerm) {
+                    const searchText = (cells[0].textContent + cells[1].textContent + cells[6].textContent).toLowerCase();
+                    if (!searchText.includes(searchTerm)) {
+                        showRow = false;
+                    }
+                }
+                
+                // Tier filter
+                if (tierFilter && !cells[5].textContent.includes(tierFilter)) {
+                    showRow = false;
+                }
+                
+                // Industry filter
+                if (industryFilter && cells[6].textContent !== industryFilter) {
+                    showRow = false;
+                }
+                
+                row.style.display = showRow ? '' : 'none';
+            }
+        }
+
+        // Sort table by column
+        function sortTable(columnIndex) {
+            const table = document.getElementById('clientTable');
+            const tbody = table.getElementsByTagName('tbody')[0];
+            const rows = Array.from(tbody.getElementsByTagName('tr'));
+            
+            const direction = (currentSort.column === columnIndex && currentSort.direction === 'asc') ? 'desc' : 'asc';
+            currentSort = {column: columnIndex, direction};
+            
+            rows.sort((a, b) => {
+                const aValue = a.getElementsByTagName('td')[columnIndex].textContent.trim();
+                const bValue = b.getElementsByTagName('td')[columnIndex].textContent.trim();
+                
+                let comparison = 0;
+                if (columnIndex === 4) { // P.U.R.E.S. Score column
+                    const aScore = parseInt(aValue.split('/')[0]);
+                    const bScore = parseInt(bValue.split('/')[0]);
+                    comparison = aScore - bScore;
+                } else {
+                    comparison = aValue.localeCompare(bValue);
+                }
+                
+                return direction === 'asc' ? comparison : -comparison;
+            });
+            
+            // Re-append sorted rows
+            rows.forEach(row => tbody.appendChild(row));
+        }
+
+        // Contact client via email
+        function contactClient(email, name, category) {
+            const emailContent = generateEmailContent(name, category);
+            
+            document.getElementById('emailContent').innerHTML = `
+                <div style="margin-bottom: 1rem;">
+                    <strong>To:</strong> ${email}<br>
+                    <strong>Subject:</strong> Exclusive Ocean Beach Surf & Skate Gear - Perfect for ${category}s
+                </div>
+                <div style="background: #2a2a2a; padding: 1rem; border-radius: 6px;">
+                    ${emailContent}
+                </div>
+            `;
+            
+            document.getElementById('emailModal').style.display = 'block';
+        }
+
+        // Generate personalized email content
+        function generateEmailContent(name, category) {
+            const baseContent = `
+                <p>Hey ${name},</p>
+                <p>Hope you're catching some great waves! I'm reaching out from Aqua Surf Shop on Judah Street - San Francisco's premier surf and skate destination since 2002.</p>
+            `;
+            
+            let personalizedContent = '';
+            
+            switch(category) {
+                case 'Professional Surfer':
+                    personalizedContent = `
+                        <p>As a professional surfer, you know that having the right gear can make all the difference in your performance. We carry the most trusted brands in the business and work with many sponsored athletes to dial in their perfect setup.</p>
+                        <p><strong>What we offer pros like you:</strong></p>
+                        <ul>
+                            <li>Latest high-performance boards from top shapers</li>
+                            <li>Professional-grade wetsuits with custom fitting</li>
+                            <li>Exclusive access to new releases and pro models</li>
+                            <li>Sponsorship and partnership opportunities</li>
+                        </ul>
+                    `;
+                    break;
+                case 'Surf Instructor':
+                    personalizedContent = `
+                        <p>Teaching others the stoke of surfing is an awesome calling! We love supporting local instructors and offer special rates for professionals who are sharing their knowledge with the community.</p>
+                        <p><strong>Instructor Benefits:</strong></p>
+                        <ul>
+                            <li>Bulk pricing on student gear and rentals</li>
+                            <li>Durable, beginner-friendly equipment</li>
+                            <li>Safety gear and first aid supplies</li>
+                            <li>Referral program for your students</li>
+                        </ul>
+                    `;
+                    break;
+                case 'Tech Professional':
+                    personalizedContent = `
+                        <p>We know the tech world can be demanding, and surfing is the perfect way to disconnect and recharge. Whether you're new to surfing or looking to upgrade your setup, our no-pressure staff will help you find exactly what you need.</p>
+                        <p><strong>Perfect for busy professionals:</strong></p>
+                        <ul>
+                            <li>Quality gear that performs in SF's unique conditions</li>
+                            <li>Expert advice to maximize your limited surf time</li>
+                            <li>Premium wetsuits for year-round comfort</li>
+                            <li>Convenient location near Ocean Beach</li>
+                        </ul>
+                    `;
+                    break;
+                default:
+                    personalizedContent = `
+                        <p>Whether you're new to surfing, looking to upgrade your gear, or just love the beach lifestyle, we've got everything you need to make the most of San Francisco's incredible surf scene.</p>
+                        <p><strong>What makes us different:</strong></p>
+                        <ul>
+                            <li>Expert local knowledge of Ocean Beach conditions</li>
+                            <li>No-pressure sales approach - we want you to get the right gear</li>
+                            <li>Trusted brands and quality equipment</li>
+                            <li>Part of the local surf community since 2002</li>
+                        </ul>
+                    `;
+            }
+            
+            return baseContent + personalizedContent + `
+                <p>Stop by our shop at 3847 Judah Street (just blocks from the beach) and let's talk story about what would work best for you. We're open daily 10AM-6PM, and our crew is always stoked to help fellow ocean lovers find their perfect setup.</p>
+                <p>Feel free to check out the current surf conditions on our site, and maybe we'll see you out in the lineup soon!</p>
+                <p>Aloha,<br>
+                The Aqua Surf Shop Crew</p>
+                <p><em>P.S. - Mention this email and get 10% off your first purchase!</em></p>
+            `;
+        }
+
+        // Call client
+        function callClient(phone) {
+            window.open(`tel:${phone}`);
+        }
+
+        // Send email
+        function sendEmail() {
+            alert('Email functionality would integrate with your email client or marketing platform.');
+            closeModal();
+        }
+
+        // Close modal
+        function closeModal() {
+            document.getElementById('emailModal').style.display = 'none';
+        }
+
+        // Show tab
+        function showTab(tabName) {
+            // Hide all tab contents
+            const tabContents = document.getElementsByClassName('tab-content');
+            for (let i = 0; i < tabContents.length; i++) {
+                tabContents[i].classList.remove('active');
+            }
+            
+            // Remove active class from all tab buttons
+            const tabButtons = document.getElementsByClassName('tab-button');
+            for (let i = 0; i < tabButtons.length; i++) {
+                tabButtons[i].classList.remove('active');
+            }
+            
+            // Show selected tab content
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked tab button
+            event.target.classList.add('active');
+        }
+
+        // Export data to CSV
+        function exportData() {
+            const table = document.getElementById('clientTable');
+            const rows = table.getElementsByTagName('tr');
+            let csv = '';
+            
+            // Add headers
+            const headers = Array.from(rows[0].getElementsByTagName('th'))
+                .slice(0, -1) // Exclude Actions column
+                .map(th => th.textContent);
+            csv += headers.join(',') + '\n';
+            
+            // Add data rows
+            for (let i = 1; i < rows.length; i++) {
+                if (rows[i].style.display !== 'none') {
+                    const cells = Array.from(rows[i].getElementsByTagName('td'))
+                        .slice(0, -1) // Exclude Actions column
+                        .map(td => `"${td.textContent.replace(/"/g, '""')}"`);
+                    csv += cells.join(',') + '\n';
+                }
+            }
+            
+            // Download CSV
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.setAttribute('hidden', '');
+            a.setAttribute('href', url);
+            a.setAttribute('download', 'aqua-surf-shop-clients.csv');
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('emailModal');
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>

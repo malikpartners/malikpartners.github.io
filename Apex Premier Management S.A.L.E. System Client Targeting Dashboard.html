@@ -1,0 +1,1722 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apex Premier Management - S.A.L.E. System Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #000000;
+            color: #ffffff;
+            line-height: 1.6;
+        }
+
+        .header {
+            background: #CF2030;
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 10px rgba(207, 32, 48, 0.3);
+        }
+
+        .header img {
+            height: 50px;
+        }
+
+        .header h1 {
+            color: #ffffff;
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .dashboard-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding: 2rem;
+            background: linear-gradient(135deg, #CF2030, #a01828);
+            border-radius: 10px;
+        }
+
+        .dashboard-header h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .dashboard-header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .business-info {
+            background: #1a1a1a;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            border: 1px solid #CF2030;
+        }
+
+        .tabs {
+            display: flex;
+            margin-bottom: 2rem;
+            background: #1a1a1a;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 1rem;
+            background: #333;
+            border: none;
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        .tab.active {
+            background: #CF2030;
+        }
+
+        .tab:hover {
+            background: #CF2030;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .search-box, .filter-select {
+            padding: 0.75rem;
+            border: 1px solid #CF2030;
+            border-radius: 5px;
+            background: #1a1a1a;
+            color: #fff;
+            font-size: 1rem;
+        }
+
+        .search-box::placeholder {
+            color: #ccc;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            background: #CF2030;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            background: #a01828;
+            transform: translateY(-2px);
+        }
+
+        .btn-small {
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+        }
+
+        .table-container {
+            background: #1a1a1a;
+            border-radius: 8px;
+            overflow-x: auto;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 1200px;
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #333;
+        }
+
+        th {
+            background: #CF2030;
+            font-weight: bold;
+            cursor: pointer;
+            user-select: none;
+            position: relative;
+        }
+
+        th:hover {
+            background: #a01828;
+        }
+
+        th::after {
+            content: ' ↕️';
+            font-size: 0.8rem;
+            opacity: 0.6;
+        }
+
+        tr:hover {
+            background: #2a2a2a;
+        }
+
+        .tier-1a { background-color: #28a745 !important; }
+        .tier-1b { background-color: #ffc107 !important; color: #000; }
+        .tier-1c { background-color: #17a2b8 !important; }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+        }
+
+        .modal-content {
+            background-color: #1a1a1a;
+            margin: 5% auto;
+            padding: 2rem;
+            border: 1px solid #CF2030;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 600px;
+            color: #fff;
+        }
+
+        .close {
+            color: #CF2030;
+            float: right;
+            font-size: 2rem;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            opacity: 0.7;
+        }
+
+        .scoring-form {
+            display: grid;
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .score-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background: #2a2a2a;
+            border-radius: 5px;
+        }
+
+        .score-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .score-btn {
+            width: 40px;
+            height: 40px;
+            border: 1px solid #CF2030;
+            background: #333;
+            color: #fff;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .score-btn.selected {
+            background: #CF2030;
+        }
+
+        .footer {
+            margin-top: 3rem;
+            text-align: center;
+            padding: 2rem;
+            background: #1a1a1a;
+            border-top: 1px solid #CF2030;
+        }
+
+        .footer img {
+            height: 30px;
+            opacity: 0.7;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: #1a1a1a;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid #CF2030;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #CF2030;
+        }
+
+        .email-template {
+            width: 100%;
+            min-height: 200px;
+            padding: 1rem;
+            background: #2a2a2a;
+            border: 1px solid #CF2030;
+            border-radius: 5px;
+            color: #fff;
+            font-family: inherit;
+            resize: vertical;
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .controls {
+                flex-direction: column;
+            }
+
+            .tabs {
+                flex-direction: column;
+            }
+
+            table {
+                font-size: 0.9rem;
+            }
+
+            th, td {
+                padding: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports" />
+        <h1>S.A.L.E. System Dashboard</h1>
+    </header>
+
+    <div class="container">
+        <div class="dashboard-header">
+            <h2>Apex Premier Management</h2>
+            <p>Direct Marketing Client Targeting & Outreach System</p>
+        </div>
+
+        <div class="business-info">
+            <h3>Business Profile</h3>
+            <p><strong>Company:</strong> Apex Premier Management</p>
+            <p><strong>Location:</strong> 2350 W Shaw Ave, Suite 142, Fresno, CA 93711</p>
+            <p><strong>Industry:</strong> Direct Marketing & Brand Representation</p>
+            <p><strong>Specialization:</strong> Telecommunications, Customer Acquisition, Market Expansion</p>
+            <p><strong>Service Area:</strong> California (Primary focus: Central Valley)</p>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number" id="totalClients">50</div>
+                <div>Total Prospects</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="tier1aClients">12</div>
+                <div>Tier 1A (Premium)</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="tier1bClients">18</div>
+                <div>Tier 1B (High-Value)</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="tier1cClients">20</div>
+                <div>Tier 1C (Qualified)</div>
+            </div>
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('sourcing')">S.OURCING</button>
+            <button class="tab" onclick="showTab('assessing')">A.SSESSING</button>
+            <button class="tab" onclick="showTab('listening')">L.ISTENING</button>
+            <button class="tab" onclick="showTab('empowering')">E.MPOWERING</button>
+        </div>
+
+        <div id="sourcing" class="tab-content active">
+            <h3>P.U.R.E.S. Client Database</h3>
+            
+            <div class="controls">
+                <input type="text" id="searchBox" class="search-box" placeholder="Search clients..." oninput="filterTable()">
+                <select id="tierFilter" class="filter-select" onchange="filterTable()">
+                    <option value="">All Tiers</option>
+                    <option value="1A">Tier 1A (Premium)</option>
+                    <option value="1B">Tier 1B (High-Value)</option>
+                    <option value="1C">Tier 1C (Qualified)</option>
+                </select>
+                <select id="industryFilter" class="filter-select" onchange="filterTable()">
+                    <option value="">All Industries</option>
+                    <option value="Technology">Technology</option>
+                    <option value="Healthcare">Healthcare</option>
+                    <option value="Finance">Finance</option>
+                    <option value="Retail">Retail</option>
+                    <option value="Manufacturing">Manufacturing</option>
+                    <option value="Real Estate">Real Estate</option>
+                </select>
+                <button class="btn" onclick="exportData()">Export CSV</button>
+                <button class="btn" onclick="addNewClient()">Add Client</button>
+            </div>
+
+            <div class="table-container">
+                <table id="clientTable">
+                    <thead>
+                        <tr>
+                            <th onclick="sortTable(0)">Client Name</th>
+                            <th onclick="sortTable(1)">Email</th>
+                            <th onclick="sortTable(2)">Phone</th>
+                            <th onclick="sortTable(3)">Address</th>
+                            <th onclick="sortTable(4)">P.U.R.E.S Score</th>
+                            <th onclick="sortTable(5)">Tier</th>
+                            <th onclick="sortTable(6)">Industry</th>
+                            <th onclick="sortTable(7)">Revenue Est.</th>
+                            <th onclick="sortTable(8)">Contact Status</th>
+                            <th onclick="sortTable(9)">Last Contact</th>
+                            <th onclick="sortTable(10)">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="clientTableBody">
+                        <!-- Client data will be populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="assessing" class="tab-content">
+            <h3>Buying Pattern Analysis</h3>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">35%</div>
+                    <div>Analytical Buyers</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">25%</div>
+                    <div>Relationship Buyers</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">25%</div>
+                    <div>Efficiency Buyers</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">15%</div>
+                    <div>Innovation Buyers</div>
+                </div>
+            </div>
+            <p>Assessment tools help identify decision timelines, stakeholder mapping, and value proposition alignment for each client type.</p>
+        </div>
+
+        <div id="listening" class="tab-content">
+            <h3>Feedback Integration System</h3>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">87%</div>
+                    <div>Response Rate</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">4.2/5</div>
+                    <div>Avg. Satisfaction</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">15</div>
+                    <div>Active Campaigns</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">92%</div>
+                    <div>Issue Resolution</div>
+                </div>
+            </div>
+            <p>Comprehensive feedback tracking from pre-sale through post-sale satisfaction monitoring.</p>
+        </div>
+
+        <div id="empowering" class="tab-content">
+            <h3>Referral Strategy Dashboard</h3>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">28</div>
+                    <div>Active Referrals</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">$45,000</div>
+                    <div>Referral Value</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">15</div>
+                    <div>Success Stories</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">85%</div>
+                    <div>Advocacy Rate</div>
+                </div>
+            </div>
+            <p>Manage referral rewards, track success stories, and plan co-marketing opportunities.</p>
+        </div>
+    </div>
+
+    <!-- P.U.R.E.S. Scoring Modal -->
+    <div id="scoreModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h3>P.U.R.E.S. Client Scoring</h3>
+            <div class="scoring-form">
+                <div class="score-item">
+                    <span><strong>Profitability:</strong> Annual revenue threshold and budget capacity</span>
+                    <div class="score-buttons" id="profitability">
+                        <button class="score-btn" onclick="setScore('profitability', 1)">1</button>
+                        <button class="score-btn" onclick="setScore('profitability', 2)">2</button>
+                        <button class="score-btn" onclick="setScore('profitability', 3)">3</button>
+                        <button class="score-btn" onclick="setScore('profitability', 4)">4</button>
+                        <button class="score-btn" onclick="setScore('profitability', 5)">5</button>
+                    </div>
+                </div>
+                <div class="score-item">
+                    <span><strong>Urgency:</strong> Active pain points requiring immediate solutions</span>
+                    <div class="score-buttons" id="urgency">
+                        <button class="score-btn" onclick="setScore('urgency', 1)">1</button>
+                        <button class="score-btn" onclick="setScore('urgency', 2)">2</button>
+                        <button class="score-btn" onclick="setScore('urgency', 3)">3</button>
+                        <button class="score-btn" onclick="setScore('urgency', 4)">4</button>
+                        <button class="score-btn" onclick="setScore('urgency', 5)">5</button>
+                    </div>
+                </div>
+                <div class="score-item">
+                    <span><strong>Reachability:</strong> Accessible decision makers with clear contact paths</span>
+                    <div class="score-buttons" id="reachability">
+                        <button class="score-btn" onclick="setScore('reachability', 1)">1</button>
+                        <button class="score-btn" onclick="setScore('reachability', 2)">2</button>
+                        <button class="score-btn" onclick="setScore('reachability', 3)">3</button>
+                        <button class="score-btn" onclick="setScore('reachability', 4)">4</button>
+                        <button class="score-btn" onclick="setScore('reachability', 5)">5</button>
+                    </div>
+                </div>
+                <div class="score-item">
+                    <span><strong>Engagement:</strong> Openness to innovation and partnerships</span>
+                    <div class="score-buttons" id="engagement">
+                        <button class="score-btn" onclick="setScore('engagement', 1)">1</button>
+                        <button class="score-btn" onclick="setScore('engagement', 2)">2</button>
+                        <button class="score-btn" onclick="setScore('engagement', 3)">3</button>
+                        <button class="score-btn" onclick="setScore('engagement', 4)">4</button>
+                        <button class="score-btn" onclick="setScore('engagement', 5)">5</button>
+                    </div>
+                </div>
+                <div class="score-item">
+                    <span><strong>Sustainability:</strong> Long-term partnership potential with growth trajectory</span>
+                    <div class="score-buttons" id="sustainability">
+                        <button class="score-btn" onclick="setScore('sustainability', 1)">1</button>
+                        <button class="score-btn" onclick="setScore('sustainability', 2)">2</button>
+                        <button class="score-btn" onclick="setScore('sustainability', 3)">3</button>
+                        <button class="score-btn" onclick="setScore('sustainability', 4)">4</button>
+                        <button class="score-btn" onclick="setScore('sustainability', 5)">5</button>
+                    </div>
+                </div>
+            </div>
+            <button class="btn" onclick="saveScore()">Save Score</button>
+        </div>
+    </div>
+
+    <!-- Email Template Modal -->
+    <div id="emailModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeEmailModal()">&times;</span>
+            <h3>Email Outreach Template</h3>
+            <textarea id="emailTemplate" class="email-template" rows="12"></textarea>
+            <div style="margin-top: 1rem;">
+                <button class="btn" onclick="sendEmail()">Send Email</button>
+                <button class="btn" onclick="copyTemplate()">Copy Template</button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports" />
+        <p>© 2026 Apex Premier Management | S.A.L.E. System Dashboard</p>
+    </footer>
+
+    <script>
+        // Sample client data for Fresno, CA area
+        let clientData = [
+            {
+                name: "Sarah Johnson",
+                email: "sarah.johnson@techcorp.com",
+                phone: "559-123-4567",
+                address: "1250 N Van Ness Ave, Fresno, CA 93728",
+                puresScore: 4.2,
+                tier: "1A",
+                industry: "Technology",
+                revenue: "$2.5M",
+                status: "Prospect",
+                lastContact: "2024-01-15",
+                notes: "Decision maker for IT infrastructure"
+            },
+            {
+                name: "Michael Rodriguez",
+                email: "m.rodriguez@healthplus.com",
+                phone: "559-234-5678",
+                address: "2500 E Shaw Ave, Fresno, CA 93710",
+                puresScore: 3.8,
+                tier: "1B",
+                industry: "Healthcare",
+                revenue: "$1.8M",
+                status: "Qualified Lead",
+                lastContact: "2024-01-12",
+                notes: "Interested in patient engagement solutions"
+            },
+            {
+                name: "Jennifer Chen",
+                email: "j.chen@centralbank.com",
+                phone: "559-345-6789",
+                address: "4550 N First St, Fresno, CA 93726",
+                puresScore: 4.5,
+                tier: "1A",
+                industry: "Finance",
+                revenue: "$5.2M",
+                status: "Hot Lead",
+                lastContact: "2024-01-18",
+                notes: "Evaluating customer acquisition platforms"
+            },
+            {
+                name: "David Thompson",
+                email: "david.t@retailmax.com",
+                phone: "559-456-7890",
+                address: "1455 E Herndon Ave, Fresno, CA 93720",
+                puresScore: 3.2,
+                tier: "1C",
+                industry: "Retail",
+                revenue: "$950K",
+                status: "Cold Lead",
+                lastContact: "2023-12-20",
+                notes: "Small retail chain owner"
+            },
+            {
+                name: "Lisa Martinez",
+                email: "lisa.m@innovatemanufacturing.com",
+                phone: "559-567-8901",
+                address: "3200 W Shaw Ave, Fresno, CA 93711",
+                puresScore: 4.0,
+                tier: "1A",
+                industry: "Manufacturing",
+                revenue: "$3.1M",
+                status: "Qualified Lead",
+                lastContact: "2024-01-10",
+                notes: "Manufacturing efficiency focus"
+            },
+            {
+                name: "Robert Kim",
+                email: "robert.kim@propmanagement.com",
+                phone: "559-678-9012",
+                address: "5642 N Fresno St, Fresno, CA 93710",
+                puresScore: 3.6,
+                tier: "1B",
+                industry: "Real Estate",
+                revenue: "$1.4M",
+                status: "Prospect",
+                lastContact: "2024-01-08",
+                notes: "Property management services"
+            },
+            {
+                name: "Amanda Foster",
+                email: "a.foster@freshnotech.com",
+                phone: "559-789-0123",
+                address: "1015 Fulton St, Fresno, CA 93721",
+                puresScore: 4.3,
+                tier: "1A",
+                industry: "Technology",
+                revenue: "$2.8M",
+                status: "Hot Lead",
+                lastContact: "2024-01-16",
+                notes: "Software development firm"
+            },
+            {
+                name: "Carlos Mendez",
+                email: "carlos.mendez@valleyhealth.org",
+                phone: "559-890-1234",
+                address: "2823 Fresno St, Fresno, CA 93721",
+                puresScore: 3.9,
+                tier: "1B",
+                industry: "Healthcare",
+                revenue: "$2.2M",
+                status: "Qualified Lead",
+                lastContact: "2024-01-14",
+                notes: "Healthcare network administrator"
+            },
+            {
+                name: "Nicole Brown",
+                email: "nicole.b@fresnoinvestments.com",
+                phone: "559-901-2345",
+                address: "1111 Van Ness Ave, Fresno, CA 93721",
+                puresScore: 4.1,
+                tier: "1A",
+                industry: "Finance",
+                revenue: "$4.5M",
+                status: "Hot Lead",
+                lastContact: "2024-01-17",
+                notes: "Investment firm partner"
+            },
+            {
+                name: "Thomas Lee",
+                email: "thomas.lee@centralretail.com",
+                phone: "559-012-3456",
+                address: "6789 N Blackstone Ave, Fresno, CA 93710",
+                puresScore: 3.4,
+                tier: "1C",
+                industry: "Retail",
+                revenue: "$1.1M",
+                status: "Cold Lead",
+                lastContact: "2023-12-28",
+                notes: "Specialty retail stores"
+            },
+            {
+                name: "Rachel Green",
+                email: "r.green@agritech.com",
+                phone: "559-123-7890",
+                address: "4450 E Ashlan Ave, Fresno, CA 93726",
+                puresScore: 3.7,
+                tier: "1B",
+                industry: "Manufacturing",
+                revenue: "$1.6M",
+                status: "Prospect",
+                lastContact: "2024-01-05",
+                notes: "Agricultural technology"
+            },
+            {
+                name: "Kevin Wilson",
+                email: "kevin.w@wilsonproperties.com",
+                phone: "559-234-8901",
+                address: "2200 Tulare St, Fresno, CA 93721",
+                puresScore: 3.8,
+                tier: "1B",
+                industry: "Real Estate",
+                revenue: "$1.9M",
+                status: "Qualified Lead",
+                lastContact: "2024-01-11",
+                notes: "Commercial real estate"
+            },
+            {
+                name: "Stephanie Davis",
+                email: "s.davis@techsolutions.net",
+                phone: "559-345-9012",
+                address: "1820 M St, Fresno, CA 93721",
+                puresScore: 4.4,
+                tier: "1A",
+                industry: "Technology",
+                revenue: "$3.3M",
+                status: "Hot Lead",
+                lastContact: "2024-01-19",
+                notes: "IT consulting services"
+            },
+            {
+                name: "Anthony Garcia",
+                email: "anthony.g@valleymedical.com",
+                phone: "559-456-0123",
+                address: "5555 N Palm Ave, Fresno, CA 93704",
+                puresScore: 4.0,
+                tier: "1A",
+                industry: "Healthcare",
+                revenue: "$2.7M",
+                status: "Qualified Lead",
+                lastContact: "2024-01-13",
+                notes: "Medical practice group"
+            },
+            {
+                name: "Monica Patel",
+                email: "monica.p@creditunion.org",
+                phone: "559-567-1234",
+                address: "3100 E McKinley Ave, Fresno, CA 93703",
+                puresScore: 3.5,
+                tier: "1C",
+                industry: "Finance",
+                revenue: "$1.3M",
+                status: "Prospect",
+                lastContact: "2024-01-07",
+                notes: "Credit union manager"
+            },
+            {
+                name: "Brian Taylor",
+                email: "brian.t@fashionforward.com",
+                phone: "559-678-2345",
+                address: "1234 Shaw Ave, Fresno, CA 93711",
+                puresScore: 3.1,
+                tier: "1C",
+                industry: "Retail",
+                revenue: "$850K",
+                status: "Cold Lead",
+                lastContact: "2023-12-15",
+                notes: "Fashion retail chain"
+            },
+            {
+                name: "Ashley White",
+                email: "ashley.w@precisionmfg.com",
+                phone: "559-789-3456",
+                address: "4200 W Clinton Ave, Fresno, CA 93722",
+                puresScore: 3.9,
+                tier: "1B",
+                industry: "Manufacturing",
+                revenue: "$2.1M",
+                status: "Qualified Lead",
+                lastContact: "2024-01-09",
+                notes: "Precision manufacturing"
+            },
+            {
+                name: "Ryan Anderson",
+                email: "ryan.a@pinnaclepm.com",
+                phone: "559-890-4567",
+                address: "7890 N Fresno St, Fresno, CA 93720",
+                puresScore: 3.6,
+                tier: "1B",
+                industry: "Real Estate",
+                revenue: "$1.5M",
+                status: "Prospect",
+                lastContact: "2024-01-06",
+                notes: "Property management"
+            },
+            {
+                name: "Kelly Murphy",
+                email: "kelly.m@digialmarketing.com",
+                phone: "559-901-5678",
+                address: "2468 E Gettysburg Ave, Fresno, CA 93726",
+                puresScore: 4.2,
+                tier: "1A",
+                industry: "Technology",
+                revenue: "$2.4M",
+                status: "Hot Lead",
+                lastContact: "2024-01-18",
+                notes: "Digital marketing agency"
+            },
+            {
+                name: "Justin Clark",
+                email: "justin.c@specialtyhealth.com",
+                phone: "559-012-6789",
+                address: "1357 W Bullard Ave, Fresno, CA 93711",
+                puresScore: 3.8,
+                tier: "1B",
+                industry: "Healthcare",
+                revenue: "$1.7M",
+                status: "Qualified Lead",
+                lastContact: "2024-01-12",
+                notes: "Specialty medical clinic"
+            },
+            {
+                name: "Melissa Scott",
+                email: "melissa.s@communitybank.com",
+                phone: "559-123-4567",
+                address: "9876 N Cedar Ave, Fresno, CA 93720",
+                puresScore: 4.3,
+                tier: "1A",
+                industry: "Finance",
+                revenue: "$3.8M",
+                status: "Hot Lead",
+                lastContact: "2024-01-17",
+                notes: "Community bank president"
+            },
+            {
+                name: "Eric Johnson",
+                email: "eric.j@outdoorgear.com",
+                phone: "559-234-5678",
+                address: "5432 E Kings Canyon Rd, Fresno, CA 93727",
+                puresScore: 3.3,
+                tier: "1C",
+                industry: "Retail",
+                revenue: "$1.0M",
+                status: "Cold Lead",
+                lastContact: "2023-12-22",
+                notes: "Outdoor equipment retailer"
+            },
+            {
+                name: "Laura Martinez",
+                email: "laura.m@foodprocessing.com",
+                phone: "559-345-6789",
+                address: "6543 W Herndon Ave, Fresno, CA 93722",
+                puresScore: 3.7,
+                tier: "1B",
+                industry: "Manufacturing",
+                revenue: "$1.8M",
+                status: "Prospect",
+                lastContact: "2024-01-04",
+                notes: "Food processing company"
+            },
+            {
+                name: "Christopher Lee",
+                email: "chris.lee@realestatepro.com",
+                phone: "559-456-7890",
+                address: "3210 E Nees Ave, Fresno, CA 93720",
+                puresScore: 3.9,
+                tier: "1B",
+                industry: "Real Estate",
+                revenue: "$2.0M",
+                status: "Qualified Lead",
+                lastContact: "2024-01-10",
+                notes: "Real estate brokerage"
+            },
+            {
+                name: "Samantha Brown",
+                email: "sam.brown@cloudtech.com",
+                phone: "559-567-8901",
+                address: "1111 E Champlain Dr, Fresno, CA 93720",
+                puresScore: 4.5,
+                tier: "1A",
+                industry: "Technology",
+                revenue: "$4.1M",
+                status: "Hot Lead",
+                lastContact: "2024-01-19",
+                notes: "Cloud technology solutions"
+            },
+            {
+                name: "Daniel Rodriguez",
+                email: "daniel.r@urgentcare.com",
+                phone: "559-678-9012",
+                address: "2222 W Shaw Ave, Fresno, CA 93711",
+                puresScore: 4.1,
+                tier: "1A",
+                industry: "Healthcare",
+                revenue: "$2.9M",
+                status: "Qualified Lead",
+                lastContact: "2024-01-15",
+                notes: "Urgent care centers"
+            },
+            {
+                name: "Patricia Wilson",
+                email: "patricia.w@wealthmanagement.com",
+                phone: "559-789-0123",
+                address: "4444 N Fresno St, Fresno, CA 93726",
+                puresScore: 4.0,
+                tier: "1A",
+                industry: "Finance",
+                revenue: "$3.5M",
+                status: "Hot Lead",
+                lastContact: "2024-01-16",
+                notes: "Wealth management firm"
+            },
+            {
+                name: "Mark Thompson",
+                email: "mark.t@electronicstore.com",
+                phone: "559-890-1234",
+                address: "7777 N Blackstone Ave, Fresno, CA 93720",
+                puresScore: 3.2,
+                tier: "1C",
+                industry: "Retail",
+                revenue: "$900K",
+                status: "Cold Lead",
+                lastContact: "2023-12-18",
+                notes: "Electronics retailer"
+            },
+            {
+                name: "Kimberly Davis",
+                email: "kim.davis@automfg.com",
+                phone: "559-901-2345",
+                address: "5555 W Barstow Ave, Fresno, CA 93722",
+                puresScore: 3.8,
+                tier: "1B",
+                industry: "Manufacturing",
+                revenue: "$1.9M",
+                status: "Prospect",
+                lastContact: "2024-01-03",
+                notes: "Automotive parts manufacturing"
+            },
+            {
+                name: "Andrew Garcia",
+                email: "andrew.g@commercialre.com",
+                phone: "559-012-3456",
+                address: "8888 E Herndon Ave, Fresno, CA 93720",
+                puresScore: 3.7,
+                tier: "1B",
+                industry: "Real Estate",
+                revenue: "$1.6M",
+                status: "Qualified Lead",
+                lastContact: "2024-01-08",
+                notes: "Commercial real estate development"
+            },
+            {
+                name: "Christine Lee",
+                email: "christine.l@softwaredev.com",
+                phone: "559-123-7890",
+                address: "3333 N Cedar Ave, Fresno, CA 93703",
+                puresScore: 4.4,
+                tier: "1A",
+                industry: "Technology",
+                revenue: "$3.0M",
+                status: "Hot Lead",
+                lastContact: "2024-01-18",
+                notes: "Custom software development"
+            },
+            {
+                name: "James Taylor",
+                email: "james.t@dentalgroup.com",
+                phone: "559-234-8901",
+                address: "1010 W Bullard Ave, Fresno, CA 93711",
+                puresScore: 3.9,
+                tier: "1B",
+                industry: "Healthcare",
+                revenue: "$2.0M",
+                status: "Qualified Lead",
+                lastContact: "2024-01-11",
+                notes: "Dental practice group"
+            },
+            {
+                name: "Lisa Anderson",
+                email: "lisa.a@investmentgroup.com",
+                phone: "559-345-9012",
+                address: "6666 E Shaw Ave, Fresno, CA 93710",
+                puresScore: 4.2,
+                tier: "1A",
+                industry: "Finance",
+                revenue: "$4.0M",
+                status: "Hot Lead",
+                lastContact: "2024-01-17",
+                notes: "Investment advisory group"
+            },
+            {
+                name: "Robert Murphy",
+                email: "robert.m@homegoods.com",
+                phone: "559-456-0123",
+                address: "4321 W Figarden Dr, Fresno, CA 93722",
+                puresScore: 3.4,
+                tier: "1C",
+                industry: "Retail",
+                revenue: "$1.2M",
+                status: "Cold Lead",
+                lastContact: "2023-12-25",
+                notes: "Home goods retailer"
+            },
+            {
+                name: "Angela Clark",
+                email: "angela.c@packagingco.com",
+                phone: "559-567-1234",
+                address: "2468 S Elm Ave, Fresno, CA 93706",
+                puresScore: 3.6,
+                tier: "1B",
+                industry: "Manufacturing",
+                revenue: "$1.4M",
+                status: "Prospect",
+                lastContact: "2024-01-02",
+                notes: "Packaging solutions"
+            },
+            {
+                name: "Matthew Scott",
+                email: "matthew.s@propertyinvest.com",
+                phone: "559-678-2345",
+                address: "1357 N First St, Fresno, CA 93726",
+                puresScore: 3.8,
+                tier: "1B",
+                industry: "Real Estate",
+                revenue: "$1.7M",
+                status: "Qualified Lead",
+                lastContact: "2024-01-09",
+                notes: "Property investment firm"
+            },
+            {
+                name: "Rebecca White",
+                email: "rebecca.w@cybersecurity.com",
+                phone: "559-789-3456",
+                address: "9999 E Kings Canyon Rd, Fresno, CA 93727",
+                puresScore: 4.6,
+                tier: "1A",
+                industry: "Technology",
+                revenue: "$3.7M",
+                status: "Hot Lead",
+                lastContact: "2024-01-19",
+                notes: "Cybersecurity solutions"
+            },
+            {
+                name: "Steven Johnson",
+                email: "steven.j@mentalhealth.com",
+                phone: "559-890-4567",
+                address: "7531 N Millbrook Ave, Fresno, CA 93720",
+                puresScore: 3.7,
+                tier: "1B",
+                industry: "Healthcare",
+                revenue: "$1.5M",
+                status: "Prospect",
+                lastContact: "2024-01-05",
+                notes: "Mental health services"
+            },
+            {
+                name: "Michelle Martinez",
+                email: "michelle.m@creditservices.com",
+                phone: "559-901-5678",
+                address: "8642 W Herndon Ave, Fresno, CA 93722",
+                puresScore: 3.5,
+                tier: "1C",
+                industry: "Finance",
+                revenue: "$1.1M",
+                status: "Prospect",
+                lastContact: "2024-01-06",
+                notes: "Credit services company"
+            },
+            {
+                name: "Timothy Brown",
+                email: "timothy.b@sportinggoods.com",
+                phone: "559-012-6789",
+                address: "1975 E Gettysburg Ave, Fresno, CA 93726",
+                puresScore: 3.3,
+                tier: "1C",
+                industry: "Retail",
+                revenue: "$950K",
+                status: "Cold Lead",
+                lastContact: "2023-12-20",
+                notes: "Sporting goods store"
+            },
+            {
+                name: "Donna Wilson",
+                email: "donna.w@textilemanufacturing.com",
+                phone: "559-123-4567",
+                address: "3691 S Cedar Ave, Fresno, CA 93725",
+                puresScore: 3.6,
+                tier: "1B",
+                industry: "Manufacturing",
+                revenue: "$1.3M",
+                status: "Prospect",
+                lastContact: "2024-01-01",
+                notes: "Textile manufacturing"
+            },
+            {
+                name: "Nathan Davis",
+                email: "nathan.d@luxuryrealestate.com",
+                phone: "559-234-5678",
+                address: "4680 N Palm Ave, Fresno, CA 93704",
+                puresScore: 4.0,
+                tier: "1A",
+                industry: "Real Estate",
+                revenue: "$2.5M",
+                status: "Qualified Lead",
+                lastContact: "2024-01-13",
+                notes: "Luxury real estate"
+            },
+            {
+                name: "Cynthia Garcia",
+                email: "cynthia.g@aitech.com",
+                phone: "559-345-6789",
+                address: "5926 E Ashlan Ave, Fresno, CA 93726",
+                puresScore: 4.7,
+                tier: "1A",
+                industry: "Technology",
+                revenue: "$4.5M",
+                status: "Hot Lead",
+                lastContact: "2024-01-20",
+                notes: "AI technology solutions"
+            },
+            {
+                name: "Gregory Thompson",
+                email: "gregory.t@rehabilitationservices.com",
+                phone: "559-456-7890",
+                address: "7247 N Fresno St, Fresno, CA 93720",
+                puresScore: 3.8,
+                tier: "1B",
+                industry: "Healthcare",
+                revenue: "$1.8M",
+                status: "Qualified Lead",
+                lastContact: "2024-01-12",
+                notes: "Physical rehabilitation services"
+            },
+            {
+                name: "Sandra Rodriguez",
+                email: "sandra.r@mortgageservices.com",
+                phone: "559-567-8901",
+                address: "2834 W Shaw Ave, Fresno, CA 93711",
+                puresScore: 3.9,
+                tier: "1B",
+                industry: "Finance",
+                revenue: "$2.1M",
+                status: "Qualified Lead",
+                lastContact: "2024-01-14",
+                notes: "Mortgage and lending services"
+            },
+            {
+                name: "Kenneth Lee",
+                email: "kenneth.l@automotiveretail.com",
+                phone: "559-678-9012",
+                address: "1593 E McKinley Ave, Fresno, CA 93703",
+                puresScore: 3.1,
+                tier: "1C",
+                industry: "Retail",
+                revenue: "$800K",
+                status: "Cold Lead",
+                lastContact: "2023-12-12",
+                notes: "Automotive parts retailer"
+            },
+            {
+                name: "Diana Patel",
+                email: "diana.p@chemicalmanufacturing.com",
+                phone: "559-789-0123",
+                address: "4175 S Elm Ave, Fresno, CA 93706",
+                puresScore: 3.5,
+                tier: "1C",
+                industry: "Manufacturing",
+                revenue: "$1.2M",
+                status: "Prospect",
+                lastContact: "2023-12-30",
+                notes: "Chemical manufacturing"
+            },
+            {
+                name: "Scott Anderson",
+                email: "scott.a@industrialrealestate.com",
+                phone: "559-890-1234",
+                address: "8361 W Clinton Ave, Fresno, CA 93722",
+                puresScore: 3.7,
+                tier: "1B",
+                industry: "Real Estate",
+                revenue: "$1.6M",
+                status: "Prospect",
+                lastContact: "2024-01-07",
+                notes: "Industrial real estate"
+            },
+            {
+                name: "Jennifer Wilson",
+                email: "jennifer.w@biotechnology.com",
+                phone: "559-901-2345",
+                address: "6284 E Herndon Ave, Fresno, CA 93720",
+                puresScore: 4.3,
+                tier: "1A",
+                industry: "Technology",
+                revenue: "$3.2M",
+                status: "Hot Lead",
+                lastContact: "2024-01-18",
+                notes: "Biotechnology research"
+            }
+        ];
+
+        let currentSortColumn = -1;
+        let sortDirection = 1;
+        let currentClient = null;
+        let scores = {
+            profitability: 0,
+            urgency: 0,
+            reachability: 0,
+            engagement: 0,
+            sustainability: 0
+        };
+
+        // Initialize dashboard
+        function init() {
+            renderTable();
+            updateStats();
+        }
+
+        // Show specific tab
+        function showTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // Render client table
+        function renderTable() {
+            const tbody = document.getElementById('clientTableBody');
+            tbody.innerHTML = '';
+
+            clientData.forEach((client, index) => {
+                const row = document.createElement('tr');
+                const tierClass = `tier-${client.tier.toLowerCase()}`;
+                row.className = tierClass;
+
+                row.innerHTML = `
+                    <td>${client.name}</td>
+                    <td>${client.email}</td>
+                    <td>${client.phone}</td>
+                    <td>${client.address}</td>
+                    <td>${client.puresScore}</td>
+                    <td>${client.tier}</td>
+                    <td>${client.industry}</td>
+                    <td>${client.revenue}</td>
+                    <td>${client.status}</td>
+                    <td>${client.lastContact}</td>
+                    <td>
+                        <button class="btn btn-small" onclick="openScoreModal(${index})">Score</button>
+                        <button class="btn btn-small" onclick="contactClient(${index}, 'email')">Email</button>
+                        <button class="btn btn-small" onclick="contactClient(${index}, 'call')">Call</button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // Filter table based on search and filters
+        function filterTable() {
+            const searchTerm = document.getElementById('searchBox').value.toLowerCase();
+            const tierFilter = document.getElementById('tierFilter').value;
+            const industryFilter = document.getElementById('industryFilter').value;
+
+            const rows = document.querySelectorAll('#clientTableBody tr');
+
+            rows.forEach(row => {
+                const cells = row.querySelectorAll('td');
+                const name = cells[0].textContent.toLowerCase();
+                const email = cells[1].textContent.toLowerCase();
+                const tier = cells[5].textContent;
+                const industry = cells[6].textContent;
+
+                const matchesSearch = name.includes(searchTerm) || email.includes(searchTerm);
+                const matchesTier = !tierFilter || tier === tierFilter;
+                const matchesIndustry = !industryFilter || industry === industryFilter;
+
+                if (matchesSearch && matchesTier && matchesIndustry) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+
+        // Sort table by column
+        function sortTable(columnIndex) {
+            if (currentSortColumn === columnIndex) {
+                sortDirection *= -1;
+            } else {
+                currentSortColumn = columnIndex;
+                sortDirection = 1;
+            }
+
+            clientData.sort((a, b) => {
+                let valueA, valueB;
+
+                switch (columnIndex) {
+                    case 0: valueA = a.name; valueB = b.name; break;
+                    case 1: valueA = a.email; valueB = b.email; break;
+                    case 2: valueA = a.phone; valueB = b.phone; break;
+                    case 3: valueA = a.address; valueB = b.address; break;
+                    case 4: valueA = parseFloat(a.puresScore); valueB = parseFloat(b.puresScore); break;
+                    case 5: valueA = a.tier; valueB = b.tier; break;
+                    case 6: valueA = a.industry; valueB = b.industry; break;
+                    case 7: valueA = parseFloat(a.revenue.replace(/[$MK,]/g, '')); valueB = parseFloat(b.revenue.replace(/[$MK,]/g, '')); break;
+                    case 8: valueA = a.status; valueB = b.status; break;
+                    case 9: valueA = new Date(a.lastContact); valueB = new Date(b.lastContact); break;
+                    default: return 0;
+                }
+
+                if (typeof valueA === 'string') {
+                    return sortDirection * valueA.localeCompare(valueB);
+                } else {
+                    return sortDirection * (valueA - valueB);
+                }
+            });
+
+            renderTable();
+        }
+
+        // Open P.U.R.E.S. scoring modal
+        function openScoreModal(clientIndex) {
+            currentClient = clientIndex;
+            const client = clientData[clientIndex];
+            
+            // Reset scores
+            scores = {
+                profitability: Math.floor(Math.random() * 5) + 1,
+                urgency: Math.floor(Math.random() * 5) + 1,
+                reachability: Math.floor(Math.random() * 5) + 1,
+                engagement: Math.floor(Math.random() * 5) + 1,
+                sustainability: Math.floor(Math.random() * 5) + 1
+            };
+
+            // Update UI
+            Object.keys(scores).forEach(category => {
+                const buttons = document.querySelectorAll(`#${category} .score-btn`);
+                buttons.forEach((btn, index) => {
+                    btn.classList.toggle('selected', index + 1 === scores[category]);
+                });
+            });
+
+            document.getElementById('scoreModal').style.display = 'block';
+        }
+
+        // Set P.U.R.E.S. score
+        function setScore(category, score) {
+            scores[category] = score;
+            
+            const buttons = document.querySelectorAll(`#${category} .score-btn`);
+            buttons.forEach((btn, index) => {
+                btn.classList.toggle('selected', index + 1 === score);
+            });
+        }
+
+        // Save P.U.R.E.S. score
+        function saveScore() {
+            if (currentClient !== null) {
+                const totalScore = Object.values(scores).reduce((sum, score) => sum + score, 0) / 5;
+                clientData[currentClient].puresScore = totalScore.toFixed(1);
+                
+                // Update tier based on score
+                if (totalScore >= 4.0) {
+                    clientData[currentClient].tier = '1A';
+                } else if (totalScore >= 3.0) {
+                    clientData[currentClient].tier = '1B';
+                } else {
+                    clientData[currentClient].tier = '1C';
+                }
+
+                renderTable();
+                updateStats();
+                closeModal();
+            }
+        }
+
+        // Close scoring modal
+        function closeModal() {
+            document.getElementById('scoreModal').style.display = 'none';
+            currentClient = null;
+        }
+
+        // Contact client (email or call)
+        function contactClient(clientIndex, method) {
+            const client = clientData[clientIndex];
+
+            if (method === 'email') {
+                openEmailModal(client);
+            } else if (method === 'call') {
+                window.open(`tel:${client.phone}`);
+            }
+        }
+
+        // Open email template modal
+        function openEmailModal(client) {
+            const template = generateEmailTemplate(client);
+            document.getElementById('emailTemplate').value = template;
+            document.getElementById('emailModal').style.display = 'block';
+        }
+
+        // Generate personalized email template
+        function generateEmailTemplate(client) {
+            const templates = {
+                'Technology': `Subject: Transform Your Technology Infrastructure with Apex Premier Management
+
+Dear ${client.name.split(' ')[0]},
+
+I hope this email finds you well. I'm reaching out from Apex Premier Management, Fresno's premier direct marketing firm specializing in telecommunications and technology solutions.
+
+Given ${client.industry} industry's rapid evolution, I believe our expertise in connecting businesses with cutting-edge telecommunications solutions could significantly benefit your organization. We've successfully helped companies like yours:
+
+• Reduce communication costs by up to 35%
+• Improve customer engagement through targeted outreach campaigns
+• Implement robust telecommunications infrastructure that scales with growth
+• Connect with decision-makers through our proven S.A.L.E. methodology
+
+Our partnership with industry leaders like AT&T allows us to offer exclusive solutions that aren't available through traditional channels. We understand the unique challenges facing technology companies in Central California and have a proven track record of delivering measurable results.
+
+I'd love to schedule a brief 15-minute call to discuss how we can help optimize your telecommunications strategy and drive meaningful customer connections.
+
+Best regards,
+Luis Salazar
+Business Development Director
+Apex Premier Management
+(559) 257-4466
+luis@apexpremiermanagement.com
+
+P.S. We're currently offering complimentary telecommunications audits for qualifying technology companies in the Fresno area.`,
+
+                'Healthcare': `Subject: Enhance Patient Engagement with Proven Direct Marketing Solutions
+
+Dear ${client.name.split(' ')[0]},
+
+As a healthcare leader in Central California, you understand the importance of meaningful patient connections. Apex Premier Management specializes in helping healthcare organizations like yours build stronger relationships with patients and communities.
+
+Our direct marketing expertise in the healthcare sector includes:
+
+• Patient acquisition campaigns that comply with HIPAA regulations
+• Community outreach programs that build trust and awareness
+• Telecommunications solutions designed for healthcare environments
+• Referral programs that leverage satisfied patients as advocates
+
+We've worked with healthcare organizations throughout Fresno and the Central Valley, helping them:
+- Increase patient satisfaction scores by an average of 22%
+- Reduce patient acquisition costs while improving quality
+- Implement HIPAA-compliant communication systems
+- Build stronger community presence through targeted outreach
+
+Our S.A.L.E. methodology ensures every patient interaction is meaningful and builds long-term relationships rather than transactional exchanges.
+
+I'd welcome the opportunity to discuss how our healthcare-focused marketing solutions can help your organization thrive in today's competitive landscape.
+
+Best regards,
+Luis Salazar
+Business Development Director
+Apex Premier Management
+(559) 257-4466
+luis@apexpremiermanagement.com`,
+
+                'Finance': `Subject: Strengthen Client Relationships with Strategic Direct Marketing
+
+Dear ${client.name.split(' ')[0]},
+
+In today's competitive financial services landscape, building genuine client relationships is more critical than ever. Apex Premier Management specializes in helping financial institutions and wealth management firms create meaningful connections with their target audiences.
+
+Our expertise in the financial sector includes:
+
+• Compliant direct marketing campaigns that adhere to financial regulations
+• High-net-worth client acquisition strategies
+• Telecommunications infrastructure optimized for financial services
+• Trust-building community engagement programs
+
+We've successfully helped financial organizations in Central California:
+- Increase qualified lead generation by 45%
+- Improve client retention rates through enhanced communication
+- Expand market share in competitive territories
+- Build community trust through authentic engagement
+
+Our partnership with telecommunications leaders ensures your firm has access to the most reliable and secure communication solutions available.
+
+Given your reputation in the ${client.industry} industry, I believe our S.A.L.E. methodology could help you expand your client base while maintaining the personal touch that sets successful financial firms apart.
+
+Would you be available for a brief conversation this week to explore how we can support your growth objectives?
+
+Best regards,
+Luis Salazar
+Business Development Director
+Apex Premier Management
+(559) 257-4466
+luis@apexpremiermanagement.com`,
+
+                'Retail': `Subject: Drive Customer Traffic and Sales with Proven Marketing Solutions
+
+Dear ${client.name.split(' ')[0]},
+
+The retail landscape continues to evolve rapidly, and successful retailers are finding innovative ways to connect with customers both online and in-person. Apex Premier Management specializes in helping retail businesses like yours create compelling customer experiences that drive sales and build loyalty.
+
+Our retail marketing expertise includes:
+
+• In-store customer engagement programs
+• Community event marketing and activation
+• Telecommunications solutions for multi-location retailers
+• Customer acquisition campaigns that drive foot traffic
+
+We've helped retailers throughout Central California:
+- Increase same-store sales by an average of 28%
+- Build stronger community connections through local engagement
+- Implement customer communication systems that improve satisfaction
+- Create referral programs that turn customers into brand advocates
+
+Our direct marketing approach focuses on creating authentic connections with your target audience, whether they're discovering your brand for the first time or are long-time loyal customers.
+
+I'd love to share some specific examples of how we've helped retailers in your market segment achieve remarkable growth.
+
+Are you available for a quick call this week to discuss your marketing objectives?
+
+Best regards,
+Luis Salazar
+Business Development Director
+Apex Premier Management
+(559) 257-4466
+luis@apexpremiermanagement.com`,
+
+                'Manufacturing': `Subject: Optimize Customer Relationships and Streamline Communications
+
+Dear ${client.name.split(' ')[0]},
+
+Manufacturing companies in Central California face unique challenges when it comes to building relationships with distributors, suppliers, and end customers. Apex Premier Management understands these complexities and specializes in creating communication strategies that drive business growth.
+
+Our manufacturing sector expertise includes:
+
+• B2B relationship building and account management support
+• Trade show and industry event marketing
+• Telecommunications infrastructure for manufacturing environments
+• Supply chain communication optimization
+
+We've successfully helped manufacturing companies:
+- Strengthen relationships with key distributors and suppliers
+- Improve communication efficiency across multiple locations
+- Generate qualified leads for new product launches
+- Build industry reputation through strategic community engagement
+
+Our S.A.L.E. methodology is particularly effective for manufacturing companies because it focuses on building long-term partnerships rather than transactional relationships.
+
+Given the specialized nature of your industry, I believe our targeted approach could help you achieve your business development goals more effectively.
+
+Would you be interested in a brief discussion about how we can support your growth initiatives?
+
+Best regards,
+Luis Salazar
+Business Development Director
+Apex Premier Management
+(559) 257-4466
+luis@apexpremiermanagement.com`,
+
+                'Real Estate': `Subject: Expand Your Market Reach with Targeted Real Estate Marketing
+
+Dear ${client.name.split(' ')[0]},
+
+The Central California real estate market presents both tremendous opportunities and significant competition. Apex Premier Management specializes in helping real estate professionals and firms build stronger connections with potential clients and referral sources.
+
+Our real estate marketing expertise includes:
+
+• First-time homebuyer education and outreach programs
+• Community event marketing and networking
+• Telecommunications solutions for real estate professionals
+• Referral network development and management
+
+We've helped real estate professionals in the Fresno area:
+- Increase qualified buyer leads by 40%
+- Build stronger relationships with mortgage brokers and other professionals
+- Improve client communication and satisfaction scores
+- Expand market presence in targeted neighborhoods
+
+Our direct marketing approach is particularly effective for real estate because it focuses on building trust and credibility within local communities.
+
+I'd be happy to share some case studies of how we've helped real estate professionals achieve remarkable results in competitive markets.
+
+Are you available for a brief conversation about your marketing objectives?
+
+Best regards,
+Luis Salazar
+Business Development Director
+Apex Premier Management
+(559) 257-4466
+luis@apexpremiermanagement.com`
+            };
+
+            return templates[client.industry] || templates['Technology'];
+        }
+
+        // Send email (opens email client)
+        function sendEmail() {
+            const template = document.getElementById('emailTemplate').value;
+            const lines = template.split('\n');
+            const subject = lines[0].replace('Subject: ', '');
+            const body = lines.slice(1).join('\n');
+            
+            window.open(`mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`);
+        }
+
+        // Copy email template to clipboard
+        function copyTemplate() {
+            const template = document.getElementById('emailTemplate');
+            template.select();
+            document.execCommand('copy');
+            alert('Email template copied to clipboard!');
+        }
+
+        // Close email modal
+        function closeEmailModal() {
+            document.getElementById('emailModal').style.display = 'none';
+        }
+
+        // Update statistics
+        function updateStats() {
+            const tier1a = clientData.filter(client => client.tier === '1A').length;
+            const tier1b = clientData.filter(client => client.tier === '1B').length;
+            const tier1c = clientData.filter(client => client.tier === '1C').length;
+
+            document.getElementById('totalClients').textContent = clientData.length;
+            document.getElementById('tier1aClients').textContent = tier1a;
+            document.getElementById('tier1bClients').textContent = tier1b;
+            document.getElementById('tier1cClients').textContent = tier1c;
+        }
+
+        // Export data to CSV
+        function exportData() {
+            const headers = ['Client Name', 'Email', 'Phone', 'Address', 'P.U.R.E.S Score', 'Tier', 'Industry', 'Revenue Est.', 'Contact Status', 'Last Contact', 'Notes'];
+            const csvData = [headers];
+
+            clientData.forEach(client => {
+                csvData.push([
+                    client.name,
+                    client.email,
+                    client.phone,
+                    client.address,
+                    client.puresScore,
+                    client.tier,
+                    client.industry,
+                    client.revenue,
+                    client.status,
+                    client.lastContact,
+                    client.notes
+                ]);
+            });
+
+            const csvString = csvData.map(row => row.join(',')).join('\n');
+            const blob = new Blob([csvString], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'apex_client_database.csv';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+        }
+
+        // Add new client (simplified for demo)
+        function addNewClient() {
+            const name = prompt('Enter client name:');
+            const email = prompt('Enter client email:');
+            const phone = prompt('Enter client phone:');
+            
+            if (name && email && phone) {
+                const newClient = {
+                    name,
+                    email,
+                    phone,
+                    address: 'Fresno, CA',
+                    puresScore: 3.0,
+                    tier: '1C',
+                    industry: 'Other',
+                    revenue: '$1.0M',
+                    status: 'New Lead',
+                    lastContact: new Date().toISOString().split('T')[0],
+                    notes: 'New client added'
+                };
+                
+                clientData.push(newClient);
+                renderTable();
+                updateStats();
+            }
+        }
+
+        // Close modals when clicking outside
+        window.onclick = function(event) {
+            const scoreModal = document.getElementById('scoreModal');
+            const emailModal = document.getElementById('emailModal');
+            
+            if (event.target === scoreModal) {
+                closeModal();
+            }
+            if (event.target === emailModal) {
+                closeEmailModal();
+            }
+        }
+
+        // Initialize dashboard on page load
+        window.onload = init;
+    </script>
+</body>
+</html>
