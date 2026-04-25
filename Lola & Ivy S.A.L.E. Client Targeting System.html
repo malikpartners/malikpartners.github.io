@@ -1,0 +1,1151 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lola & Ivy - S.A.L.E. Client Targeting System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #000000;
+            color: #CF2030;
+            line-height: 1.6;
+        }
+
+        .header {
+            background-color: #000000;
+            padding: 20px 0;
+            border-bottom: 2px solid #CF2030;
+            text-align: center;
+        }
+
+        .logo {
+            max-width: 300px;
+            height: auto;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .nav-menu {
+            background-color: #CF2030;
+            padding: 15px 0;
+            margin-bottom: 30px;
+        }
+
+        .nav-menu ul {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            gap: 30px;
+        }
+
+        .nav-menu a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 10px 20px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .nav-menu a:hover, .nav-menu a.active {
+            background-color: rgba(255,255,255,0.2);
+        }
+
+        .module {
+            background-color: #111111;
+            border: 1px solid #CF2030;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(207, 32, 48, 0.3);
+        }
+
+        .module h2 {
+            color: #CF2030;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+            border-bottom: 2px solid #CF2030;
+            padding-bottom: 10px;
+        }
+
+        .search-filter {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .search-filter input, .search-filter select {
+            background-color: #222;
+            color: white;
+            border: 1px solid #CF2030;
+            padding: 10px;
+            border-radius: 5px;
+            flex: 1;
+            min-width: 200px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #111111;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #CF2030;
+        }
+
+        th {
+            background-color: #CF2030;
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        th:hover {
+            background-color: #B01020;
+        }
+
+        tbody tr:nth-child(even) {
+            background-color: #1a1a1a;
+        }
+
+        tbody tr:hover {
+            background-color: #2a2a2a;
+        }
+
+        .tier-1a { background-color: #004d00 !important; }
+        .tier-1b { background-color: #4d4d00 !important; }
+        .tier-1c { background-color: #00004d !important; }
+
+        .btn {
+            background-color: #CF2030;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 12px;
+            margin: 2px;
+            transition: background-color 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #B01020;
+        }
+
+        .btn-small {
+            padding: 5px 10px;
+            font-size: 11px;
+        }
+
+        .scoring-form {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .score-item {
+            background-color: #1a1a1a;
+            padding: 15px;
+            border-radius: 5px;
+            border: 1px solid #CF2030;
+        }
+
+        .score-item label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .score-item input[type="range"] {
+            width: 100%;
+            margin: 10px 0;
+        }
+
+        .score-display {
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            color: #CF2030;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+        }
+
+        .modal-content {
+            background-color: #111111;
+            margin: 5% auto;
+            padding: 30px;
+            border: 2px solid #CF2030;
+            width: 80%;
+            max-width: 600px;
+            border-radius: 10px;
+            color: white;
+        }
+
+        .close {
+            color: #CF2030;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: #B01020;
+        }
+
+        .footer {
+            background-color: #111111;
+            border-top: 2px solid #CF2030;
+            text-align: center;
+            padding: 20px;
+            margin-top: 50px;
+        }
+
+        .footer-logo {
+            max-width: 150px;
+            height: auto;
+            opacity: 0.7;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .metric-card {
+            background-color: #1a1a1a;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #CF2030;
+            text-align: center;
+        }
+
+        .metric-number {
+            font-size: 2em;
+            font-weight: bold;
+            color: #CF2030;
+            margin-bottom: 10px;
+        }
+
+        .email-template {
+            background-color: #1a1a1a;
+            padding: 15px;
+            border-radius: 5px;
+            border: 1px solid #CF2030;
+            margin: 15px 0;
+        }
+
+        .email-template textarea {
+            width: 100%;
+            height: 300px;
+            background-color: #222;
+            color: white;
+            border: 1px solid #CF2030;
+            padding: 15px;
+            border-radius: 5px;
+            resize: vertical;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports" class="logo">
+    </div>
+
+    <nav class="nav-menu">
+        <ul>
+            <li><a href="#sourcing" class="nav-link active" onclick="showModule('sourcing')">SOURCING</a></li>
+            <li><a href="#assessing" class="nav-link" onclick="showModule('assessing')">ASSESSING</a></li>
+            <li><a href="#listening" class="nav-link" onclick="showModule('listening')">LISTENING</a></li>
+            <li><a href="#empowering" class="nav-link" onclick="showModule('empowering')">EMPOWERING</a></li>
+            <li><a href="#analytics" class="nav-link" onclick="showModule('analytics')">ANALYTICS</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <!-- SOURCING Module -->
+        <div id="sourcing" class="module">
+            <h2>S.A.L.E. SOURCING - P.U.R.E.S. Client Evaluation</h2>
+            
+            <div class="scoring-form">
+                <div class="score-item">
+                    <label>Profitability (Revenue Potential)</label>
+                    <input type="range" min="1" max="5" value="3" id="profitability">
+                    <div class="score-display" id="profitability-score">3</div>
+                </div>
+                <div class="score-item">
+                    <label>Urgency (Immediate Need)</label>
+                    <input type="range" min="1" max="5" value="3" id="urgency">
+                    <div class="score-display" id="urgency-score">3</div>
+                </div>
+                <div class="score-item">
+                    <label>Reachability (Contact Access)</label>
+                    <input type="range" min="1" max="5" value="3" id="reachability">
+                    <div class="score-display" id="reachability-score">3</div>
+                </div>
+                <div class="score-item">
+                    <label>Engagement (Partnership Openness)</label>
+                    <input type="range" min="1" max="5" value="3" id="engagement">
+                    <div class="score-display" id="engagement-score">3</div>
+                </div>
+                <div class="score-item">
+                    <label>Sustainability (Long-term Growth)</label>
+                    <input type="range" min="1" max="5" value="3" id="sustainability">
+                    <div class="score-display" id="sustainability-score">3</div>
+                </div>
+            </div>
+
+            <div class="search-filter">
+                <input type="text" id="searchInput" placeholder="Search clients...">
+                <select id="tierFilter">
+                    <option value="">All Tiers</option>
+                    <option value="1A">Tier 1A (Premium)</option>
+                    <option value="1B">Tier 1B (High-Value)</option>
+                    <option value="1C">Tier 1C (Qualified)</option>
+                </select>
+                <select id="industryFilter">
+                    <option value="">All Industries</option>
+                    <option value="Fashion">Fashion</option>
+                    <option value="Lifestyle">Lifestyle</option>
+                    <option value="Beauty">Beauty</option>
+                    <option value="Fitness">Fitness</option>
+                    <option value="Travel">Travel</option>
+                    <option value="Food">Food</option>
+                </select>
+                <button class="btn" onclick="exportData()">Export CSV</button>
+            </div>
+
+            <table id="clientTable">
+                <thead>
+                    <tr>
+                        <th onclick="sortTable(0)">Client Name ↕</th>
+                        <th onclick="sortTable(1)">Email ↕</th>
+                        <th onclick="sortTable(2)">Phone ↕</th>
+                        <th onclick="sortTable(3)">Address ↕</th>
+                        <th onclick="sortTable(4)">P.U.R.E.S. Score ↕</th>
+                        <th onclick="sortTable(5)">Tier ↕</th>
+                        <th onclick="sortTable(6)">Industry ↕</th>
+                        <th onclick="sortTable(7)">Revenue Est. ↕</th>
+                        <th onclick="sortTable(8)">Status ↕</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="clientTableBody">
+                </tbody>
+            </table>
+        </div>
+
+        <!-- ASSESSING Module -->
+        <div id="assessing" class="module" style="display:none;">
+            <h2>A.SSESSING - Buying Pattern Analysis</h2>
+            
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-number">24</div>
+                    <div>Analytical Buyers</div>
+                    <small>Require ROI analysis & case studies</small>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">18</div>
+                    <div>Relationship Buyers</div>
+                    <small>Value trust & referrals</small>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">13</div>
+                    <div>Efficiency Buyers</div>
+                    <small>Focus on time-saving solutions</small>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">9</div>
+                    <div>Innovation Buyers</div>
+                    <small>Seek cutting-edge advantages</small>
+                </div>
+            </div>
+
+            <h3 style="margin-top: 30px; color: #CF2030;">Decision Timeline Analysis</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Client</th>
+                        <th>Buyer Type</th>
+                        <th>Decision Timeline</th>
+                        <th>Key Stakeholders</th>
+                        <th>Value Proposition Match</th>
+                        <th>Next Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Sarah Mitchell</td>
+                        <td>Analytical</td>
+                        <td>6-8 weeks</td>
+                        <td>Marketing Dir, CEO</td>
+                        <td>95%</td>
+                        <td>Send ROI case study</td>
+                    </tr>
+                    <tr>
+                        <td>Jessica Chen</td>
+                        <td>Relationship</td>
+                        <td>2-4 weeks</td>
+                        <td>Self, Assistant</td>
+                        <td>88%</td>
+                        <td>Schedule intro call</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- LISTENING Module -->
+        <div id="listening" class="module" style="display:none;">
+            <h2>L.ISTENING - Feedback Integration System</h2>
+            
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-number">87%</div>
+                    <div>Feedback Collection Rate</div>
+                    <small>Target: >70%</small>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">4.6</div>
+                    <div>Average Satisfaction</div>
+                    <small>Out of 5.0</small>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">12</div>
+                    <div>Active Complaints</div>
+                    <small>Resolution time: 24h</small>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">156</div>
+                    <div>Feedback Items</div>
+                    <small>This month</small>
+                </div>
+            </div>
+
+            <h3 style="margin-top: 30px; color: #CF2030;">Recent Feedback</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Client</th>
+                        <th>Type</th>
+                        <th>Rating</th>
+                        <th>Feedback</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Amanda Rodriguez</td>
+                        <td>Post-Campaign</td>
+                        <td>5/5</td>
+                        <td>"Exceeded expectations on campaign ROI"</td>
+                        <td>Resolved</td>
+                        <td><button class="btn btn-small">View Details</button></td>
+                    </tr>
+                    <tr>
+                        <td>Taylor Johnson</td>
+                        <td>During-Service</td>
+                        <td>3/5</td>
+                        <td>"Communication could be more frequent"</td>
+                        <td>In Progress</td>
+                        <td><button class="btn btn-small">Respond</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- EMPOWERING Module -->
+        <div id="empowering" class="module" style="display:none;">
+            <h2>E.MPOWERING - Referral Strategy Dashboard</h2>
+            
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-number">34</div>
+                    <div>Referrals Generated</div>
+                    <small>This quarter</small>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">$127K</div>
+                    <div>Referral Revenue</div>
+                    <small>Total value</small>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">2.8</div>
+                    <div>Avg Referrals/Client</div>
+                    <small>Target: 2+</small>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">15</div>
+                    <div>Success Stories</div>
+                    <small>Documented</small>
+                </div>
+            </div>
+
+            <h3 style="margin-top: 30px; color: #CF2030;">Success Stories & Referral Tracking</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Referrer</th>
+                        <th>Referred Client</th>
+                        <th>Status</th>
+                        <th>Value</th>
+                        <th>Reward Status</th>
+                        <th>Success Story</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Sarah Mitchell</td>
+                        <td>Emma Thompson</td>
+                        <td>Converted</td>
+                        <td>$15K</td>
+                        <td>Paid</td>
+                        <td><button class="btn btn-small">View Story</button></td>
+                    </tr>
+                    <tr>
+                        <td>Jessica Chen</td>
+                        <td>Katie Williams</td>
+                        <td>Pending</td>
+                        <td>$8K</td>
+                        <td>Pending</td>
+                        <td><button class="btn btn-small">Create Story</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- ANALYTICS Module -->
+        <div id="analytics" class="module" style="display:none;">
+            <h2>S.A.L.E. Performance Analytics</h2>
+            
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-number">85%</div>
+                    <div>P.U.R.E.S. Accuracy</div>
+                    <small>Target: >80%</small>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">92%</div>
+                    <div>Assessment Accuracy</div>
+                    <small>Target: >90%</small>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">78%</div>
+                    <div>Client Retention</div>
+                    <small>12-month rate</small>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">$2.4M</div>
+                    <div>Total Pipeline</div>
+                    <small>Current value</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Email Modal -->
+    <div id="emailModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Compose Email</h2>
+            <div class="email-template">
+                <p><strong>To:</strong> <span id="emailRecipient"></span></p>
+                <p><strong>Subject:</strong> Transform Your Influence into Revenue - Lola & Ivy Partnership</p>
+                <textarea id="emailContent" placeholder="Email content will be generated here..."></textarea>
+                <br><br>
+                <button class="btn" onclick="sendEmail()">Send Email</button>
+                <button class="btn" onclick="closeEmailModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports" class="footer-logo">
+        <p style="color: #666; margin-top: 10px;">&copy; 2024 Higgins Reports | S.A.L.E. Client Targeting System</p>
+    </div>
+
+    <script>
+        // Sample client data for Lola & Ivy (Fashion/Lifestyle Influencers near Atascadero, CA)
+        const clientData = [
+            {
+                name: "Sarah Mitchell",
+                email: "sarah.mitchell@gmail.com",
+                phone: "(805) 555-0123",
+                address: "1234 Vineyard Dr, Paso Robles, CA 93446",
+                pures: 4.2,
+                tier: "1A",
+                industry: "Fashion",
+                revenue: "$75K",
+                status: "Prospect",
+                lastContact: "2024-01-15",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Jessica Chen",
+                email: "jess.chen.style@gmail.com",
+                phone: "(805) 555-0124",
+                address: "567 Oak St, San Luis Obispo, CA 93401",
+                pures: 3.8,
+                tier: "1B",
+                industry: "Lifestyle",
+                revenue: "$45K",
+                status: "Active",
+                lastContact: "2024-01-20",
+                buyerType: "Relationship"
+            },
+            {
+                name: "Amanda Rodriguez",
+                email: "amanda.r.fashion@gmail.com",
+                phone: "(805) 555-0125",
+                address: "890 Main St, Arroyo Grande, CA 93420",
+                pures: 4.5,
+                tier: "1A",
+                industry: "Fashion",
+                revenue: "$95K",
+                status: "Client",
+                lastContact: "2024-01-25",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Taylor Johnson",
+                email: "taylor.j.lifestyle@gmail.com",
+                phone: "(805) 555-0126",
+                address: "234 Beach Blvd, Pismo Beach, CA 93449",
+                pures: 3.2,
+                tier: "1C",
+                industry: "Lifestyle",
+                revenue: "$28K",
+                status: "Prospect",
+                lastContact: "2024-01-10",
+                buyerType: "Efficiency"
+            },
+            {
+                name: "Megan Foster",
+                email: "megan.foster.beauty@gmail.com",
+                phone: "(805) 555-0127",
+                address: "456 Garden St, Morro Bay, CA 93442",
+                pures: 4.0,
+                tier: "1A",
+                industry: "Beauty",
+                revenue: "$65K",
+                status: "Prospect",
+                lastContact: "2024-01-18",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Chloe Kim",
+                email: "chloe.kim.fitness@gmail.com",
+                phone: "(805) 555-0128",
+                address: "789 Fitness Way, Templeton, CA 93465",
+                pures: 3.6,
+                tier: "1B",
+                industry: "Fitness",
+                revenue: "$52K",
+                status: "Active",
+                lastContact: "2024-01-22",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Isabella Martinez",
+                email: "bella.martinez.travel@gmail.com",
+                phone: "(805) 555-0129",
+                address: "321 Coastal Dr, Cayucos, CA 93430",
+                pures: 3.9,
+                tier: "1B",
+                industry: "Travel",
+                revenue: "$41K",
+                status: "Prospect",
+                lastContact: "2024-01-12",
+                buyerType: "Relationship"
+            },
+            {
+                name: "Sophia Williams",
+                email: "sophia.w.food@gmail.com",
+                phone: "(805) 555-0130",
+                address: "654 Culinary Ave, Atascadero, CA 93422",
+                pures: 3.4,
+                tier: "1C",
+                industry: "Food",
+                revenue: "$38K",
+                status: "Lead",
+                lastContact: "2024-01-08",
+                buyerType: "Efficiency"
+            },
+            {
+                name: "Olivia Davis",
+                email: "olivia.davis.style@gmail.com",
+                phone: "(805) 555-0131",
+                address: "987 Fashion Blvd, Santa Maria, CA 93454",
+                pures: 4.3,
+                tier: "1A",
+                industry: "Fashion",
+                revenue: "$88K",
+                status: "Client",
+                lastContact: "2024-01-28",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Emma Thompson",
+                email: "emma.thompson.beauty@gmail.com",
+                phone: "(805) 555-0132",
+                address: "147 Beauty Lane, Grover Beach, CA 93433",
+                pures: 3.7,
+                tier: "1B",
+                industry: "Beauty",
+                revenue: "$47K",
+                status: "Prospect",
+                lastContact: "2024-01-14",
+                buyerType: "Relationship"
+            }
+            // Add 40 more entries to reach 50...
+        ];
+
+        // Add 40 more sample entries
+        const additionalClients = [
+            "Ava Wilson", "Grace Lee", "Zoe Brown", "Lily Anderson", "Maya Patel",
+            "Aria Jackson", "Luna Garcia", "Nova Rodriguez", "Ivy Thompson", "Ruby Martinez",
+            "Sage Johnson", "Rose Wilson", "Iris Davis", "Jade Miller", "Pearl Jones",
+            "Coral Smith", "Dawn Williams", "Star Chen", "Sky Foster", "Rain Kim",
+            "River Martinez", "Ocean Thompson", "Storm Johnson", "Cloud Wilson", "Sunny Davis",
+            "Moon Miller", "Star Jones", "Galaxy Smith", "Aurora Williams", "Celestia Chen",
+            "Phoenix Foster", "Raven Kim", "Willow Martinez", "Aspen Thompson", "Rowan Johnson",
+            "Hazel Wilson", "Fern Davis", "Sage Miller", "Poppy Jones", "Dahlia Smith"
+        ];
+
+        additionalClients.forEach((name, index) => {
+            const [firstName, lastName] = name.split(' ');
+            const email = `${firstName.toLowerCase()}.${lastName.toLowerCase()}@gmail.com`;
+            const industries = ["Fashion", "Lifestyle", "Beauty", "Fitness", "Travel", "Food"];
+            const tiers = ["1A", "1B", "1C"];
+            const statuses = ["Prospect", "Active", "Client", "Lead"];
+            const buyerTypes = ["Analytical", "Relationship", "Efficiency", "Innovation"];
+            const cities = ["Atascadero", "Paso Robles", "San Luis Obispo", "Arroyo Grande", "Pismo Beach", "Morro Bay", "Templeton", "Cayucos", "Santa Maria", "Grover Beach"];
+            
+            clientData.push({
+                name: name,
+                email: email,
+                phone: `(805) 555-${(200 + index).toString().padStart(4, '0')}`,
+                address: `${Math.floor(Math.random() * 9999)} ${['Main St', 'Oak Ave', 'Pine Dr', 'Cedar Ln', 'Maple Way'][index % 5]}, ${cities[index % cities.length]}, CA 934${Math.floor(Math.random() * 99)}`,
+                pures: (Math.random() * 2 + 3).toFixed(1),
+                tier: tiers[Math.floor(Math.random() * tiers.length)],
+                industry: industries[Math.floor(Math.random() * industries.length)],
+                revenue: `$${Math.floor(Math.random() * 80 + 20)}K`,
+                status: statuses[Math.floor(Math.random() * statuses.length)],
+                lastContact: `2024-01-${Math.floor(Math.random() * 30 + 1).toString().padStart(2, '0')}`,
+                buyerType: buyerTypes[Math.floor(Math.random() * buyerTypes.length)]
+            });
+        });
+
+        let currentClients = clientData;
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            loadClientTable();
+            setupScoringSystem();
+            setupFilters();
+            setupModal();
+        });
+
+        function setupScoringSystem() {
+            const sliders = ['profitability', 'urgency', 'reachability', 'engagement', 'sustainability'];
+            
+            sliders.forEach(slider => {
+                const element = document.getElementById(slider);
+                const display = document.getElementById(slider + '-score');
+                
+                element.addEventListener('input', function() {
+                    display.textContent = this.value;
+                    calculateOverallScore();
+                });
+            });
+        }
+
+        function calculateOverallScore() {
+            const sliders = ['profitability', 'urgency', 'reachability', 'engagement', 'sustainability'];
+            let total = 0;
+            
+            sliders.forEach(slider => {
+                total += parseInt(document.getElementById(slider).value);
+            });
+            
+            const average = (total / 5).toFixed(1);
+            console.log(`P.U.R.E.S. Average Score: ${average}`);
+        }
+
+        function loadClientTable() {
+            const tbody = document.getElementById('clientTableBody');
+            tbody.innerHTML = '';
+            
+            currentClients.forEach((client, index) => {
+                const row = tbody.insertRow();
+                row.className = getTierClass(client.tier);
+                
+                row.innerHTML = `
+                    <td>${client.name}</td>
+                    <td>${client.email}</td>
+                    <td>${client.phone}</td>
+                    <td>${client.address}</td>
+                    <td>${client.pures}</td>
+                    <td>Tier ${client.tier}</td>
+                    <td>${client.industry}</td>
+                    <td>${client.revenue}</td>
+                    <td>${client.status}</td>
+                    <td>
+                        <button class="btn btn-small" onclick="openEmailModal('${client.email}', '${client.name}', '${client.industry}')">Email</button>
+                        <button class="btn btn-small" onclick="callClient('${client.phone}')">Call</button>
+                        <button class="btn btn-small" onclick="viewProfile(${index})">Profile</button>
+                    </td>
+                `;
+            });
+        }
+
+        function getTierClass(tier) {
+            switch(tier) {
+                case '1A': return 'tier-1a';
+                case '1B': return 'tier-1b';
+                case '1C': return 'tier-1c';
+                default: return '';
+            }
+        }
+
+        function setupFilters() {
+            document.getElementById('searchInput').addEventListener('input', filterTable);
+            document.getElementById('tierFilter').addEventListener('change', filterTable);
+            document.getElementById('industryFilter').addEventListener('change', filterTable);
+        }
+
+        function filterTable() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const tierFilter = document.getElementById('tierFilter').value;
+            const industryFilter = document.getElementById('industryFilter').value;
+            
+            currentClients = clientData.filter(client => {
+                const matchesSearch = client.name.toLowerCase().includes(searchTerm) ||
+                                    client.email.toLowerCase().includes(searchTerm) ||
+                                    client.address.toLowerCase().includes(searchTerm);
+                
+                const matchesTier = !tierFilter || client.tier === tierFilter;
+                const matchesIndustry = !industryFilter || client.industry === industryFilter;
+                
+                return matchesSearch && matchesTier && matchesIndustry;
+            });
+            
+            loadClientTable();
+        }
+
+        function sortTable(columnIndex) {
+            const table = document.getElementById('clientTable');
+            const tbody = table.getElementsByTagName('tbody')[0];
+            const rows = Array.from(tbody.getElementsByTagName('tr'));
+            
+            const isNumeric = columnIndex === 4; // P.U.R.E.S. score column
+            
+            rows.sort((a, b) => {
+                const aVal = a.cells[columnIndex].textContent.trim();
+                const bVal = b.cells[columnIndex].textContent.trim();
+                
+                if (isNumeric) {
+                    return parseFloat(aVal) - parseFloat(bVal);
+                }
+                
+                return aVal.localeCompare(bVal);
+            });
+            
+            // Clear tbody and append sorted rows
+            tbody.innerHTML = '';
+            rows.forEach(row => tbody.appendChild(row));
+        }
+
+        function setupModal() {
+            const modal = document.getElementById('emailModal');
+            const closeBtn = modal.querySelector('.close');
+            
+            closeBtn.addEventListener('click', closeEmailModal);
+            
+            window.addEventListener('click', function(event) {
+                if (event.target === modal) {
+                    closeEmailModal();
+                }
+            });
+        }
+
+        function openEmailModal(email, name, industry) {
+            const modal = document.getElementById('emailModal');
+            const recipientSpan = document.getElementById('emailRecipient');
+            const contentTextarea = document.getElementById('emailContent');
+            
+            recipientSpan.textContent = email;
+            
+            const emailTemplate = generateEmailContent(name, industry);
+            contentTextarea.value = emailTemplate;
+            
+            modal.style.display = 'block';
+        }
+
+        function generateEmailContent(name, industry) {
+            const templates = {
+                Fashion: `Dear ${name},
+
+I hope this message finds you creating amazing content! I'm reaching out from Lola & Ivy, a digital talent management company that specializes in helping fashion influencers like yourself maximize revenue and streamline their business operations.
+
+We've been following your work and are impressed by your authentic style and engaged audience. At Lola & Ivy, we understand the challenges fashion influencers face - from managing brand partnerships to optimizing content strategy while maintaining creative freedom.
+
+Here's how we can help transform your influence into sustainable revenue:
+
+✨ CAMPAIGN MANAGEMENT: We handle all brand negotiations, contracts, and deliverables so you can focus on creating stunning content
+💰 REVENUE OPTIMIZATION: Our proven strategies have helped clients increase their monthly earnings by 40-60%
+📈 GROWTH STRATEGY: We develop personalized content plans that boost engagement and attract premium brand partnerships
+🎯 BRAND PARTNERSHIPS: Access to our network of top fashion and lifestyle brands seeking authentic influencer collaborations
+
+What sets us apart:
+• We only work with high-quality creators who share our values of authenticity and professionalism
+• Transparent pricing with no hidden fees
+• Dedicated account management with monthly strategy sessions
+• Proven track record of helping influencers build sustainable businesses
+
+Would you be interested in a 15-minute call to discuss how we could help elevate your fashion influence and increase your revenue? I'd love to share some specific strategies that could work well for your unique brand.
+
+Best regards,
+Katie Rosevear
+Founder, Lola & Ivy
+katie@lolaandivy.com
+www.lolaandivy.com
+
+P.S. We're currently offering a complimentary brand partnership audit for new clients. This alone has helped our partners identify $5K-15K in missed opportunities!`,
+
+                Lifestyle: `Hi ${name},
+
+I'm Katie from Lola & Ivy, and I've been admiring your lifestyle content! Your authentic approach to sharing daily inspiration really resonates with audiences looking for genuine connections.
+
+As a digital talent management company specializing in lifestyle creators, we help influencers like you transform their passion into profitable, sustainable businesses without losing the authenticity that makes your content special.
+
+Here's what we bring to lifestyle influencers:
+
+🏠 LIFESTYLE BRAND PARTNERSHIPS: Connect with home decor, wellness, travel, and lifestyle brands that align with your values
+📱 CONTENT STRATEGY: Develop engaging content calendars that tell your story while driving revenue
+💼 BUSINESS MANAGEMENT: Handle contracts, invoicing, and campaign logistics so you can focus on living and sharing your best life
+🌟 AUDIENCE GROWTH: Strategies to grow an engaged community that values your recommendations
+
+Our lifestyle creators typically see:
+• 45% increase in brand partnership opportunities
+• Higher-paying collaborations through professional negotiation
+• More time for content creation and personal life
+• Strategic growth that feels authentic to their brand
+
+We believe lifestyle influencing should enhance your life, not overwhelm it. Our management approach ensures you maintain creative control while we handle the business side.
+
+I'd love to chat about your goals and share how we've helped other lifestyle creators build thriving businesses. Are you free for a quick call this week?
+
+Looking forward to potentially working together!
+
+Katie Rosevear
+Lola & Ivy Digital Talent Management
+katie@lolaandivy.com`,
+
+                Beauty: `Hello ${name},
+
+Your beauty content caught our attention at Lola & Ivy! The way you showcase products and techniques shows real expertise and genuine passion for the beauty industry.
+
+As a management company focused on beauty and lifestyle creators, we specialize in helping talented influencers like you build profitable partnerships with top beauty brands while maintaining the authenticity your audience loves.
+
+What we offer beauty influencers:
+
+💄 BEAUTY BRAND NETWORK: Direct connections with major beauty brands, indie favorites, and emerging companies
+🎥 CONTENT OPTIMIZATION: Strategy for tutorials, reviews, and lifestyle content that drives engagement and sales
+💰 RATE NEGOTIATIONS: We ensure you're compensated fairly for your expertise and reach
+📊 ANALYTICS & GROWTH: Data-driven strategies to grow your audience and improve content performance
+
+Success stories from our beauty creators:
+• 60% average increase in brand partnership rates
+• Access to exclusive product launches and brand events
+• Professional negotiation that secures better contract terms
+• Strategic content planning that builds long-term audience trust
+
+The beauty industry moves fast, and having professional management ensures you don't miss opportunities while staying true to your brand voice.
+
+Would you be interested in learning more about how we could help elevate your beauty influence? I'd be happy to share specific strategies that have worked for creators in your niche.
+
+Best,
+Katie Rosevear
+Founder, Lola & Ivy
+katie@lolaandivy.com`,
+
+                Fitness: `Hey ${name},
+
+I've been following your fitness journey, and your dedication to helping others achieve their health goals is truly inspiring! Your authentic approach to fitness content sets you apart in a crowded space.
+
+At Lola & Ivy, we work with fitness influencers who are serious about building sustainable businesses around their passion for health and wellness.
+
+How we support fitness creators:
+
+💪 FITNESS BRAND PARTNERSHIPS: Connect with supplement companies, activewear brands, equipment manufacturers, and wellness companies
+🏋️ CONTENT STRATEGY: Develop workout plans, nutrition content, and motivational posts that engage and convert
+📈 AUDIENCE BUILDING: Grow a committed fitness community that trusts your recommendations
+💼 BUSINESS DEVELOPMENT: Handle partnerships so you can focus on training and content creation
+
+Our fitness influencers typically experience:
+• Premium partnerships with respected fitness brands
+• Higher engagement rates through strategic content planning
+• Professional business management and contract negotiation
+• Opportunities for fitness app collaborations and program launches
+
+The fitness industry values authentic voices, and we help you monetize your expertise while staying true to your mission of helping others achieve their goals.
+
+I'd love to discuss how we could help you build a thriving fitness business. Could we schedule a brief call to explore partnership possibilities?
+
+To your success,
+Katie Rosevear
+Lola & Ivy Management
+katie@lolaandivy.com`,
+
+                Travel: `Hi ${name},
+
+Your travel content transports viewers to amazing destinations! The way you capture both the beauty and authentic experiences of your journeys is exactly what travel brands are looking for in partnership opportunities.
+
+Lola & Ivy specializes in helping travel influencers monetize their wanderlust through strategic brand partnerships and content optimization.
+
+Travel influencer services:
+
+✈️ TRAVEL BRAND PARTNERSHIPS: Hotels, airlines, tourism boards, gear companies, and booking platforms
+🌍 DESTINATION COLLABORATIONS: Work with tourism boards and travel companies for sponsored trips
+📸 CONTENT MONETIZATION: Turn your travel photos and videos into multiple revenue streams
+🗺️ TRIP PLANNING SERVICES: Partner with travel planning companies and booking platforms
+
+Benefits our travel creators enjoy:
+• Sponsored travel opportunities with luxury and boutique brands
+• Higher rates for travel content through professional negotiation
+• Strategic content planning that maximizes trip ROI
+• Long-term partnerships with travel brands and destinations
+
+Travel influencing can be incredibly rewarding both personally and financially when managed professionally. We help you turn your adventures into sustainable income streams.
+
+Would you be interested in exploring how we could help you monetize your travel content more effectively? I'd love to share some specific opportunities in the travel space.
+
+Safe travels and talk soon!
+
+Katie Rosevear
+Lola & Ivy Digital Management
+katie@lolaandivy.com`,
+
+                Food: `Hello ${name},
+
+Your food content is absolutely mouth-watering! The way you style and photograph food shows real culinary artistry, and your audience engagement proves people trust your taste and recommendations.
+
+At Lola & Ivy, we help food influencers build delicious businesses through strategic partnerships with restaurants, food brands, and culinary companies.
+
+Food influencer opportunities:
+
+🍽️ RESTAURANT PARTNERSHIPS: Collaborations with local eateries, chain restaurants, and fine dining establishments
+🥘 FOOD BRAND COLLABORATIONS: Partnerships with food manufacturers, specialty brands, and kitchen equipment companies
+📱 RECIPE DEVELOPMENT: Paid opportunities to create content for food brands and publications
+👨‍🍳 CULINARY EVENTS: Access to food festivals, brand events, and chef collaborations
+
+What food creators gain with us:
+• Restaurant partnership negotiations that ensure fair compensation
+• Food brand collaborations that align with your culinary style
+• Strategic content planning for maximum recipe engagement
+• Professional management of sponsored content and FTC compliance
+
+The food industry offers incredible opportunities for authentic creators who can make audiences hungry for what they're sharing. We help you serve up success while maintaining your unique culinary voice.
+
+I'd love to chat about your food content goals and share how we've helped other food influencers build thriving businesses. Are you available for a quick call?
+
+Bon appétit and best regards!
+
+Katie Rosevear
+Lola & Ivy Management
+katie@lolaandivy.com`
+            };
+
+            return templates[industry] || templates.Lifestyle;
+        }
+
+        function closeEmailModal() {
+            document.getElementById('emailModal').style.display = 'none';
+        }
+
+        function sendEmail() {
+            const recipient = document.getElementById('emailRecipient').textContent;
+            const content = document.getElementById('emailContent').value;
+            
+            // In a real application, this would send the email via an API
+            alert(`Email would be sent to: ${recipient}\n\nContent: ${content.substring(0, 100)}...`);
+            closeEmailModal();
+        }
+
+        function callClient(phone) {
+            alert(`Calling ${phone}...\n\nIn a real application, this would integrate with a calling system.`);
+        }
+
+        function viewProfile(index) {
+            const client = currentClients[index];
+            alert(`Client Profile:\n\nName: ${client.name}\nIndustry: ${client.industry}\nBuyer Type: ${client.buyerType}\nRevenue: ${client.revenue}\nStatus: ${client.status}\nLast Contact: ${client.lastContact}`);
+        }
+
+        function exportData() {
+            let csv = 'Name,Email,Phone,Address,P.U.R.E.S. Score,Tier,Industry,Revenue,Status\n';
+            
+            currentClients.forEach(client => {
+                csv += `"${client.name}","${client.email}","${client.phone}","${client.address}",${client.pures},${client.tier},"${client.industry}","${client.revenue}","${client.status}"\n`;
+            });
+            
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'lola-ivy-clients.csv';
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+
+        function showModule(moduleId) {
+            // Hide all modules
+            const modules = document.querySelectorAll('.module');
+            modules.forEach(module => {
+                module.style.display = 'none';
+            });
+            
+            // Show selected module
+            document.getElementById(moduleId).style.display = 'block';
+            
+            // Update navigation
+            const navLinks = document.querySelectorAll('.nav-link');
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+            });
+            
+            event.target.classList.add('active');
+        }
+    </script>
+</body>
+</html>

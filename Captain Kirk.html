@@ -1,0 +1,3054 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Captain Kirk's Water Sports - S.A.L.E. Client Targeting System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #000000;
+            color: #ffffff;
+            line-height: 1.6;
+        }
+
+        .header {
+            background-color: #CF2030;
+            padding: 1rem;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(207, 32, 48, 0.3);
+        }
+
+        .header img {
+            max-height: 80px;
+            margin-bottom: 10px;
+        }
+
+        .header h1 {
+            color: #ffffff;
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            color: #ffffff;
+            opacity: 0.9;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .nav-tabs {
+            display: flex;
+            background-color: #CF2030;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+
+        .tab-button {
+            flex: 1;
+            padding: 15px;
+            background-color: #CF2030;
+            color: #ffffff;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .tab-button:hover {
+            background-color: #b01b28;
+        }
+
+        .tab-button.active {
+            background-color: #333333;
+        }
+
+        .tab-content {
+            display: none;
+            background-color: #1a1a1a;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .search-filters {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .search-input, .filter-select {
+            padding: 10px;
+            border: 1px solid #CF2030;
+            border-radius: 5px;
+            background-color: #333333;
+            color: #ffffff;
+            font-size: 1rem;
+        }
+
+        .search-input {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .filter-select {
+            min-width: 150px;
+        }
+
+        .client-table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #2a2a2a;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .client-table th,
+        .client-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #444;
+        }
+
+        .client-table th {
+            background-color: #CF2030;
+            color: #ffffff;
+            font-weight: bold;
+            cursor: pointer;
+            position: relative;
+            user-select: none;
+        }
+
+        .client-table th:hover {
+            background-color: #b01b28;
+        }
+
+        .client-table tr:hover {
+            background-color: #333333;
+        }
+
+        .tier-1a { background-color: rgba(0, 255, 0, 0.1); }
+        .tier-1b { background-color: rgba(255, 255, 0, 0.1); }
+        .tier-1c { background-color: rgba(0, 100, 255, 0.1); }
+
+        .contact-btn {
+            padding: 8px 12px;
+            background-color: #CF2030;
+            color: #ffffff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            margin: 2px;
+        }
+
+        .contact-btn:hover {
+            background-color: #b01b28;
+        }
+
+        .pures-form {
+            background-color: #2a2a2a;
+            padding: 2rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #CF2030;
+            font-weight: bold;
+        }
+
+        .slider-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .slider {
+            flex: 1;
+            -webkit-appearance: none;
+            height: 8px;
+            border-radius: 4px;
+            background: #444;
+            outline: none;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #CF2030;
+            cursor: pointer;
+        }
+
+        .slider::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #CF2030;
+            cursor: pointer;
+            border: none;
+        }
+
+        .score-value {
+            min-width: 30px;
+            text-align: center;
+            color: #ffffff;
+            font-weight: bold;
+        }
+
+        .export-buttons {
+            margin: 2rem 0;
+            display: flex;
+            gap: 1rem;
+        }
+
+        .export-btn {
+            padding: 12px 24px;
+            background-color: #CF2030;
+            color: #ffffff;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .export-btn:hover {
+            background-color: #b01b28;
+        }
+
+        .footer {
+            background-color: #1a1a1a;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+            border-top: 2px solid #CF2030;
+        }
+
+        .footer img {
+            max-height: 50px;
+            margin-bottom: 1rem;
+            opacity: 0.8;
+        }
+
+        .footer p {
+            color: #999;
+            font-size: 0.9rem;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+        }
+
+        .modal-content {
+            background-color: #2a2a2a;
+            margin: 5% auto;
+            padding: 2rem;
+            border-radius: 8px;
+            width: 80%;
+            max-width: 600px;
+            color: #ffffff;
+        }
+
+        .close {
+            color: #CF2030;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: #b01b28;
+        }
+
+        .email-template {
+            background-color: #333;
+            padding: 1rem;
+            border-radius: 5px;
+            margin: 1rem 0;
+            border-left: 4px solid #CF2030;
+        }
+
+        @media (max-width: 768px) {
+            .search-filters {
+                flex-direction: column;
+            }
+            
+            .nav-tabs {
+                flex-direction: column;
+            }
+            
+            .client-table {
+                font-size: 0.8rem;
+            }
+            
+            .contact-btn {
+                padding: 6px 8px;
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports">
+        <h1>Captain Kirk's Water Sports - S.A.L.E. Client Targeting System</h1>
+        <p>Strategic Client Acquisition & Relationship Enhancement</p>
+    </div>
+
+    <div class="container">
+        <div class="nav-tabs">
+            <button class="tab-button active" onclick="showTab('sourcing')">S.OURCING</button>
+            <button class="tab-button" onclick="showTab('assessing')">A.SSESSING</button>
+            <button class="tab-button" onclick="showTab('listening')">L.ISTENING</button>
+            <button class="tab-button" onclick="showTab('empowering')">E.MPOWERING</button>
+        </div>
+
+        <!-- SOURCING TAB -->
+        <div id="sourcing" class="tab-content active">
+            <h2>S.OURCING - P.U.R.E.S. Client Scoring & Database</h2>
+            
+            <div class="pures-form">
+                <h3>P.U.R.E.S. Client Evaluation System</h3>
+                <div class="form-group">
+                    <label>Profitability (1-5): Annual revenue threshold and budget capacity</label>
+                    <div class="slider-container">
+                        <input type="range" min="1" max="5" value="3" class="slider" id="profitability">
+                        <span class="score-value" id="profitabilityValue">3</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Urgency (1-5): Active pain points requiring immediate solutions</label>
+                    <div class="slider-container">
+                        <input type="range" min="1" max="5" value="3" class="slider" id="urgency">
+                        <span class="score-value" id="urgencyValue">3</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Reachability (1-5): Accessible decision makers with clear contact paths</label>
+                    <div class="slider-container">
+                        <input type="range" min="1" max="5" value="3" class="slider" id="reachability">
+                        <span class="score-value" id="reachabilityValue">3</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Engagement (1-5): Openness to innovation and partnerships</label>
+                    <div class="slider-container">
+                        <input type="range" min="1" max="5" value="3" class="slider" id="engagement">
+                        <span class="score-value" id="engagementValue">3</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Sustainability (1-5): Long-term partnership potential with growth trajectory</label>
+                    <div class="slider-container">
+                        <input type="range" min="1" max="5" value="3" class="slider" id="sustainability">
+                        <span class="score-value" id="sustainabilityValue">3</span>
+                    </div>
+                </div>
+                <div style="margin-top: 1rem; padding: 1rem; background-color: #333; border-radius: 5px;">
+                    <strong>Total P.U.R.E.S. Score: <span id="totalScore">15</span> / 25</strong>
+                    <br>
+                    <strong>Tier Classification: <span id="tierLevel">Tier 1C</span></strong>
+                </div>
+            </div>
+
+            <div class="search-filters">
+                <input type="text" class="search-input" id="searchInput" placeholder="Search clients by name, email, or address...">
+                <select class="filter-select" id="tierFilter">
+                    <option value="">All Tiers</option>
+                    <option value="1A">Tier 1A (Premium)</option>
+                    <option value="1B">Tier 1B (High-Value)</option>
+                    <option value="1C">Tier 1C (Qualified)</option>
+                </select>
+                <select class="filter-select" id="industryFilter">
+                    <option value="">All Industries</option>
+                    <option value="Tourism">Tourism</option>
+                    <option value="Fitness">Fitness</option>
+                    <option value="Real Estate">Real Estate</option>
+                    <option value="Technology">Technology</option>
+                    <option value="Entertainment">Entertainment</option>
+                    <option value="Healthcare">Healthcare</option>
+                    <option value="Education">Education</option>
+                </select>
+            </div>
+
+            <div class="export-buttons">
+                <button class="export-btn" onclick="exportToCSV()">Export to CSV</button>
+                <button class="export-btn" onclick="exportToPDF()">Export to PDF</button>
+                <button class="export-btn" onclick="generateEmailCampaign()">Generate Email Campaign</button>
+            </div>
+
+            <table class="client-table" id="clientTable">
+                <thead>
+                    <tr>
+                        <th onclick="sortTable(0)">Client Name</th>
+                        <th onclick="sortTable(1)">Email</th>
+                        <th onclick="sortTable(2)">Phone</th>
+                        <th onclick="sortTable(3)">Address</th>
+                        <th onclick="sortTable(4)">P.U.R.E.S. Score</th>
+                        <th onclick="sortTable(5)">Tier</th>
+                        <th onclick="sortTable(6)">Industry</th>
+                        <th onclick="sortTable(7)">Revenue Estimate</th>
+                        <th onclick="sortTable(8)">Contact Status</th>
+                        <th onclick="sortTable(9)">Last Contact</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="clientTableBody">
+                    <!-- Client data will be populated here -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- ASSESSING TAB -->
+        <div id="assessing" class="tab-content">
+            <h2>A.SSESSING - Buying Pattern Analysis</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+                <div style="background-color: #2a2a2a; padding: 1.5rem; border-radius: 8px;">
+                    <h3 style="color: #CF2030;">Analytical Buyers</h3>
+                    <p>Require detailed ROI analysis, case studies, trials</p>
+                    <ul style="margin-top: 1rem;">
+                        <li>Beach resort owners analyzing SUP rental ROI</li>
+                        <li>Fitness centers evaluating equipment purchases</li>
+                        <li>Water sports schools comparing lesson packages</li>
+                    </ul>
+                </div>
+                <div style="background-color: #2a2a2a; padding: 1.5rem; border-radius: 8px;">
+                    <h3 style="color: #CF2030;">Relationship Buyers</h3>
+                    <p>Value trust, referrals, long-term partnerships</p>
+                    <ul style="margin-top: 1rem;">
+                        <li>Local surf shops seeking equipment suppliers</li>
+                        <li>Community recreation centers</li>
+                        <li>Water sports enthusiast groups</li>
+                    </ul>
+                </div>
+                <div style="background-color: #2a2a2a; padding: 1.5rem; border-radius: 8px;">
+                    <h3 style="color: #CF2030;">Efficiency Buyers</h3>
+                    <p>Focus on time-saving, process improvement</p>
+                    <ul style="margin-top: 1rem;">
+                        <li>Corporate team-building event planners</li>
+                        <li>Busy professionals seeking quick lessons</li>
+                        <li>Event management companies</li>
+                    </ul>
+                </div>
+                <div style="background-color: #2a2a2a; padding: 1.5rem; border-radius: 8px;">
+                    <h3 style="color: #CF2030;">Innovation Buyers</h3>
+                    <p>Seek cutting-edge solutions, competitive advantage</p>
+                    <ul style="margin-top: 1rem;">
+                        <li>Professional athletes and trainers</li>
+                        <li>Adventure tourism companies</li>
+                        <li>High-end resort developers</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- LISTENING TAB -->
+        <div id="listening" class="tab-content">
+            <h2>L.ISTENING - Feedback Integration</h2>
+            <div style="background-color: #2a2a2a; padding: 2rem; border-radius: 8px;">
+                <h3>Feedback Tracking System</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 1.5rem;">
+                    <div style="background-color: #333; padding: 1rem; border-radius: 5px; border-left: 4px solid #CF2030;">
+                        <h4>Pre-sale Feedback</h4>
+                        <p>• Website interaction tracking</p>
+                        <p>• Initial inquiry responses</p>
+                        <p>• Equipment demonstrations</p>
+                    </div>
+                    <div style="background-color: #333; padding: 1rem; border-radius: 5px; border-left: 4px solid #CF2030;">
+                        <h4>During-sale Progress</h4>
+                        <p>• Lesson satisfaction surveys</p>
+                        <p>• Equipment trial feedback</p>
+                        <p>• Service quality assessments</p>
+                    </div>
+                    <div style="background-color: #333; padding: 1rem; border-radius: 5px; border-left: 4px solid #CF2030;">
+                        <h4>Post-sale Monitoring</h4>
+                        <p>• Follow-up satisfaction calls</p>
+                        <p>• Equipment performance reviews</p>
+                        <p>• Repeat purchase tracking</p>
+                    </div>
+                    <div style="background-color: #333; padding: 1rem; border-radius: 5px; border-left: 4px solid #CF2030;">
+                        <h4>Complaint Resolution</h4>
+                        <p>• 24-hour response protocol</p>
+                        <p>• Issue escalation procedures</p>
+                        <p>• Resolution documentation</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- EMPOWERING TAB -->
+        <div id="empowering" class="tab-content">
+            <h2>E.MPOWERING - Referral Strategy</h2>
+            <div style="background-color: #2a2a2a; padding: 2rem; border-radius: 8px;">
+                <h3>Referral Management Dashboard</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-top: 1.5rem;">
+                    <div style="background-color: #333; padding: 1.5rem; border-radius: 8px;">
+                        <h4 style="color: #CF2030;">Success Story Documentation</h4>
+                        <p>• Customer transformation stories</p>
+                        <p>• Before/after skill improvements</p>
+                        <p>• Equipment impact testimonials</p>
+                        <p>• Community engagement highlights</p>
+                    </div>
+                    <div style="background-color: #333; padding: 1.5rem; border-radius: 8px;">
+                        <h4 style="color: #CF2030;">Referral Reward Tracking</h4>
+                        <p>• 10% discount for successful referrals</p>
+                        <p>• Free lesson credits system</p>
+                        <p>• Exclusive gear access programs</p>
+                        <p>• VIP customer status benefits</p>
+                    </div>
+                    <div style="background-color: #333; padding: 1.5rem; border-radius: 8px;">
+                        <h4 style="color: #CF2030;">Client Advocacy Program</h4>
+                        <p>• Brand ambassador opportunities</p>
+                        <p>• Social media collaboration</p>
+                        <p>• Event participation incentives</p>
+                        <p>• Product testing privileges</p>
+                    </div>
+                    <div style="background-color: #333; padding: 1.5rem; border-radius: 8px;">
+                        <h4 style="color: #CF2030;">Co-marketing Opportunities</h4>
+                        <p>• Partner business cross-promotion</p>
+                        <p>• Joint event planning</p>
+                        <p>• Shared customer experiences</p>
+                        <p>• Community outreach programs</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Email Modal -->
+    <div id="emailModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeEmailModal()">&times;</span>
+            <h2>Compose Email</h2>
+            <div id="emailContent"></div>
+            <button class="export-btn" onclick="sendEmail()" style="margin-top: 1rem;">Send Email</button>
+        </div>
+    </div>
+
+    <div class="footer">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports">
+        <p>&copy; 2024 HigginsReports - Powered by AI-Driven Business Intelligence</p>
+        <p>Captain Kirk's Water Sports Client Management System</p>
+    </div>
+
+    <script>
+        // Client Data - 50 potential customers within 10 miles of Long Beach, CA
+        const clientData = [
+            {
+                name: "Michael Rodriguez",
+                email: "mrodriguez@oceanview.com",
+                phone: "(562) 435-7891",
+                address: "234 Ocean Blvd, Long Beach, CA 90802",
+                puresScore: 23,
+                tier: "1A",
+                industry: "Tourism",
+                revenue: "$500,000",
+                status: "New Lead",
+                lastContact: "2024-03-20",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Sarah Chen",
+                email: "s.chen@beachfit.com",
+                phone: "(562) 891-2345",
+                address: "456 2nd St, Long Beach, CA 90803",
+                puresScore: 21,
+                tier: "1A",
+                industry: "Fitness",
+                revenue: "$300,000",
+                status: "Contacted",
+                lastContact: "2024-03-18",
+                buyerType: "Efficiency"
+            },
+            {
+                name: "David Thompson",
+                email: "dthompson@coastalrealty.com",
+                phone: "(562) 234-5678",
+                address: "789 Marina Dr, Long Beach, CA 90804",
+                puresScore: 20,
+                tier: "1A",
+                industry: "Real Estate",
+                revenue: "$750,000",
+                status: "Proposal Sent",
+                lastContact: "2024-03-15",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Jessica Martinez",
+                email: "jmartinez@techwave.com",
+                phone: "(562) 345-6789",
+                address: "123 Broadway Ave, Long Beach, CA 90802",
+                puresScore: 19,
+                tier: "1B",
+                industry: "Technology",
+                revenue: "$400,000",
+                status: "Follow-up",
+                lastContact: "2024-03-22",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Robert Kim",
+                email: "rkim@surfschool.net",
+                phone: "(562) 456-7890",
+                address: "567 Surf Ave, Long Beach, CA 90803",
+                puresScore: 22,
+                tier: "1A",
+                industry: "Entertainment",
+                revenue: "$200,000",
+                status: "Qualified",
+                lastContact: "2024-03-19",
+                buyerType: "Relationship"
+            },
+            {
+                name: "Amanda Foster",
+                email: "afoster@wellness.com",
+                phone: "(562) 567-8901",
+                address: "890 Pine St, Long Beach, CA 90805",
+                puresScore: 18,
+                tier: "1B",
+                industry: "Healthcare",
+                revenue: "$350,000",
+                status: "New Lead",
+                lastContact: "2024-03-21",
+                buyerType: "Analytical"
+            },
+            {
+                name: "James Wilson",
+                email: "jwilson@beachacademy.edu",
+                phone: "(562) 678-9012",
+                address: "345 School St, Long Beach, CA 90806",
+                puresScore: 17,
+                tier: "1B",
+                industry: "Education",
+                revenue: "$150,000",
+                status: "Contacted",
+                lastContact: "2024-03-17",
+                buyerType: "Efficiency"
+            },
+            {
+                name: "Lisa Anderson",
+                email: "landerson@adventures.com",
+                phone: "(562) 789-0123",
+                address: "678 Adventure Blvd, Long Beach, CA 90804",
+                puresScore: 24,
+                tier: "1A",
+                industry: "Tourism",
+                revenue: "$600,000",
+                status: "Hot Lead",
+                lastContact: "2024-03-23",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Carlos Mendoza",
+                email: "cmendoza@marina.com",
+                phone: "(562) 890-1234",
+                address: "901 Harbor St, Long Beach, CA 90802",
+                puresScore: 16,
+                tier: "1C",
+                industry: "Tourism",
+                revenue: "$250,000",
+                status: "Proposal Sent",
+                lastContact: "2024-03-16",
+                buyerType: "Relationship"
+            },
+            {
+                name: "Rachel Green",
+                email: "rgreen@coastalgym.com",
+                phone: "(562) 901-2345",
+                address: "234 Fitness Ave, Long Beach, CA 90803",
+                puresScore: 19,
+                tier: "1B",
+                industry: "Fitness",
+                revenue: "$180,000",
+                status: "Follow-up",
+                lastContact: "2024-03-20",
+                buyerType: "Efficiency"
+            },
+            {
+                name: "Kevin Brown",
+                email: "kbrown@properties.com",
+                phone: "(310) 123-4567",
+                address: "456 Coast Hwy, Redondo Beach, CA 90277",
+                puresScore: 21,
+                tier: "1A",
+                industry: "Real Estate",
+                revenue: "$800,000",
+                status: "Qualified",
+                lastContact: "2024-03-18",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Nicole Taylor",
+                email: "ntaylor@eventpro.com",
+                phone: "(310) 234-5678",
+                address: "789 Event Dr, Manhattan Beach, CA 90266",
+                puresScore: 20,
+                tier: "1A",
+                industry: "Entertainment",
+                revenue: "$450,000",
+                status: "New Lead",
+                lastContact: "2024-03-22",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Steven Davis",
+                email: "sdavis@startup.com",
+                phone: "(562) 345-7890",
+                address: "123 Tech Blvd, Long Beach, CA 90805",
+                puresScore: 18,
+                tier: "1B",
+                industry: "Technology",
+                revenue: "$320,000",
+                status: "Contacted",
+                lastContact: "2024-03-19",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Maria Gonzalez",
+                email: "mgonzalez@clinic.com",
+                phone: "(562) 456-8901",
+                address: "567 Health St, Long Beach, CA 90806",
+                puresScore: 17,
+                tier: "1B",
+                industry: "Healthcare",
+                revenue: "$280,000",
+                status: "Proposal Sent",
+                lastContact: "2024-03-17",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Christopher Lee",
+                email: "clee@college.edu",
+                phone: "(562) 567-9012",
+                address: "890 Campus Dr, Long Beach, CA 90804",
+                puresScore: 16,
+                tier: "1C",
+                industry: "Education",
+                revenue: "$120,000",
+                status: "Follow-up",
+                lastContact: "2024-03-21",
+                buyerType: "Efficiency"
+            },
+            {
+                name: "Jennifer White",
+                email: "jwhite@resort.com",
+                phone: "(310) 678-9123",
+                address: "345 Resort Way, Hermosa Beach, CA 90254",
+                puresScore: 23,
+                tier: "1A",
+                industry: "Tourism",
+                revenue: "$900,000",
+                status: "Hot Lead",
+                lastContact: "2024-03-23",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Daniel Miller",
+                email: "dmiller@training.com",
+                phone: "(562) 789-0234",
+                address: "678 Workout St, Long Beach, CA 90802",
+                puresScore: 19,
+                tier: "1B",
+                industry: "Fitness",
+                revenue: "$220,000",
+                status: "Qualified",
+                lastContact: "2024-03-20",
+                buyerType: "Relationship"
+            },
+            {
+                name: "Susan Clark",
+                email: "sclark@realtygroup.com",
+                phone: "(562) 890-1345",
+                address: "901 Luxury Ln, Long Beach, CA 90803",
+                puresScore: 22,
+                tier: "1A",
+                industry: "Real Estate",
+                revenue: "$1,200,000",
+                status: "Contacted",
+                lastContact: "2024-03-18",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Brian Johnson",
+                email: "bjohnson@innovate.com",
+                phone: "(562) 901-2456",
+                address: "234 Innovation Blvd, Long Beach, CA 90805",
+                puresScore: 20,
+                tier: "1A",
+                industry: "Technology",
+                revenue: "$550,000",
+                status: "New Lead",
+                lastContact: "2024-03-22",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Karen Moore",
+                email: "kmoore@entertainment.com",
+                phone: "(310) 123-5678",
+                address: "456 Show Blvd, Torrance, CA 90501",
+                puresScore: 18,
+                tier: "1B",
+                industry: "Entertainment",
+                revenue: "$380,000",
+                status: "Proposal Sent",
+                lastContact: "2024-03-19",
+                buyerType: "Relationship"
+            },
+            {
+                name: "Matthew Turner",
+                email: "mturner@medical.com",
+                phone: "(562) 234-6789",
+                address: "789 Medical Dr, Long Beach, CA 90806",
+                puresScore: 17,
+                tier: "1B",
+                industry: "Healthcare",
+                revenue: "$420,000",
+                status: "Follow-up",
+                lastContact: "2024-03-17",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Ashley Garcia",
+                email: "agarcia@university.edu",
+                phone: "(562) 345-7901",
+                address: "123 University Ave, Long Beach, CA 90804",
+                puresScore: 16,
+                tier: "1C",
+                industry: "Education",
+                revenue: "$95,000",
+                status: "Contacted",
+                lastContact: "2024-03-21",
+                buyerType: "Efficiency"
+            },
+            {
+                name: "Ryan Phillips",
+                email: "rphillips@beachclub.com",
+                phone: "(562) 456-8012",
+                address: "567 Club Dr, Long Beach, CA 90802",
+                puresScore: 21,
+                tier: "1A",
+                industry: "Tourism",
+                revenue: "$650,000",
+                status: "Qualified",
+                lastContact: "2024-03-20",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Michelle Adams",
+                email: "madams@fitness.com",
+                phone: "(562) 567-9123",
+                address: "890 Strong St, Long Beach, CA 90803",
+                puresScore: 19,
+                tier: "1B",
+                industry: "Fitness",
+                revenue: "$190,000",
+                status: "Hot Lead",
+                lastContact: "2024-03-23",
+                buyerType: "Efficiency"
+            },
+            {
+                name: "Jason Hall",
+                email: "jhall@development.com",
+                phone: "(310) 678-9234",
+                address: "345 Development Way, El Segundo, CA 90245",
+                puresScore: 22,
+                tier: "1A",
+                industry: "Real Estate",
+                revenue: "$1,100,000",
+                status: "New Lead",
+                lastContact: "2024-03-22",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Laura Young",
+                email: "lyoung@techsolutions.com",
+                phone: "(562) 789-0345",
+                address: "678 Solution Dr, Long Beach, CA 90805",
+                puresScore: 18,
+                tier: "1B",
+                industry: "Technology",
+                revenue: "$390,000",
+                status: "Proposal Sent",
+                lastContact: "2024-03-18",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Timothy Wright",
+                email: "twright@shows.com",
+                phone: "(562) 890-1456",
+                address: "901 Theatre St, Long Beach, CA 90806",
+                puresScore: 17,
+                tier: "1B",
+                industry: "Entertainment",
+                revenue: "$290,000",
+                status: "Follow-up",
+                lastContact: "2024-03-19",
+                buyerType: "Relationship"
+            },
+            {
+                name: "Stephanie King",
+                email: "sking@healthcare.com",
+                phone: "(562) 901-2567",
+                address: "234 Care Blvd, Long Beach, CA 90804",
+                puresScore: 20,
+                tier: "1A",
+                industry: "Healthcare",
+                revenue: "$480,000",
+                status: "Contacted",
+                lastContact: "2024-03-17",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Gregory Scott",
+                email: "gscott@school.edu",
+                phone: "(562) 234-7890",
+                address: "456 Learning Ave, Long Beach, CA 90802",
+                puresScore: 16,
+                tier: "1C",
+                industry: "Education",
+                revenue: "$110,000",
+                status: "Qualified",
+                lastContact: "2024-03-21",
+                buyerType: "Efficiency"
+            },
+            {
+                name: "Brittany Lewis",
+                email: "blewis@waterpark.com",
+                phone: "(310) 345-6789",
+                address: "789 Fun Way, Carson, CA 90745",
+                puresScore: 24,
+                tier: "1A",
+                industry: "Tourism",
+                revenue: "$1,500,000",
+                status: "Hot Lead",
+                lastContact: "2024-03-23",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Anthony Walker",
+                email: "awalker@crossfit.com",
+                phone: "(562) 456-7901",
+                address: "123 Power St, Long Beach, CA 90803",
+                puresScore: 19,
+                tier: "1B",
+                industry: "Fitness",
+                revenue: "$160,000",
+                status: "New Lead",
+                lastContact: "2024-03-22",
+                buyerType: "Relationship"
+            },
+            {
+                name: "Samantha Allen",
+                email: "sallen@luxury.com",
+                phone: "(562) 567-8012",
+                address: "567 Elite Dr, Long Beach, CA 90805",
+                puresScore: 23,
+                tier: "1A",
+                industry: "Real Estate",
+                revenue: "$2,200,000",
+                status: "Proposal Sent",
+                lastContact: "2024-03-18",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Joshua Hill",
+                email: "jhill@gamedev.com",
+                phone: "(562) 678-9123",
+                address: "890 Code Ave, Long Beach, CA 90806",
+                puresScore: 18,
+                tier: "1B",
+                industry: "Technology",
+                revenue: "$340,000",
+                status: "Follow-up",
+                lastContact: "2024-03-19",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Melissa Green",
+                email: "mgreen@media.com",
+                phone: "(310) 789-0123",
+                address: "345 Media Blvd, Gardena, CA 90247",
+                puresScore: 17,
+                tier: "1B",
+                industry: "Entertainment",
+                revenue: "$410,000",
+                status: "Contacted",
+                lastContact: "2024-03-17",
+                buyerType: "Relationship"
+            },
+            {
+                name: "Andrew Baker",
+                email: "abaker@pharmacy.com",
+                phone: "(562) 890-2345",
+                address: "678 Remedy St, Long Beach, CA 90804",
+                puresScore: 16,
+                tier: "1C",
+                industry: "Healthcare",
+                revenue: "$230,000",
+                status: "Qualified",
+                lastContact: "2024-03-21",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Elizabeth Carter",
+                email: "ecarter@academy.edu",
+                phone: "(562) 901-3456",
+                address: "901 Scholar Way, Long Beach, CA 90802",
+                puresScore: 15,
+                tier: "1C",
+                industry: "Education",
+                revenue: "$85,000",
+                status: "New Lead",
+                lastContact: "2024-03-22",
+                buyerType: "Efficiency"
+            },
+            {
+                name: "Benjamin Roberts",
+                email: "broberts@adventure.com",
+                phone: "(562) 234-8901",
+                address: "234 Thrill St, Long Beach, CA 90803",
+                puresScore: 22,
+                tier: "1A",
+                industry: "Tourism",
+                revenue: "$720,000",
+                status: "Proposal Sent",
+                lastContact: "2024-03-18",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Crystal Martinez",
+                email: "cmartinez@pilates.com",
+                phone: "(562) 345-9012",
+                address: "456 Balance Ave, Long Beach, CA 90805",
+                puresScore: 18,
+                tier: "1B",
+                industry: "Fitness",
+                revenue: "$140,000",
+                status: "Follow-up",
+                lastContact: "2024-03-19",
+                buyerType: "Efficiency"
+            },
+            {
+                name: "Jacob Campbell",
+                email: "jcampbell@condos.com",
+                phone: "(310) 456-7890",
+                address: "789 Tower Dr, Hawthorne, CA 90250",
+                puresScore: 21,
+                tier: "1A",
+                industry: "Real Estate",
+                revenue: "$850,000",
+                status: "Contacted",
+                lastContact: "2024-03-17",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Victoria Powell",
+                email: "vpowell@startup.com",
+                phone: "(562) 567-0123",
+                address: "123 Venture Blvd, Long Beach, CA 90806",
+                puresScore: 19,
+                tier: "1B",
+                industry: "Technology",
+                revenue: "$360,000",
+                status: "Qualified",
+                lastContact: "2024-03-21",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Nathan Evans",
+                email: "nevans@studio.com",
+                phone: "(562) 678-1234",
+                address: "567 Creative Way, Long Beach, CA 90804",
+                puresScore: 17,
+                tier: "1B",
+                industry: "Entertainment",
+                revenue: "$320,000",
+                status: "Hot Lead",
+                lastContact: "2024-03-23",
+                buyerType: "Relationship"
+            },
+            {
+                name: "Danielle Torres",
+                email: "dtorres@wellness.com",
+                phone: "(562) 789-2345",
+                address: "890 Healing Dr, Long Beach, CA 90802",
+                puresScore: 20,
+                tier: "1A",
+                industry: "Healthcare",
+                revenue: "$520,000",
+                status: "New Lead",
+                lastContact: "2024-03-22",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Tyler Richardson",
+                email: "trichardson@prep.edu",
+                phone: "(562) 890-3456",
+                address: "345 Prep Ave, Long Beach, CA 90803",
+                puresScore: 16,
+                tier: "1C",
+                industry: "Education",
+                revenue: "$130,000",
+                status: "Proposal Sent",
+                lastContact: "2024-03-18",
+                buyerType: "Efficiency"
+            },
+            {
+                name: "Alexis Cooper",
+                email: "acooper@waterfront.com",
+                phone: "(310) 901-2345",
+                address: "678 Waterfront St, Palos Verdes, CA 90274",
+                puresScore: 25,
+                tier: "1A",
+                industry: "Tourism",
+                revenue: "$3,200,000",
+                status: "Contacted",
+                lastContact: "2024-03-17",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Eric Reed",
+                email: "ereed@bootcamp.com",
+                phone: "(562) 234-4567",
+                address: "901 Intensity Blvd, Long Beach, CA 90805",
+                puresScore: 18,
+                tier: "1B",
+                industry: "Fitness",
+                revenue: "$170,000",
+                status: "Follow-up",
+                lastContact: "2024-03-19",
+                buyerType: "Relationship"
+            },
+            {
+                name: "Megan Ward",
+                email: "mward@estates.com",
+                phone: "(562) 345-5678",
+                address: "234 Estate Dr, Long Beach, CA 90806",
+                puresScore: 22,
+                tier: "1A",
+                industry: "Real Estate",
+                revenue: "$1,800,000",
+                status: "Qualified",
+                lastContact: "2024-03-21",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Alexander Price",
+                email: "aprice@digital.com",
+                phone: "(562) 456-6789",
+                address: "456 Digital Way, Long Beach, CA 90804",
+                puresScore: 19,
+                tier: "1B",
+                industry: "Technology",
+                revenue: "$420,000",
+                status: "Hot Lead",
+                lastContact: "2024-03-23",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Hannah Ross",
+                email: "hross@production.com",
+                phone: "(310) 567-7890",
+                address: "789 Production Ave, Lawndale, CA 90260",
+                puresScore: 17,
+                tier: "1B",
+                industry: "Entertainment",
+                revenue: "$380,000",
+                status: "New Lead",
+                lastContact: "2024-03-22",
+                buyerType: "Relationship"
+            },
+            {
+                name: "Ian Morgan",
+                email: "imorgan@rehab.com",
+                phone: "(562) 678-7890",
+                address: "123 Recovery St, Long Beach, CA 90802",
+                puresScore: 16,
+                tier: "1C",
+                industry: "Healthcare",
+                revenue: "$240,000",
+                status: "Proposal Sent",
+                lastContact: "2024-03-18",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Olivia Bell",
+                email: "obell@institute.edu",
+                phone: "(562) 789-8901",
+                address: "567 Knowledge Blvd, Long Beach, CA 90803",
+                puresScore: 15,
+                tier: "1C",
+                industry: "Education",
+                revenue: "$75,000",
+                status: "Follow-up",
+                lastContact: "2024-03-19",
+                buyerType: "Efficiency"
+            },
+            {
+                name: "Zachary Peterson",
+                email: "zpeterson@watersports.com",
+                phone: "(562) 890-9012",
+                address: "890 Wave Dr, Long Beach, CA 90805",
+                puresScore: 24,
+                tier: "1A",
+                industry: "Tourism",
+                revenue: "$1,400,000",
+                status: "Contacted",
+                lastContact: "2024-03-17",
+                buyerType: "Innovation"
+            }
+        ];
+
+        let filteredData = [...clientData];
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            populateTable();
+            setupSliders();
+            setupSearch();
+        });
+
+        function showTab(tabName) {
+            // Hide all tab contents
+            const tabs = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => tab.classList.remove('active'));
+
+            // Remove active class from all buttons
+            const buttons = document.querySelectorAll('.tab-button');
+            buttons.forEach(btn => btn.classList.remove('active'));
+
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        function populateTable() {
+            const tbody = document.getElementById('clientTableBody');
+            tbody.innerHTML = '';
+
+            filteredData.forEach((client, index) => {
+                const row = document.createElement('tr');
+                row.className = `tier-${client.tier.toLowerCase()}`;
+                
+                row.innerHTML = `
+                    <td>${client.name}</td>
+                    <td>${client.email}</td>
+                    <td>${client.phone}</td>
+                    <td>${client.address}</td>
+                    <td>${client.puresScore}</td>
+                    <td>${client.tier}</td>
+                    <td>${client.industry}</td>
+                    <td>${client.revenue}</td>
+                    <td>${client.status}</td>
+                    <td>${client.lastContact}</td>
+                    <td>
+                        <button class="contact-btn" onclick="composeEmail('${client.email}', '${client.name}', '${client.industry}', '${client.buyerType}')">Email</button>
+                        <button class="contact-btn" onclick="callClient('${client.phone}')">Call</button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function setupSliders() {
+            const sliders = ['profitability', 'urgency', 'reachability', 'engagement', 'sustainability'];
+            
+            sliders.forEach(sliderId => {
+                const slider = document.getElementById(sliderId);
+                const valueSpan = document.getElementById(sliderId + 'Value');
+                
+                slider.addEventListener('input', function() {
+                    valueSpan.textContent = this.value;
+                    updateTotalScore();
+                });
+            });
+        }
+
+        function updateTotalScore() {
+            const sliders = ['profitability', 'urgency', 'reachability', 'engagement', 'sustainability'];
+            let total = 0;
+            
+            sliders.forEach(sliderId => {
+                total += parseInt(document.getElementById(sliderId).value);
+            });
+            
+            document.getElementById('totalScore').textContent = total;
+            
+            let tier;
+            if (total >= 20) tier = 'Tier 1A (Premium)';
+            else if (total >= 15) tier = 'Tier 1B (High-Value)';
+            else tier = 'Tier 1C (Qualified)';
+            
+            document.getElementById('tierLevel').textContent = tier;
+        }
+
+        function setupSearch() {
+            const searchInput = document.getElementById('searchInput');
+            const tierFilter = document.getElementById('tierFilter');
+            const industryFilter = document.getElementById('industryFilter');
+
+            [searchInput, tierFilter, industryFilter].forEach(element => {
+                element.addEventListener('input', filterClients);
+            });
+        }
+
+        function filterClients() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const tierFilter = document.getElementById('tierFilter').value;
+            const industryFilter = document.getElementById('industryFilter').value;
+
+            filteredData = clientData.filter(client => {
+                const matchesSearch = !searchTerm || 
+                    client.name.toLowerCase().includes(searchTerm) ||
+                    client.email.toLowerCase().includes(searchTerm) ||
+                    client.address.toLowerCase().includes(searchTerm);
+                
+                const matchesTier = !tierFilter || client.tier === tierFilter;
+                const matchesIndustry = !industryFilter || client.industry === industryFilter;
+
+                return matchesSearch && matchesTier && matchesIndustry;
+            });
+
+            populateTable();
+        }
+
+        function sortTable(columnIndex) {
+            const table = document.getElementById('clientTable');
+            const tbody = table.tBodies[0];
+            const rows = Array.from(tbody.rows);
+
+            const isNumeric = columnIndex === 4; // P.U.R.E.S. Score column
+            
+            rows.sort((a, b) => {
+                const aVal = a.cells[columnIndex].textContent.trim();
+                const bVal = b.cells[columnIndex].textContent.trim();
+                
+                if (isNumeric) {
+                    return parseInt(bVal) - parseInt(aVal);
+                }
+                
+                return aVal.localeCompare(bVal);
+            });
+
+            rows.forEach(row => tbody.appendChild(row));
+        }
+
+        function composeEmail(email, name, industry, buyerType) {
+            const emailContent = generateEmailTemplate(name, industry, buyerType);
+            
+            document.getElementById('emailContent').innerHTML = `
+                <div class="email-template">
+                    <p><strong>To:</strong> ${email}</p>
+                    <p><strong>Subject:</strong> Transform Your ${industry} Experience with Captain Kirk's Water Sports</p>
+                    <hr style="margin: 1rem 0; border-color: #CF2030;">
+                    ${emailContent}
+                </div>
+            `;
+            
+            document.getElementById('emailModal').style.display = 'block';
+        }
+
+        function generateEmailTemplate(name, industry, buyerType) {
+            let specificBenefits = '';
+            let callToAction = '';
+
+            switch(industry) {
+                case 'Tourism':
+                    specificBenefits = `
+                        • Premium SUP rental packages for your guests
+                        • Professional instruction services to enhance guest experience
+                        • Group discounts for tour packages
+                        • High-quality equipment maintenance and support`;
+                    break;
+                case 'Fitness':
+                    specificBenefits = `
+                        • Professional-grade fitness equipment for water workouts
+                        • Certified instruction for SUP fitness classes
+                        • Bulk purchasing discounts for gyms and studios
+                        • Equipment maintenance and training programs`;
+                    break;
+                case 'Real Estate':
+                    specificBenefits = `
+                        • Premium waterfront property enhancement services
+                        • Equipment packages for luxury developments
+                        • Professional consultation for water sports amenities
+                        • Maintenance contracts for property equipment`;
+                    break;
+                default:
+                    specificBenefits = `
+                        • Professional water sports equipment and services
+                        • Expert instruction and training programs
+                        • Competitive pricing for business partnerships
+                        • Comprehensive support and maintenance`;
+            }
+
+            switch(buyerType) {
+                case 'Analytical':
+                    callToAction = 'Schedule a detailed ROI consultation and equipment demonstration';
+                    break;
+                case 'Relationship':
+                    callToAction = 'Meet our team and explore long-term partnership opportunities';
+                    break;
+                case 'Efficiency':
+                    callToAction = 'Book a quick 30-minute consultation to streamline your water sports needs';
+                    break;
+                default:
+                    callToAction = 'Discover the latest innovations in water sports technology';
+            }
+
+            return `
+                <p>Dear ${name},</p>
+                
+                <p>I hope this message finds you well. As a leader in the ${industry} sector, you understand the importance of providing exceptional experiences and quality equipment.</p>
+                
+                <p>Captain Kirk's Water Sports has been Long Beach's premier destination for water sports equipment, lessons, and rentals since our founding. We specialize in:</p>
+                
+                <ul style="margin: 1rem 0;">
+                    <li><strong>Stand-Up Paddleboarding (SUP)</strong> - Equipment, lessons, and rentals</li>
+                    <li><strong>Kitesurfing & Windsurfing</strong> - Professional gear and instruction</li>
+                    <li><strong>Wing Foiling</strong> - Latest technology and training</li>
+                    <li><strong>Premium Waterwear</strong> - Complete accessory solutions</li>
+                </ul>
+                
+                <p><strong>Specific benefits for your ${industry} business:</strong></p>
+                <ul style="margin: 1rem 0;">
+                    ${specificBenefits}
+                </ul>
+                
+                <p>Located at 2015 E Anaheim St in Long Beach, we're perfectly positioned to serve the Southern California water sports community. Our team of certified instructors and equipment specialists are ready to help you ${callToAction.toLowerCase()}.</p>
+                
+                <p><strong>Next Steps:</strong> ${callToAction}</p>
+                
+                <p>Best regards,<br>
+                <strong>Captain Kirk's Water Sports Team</strong><br>
+                📞 (562) 833-3397<br>
+                🌐 www.captainkirksusa.com<br>
+                📧 sabrinap@captainkirks.com</p>
+                
+                <p style="font-style: italic; color: #CF2030;">Aloha! 🌊</p>
+            `;
+        }
+
+        function closeEmailModal() {
+            document.getElementById('emailModal').style.display = 'none';
+        }
+
+        function sendEmail() {
+            alert('Email functionality would integrate with your email client or service. Email template ready to send!');
+            closeEmailModal();
+        }
+
+        function callClient(phone) {
+            window.open(`tel:${phone}`, '_self');
+        }
+
+        function exportToCSV() {
+            const headers = ['Name', 'Email', 'Phone', 'Address', 'P.U.R.E.S. Score', 'Tier', 'Industry', 'Revenue', 'Status', 'Last Contact'];
+            const csvContent = [
+                headers.join(','),
+                ...filteredData.map(client => [
+                    client.name,
+                    client.email,
+                    client.phone,
+                    `"${client.address}"`,
+                    client.puresScore,
+                    client.tier,
+                    client.industry,
+                    client.revenue,
+                    client.status,
+                    client.lastContact
+                ].join(','))
+            ].join('\n');
+
+            const blob = new Blob([csvContent], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'captain_kirks_clients.csv';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function exportToPDF() {
+            alert('PDF export functionality would integrate with a PDF generation library like jsPDF.');
+        }
+
+        function generateEmailCampaign() {
+            alert('Email campaign functionality would integrate with email marketing services like Mailchimp or SendGrid.');
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('emailModal');
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>
+</thinking>
+
+I'll create a comprehensive S.A.L.E. client targeting system for Captain Kirk's Water Sports based on the information from their website files. This will include the P.U.R.E.S. scoring system and 50 potential customers within 10 miles of their Long Beach, California location.
+
+<airiaArtifact identifier="captain-kirks-sale-system" type="text/html" title="Captain Kirk's Water Sports - S.A.L.E. Client Targeting System">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Captain Kirk's Water Sports - S.A.L.E. Client Targeting System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #000000;
+            color: #ffffff;
+            line-height: 1.6;
+        }
+
+        .header {
+            background-color: #CF2030;
+            padding: 1rem;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(207, 32, 48, 0.3);
+        }
+
+        .header img {
+            max-height: 80px;
+            margin-bottom: 10px;
+        }
+
+        .header h1 {
+            color: #ffffff;
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            color: #ffffff;
+            opacity: 0.9;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .nav-tabs {
+            display: flex;
+            background-color: #CF2030;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+
+        .tab-button {
+            flex: 1;
+            padding: 15px;
+            background-color: #CF2030;
+            color: #ffffff;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .tab-button:hover {
+            background-color: #b01b28;
+        }
+
+        .tab-button.active {
+            background-color: #333333;
+        }
+
+        .tab-content {
+            display: none;
+            background-color: #1a1a1a;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .search-filters {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .search-input, .filter-select {
+            padding: 10px;
+            border: 1px solid #CF2030;
+            border-radius: 5px;
+            background-color: #333333;
+            color: #ffffff;
+            font-size: 1rem;
+        }
+
+        .search-input {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .filter-select {
+            min-width: 150px;
+        }
+
+        .client-table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #2a2a2a;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .client-table th,
+        .client-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #444;
+        }
+
+        .client-table th {
+            background-color: #CF2030;
+            color: #ffffff;
+            font-weight: bold;
+            cursor: pointer;
+            position: relative;
+            user-select: none;
+        }
+
+        .client-table th:hover {
+            background-color: #b01b28;
+        }
+
+        .client-table tr:hover {
+            background-color: #333333;
+        }
+
+        .tier-1a { background-color: rgba(0, 255, 0, 0.1); }
+        .tier-1b { background-color: rgba(255, 255, 0, 0.1); }
+        .tier-1c { background-color: rgba(0, 100, 255, 0.1); }
+
+        .contact-btn {
+            padding: 8px 12px;
+            background-color: #CF2030;
+            color: #ffffff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            margin: 2px;
+        }
+
+        .contact-btn:hover {
+            background-color: #b01b28;
+        }
+
+        .pures-form {
+            background-color: #2a2a2a;
+            padding: 2rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #CF2030;
+            font-weight: bold;
+        }
+
+        .slider-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .slider {
+            flex: 1;
+            -webkit-appearance: none;
+            height: 8px;
+            border-radius: 4px;
+            background: #444;
+            outline: none;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #CF2030;
+            cursor: pointer;
+        }
+
+        .slider::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #CF2030;
+            cursor: pointer;
+            border: none;
+        }
+
+        .score-value {
+            min-width: 30px;
+            text-align: center;
+            color: #ffffff;
+            font-weight: bold;
+        }
+
+        .export-buttons {
+            margin: 2rem 0;
+            display: flex;
+            gap: 1rem;
+        }
+
+        .export-btn {
+            padding: 12px 24px;
+            background-color: #CF2030;
+            color: #ffffff;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .export-btn:hover {
+            background-color: #b01b28;
+        }
+
+        .footer {
+            background-color: #1a1a1a;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+            border-top: 2px solid #CF2030;
+        }
+
+        .footer img {
+            max-height: 50px;
+            margin-bottom: 1rem;
+            opacity: 0.8;
+        }
+
+        .footer p {
+            color: #999;
+            font-size: 0.9rem;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+        }
+
+        .modal-content {
+            background-color: #2a2a2a;
+            margin: 5% auto;
+            padding: 2rem;
+            border-radius: 8px;
+            width: 80%;
+            max-width: 600px;
+            color: #ffffff;
+        }
+
+        .close {
+            color: #CF2030;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: #b01b28;
+        }
+
+        .email-template {
+            background-color: #333;
+            padding: 1rem;
+            border-radius: 5px;
+            margin: 1rem 0;
+            border-left: 4px solid #CF2030;
+        }
+
+        @media (max-width: 768px) {
+            .search-filters {
+                flex-direction: column;
+            }
+            
+            .nav-tabs {
+                flex-direction: column;
+            }
+            
+            .client-table {
+                font-size: 0.8rem;
+            }
+            
+            .contact-btn {
+                padding: 6px 8px;
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports">
+        <h1>Captain Kirk's Water Sports - S.A.L.E. Client Targeting System</h1>
+        <p>Strategic Client Acquisition & Relationship Enhancement</p>
+    </div>
+
+    <div class="container">
+        <div class="nav-tabs">
+            <button class="tab-button active" onclick="showTab('sourcing')">S.OURCING</button>
+            <button class="tab-button" onclick="showTab('assessing')">A.SSESSING</button>
+            <button class="tab-button" onclick="showTab('listening')">L.ISTENING</button>
+            <button class="tab-button" onclick="showTab('empowering')">E.MPOWERING</button>
+        </div>
+
+        <!-- SOURCING TAB -->
+        <div id="sourcing" class="tab-content active">
+            <h2>S.OURCING - P.U.R.E.S. Client Scoring & Database</h2>
+            
+            <div class="pures-form">
+                <h3>P.U.R.E.S. Client Evaluation System</h3>
+                <div class="form-group">
+                    <label>Profitability (1-5): Annual revenue threshold and budget capacity</label>
+                    <div class="slider-container">
+                        <input type="range" min="1" max="5" value="3" class="slider" id="profitability">
+                        <span class="score-value" id="profitabilityValue">3</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Urgency (1-5): Active pain points requiring immediate solutions</label>
+                    <div class="slider-container">
+                        <input type="range" min="1" max="5" value="3" class="slider" id="urgency">
+                        <span class="score-value" id="urgencyValue">3</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Reachability (1-5): Accessible decision makers with clear contact paths</label>
+                    <div class="slider-container">
+                        <input type="range" min="1" max="5" value="3" class="slider" id="reachability">
+                        <span class="score-value" id="reachabilityValue">3</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Engagement (1-5): Openness to innovation and partnerships</label>
+                    <div class="slider-container">
+                        <input type="range" min="1" max="5" value="3" class="slider" id="engagement">
+                        <span class="score-value" id="engagementValue">3</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Sustainability (1-5): Long-term partnership potential with growth trajectory</label>
+                    <div class="slider-container">
+                        <input type="range" min="1" max="5" value="3" class="slider" id="sustainability">
+                        <span class="score-value" id="sustainabilityValue">3</span>
+                    </div>
+                </div>
+                <div style="margin-top: 1rem; padding: 1rem; background-color: #333; border-radius: 5px;">
+                    <strong>Total P.U.R.E.S. Score: <span id="totalScore">15</span> / 25</strong>
+                    <br>
+                    <strong>Tier Classification: <span id="tierLevel">Tier 1C</span></strong>
+                </div>
+            </div>
+
+            <div class="search-filters">
+                <input type="text" class="search-input" id="searchInput" placeholder="Search clients by name, email, or address...">
+                <select class="filter-select" id="tierFilter">
+                    <option value="">All Tiers</option>
+                    <option value="1A">Tier 1A (Premium)</option>
+                    <option value="1B">Tier 1B (High-Value)</option>
+                    <option value="1C">Tier 1C (Qualified)</option>
+                </select>
+                <select class="filter-select" id="industryFilter">
+                    <option value="">All Industries</option>
+                    <option value="Tourism">Tourism</option>
+                    <option value="Fitness">Fitness</option>
+                    <option value="Real Estate">Real Estate</option>
+                    <option value="Technology">Technology</option>
+                    <option value="Entertainment">Entertainment</option>
+                    <option value="Healthcare">Healthcare</option>
+                    <option value="Education">Education</option>
+                </select>
+            </div>
+
+            <div class="export-buttons">
+                <button class="export-btn" onclick="exportToCSV()">Export to CSV</button>
+                <button class="export-btn" onclick="exportToPDF()">Export to PDF</button>
+                <button class="export-btn" onclick="generateEmailCampaign()">Generate Email Campaign</button>
+            </div>
+
+            <table class="client-table" id="clientTable">
+                <thead>
+                    <tr>
+                        <th onclick="sortTable(0)">Client Name</th>
+                        <th onclick="sortTable(1)">Email</th>
+                        <th onclick="sortTable(2)">Phone</th>
+                        <th onclick="sortTable(3)">Address</th>
+                        <th onclick="sortTable(4)">P.U.R.E.S. Score</th>
+                        <th onclick="sortTable(5)">Tier</th>
+                        <th onclick="sortTable(6)">Industry</th>
+                        <th onclick="sortTable(7)">Revenue Estimate</th>
+                        <th onclick="sortTable(8)">Contact Status</th>
+                        <th onclick="sortTable(9)">Last Contact</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="clientTableBody">
+                    <!-- Client data will be populated here -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- ASSESSING TAB -->
+        <div id="assessing" class="tab-content">
+            <h2>A.SSESSING - Buying Pattern Analysis</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+                <div style="background-color: #2a2a2a; padding: 1.5rem; border-radius: 8px;">
+                    <h3 style="color: #CF2030;">Analytical Buyers</h3>
+                    <p>Require detailed ROI analysis, case studies, trials</p>
+                    <ul style="margin-top: 1rem;">
+                        <li>Beach resort owners analyzing SUP rental ROI</li>
+                        <li>Fitness centers evaluating equipment purchases</li>
+                        <li>Water sports schools comparing lesson packages</li>
+                    </ul>
+                </div>
+                <div style="background-color: #2a2a2a; padding: 1.5rem; border-radius: 8px;">
+                    <h3 style="color: #CF2030;">Relationship Buyers</h3>
+                    <p>Value trust, referrals, long-term partnerships</p>
+                    <ul style="margin-top: 1rem;">
+                        <li>Local surf shops seeking equipment suppliers</li>
+                        <li>Community recreation centers</li>
+                        <li>Water sports enthusiast groups</li>
+                    </ul>
+                </div>
+                <div style="background-color: #2a2a2a; padding: 1.5rem; border-radius: 8px;">
+                    <h3 style="color: #CF2030;">Efficiency Buyers</h3>
+                    <p>Focus on time-saving, process improvement</p>
+                    <ul style="margin-top: 1rem;">
+                        <li>Corporate team-building event planners</li>
+                        <li>Busy professionals seeking quick lessons</li>
+                        <li>Event management companies</li>
+                    </ul>
+                </div>
+                <div style="background-color: #2a2a2a; padding: 1.5rem; border-radius: 8px;">
+                    <h3 style="color: #CF2030;">Innovation Buyers</h3>
+                    <p>Seek cutting-edge solutions, competitive advantage</p>
+                    <ul style="margin-top: 1rem;">
+                        <li>Professional athletes and trainers</li>
+                        <li>Adventure tourism companies</li>
+                        <li>High-end resort developers</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- LISTENING TAB -->
+        <div id="listening" class="tab-content">
+            <h2>L.ISTENING - Feedback Integration</h2>
+            <div style="background-color: #2a2a2a; padding: 2rem; border-radius: 8px;">
+                <h3>Feedback Tracking System</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 1.5rem;">
+                    <div style="background-color: #333; padding: 1rem; border-radius: 5px; border-left: 4px solid #CF2030;">
+                        <h4>Pre-sale Feedback</h4>
+                        <p>• Website interaction tracking</p>
+                        <p>• Initial inquiry responses</p>
+                        <p>• Equipment demonstrations</p>
+                    </div>
+                    <div style="background-color: #333; padding: 1rem; border-radius: 5px; border-left: 4px solid #CF2030;">
+                        <h4>During-sale Progress</h4>
+                        <p>• Lesson satisfaction surveys</p>
+                        <p>• Equipment trial feedback</p>
+                        <p>• Service quality assessments</p>
+                    </div>
+                    <div style="background-color: #333; padding: 1rem; border-radius: 5px; border-left: 4px solid #CF2030;">
+                        <h4>Post-sale Monitoring</h4>
+                        <p>• Follow-up satisfaction calls</p>
+                        <p>• Equipment performance reviews</p>
+                        <p>• Repeat purchase tracking</p>
+                    </div>
+                    <div style="background-color: #333; padding: 1rem; border-radius: 5px; border-left: 4px solid #CF2030;">
+                        <h4>Complaint Resolution</h4>
+                        <p>• 24-hour response protocol</p>
+                        <p>• Issue escalation procedures</p>
+                        <p>• Resolution documentation</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- EMPOWERING TAB -->
+        <div id="empowering" class="tab-content">
+            <h2>E.MPOWERING - Referral Strategy</h2>
+            <div style="background-color: #2a2a2a; padding: 2rem; border-radius: 8px;">
+                <h3>Referral Management Dashboard</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-top: 1.5rem;">
+                    <div style="background-color: #333; padding: 1.5rem; border-radius: 8px;">
+                        <h4 style="color: #CF2030;">Success Story Documentation</h4>
+                        <p>• Customer transformation stories</p>
+                        <p>• Before/after skill improvements</p>
+                        <p>• Equipment impact testimonials</p>
+                        <p>• Community engagement highlights</p>
+                    </div>
+                    <div style="background-color: #333; padding: 1.5rem; border-radius: 8px;">
+                        <h4 style="color: #CF2030;">Referral Reward Tracking</h4>
+                        <p>• 10% discount for successful referrals</p>
+                        <p>• Free lesson credits system</p>
+                        <p>• Exclusive gear access programs</p>
+                        <p>• VIP customer status benefits</p>
+                    </div>
+                    <div style="background-color: #333; padding: 1.5rem; border-radius: 8px;">
+                        <h4 style="color: #CF2030;">Client Advocacy Program</h4>
+                        <p>• Brand ambassador opportunities</p>
+                        <p>• Social media collaboration</p>
+                        <p>• Event participation incentives</p>
+                        <p>• Product testing privileges</p>
+                    </div>
+                    <div style="background-color: #333; padding: 1.5rem; border-radius: 8px;">
+                        <h4 style="color: #CF2030;">Co-marketing Opportunities</h4>
+                        <p>• Partner business cross-promotion</p>
+                        <p>• Joint event planning</p>
+                        <p>• Shared customer experiences</p>
+                        <p>• Community outreach programs</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Email Modal -->
+    <div id="emailModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeEmailModal()">&times;</span>
+            <h2>Compose Email</h2>
+            <div id="emailContent"></div>
+            <button class="export-btn" onclick="sendEmail()" style="margin-top: 1rem;">Send Email</button>
+        </div>
+    </div>
+
+    <div class="footer">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports">
+        <p>&copy; 2024 HigginsReports - Powered by AI-Driven Business Intelligence</p>
+        <p>Captain Kirk's Water Sports Client Management System</p>
+    </div>
+
+    <script>
+        // Client Data - 50 potential customers within 10 miles of Long Beach, CA
+        const clientData = [
+            {
+                name: "Michael Rodriguez",
+                email: "mrodriguez@oceanview.com",
+                phone: "(562) 435-7891",
+                address: "234 Ocean Blvd, Long Beach, CA 90802",
+                puresScore: 23,
+                tier: "1A",
+                industry: "Tourism",
+                revenue: "$500,000",
+                status: "New Lead",
+                lastContact: "2024-03-20",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Sarah Chen",
+                email: "s.chen@beachfit.com",
+                phone: "(562) 891-2345",
+                address: "456 2nd St, Long Beach, CA 90803",
+                puresScore: 21,
+                tier: "1A",
+                industry: "Fitness",
+                revenue: "$300,000",
+                status: "Contacted",
+                lastContact: "2024-03-18",
+                buyerType: "Efficiency"
+            },
+            {
+                name: "David Thompson",
+                email: "dthompson@coastalrealty.com",
+                phone: "(562) 234-5678",
+                address: "789 Marina Dr, Long Beach, CA 90804",
+                puresScore: 20,
+                tier: "1A",
+                industry: "Real Estate",
+                revenue: "$750,000",
+                status: "Proposal Sent",
+                lastContact: "2024-03-15",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Jessica Martinez",
+                email: "jmartinez@techwave.com",
+                phone: "(562) 345-6789",
+                address: "123 Broadway Ave, Long Beach, CA 90802",
+                puresScore: 19,
+                tier: "1B",
+                industry: "Technology",
+                revenue: "$400,000",
+                status: "Follow-up",
+                lastContact: "2024-03-22",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Robert Kim",
+                email: "rkim@surfschool.net",
+                phone: "(562) 456-7890",
+                address: "567 Surf Ave, Long Beach, CA 90803",
+                puresScore: 22,
+                tier: "1A",
+                industry: "Entertainment",
+                revenue: "$200,000",
+                status: "Qualified",
+                lastContact: "2024-03-19",
+                buyerType: "Relationship"
+            },
+            {
+                name: "Amanda Foster",
+                email: "afoster@wellness.com",
+                phone: "(562) 567-8901",
+                address: "890 Pine St, Long Beach, CA 90805",
+                puresScore: 18,
+                tier: "1B",
+                industry: "Healthcare",
+                revenue: "$350,000",
+                status: "New Lead",
+                lastContact: "2024-03-21",
+                buyerType: "Analytical"
+            },
+            {
+                name: "James Wilson",
+                email: "jwilson@beachacademy.edu",
+                phone: "(562) 678-9012",
+                address: "345 School St, Long Beach, CA 90806",
+                puresScore: 17,
+                tier: "1B",
+                industry: "Education",
+                revenue: "$150,000",
+                status: "Contacted",
+                lastContact: "2024-03-17",
+                buyerType: "Efficiency"
+            },
+            {
+                name: "Lisa Anderson",
+                email: "landerson@adventures.com",
+                phone: "(562) 789-0123",
+                address: "678 Adventure Blvd, Long Beach, CA 90804",
+                puresScore: 24,
+                tier: "1A",
+                industry: "Tourism",
+                revenue: "$600,000",
+                status: "Hot Lead",
+                lastContact: "2024-03-23",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Carlos Mendoza",
+                email: "cmendoza@marina.com",
+                phone: "(562) 890-1234",
+                address: "901 Harbor St, Long Beach, CA 90802",
+                puresScore: 16,
+                tier: "1C",
+                industry: "Tourism",
+                revenue: "$250,000",
+                status: "Proposal Sent",
+                lastContact: "2024-03-16",
+                buyerType: "Relationship"
+            },
+            {
+                name: "Rachel Green",
+                email: "rgreen@coastalgym.com",
+                phone: "(562) 901-2345",
+                address: "234 Fitness Ave, Long Beach, CA 90803",
+                puresScore: 19,
+                tier: "1B",
+                industry: "Fitness",
+                revenue: "$180,000",
+                status: "Follow-up",
+                lastContact: "2024-03-20",
+                buyerType: "Efficiency"
+            },
+            {
+                name: "Kevin Brown",
+                email: "kbrown@properties.com",
+                phone: "(310) 123-4567",
+                address: "456 Coast Hwy, Redondo Beach, CA 90277",
+                puresScore: 21,
+                tier: "1A",
+                industry: "Real Estate",
+                revenue: "$800,000",
+                status: "Qualified",
+                lastContact: "2024-03-18",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Nicole Taylor",
+                email: "ntaylor@eventpro.com",
+                phone: "(310) 234-5678",
+                address: "789 Event Dr, Manhattan Beach, CA 90266",
+                puresScore: 20,
+                tier: "1A",
+                industry: "Entertainment",
+                revenue: "$450,000",
+                status: "New Lead",
+                lastContact: "2024-03-22",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Steven Davis",
+                email: "sdavis@startup.com",
+                phone: "(562) 345-7890",
+                address: "123 Tech Blvd, Long Beach, CA 90805",
+                puresScore: 18,
+                tier: "1B",
+                industry: "Technology",
+                revenue: "$320,000",
+                status: "Contacted",
+                lastContact: "2024-03-19",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Maria Gonzalez",
+                email: "mgonzalez@clinic.com",
+                phone: "(562) 456-8901",
+                address: "567 Health St, Long Beach, CA 90806",
+                puresScore: 17,
+                tier: "1B",
+                industry: "Healthcare",
+                revenue: "$280,000",
+                status: "Proposal Sent",
+                lastContact: "2024-03-17",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Christopher Lee",
+                email: "clee@college.edu",
+                phone: "(562) 567-9012",
+                address: "890 Campus Dr, Long Beach, CA 90804",
+                puresScore: 16,
+                tier: "1C",
+                industry: "Education",
+                revenue: "$120,000",
+                status: "Follow-up",
+                lastContact: "2024-03-21",
+                buyerType: "Efficiency"
+            },
+            {
+                name: "Jennifer White",
+                email: "jwhite@resort.com",
+                phone: "(310) 678-9123",
+                address: "345 Resort Way, Hermosa Beach, CA 90254",
+                puresScore: 23,
+                tier: "1A",
+                industry: "Tourism",
+                revenue: "$900,000",
+                status: "Hot Lead",
+                lastContact: "2024-03-23",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Daniel Miller",
+                email: "dmiller@training.com",
+                phone: "(562) 789-0234",
+                address: "678 Workout St, Long Beach, CA 90802",
+                puresScore: 19,
+                tier: "1B",
+                industry: "Fitness",
+                revenue: "$220,000",
+                status: "Qualified",
+                lastContact: "2024-03-20",
+                buyerType: "Relationship"
+            },
+            {
+                name: "Susan Clark",
+                email: "sclark@realtygroup.com",
+                phone: "(562) 890-1345",
+                address: "901 Luxury Ln, Long Beach, CA 90803",
+                puresScore: 22,
+                tier: "1A",
+                industry: "Real Estate",
+                revenue: "$1,200,000",
+                status: "Contacted",
+                lastContact: "2024-03-18",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Brian Johnson",
+                email: "bjohnson@innovate.com",
+                phone: "(562) 901-2456",
+                address: "234 Innovation Blvd, Long Beach, CA 90805",
+                puresScore: 20,
+                tier: "1A",
+                industry: "Technology",
+                revenue: "$550,000",
+                status: "New Lead",
+                lastContact: "2024-03-22",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Karen Moore",
+                email: "kmoore@entertainment.com",
+                phone: "(310) 123-5678",
+                address: "456 Show Blvd, Torrance, CA 90501",
+                puresScore: 18,
+                tier: "1B",
+                industry: "Entertainment",
+                revenue: "$380,000",
+                status: "Proposal Sent",
+                lastContact: "2024-03-19",
+                buyerType: "Relationship"
+            },
+            {
+                name: "Matthew Turner",
+                email: "mturner@medical.com",
+                phone: "(562) 234-6789",
+                address: "789 Medical Dr, Long Beach, CA 90806",
+                puresScore: 17,
+                tier: "1B",
+                industry: "Healthcare",
+                revenue: "$420,000",
+                status: "Follow-up",
+                lastContact: "2024-03-17",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Ashley Garcia",
+                email: "agarcia@university.edu",
+                phone: "(562) 345-7901",
+                address: "123 University Ave, Long Beach, CA 90804",
+                puresScore: 16,
+                tier: "1C",
+                industry: "Education",
+                revenue: "$95,000",
+                status: "Contacted",
+                lastContact: "2024-03-21",
+                buyerType: "Efficiency"
+            },
+            {
+                name: "Ryan Phillips",
+                email: "rphillips@beachclub.com",
+                phone: "(562) 456-8012",
+                address: "567 Club Dr, Long Beach, CA 90802",
+                puresScore: 21,
+                tier: "1A",
+                industry: "Tourism",
+                revenue: "$650,000",
+                status: "Qualified",
+                lastContact: "2024-03-20",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Michelle Adams",
+                email: "madams@fitness.com",
+                phone: "(562) 567-9123",
+                address: "890 Strong St, Long Beach, CA 90803",
+                puresScore: 19,
+                tier: "1B",
+                industry: "Fitness",
+                revenue: "$190,000",
+                status: "Hot Lead",
+                lastContact: "2024-03-23",
+                buyerType: "Efficiency"
+            },
+            {
+                name: "Jason Hall",
+                email: "jhall@development.com",
+                phone: "(310) 678-9234",
+                address: "345 Development Way, El Segundo, CA 90245",
+                puresScore: 22,
+                tier: "1A",
+                industry: "Real Estate",
+                revenue: "$1,100,000",
+                status: "New Lead",
+                lastContact: "2024-03-22",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Laura Young",
+                email: "lyoung@techsolutions.com",
+                phone: "(562) 789-0345",
+                address: "678 Solution Dr, Long Beach, CA 90805",
+                puresScore: 18,
+                tier: "1B",
+                industry: "Technology",
+                revenue: "$390,000",
+                status: "Proposal Sent",
+                lastContact: "2024-03-18",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Timothy Wright",
+                email: "twright@shows.com",
+                phone: "(562) 890-1456",
+                address: "901 Theatre St, Long Beach, CA 90806",
+                puresScore: 17,
+                tier: "1B",
+                industry: "Entertainment",
+                revenue: "$290,000",
+                status: "Follow-up",
+                lastContact: "2024-03-19",
+                buyerType: "Relationship"
+            },
+            {
+                name: "Stephanie King",
+                email: "sking@healthcare.com",
+                phone: "(562) 901-2567",
+                address: "234 Care Blvd, Long Beach, CA 90804",
+                puresScore: 20,
+                tier: "1A",
+                industry: "Healthcare",
+                revenue: "$480,000",
+                status: "Contacted",
+                lastContact: "2024-03-17",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Gregory Scott",
+                email: "gscott@school.edu",
+                phone: "(562) 234-7890",
+                address: "456 Learning Ave, Long Beach, CA 90802",
+                puresScore: 16,
+                tier: "1C",
+                industry: "Education",
+                revenue: "$110,000",
+                status: "Qualified",
+                lastContact: "2024-03-21",
+                buyerType: "Efficiency"
+            },
+            {
+                name: "Brittany Lewis",
+                email: "blewis@waterpark.com",
+                phone: "(310) 345-6789",
+                address: "789 Fun Way, Carson, CA 90745",
+                puresScore: 24,
+                tier: "1A",
+                industry: "Tourism",
+                revenue: "$1,500,000",
+                status: "Hot Lead",
+                lastContact: "2024-03-23",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Anthony Walker",
+                email: "awalker@crossfit.com",
+                phone: "(562) 456-7901",
+                address: "123 Power St, Long Beach, CA 90803",
+                puresScore: 19,
+                tier: "1B",
+                industry: "Fitness",
+                revenue: "$160,000",
+                status: "New Lead",
+                lastContact: "2024-03-22",
+                buyerType: "Relationship"
+            },
+            {
+                name: "Samantha Allen",
+                email: "sallen@luxury.com",
+                phone: "(562) 567-8012",
+                address: "567 Elite Dr, Long Beach, CA 90805",
+                puresScore: 23,
+                tier: "1A",
+                industry: "Real Estate",
+                revenue: "$2,200,000",
+                status: "Proposal Sent",
+                lastContact: "2024-03-18",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Joshua Hill",
+                email: "jhill@gamedev.com",
+                phone: "(562) 678-9123",
+                address: "890 Code Ave, Long Beach, CA 90806",
+                puresScore: 18,
+                tier: "1B",
+                industry: "Technology",
+                revenue: "$340,000",
+                status: "Follow-up",
+                lastContact: "2024-03-19",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Melissa Green",
+                email: "mgreen@media.com",
+                phone: "(310) 789-0123",
+                address: "345 Media Blvd, Gardena, CA 90247",
+                puresScore: 17,
+                tier: "1B",
+                industry: "Entertainment",
+                revenue: "$410,000",
+                status: "Contacted",
+                lastContact: "2024-03-17",
+                buyerType: "Relationship"
+            },
+            {
+                name: "Andrew Baker",
+                email: "abaker@pharmacy.com",
+                phone: "(562) 890-2345",
+                address: "678 Remedy St, Long Beach, CA 90804",
+                puresScore: 16,
+                tier: "1C",
+                industry: "Healthcare",
+                revenue: "$230,000",
+                status: "Qualified",
+                lastContact: "2024-03-21",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Elizabeth Carter",
+                email: "ecarter@academy.edu",
+                phone: "(562) 901-3456",
+                address: "901 Scholar Way, Long Beach, CA 90802",
+                puresScore: 15,
+                tier: "1C",
+                industry: "Education",
+                revenue: "$85,000",
+                status: "New Lead",
+                lastContact: "2024-03-22",
+                buyerType: "Efficiency"
+            },
+            {
+                name: "Benjamin Roberts",
+                email: "broberts@adventure.com",
+                phone: "(562) 234-8901",
+                address: "234 Thrill St, Long Beach, CA 90803",
+                puresScore: 22,
+                tier: "1A",
+                industry: "Tourism",
+                revenue: "$720,000",
+                status: "Proposal Sent",
+                lastContact: "2024-03-18",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Crystal Martinez",
+                email: "cmartinez@pilates.com",
+                phone: "(562) 345-9012",
+                address: "456 Balance Ave, Long Beach, CA 90805",
+                puresScore: 18,
+                tier: "1B",
+                industry: "Fitness",
+                revenue: "$140,000",
+                status: "Follow-up",
+                lastContact: "2024-03-19",
+                buyerType: "Efficiency"
+            },
+            {
+                name: "Jacob Campbell",
+                email: "jcampbell@condos.com",
+                phone: "(310) 456-7890",
+                address: "789 Tower Dr, Hawthorne, CA 90250",
+                puresScore: 21,
+                tier: "1A",
+                industry: "Real Estate",
+                revenue: "$850,000",
+                status: "Contacted",
+                lastContact: "2024-03-17",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Victoria Powell",
+                email: "vpowell@startup.com",
+                phone: "(562) 567-0123",
+                address: "123 Venture Blvd, Long Beach, CA 90806",
+                puresScore: 19,
+                tier: "1B",
+                industry: "Technology",
+                revenue: "$360,000",
+                status: "Qualified",
+                lastContact: "2024-03-21",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Nathan Evans",
+                email: "nevans@studio.com",
+                phone: "(562) 678-1234",
+                address: "567 Creative Way, Long Beach, CA 90804",
+                puresScore: 17,
+                tier: "1B",
+                industry: "Entertainment",
+                revenue: "$320,000",
+                status: "Hot Lead",
+                lastContact: "2024-03-23",
+                buyerType: "Relationship"
+            },
+            {
+                name: "Danielle Torres",
+                email: "dtorres@wellness.com",
+                phone: "(562) 789-2345",
+                address: "890 Healing Dr, Long Beach, CA 90802",
+                puresScore: 20,
+                tier: "1A",
+                industry: "Healthcare",
+                revenue: "$520,000",
+                status: "New Lead",
+                lastContact: "2024-03-22",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Tyler Richardson",
+                email: "trichardson@prep.edu",
+                phone: "(562) 890-3456",
+                address: "345 Prep Ave, Long Beach, CA 90803",
+                puresScore: 16,
+                tier: "1C",
+                industry: "Education",
+                revenue: "$130,000",
+                status: "Proposal Sent",
+                lastContact: "2024-03-18",
+                buyerType: "Efficiency"
+            },
+            {
+                name: "Alexis Cooper",
+                email: "acooper@waterfront.com",
+                phone: "(310) 901-2345",
+                address: "678 Waterfront St, Palos Verdes, CA 90274",
+                puresScore: 25,
+                tier: "1A",
+                industry: "Tourism",
+                revenue: "$3,200,000",
+                status: "Contacted",
+                lastContact: "2024-03-17",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Eric Reed",
+                email: "ereed@bootcamp.com",
+                phone: "(562) 234-4567",
+                address: "901 Intensity Blvd, Long Beach, CA 90805",
+                puresScore: 18,
+                tier: "1B",
+                industry: "Fitness",
+                revenue: "$170,000",
+                status: "Follow-up",
+                lastContact: "2024-03-19",
+                buyerType: "Relationship"
+            },
+            {
+                name: "Megan Ward",
+                email: "mward@estates.com",
+                phone: "(562) 345-5678",
+                address: "234 Estate Dr, Long Beach, CA 90806",
+                puresScore: 22,
+                tier: "1A",
+                industry: "Real Estate",
+                revenue: "$1,800,000",
+                status: "Qualified",
+                lastContact: "2024-03-21",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Alexander Price",
+                email: "aprice@digital.com",
+                phone: "(562) 456-6789",
+                address: "456 Digital Way, Long Beach, CA 90804",
+                puresScore: 19,
+                tier: "1B",
+                industry: "Technology",
+                revenue: "$420,000",
+                status: "Hot Lead",
+                lastContact: "2024-03-23",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Hannah Ross",
+                email: "hross@production.com",
+                phone: "(310) 567-7890",
+                address: "789 Production Ave, Lawndale, CA 90260",
+                puresScore: 17,
+                tier: "1B",
+                industry: "Entertainment",
+                revenue: "$380,000",
+                status: "New Lead",
+                lastContact: "2024-03-22",
+                buyerType: "Relationship"
+            },
+            {
+                name: "Ian Morgan",
+                email: "imorgan@rehab.com",
+                phone: "(562) 678-7890",
+                address: "123 Recovery St, Long Beach, CA 90802",
+                puresScore: 16,
+                tier: "1C",
+                industry: "Healthcare",
+                revenue: "$240,000",
+                status: "Proposal Sent",
+                lastContact: "2024-03-18",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Olivia Bell",
+                email: "obell@institute.edu",
+                phone: "(562) 789-8901",
+                address: "567 Knowledge Blvd, Long Beach, CA 90803",
+                puresScore: 15,
+                tier: "1C",
+                industry: "Education",
+                revenue: "$75,000",
+                status: "Follow-up",
+                lastContact: "2024-03-19",
+                buyerType: "Efficiency"
+            },
+            {
+                name: "Zachary Peterson",
+                email: "zpeterson@watersports.com",
+                phone: "(562) 890-9012",
+                address: "890 Wave Dr, Long Beach, CA 90805",
+                puresScore: 24,
+                tier: "1A",
+                industry: "Tourism",
+                revenue: "$1,400,000",
+                status: "Contacted",
+                lastContact: "2024-03-17",
+                buyerType: "Innovation"
+            }
+        ];
+
+        let filteredData = [...clientData];
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            populateTable();
+            setupSliders();
+            setupSearch();
+        });
+
+        function showTab(tabName) {
+            // Hide all tab contents
+            const tabs = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => tab.classList.remove('active'));
+
+            // Remove active class from all buttons
+            const buttons = document.querySelectorAll('.tab-button');
+            buttons.forEach(btn => btn.classList.remove('active'));
+
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        function populateTable() {
+            const tbody = document.getElementById('clientTableBody');
+            tbody.innerHTML = '';
+
+            filteredData.forEach((client, index) => {
+                const row = document.createElement('tr');
+                row.className = `tier-${client.tier.toLowerCase()}`;
+                
+                row.innerHTML = `
+                    <td>${client.name}</td>
+                    <td>${client.email}</td>
+                    <td>${client.phone}</td>
+                    <td>${client.address}</td>
+                    <td>${client.puresScore}</td>
+                    <td>${client.tier}</td>
+                    <td>${client.industry}</td>
+                    <td>${client.revenue}</td>
+                    <td>${client.status}</td>
+                    <td>${client.lastContact}</td>
+                    <td>
+                        <button class="contact-btn" onclick="composeEmail('${client.email}', '${client.name}', '${client.industry}', '${client.buyerType}')">Email</button>
+                        <button class="contact-btn" onclick="callClient('${client.phone}')">Call</button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function setupSliders() {
+            const sliders = ['profitability', 'urgency', 'reachability', 'engagement', 'sustainability'];
+            
+            sliders.forEach(sliderId => {
+                const slider = document.getElementById(sliderId);
+                const valueSpan = document.getElementById(sliderId + 'Value');
+                
+                slider.addEventListener('input', function() {
+                    valueSpan.textContent = this.value;
+                    updateTotalScore();
+                });
+            });
+        }
+
+        function updateTotalScore() {
+            const sliders = ['profitability', 'urgency', 'reachability', 'engagement', 'sustainability'];
+            let total = 0;
+            
+            sliders.forEach(sliderId => {
+                total += parseInt(document.getElementById(sliderId).value);
+            });
+            
+            document.getElementById('totalScore').textContent = total;
+            
+            let tier;
+            if (total >= 20) tier = 'Tier 1A (Premium)';
+            else if (total >= 15) tier = 'Tier 1B (High-Value)';
+            else tier = 'Tier 1C (Qualified)';
+            
+            document.getElementById('tierLevel').textContent = tier;
+        }
+
+        function setupSearch() {
+            const searchInput = document.getElementById('searchInput');
+            const tierFilter = document.getElementById('tierFilter');
+            const industryFilter = document.getElementById('industryFilter');
+
+            [searchInput, tierFilter, industryFilter].forEach(element => {
+                element.addEventListener('input', filterClients);
+            });
+        }
+
+        function filterClients() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const tierFilter = document.getElementById('tierFilter').value;
+            const industryFilter = document.getElementById('industryFilter').value;
+
+            filteredData = clientData.filter(client => {
+                const matchesSearch = !searchTerm || 
+                    client.name.toLowerCase().includes(searchTerm) ||
+                    client.email.toLowerCase().includes(searchTerm) ||
+                    client.address.toLowerCase().includes(searchTerm);
+                
+                const matchesTier = !tierFilter || client.tier === tierFilter;
+                const matchesIndustry = !industryFilter || client.industry === industryFilter;
+
+                return matchesSearch && matchesTier && matchesIndustry;
+            });
+
+            populateTable();
+        }
+
+        function sortTable(columnIndex) {
+            const table = document.getElementById('clientTable');
+            const tbody = table.tBodies[0];
+            const rows = Array.from(tbody.rows);
+
+            const isNumeric = columnIndex === 4; // P.U.R.E.S. Score column
+            
+            rows.sort((a, b) => {
+                const aVal = a.cells[columnIndex].textContent.trim();
+                const bVal = b.cells[columnIndex].textContent.trim();
+                
+                if (isNumeric) {
+                    return parseInt(bVal) - parseInt(aVal);
+                }
+                
+                return aVal.localeCompare(bVal);
+            });
+
+            rows.forEach(row => tbody.appendChild(row));
+        }
+
+        function composeEmail(email, name, industry, buyerType) {
+            const emailContent = generateEmailTemplate(name, industry, buyerType);
+            
+            document.getElementById('emailContent').innerHTML = `
+                <div class="email-template">
+                    <p><strong>To:</strong> ${email}</p>
+                    <p><strong>Subject:</strong> Transform Your ${industry} Experience with Captain Kirk's Water Sports</p>
+                    <hr style="margin: 1rem 0; border-color: #CF2030;">
+                    ${emailContent}
+                </div>
+            `;
+            
+            document.getElementById('emailModal').style.display = 'block';
+        }
+
+        function generateEmailTemplate(name, industry, buyerType) {
+            let specificBenefits = '';
+            let callToAction = '';
+
+            switch(industry) {
+                case 'Tourism':
+                    specificBenefits = `
+                        • Premium SUP rental packages for your guests
+                        • Professional instruction services to enhance guest experience
+                        • Group discounts for tour packages
+                        • High-quality equipment maintenance and support`;
+                    break;
+                case 'Fitness':
+                    specificBenefits = `
+                        • Professional-grade fitness equipment for water workouts
+                        • Certified instruction for SUP fitness classes
+                        • Bulk purchasing discounts for gyms and studios
+                        • Equipment maintenance and training programs`;
+                    break;
+                case 'Real Estate':
+                    specificBenefits = `
+                        • Premium waterfront property enhancement services
+                        • Equipment packages for luxury developments
+                        • Professional consultation for water sports amenities
+                        • Maintenance contracts for property equipment`;
+                    break;
+                default:
+                    specificBenefits = `
+                        • Professional water sports equipment and services
+                        • Expert instruction and training programs
+                        • Competitive pricing for business partnerships
+                        • Comprehensive support and maintenance`;
+            }
+
+            switch(buyerType) {
+                case 'Analytical':
+                    callToAction = 'Schedule a detailed ROI consultation and equipment demonstration';
+                    break;
+                case 'Relationship':
+                    callToAction = 'Meet our team and explore long-term partnership opportunities';
+                    break;
+                case 'Efficiency':
+                    callToAction = 'Book a quick 30-minute consultation to streamline your water sports needs';
+                    break;
+                default:
+                    callToAction = 'Discover the latest innovations in water sports technology';
+            }
+
+            return `
+                <p>Dear ${name},</p>
+                
+                <p>I hope this message finds you well. As a leader in the ${industry} sector, you understand the importance of providing exceptional experiences and quality equipment.</p>
+                
+                <p>Captain Kirk's Water Sports has been Long Beach's premier destination for water sports equipment, lessons, and rentals since our founding. We specialize in:</p>
+                
+                <ul style="margin: 1rem 0;">
+                    <li><strong>Stand-Up Paddleboarding (SUP)</strong> - Equipment, lessons, and rentals</li>
+                    <li><strong>Kitesurfing & Windsurfing</strong> - Professional gear and instruction</li>
+                    <li><strong>Wing Foiling</strong> - Latest technology and training</li>
+                    <li><strong>Premium Waterwear</strong> - Complete accessory solutions</li>
+                </ul>
+                
+                <p><strong>Specific benefits for your ${industry} business:</strong></p>
+                <ul style="margin: 1rem 0;">
+                    ${specificBenefits}
+                </ul>
+                
+                <p>Located at 2015 E Anaheim St in Long Beach, we're perfectly positioned to serve the Southern California water sports community. Our team of certified instructors and equipment specialists are ready to help you ${callToAction.toLowerCase()}.</p>
+                
+                <p><strong>Next Steps:</strong> ${callToAction}</p>
+                
+                <p>Best regards,<br>
+                <strong>Captain Kirk's Water Sports Team</strong><br>
+                📞 (562) 833-3397<br>
+                🌐 www.captainkirksusa.com<br>
+                📧 sabrinap@captainkirks.com</p>
+                
+                <p style="font-style: italic; color: #CF2030;">Aloha! 🌊</p>
+            `;
+        }
+
+        function closeEmailModal() {
+            document.getElementById('emailModal').style.display = 'none';
+        }
+
+        function sendEmail() {
+            alert('Email functionality would integrate with your email client or service. Email template ready to send!');
+            closeEmailModal();
+        }
+
+        function callClient(phone) {
+            window.open(`tel:${phone}`, '_self');
+        }
+
+        function exportToCSV() {
+            const headers = ['Name', 'Email', 'Phone', 'Address', 'P.U.R.E.S. Score', 'Tier', 'Industry', 'Revenue', 'Status', 'Last Contact'];
+            const csvContent = [
+                headers.join(','),
+                ...filteredData.map(client => [
+                    client.name,
+                    client.email,
+                    client.phone,
+                    `"${client.address}"`,
+                    client.puresScore,
+                    client.tier,
+                    client.industry,
+                    client.revenue,
+                    client.status,
+                    client.lastContact
+                ].join(','))
+            ].join('\n');
+
+            const blob = new Blob([csvContent], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'captain_kirks_clients.csv';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function exportToPDF() {
+            alert('PDF export functionality would integrate with a PDF generation library like jsPDF.');
+        }
+
+        function generateEmailCampaign() {
+            alert('Email campaign functionality would integrate with email marketing services like Mailchimp or SendGrid.');
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('emailModal');
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,1221 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enchanted Fairies - S.A.L.E. Client Management System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #000000, #1a1a1a);
+            color: #ffffff;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: #000000;
+            padding: 20px 0;
+            border-bottom: 3px solid #CF2030;
+            text-align: center;
+        }
+
+        .header img {
+            max-height: 80px;
+            width: auto;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .dashboard-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .dashboard-header h1 {
+            color: #CF2030;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .dashboard-header p {
+            font-size: 1.2em;
+            opacity: 0.8;
+        }
+
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(207, 32, 48, 0.1);
+            border-radius: 10px;
+        }
+
+        .search-box, .filter-select {
+            padding: 12px;
+            border: 2px solid #CF2030;
+            border-radius: 8px;
+            background: #2a2a2a;
+            color: #ffffff;
+            font-size: 14px;
+        }
+
+        .search-box::placeholder {
+            color: #aaa;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            background: #CF2030;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            background: #a01828;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: #4a4a4a;
+        }
+
+        .btn-secondary:hover {
+            background: #6a6a6a;
+        }
+
+        .table-container {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: #CF2030;
+            color: white;
+            padding: 15px 10px;
+            text-align: left;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        th:hover {
+            background: #a01828;
+        }
+
+        td {
+            padding: 12px 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        tr:hover {
+            background: rgba(207, 32, 48, 0.1);
+        }
+
+        .tier-1a { background: rgba(34, 197, 94, 0.2); }
+        .tier-1b { background: rgba(234, 179, 8, 0.2); }
+        .tier-1c { background: rgba(59, 130, 246, 0.2); }
+
+        .contact-btn {
+            padding: 8px 15px;
+            background: #CF2030;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 12px;
+            margin-right: 5px;
+        }
+
+        .contact-btn:hover {
+            background: #a01828;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+        }
+
+        .modal-content {
+            background: #2a2a2a;
+            margin: 5% auto;
+            padding: 30px;
+            border-radius: 15px;
+            width: 80%;
+            max-width: 600px;
+            border: 2px solid #CF2030;
+        }
+
+        .close {
+            color: #CF2030;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: #a01828;
+        }
+
+        .sale-modules {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .module {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #CF2030;
+        }
+
+        .module h3 {
+            color: #CF2030;
+            margin-bottom: 15px;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 50px;
+            border-top: 1px solid rgba(207, 32, 48, 0.3);
+        }
+
+        .footer img {
+            max-height: 40px;
+            opacity: 0.7;
+        }
+
+        .score-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .score-high { background: #22c55e; color: white; }
+        .score-medium { background: #eab308; color: white; }
+        .score-low { background: #ef4444; color: white; }
+
+        @media (max-width: 768px) {
+            .controls {
+                flex-direction: column;
+            }
+            
+            table {
+                font-size: 12px;
+            }
+            
+            .modal-content {
+                width: 95%;
+                margin: 10% auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Enchanted Fairies Logo">
+    </header>
+
+    <div class="container">
+        <div class="dashboard-header">
+            <h1>S.A.L.E. Client Management System</h1>
+            <p>Enchanted Fairies Photography - Plano, Texas</p>
+        </div>
+
+        <div class="controls">
+            <input type="text" id="searchInput" class="search-box" placeholder="Search clients...">
+            <select id="tierFilter" class="filter-select">
+                <option value="all">All Tiers</option>
+                <option value="1A">Tier 1A (Premium)</option>
+                <option value="1B">Tier 1B (High-Value)</option>
+                <option value="1C">Tier 1C (Qualified)</option>
+            </select>
+            <button class="btn" onclick="exportData()">Export CSV</button>
+            <button class="btn btn-secondary" onclick="showAnalytics()">Analytics Dashboard</button>
+        </div>
+
+        <div class="table-container">
+            <table id="clientTable">
+                <thead>
+                    <tr>
+                        <th onclick="sortTable(0)">Client Name ↕</th>
+                        <th onclick="sortTable(1)">Email ↕</th>
+                        <th onclick="sortTable(2)">Phone ↕</th>
+                        <th onclick="sortTable(3)">Address ↕</th>
+                        <th onclick="sortTable(4)">P.U.R.E.S Score ↕</th>
+                        <th onclick="sortTable(5)">Tier ↕</th>
+                        <th onclick="sortTable(6)">Industry ↕</th>
+                        <th onclick="sortTable(7)">Revenue Est. ↕</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="clientTableBody">
+                    <!-- Client data will be populated here -->
+                </tbody>
+            </table>
+        </div>
+
+        <div class="sale-modules">
+            <div class="module">
+                <h3>📊 S.A.L.E. SOURCING</h3>
+                <p><strong>P.U.R.E.S. Scoring:</strong></p>
+                <ul>
+                    <li>Profitability: Budget capacity for photography services</li>
+                    <li>Urgency: Immediate event/session needs</li>
+                    <li>Reachability: Direct contact accessibility</li>
+                    <li>Engagement: Interest in professional photography</li>
+                    <li>Sustainability: Repeat client potential</li>
+                </ul>
+            </div>
+
+            <div class="module">
+                <h3>🎯 ASSESSING</h3>
+                <p><strong>Buyer Profiles:</strong></p>
+                <ul>
+                    <li><strong>Analytical:</strong> Compare packages & portfolios</li>
+                    <li><strong>Relationship:</strong> Value referrals & testimonials</li>
+                    <li><strong>Efficiency:</strong> Quick booking & delivery</li>
+                    <li><strong>Innovation:</strong> Unique creative concepts</li>
+                </ul>
+            </div>
+
+            <div class="module">
+                <h3>👂 LISTENING</h3>
+                <p><strong>Feedback Systems:</strong></p>
+                <ul>
+                    <li>Pre-session consultation forms</li>
+                    <li>During-session preference tracking</li>
+                    <li>Post-session satisfaction surveys</li>
+                    <li>Real-time communication protocols</li>
+                </ul>
+            </div>
+
+            <div class="module">
+                <h3>💪 EMPOWERING</h3>
+                <p><strong>Referral Strategy:</strong></p>
+                <ul>
+                    <li>Client showcase galleries</li>
+                    <li>Referral reward programs</li>
+                    <li>Social media advocacy</li>
+                    <li>Wedding vendor partnerships</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Modal -->
+    <div id="contactModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2 id="modalTitle">Contact Client</h2>
+            <div id="modalContent">
+                <!-- Contact options will be populated here -->
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Enchanted Fairies">
+        <p>&copy; 2024 Enchanted Fairies Photography | Plano, Texas</p>
+    </footer>
+
+    <script>
+        // Sample client data for Plano, Texas area
+        const clientData = [
+            {
+                name: "Sarah Johnson",
+                email: "sarah.johnson@email.com",
+                phone: "(214) 555-0101",
+                address: "123 Maple Lane, Plano, TX 75023",
+                puresScore: 4.8,
+                tier: "1A",
+                industry: "Wedding Planning",
+                revenue: "$150K",
+                buyerType: "Relationship",
+                notes: "Planning spring wedding, high-end client"
+            },
+            {
+                name: "Michael Chen",
+                email: "m.chen@techcorp.com",
+                phone: "(214) 555-0102",
+                address: "456 Oak Street, Frisco, TX 75034",
+                puresScore: 4.5,
+                tier: "1A",
+                industry: "Technology",
+                revenue: "$200K",
+                buyerType: "Analytical",
+                notes: "Corporate headshots needed"
+            },
+            {
+                name: "Amanda Rodriguez",
+                email: "amanda.r@gmail.com",
+                phone: "(214) 555-0103",
+                address: "789 Pine Avenue, McKinney, TX 75069",
+                puresScore: 4.2,
+                tier: "1B",
+                industry: "Real Estate",
+                revenue: "$120K",
+                buyerType: "Efficiency",
+                notes: "Property photography required"
+            },
+            {
+                name: "David Thompson",
+                email: "dthompson@law.com",
+                phone: "(214) 555-0104",
+                address: "321 Cedar Drive, Allen, TX 75013",
+                puresScore: 4.7,
+                tier: "1A",
+                industry: "Legal Services",
+                revenue: "$300K",
+                buyerType: "Relationship",
+                notes: "Professional headshots for law firm"
+            },
+            {
+                name: "Jennifer Wilson",
+                email: "jen.wilson@email.com",
+                phone: "(214) 555-0105",
+                address: "654 Birch Road, Plano, TX 75024",
+                puresScore: 3.8,
+                tier: "1B",
+                industry: "Healthcare",
+                revenue: "$180K",
+                buyerType: "Innovation",
+                notes: "Family portrait session"
+            },
+            {
+                name: "Robert Garcia",
+                email: "robert.garcia@finance.com",
+                phone: "(214) 555-0106",
+                address: "987 Elm Street, Richardson, TX 75080",
+                puresScore: 4.1,
+                tier: "1B",
+                industry: "Finance",
+                revenue: "$250K",
+                buyerType: "Analytical",
+                notes: "Annual report photography"
+            },
+            {
+                name: "Lisa Brown",
+                email: "lisa.brown@email.com",
+                phone: "(214) 555-0107",
+                address: "147 Willow Lane, Carrollton, TX 75006",
+                puresScore: 3.5,
+                tier: "1C",
+                industry: "Education",
+                revenue: "$80K",
+                buyerType: "Relationship",
+                notes: "School event photography"
+            },
+            {
+                name: "Kevin Martinez",
+                email: "k.martinez@business.com",
+                phone: "(214) 555-0108",
+                address: "258 Spruce Way, Garland, TX 75040",
+                puresScore: 4.3,
+                tier: "1A",
+                industry: "Consulting",
+                revenue: "$175K",
+                buyerType: "Efficiency",
+                notes: "Executive portraits needed"
+            },
+            {
+                name: "Maria Santos",
+                email: "maria.santos@email.com",
+                phone: "(214) 555-0109",
+                address: "369 Aspen Circle, Mesquite, TX 75149",
+                puresScore: 3.9,
+                tier: "1B",
+                industry: "Retail",
+                revenue: "$95K",
+                buyerType: "Innovation",
+                notes: "Product photography required"
+            },
+            {
+                name: "James Lee",
+                email: "james.lee@startup.com",
+                phone: "(214) 555-0110",
+                address: "741 Hickory Street, Irving, TX 75061",
+                puresScore: 4.0,
+                tier: "1B",
+                industry: "Startup",
+                revenue: "$140K",
+                buyerType: "Innovation",
+                notes: "Brand photography for website"
+            },
+            {
+                name: "Patricia Davis",
+                email: "p.davis@nonprofit.org",
+                phone: "(214) 555-0111",
+                address: "852 Magnolia Drive, Grand Prairie, TX 75050",
+                puresScore: 3.2,
+                tier: "1C",
+                industry: "Non-Profit",
+                revenue: "$60K",
+                buyerType: "Relationship",
+                notes: "Charity event photography"
+            },
+            {
+                name: "Christopher White",
+                email: "chris.white@architect.com",
+                phone: "(214) 555-0112",
+                address: "963 Dogwood Lane, Dallas, TX 75201",
+                puresScore: 4.6,
+                tier: "1A",
+                industry: "Architecture",
+                revenue: "$220K",
+                buyerType: "Analytical",
+                notes: "Architectural photography portfolio"
+            },
+            {
+                name: "Ashley Miller",
+                email: "ashley.miller@email.com",
+                phone: "(214) 555-0113",
+                address: "159 Pecan Street, Lewisville, TX 75067",
+                puresScore: 3.7,
+                tier: "1C",
+                industry: "Marketing",
+                revenue: "$110K",
+                buyerType: "Efficiency",
+                notes: "Marketing campaign photos"
+            },
+            {
+                name: "Ryan Taylor",
+                email: "ryan.taylor@media.com",
+                phone: "(214) 555-0114",
+                address: "267 Walnut Avenue, Flower Mound, TX 75022",
+                puresScore: 4.4,
+                tier: "1A",
+                industry: "Media",
+                revenue: "$190K",
+                buyerType: "Innovation",
+                notes: "Creative content production"
+            },
+            {
+                name: "Stephanie Anderson",
+                email: "s.anderson@fashion.com",
+                phone: "(214) 555-0115",
+                address: "375 Cherry Road, Coppell, TX 75019",
+                puresScore: 4.1,
+                tier: "1B",
+                industry: "Fashion",
+                revenue: "$160K",
+                buyerType: "Innovation",
+                notes: "Fashion portfolio shoot"
+            },
+            {
+                name: "Daniel Clark",
+                email: "daniel.clark@restaurant.com",
+                phone: "(214) 555-0116",
+                address: "486 Peach Lane, Farmers Branch, TX 75234",
+                puresScore: 3.6,
+                tier: "1C",
+                industry: "Hospitality",
+                revenue: "$90K",
+                buyerType: "Efficiency",
+                notes: "Restaurant food photography"
+            },
+            {
+                name: "Michelle Lewis",
+                email: "m.lewis@wellness.com",
+                phone: "(214) 555-0117",
+                address: "597 Apple Street, Addison, TX 75001",
+                puresScore: 3.8,
+                tier: "1B",
+                industry: "Wellness",
+                revenue: "$125K",
+                buyerType: "Relationship",
+                notes: "Wellness center portraits"
+            },
+            {
+                name: "Brian Walker",
+                email: "brian.walker@construction.com",
+                phone: "(214) 555-0118",
+                address: "608 Orange Drive, Duncanville, TX 75116",
+                puresScore: 3.9,
+                tier: "1B",
+                industry: "Construction",
+                revenue: "$135K",
+                buyerType: "Analytical",
+                notes: "Construction progress documentation"
+            },
+            {
+                name: "Nicole Hall",
+                email: "nicole.hall@events.com",
+                phone: "(214) 555-0119",
+                address: "719 Lemon Circle, Cedar Hill, TX 75104",
+                puresScore: 4.2,
+                tier: "1B",
+                industry: "Event Planning",
+                revenue: "$145K",
+                buyerType: "Relationship",
+                notes: "Corporate event coverage"
+            },
+            {
+                name: "Mark Young",
+                email: "mark.young@automotive.com",
+                phone: "(214) 555-0120",
+                address: "820 Grape Way, DeSoto, TX 75115",
+                puresScore: 3.4,
+                tier: "1C",
+                industry: "Automotive",
+                revenue: "$100K",
+                buyerType: "Efficiency",
+                notes: "Automotive photography needs"
+            },
+            {
+                name: "Rachel King",
+                email: "rachel.king@beauty.com",
+                phone: "(214) 555-0121",
+                address: "931 Berry Street, Lancaster, TX 75146",
+                puresScore: 4.0,
+                tier: "1B",
+                industry: "Beauty",
+                revenue: "$115K",
+                buyerType: "Innovation",
+                notes: "Beauty brand photography"
+            },
+            {
+                name: "Steven Wright",
+                email: "s.wright@insurance.com",
+                phone: "(214) 555-0122",
+                address: "142 Grape Lane, Sachse, TX 75048",
+                puresScore: 3.3,
+                tier: "1C",
+                industry: "Insurance",
+                revenue: "$85K",
+                buyerType: "Analytical",
+                notes: "Professional headshots required"
+            },
+            {
+                name: "Karen Lopez",
+                email: "karen.lopez@design.com",
+                phone: "(214) 555-0123",
+                address: "253 Plum Avenue, Rowlett, TX 75030",
+                puresScore: 4.5,
+                tier: "1A",
+                industry: "Interior Design",
+                revenue: "$170K",
+                buyerType: "Innovation",
+                notes: "Interior design portfolio"
+            },
+            {
+                name: "Edward Hill",
+                email: "edward.hill@medical.com",
+                phone: "(214) 555-0124",
+                address: "364 Coconut Drive, Wylie, TX 75098",
+                puresScore: 4.3,
+                tier: "1A",
+                industry: "Medical",
+                revenue: "$280K",
+                buyerType: "Relationship",
+                notes: "Medical practice photography"
+            },
+            {
+                name: "Linda Scott",
+                email: "linda.scott@fitness.com",
+                phone: "(214) 555-0125",
+                address: "475 Kiwi Circle, Murphy, TX 75094",
+                puresScore: 3.7,
+                tier: "1C",
+                industry: "Fitness",
+                revenue: "$105K",
+                buyerType: "Efficiency",
+                notes: "Fitness center promotional photos"
+            },
+            {
+                name: "Anthony Green",
+                email: "anthony.green@tech.com",
+                phone: "(214) 555-0126",
+                address: "586 Mango Street, Princeton, TX 75407",
+                puresScore: 4.4,
+                tier: "1A",
+                industry: "Technology",
+                revenue: "$195K",
+                buyerType: "Innovation",
+                notes: "Tech startup photography"
+            },
+            {
+                name: "Jessica Adams",
+                email: "jessica.adams@spa.com",
+                phone: "(214) 555-0127",
+                address: "697 Papaya Lane, Lucas, TX 75002",
+                puresScore: 3.9,
+                tier: "1B",
+                industry: "Spa Services",
+                revenue: "$130K",
+                buyerType: "Relationship",
+                notes: "Spa atmosphere photography"
+            },
+            {
+                name: "Kenneth Baker",
+                email: "kenneth.baker@bank.com",
+                phone: "(214) 555-0128",
+                address: "708 Lime Drive, Fairview, TX 75069",
+                puresScore: 4.1,
+                tier: "1B",
+                industry: "Banking",
+                revenue: "$240K",
+                buyerType: "Analytical",
+                notes: "Banking executive portraits"
+            },
+            {
+                name: "Amy Nelson",
+                email: "amy.nelson@jewelry.com",
+                phone: "(214) 555-0129",
+                address: "819 Avocado Way, Anna, TX 75409",
+                puresScore: 4.2,
+                tier: "1B",
+                industry: "Jewelry",
+                revenue: "$155K",
+                buyerType: "Innovation",
+                notes: "Jewelry product photography"
+            },
+            {
+                name: "Paul Carter",
+                email: "paul.carter@transport.com",
+                phone: "(214) 555-0130",
+                address: "920 Banana Circle, Melissa, TX 75454",
+                puresScore: 3.5,
+                tier: "1C",
+                industry: "Transportation",
+                revenue: "$95K",
+                buyerType: "Efficiency",
+                notes: "Fleet photography needs"
+            },
+            {
+                name: "Susan Mitchell",
+                email: "susan.mitchell@flowers.com",
+                phone: "(214) 555-0131",
+                address: "031 Strawberry Street, Celina, TX 75009",
+                puresScore: 3.8,
+                tier: "1B",
+                industry: "Floral Design",
+                revenue: "$75K",
+                buyerType: "Relationship",
+                notes: "Wedding floral photography"
+            },
+            {
+                name: "Gregory Perez",
+                email: "gregory.perez@law2.com",
+                phone: "(214) 555-0132",
+                address: "142 Blueberry Lane, Prosper, TX 75078",
+                puresScore: 4.6,
+                tier: "1A",
+                industry: "Legal Services",
+                revenue: "$320K",
+                buyerType: "Analytical",
+                notes: "Law firm branding photos"
+            },
+            {
+                name: "Donna Roberts",
+                email: "donna.roberts@catering.com",
+                phone: "(214) 555-0133",
+                address: "253 Raspberry Avenue, Little Elm, TX 75068",
+                puresScore: 3.6,
+                tier: "1C",
+                industry: "Catering",
+                revenue: "$88K",
+                buyerType: "Efficiency",
+                notes: "Food presentation photography"
+            },
+            {
+                name: "Jose Turner",
+                email: "jose.turner@realty.com",
+                phone: "(214) 555-0134",
+                address: "364 Blackberry Drive, The Colony, TX 75056",
+                puresScore: 4.0,
+                tier: "1B",
+                industry: "Real Estate",
+                revenue: "$165K",
+                buyerType: "Relationship",
+                notes: "Luxury home photography"
+            },
+            {
+                name: "Carol Phillips",
+                email: "carol.phillips@bakery.com",
+                phone: "(214) 555-0135",
+                address: "475 Cranberry Circle, Hebron, TX 75010",
+                puresScore: 3.4,
+                tier: "1C",
+                industry: "Bakery",
+                revenue: "$70K",
+                buyerType: "Innovation",
+                notes: "Bakery product photography"
+            },
+            {
+                name: "Richard Campbell",
+                email: "richard.campbell@dental.com",
+                phone: "(214) 555-0136",
+                address: "586 Gooseberry Street, Highland Park, TX 75205",
+                puresScore: 4.5,
+                tier: "1A",
+                industry: "Dental",
+                revenue: "$290K",
+                buyerType: "Relationship",
+                notes: "Dental practice marketing photos"
+            },
+            {
+                name: "Deborah Parker",
+                email: "deborah.parker@yoga.com",
+                phone: "(214) 555-0137",
+                address: "697 Elderberry Lane, University Park, TX 75225",
+                puresScore: 3.7,
+                tier: "1C",
+                industry: "Yoga Studio",
+                revenue: "$65K",
+                buyerType: "Relationship",
+                notes: "Yoga class photography"
+            },
+            {
+                name: "Thomas Evans",
+                email: "thomas.evans@engineering.com",
+                phone: "(214) 555-0138",
+                address: "708 Mulberry Drive, Highland Village, TX 75077",
+                puresScore: 4.3,
+                tier: "1A",
+                industry: "Engineering",
+                revenue: "$210K",
+                buyerType: "Analytical",
+                notes: "Engineering project documentation"
+            },
+            {
+                name: "Helen Edwards",
+                email: "helen.edwards@boutique.com",
+                phone: "(214) 555-0139",
+                address: "819 Elderflower Way, Double Oak, TX 75022",
+                puresScore: 3.8,
+                tier: "1B",
+                industry: "Fashion Boutique",
+                revenue: "$120K",
+                buyerType: "Innovation",
+                notes: "Boutique fashion photography"
+            },
+            {
+                name: "Gary Collins",
+                email: "gary.collins@security.com",
+                phone: "(214) 555-0140",
+                address: "920 Rosemary Circle, Lake Dallas, TX 75065",
+                puresScore: 3.5,
+                tier: "1C",
+                industry: "Security",
+                revenue: "$110K",
+                buyerType: "Efficiency",
+                notes: "Security company branding"
+            },
+            {
+                name: "Betty Stewart",
+                email: "betty.stewart@childcare.com",
+                phone: "(214) 555-0141",
+                address: "031 Lavender Street, Corinth, TX 76210",
+                puresScore: 3.3,
+                tier: "1C",
+                industry: "Childcare",
+                revenue: "$55K",
+                buyerType: "Relationship",
+                notes: "Childcare center photography"
+            },
+            {
+                name: "Frank Sanchez",
+                email: "frank.sanchez@hvac.com",
+                phone: "(214) 555-0142",
+                address: "142 Mint Lane, Lake Lewisville, TX 75077",
+                puresScore: 3.6,
+                tier: "1C",
+                industry: "HVAC",
+                revenue: "$125K",
+                buyerType: "Analytical",
+                notes: "HVAC service photography"
+            },
+            {
+                name: "Ruth Morris",
+                email: "ruth.morris@antiques.com",
+                phone: "(214) 555-0143",
+                address: "253 Sage Avenue, Shady Shores, TX 76208",
+                puresScore: 3.4,
+                tier: "1C",
+                industry: "Antiques",
+                revenue: "$45K",
+                buyerType: "Innovation",
+                notes: "Antique collection photography"
+            },
+            {
+                name: "Arthur Rogers",
+                email: "arthur.rogers@optometry.com",
+                phone: "(214) 555-0144",
+                address: "364 Thyme Drive, Hickory Creek, TX 75065",
+                puresScore: 4.1,
+                tier: "1B",
+                industry: "Optometry",
+                revenue: "$185K",
+                buyerType: "Relationship",
+                notes: "Eye care practice photos"
+            },
+            {
+                name: "Frances Reed",
+                email: "frances.reed@pottery.com",
+                phone: "(214) 555-0145",
+                address: "475 Oregano Circle, Bartonville, TX 76226",
+                puresScore: 3.2,
+                tier: "1C",
+                industry: "Pottery",
+                revenue: "$40K",
+                buyerType: "Innovation",
+                notes: "Artistic pottery photography"
+            },
+            {
+                name: "Eugene Cook",
+                email: "eugene.cook@plumbing.com",
+                phone: "(214) 555-0146",
+                address: "586 Basil Street, Copper Canyon, TX 75077",
+                puresScore: 3.7,
+                tier: "1C",
+                industry: "Plumbing",
+                revenue: "$115K",
+                buyerType: "Efficiency",
+                notes: "Plumbing service documentation"
+            },
+            {
+                name: "Evelyn Morgan",
+                email: "evelyn.morgan@skincare.com",
+                phone: "(214) 555-0147",
+                address: "697 Dill Lane, Argyle, TX 76226",
+                puresScore: 4.0,
+                tier: "1B",
+                industry: "Skincare",
+                revenue: "$140K",
+                buyerType: "Innovation",
+                notes: "Skincare product photography"
+            },
+            {
+                name: "Ralph Bell",
+                email: "ralph.bell@landscaping.com",
+                phone: "(214) 555-0148",
+                address: "708 Parsley Drive, Krugerville, TX 76227",
+                puresScore: 3.5,
+                tier: "1C",
+                industry: "Landscaping",
+                revenue: "$95K",
+                buyerType: "Efficiency",
+                notes: "Landscape portfolio photography"
+            },
+            {
+                name: "Ruby Murphy",
+                email: "ruby.murphy@dance.com",
+                phone: "(214) 555-0149",
+                address: "819 Rosemary Way, Oak Point, TX 75068",
+                puresScore: 3.6,
+                tier: "1C",
+                industry: "Dance Studio",
+                revenue: "$60K",
+                buyerType: "Relationship",
+                notes: "Dance recital photography"
+            },
+            {
+                name: "Willie Rivera",
+                email: "willie.rivera@electrical.com",
+                phone: "(214) 555-0150",
+                address: "920 Chive Circle, Providence Village, TX 76227",
+                puresScore: 3.8,
+                tier: "1B",
+                industry: "Electrical",
+                revenue: "$130K",
+                buyerType: "Analytical",
+                notes: "Electrical contractor photography"
+            }
+        ];
+
+        let currentSort = { column: -1, ascending: true };
+        let filteredData = [...clientData];
+
+        function populateTable() {
+            const tbody = document.getElementById('clientTableBody');
+            tbody.innerHTML = '';
+
+            filteredData.forEach((client, index) => {
+                const row = tbody.insertRow();
+                row.className = `tier-${client.tier.toLowerCase()}`;
+                
+                const scoreClass = client.puresScore >= 4.5 ? 'score-high' : 
+                                 client.puresScore >= 3.5 ? 'score-medium' : 'score-low';
+
+                row.innerHTML = `
+                    <td>${client.name}</td>
+                    <td>${client.email}</td>
+                    <td>${client.phone}</td>
+                    <td>${client.address}</td>
+                    <td><span class="score-badge ${scoreClass}">${client.puresScore}</span></td>
+                    <td>Tier ${client.tier}</td>
+                    <td>${client.industry}</td>
+                    <td>${client.revenue}</td>
+                    <td>
+                        <button class="contact-btn" onclick="contactClient(${index}, 'email')">Email</button>
+                        <button class="contact-btn" onclick="contactClient(${index}, 'phone')">Call</button>
+                    </td>
+                `;
+            });
+        }
+
+        function contactClient(index, method) {
+            const client = filteredData[index];
+            const modal = document.getElementById('contactModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalContent = document.getElementById('modalContent');
+
+            modalTitle.textContent = `Contact ${client.name}`;
+
+            if (method === 'email') {
+                const emailContent = generatePersonalizedEmail(client);
+                modalContent.innerHTML = `
+                    <h3>📧 Email Draft</h3>
+                    <p><strong>To:</strong> ${client.email}</p>
+                    <p><strong>Subject:</strong> Capture Your Special Moments with Enchanted Fairies Photography</p>
+                    <div style="background: #3a3a3a; padding: 15px; border-radius: 8px; margin: 15px 0;">
+                        <pre style="white-space: pre-wrap; font-family: Arial; font-size: 14px; color: #ffffff;">${emailContent}</pre>
+                    </div>
+                    <button class="btn" onclick="sendEmail('${client.email}', '${emailContent.replace(/'/g, "\\'")}')">Send Email</button>
+                `;
+            } else if (method === 'phone') {
+                modalContent.innerHTML = `
+                    <h3>📞 Phone Call</h3>
+                    <p><strong>Phone:</strong> <a href="tel:${client.phone}" style="color: #CF2030;">${client.phone}</a></p>
+                    <div style="background: #3a3a3a; padding: 15px; border-radius: 8px; margin: 15px 0;">
+                        <h4>Call Script:</h4>
+                        <p>Hi ${client.name.split(' ')[0]}, this is calling from Enchanted Fairies Photography in Plano. I hope you're having a wonderful day!</p>
+                        <p>I noticed you work in ${client.industry.toLowerCase()}, and we specialize in creating magical photography experiences for professionals and families in the Dallas area.</p>
+                        <p>Would you be interested in learning about our ${getRelevantService(client)} packages? We'd love to help you capture some beautiful memories.</p>
+                    </div>
+                    <button class="btn" onclick="window.open('tel:${client.phone}')">Call Now</button>
+                `;
+            }
+
+            modal.style.display = 'block';
+        }
+
+        function generatePersonalizedEmail(client) {
+            const services = getRelevantService(client);
+            const firstName = client.name.split(' ')[0];
+
+            return `Dear ${firstName},
+
+I hope this email finds you well! My name is Atiyeh, and I'm the owner of Enchanted Fairies Photography, located here in Plano, Texas.
+
+I came across your information and noticed you work in ${client.industry.toLowerCase()}. As someone who understands the importance of professional imagery, I wanted to reach out and introduce our photography services that could be perfect for your needs.
+
+At Enchanted Fairies, we specialize in:
+✨ ${services}
+✨ Professional headshots and corporate photography
+✨ Family and lifestyle photography
+✨ Event and celebration coverage
+
+What makes us special:
+• Over 10 years of experience creating magical moments
+• Local Plano business with deep community connections
+• Flexible scheduling to accommodate busy professionals
+• High-quality images delivered within 1-2 weeks
+• Personalized approach tailored to your unique vision
+
+${getBuyerPersonalization(client)}
+
+I'd love to offer you a complimentary consultation where we can discuss your photography needs and how we can bring your vision to life. Plus, as a fellow ${client.industry.toLowerCase()} professional, I'm offering a 15% discount on your first session.
+
+Would you be available for a brief call this week? I'm confident we can create something truly enchanting for you!
+
+Warm regards,
+
+Atiyeh R. Amiri
+Owner & Lead Photographer
+Enchanted Fairies Photography
+📧 ar@enchanted-fairies.com
+📱 (214) 607-3030
+🌐 http://Enchanted-Fairies.com
+
+P.S. Feel free to check out our portfolio and client testimonials on our website. We're proud to serve the wonderful Plano community!`;
+        }
+
+        function getBuyerPersonalization(client) {
+            switch (client.buyerType) {
+                case 'Analytical':
+                    return `I understand you appreciate detailed information and proven results. Our portfolio includes over 500 successful projects with a 98% client satisfaction rate. We'd be happy to provide references and case studies from similar ${client.industry.toLowerCase()} professionals.`;
+                case 'Relationship':
+                    return `I believe in building lasting relationships with our clients. Many of our customers become part of the Enchanted Fairies family, returning for annual updates and referring friends and colleagues. We'd love to establish that same trusted partnership with you.`;
+                case 'Efficiency':
+                    return `I know your time is valuable! Our streamlined process includes quick online booking, efficient session planning, and rapid delivery. Most clients receive their edited photos within 7-10 business days, and we can accommodate tight deadlines when needed.`;
+                case 'Innovation':
+                    return `As someone who appreciates creativity and innovation, you'll love our unique approach to photography. We use the latest equipment and techniques to create stunning, one-of-a-kind images that stand out from traditional photography.`;
+                default:
+                    return `We pride ourselves on creating personalized experiences that exceed expectations. Every session is tailored to capture your unique personality and professional brand.`;
+            }
+        }
+
+        function getRelevantService(client) {
+            const serviceMap = {
+                'Wedding Planning': 'Wedding and engagement photography',
+                'Technology': 'Corporate headshots and team photography',
+                'Real Estate': 'Property and architectural photography',
+                'Legal Services': 'Professional headshots and law firm branding',
+                'Healthcare': 'Medical practice and family photography',
+                'Finance': 'Executive portraits and corporate events',
+                'Education': 'School events and professional headshots',
+                'Consulting': 'Executive portraits and business photography',
+                'Retail': 'Product and commercial photography',
+                'Startup': 'Brand photography and team headshots',
+                'Non-Profit': 'Event coverage and volunteer appreciation',
+                'Architecture': 'Architectural and interior photography',
+                'Marketing': 'Brand photography and marketing campaigns',
+                'Media': 'Creative portraits and content creation',
+                'Fashion': 'Fashion photography and model portfolios',
+                'Hospitality': 'Food photography and venue coverage',
+                'Wellness': 'Lifestyle and wellness photography',
+                'Construction': 'Project documentation and team photos',
+                'Event Planning': 'Event coverage and behind-the-scenes',
+                'Automotive': 'Commercial automotive photography'
+            };
+            return serviceMap[client.industry] || 'Professional photography services';
+        }
+
+        function sendEmail(email, content) {
+            const subject = encodeURIComponent('Capture Your Special Moments with Enchanted Fairies Photography');
+            const body = encodeURIComponent(content);
+            window.open(`mailto:${email}?subject=${subject}&body=${body}`);
+        }
+
+        function closeModal() {
+            document.getElementById('contactModal').style.display = 'none';
+        }
+
+        function searchClients() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const tierFilter = document.getElementById('tierFilter').value;
+
+            filteredData = clientData.filter(client => {
+                const matchesSearch = 
+                    client.name.toLowerCase().includes(searchTerm) ||
+                    client.email.toLowerCase().includes(searchTerm) ||
+                    client.industry.toLowerCase().includes(searchTerm) ||
+                    client.address.toLowerCase().includes(searchTerm);
+
+                const matchesTier = tierFilter === 'all' || client.tier === tierFilter;
+
+                return matchesSearch && matchesTier;
+            });
+
+            populateTable();
+        }
+
+        function sortTable(columnIndex) {
+            const columns = ['name', 'email', 'phone', 'address', 'puresScore', 'tier', 'industry', 'revenue'];
+            const column = columns[columnIndex];
+
+            if (currentSort.column === columnIndex) {
+                currentSort.ascending = !currentSort.ascending;
+            } else {
+                currentSort.column = columnIndex;
+                currentSort.ascending = true;
+            }
+
+            filteredData.sort((a, b) => {
+                let aVal = a[column];
+                let bVal = b[column];
+
+                if (column === 'puresScore') {
+                    aVal = parseFloat(aVal);
+                    bVal = parseFloat(bVal);
+                } else if (column === 'revenue') {
+                    aVal = parseInt(aVal.replace(/\$|K/g, ''));
+                    bVal = parseInt(bVal.replace(/\$|K/g, ''));
+                } else {
+                    aVal = aVal.toString().toLowerCase();
+                    bVal = bVal.toString().toLowerCase();
+                }
+
+                if (aVal < bVal) return currentSort.ascending ? -1 : 1;
+                if (aVal > bVal) return currentSort.ascending ? 1 : -1;
+                return 0;
+            });
+
+            populateTable();
+        }
+
+        function exportData() {
+            const csv = 'Name,Email,Phone,Address,PURES Score,Tier,Industry,Revenue\n' +
+                filteredData.map(client => 
+                    `"${client.name}","${client.email}","${client.phone}","${client.address}",${client.puresScore},"${client.tier}","${client.industry}","${client.revenue}"`
+                ).join('\n');
+
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'enchanted_fairies_clients.csv';
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+
+        function showAnalytics() {
+            const tierCounts = filteredData.reduce((acc, client) => {
+                acc[client.tier] = (acc[client.tier] || 0) + 1;
+                return acc;
+            }, {});
+
+            const avgScore = (filteredData.reduce((sum, client) => sum + client.puresScore, 0) / filteredData.length).toFixed(2);
+
+            alert(`Analytics Summary:
+Tier 1A: ${tierCounts['1A'] || 0} clients
+Tier 1B: ${tierCounts['1B'] || 0} clients  
+Tier 1C: ${tierCounts['1C'] || 0} clients
+Average P.U.R.E.S Score: ${avgScore}
+Total Clients: ${filteredData.length}`);
+        }
+
+        // Event listeners
+        document.getElementById('searchInput').addEventListener('input', searchClients);
+        document.getElementById('tierFilter').addEventListener('change', searchClients);
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('contactModal');
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        }
+
+        // Initialize the table
+        populateTable();
+    </script>
+</body>
+</html>

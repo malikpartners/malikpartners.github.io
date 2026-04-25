@@ -1,0 +1,763 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crest Coating - S.A.L.E. Client Targeting Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #000000;
+            color: #CF2030;
+            line-height: 1.6;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
+            padding: 1rem 2rem;
+            border-bottom: 3px solid #CF2030;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px rgba(207, 32, 48, 0.3);
+        }
+        
+        .logo {
+            height: 60px;
+        }
+        
+        .header h1 {
+            color: #CF2030;
+            font-size: 2rem;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .card {
+            background: linear-gradient(145deg, #1a1a1a, #2a2a2a);
+            border: 2px solid #CF2030;
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 8px 16px rgba(207, 32, 48, 0.2);
+        }
+        
+        .card h3 {
+            color: #CF2030;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+            border-bottom: 2px solid #CF2030;
+            padding-bottom: 0.5rem;
+        }
+        
+        .search-controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .search-input, .filter-select, .btn {
+            padding: 0.75rem;
+            border: 2px solid #CF2030;
+            border-radius: 8px;
+            background: #1a1a1a;
+            color: #CF2030;
+            font-size: 1rem;
+        }
+        
+        .btn {
+            background: linear-gradient(45deg, #CF2030, #A01828);
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            font-weight: 600;
+        }
+        
+        .btn:hover {
+            background: linear-gradient(45deg, #A01828, #CF2030);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(207, 32, 48, 0.4);
+        }
+        
+        .btn-small {
+            padding: 0.4rem 0.8rem;
+            font-size: 0.85rem;
+        }
+        
+        .table-container {
+            overflow-x: auto;
+            border-radius: 15px;
+            border: 2px solid #CF2030;
+            background: #1a1a1a;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #1a1a1a;
+        }
+        
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #CF2030;
+            color: #CF2030;
+        }
+        
+        th {
+            background: linear-gradient(45deg, #CF2030, #A01828);
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        
+        th:hover {
+            background: linear-gradient(45deg, #A01828, #CF2030);
+        }
+        
+        tr:hover {
+            background: rgba(207, 32, 48, 0.1);
+        }
+        
+        .tier-1a { background: rgba(34, 197, 94, 0.2); }
+        .tier-1b { background: rgba(234, 179, 8, 0.2); }
+        .tier-1c { background: rgba(59, 130, 246, 0.2); }
+        
+        .score-badge {
+            display: inline-block;
+            padding: 0.2rem 0.5rem;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.8rem;
+        }
+        
+        .score-high { background: #22c55e; color: white; }
+        .score-medium { background: #eab308; color: black; }
+        .score-low { background: #ef4444; color: white; }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+        }
+        
+        .modal-content {
+            background: #1a1a1a;
+            margin: 5% auto;
+            padding: 2rem;
+            border: 3px solid #CF2030;
+            border-radius: 15px;
+            width: 80%;
+            max-width: 600px;
+            color: #CF2030;
+        }
+        
+        .close {
+            color: #CF2030;
+            float: right;
+            font-size: 2rem;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .close:hover {
+            color: #A01828;
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+        
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%;
+            padding: 0.5rem;
+            border: 2px solid #CF2030;
+            border-radius: 5px;
+            background: #2a2a2a;
+            color: #CF2030;
+        }
+        
+        textarea {
+            height: 120px;
+            resize: vertical;
+        }
+        
+        .footer {
+            margin-top: 3rem;
+            text-align: center;
+            padding: 2rem;
+            border-top: 2px solid #CF2030;
+        }
+        
+        .footer-logo {
+            height: 30px;
+            margin-bottom: 1rem;
+        }
+        
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .metric-card {
+            background: linear-gradient(145deg, #CF2030, #A01828);
+            color: white;
+            padding: 1rem;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .metric-value {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        
+        @media (max-width: 768px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .search-controls {
+                flex-direction: column;
+            }
+            
+            .header h1 {
+                font-size: 1.5rem;
+            }
+            
+            .container {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="HigginsReports" class="logo">
+        <h1>Crest Coating S.A.L.E. Client Targeting Dashboard</h1>
+    </header>
+
+    <div class="container">
+        <!-- Key Metrics -->
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-value">50</div>
+                <div>Total Prospects</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value">15</div>
+                <div>Tier 1A (Premium)</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value">20</div>
+                <div>Tier 1B (High-Value)</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value">15</div>
+                <div>Tier 1C (Qualified)</div>
+            </div>
+        </div>
+
+        <!-- S.A.L.E. Dashboard Grid -->
+        <div class="dashboard-grid">
+            <!-- P.U.R.E.S. Scoring -->
+            <div class="card">
+                <h3>P.U.R.E.S. Client Scoring</h3>
+                <div class="form-group">
+                    <label>Profitability (1-5):</label>
+                    <input type="range" id="profitability" min="1" max="5" value="3">
+                    <span id="profitabilityValue">3</span>
+                </div>
+                <div class="form-group">
+                    <label>Urgency (1-5):</label>
+                    <input type="range" id="urgency" min="1" max="5" value="3">
+                    <span id="urgencyValue">3</span>
+                </div>
+                <div class="form-group">
+                    <label>Reachability (1-5):</label>
+                    <input type="range" id="reachability" min="1" max="5" value="3">
+                    <span id="reachabilityValue">3</span>
+                </div>
+                <div class="form-group">
+                    <label>Engagement (1-5):</label>
+                    <input type="range" id="engagement" min="1" max="5" value="3">
+                    <span id="engagementValue">3</span>
+                </div>
+                <div class="form-group">
+                    <label>Sustainability (1-5):</label>
+                    <input type="range" id="sustainability" min="1" max="5" value="3">
+                    <span id="sustainabilityValue">3</span>
+                </div>
+                <div class="form-group">
+                    <strong>Total P.U.R.E.S. Score: <span id="totalScore">15</span>/25</strong>
+                </div>
+            </div>
+
+            <!-- S.A.L.E. Strategy Overview -->
+            <div class="card">
+                <h3>S.A.L.E. Strategy Framework</h3>
+                <div style="margin-bottom: 1rem;">
+                    <strong>S - SOURCING:</strong> P.U.R.E.S. scoring identifies high-value manufacturing prospects within 10 miles of Anaheim requiring specialized coating solutions.
+                </div>
+                <div style="margin-bottom: 1rem;">
+                    <strong>A - ASSESSING:</strong> Buyer personas include Analytical (ROI-focused), Relationship (trust-based), Efficiency (time-saving), and Innovation (competitive advantage) buyers.
+                </div>
+                <div style="margin-bottom: 1rem;">
+                    <strong>L - LISTENING:</strong> Feedback tracking from initial contact through project completion ensures continuous improvement and client satisfaction.
+                </div>
+                <div style="margin-bottom: 1rem;">
+                    <strong>E - EMPOWERING:</strong> Referral programs and success stories create advocates within the industrial manufacturing community.
+                </div>
+            </div>
+        </div>
+
+        <!-- Search and Filter Controls -->
+        <div class="search-controls">
+            <input type="text" id="searchInput" placeholder="Search clients..." class="search-input">
+            <select id="tierFilter" class="filter-select">
+                <option value="">All Tiers</option>
+                <option value="1A">Tier 1A (Premium)</option>
+                <option value="1B">Tier 1B (High-Value)</option>
+                <option value="1C">Tier 1C (Qualified)</option>
+            </select>
+            <select id="industryFilter" class="filter-select">
+                <option value="">All Industries</option>
+                <option value="Aerospace">Aerospace</option>
+                <option value="Automotive">Automotive</option>
+                <option value="Food Processing">Food Processing</option>
+                <option value="Medical">Medical</option>
+                <option value="Military">Military</option>
+                <option value="Electronics">Electronics</option>
+                <option value="General Manufacturing">General Manufacturing</option>
+            </select>
+            <button onclick="exportData()" class="btn">Export CSV</button>
+            <button onclick="openEmailModal()" class="btn">Bulk Email</button>
+        </div>
+
+        <!-- Client Database Table -->
+        <div class="table-container">
+            <table id="clientTable">
+                <thead>
+                    <tr>
+                        <th onclick="sortTable(0)">Client Name ↕</th>
+                        <th onclick="sortTable(1)">Email ↕</th>
+                        <th onclick="sortTable(2)">Phone ↕</th>
+                        <th onclick="sortTable(3)">Address ↕</th>
+                        <th onclick="sortTable(4)">P.U.R.E.S. Score ↕</th>
+                        <th onclick="sortTable(5)">Tier Level ↕</th>
+                        <th onclick="sortTable(6)">Industry ↕</th>
+                        <th onclick="sortTable(7)">Revenue Est. ↕</th>
+                        <th onclick="sortTable(8)">Contact Status ↕</th>
+                        <th onclick="sortTable(9)">Last Contact ↕</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="clientTableBody">
+                    <!-- Client data will be populated by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Email Modal -->
+    <div id="emailModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h3>Send Email to Client</h3>
+            <form id="emailForm">
+                <div class="form-group">
+                    <label>To:</label>
+                    <input type="email" id="emailTo" required>
+                </div>
+                <div class="form-group">
+                    <label>Subject:</label>
+                    <input type="text" id="emailSubject" value="Premium Industrial Coating Solutions for Your Manufacturing Operations">
+                </div>
+                <div class="form-group">
+                    <label>Message:</label>
+                    <textarea id="emailMessage" required></textarea>
+                </div>
+                <button type="submit" class="btn">Send Email</button>
+            </form>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="HigginsReports" class="footer-logo">
+        <p>&copy; 2024 Crest Coating Inc. | Powered by HigginsReports S.A.L.E. System</p>
+    </footer>
+
+    <script>
+        // Client data for Crest Coating - Industrial companies within 10 miles of Anaheim, CA
+        const clientData = [
+            {name: "Northrop Grumman Systems", email: "procurement@northropgrumman.com", phone: "(714) 555-0101", address: "1 Aerospace Way, El Segundo, CA", pures: 23, tier: "1A", industry: "Aerospace", revenue: "$30B+", status: "New", lastContact: "2024-01-15"},
+            {name: "Raytheon Technologies", email: "sourcing@raytheon.com", phone: "(714) 555-0102", address: "2000 E El Segundo Blvd, El Segundo, CA", pures: 22, tier: "1A", industry: "Aerospace", revenue: "$15B+", status: "In Progress", lastContact: "2024-01-20"},
+            {name: "Boeing Commercial", email: "suppliers@boeing.com", phone: "(562) 555-0103", address: "5301 Bolsa Ave, Huntington Beach, CA", pures: 24, tier: "1A", industry: "Aerospace", revenue: "$25B+", status: "New", lastContact: "2024-01-10"},
+            {name: "Honda Manufacturing", email: "procurement@honda.com", phone: "(310) 555-0104", address: "24000 Honda Pkwy, Torrance, CA", pures: 21, tier: "1A", industry: "Automotive", revenue: "$12B+", status: "Contacted", lastContact: "2024-01-18"},
+            {name: "Tesla Fremont Factory", email: "suppliers@tesla.com", phone: "(510) 555-0105", address: "45500 Fremont Blvd, Fremont, CA", pures: 23, tier: "1A", industry: "Automotive", revenue: "$20B+", status: "New", lastContact: "2024-01-12"},
+            
+            {name: "Applied Materials Inc", email: "sourcing@appliedmaterials.com", phone: "(408) 555-0106", address: "3050 Bowers Ave, Santa Clara, CA", pures: 20, tier: "1B", industry: "Electronics", revenue: "$8B+", status: "In Progress", lastContact: "2024-01-22"},
+            {name: "Lockheed Martin Space", email: "procurement@lockheedmartin.com", phone: "(818) 555-0107", address: "1111 Lockheed Way, Palmdale, CA", pures: 22, tier: "1A", industry: "Aerospace", revenue: "$18B+", status: "Contacted", lastContact: "2024-01-14"},
+            {name: "General Dynamics", email: "suppliers@gd.com", phone: "(858) 555-0108", address: "5200 Pacific Hwy, San Diego, CA", pures: 21, tier: "1A", industry: "Military", revenue: "$16B+", status: "New", lastContact: "2024-01-16"},
+            {name: "Edwards Lifesciences", email: "procurement@edwards.com", phone: "(949) 555-0109", address: "One Edwards Way, Irvine, CA", pures: 20, tier: "1B", industry: "Medical", revenue: "$6B+", status: "In Progress", lastContact: "2024-01-19"},
+            {name: "Medtronic MiniMed", email: "sourcing@medtronic.com", phone: "(818) 555-0110", address: "18000 Devonshire St, Northridge, CA", pures: 19, tier: "1B", industry: "Medical", revenue: "$5B+", status: "Contacted", lastContact: "2024-01-21"},
+            
+            {name: "Nestle USA Food Processing", email: "procurement@nestle.com", phone: "(800) 555-0111", address: "800 N Brand Blvd, Glendale, CA", pures: 18, tier: "1B", industry: "Food Processing", revenue: "$4B+", status: "New", lastContact: "2024-01-13"},
+            {name: "ConAgra Foods", email: "suppliers@conagra.com", phone: "(714) 555-0112", address: "5000 S Eastern Ave, Commerce, CA", pures: 17, tier: "1B", industry: "Food Processing", revenue: "$3B+", status: "In Progress", lastContact: "2024-01-17"},
+            {name: "Farmer John Meats", email: "procurement@farmerjohn.com", phone: "(323) 555-0113", address: "3049 E Vernon Ave, Vernon, CA", pures: 16, tier: "1C", industry: "Food Processing", revenue: "$1B+", status: "Contacted", lastContact: "2024-01-11"},
+            {name: "Quantum Technologies", email: "sourcing@quantumtech.com", phone: "(714) 555-0114", address: "1500 S Anaheim Blvd, Anaheim, CA", pures: 19, tier: "1B", industry: "Electronics", revenue: "$2B+", status: "New", lastContact: "2024-01-20"},
+            {name: "Precision Components Inc", email: "procurement@precisioncomp.com", phone: "(714) 555-0115", address: "2200 E Katella Ave, Anaheim, CA", pures: 18, tier: "1B", industry: "General Manufacturing", revenue: "$500M+", status: "In Progress", lastContact: "2024-01-15"},
+            
+            {name: "Advanced Manufacturing Solutions", email: "sourcing@advancedmfg.com", phone: "(714) 555-0116", address: "3300 E Miraloma Ave, Anaheim, CA", pures: 17, tier: "1B", industry: "General Manufacturing", revenue: "$300M+", status: "Contacted", lastContact: "2024-01-18"},
+            {name: "Aerospace Fasteners Corp", email: "procurement@aerofast.com", phone: "(714) 555-0117", address: "1800 S Lewis St, Anaheim, CA", pures: 20, tier: "1B", industry: "Aerospace", revenue: "$400M+", status: "New", lastContact: "2024-01-12"},
+            {name: "Industrial Pump Systems", email: "sourcing@indpump.com", phone: "(714) 555-0118", address: "4100 E La Palma Ave, Anaheim, CA", pures: 16, tier: "1C", industry: "General Manufacturing", revenue: "$200M+", status: "In Progress", lastContact: "2024-01-16"},
+            {name: "Hydraulic Solutions Inc", email: "procurement@hydraulicsol.com", phone: "(714) 555-0119", address: "2500 W Lincoln Ave, Anaheim, CA", pures: 18, tier: "1B", industry: "General Manufacturing", revenue: "$350M+", status: "Contacted", lastContact: "2024-01-14"},
+            {name: "Orange County Machine Works", email: "sourcing@ocmachine.com", phone: "(714) 555-0120", address: "1200 N Kraemer Blvd, Anaheim, CA", pures: 17, tier: "1B", industry: "General Manufacturing", revenue: "$250M+", status: "New", lastContact: "2024-01-19"},
+            
+            {name: "Defense Systems Technologies", email: "procurement@defensetech.com", phone: "(714) 555-0121", address: "5500 E Santa Ana Canyon Rd, Anaheim, CA", pures: 21, tier: "1A", industry: "Military", revenue: "$800M+", status: "In Progress", lastContact: "2024-01-21"},
+            {name: "Medical Device Manufacturing", email: "sourcing@meddevice.com", phone: "(714) 555-0122", address: "3000 E Frontera St, Anaheim, CA", pures: 19, tier: "1B", industry: "Medical", revenue: "$400M+", status: "Contacted", lastContact: "2024-01-13"},
+            {name: "Automotive Parts Solutions", email: "procurement@autoparts.com", phone: "(714) 555-0123", address: "4000 E Ball Rd, Anaheim, CA", pures: 18, tier: "1B", industry: "Automotive", revenue: "$600M+", status: "New", lastContact: "2024-01-17"},
+            {name: "Electronic Component Systems", email: "sourcing@elecsystems.com", phone: "(714) 555-0124", address: "1900 E Orangewood Ave, Anaheim, CA", pures: 17, tier: "1B", industry: "Electronics", revenue: "$300M+", status: "In Progress", lastContact: "2024-01-11"},
+            {name: "Precision Valve Manufacturing", email: "procurement@precisionvalve.com", phone: "(714) 555-0125", address: "2800 E Cerritos Ave, Anaheim, CA", pures: 16, tier: "1C", industry: "General Manufacturing", revenue: "$150M+", status: "Contacted", lastContact: "2024-01-15"},
+            
+            {name: "Industrial Equipment Corp", email: "sourcing@indequip.com", phone: "(714) 555-0126", address: "3500 S Harbor Blvd, Anaheim, CA", pures: 18, tier: "1B", industry: "General Manufacturing", revenue: "$400M+", status: "New", lastContact: "2024-01-20"},
+            {name: "Specialty Metals Inc", email: "procurement@specmetals.com", phone: "(714) 555-0127", address: "1600 S Magnolia Ave, Anaheim, CA", pures: 19, tier: "1B", industry: "General Manufacturing", revenue: "$500M+", status: "In Progress", lastContact: "2024-01-18"},
+            {name: "Food Service Equipment", email: "sourcing@foodservice.com", phone: "(714) 555-0128", address: "4200 E Chapman Ave, Anaheim, CA", pures: 15, tier: "1C", industry: "Food Processing", revenue: "$180M+", status: "Contacted", lastContact: "2024-01-12"},
+            {name: "Marine Systems Technologies", email: "procurement@marinesys.com", phone: "(714) 555-0129", address: "2100 E Lincoln Ave, Anaheim, CA", pures: 17, tier: "1B", industry: "Military", revenue: "$350M+", status: "New", lastContact: "2024-01-16"},
+            {name: "Chemical Processing Equipment", email: "sourcing@chemprocess.com", phone: "(714) 555-0130", address: "3800 E Miraloma Ave, Anaheim, CA", pures: 16, tier: "1C", industry: "General Manufacturing", revenue: "$220M+", status: "In Progress", lastContact: "2024-01-14"},
+            
+            {name: "Advanced Coating Technologies", email: "procurement@advcoating.com", phone: "(714) 555-0131", address: "1300 S State College Blvd, Anaheim, CA", pures: 15, tier: "1C", industry: "General Manufacturing", revenue: "$120M+", status: "Contacted", lastContact: "2024-01-19"},
+            {name: "Semiconductor Equipment Inc", email: "sourcing@semiconductor.com", phone: "(714) 555-0132", address: "2700 E La Palma Ave, Anaheim, CA", pures: 20, tier: "1B", industry: "Electronics", revenue: "$700M+", status: "New", lastContact: "2024-01-21"},
+            {name: "Aerospace Components Corp", email: "procurement@aerocomp.com", phone: "(714) 555-0133", address: "5000 E Santa Ana Canyon Rd, Anaheim, CA", pures: 22, tier: "1A", industry: "Aerospace", revenue: "$900M+", status: "In Progress", lastContact: "2024-01-13"},
+            {name: "Industrial Robotics Systems", email: "sourcing@robotics.com", phone: "(714) 555-0134", address: "1700 N Placentia Ave, Anaheim, CA", pures: 19, tier: "1B", industry: "General Manufacturing", revenue: "$450M+", status: "Contacted", lastContact: "2024-01-17"},
+            {name: "Medical Instrument Manufacturing", email: "procurement@medinstrument.com", phone: "(714) 555-0135", address: "3200 E Frontera St, Anaheim, CA", pures: 18, tier: "1B", industry: "Medical", revenue: "$380M+", status: "New", lastContact: "2024-01-11"},
+            
+            {name: "Power Generation Equipment", email: "sourcing@powergen.com", phone: "(714) 555-0136", address: "4500 E Ball Rd, Anaheim, CA", pures: 17, tier: "1B", industry: "General Manufacturing", revenue: "$600M+", status: "In Progress", lastContact: "2024-01-15"},
+            {name: "Automotive Testing Systems", email: "procurement@autotest.com", phone: "(714) 555-0137", address: "2300 E Orangewood Ave, Anaheim, CA", pures: 16, tier: "1C", industry: "Automotive", revenue: "$280M+", status: "Contacted", lastContact: "2024-01-20"},
+            {name: "Defense Communications Inc", email: "sourcing@defcomm.com", phone: "(714) 555-0138", address: "3600 S Harbor Blvd, Anaheim, CA", pures: 21, tier: "1A", industry: "Military", revenue: "$750M+", status: "New", lastContact: "2024-01-18"},
+            {name: "Laboratory Equipment Corp", email: "procurement@labequip.com", phone: "(714) 555-0139", address: "1400 S Euclid St, Anaheim, CA", pures: 18, tier: "1B", industry: "Medical", revenue: "$320M+", status: "In Progress", lastContact: "2024-01-12"},
+            {name: "Food Processing Machinery", email: "sourcing@foodmach.com", phone: "(714) 555-0140", address: "2900 E Chapman Ave, Anaheim, CA", pures: 15, tier: "1C", industry: "Food Processing", revenue: "$190M+", status: "Contacted", lastContact: "2024-01-16"},
+            
+            {name: "Electronic Test Equipment", email: "procurement@electrotest.com", phone: "(714) 555-0141", address: "3700 E Miraloma Ave, Anaheim, CA", pures: 17, tier: "1B", industry: "Electronics", revenue: "$420M+", status: "New", lastContact: "2024-01-14"},
+            {name: "Precision Machining Services", email: "sourcing@precmach.com", phone: "(714) 555-0142", address: "1500 S Magnolia Ave, Anaheim, CA", pures: 16, tier: "1C", industry: "General Manufacturing", revenue: "$160M+", status: "In Progress", lastContact: "2024-01-19"},
+            {name: "Industrial Filtration Systems", email: "procurement@indfilter.com", phone: "(714) 555-0143", address: "4100 E Chapman Ave, Anaheim, CA", pures: 18, tier: "1B", industry: "General Manufacturing", revenue: "$340M+", status: "Contacted", lastContact: "2024-01-21"},
+            {name: "Aerospace Tooling Corp", email: "sourcing@aerotool.com", phone: "(714) 555-0144", address: "2000 E Lincoln Ave, Anaheim, CA", pures: 20, tier: "1B", industry: "Aerospace", revenue: "$550M+", status: "New", lastContact: "2024-01-13"},
+            {name: "Medical Device Testing", email: "procurement@medtest.com", phone: "(714) 555-0145", address: "3100 E Frontera St, Anaheim, CA", pures: 19, tier: "1B", industry: "Medical", revenue: "$410M+", status: "In Progress", lastContact: "2024-01-17"},
+            
+            {name: "Automotive Electronics", email: "sourcing@autoelec.com", phone: "(714) 555-0146", address: "2400 E Orangewood Ave, Anaheim, CA", pures: 17, tier: "1B", industry: "Automotive", revenue: "$390M+", status: "Contacted", lastContact: "2024-01-11"},
+            {name: "Industrial Control Systems", email: "procurement@indcontrol.com", phone: "(714) 555-0147", address: "3800 S Harbor Blvd, Anaheim, CA", pures: 16, tier: "1C", industry: "General Manufacturing", revenue: "$240M+", status: "New", lastContact: "2024-01-15"},
+            {name: "Military Vehicle Components", email: "sourcing@milvehicle.com", phone: "(714) 555-0148", address: "1800 S Euclid St, Anaheim, CA", pures: 22, tier: "1A", industry: "Military", revenue: "$850M+", status: "In Progress", lastContact: "2024-01-20"},
+            {name: "Food Safety Equipment", email: "procurement@foodsafety.com", phone: "(714) 555-0149", address: "3000 E Chapman Ave, Anaheim, CA", pures: 15, tier: "1C", industry: "Food Processing", revenue: "$170M+", status: "Contacted", lastContact: "2024-01-18"},
+            {name: "Electronic Manufacturing Services", email: "sourcing@elmfg.com", phone: "(714) 555-0150", address: "4000 E Miraloma Ave, Anaheim, CA", pures: 18, tier: "1B", industry: "Electronics", revenue: "$480M+", status: "New", lastContact: "2024-01-12"}
+        ];
+
+        let filteredData = [...clientData];
+
+        function initializeTable() {
+            populateTable(filteredData);
+            updateScoreInputs();
+        }
+
+        function populateTable(data) {
+            const tbody = document.getElementById('clientTableBody');
+            tbody.innerHTML = '';
+            
+            data.forEach(client => {
+                const row = document.createElement('tr');
+                row.className = getTierClass(client.tier);
+                
+                row.innerHTML = `
+                    <td>${client.name}</td>
+                    <td>${client.email}</td>
+                    <td>${client.phone}</td>
+                    <td>${client.address}</td>
+                    <td><span class="score-badge ${getScoreClass(client.pures)}">${client.pures}/25</span></td>
+                    <td>Tier ${client.tier}</td>
+                    <td>${client.industry}</td>
+                    <td>${client.revenue}</td>
+                    <td>${client.status}</td>
+                    <td>${client.lastContact}</td>
+                    <td>
+                        <button onclick="sendEmail('${client.email}', '${client.name}', '${client.industry}')" class="btn btn-small">Email</button>
+                        <button onclick="callClient('${client.phone}')" class="btn btn-small">Call</button>
+                    </td>
+                `;
+                
+                tbody.appendChild(row);
+            });
+        }
+
+        function getTierClass(tier) {
+            switch(tier) {
+                case '1A': return 'tier-1a';
+                case '1B': return 'tier-1b';
+                case '1C': return 'tier-1c';
+                default: return '';
+            }
+        }
+
+        function getScoreClass(score) {
+            if (score >= 20) return 'score-high';
+            if (score >= 15) return 'score-medium';
+            return 'score-low';
+        }
+
+        function updateScoreInputs() {
+            const inputs = ['profitability', 'urgency', 'reachability', 'engagement', 'sustainability'];
+            inputs.forEach(input => {
+                const slider = document.getElementById(input);
+                const value = document.getElementById(input + 'Value');
+                
+                slider.addEventListener('input', function() {
+                    value.textContent = this.value;
+                    updateTotalScore();
+                });
+            });
+        }
+
+        function updateTotalScore() {
+            const profitability = parseInt(document.getElementById('profitability').value);
+            const urgency = parseInt(document.getElementById('urgency').value);
+            const reachability = parseInt(document.getElementById('reachability').value);
+            const engagement = parseInt(document.getElementById('engagement').value);
+            const sustainability = parseInt(document.getElementById('sustainability').value);
+            
+            const total = profitability + urgency + reachability + engagement + sustainability;
+            document.getElementById('totalScore').textContent = total;
+        }
+
+        function sortTable(columnIndex) {
+            const table = document.getElementById('clientTable');
+            const tbody = table.tBodies[0];
+            const rows = Array.from(tbody.rows);
+            
+            rows.sort((a, b) => {
+                const aText = a.cells[columnIndex].textContent.trim();
+                const bText = b.cells[columnIndex].textContent.trim();
+                
+                if (columnIndex === 4) { // P.U.R.E.S. Score column
+                    return parseInt(bText.split('/')[0]) - parseInt(aText.split('/')[0]);
+                }
+                
+                return aText.localeCompare(bText);
+            });
+            
+            rows.forEach(row => tbody.appendChild(row));
+        }
+
+        function filterClients() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const tierFilter = document.getElementById('tierFilter').value;
+            const industryFilter = document.getElementById('industryFilter').value;
+            
+            filteredData = clientData.filter(client => {
+                const matchesSearch = client.name.toLowerCase().includes(searchTerm) ||
+                                    client.email.toLowerCase().includes(searchTerm) ||
+                                    client.industry.toLowerCase().includes(searchTerm);
+                const matchesTier = !tierFilter || client.tier === tierFilter;
+                const matchesIndustry = !industryFilter || client.industry === industryFilter;
+                
+                return matchesSearch && matchesTier && matchesIndustry;
+            });
+            
+            populateTable(filteredData);
+        }
+
+        function sendEmail(email, clientName, industry) {
+            const modal = document.getElementById('emailModal');
+            const emailTo = document.getElementById('emailTo');
+            const emailMessage = document.getElementById('emailMessage');
+            
+            emailTo.value = email;
+            
+            const emailTemplate = generateEmailTemplate(clientName, industry);
+            emailMessage.value = emailTemplate;
+            
+            modal.style.display = 'block';
+        }
+
+        function generateEmailTemplate(clientName, industry) {
+            return `Dear ${clientName} Team,
+
+I hope this email finds you well. I'm reaching out from Crest Coating, Orange County's premier industrial coating specialist with over 55 years of excellence in the ${industry.toLowerCase()} industry.
+
+As a trusted partner to leading companies like Northrop Grumman, Boeing, and Honda Manufacturing, we understand the critical importance of high-performance coatings in your operations.
+
+Our specialized solutions for ${industry} include:
+
+• PTFE/Teflon Coatings for superior non-stick and chemical resistance
+• High-Temperature Ceramic Coatings (up to 2000°F)
+• Military-Spec CARC Coatings for defense applications
+• FDA-Compliant Food-Grade Coatings
+• Precision Fastener Coatings for torque control
+• Halar & Chemical Resistant Coatings for harsh environments
+
+Why Choose Crest Coating:
+✓ ISO 9001:2015 Certified Quality Management
+✓ Chemours Licensed Industrial Applicator (40+ years)
+✓ 50,000+ sq ft facility with high-volume conveyor lines
+✓ Same-day quotes and rapid turnaround times
+✓ Local to Orange County with nationwide shipping
+
+We would welcome the opportunity to discuss how our advanced coating solutions can enhance your products' performance, extend service life, and reduce maintenance costs.
+
+Would you be available for a brief call this week to explore potential collaboration opportunities?
+
+Best regards,
+
+Mike Erickson
+Business Development
+Crest Coating Inc.
+Phone: (714) 635-7090
+Email: mikee@crestcoating.com
+Website: www.crestcoating.com
+
+P.S. We're currently offering complimentary coating evaluations for new ${industry} partners. This could be an excellent opportunity to test our solutions with your specific requirements at no cost.`;
+        }
+
+        function callClient(phone) {
+            window.open(`tel:${phone}`, '_self');
+        }
+
+        function openEmailModal() {
+            const modal = document.getElementById('emailModal');
+            const emailTo = document.getElementById('emailTo');
+            const emailMessage = document.getElementById('emailMessage');
+            
+            emailTo.value = 'multiple@recipients.com';
+            emailMessage.value = generateBulkEmailTemplate();
+            
+            modal.style.display = 'block';
+        }
+
+        function generateBulkEmailTemplate() {
+            return `Subject: Transform Your Manufacturing Operations with Premium Industrial Coatings
+
+Dear Manufacturing Leaders,
+
+As Orange County's most experienced industrial coating specialist, Crest Coating has been the trusted partner for aerospace, automotive, medical, and defense manufacturers since 1967.
+
+Our comprehensive coating solutions deliver measurable results:
+• 50-75% reduction in maintenance downtime
+• Extended component life (2-5x longer service intervals)
+• Enhanced performance in extreme environments
+• FDA compliance for food-contact surfaces
+• Military specifications for defense applications
+
+Featured Services:
+• Teflon/PTFE Coatings • High-Temperature Ceramics
+• Military-Spec CARC • Chemical Resistant Halar
+• Food-Grade BCS Coatings • Precision Fastener Coatings
+
+Ready to optimize your operations? Contact us today for a complimentary coating consultation.
+
+Best regards,
+Crest Coating Team
+(714) 635-7090 | sales_team@crestcoating.com`;
+        }
+
+        function exportData() {
+            const csv = convertToCSV(filteredData);
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.setAttribute('hidden', '');
+            a.setAttribute('href', url);
+            a.setAttribute('download', 'crest-coating-prospects.csv');
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+
+        function convertToCSV(data) {
+            const headers = ['Client Name', 'Email', 'Phone', 'Address', 'P.U.R.E.S. Score', 'Tier Level', 'Industry', 'Revenue Estimate', 'Contact Status', 'Last Contact'];
+            const rows = data.map(client => [
+                client.name, client.email, client.phone, client.address,
+                client.pures, client.tier, client.industry, client.revenue,
+                client.status, client.lastContact
+            ]);
+            
+            const csvContent = [headers, ...rows]
+                .map(row => row.map(field => `"${field}"`).join(','))
+                .join('\n');
+            
+            return csvContent;
+        }
+
+        // Event Listeners
+        document.getElementById('searchInput').addEventListener('input', filterClients);
+        document.getElementById('tierFilter').addEventListener('change', filterClients);
+        document.getElementById('industryFilter').addEventListener('change', filterClients);
+
+        // Modal functionality
+        const modal = document.getElementById('emailModal');
+        const span = document.getElementsByClassName('close')[0];
+
+        span.onclick = function() {
+            modal.style.display = 'none';
+        }
+
+        window.onclick = function(event) {
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        }
+
+        document.getElementById('emailForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const emailTo = document.getElementById('emailTo').value;
+            const subject = document.getElementById('emailSubject').value;
+            const message = document.getElementById('emailMessage').value;
+            
+            const mailtoLink = `mailto:${emailTo}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(message)}`;
+            window.open(mailtoLink, '_blank');
+            
+            modal.style.display = 'none';
+            alert('Email client opened with pre-filled content!');
+        });
+
+        // Initialize the application
+        initializeTable();
+    </script>
+</body>
+</html>
