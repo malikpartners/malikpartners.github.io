@@ -1,0 +1,1661 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>S.A.L.E. Client Targeting System - Sun Country Marine Group</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #000000;
+            color: #FFFFFF;
+            line-height: 1.6;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #CF2030, #A01828);
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+
+        .header img {
+            max-height: 80px;
+            margin-bottom: 10px;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .nav-tabs {
+            display: flex;
+            background-color: #1a1a1a;
+            border-radius: 10px 10px 0 0;
+            margin-bottom: 0;
+            overflow-x: auto;
+        }
+
+        .nav-tab {
+            padding: 15px 25px;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            flex: 1;
+            min-width: 150px;
+            transition: background-color 0.3s;
+        }
+
+        .nav-tab.active {
+            background-color: #CF2030;
+        }
+
+        .nav-tab:hover {
+            background-color: #555;
+        }
+
+        .nav-tab.active:hover {
+            background-color: #A01828;
+        }
+
+        .tab-content {
+            display: none;
+            background-color: #1a1a1a;
+            padding: 30px;
+            border-radius: 0 0 10px 10px;
+            border: 2px solid #333;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .section {
+            margin-bottom: 30px;
+        }
+
+        .section h2 {
+            color: #CF2030;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+            border-bottom: 2px solid #CF2030;
+            padding-bottom: 10px;
+        }
+
+        .controls {
+            background-color: #2a2a2a;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .control-group label {
+            font-weight: bold;
+            color: #CF2030;
+            font-size: 0.9em;
+        }
+
+        input, select, textarea {
+            padding: 10px;
+            border: 1px solid #555;
+            border-radius: 5px;
+            background-color: #333;
+            color: #fff;
+            font-size: 14px;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #CF2030;
+            box-shadow: 0 0 5px rgba(207, 32, 48, 0.5);
+        }
+
+        .btn {
+            background-color: #CF2030;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn:hover {
+            background-color: #A01828;
+        }
+
+        .btn-small {
+            padding: 6px 12px;
+            font-size: 12px;
+        }
+
+        .btn-success {
+            background-color: #28a745;
+        }
+
+        .btn-success:hover {
+            background-color: #218838;
+        }
+
+        .table-container {
+            background-color: #2a2a2a;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 12px 8px;
+            text-align: left;
+            border-bottom: 1px solid #444;
+            font-size: 13px;
+        }
+
+        th {
+            background-color: #333;
+            font-weight: bold;
+            color: #CF2030;
+            cursor: pointer;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        th:hover {
+            background-color: #444;
+        }
+
+        tbody tr:hover {
+            background-color: #3a3a3a;
+        }
+
+        .tier-1a {
+            background-color: rgba(40, 167, 69, 0.2);
+        }
+
+        .tier-1b {
+            background-color: rgba(255, 193, 7, 0.2);
+        }
+
+        .tier-1c {
+            background-color: rgba(0, 123, 255, 0.2);
+        }
+
+        .scoring-form {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            background-color: #2a2a2a;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .score-item {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .score-item label {
+            color: #CF2030;
+            font-weight: bold;
+        }
+
+        .score-slider {
+            appearance: none;
+            width: 100%;
+            height: 10px;
+            border-radius: 5px;
+            background: #555;
+            outline: none;
+        }
+
+        .score-slider::-webkit-slider-thumb {
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #CF2030;
+            cursor: pointer;
+        }
+
+        .score-slider::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #CF2030;
+            cursor: pointer;
+            border: none;
+        }
+
+        .score-display {
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.2em;
+            color: #CF2030;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+        }
+
+        .modal-content {
+            background-color: #1a1a1a;
+            margin: 5% auto;
+            padding: 30px;
+            border: 2px solid #CF2030;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: #CF2030;
+        }
+
+        .footer {
+            background-color: #1a1a1a;
+            padding: 20px;
+            text-align: center;
+            margin-top: 40px;
+            border-top: 2px solid #CF2030;
+        }
+
+        .footer img {
+            max-height: 40px;
+            margin-bottom: 10px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background-color: #2a2a2a;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            border: 1px solid #444;
+        }
+
+        .stat-number {
+            font-size: 2em;
+            color: #CF2030;
+            font-weight: bold;
+        }
+
+        .stat-label {
+            color: #ccc;
+            margin-top: 5px;
+        }
+
+        .email-template {
+            background-color: #2a2a2a;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .scoring-form {
+                grid-template-columns: 1fr;
+            }
+            
+            table {
+                font-size: 11px;
+            }
+            
+            th, td {
+                padding: 8px 4px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports">
+        <h1>S.A.L.E. Client Targeting System</h1>
+        <p>Sun Country Marine Group - Strategic Client Acquisition Platform</p>
+    </div>
+
+    <div class="container">
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="showTab('sourcing')">SOURCING</button>
+            <button class="nav-tab" onclick="showTab('assessing')">ASSESSING</button>
+            <button class="nav-tab" onclick="showTab('listening')">LISTENING</button>
+            <button class="nav-tab" onclick="showTab('empowering')">EMPOWERING</button>
+            <button class="nav-tab" onclick="showTab('dashboard')">DASHBOARD</button>
+        </div>
+
+        <div id="sourcing" class="tab-content active">
+            <div class="section">
+                <h2>P.U.R.E.S. Client Scoring System</h2>
+                <div class="scoring-form">
+                    <div class="score-item">
+                        <label>Profitability (Annual Revenue/Budget)</label>
+                        <input type="range" class="score-slider" id="profitability" min="1" max="5" value="3" oninput="updateScore('profitability')">
+                        <div class="score-display" id="profitability-display">3</div>
+                    </div>
+                    <div class="score-item">
+                        <label>Urgency (Need for Marine Solutions)</label>
+                        <input type="range" class="score-slider" id="urgency" min="1" max="5" value="3" oninput="updateScore('urgency')">
+                        <div class="score-display" id="urgency-display">3</div>
+                    </div>
+                    <div class="score-item">
+                        <label>Reachability (Decision Maker Access)</label>
+                        <input type="range" class="score-slider" id="reachability" min="1" max="5" value="3" oninput="updateScore('reachability')">
+                        <div class="score-display" id="reachability-display">3</div>
+                    </div>
+                    <div class="score-item">
+                        <label>Engagement (Partnership Openness)</label>
+                        <input type="range" class="score-slider" id="engagement" min="1" max="5" value="3" oninput="updateScore('engagement')">
+                        <div class="score-display" id="engagement-display">3</div>
+                    </div>
+                    <div class="score-item">
+                        <label>Sustainability (Long-term Potential)</label>
+                        <input type="range" class="score-slider" id="sustainability" min="1" max="5" value="3" oninput="updateScore('sustainability')">
+                        <div class="score-display" id="sustainability-display">3</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>Client Database</h2>
+                <div class="controls">
+                    <div class="control-group">
+                        <label>Search</label>
+                        <input type="text" id="searchInput" placeholder="Search clients..." onkeyup="filterTable()">
+                    </div>
+                    <div class="control-group">
+                        <label>Filter by Tier</label>
+                        <select id="tierFilter" onchange="filterTable()">
+                            <option value="">All Tiers</option>
+                            <option value="1A">Tier 1A (Premium)</option>
+                            <option value="1B">Tier 1B (High-Value)</option>
+                            <option value="1C">Tier 1C (Qualified)</option>
+                        </select>
+                    </div>
+                    <div class="control-group">
+                        <label>Filter by Industry</label>
+                        <select id="industryFilter" onchange="filterTable()">
+                            <option value="">All Industries</option>
+                            <option value="Real Estate">Real Estate</option>
+                            <option value="Finance">Finance</option>
+                            <option value="Technology">Technology</option>
+                            <option value="Healthcare">Healthcare</option>
+                            <option value="Entertainment">Entertainment</option>
+                            <option value="Hospitality">Hospitality</option>
+                            <option value="Manufacturing">Manufacturing</option>
+                        </select>
+                    </div>
+                    <button class="btn" onclick="generateEmailCampaign()">Generate Email Campaign</button>
+                    <button class="btn" onclick="exportData()">Export Data</button>
+                </div>
+
+                <div class="table-container">
+                    <table id="clientTable">
+                        <thead>
+                            <tr>
+                                <th onclick="sortTable(0)">Client Name ↕</th>
+                                <th onclick="sortTable(1)">Email ↕</th>
+                                <th onclick="sortTable(2)">Phone ↕</th>
+                                <th onclick="sortTable(3)">Address ↕</th>
+                                <th onclick="sortTable(4)">P.U.R.E.S. Score ↕</th>
+                                <th onclick="sortTable(5)">Tier ↕</th>
+                                <th onclick="sortTable(6)">Industry ↕</th>
+                                <th onclick="sortTable(7)">Revenue Est. ↕</th>
+                                <th onclick="sortTable(8)">Contact Status ↕</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="clientTableBody">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div id="assessing" class="tab-content">
+            <div class="section">
+                <h2>Buying Pattern Analysis</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number" id="analyticalBuyers">0</div>
+                        <div class="stat-label">Analytical Buyers</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="relationshipBuyers">0</div>
+                        <div class="stat-label">Relationship Buyers</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="efficiencyBuyers">0</div>
+                        <div class="stat-label">Efficiency Buyers</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="innovationBuyers">0</div>
+                        <div class="stat-label">Innovation Buyers</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="listening" class="tab-content">
+            <div class="section">
+                <h2>Feedback Integration System</h2>
+                <div class="controls">
+                    <div class="control-group">
+                        <label>Client Feedback</label>
+                        <select id="feedbackClient">
+                            <option value="">Select Client</option>
+                        </select>
+                    </div>
+                    <div class="control-group">
+                        <label>Feedback Type</label>
+                        <select id="feedbackType">
+                            <option value="pre-sale">Pre-Sale Inquiry</option>
+                            <option value="during-sale">During Sale Process</option>
+                            <option value="post-sale">Post-Sale Satisfaction</option>
+                            <option value="complaint">Complaint Resolution</option>
+                        </select>
+                    </div>
+                    <div class="control-group">
+                        <label>Feedback Details</label>
+                        <textarea id="feedbackDetails" rows="3" placeholder="Enter feedback details..."></textarea>
+                    </div>
+                    <button class="btn" onclick="submitFeedback()">Submit Feedback</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="empowering" class="tab-content">
+            <div class="section">
+                <h2>Referral Strategy Dashboard</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalReferrals">0</div>
+                        <div class="stat-label">Total Referrals</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="successStories">0</div>
+                        <div class="stat-label">Success Stories</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="activeAdvocates">0</div>
+                        <div class="stat-label">Active Advocates</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="coMarketingOps">0</div>
+                        <div class="stat-label">Co-Marketing Opportunities</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="dashboard" class="tab-content">
+            <div class="section">
+                <h2>Performance Dashboard</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalProspects">50</div>
+                        <div class="stat-label">Total Prospects</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="tier1aCount">0</div>
+                        <div class="stat-label">Tier 1A Prospects</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="avgPuresScore">0</div>
+                        <div class="stat-label">Avg P.U.R.E.S. Score</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="conversionRate">0%</div>
+                        <div class="stat-label">Conversion Rate</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Email Modal -->
+    <div id="emailModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeEmailModal()">&times;</span>
+            <h2>Send Email</h2>
+            <div id="emailContent"></div>
+            <button class="btn" onclick="sendEmail()">Send Email</button>
+        </div>
+    </div>
+
+    <div class="footer">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports">
+        <p>&copy; 2026 Higgins Reports | S.A.L.E. Client Targeting System</p>
+    </div>
+
+    <script>
+        // Sample client data within 10 miles of Irvine, CA
+        const clientData = [
+            {
+                name: "Michael Chen",
+                email: "mchen@oceanviewrealty.com",
+                phone: "(714) 555-0123",
+                address: "1234 Harbor Blvd, Newport Beach, CA 92660",
+                puresScore: 4.2,
+                tier: "1A",
+                industry: "Real Estate",
+                revenue: "$2.5M",
+                status: "New Lead",
+                lastContact: "2024-01-15",
+                nextAction: "Initial Contact",
+                notes: "Luxury real estate agent, owns 45ft Sea Ray",
+                buyerType: "relationship"
+            },
+            {
+                name: "Sarah Rodriguez",
+                email: "sarah.r@wealthmanagementco.com",
+                phone: "(949) 555-0234",
+                address: "5678 Pacific Coast Hwy, Laguna Beach, CA 92651",
+                puresScore: 4.8,
+                tier: "1A",
+                industry: "Finance",
+                revenue: "$5.2M",
+                status: "Qualified",
+                lastContact: "2024-01-12",
+                nextAction: "Schedule Demo",
+                notes: "Wealth management executive, interested in Sunseeker",
+                buyerType: "analytical"
+            },
+            {
+                name: "David Thompson",
+                email: "dthompson@techstartup.io",
+                phone: "(714) 555-0345",
+                address: "9012 Innovation Dr, Irvine, CA 92618",
+                puresScore: 3.6,
+                tier: "1B",
+                industry: "Technology",
+                revenue: "$1.8M",
+                status: "In Progress",
+                lastContact: "2024-01-10",
+                nextAction: "Follow Up",
+                notes: "Tech entrepreneur, looking for weekend boat",
+                buyerType: "innovation"
+            },
+            {
+                name: "Jennifer Walsh",
+                email: "jwalsh@luxuryhotels.com",
+                phone: "(949) 555-0456",
+                address: "3456 Resort Way, Dana Point, CA 92629",
+                puresScore: 4.4,
+                tier: "1A",
+                industry: "Hospitality",
+                revenue: "$3.1M",
+                status: "Hot Lead",
+                lastContact: "2024-01-14",
+                nextAction: "Site Visit",
+                notes: "Hotel chain owner, considering yacht charter business",
+                buyerType: "efficiency"
+            },
+            {
+                name: "Robert Kim",
+                email: "rkim@coastalconstruction.com",
+                phone: "(714) 555-0567",
+                address: "7890 Business Park Dr, Tustin, CA 92780",
+                puresScore: 3.8,
+                tier: "1B",
+                industry: "Construction",
+                revenue: "$2.2M",
+                status: "Contacted",
+                lastContact: "2024-01-08",
+                nextAction: "Pricing Discussion",
+                notes: "Construction company owner, needs work boat",
+                buyerType: "analytical"
+            },
+            {
+                name: "Lisa Martinez",
+                email: "lisa.martinez@medicalgroup.com",
+                phone: "(949) 555-0678",
+                address: "2345 Health Center Blvd, Mission Viejo, CA 92691",
+                puresScore: 4.0,
+                tier: "1B",
+                industry: "Healthcare",
+                revenue: "$2.8M",
+                status: "Negotiating",
+                lastContact: "2024-01-13",
+                nextAction: "Contract Review",
+                notes: "Medical practice owner, family boating enthusiast",
+                buyerType: "relationship"
+            },
+            {
+                name: "James Patterson",
+                email: "jpatterson@entertainmentlaw.com",
+                phone: "(714) 555-0789",
+                address: "6789 Entertainment Blvd, Costa Mesa, CA 92626",
+                puresScore: 4.6,
+                tier: "1A",
+                industry: "Entertainment",
+                revenue: "$4.3M",
+                status: "Proposal Sent",
+                lastContact: "2024-01-11",
+                nextAction: "Proposal Follow-up",
+                notes: "Entertainment lawyer, client referrals possible",
+                buyerType: "relationship"
+            },
+            {
+                name: "Amanda Foster",
+                email: "afoster@investmentfirm.com",
+                phone: "(949) 555-0890",
+                address: "1357 Financial Way, Newport Beach, CA 92660",
+                puresScore: 4.4,
+                tier: "1A",
+                industry: "Finance",
+                revenue: "$3.7M",
+                status: "Meeting Scheduled",
+                lastContact: "2024-01-09",
+                nextAction: "Product Demo",
+                notes: "Investment advisor, high net worth clients",
+                buyerType: "analytical"
+            },
+            {
+                name: "Kevin O'Brien",
+                email: "kobrien@luxuryautos.com",
+                phone: "(714) 555-0901",
+                address: "2468 Luxury Mile, Fountain Valley, CA 92708",
+                puresScore: 3.4,
+                tier: "1C",
+                industry: "Automotive",
+                revenue: "$1.5M",
+                status: "Research Phase",
+                lastContact: "2024-01-07",
+                nextAction: "Information Package",
+                notes: "Luxury car dealer, cross-selling opportunity",
+                buyerType: "efficiency"
+            },
+            {
+                name: "Rachel Green",
+                email: "rgreen@pharmatech.com",
+                phone: "(949) 555-1012",
+                address: "3579 Research Pkwy, Irvine, CA 92618",
+                puresScore: 3.2,
+                tier: "1C",
+                industry: "Healthcare",
+                revenue: "$1.3M",
+                status: "Initial Contact",
+                lastContact: "2024-01-06",
+                nextAction: "Needs Assessment",
+                notes: "Biotech executive, potential corporate client",
+                buyerType: "innovation"
+            },
+            {
+                name: "Thomas Wilson",
+                email: "twilson@realestategroup.com",
+                phone: "(714) 555-1123",
+                address: "4680 Coastal Hwy, Huntington Beach, CA 92648",
+                puresScore: 4.0,
+                tier: "1B",
+                industry: "Real Estate",
+                revenue: "$2.4M",
+                status: "Qualified Lead",
+                lastContact: "2024-01-05",
+                nextAction: "Consultation",
+                notes: "Real estate developer, marina projects",
+                buyerType: "relationship"
+            },
+            {
+                name: "Michelle Davis",
+                email: "mdavis@techconsulting.com",
+                phone: "(949) 555-1234",
+                address: "5791 Technology Dr, Irvine, CA 92618",
+                puresScore: 3.6,
+                tier: "1B",
+                industry: "Technology",
+                revenue: "$1.9M",
+                status: "Discovery Call",
+                lastContact: "2024-01-04",
+                nextAction: "Technical Demo",
+                notes: "IT consultant, corporate fleet potential",
+                buyerType: "analytical"
+            },
+            {
+                name: "Daniel Brown",
+                email: "dbrown@marineconstruction.com",
+                phone: "(714) 555-1345",
+                address: "6802 Harbor Dr, Newport Beach, CA 92660",
+                puresScore: 4.2,
+                tier: "1A",
+                industry: "Construction",
+                revenue: "$3.0M",
+                status: "Proposal Review",
+                lastContact: "2024-01-03",
+                nextAction: "Contract Negotiation",
+                notes: "Marine construction, commercial vessels",
+                buyerType: "efficiency"
+            },
+            {
+                name: "Emily Anderson",
+                email: "eanderson@wealthservices.com",
+                phone: "(949) 555-1456",
+                address: "7913 Elite Blvd, Laguna Niguel, CA 92677",
+                puresScore: 4.8,
+                tier: "1A",
+                industry: "Finance",
+                revenue: "$4.8M",
+                status: "Contract Signed",
+                lastContact: "2024-01-02",
+                nextAction: "Delivery Coordination",
+                notes: "Wealth advisor, multiple yacht purchases",
+                buyerType: "relationship"
+            },
+            {
+                name: "Christopher Lee",
+                email: "clee@hotelsuite.com",
+                phone: "(714) 555-1567",
+                address: "8024 Resort Circle, Dana Point, CA 92629",
+                puresScore: 3.8,
+                tier: "1B",
+                industry: "Hospitality",
+                revenue: "$2.3M",
+                status: "Budget Approval",
+                lastContact: "2024-01-01",
+                nextAction: "Final Presentation",
+                notes: "Resort owner, guest charter services",
+                buyerType: "efficiency"
+            },
+            {
+                name: "Nicole Taylor",
+                email: "ntaylor@pharmainnovate.com",
+                phone: "(949) 555-1678",
+                address: "9135 Science Center Dr, Irvine, CA 92618",
+                puresScore: 3.4,
+                tier: "1C",
+                industry: "Healthcare",
+                revenue: "$1.6M",
+                status: "Information Gathering",
+                lastContact: "2023-12-31",
+                nextAction: "Product Education",
+                notes: "Pharmaceutical R&D, corporate events",
+                buyerType: "innovation"
+            },
+            {
+                name: "Ryan Murphy",
+                email: "rmurphy@entertainmentgroup.com",
+                phone: "(714) 555-1789",
+                address: "1246 Studio Way, Costa Mesa, CA 92626",
+                puresScore: 4.0,
+                tier: "1B",
+                industry: "Entertainment",
+                revenue: "$2.6M",
+                status: "Demo Scheduled",
+                lastContact: "2023-12-30",
+                nextAction: "Product Demonstration",
+                notes: "Entertainment producer, celebrity clients",
+                buyerType: "relationship"
+            },
+            {
+                name: "Jessica Clark",
+                email: "jclark@designstudio.com",
+                phone: "(949) 555-1890",
+                address: "2357 Creative Blvd, Laguna Beach, CA 92651",
+                puresScore: 3.2,
+                tier: "1C",
+                industry: "Design",
+                revenue: "$1.2M",
+                status: "Initial Interest",
+                lastContact: "2023-12-29",
+                nextAction: "Portfolio Review",
+                notes: "Yacht interior designer, partnership potential",
+                buyerType: "innovation"
+            },
+            {
+                name: "Mark Johnson",
+                email: "mjohnson@financialpartners.com",
+                phone: "(714) 555-1901",
+                address: "3468 Investment Ave, Newport Beach, CA 92660",
+                puresScore: 4.6,
+                tier: "1A",
+                industry: "Finance",
+                revenue: "$4.1M",
+                status: "Closing Phase",
+                lastContact: "2023-12-28",
+                nextAction: "Financing Finalization",
+                notes: "Private equity partner, fleet acquisition",
+                buyerType: "analytical"
+            },
+            {
+                name: "Kelly White",
+                email: "kwhite@luxuryretail.com",
+                phone: "(949) 555-2012",
+                address: "4579 Fashion Island, Newport Beach, CA 92660",
+                puresScore: 3.6,
+                tier: "1B",
+                industry: "Retail",
+                revenue: "$1.8M",
+                status: "Price Discussion",
+                lastContact: "2023-12-27",
+                nextAction: "Financing Options",
+                notes: "Luxury retail owner, lifestyle purchase",
+                buyerType: "relationship"
+            },
+            {
+                name: "Brandon Scott",
+                email: "bscott@coastalmanufacturing.com",
+                phone: "(714) 555-2123",
+                address: "5680 Industrial Way, Huntington Beach, CA 92648",
+                puresScore: 3.8,
+                tier: "1B",
+                industry: "Manufacturing",
+                revenue: "$2.1M",
+                status: "Technical Review",
+                lastContact: "2023-12-26",
+                nextAction: "Engineering Consultation",
+                notes: "Marine equipment manufacturer, testing vessel",
+                buyerType: "analytical"
+            },
+            {
+                name: "Stephanie Lewis",
+                email: "slewis@healthcaresolutions.com",
+                phone: "(949) 555-2234",
+                address: "6791 Medical Plaza, Mission Viejo, CA 92691",
+                puresScore: 3.4,
+                tier: "1C",
+                industry: "Healthcare",
+                revenue: "$1.4M",
+                status: "Needs Analysis",
+                lastContact: "2023-12-25",
+                nextAction: "Solution Mapping",
+                notes: "Healthcare IT, mobile clinic boat concept",
+                buyerType: "innovation"
+            },
+            {
+                name: "Andrew Garcia",
+                email: "agarcia@investmentbank.com",
+                phone: "(714) 555-2345",
+                address: "7902 Financial Center, Irvine, CA 92618",
+                puresScore: 4.4,
+                tier: "1A",
+                industry: "Finance",
+                revenue: "$3.5M",
+                status: "Contract Review",
+                lastContact: "2023-12-24",
+                nextAction: "Legal Review",
+                notes: "Investment banker, high-end yacht interest",
+                buyerType: "analytical"
+            },
+            {
+                name: "Melissa Rodriguez",
+                email: "mrodriguez@luxuryhomes.com",
+                phone: "(949) 555-2456",
+                address: "8013 Estate Dr, Laguna Niguel, CA 92677",
+                puresScore: 4.0,
+                tier: "1B",
+                industry: "Real Estate",
+                revenue: "$2.7M",
+                status: "Site Inspection",
+                lastContact: "2023-12-23",
+                nextAction: "Property Visit",
+                notes: "Luxury home sales, waterfront properties",
+                buyerType: "relationship"
+            },
+            {
+                name: "Jonathan Miller",
+                email: "jmiller@techventures.com",
+                phone: "(714) 555-2567",
+                address: "9124 Innovation Hub, Irvine, CA 92618",
+                puresScore: 3.6,
+                tier: "1B",
+                industry: "Technology",
+                revenue: "$1.9M",
+                status: "Technology Assessment",
+                lastContact: "2023-12-22",
+                nextAction: "Tech Integration",
+                notes: "Venture capitalist, smart boat technology",
+                buyerType: "innovation"
+            },
+            {
+                name: "Laura Wilson",
+                email: "lwilson@entertainmentmedia.com",
+                phone: "(949) 555-2678",
+                address: "1235 Media Blvd, Costa Mesa, CA 92626",
+                puresScore: 3.8,
+                tier: "1B",
+                industry: "Entertainment",
+                revenue: "$2.2M",
+                status: "Content Planning",
+                lastContact: "2023-12-21",
+                nextAction: "Media Strategy",
+                notes: "Media company, yacht filming platform",
+                buyerType: "efficiency"
+            },
+            {
+                name: "Timothy Davis",
+                email: "tdavis@constructiongroup.com",
+                phone: "(714) 555-2789",
+                address: "2346 Builder's Row, Fountain Valley, CA 92708",
+                puresScore: 3.2,
+                tier: "1C",
+                industry: "Construction",
+                revenue: "$1.3M",
+                status: "Project Evaluation",
+                lastContact: "2023-12-20",
+                nextAction: "Scope Definition",
+                notes: "General contractor, marina development",
+                buyerType: "efficiency"
+            },
+            {
+                name: "Victoria Chen",
+                email: "vchen@luxuryservices.com",
+                phone: "(949) 555-2890",
+                address: "3457 Prestige Pkwy, Newport Beach, CA 92660",
+                puresScore: 4.2,
+                tier: "1A",
+                industry: "Hospitality",
+                revenue: "$3.2M",
+                status: "Service Planning",
+                lastContact: "2023-12-19",
+                nextAction: "Service Package",
+                notes: "Luxury concierge services, yacht management",
+                buyerType: "relationship"
+            },
+            {
+                name: "Gregory Thompson",
+                email: "gthompson@biotech.com",
+                phone: "(714) 555-2901",
+                address: "4568 Research Center, Irvine, CA 92618",
+                puresScore: 3.4,
+                tier: "1C",
+                industry: "Healthcare",
+                revenue: "$1.5M",
+                status: "Research Phase",
+                lastContact: "2023-12-18",
+                nextAction: "Use Case Analysis",
+                notes: "Biotech researcher, marine research vessel",
+                buyerType: "analytical"
+            },
+            {
+                name: "Samantha Lee",
+                email: "slee@wealthadvisors.com",
+                phone: "(949) 555-3012",
+                address: "5679 Elite Circle, Laguna Beach, CA 92651",
+                puresScore: 4.6,
+                tier: "1A",
+                industry: "Finance",
+                revenue: "$4.2M",
+                status: "Investment Review",
+                lastContact: "2023-12-17",
+                nextAction: "Portfolio Integration",
+                notes: "Wealth management, yacht as investment",
+                buyerType: "analytical"
+            },
+            {
+                name: "Eric Martinez",
+                email: "emartinez@sportsentertainment.com",
+                phone: "(714) 555-3123",
+                address: "6780 Sports Complex, Costa Mesa, CA 92626",
+                puresScore: 3.8,
+                tier: "1B",
+                industry: "Entertainment",
+                revenue: "$2.3M",
+                status: "Event Planning",
+                lastContact: "2023-12-16",
+                nextAction: "Event Coordination",
+                notes: "Sports entertainment, corporate events",
+                buyerType: "efficiency"
+            },
+            {
+                name: "Patricia Brown",
+                email: "pbrown@medicalcenter.com",
+                phone: "(949) 555-3234",
+                address: "7891 Healthcare Blvd, Mission Viejo, CA 92691",
+                puresScore: 3.6,
+                tier: "1B",
+                industry: "Healthcare",
+                revenue: "$1.8M",
+                status: "Budget Planning",
+                lastContact: "2023-12-15",
+                nextAction: "Financial Planning",
+                notes: "Medical center director, staff recreation",
+                buyerType: "relationship"
+            },
+            {
+                name: "Jason Anderson",
+                email: "janderson@realestateinvest.com",
+                phone: "(714) 555-3345",
+                address: "8902 Investment Dr, Huntington Beach, CA 92648",
+                puresScore: 4.0,
+                tier: "1B",
+                industry: "Real Estate",
+                revenue: "$2.5M",
+                status: "Investment Analysis",
+                lastContact: "2023-12-14",
+                nextAction: "ROI Calculation",
+                notes: "Real estate investor, charter business model",
+                buyerType: "analytical"
+            },
+            {
+                name: "Caroline Foster",
+                email: "cfoster@luxuryboutique.com",
+                phone: "(949) 555-3456",
+                address: "9013 Fashion Way, Newport Beach, CA 92660",
+                puresScore: 3.4,
+                tier: "1C",
+                industry: "Retail",
+                revenue: "$1.4M",
+                status: "Lifestyle Consultation",
+                lastContact: "2023-12-13",
+                nextAction: "Personal Consultation",
+                notes: "Luxury boutique owner, lifestyle enhancement",
+                buyerType: "relationship"
+            },
+            {
+                name: "Steven Walsh",
+                email: "swalsh@techsolutions.com",
+                phone: "(714) 555-3567",
+                address: "1124 Technology Center, Irvine, CA 92618",
+                puresScore: 3.6,
+                tier: "1B",
+                industry: "Technology",
+                revenue: "$1.9M",
+                status: "Solution Design",
+                lastContact: "2023-12-12",
+                nextAction: "Custom Solution",
+                notes: "Tech solutions provider, marine IoT systems",
+                buyerType: "innovation"
+            },
+            {
+                name: "Rebecca Kim",
+                email: "rkim@entertainmentlaw.com",
+                phone: "(949) 555-3678",
+                address: "2235 Legal Plaza, Costa Mesa, CA 92626",
+                puresScore: 4.2,
+                tier: "1A",
+                industry: "Legal",
+                revenue: "$3.1M",
+                status: "Legal Review",
+                lastContact: "2023-12-11",
+                nextAction: "Contract Analysis",
+                notes: "Entertainment attorney, celebrity client base",
+                buyerType: "relationship"
+            },
+            {
+                name: "Benjamin Taylor",
+                email: "btaylor@coastalengineering.com",
+                phone: "(714) 555-3789",
+                address: "3346 Engineering Way, Huntington Beach, CA 92648",
+                puresScore: 3.8,
+                tier: "1B",
+                industry: "Engineering",
+                revenue: "$2.1M",
+                status: "Technical Specs",
+                lastContact: "2023-12-10",
+                nextAction: "Engineering Review",
+                notes: "Marine engineering firm, custom modifications",
+                buyerType: "analytical"
+            },
+            {
+                name: "Monica Clark",
+                email: "mclark@luxuryevent.com",
+                phone: "(949) 555-3890",
+                address: "4457 Event Center, Dana Point, CA 92629",
+                puresScore: 3.6,
+                tier: "1B",
+                industry: "Hospitality",
+                revenue: "$1.8M",
+                status: "Event Planning",
+                lastContact: "2023-12-09",
+                nextAction: "Venue Planning",
+                notes: "Luxury event planner, yacht venue services",
+                buyerType: "efficiency"
+            },
+            {
+                name: "Richard Murphy",
+                email: "rmurphy@financialgroup.com",
+                phone: "(714) 555-3901",
+                address: "5568 Finance Blvd, Irvine, CA 92618",
+                puresScore: 4.4,
+                tier: "1A",
+                industry: "Finance",
+                revenue: "$3.8M",
+                status: "Financing Approval",
+                lastContact: "2023-12-08",
+                nextAction: "Final Approval",
+                notes: "Financial services, yacht financing specialist",
+                buyerType: "analytical"
+            },
+            {
+                name: "Angela Scott",
+                email: "ascott@medicaldevices.com",
+                phone: "(949) 555-4012",
+                address: "6679 Medical Tech Dr, Mission Viejo, CA 92691",
+                puresScore: 3.2,
+                tier: "1C",
+                industry: "Healthcare",
+                revenue: "$1.3M",
+                status: "Product Research",
+                lastContact: "2023-12-07",
+                nextAction: "Research Collaboration",
+                notes: "Medical device company, marine medical equipment",
+                buyerType: "innovation"
+            },
+            {
+                name: "Kevin Lewis",
+                email: "klewis@constructioncorp.com",
+                phone: "(714) 555-4123",
+                address: "7780 Construction Blvd, Fountain Valley, CA 92708",
+                puresScore: 3.8,
+                tier: "1B",
+                industry: "Construction",
+                revenue: "$2.2M",
+                status: "Project Planning",
+                lastContact: "2023-12-06",
+                nextAction: "Project Timeline",
+                notes: "Construction corporation, marina projects",
+                buyerType: "efficiency"
+            },
+            {
+                name: "Diana Garcia",
+                email: "dgarcia@luxuryspa.com",
+                phone: "(949) 555-4234",
+                address: "8891 Wellness Way, Laguna Beach, CA 92651",
+                puresScore: 3.4,
+                tier: "1C",
+                industry: "Hospitality",
+                revenue: "$1.5M",
+                status: "Wellness Consultation",
+                lastContact: "2023-12-05",
+                nextAction: "Wellness Planning",
+                notes: "Luxury spa owner, floating spa concept",
+                buyerType: "innovation"
+            },
+            {
+                name: "Peter Rodriguez",
+                email: "prodriguez@investmentfund.com",
+                phone: "(714) 555-4345",
+                address: "9902 Fund Management, Newport Beach, CA 92660",
+                puresScore: 4.8,
+                tier: "1A",
+                industry: "Finance",
+                revenue: "$5.1M",
+                status: "Fund Approval",
+                lastContact: "2023-12-04",
+                nextAction: "Fund Allocation",
+                notes: "Investment fund manager, yacht fund portfolio",
+                buyerType: "analytical"
+            },
+            {
+                name: "Courtney Miller",
+                email: "cmiller@digitalagency.com",
+                phone: "(949) 555-4456",
+                address: "1013 Digital Hub, Irvine, CA 92618",
+                puresScore: 3.6,
+                tier: "1B",
+                industry: "Technology",
+                revenue: "$1.8M",
+                status: "Digital Strategy",
+                lastContact: "2023-12-03",
+                nextAction: "Marketing Strategy",
+                notes: "Digital marketing agency, yacht brand promotion",
+                buyerType: "innovation"
+            },
+            {
+                name: "Matthew Wilson",
+                email: "mwilson@luxurytravel.com",
+                phone: "(714) 555-4567",
+                address: "2124 Travel Plaza, Costa Mesa, CA 92626",
+                puresScore: 4.0,
+                tier: "1B",
+                industry: "Hospitality",
+                revenue: "$2.4M",
+                status: "Travel Planning",
+                lastContact: "2023-12-02",
+                nextAction: "Itinerary Development",
+                notes: "Luxury travel agency, yacht charter packages",
+                buyerType: "relationship"
+            },
+            {
+                name: "Kimberly Davis",
+                email: "kdavis@realestatelux.com",
+                phone: "(949) 555-4678",
+                address: "3235 Luxury Row, Laguna Niguel, CA 92677",
+                puresScore: 4.2,
+                tier: "1A",
+                industry: "Real Estate",
+                revenue: "$3.3M",
+                status: "Property Integration",
+                lastContact: "2023-12-01",
+                nextAction: "Property Showcase",
+                notes: "Luxury real estate, waterfront property sales",
+                buyerType: "relationship"
+            },
+            {
+                name: "Nathan Brown",
+                email: "nbrown@techstartup.com",
+                phone: "(714) 555-4789",
+                address: "4346 Startup Alley, Irvine, CA 92618",
+                puresScore: 3.4,
+                tier: "1C",
+                industry: "Technology",
+                revenue: "$1.4M",
+                status: "Innovation Discussion",
+                lastContact: "2023-11-30",
+                nextAction: "Innovation Partnership",
+                notes: "Tech startup founder, marine technology integration",
+                buyerType: "innovation"
+            },
+            {
+                name: "Heather Anderson",
+                email: "handerson@pharmaceuticals.com",
+                phone: "(949) 555-4890",
+                address: "5457 Pharma Center, Mission Viejo, CA 92691",
+                puresScore: 3.8,
+                tier: "1B",
+                industry: "Healthcare",
+                revenue: "$2.1M",
+                status: "Pharmaceutical Review",
+                lastContact: "2023-11-29",
+                nextAction: "Compliance Review",
+                notes: "Pharmaceutical company, floating research lab",
+                buyerType: "analytical"
+            }
+        ];
+
+        let filteredData = [...clientData];
+        let currentSortColumn = -1;
+        let currentSortDirection = 'asc';
+
+        // Initialize the application
+        function initializeApp() {
+            populateClientTable();
+            updateDashboardStats();
+            populateFeedbackClientDropdown();
+        }
+
+        // Tab management
+        function showTab(tabName) {
+            // Hide all tab contents
+            const tabs = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Remove active class from all nav tabs
+            const navTabs = document.querySelectorAll('.nav-tab');
+            navTabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Show selected tab content
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked nav tab
+            event.target.classList.add('active');
+        }
+
+        // P.U.R.E.S. scoring
+        function updateScore(scoreType) {
+            const slider = document.getElementById(scoreType);
+            const display = document.getElementById(scoreType + '-display');
+            display.textContent = slider.value;
+        }
+
+        // Populate client table
+        function populateClientTable() {
+            const tbody = document.getElementById('clientTableBody');
+            tbody.innerHTML = '';
+            
+            filteredData.forEach((client, index) => {
+                const row = tbody.insertRow();
+                row.className = getTierClass(client.tier);
+                
+                row.innerHTML = `
+                    <td>${client.name}</td>
+                    <td>${client.email}</td>
+                    <td>${client.phone}</td>
+                    <td>${client.address}</td>
+                    <td>${client.puresScore}</td>
+                    <td><span class="tier-badge tier-${client.tier.toLowerCase()}">${client.tier}</span></td>
+                    <td>${client.industry}</td>
+                    <td>${client.revenue}</td>
+                    <td>${client.status}</td>
+                    <td>
+                        <button class="btn btn-small" onclick="openEmailModal('${index}')">Email</button>
+                        <button class="btn btn-small btn-success" onclick="callClient('${client.phone}')">Call</button>
+                    </td>
+                `;
+            });
+        }
+
+        // Get CSS class for tier
+        function getTierClass(tier) {
+            switch(tier) {
+                case '1A': return 'tier-1a';
+                case '1B': return 'tier-1b';
+                case '1C': return 'tier-1c';
+                default: return '';
+            }
+        }
+
+        // Filter table
+        function filterTable() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const tierFilter = document.getElementById('tierFilter').value;
+            const industryFilter = document.getElementById('industryFilter').value;
+            
+            filteredData = clientData.filter(client => {
+                const matchesSearch = Object.values(client).some(value => 
+                    value.toString().toLowerCase().includes(searchTerm)
+                );
+                const matchesTier = !tierFilter || client.tier === tierFilter;
+                const matchesIndustry = !industryFilter || client.industry === industryFilter;
+                
+                return matchesSearch && matchesTier && matchesIndustry;
+            });
+            
+            populateClientTable();
+            updateDashboardStats();
+        }
+
+        // Sort table
+        function sortTable(columnIndex) {
+            const columns = ['name', 'email', 'phone', 'address', 'puresScore', 'tier', 'industry', 'revenue', 'status'];
+            const column = columns[columnIndex];
+            
+            if (currentSortColumn === columnIndex) {
+                currentSortDirection = currentSortDirection === 'asc' ? 'desc' : 'asc';
+            } else {
+                currentSortDirection = 'asc';
+                currentSortColumn = columnIndex;
+            }
+            
+            filteredData.sort((a, b) => {
+                let aVal = a[column];
+                let bVal = b[column];
+                
+                if (column === 'puresScore') {
+                    aVal = parseFloat(aVal);
+                    bVal = parseFloat(bVal);
+                } else if (column === 'revenue') {
+                    aVal = parseFloat(aVal.replace(/[$M,]/g, ''));
+                    bVal = parseFloat(bVal.replace(/[$M,]/g, ''));
+                } else {
+                    aVal = aVal.toString().toLowerCase();
+                    bVal = bVal.toString().toLowerCase();
+                }
+                
+                if (currentSortDirection === 'asc') {
+                    return aVal < bVal ? -1 : (aVal > bVal ? 1 : 0);
+                } else {
+                    return aVal > bVal ? -1 : (aVal < bVal ? 1 : 0);
+                }
+            });
+            
+            populateClientTable();
+        }
+
+        // Open email modal
+        function openEmailModal(clientIndex) {
+            const client = filteredData[clientIndex];
+            const modal = document.getElementById('emailModal');
+            const content = document.getElementById('emailContent');
+            
+            const emailTemplate = generateEmailTemplate(client);
+            
+            content.innerHTML = `
+                <div class="email-template">
+                    <h3>Email to ${client.name}</h3>
+                    <p><strong>To:</strong> ${client.email}</p>
+                    <p><strong>Subject:</strong> Exclusive Marine Solutions for ${client.name} - Sun Country Marine Group</p>
+                    <div style="background: #333; padding: 20px; border-radius: 5px; margin: 20px 0;">
+                        ${emailTemplate}
+                    </div>
+                </div>
+            `;
+            
+            modal.style.display = 'block';
+        }
+
+        // Generate email template based on client profile
+        function generateEmailTemplate(client) {
+            let template = `
+                <p>Dear ${client.name},</p>
+                
+                <p>I hope this message finds you well. My name is Ashley Basso from Sun Country Marine Group, and I'm reaching out because our research indicates that ${client.industry} leaders like yourself often find tremendous value in our premium marine solutions.</p>
+            `;
+            
+            // Customize based on industry and buyer type
+            if (client.industry === 'Real Estate') {
+                template += `
+                    <p>As a distinguished ${client.industry} professional, you understand the importance of luxury amenities in closing high-value deals. Our exclusive yacht collection - featuring Sunseeker, Prestige, and Riviera models - provides the perfect setting for impressing discerning clients and closing waterfront property sales.</p>
+                `;
+            } else if (client.industry === 'Finance') {
+                template += `
+                    <p>In the competitive world of wealth management, providing unique experiences for high-net-worth clients sets you apart. Our premium yacht portfolio offers the perfect platform for private client meetings, exclusive events, and investment discussions in an unparalleled luxury setting.</p>
+                `;
+            } else if (client.industry === 'Technology') {
+                template += `
+                    <p>As an innovator in the technology sector, you'll appreciate our cutting-edge marine technologies and smart yacht systems. Our vessels feature the latest in navigation technology, entertainment systems, and connectivity solutions perfect for both business and recreation.</p>
+                `;
+            } else if (client.industry === 'Healthcare') {
+                template += `
+                    <p>Healthcare leaders deserve exceptional recreation after serving others. Our therapeutic marine environment provides the perfect escape, while our yacht's luxurious amenities offer an ideal setting for medical conferences or executive retreats.</p>
+                `;
+            } else if (client.industry === 'Entertainment') {
+                template += `
+                    <p>In the entertainment industry, image and experiences matter. Our spectacular yacht collection provides the perfect backdrop for client entertainment, industry networking, and creating unforgettable moments that enhance your professional reputation.</p>
+                `;
+            } else {
+                template += `
+                    <p>Our premium marine solutions are designed for successful professionals who demand excellence in every aspect of their lives. Whether for business entertainment, family recreation, or investment purposes, our yacht collection delivers unmatched quality and prestige.</p>
+                `;
+            }
+            
+            template += `
+                <p><strong>What sets Sun Country Marine Group apart:</strong></p>
+                <ul>
+                    <li>37 years of excellence in marine sales and service</li>
+                    <li>Largest boat dealership on the West Coast with 8 locations</li>
+                    <li>Exclusive dealer for 10 world-class brands: Sunseeker, Prestige, Riviera, Beneteau, Boston Whaler, Sea Ray, Nautique, Bennington, and Premier</li>
+                    <li>Industry-leading Platinum Yacht Service for comprehensive yacht management</li>
+                    <li>On-the-water showrooms in prime marina locations</li>
+                </ul>
+                
+                <p>Given your success in ${client.industry} and your location near our ${getClosestLocation(client.address)} location, I'd love to arrange a private consultation to show you how our marine solutions can enhance both your business and lifestyle.</p>
+                
+                <p>Would you be available for a brief 15-minute call this week to discuss your marine interests? I can also arrange a private showing at our on-the-water showroom at your convenience.</p>
+                
+                <p>Best regards,</p>
+                <p><strong>Ashley Basso</strong><br>
+                Business Development Specialist<br>
+                Sun Country Marine Group<br>
+                Phone: (949) 777-2248<br>
+                Email: ashleyb@scmg.com<br>
+                Website: https://suncountrymarinegroup.com</p>
+                
+                <p><em>P.S. As a valued ${client.industry} professional, you're eligible for our executive client program with special pricing and exclusive service benefits.</em></p>
+            `;
+            
+            return template;
+        }
+
+        // Get closest location based on address
+        function getClosestLocation(address) {
+            if (address.includes('Newport')) return 'Newport Beach';
+            if (address.includes('Irvine')) return 'Irvine';
+            if (address.includes('San Diego')) return 'San Diego';
+            if (address.includes('Dana Point')) return 'Newport Beach';
+            if (address.includes('Laguna')) return 'Newport Beach';
+            if (address.includes('Costa Mesa')) return 'Irvine';
+            if (address.includes('Huntington')) return 'Irvine';
+            return 'Irvine';
+        }
+
+        // Close email modal
+        function closeEmailModal() {
+            document.getElementById('emailModal').style.display = 'none';
+        }
+
+        // Send email (simulation)
+        function sendEmail() {
+            alert('Email sent successfully! (This is a simulation)');
+            closeEmailModal();
+        }
+
+        // Call client (simulation)
+        function callClient(phone) {
+            if (confirm(`Would you like to call ${phone}?`)) {
+                window.open(`tel:${phone}`);
+            }
+        }
+
+        // Generate email campaign
+        function generateEmailCampaign() {
+            const tier1AClients = filteredData.filter(client => client.tier === '1A');
+            alert(`Email campaign generated for ${tier1AClients.length} Tier 1A clients. Templates customized by industry and buyer type.`);
+        }
+
+        // Export data
+        function exportData() {
+            const csv = convertToCSV(filteredData);
+            downloadCSV(csv, 'client_data.csv');
+        }
+
+        // Convert to CSV
+        function convertToCSV(data) {
+            const headers = ['Name', 'Email', 'Phone', 'Address', 'P.U.R.E.S. Score', 'Tier', 'Industry', 'Revenue', 'Status', 'Last Contact', 'Next Action', 'Notes'];
+            const rows = data.map(client => [
+                client.name, client.email, client.phone, client.address, client.puresScore,
+                client.tier, client.industry, client.revenue, client.status, client.lastContact,
+                client.nextAction, client.notes
+            ]);
+            
+            return [headers, ...rows].map(row => 
+                row.map(field => `"${field}"`).join(',')
+            ).join('\n');
+        }
+
+        // Download CSV
+        function downloadCSV(csv, filename) {
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.setAttribute('hidden', '');
+            a.setAttribute('href', url);
+            a.setAttribute('download', filename);
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+
+        // Update dashboard stats
+        function updateDashboardStats() {
+            // Calculate tier counts
+            const tier1A = filteredData.filter(client => client.tier === '1A').length;
+            const tier1B = filteredData.filter(client => client.tier === '1B').length;
+            const tier1C = filteredData.filter(client => client.tier === '1C').length;
+            
+            // Calculate average P.U.R.E.S. score
+            const avgScore = filteredData.reduce((sum, client) => sum + client.puresScore, 0) / filteredData.length;
+            
+            // Update dashboard elements
+            document.getElementById('totalProspects').textContent = filteredData.length;
+            document.getElementById('tier1aCount').textContent = tier1A;
+            document.getElementById('avgPuresScore').textContent = avgScore.toFixed(1);
+            document.getElementById('conversionRate').textContent = '12.5%'; // Sample conversion rate
+            
+            // Update buyer type stats
+            const buyerTypes = filteredData.reduce((acc, client) => {
+                acc[client.buyerType] = (acc[client.buyerType] || 0) + 1;
+                return acc;
+            }, {});
+            
+            document.getElementById('analyticalBuyers').textContent = buyerTypes.analytical || 0;
+            document.getElementById('relationshipBuyers').textContent = buyerTypes.relationship || 0;
+            document.getElementById('efficiencyBuyers').textContent = buyerTypes.efficiency || 0;
+            document.getElementById('innovationBuyers').textContent = buyerTypes.innovation || 0;
+        }
+
+        // Populate feedback client dropdown
+        function populateFeedbackClientDropdown() {
+            const select = document.getElementById('feedbackClient');
+            select.innerHTML = '<option value="">Select Client</option>';
+            
+            clientData.forEach((client, index) => {
+                const option = document.createElement('option');
+                option.value = index;
+                option.textContent = client.name;
+                select.appendChild(option);
+            });
+        }
+
+        // Submit feedback
+        function submitFeedback() {
+            const clientIndex = document.getElementById('feedbackClient').value;
+            const feedbackType = document.getElementById('feedbackType').value;
+            const feedbackDetails = document.getElementById('feedbackDetails').value;
+            
+            if (clientIndex && feedbackType && feedbackDetails) {
+                alert('Feedback submitted successfully!');
+                document.getElementById('feedbackDetails').value = '';
+            } else {
+                alert('Please fill in all fields.');
+            }
+        }
+
+        // Initialize the application when the page loads
+        window.onload = initializeApp;
+    </script>
+</body>
+</html>

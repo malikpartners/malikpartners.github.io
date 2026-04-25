@@ -1,0 +1,869 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>S.A.L.E. Client Targeting System - California Tool & Welding Supply</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #000000;
+            color: #ffffff;
+            line-height: 1.6;
+        }
+
+        .header {
+            background-color: #CF2030;
+            padding: 20px 0;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(207, 32, 48, 0.3);
+        }
+
+        .header img {
+            max-height: 60px;
+            width: auto;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .nav-tabs {
+            display: flex;
+            background-color: #CF2030;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .nav-tab {
+            flex: 1;
+            padding: 15px;
+            text-align: center;
+            background-color: #CF2030;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-weight: bold;
+        }
+
+        .nav-tab:hover, .nav-tab.active {
+            background-color: #A01B28;
+        }
+
+        .tab-content {
+            display: none;
+            background-color: #1a1a1a;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .search-filter {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .search-filter input, .search-filter select {
+            padding: 10px;
+            border: 1px solid #CF2030;
+            border-radius: 5px;
+            background-color: #2a2a2a;
+            color: white;
+            min-width: 200px;
+        }
+
+        .search-filter input::placeholder {
+            color: #ccc;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            background-color: #2a2a2a;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 1200px;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #404040;
+        }
+
+        th {
+            background-color: #CF2030;
+            font-weight: bold;
+            cursor: pointer;
+            position: relative;
+        }
+
+        th:hover {
+            background-color: #A01B28;
+        }
+
+        .sort-icon {
+            margin-left: 5px;
+            font-size: 12px;
+        }
+
+        .tier-1a { background-color: #2d5a2d; }
+        .tier-1b { background-color: #5a5a2d; }
+        .tier-1c { background-color: #2d4a5a; }
+
+        .contact-btn {
+            background-color: #CF2030;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            margin: 2px;
+        }
+
+        .contact-btn:hover {
+            background-color: #A01B28;
+        }
+
+        .pures-form {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            background-color: #2a2a2a;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #CF2030;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #CF2030;
+        }
+
+        .rating-scale {
+            display: flex;
+            gap: 10px;
+            margin-top: 5px;
+        }
+
+        .rating-scale input[type="radio"] {
+            margin: 0 5px;
+        }
+
+        .email-template {
+            background-color: #2a2a2a;
+            border: 1px solid #CF2030;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 10px;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .metric-card {
+            background-color: #2a2a2a;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #CF2030;
+            text-align: center;
+        }
+
+        .metric-value {
+            font-size: 2em;
+            font-weight: bold;
+            color: #CF2030;
+        }
+
+        .export-btn {
+            background-color: #CF2030;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px;
+            font-weight: bold;
+        }
+
+        .export-btn:hover {
+            background-color: #A01B28;
+        }
+
+        .footer {
+            background-color: #CF2030;
+            padding: 20px 0;
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        .footer img {
+            max-height: 30px;
+            width: auto;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background-color: #404040;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background-color: #CF2030;
+            transition: width 0.3s;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports">
+    </div>
+
+    <div class="container">
+        <h1 style="text-align: center; color: #CF2030; margin-bottom: 30px;">S.A.L.E. Client Targeting System</h1>
+        <h2 style="text-align: center; margin-bottom: 30px;">California Tool & Welding Supply</h2>
+
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="showTab('sourcing')">SOURCING</button>
+            <button class="nav-tab" onclick="showTab('assessing')">ASSESSING</button>
+            <button class="nav-tab" onclick="showTab('listening')">LISTENING</button>
+            <button class="nav-tab" onclick="showTab('empowering')">EMPOWERING</button>
+            <button class="nav-tab" onclick="showTab('analytics')">ANALYTICS</button>
+        </div>
+
+        <!-- SOURCING Tab -->
+        <div id="sourcing" class="tab-content active">
+            <h3 style="color: #CF2030; margin-bottom: 20px;">P.U.R.E.S. Client Scoring System</h3>
+            
+            <div class="search-filter">
+                <input type="text" id="searchInput" placeholder="Search clients..." onkeyup="filterTable()">
+                <select id="tierFilter" onchange="filterTable()">
+                    <option value="">All Tiers</option>
+                    <option value="Tier 1A">Tier 1A - Premium</option>
+                    <option value="Tier 1B">Tier 1B - High-Value</option>
+                    <option value="Tier 1C">Tier 1C - Qualified</option>
+                </select>
+                <select id="industryFilter" onchange="filterTable()">
+                    <option value="">All Industries</option>
+                    <option value="Manufacturing">Manufacturing</option>
+                    <option value="Construction">Construction</option>
+                    <option value="Automotive">Automotive</option>
+                    <option value="Aerospace">Aerospace</option>
+                    <option value="Energy">Energy</option>
+                </select>
+                <button class="export-btn" onclick="exportToCSV()">Export CSV</button>
+            </div>
+
+            <div class="table-container">
+                <table id="clientTable">
+                    <thead>
+                        <tr>
+                            <th onclick="sortTable(0)">Client Name <span class="sort-icon">↕</span></th>
+                            <th onclick="sortTable(1)">Email <span class="sort-icon">↕</span></th>
+                            <th onclick="sortTable(2)">Phone <span class="sort-icon">↕</span></th>
+                            <th onclick="sortTable(3)">Address <span class="sort-icon">↕</span></th>
+                            <th onclick="sortTable(4)">P.U.R.E.S. Score <span class="sort-icon">↕</span></th>
+                            <th onclick="sortTable(5)">Tier Level <span class="sort-icon">↕</span></th>
+                            <th onclick="sortTable(6)">Industry <span class="sort-icon">↕</span></th>
+                            <th onclick="sortTable(7)">Revenue Est. <span class="sort-icon">↕</span></th>
+                            <th onclick="sortTable(8)">Contact Status <span class="sort-icon">↕</span></th>
+                            <th onclick="sortTable(9)">Last Contact <span class="sort-icon">↕</span></th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="clientTableBody">
+                        <!-- Client data will be populated here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- ASSESSING Tab -->
+        <div id="assessing" class="tab-content">
+            <h3 style="color: #CF2030; margin-bottom: 20px;">Buying Pattern Analysis</h3>
+            
+            <div class="pures-form">
+                <div class="form-group">
+                    <label>Profitability Assessment</label>
+                    <div class="rating-scale">
+                        <span>1</span><input type="radio" name="profitability" value="1">
+                        <span>2</span><input type="radio" name="profitability" value="2">
+                        <span>3</span><input type="radio" name="profitability" value="3">
+                        <span>4</span><input type="radio" name="profitability" value="4">
+                        <span>5</span><input type="radio" name="profitability" value="5">
+                    </div>
+                    <small>Annual revenue threshold and budget capacity</small>
+                </div>
+
+                <div class="form-group">
+                    <label>Urgency Level</label>
+                    <div class="rating-scale">
+                        <span>1</span><input type="radio" name="urgency" value="1">
+                        <span>2</span><input type="radio" name="urgency" value="2">
+                        <span>3</span><input type="radio" name="urgency" value="3">
+                        <span>4</span><input type="radio" name="urgency" value="4">
+                        <span>5</span><input type="radio" name="urgency" value="5">
+                    </div>
+                    <small>Active pain points requiring immediate solutions</small>
+                </div>
+
+                <div class="form-group">
+                    <label>Reachability Factor</label>
+                    <div class="rating-scale">
+                        <span>1</span><input type="radio" name="reachability" value="1">
+                        <span>2</span><input type="radio" name="reachability" value="2">
+                        <span>3</span><input type="radio" name="reachability" value="3">
+                        <span>4</span><input type="radio" name="reachability" value="4">
+                        <span>5</span><input type="radio" name="reachability" value="5">
+                    </div>
+                    <small>Accessible decision makers with clear contact paths</small>
+                </div>
+
+                <div class="form-group">
+                    <label>Engagement Potential</label>
+                    <div class="rating-scale">
+                        <span>1</span><input type="radio" name="engagement" value="1">
+                        <span>2</span><input type="radio" name="engagement" value="2">
+                        <span>3</span><input type="radio" name="engagement" value="3">
+                        <span>4</span><input type="radio" name="engagement" value="4">
+                        <span>5</span><input type="radio" name="engagement" value="5">
+                    </div>
+                    <small>Openness to innovation and partnerships</small>
+                </div>
+
+                <div class="form-group">
+                    <label>Sustainability Score</label>
+                    <div class="rating-scale">
+                        <span>1</span><input type="radio" name="sustainability" value="1">
+                        <span>2</span><input type="radio" name="sustainability" value="2">
+                        <span>3</span><input type="radio" name="sustainability" value="3">
+                        <span>4</span><input type="radio" name="sustainability" value="4">
+                        <span>5</span><input type="radio" name="sustainability" value="5">
+                    </div>
+                    <small>Long-term partnership potential with growth trajectory</small>
+                </div>
+            </div>
+
+            <button class="export-btn" onclick="calculatePURES()">Calculate P.U.R.E.S. Score</button>
+            
+            <div id="puresResult" style="margin-top: 20px;"></div>
+
+            <h4 style="color: #CF2030; margin: 30px 0 15px 0;">Client Buying Profiles</h4>
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <h4>Analytical Buyers</h4>
+                    <p>Require detailed ROI analysis, case studies, trials</p>
+                </div>
+                <div class="metric-card">
+                    <h4>Relationship Buyers</h4>
+                    <p>Value trust, referrals, long-term partnerships</p>
+                </div>
+                <div class="metric-card">
+                    <h4>Efficiency Buyers</h4>
+                    <p>Focus on time-saving, process improvement</p>
+                </div>
+                <div class="metric-card">
+                    <h4>Innovation Buyers</h4>
+                    <p>Seek cutting-edge solutions, competitive advantage</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- LISTENING Tab -->
+        <div id="listening" class="tab-content">
+            <h3 style="color: #CF2030; margin-bottom: 20px;">Feedback Integration System</h3>
+            
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <h4>Pre-Sale Feedback</h4>
+                    <div class="metric-value">85%</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 85%;"></div>
+                    </div>
+                    <p>Collection Rate</p>
+                </div>
+
+                <div class="metric-card">
+                    <h4>During-Sale Progress</h4>
+                    <div class="metric-value">92%</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 92%;"></div>
+                    </div>
+                    <p>Tracking Rate</p>
+                </div>
+
+                <div class="metric-card">
+                    <h4>Post-Sale Satisfaction</h4>
+                    <div class="metric-value">78%</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 78%;"></div>
+                    </div>
+                    <p>Response Rate</p>
+                </div>
+
+                <div class="metric-card">
+                    <h4>Real-time Resolution</h4>
+                    <div class="metric-value">95%</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 95%;"></div>
+                    </div>
+                    <p>Success Rate</p>
+                </div>
+            </div>
+
+            <div style="background-color: #2a2a2a; padding: 20px; border-radius: 8px; margin-top: 20px;">
+                <h4 style="color: #CF2030;">Recent Feedback</h4>
+                <ul style="list-style: none; padding: 0;">
+                    <li style="padding: 10px 0; border-bottom: 1px solid #404040;">
+                        <strong>Acme Manufacturing:</strong> "Excellent welding equipment delivery time. Need more variety in specialty gases." - 4/5 stars
+                    </li>
+                    <li style="padding: 10px 0; border-bottom: 1px solid #404040;">
+                        <strong>Desert Construction:</strong> "Safety training was comprehensive. Would like online options." - 5/5 stars
+                    </li>
+                    <li style="padding: 10px 0; border-bottom: 1px solid #404040;">
+                        <strong>Precision Auto:</strong> "Great technical support. Competitive pricing needed." - 4/5 stars
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- EMPOWERING Tab -->
+        <div id="empowering" class="tab-content">
+            <h3 style="color: #CF2030; margin-bottom: 20px;">Referral Strategy Dashboard</h3>
+            
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <h4>Active Referral Partners</h4>
+                    <div class="metric-value">23</div>
+                    <p>Generating qualified leads</p>
+                </div>
+
+                <div class="metric-card">
+                    <h4>Success Stories</h4>
+                    <div class="metric-value">15</div>
+                    <p>Documented case studies</p>
+                </div>
+
+                <div class="metric-card">
+                    <h4>Referral Rewards Paid</h4>
+                    <div class="metric-value">$12,500</div>
+                    <p>This quarter</p>
+                </div>
+
+                <div class="metric-card">
+                    <h4>Co-Marketing Campaigns</h4>
+                    <div class="metric-value">8</div>
+                    <p>Active partnerships</p>
+                </div>
+            </div>
+
+            <div style="background-color: #2a2a2a; padding: 20px; border-radius: 8px; margin-top: 20px;">
+                <h4 style="color: #CF2030;">Top Referral Partners</h4>
+                <table style="width: 100%; margin-top: 15px;">
+                    <thead>
+                        <tr style="background-color: #CF2030;">
+                            <th>Partner Name</th>
+                            <th>Referrals This Month</th>
+                            <th>Conversion Rate</th>
+                            <th>Revenue Generated</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Riverside Metal Works</td>
+                            <td>12</td>
+                            <td>75%</td>
+                            <td>$45,000</td>
+                        </tr>
+                        <tr>
+                            <td>SoCal Fabrication</td>
+                            <td>8</td>
+                            <td>62%</td>
+                            <td>$32,000</td>
+                        </tr>
+                        <tr>
+                            <td>Desert Engineering</td>
+                            <td>6</td>
+                            <td>83%</td>
+                            <td>$28,000</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- ANALYTICS Tab -->
+        <div id="analytics" class="tab-content">
+            <h3 style="color: #CF2030; margin-bottom: 20px;">S.A.L.E. Performance Analytics</h3>
+            
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <h4>Sourcing Accuracy</h4>
+                    <div class="metric-value">87%</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 87%;"></div>
+                    </div>
+                    <p>P.U.R.E.S. Score Accuracy (Target: 80%)</p>
+                </div>
+
+                <div class="metric-card">
+                    <h4>Assessment Precision</h4>
+                    <div class="metric-value">94%</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 94%;"></div>
+                    </div>
+                    <p>Needs Assessment Accuracy (Target: 90%)</p>
+                </div>
+
+                <div class="metric-card">
+                    <h4>Listening Engagement</h4>
+                    <div class="metric-value">76%</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 76%;"></div>
+                    </div>
+                    <p>Feedback Collection Rate (Target: 70%)</p>
+                </div>
+
+                <div class="metric-card">
+                    <h4>Empowerment Success</h4>
+                    <div class="metric-value">2.8</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 93%;"></div>
+                    </div>
+                    <p>Avg. Referrals per Client (Target: 2+)</p>
+                </div>
+            </div>
+
+            <div style="background-color: #2a2a2a; padding: 20px; border-radius: 8px; margin-top: 20px;">
+                <h4 style="color: #CF2030;">Monthly Performance Trends</h4>
+                <div style="text-align: center; padding: 40px;">
+                    <p style="color: #ccc;">Performance chart visualization would be displayed here</p>
+                    <p style="color: #ccc;">Showing trends in lead generation, conversion rates, and revenue growth</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports">
+        <p style="margin-top: 10px; color: white;">© 2024 California Tool & Welding Supply. Powered by Higgins Reports.</p>
+    </div>
+
+    <script>
+        // Sample client data for Riverside, CA area
+        const clientData = [
+            {name: "Acme Manufacturing", email: "contact@acmemfg.com", phone: "(951) 555-0123", address: "1245 Industrial Blvd, Riverside, CA 92501", pures: 4.2, tier: "Tier 1A", industry: "Manufacturing", revenue: "$2.5M", status: "Active", lastContact: "2024-01-15", notes: "Interested in bulk gas systems"},
+            {name: "Desert Construction Co", email: "info@desertconstruct.com", phone: "(951) 555-0124", address: "890 Construction Way, Moreno Valley, CA 92553", pures: 4.0, tier: "Tier 1A", industry: "Construction", revenue: "$1.8M", status: "Prospect", lastContact: "2024-01-10", notes: "Safety training needs"},
+            {name: "Precision Automotive", email: "sales@precisionauto.com", phone: "(951) 555-0125", address: "567 Auto Lane, Corona, CA 92879", pures: 3.8, tier: "Tier 1B", industry: "Automotive", revenue: "$1.2M", status: "Active", lastContact: "2024-01-12", notes: "Welding equipment rental"},
+            {name: "SoCal Fabrication", email: "orders@socalfab.com", phone: "(909) 555-0126", address: "432 Fabrication St, Fontana, CA 92336", pures: 4.1, tier: "Tier 1A", industry: "Manufacturing", revenue: "$2.1M", status: "Active", lastContact: "2024-01-18", notes: "Microbulk gas systems"},
+            {name: "Riverside Metal Works", email: "info@riversidemetal.com", phone: "(951) 555-0127", address: "789 Metal Ave, Riverside, CA 92504", pures: 3.9, tier: "Tier 1B", industry: "Manufacturing", revenue: "$1.5M", status: "Active", lastContact: "2024-01-14", notes: "Process pipe installation"},
+            {name: "High Desert Energy", email: "contact@hdtenergy.com", phone: "(760) 555-0128", address: "123 Energy Blvd, Victorville, CA 92392", pures: 3.7, tier: "Tier 1B", industry: "Energy", revenue: "$1.0M", status: "Prospect", lastContact: "2024-01-08", notes: "Specialty gases needed"},
+            {name: "Corona Aerospace", email: "procurement@coronaaero.com", phone: "(951) 555-0129", address: "456 Aerospace Dr, Corona, CA 92881", pures: 4.3, tier: "Tier 1A", industry: "Aerospace", revenue: "$3.2M", status: "Active", lastContact: "2024-01-20", notes: "High-purity gases"},
+            {name: "Inland Machine Shop", email: "shop@inlandmachine.com", phone: "(909) 555-0130", address: "321 Machine Rd, San Bernardino, CA 92408", pures: 3.6, tier: "Tier 1C", industry: "Manufacturing", revenue: "$800K", status: "Prospect", lastContact: "2024-01-05", notes: "Welding automation interest"},
+            {name: "Valley Welding Services", email: "info@valleywelding.com", phone: "(951) 555-0131", address: "654 Welding Way, Hemet, CA 92543", pures: 3.8, tier: "Tier 1B", industry: "Construction", revenue: "$1.1M", status: "Active", lastContact: "2024-01-16", notes: "Equipment rental program"},
+            {name: "Moreno Valley Motors", email: "service@mvmotors.com", phone: "(951) 555-0132", address: "987 Motors Blvd, Moreno Valley, CA 92557", pures: 3.4, tier: "Tier 1C", industry: "Automotive", revenue: "$650K", status: "Prospect", lastContact: "2024-01-03", notes: "Safety equipment needs"},
+            {name: "Imperial Steel Works", email: "sales@imperialsteel.com", phone: "(760) 555-0133", address: "147 Steel St, Palm Desert, CA 92211", pures: 4.0, tier: "Tier 1A", industry: "Manufacturing", revenue: "$1.9M", status: "Active", lastContact: "2024-01-19", notes: "Bulk gas delivery"},
+            {name: "Temecula Tech", email: "contact@temeculatech.com", phone: "(951) 555-0134", address: "258 Tech Blvd, Temecula, CA 92590", pures: 3.7, tier: "Tier 1B", industry: "Manufacturing", revenue: "$1.3M", status: "Prospect", lastContact: "2024-01-11", notes: "Process optimization"},
+            {name: "Redlands Repair", email: "info@redlandsrepair.com", phone: "(909) 555-0135", address: "369 Repair Ave, Redlands, CA 92373", pures: 3.5, tier: "Tier 1C", industry: "Automotive", revenue: "$750K", status: "Active", lastContact: "2024-01-13", notes: "Welding equipment service"},
+            {name: "Perris Pipeline", email: "office@perrispipe.com", phone: "(951) 555-0136", address: "741 Pipeline Rd, Perris, CA 92570", pures: 3.9, tier: "Tier 1B", industry: "Energy", revenue: "$1.4M", status: "Active", lastContact: "2024-01-17", notes: "Process pipe installation"},
+            {name: "Colton Construction", email: "bids@coltonconstruct.com", phone: "(909) 555-0137", address: "852 Construction Dr, Colton, CA 92324", pures: 3.6, tier: "Tier 1C", industry: "Construction", revenue: "$900K", status: "Prospect", lastContact: "2024-01-07", notes: "Safety training required"},
+            {name: "Beaumont Builders", email: "projects@beaumontbuild.com", phone: "(951) 555-0138", address: "963 Builder Blvd, Beaumont, CA 92223", pures: 3.8, tier: "Tier 1B", industry: "Construction", revenue: "$1.2M", status: "Active", lastContact: "2024-01-21", notes: "Equipment rental interest"},
+            {name: "Rancho Mirage Racing", email: "garage@rmracing.com", phone: "(760) 555-0139", address: "159 Racing Way, Rancho Mirage, CA 92270", pures: 3.7, tier: "Tier 1B", industry: "Automotive", revenue: "$1.1M", status: "Active", lastContact: "2024-01-09", notes: "Specialty welding gases"},
+            {name: "Banning Industrial", email: "purchasing@banningindustrial.com", phone: "(951) 555-0140", address: "357 Industrial Pkwy, Banning, CA 92220", pures: 4.1, tier: "Tier 1A", industry: "Manufacturing", revenue: "$2.3M", status: "Active", lastContact: "2024-01-22", notes: "Automation systems"},
+            {name: "Chino Hills Tech", email: "tech@chinohillstech.com", phone: "(909) 555-0141", address: "486 Hills Dr, Chino Hills, CA 91709", pures: 3.9, tier: "Tier 1B", industry: "Aerospace", revenue: "$1.6M", status: "Prospect", lastContact: "2024-01-06", notes: "High-purity gas supply"},
+            {name: "Jurupa Valley Ventures", email: "info@jurupaventures.com", phone: "(951) 555-0142", address: "612 Valley Rd, Jurupa Valley, CA 92509", pures: 3.5, tier: "Tier 1C", industry: "Manufacturing", revenue: "$780K", status: "Active", lastContact: "2024-01-23", notes: "Safety equipment upgrade"},
+            {name: "Lake Elsinore Logistics", email: "ops@lellogistics.com", phone: "(951) 555-0143", address: "734 Logistics Ln, Lake Elsinore, CA 92530", pures: 3.6, tier: "Tier 1C", industry: "Energy", revenue: "$850K", status: "Prospect", lastContact: "2024-01-04", notes: "Mobile welding needs"},
+            {name: "Norco Engineering", email: "design@norcoeng.com", phone: "(951) 555-0144", address: "895 Engineering Blvd, Norco, CA 92860", pures: 4.2, tier: "Tier 1A", industry: "Aerospace", revenue: "$2.7M", status: "Active", lastContact: "2024-01-24", notes: "Process optimization"},
+            {name: "Eastvale Electronics", email: "production@eastvaleelec.com", phone: "(951) 555-0145", address: "123 Electronics Ave, Eastvale, CA 92880", pures: 3.8, tier: "Tier 1B", industry: "Manufacturing", revenue: "$1.3M", status: "Active", lastContact: "2024-01-15", notes: "Specialty gas requirements"},
+            {name: "Wildomar Welding", email: "shop@wildomarweld.com", phone: "(951) 555-0146", address: "246 Welding St, Wildomar, CA 92595", pures: 3.4, tier: "Tier 1C", industry: "Construction", revenue: "$690K", status: "Prospect", lastContact: "2024-01-02", notes: "Equipment financing options"},
+            {name: "Murrieta Manufacturing", email: "contact@murrietamfg.com", phone: "(951) 555-0147", address: "468 Manufacturing Dr, Murrieta, CA 92563", pures: 4.0, tier: "Tier 1A", industry: "Manufacturing", revenue: "$2.0M", status: "Active", lastContact: "2024-01-25", notes: "Bulk gas systems"},
+            {name: "Menifee Metals", email: "sales@menifeemetals.com", phone: "(951) 555-0148", address: "579 Metals Rd, Menifee, CA 92584", pures: 3.7, tier: "Tier 1B", industry: "Manufacturing", revenue: "$1.2M", status: "Active", lastContact: "2024-01-18", notes: "Process pipe needs"},
+            {name: "Winchester Works", email: "info@winchesterworks.com", phone: "(951) 555-0149", address: "681 Works Way, Winchester, CA 92596", pures: 3.5, tier: "Tier 1C", industry: "Automotive", revenue: "$740K", status: "Prospect", lastContact: "2024-01-01", notes: "Safety training interest"},
+            {name: "French Valley Fabrication", email: "orders@frenchvalleyfab.com", phone: "(951) 555-0150", address: "792 Fabrication Blvd, French Valley, CA 92596", pures: 3.9, tier: "Tier 1B", industry: "Construction", revenue: "$1.4M", status: "Active", lastContact: "2024-01-26", notes: "Welding automation"},
+            {name: "Sun City Solutions", email: "solutions@suncitysol.com", phone: "(951) 555-0151", address: "814 Solutions St, Sun City, CA 92586", pures: 3.6, tier: "Tier 1C", industry: "Energy", revenue: "$820K", status: "Prospect", lastContact: "2024-01-12", notes: "Specialty gas supply"},
+            {name: "Cabazon Construction", email: "projects@cabazonconstruct.com", phone: "(951) 555-0152", address: "925 Construction Ave, Cabazon, CA 92230", pures: 3.8, tier: "Tier 1B", industry: "Construction", revenue: "$1.1M", status: "Active", lastContact: "2024-01-27", notes: "Equipment rental program"},
+            {name: "Desert Hot Springs Industrial", email: "industrial@dhsindustrial.com", phone: "(760) 555-0153", address: "137 Industrial Dr, Desert Hot Springs, CA 92240", pures: 4.1, tier: "Tier 1A", industry: "Manufacturing", revenue: "$2.4M", status: "Active", lastContact: "2024-01-28", notes: "Microbulk systems"},
+            {name: "Coachella Valley Ventures", email: "ventures@cvventures.com", phone: "(760) 555-0154", address: "248 Ventures Blvd, Coachella, CA 92236", pures: 3.7, tier: "Tier 1B", industry: "Energy", revenue: "$1.0M", status: "Prospect", lastContact: "2024-01-14", notes: "Process optimization"},
+            {name: "Indio Industrial", email: "contact@indioindustrial.com", phone: "(760) 555-0155", address: "359 Industrial Pkwy, Indio, CA 92201", pures: 3.9, tier: "Tier 1B", industry: "Manufacturing", revenue: "$1.5M", status: "Active", lastContact: "2024-01-29", notes: "Safety equipment needs"},
+            {name: "La Quinta Logistics", email: "shipping@lqlogistics.com", phone: "(760) 555-0156", address: "471 Logistics Ln, La Quinta, CA 92253", pures: 3.4, tier: "Tier 1C", industry: "Energy", revenue: "$710K", status: "Prospect", lastContact: "2024-01-16", notes: "Mobile welding services"},
+            {name: "Palm Springs Precision", email: "precision@psprecision.com", phone: "(760) 555-0157", address: "582 Precision Way, Palm Springs, CA 92262", pures: 4.0, tier: "Tier 1A", industry: "Aerospace", revenue: "$1.8M", status: "Active", lastContact: "2024-01-30", notes: "High-purity gases"},
+            {name: "Cathedral City Construction", email: "builds@ccconstruction.com", phone: "(760) 555-0158", address: "693 Construction Dr, Cathedral City, CA 92234", pures: 3.6, tier: "Tier 1C", industry: "Construction", revenue: "$890K", status: "Active", lastContact: "2024-01-20", notes: "Welding equipment rental"},
+            {name: "Thousand Palms Tech", email: "tech@tptech.com", phone: "(760) 555-0159", address: "715 Tech Blvd, Thousand Palms, CA 92276", pures: 3.8, tier: "Tier 1B", industry: "Manufacturing", revenue: "$1.3M", status: "Prospect", lastContact: "2024-01-31", notes: "Automation systems"},
+            {name: "Bermuda Dunes Builders", email: "builds@bdbuilders.com", phone: "(760) 555-0160", address: "826 Builders Rd, Bermuda Dunes, CA 92203", pures: 3.7, tier: "Tier 1B", industry: "Construction", revenue: "$1.1M", status: "Active", lastContact: "2024-01-22", notes: "Process pipe installation"},
+            {name: "Salton City Services", email: "services@saltoncity.com", phone: "(760) 555-0161", address: "937 Services Ave, Salton City, CA 92275", pures: 3.5, tier: "Tier 1C", industry: "Energy", revenue: "$760K", status: "Prospect", lastContact: "2024-01-24", notes: "Safety training needs"},
+            {name: "Thermal Technologies", email: "tech@thermaltech.com", phone: "(760) 555-0162", address: "148 Technologies Dr, Thermal, CA 92274", pures: 4.2, tier: "Tier 1A", industry: "Aerospace", revenue: "$2.6M", status: "Active", lastContact: "2024-02-01", notes: "Specialty gas requirements"},
+            {name: "Mecca Manufacturing", email: "production@meccamfg.com", phone: "(760) 555-0163", address: "259 Manufacturing St, Mecca, CA 92254", pures: 3.6, tier: "Tier 1C", industry: "Manufacturing", revenue: "$830K", status: "Active", lastContact: "2024-01-26", notes: "Equipment financing"},
+            {name: "North Shore Solutions", email: "solutions@northshoresol.com", phone: "(760) 555-0164", address: "371 Solutions Blvd, North Shore, CA 92254", pures: 3.8, tier: "Tier 1B", industry: "Energy", revenue: "$1.2M", status: "Prospect", lastContact: "2024-01-28", notes: "Mobile services"},
+            {name: "Bombay Beach Industries", email: "contact@bbindustries.com", phone: "(760) 555-0165", address: "482 Industries Ave, Bombay Beach, CA 92233", pures: 3.4, tier: "Tier 1C", industry: "Manufacturing", revenue: "$680K", status: "Active", lastContact: "2024-01-30", notes: "Safety equipment upgrade"},
+            {name: "Niland Energy", email: "energy@nilandenergy.com", phone: "(760) 555-0166", address: "593 Energy Dr, Niland, CA 92257", pures: 3.9, tier: "Tier 1B", industry: "Energy", revenue: "$1.4M", status: "Active", lastContact: "2024-02-02", notes: "Process optimization"},
+            {name: "Calipatria Construction", email: "builds@calipatriaconstruct.com", phone: "(760) 555-0167", address: "614 Construction Way, Calipatria, CA 92233", pures: 3.7, tier: "Tier 1B", industry: "Construction", revenue: "$1.0M", status: "Prospect", lastContact: "2024-01-25", notes: "Welding automation"},
+            {name: "Westmorland Works", email: "works@westmorlandworks.com", phone: "(760) 555-0168", address: "725 Works Rd, Westmorland, CA 92227", pures: 3.5, tier: "Tier 1C", industry: "Automotive", revenue: "$790K", status: "Active", lastContact: "2024-02-03", notes: "Equipment rental"},
+            {name: "Brawley Builders", email: "builds@brawleybuilders.com", phone: "(760) 555-0169", address: "836 Builders Blvd, Brawley, CA 92227", pures: 3.8, tier: "Tier 1B", industry: "Construction", revenue: "$1.3M", status: "Active", lastContact: "2024-01-27", notes: "Safety training"},
+            {name: "Imperial Valley Ventures", email: "ventures@ivventures.com", phone: "(760) 555-0170", address: "947 Ventures Ave, Imperial, CA 92251", pures: 4.0, tier: "Tier 1A", industry: "Manufacturing", revenue: "$1.9M", status: "Prospect", lastContact: "2024-02-04", notes: "Bulk gas systems"},
+            {name: "El Centro Engineering", email: "engineering@elcentroeng.com", phone: "(760) 555-0171", address: "158 Engineering Dr, El Centro, CA 92243", pures: 4.1, tier: "Tier 1A", industry: "Aerospace", revenue: "$2.2M", status: "Active", lastContact: "2024-02-05", notes: "High-purity gas supply"},
+            {name: "Holtville Heavy Industry", email: "heavy@holtvillehi.com", phone: "(760) 555-0172", address: "269 Heavy Industry Rd, Holtville, CA 92250", pures: 3.9, tier: "Tier 1B", industry: "Manufacturing", revenue: "$1.6M", status: "Active", lastContact: "2024-01-29", notes: "Process pipe needs"}
+        ];
+
+        let sortDirection = {};
+        let filteredData = [...clientData];
+
+        function showTab(tabName) {
+            // Hide all tab contents
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabContents.forEach(tab => tab.classList.remove('active'));
+
+            // Hide all nav tabs
+            const navTabs = document.querySelectorAll('.nav-tab');
+            navTabs.forEach(tab => tab.classList.remove('active'));
+
+            // Show selected tab content
+            document.getElementById(tabName).classList.add('active');
+
+            // Activate selected nav tab
+            event.target.classList.add('active');
+        }
+
+        function populateTable(data = filteredData) {
+            const tableBody = document.getElementById('clientTableBody');
+            tableBody.innerHTML = '';
+
+            data.forEach(client => {
+                const row = document.createElement('tr');
+                const tierClass = client.tier.replace(' ', '').toLowerCase();
+                row.className = tierClass;
+                
+                row.innerHTML = `
+                    <td>${client.name}</td>
+                    <td>${client.email}</td>
+                    <td>${client.phone}</td>
+                    <td>${client.address}</td>
+                    <td>${client.pures}</td>
+                    <td>${client.tier}</td>
+                    <td>${client.industry}</td>
+                    <td>${client.revenue}</td>
+                    <td>${client.status}</td>
+                    <td>${client.lastContact}</td>
+                    <td>
+                        <button class="contact-btn" onclick="callClient('${client.phone}')">📞 Call</button>
+                        <button class="contact-btn" onclick="emailClient('${client.email}', '${client.name}')">📧 Email</button>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        function filterTable() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const tierFilter = document.getElementById('tierFilter').value;
+            const industryFilter = document.getElementById('industryFilter').value;
+
+            filteredData = clientData.filter(client => {
+                const matchesSearch = Object.values(client).some(value => 
+                    value.toString().toLowerCase().includes(searchTerm)
+                );
+                const matchesTier = !tierFilter || client.tier === tierFilter;
+                const matchesIndustry = !industryFilter || client.industry === industryFilter;
+
+                return matchesSearch && matchesTier && matchesIndustry;
+            });
+
+            populateTable(filteredData);
+        }
+
+        function sortTable(columnIndex) {
+            const columns = ['name', 'email', 'phone', 'address', 'pures', 'tier', 'industry', 'revenue', 'status', 'lastContact'];
+            const column = columns[columnIndex];
+
+            if (!sortDirection[column]) {
+                sortDirection[column] = 'asc';
+            } else {
+                sortDirection[column] = sortDirection[column] === 'asc' ? 'desc' : 'asc';
+            }
+
+            filteredData.sort((a, b) => {
+                let aVal = a[column];
+                let bVal = b[column];
+
+                if (column === 'pures' || column === 'revenue') {
+                    aVal = parseFloat(aVal.toString().replace(/[$,M]/g, ''));
+                    bVal = parseFloat(bVal.toString().replace(/[$,M]/g, ''));
+                }
+
+                if (sortDirection[column] === 'asc') {
+                    return aVal > bVal ? 1 : -1;
+                } else {
+                    return aVal < bVal ? 1 : -1;
+                }
+            });
+
+            populateTable(filteredData);
+        }
+
+        function callClient(phone) {
+            window.open(`tel:${phone}`);
+        }
+
+        function emailClient(email, clientName) {
+            const subject = encodeURIComponent(`Partnership Opportunity - California Tool & Welding Supply`);
+            const body = encodeURIComponent(`Dear ${clientName},
+
+I hope this message finds you well. I'm reaching out from California Tool & Welding Supply, Southern California's premier provider of industrial gases and welding solutions since 1976.
+
+Based on your industry expertise and our analysis, I believe we can provide significant value to your operations through:
+
+🔧 HIGH-QUALITY WELDING EQUIPMENT: Professional-grade tools and automation systems
+⚡ SPECIALTY GASES: Industrial, medical, and laboratory-grade gases with reliable delivery
+🛡️ SAFETY TRAINING: OSHA-compliant compressed gas safety programs
+🔄 EQUIPMENT RENTALS: Flexible leasing options for temporary or long-term needs
+🚚 24/7 SERVICE: Round-the-clock ordering with flexible delivery methods
+
+Our family-owned business has served over 10,000 customers across Southern California and Nevada with:
+• 90 experienced professionals with 300+ combined years of expertise
+• 10 strategic locations for optimal service coverage
+• Microbulk systems and bulk gas solutions
+• Process pipe installations and automation systems
+
+We pride ourselves on providing "Service only a family-owned-and-operated business can supply."
+
+I'd welcome the opportunity to discuss how we can optimize your operations, reduce costs, and improve efficiency. Could we schedule a brief 15-minute conversation this week?
+
+Best regards,
+
+Andrew Myers
+California Tool & Welding Supply
+Phone: (951) 686-7822
+Email: andrew@cal-tool.com
+Website: www.cal-tool.com
+
+P.S. Ask about our current promotions for new partnership accounts!`);
+
+            window.open(`mailto:${email}?subject=${subject}&body=${body}`);
+        }
+
+        function calculatePURES() {
+            const profitability = document.querySelector('input[name="profitability"]:checked');
+            const urgency = document.querySelector('input[name="urgency"]:checked');
+            const reachability = document.querySelector('input[name="reachability"]:checked');
+            const engagement = document.querySelector('input[name="engagement"]:checked');
+            const sustainability = document.querySelector('input[name="sustainability"]:checked');
+
+            if (!profitability || !urgency || !reachability || !engagement || !sustainability) {
+                alert('Please complete all P.U.R.E.S. ratings');
+                return;
+            }
+
+            const scores = [
+                parseInt(profitability.value),
+                parseInt(urgency.value),
+                parseInt(reachability.value),
+                parseInt(engagement.value),
+                parseInt(sustainability.value)
+            ];
+
+            const average = scores.reduce((a, b) => a + b, 0) / scores.length;
+            let tier = '';
+
+            if (average >= 4.0) {
+                tier = 'Tier 1A - Premium';
+            } else if (average >= 3.5) {
+                tier = 'Tier 1B - High-Value';
+            } else if (average >= 3.0) {
+                tier = 'Tier 1C - Qualified';
+            } else {
+                tier = 'Below Tier 1 - Not Qualified';
+            }
+
+            const result = document.getElementById('puresResult');
+            result.innerHTML = `
+                <div style="background-color: #2a2a2a; padding: 20px; border-radius: 8px; border: 1px solid #CF2030;">
+                    <h4 style="color: #CF2030;">P.U.R.E.S. Assessment Result</h4>
+                    <p><strong>Average Score:</strong> ${average.toFixed(2)}</p>
+                    <p><strong>Client Tier:</strong> ${tier}</p>
+                    <div style="margin-top: 15px;">
+                        <strong>Score Breakdown:</strong><br>
+                        Profitability: ${scores[0]}/5<br>
+                        Urgency: ${scores[1]}/5<br>
+                        Reachability: ${scores[2]}/5<br>
+                        Engagement: ${scores[3]}/5<br>
+                        Sustainability: ${scores[4]}/5
+                    </div>
+                </div>
+            `;
+        }
+
+        function exportToCSV() {
+            const headers = ['Client Name', 'Email', 'Phone', 'Address', 'P.U.R.E.S. Score', 'Tier Level', 'Industry', 'Revenue Estimate', 'Contact Status', 'Last Contact', 'Notes'];
+            
+            let csvContent = headers.join(',') + '\n';
+            
+            filteredData.forEach(client => {
+                const row = [
+                    client.name,
+                    client.email,
+                    client.phone,
+                    `"${client.address}"`,
+                    client.pures,
+                    client.tier,
+                    client.industry,
+                    client.revenue,
+                    client.status,
+                    client.lastContact,
+                    `"${client.notes}"`
+                ];
+                csvContent += row.join(',') + '\n';
+            });
+
+            const blob = new Blob([csvContent], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.setAttribute('hidden', '');
+            a.setAttribute('href', url);
+            a.setAttribute('download', 'california-tool-welding-clients.csv');
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+
+        // Initialize the table on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            populateTable();
+        });
+    </script>
+</body>
+</html>

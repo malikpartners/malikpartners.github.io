@@ -1,0 +1,1282 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>S.A.L.E. System Client Targeting Dashboard - TARS Innovation/LabD</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #000000;
+            color: #ffffff;
+            line-height: 1.6;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #CF2030 0%, #8B1538 100%);
+            padding: 1rem;
+            box-shadow: 0 2px 10px rgba(207, 32, 48, 0.3);
+        }
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .logo {
+            height: 60px;
+        }
+        
+        .header-title {
+            color: #ffffff;
+            font-size: 1.8rem;
+            font-weight: 600;
+        }
+        
+        .business-info {
+            text-align: right;
+            font-size: 0.9rem;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .dashboard-tabs {
+            display: flex;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid #CF2030;
+        }
+        
+        .tab-button {
+            background: none;
+            border: none;
+            color: #ffffff;
+            padding: 1rem 2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+        }
+        
+        .tab-button.active {
+            border-bottom-color: #CF2030;
+            background: rgba(207, 32, 48, 0.1);
+        }
+        
+        .tab-button:hover {
+            background: rgba(207, 32, 48, 0.2);
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .search-box, .filter-select {
+            padding: 0.75rem;
+            border: 2px solid #CF2030;
+            border-radius: 5px;
+            background: #1a1a1a;
+            color: #ffffff;
+            font-size: 1rem;
+        }
+        
+        .search-box {
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        .filter-select {
+            min-width: 150px;
+        }
+        
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+        
+        .btn-primary {
+            background: #CF2030;
+            color: #ffffff;
+        }
+        
+        .btn-primary:hover {
+            background: #b01c28;
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background: #333333;
+            color: #ffffff;
+            border: 1px solid #CF2030;
+        }
+        
+        .btn-secondary:hover {
+            background: #CF2030;
+        }
+        
+        .btn-small {
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+        }
+        
+        .table-container {
+            background: #1a1a1a;
+            border-radius: 10px;
+            padding: 1.5rem;
+            border: 1px solid #CF2030;
+            overflow-x: auto;
+        }
+        
+        .client-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1rem;
+        }
+        
+        .client-table th,
+        .client-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #333;
+        }
+        
+        .client-table th {
+            background: #CF2030;
+            color: #ffffff;
+            font-weight: 600;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .client-table th:hover {
+            background: #b01c28;
+        }
+        
+        .client-table tbody tr:hover {
+            background: rgba(207, 32, 48, 0.1);
+        }
+        
+        .tier-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .tier-1a {
+            background: #4CAF50;
+            color: #ffffff;
+        }
+        
+        .tier-1b {
+            background: #FFC107;
+            color: #000000;
+        }
+        
+        .tier-1c {
+            background: #2196F3;
+            color: #ffffff;
+        }
+        
+        .pures-score {
+            font-weight: bold;
+            padding: 0.5rem;
+            border-radius: 5px;
+            text-align: center;
+        }
+        
+        .score-high {
+            background: #4CAF50;
+            color: #ffffff;
+        }
+        
+        .score-medium {
+            background: #FFC107;
+            color: #000000;
+        }
+        
+        .score-low {
+            background: #f44336;
+            color: #ffffff;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+        
+        .modal-content {
+            background: #1a1a1a;
+            margin: 5% auto;
+            padding: 2rem;
+            border: 2px solid #CF2030;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 800px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .close {
+            color: #CF2030;
+            float: right;
+            font-size: 2rem;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .close:hover {
+            color: #ffffff;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #CF2030;
+            font-weight: 600;
+        }
+        
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #CF2030;
+            border-radius: 5px;
+            background: #000000;
+            color: #ffffff;
+            font-size: 1rem;
+        }
+        
+        .form-group textarea {
+            height: 120px;
+            resize: vertical;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: #1a1a1a;
+            border: 1px solid #CF2030;
+            border-radius: 10px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #CF2030;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-label {
+            color: #ffffff;
+            font-size: 1rem;
+        }
+        
+        .footer {
+            margin-top: 4rem;
+            padding: 2rem;
+            border-top: 1px solid #CF2030;
+            text-align: center;
+        }
+        
+        .footer-logo {
+            height: 40px;
+            margin-bottom: 1rem;
+        }
+        
+        .email-template {
+            background: #2a2a2a;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid #CF2030;
+            margin-top: 1rem;
+        }
+        
+        .marketing-calendar {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 1px;
+            background: #CF2030;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 1rem;
+        }
+        
+        .calendar-day {
+            background: #1a1a1a;
+            padding: 1rem;
+            min-height: 100px;
+            position: relative;
+        }
+        
+        .calendar-day-number {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        
+        .calendar-event {
+            background: #CF2030;
+            color: #ffffff;
+            padding: 0.25rem;
+            border-radius: 3px;
+            font-size: 0.8rem;
+            margin-bottom: 0.25rem;
+        }
+        
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .controls {
+                flex-direction: column;
+            }
+            
+            .search-box {
+                min-width: auto;
+            }
+            
+            .dashboard-tabs {
+                flex-wrap: wrap;
+            }
+            
+            .modal-content {
+                width: 95%;
+                margin: 2% auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="HigginsReports" class="logo">
+            <div>
+                <h1 class="header-title">S.A.L.E. System Dashboard</h1>
+                <div class="business-info">
+                    <strong>TARS Innovation / LabD</strong><br>
+                    Agricultural & Environmental Monitoring<br>
+                    Sunnyvale, CA | diw@labd.us
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value" id="totalClients">50</div>
+                <div class="stat-label">Total Prospects</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="tier1aClients">12</div>
+                <div class="stat-label">Tier 1A (Premium)</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="tier1bClients">18</div>
+                <div class="stat-label">Tier 1B (High-Value)</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="tier1cClients">20</div>
+                <div class="stat-label">Tier 1C (Qualified)</div>
+            </div>
+        </div>
+
+        <div class="dashboard-tabs">
+            <button class="tab-button active" onclick="showTab('sourcing')">S - Sourcing</button>
+            <button class="tab-button" onclick="showTab('assessing')">A - Assessing</button>
+            <button class="tab-button" onclick="showTab('listening')">L - Listening</button>
+            <button class="tab-button" onclick="showTab('empowering')">E - Empowering</button>
+        </div>
+
+        <!-- SOURCING TAB -->
+        <div id="sourcing" class="tab-content active">
+            <h2>P.U.R.E.S. Client Sourcing System</h2>
+            
+            <div class="controls">
+                <input type="text" id="searchInput" class="search-box" placeholder="Search clients by name, company, or industry...">
+                <select id="tierFilter" class="filter-select">
+                    <option value="all">All Tiers</option>
+                    <option value="1A">Tier 1A - Premium</option>
+                    <option value="1B">Tier 1B - High Value</option>
+                    <option value="1C">Tier 1C - Qualified</option>
+                </select>
+                <select id="industryFilter" class="filter-select">
+                    <option value="all">All Industries</option>
+                    <option value="agriculture">Agriculture</option>
+                    <option value="greenhouse">Greenhouse/Hydroponics</option>
+                    <option value="research">Research/Academic</option>
+                    <option value="technology">Technology</option>
+                </select>
+                <button class="btn btn-primary" onclick="exportData()">Export CSV</button>
+                <button class="btn btn-secondary" onclick="openPuresModal()">Add New Client</button>
+            </div>
+
+            <div class="table-container">
+                <table class="client-table" id="clientTable">
+                    <thead>
+                        <tr>
+                            <th onclick="sortTable(0)">Client Name</th>
+                            <th onclick="sortTable(1)">Company</th>
+                            <th onclick="sortTable(2)">Email</th>
+                            <th onclick="sortTable(3)">Phone</th>
+                            <th onclick="sortTable(4)">Address</th>
+                            <th onclick="sortTable(5)">P.U.R.E.S. Score</th>
+                            <th onclick="sortTable(6)">Tier Level</th>
+                            <th onclick="sortTable(7)">Industry</th>
+                            <th onclick="sortTable(8)">Revenue Est.</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="clientTableBody">
+                        <!-- Dynamic content will be inserted here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- ASSESSING TAB -->
+        <div id="assessing" class="tab-content">
+            <h2>Buying Pattern Analysis & Assessment</h2>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value">35%</div>
+                    <div class="stat-label">Analytical Buyers</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">28%</div>
+                    <div class="stat-label">Relationship Buyers</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">22%</div>
+                    <div class="stat-label">Efficiency Buyers</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">15%</div>
+                    <div class="stat-label">Innovation Buyers</div>
+                </div>
+            </div>
+
+            <h3>Client Assessment Tools</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-top: 1rem;">
+                <div class="stat-card">
+                    <h4>Decision Timeline Analyzer</h4>
+                    <p>Track client decision-making processes and identify optimal engagement windows.</p>
+                    <button class="btn btn-primary btn-small">Launch Analyzer</button>
+                </div>
+                <div class="stat-card">
+                    <h4>Stakeholder Mapping</h4>
+                    <p>Visualize decision-maker hierarchies and influence patterns within target organizations.</p>
+                    <button class="btn btn-primary btn-small">Map Stakeholders</button>
+                </div>
+                <div class="stat-card">
+                    <h4>Value Proposition Alignment</h4>
+                    <p>Match LabD's monitoring solutions to specific client pain points and requirements.</p>
+                    <button class="btn btn-primary btn-small">Align Value Props</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- LISTENING TAB -->
+        <div id="listening" class="tab-content">
+            <h2>Feedback Integration & Listening System</h2>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value">92%</div>
+                    <div class="stat-label">Feedback Collection Rate</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">4.7/5</div>
+                    <div class="stat-label">Average Satisfaction</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">24hrs</div>
+                    <div class="stat-label">Avg Response Time</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">95%</div>
+                    <div class="stat-label">Issue Resolution Rate</div>
+                </div>
+            </div>
+
+            <h3>Feedback Tracking System</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-top: 1rem;">
+                <div class="stat-card">
+                    <h4>Pre-Sale Feedback</h4>
+                    <p>Capture initial requirements, pain points, and expectations during prospect qualification.</p>
+                    <button class="btn btn-primary btn-small">View Pre-Sale Forms</button>
+                </div>
+                <div class="stat-card">
+                    <h4>During-Sale Progress</h4>
+                    <p>Monitor engagement levels, objections, and buying signals throughout the sales process.</p>
+                    <button class="btn btn-primary btn-small">Track Progress</button>
+                </div>
+                <div class="stat-card">
+                    <h4>Post-Sale Satisfaction</h4>
+                    <p>Measure customer satisfaction, identify expansion opportunities, and gather testimonials.</p>
+                    <button class="btn btn-primary btn-small">Review Satisfaction</button>
+                </div>
+                <div class="stat-card">
+                    <h4>Real-time Resolution</h4>
+                    <p>Address customer concerns immediately and maintain high service standards.</p>
+                    <button class="btn btn-primary btn-small">Manage Complaints</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- EMPOWERING TAB -->
+        <div id="empowering" class="tab-content">
+            <h2>Referral Strategy & Client Empowerment</h2>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value">127</div>
+                    <div class="stat-label">Active Referrals</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">3.2</div>
+                    <div class="stat-label">Avg Referrals per Client</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">$75K</div>
+                    <div class="stat-label">Referral Revenue YTD</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">89%</div>
+                    <div class="stat-label">Referral Conversion Rate</div>
+                </div>
+            </div>
+
+            <h3>Marketing Calendar & Outreach Schedule</h3>
+            <div class="marketing-calendar" id="marketingCalendar">
+                <!-- Dynamic calendar will be generated here -->
+            </div>
+
+            <h3>Co-marketing Opportunities</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-top: 2rem;">
+                <div class="stat-card">
+                    <h4>Success Story Documentation</h4>
+                    <p>Capture and share client success stories showcasing LabD's impact on agricultural operations.</p>
+                    <button class="btn btn-primary btn-small">Document Stories</button>
+                </div>
+                <div class="stat-card">
+                    <h4>Referral Reward Tracking</h4>
+                    <p>Manage incentive programs and track referral rewards for satisfied customers.</p>
+                    <button class="btn btn-primary btn-small">Track Rewards</button>
+                </div>
+                <div class="stat-card">
+                    <h4>Client Advocacy Program</h4>
+                    <p>Develop client ambassadors who actively promote LabD solutions in their networks.</p>
+                    <button class="btn btn-primary btn-small">Manage Advocates</button>
+                </div>
+                <div class="stat-card">
+                    <h4>Joint Marketing Plans</h4>
+                    <p>Create collaborative marketing initiatives with key partners and industry leaders.</p>
+                    <button class="btn btn-primary btn-small">Plan Campaigns</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- P.U.R.E.S. Scoring Modal -->
+    <div id="puresModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closePuresModal()">&times;</span>
+            <h2>P.U.R.E.S. Client Evaluation</h2>
+            <form id="puresForm">
+                <div class="form-group">
+                    <label>Client Name:</label>
+                    <input type="text" id="clientName" required>
+                </div>
+                <div class="form-group">
+                    <label>Company:</label>
+                    <input type="text" id="companyName" required>
+                </div>
+                <div class="form-group">
+                    <label>Email:</label>
+                    <input type="email" id="clientEmail" required>
+                </div>
+                <div class="form-group">
+                    <label>Phone:</label>
+                    <input type="tel" id="clientPhone" required>
+                </div>
+                <div class="form-group">
+                    <label>Address:</label>
+                    <input type="text" id="clientAddress" required>
+                </div>
+                <div class="form-group">
+                    <label>Industry:</label>
+                    <select id="clientIndustry" required>
+                        <option value="">Select Industry</option>
+                        <option value="agriculture">Agriculture</option>
+                        <option value="greenhouse">Greenhouse/Hydroponics</option>
+                        <option value="research">Research/Academic</option>
+                        <option value="technology">Technology</option>
+                    </select>
+                </div>
+                
+                <h3>P.U.R.E.S. Scoring (1-5 scale)</h3>
+                
+                <div class="form-group">
+                    <label>Profitability (Budget Capacity):</label>
+                    <select id="profitability" required>
+                        <option value="">Select Score</option>
+                        <option value="5">5 - High ($100K+ annual budget)</option>
+                        <option value="4">4 - Good ($50K-$100K budget)</option>
+                        <option value="3">3 - Medium ($25K-$50K budget)</option>
+                        <option value="2">2 - Low ($10K-$25K budget)</option>
+                        <option value="1">1 - Very Low (<$10K budget)</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>Urgency (Immediate Pain Points):</label>
+                    <select id="urgency" required>
+                        <option value="">Select Score</option>
+                        <option value="5">5 - Critical (Immediate need)</option>
+                        <option value="4">4 - High (Within 30 days)</option>
+                        <option value="3">3 - Medium (2-3 months)</option>
+                        <option value="2">2 - Low (6 months)</option>
+                        <option value="1">1 - No urgency (Future consideration)</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>Reachability (Decision Maker Access):</label>
+                    <select id="reachability" required>
+                        <option value="">Select Score</option>
+                        <option value="5">5 - Direct access to decision maker</option>
+                        <option value="4">4 - One degree of separation</option>
+                        <option value="3">3 - Warm introduction available</option>
+                        <option value="2">2 - Cold outreach required</option>
+                        <option value="1">1 - Difficult to reach</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>Engagement (Innovation Openness):</label>
+                    <select id="engagement" required>
+                        <option value="">Select Score</option>
+                        <option value="5">5 - Early adopter, tech-forward</option>
+                        <option value="4">4 - Open to innovation</option>
+                        <option value="3">3 - Moderate interest in new tech</option>
+                        <option value="2">2 - Conservative approach</option>
+                        <option value="1">1 - Resistant to change</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>Sustainability (Partnership Potential):</label>
+                    <select id="sustainability" required>
+                        <option value="">Select Score</option>
+                        <option value="5">5 - Growing operation, expansion plans</option>
+                        <option value="4">4 - Stable with growth potential</option>
+                        <option value="3">3 - Steady operation</option>
+                        <option value="2">2 - Limited growth prospects</option>
+                        <option value="1">1 - Declining or uncertain future</option>
+                    </select>
+                </div>
+                
+                <button type="submit" class="btn btn-primary">Calculate P.U.R.E.S. Score</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Contact Modal -->
+    <div id="contactModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeContactModal()">&times;</span>
+            <h2>Contact Client</h2>
+            <div id="contactContent">
+                <!-- Dynamic content will be inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="HigginsReports" class="footer-logo">
+        <p>&copy; 2024 HigginsReports. All rights reserved. | Powered by S.A.L.E. System Technology</p>
+        <p>For support: support@higgins.ai | 1-888-364-3924</p>
+    </footer>
+
+    <script>
+        // Sample client data for Sunnyvale, CA area (Agricultural/Tech focus)
+        const clientData = [
+            {
+                name: "Sarah Chen",
+                company: "Valley Fresh Farms",
+                email: "sarah.chen@valleyfresh.com",
+                phone: "(408) 555-0123",
+                address: "1234 Farm Road, Sunnyvale, CA 94085",
+                puresScore: 23,
+                tier: "1A",
+                industry: "agriculture",
+                revenue: "$2.5M",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Michael Rodriguez",
+                company: "GreenTech Hydroponics",
+                email: "m.rodriguez@greentech.com",
+                phone: "(408) 555-0124",
+                address: "2468 Innovation Way, Santa Clara, CA 95051",
+                puresScore: 22,
+                tier: "1A",
+                industry: "greenhouse",
+                revenue: "$1.8M",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Dr. Emily Thompson",
+                company: "Stanford Agricultural Research",
+                email: "ethompson@stanford.edu",
+                phone: "(650) 555-0125",
+                address: "450 Serra Mall, Stanford, CA 94305",
+                puresScore: 21,
+                tier: "1A",
+                industry: "research",
+                revenue: "$5.2M",
+                buyerType: "Analytical"
+            },
+            {
+                name: "James Park",
+                company: "Silicon Valley Farms",
+                email: "jpark@svfarms.com",
+                phone: "(408) 555-0126",
+                address: "3691 Saratoga Ave, San Jose, CA 95130",
+                puresScore: 20,
+                tier: "1B",
+                industry: "agriculture",
+                revenue: "$3.1M",
+                buyerType: "Efficiency"
+            },
+            {
+                name: "Lisa Wang",
+                company: "AquaCulture Systems",
+                email: "lwang@aquaculture.com",
+                phone: "(408) 555-0127",
+                address: "1500 Technology Dr, Sunnyvale, CA 94089",
+                puresScore: 19,
+                tier: "1B",
+                industry: "greenhouse",
+                revenue: "$1.2M",
+                buyerType: "Relationship"
+            },
+            {
+                name: "Robert Kim",
+                company: "Organic Valley Co-op",
+                email: "rkim@organicvalley.com",
+                phone: "(408) 555-0128",
+                address: "2900 Lakeside Dr, Santa Clara, CA 95054",
+                puresScore: 18,
+                tier: "1B",
+                industry: "agriculture",
+                revenue: "$4.7M",
+                buyerType: "Relationship"
+            },
+            {
+                name: "Amanda Foster",
+                company: "TechGrow Solutions",
+                email: "afoster@techgrow.com",
+                phone: "(408) 555-0129",
+                address: "750 University Ave, Los Altos, CA 94022",
+                puresScore: 17,
+                tier: "1B",
+                industry: "technology",
+                revenue: "$890K",
+                buyerType: "Innovation"
+            },
+            {
+                name: "David Martinez",
+                company: "Mountain View Nursery",
+                email: "dmartinez@mvnursery.com",
+                phone: "(650) 555-0130",
+                address: "1850 Middlefield Rd, Mountain View, CA 94043",
+                puresScore: 16,
+                tier: "1C",
+                industry: "agriculture",
+                revenue: "$750K",
+                buyerType: "Efficiency"
+            }
+        ];
+
+        // Generate additional clients to reach 50
+        function generateClients() {
+            const firstNames = ["John", "Mary", "David", "Jennifer", "Michael", "Linda", "William", "Elizabeth", "Richard", "Patricia"];
+            const lastNames = ["Smith", "Johnson", "Williams", "Brown", "Jones", "Garcia", "Miller", "Davis", "Rodriguez", "Martinez"];
+            const companies = ["AgriTech Solutions", "Green Growth Systems", "Valley Innovations", "Smart Farm Co", "EcoGrow Technologies", "Harvest Analytics", "Precision Agriculture", "FarmTech Innovations", "Agricultural Solutions Inc", "GreenSmart Systems"];
+            const streets = ["Main St", "First Ave", "Oak Dr", "Pine Rd", "Maple Ave", "Cedar St", "Elm Way", "Willow Ln", "Birch Ct", "Spruce Blvd"];
+            const cities = ["Sunnyvale", "Santa Clara", "Mountain View", "Los Altos", "Cupertino", "San Jose", "Palo Alto", "Fremont"];
+            const industries = ["agriculture", "greenhouse", "research", "technology"];
+            const buyerTypes = ["Analytical", "Relationship", "Efficiency", "Innovation"];
+
+            for (let i = clientData.length; i < 50; i++) {
+                const firstName = firstNames[Math.floor(Math.random() * firstNames.length)];
+                const lastName = lastNames[Math.floor(Math.random() * lastNames.length)];
+                const company = companies[Math.floor(Math.random() * companies.length)];
+                const street = streets[Math.floor(Math.random() * streets.length)];
+                const city = cities[Math.floor(Math.random() * cities.length)];
+                const industry = industries[Math.floor(Math.random() * industries.length)];
+                const buyerType = buyerTypes[Math.floor(Math.random() * buyerTypes.length)];
+                
+                const puresScore = Math.floor(Math.random() * 10) + 11; // 11-20
+                let tier;
+                if (puresScore >= 18) tier = "1A";
+                else if (puresScore >= 15) tier = "1B";
+                else tier = "1C";
+
+                const revenue = `$${(Math.random() * 3 + 0.5).toFixed(1)}M`;
+
+                clientData.push({
+                    name: `${firstName} ${lastName}`,
+                    company: company,
+                    email: `${firstName.toLowerCase()}.${lastName.toLowerCase()}@${company.toLowerCase().replace(/\s+/g, '')}.com`,
+                    phone: `(${Math.floor(Math.random() * 900) + 100}) ${Math.floor(Math.random() * 900) + 100}-${Math.floor(Math.random() * 9000) + 1000}`,
+                    address: `${Math.floor(Math.random() * 9999) + 1} ${street}, ${city}, CA 9${Math.floor(Math.random() * 100) + 400}`,
+                    puresScore: puresScore,
+                    tier: tier,
+                    industry: industry,
+                    revenue: revenue,
+                    buyerType: buyerType
+                });
+            }
+        }
+
+        generateClients();
+
+        // Initialize the dashboard
+        function initDashboard() {
+            populateClientTable();
+            generateMarketingCalendar();
+            updateStats();
+        }
+
+        function showTab(tabName) {
+            // Hide all tabs
+            const tabs = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Remove active class from all buttons
+            const buttons = document.querySelectorAll('.tab-button');
+            buttons.forEach(button => button.classList.remove('active'));
+            
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        function populateClientTable() {
+            const tbody = document.getElementById('clientTableBody');
+            tbody.innerHTML = '';
+
+            clientData.forEach((client, index) => {
+                const row = document.createElement('tr');
+                
+                const scoreClass = client.puresScore >= 18 ? 'score-high' : 
+                                 client.puresScore >= 15 ? 'score-medium' : 'score-low';
+                
+                row.innerHTML = `
+                    <td>${client.name}</td>
+                    <td>${client.company}</td>
+                    <td>${client.email}</td>
+                    <td>${client.phone}</td>
+                    <td>${client.address}</td>
+                    <td><span class="pures-score ${scoreClass}">${client.puresScore}/25</span></td>
+                    <td><span class="tier-badge tier-${client.tier.toLowerCase()}">${client.tier}</span></td>
+                    <td>${client.industry}</td>
+                    <td>${client.revenue}</td>
+                    <td>
+                        <button class="btn btn-primary btn-small" onclick="contactClient(${index})">Contact</button>
+                        <button class="btn btn-secondary btn-small" onclick="viewClientDetails(${index})">Details</button>
+                    </td>
+                `;
+                
+                tbody.appendChild(row);
+            });
+        }
+
+        function updateStats() {
+            const tier1a = clientData.filter(client => client.tier === '1A').length;
+            const tier1b = clientData.filter(client => client.tier === '1B').length;
+            const tier1c = clientData.filter(client => client.tier === '1C').length;
+
+            document.getElementById('totalClients').textContent = clientData.length;
+            document.getElementById('tier1aClients').textContent = tier1a;
+            document.getElementById('tier1bClients').textContent = tier1b;
+            document.getElementById('tier1cClients').textContent = tier1c;
+        }
+
+        function contactClient(index) {
+            const client = clientData[index];
+            const emailTemplate = generateEmailTemplate(client);
+            
+            const contactContent = document.getElementById('contactContent');
+            contactContent.innerHTML = `
+                <h3>Contact ${client.name} - ${client.company}</h3>
+                <div style="margin-bottom: 2rem;">
+                    <p><strong>Email:</strong> ${client.email}</p>
+                    <p><strong>Phone:</strong> ${client.phone}</p>
+                    <p><strong>Industry:</strong> ${client.industry}</p>
+                    <p><strong>P.U.R.E.S. Score:</strong> ${client.puresScore}/25</p>
+                    <p><strong>Buyer Type:</strong> ${client.buyerType}</p>
+                </div>
+                
+                <h4>Recommended Email Template:</h4>
+                <div class="email-template">
+                    <p><strong>Subject:</strong> ${emailTemplate.subject}</p>
+                    <hr style="border-color: #CF2030; margin: 1rem 0;">
+                    <div style="white-space: pre-line;">${emailTemplate.body}</div>
+                </div>
+                
+                <div style="margin-top: 2rem;">
+                    <button class="btn btn-primary" onclick="sendEmail('${client.email}', '${emailTemplate.subject}', '${emailTemplate.body}')">Send Email</button>
+                    <button class="btn btn-secondary" onclick="window.open('tel:${client.phone}')">Call Now</button>
+                </div>
+            `;
+            
+            document.getElementById('contactModal').style.display = 'block';
+        }
+
+        function generateEmailTemplate(client) {
+            const industryMessages = {
+                agriculture: {
+                    subject: "Optimize Your Crop Yields with Advanced Environmental Monitoring",
+                    value: "increase yields by up to 35% while reducing water usage by 25%",
+                    solution: "LabD's wireless sensor network provides real-time monitoring of soil moisture, temperature, and humidity across your entire operation"
+                },
+                greenhouse: {
+                    subject: "Revolutionize Your Greenhouse Operations with Smart Monitoring",
+                    value: "achieve 40% more efficient growing cycles and reduce crop loss by 60%",
+                    solution: "Our advanced CO2, temperature, and humidity sensors optimize growing conditions automatically"
+                },
+                research: {
+                    subject: "Enhance Your Agricultural Research with Precision Data Collection",
+                    value: "collect research-grade environmental data with 99.9% accuracy and automated reporting",
+                    solution: "LabD's research-grade sensors provide the precise data collection your studies require"
+                },
+                technology: {
+                    subject: "Integrate Advanced AgTech Solutions into Your Technology Stack",
+                    value: "offer your clients cutting-edge environmental monitoring with seamless API integration",
+                    solution: "Our LoRaWAN-based system integrates perfectly with existing AgTech platforms"
+                }
+            };
+
+            const buyerMessages = {
+                Analytical: "Based on our ROI analysis, LabD customers typically see a 300% return on investment within the first 18 months through improved yields and reduced losses.",
+                Relationship: "Many industry leaders like yourself have partnered with LabD to transform their operations. I'd love to introduce you to some of our satisfied customers in your area.",
+                Efficiency: "LabD eliminates the time-consuming process of manual monitoring, freeing up 15+ hours per week that can be redirected to strategic farming decisions.",
+                Innovation: "As an early adopter in your industry, you'll appreciate LabD's cutting-edge LoRaWAN technology that's setting the new standard for agricultural monitoring."
+            };
+
+            const message = industryMessages[client.industry] || industryMessages.agriculture;
+            const buyerMessage = buyerMessages[client.buyerType] || buyerMessages.Analytical;
+
+            return {
+                subject: message.subject,
+                body: `Dear ${client.name},
+
+I hope this email finds you well. I'm reaching out because I believe LabD's advanced environmental monitoring system could help ${client.company} ${message.value}.
+
+${message.solution}. Our wireless sensors eliminate the guesswork from environmental control and provide actionable insights that drive real results.
+
+${buyerMessage}
+
+What sets LabD apart:
+• Real-time monitoring with instant alerts
+• Up to 10-mile wireless range with our LoRaWAN technology
+• Easy installation with no complex wiring
+• Free mobile app with professional dashboard
+• Proven results across 500+ installations
+
+I'd love to schedule a brief 15-minute call to discuss how LabD can specifically benefit ${client.company}. We're currently offering free pilot installations for qualified agricultural operations in the Sunnyvale area.
+
+Would you be available for a quick call this week? I can also arrange an on-site demonstration at your convenience.
+
+Best regards,
+
+Di Wang
+Business Development Manager
+TARS Innovation / LabD
+Email: diw@labd.us
+Phone: (408) 585-9190
+Website: www.labd.us
+
+P.S. We're offering a special 20% discount for new customers who sign up before the end of this month. Let's discuss how LabD can transform your operation!`
+            };
+        }
+
+        function sendEmail(email, subject, body) {
+            const mailtoLink = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+            window.open(mailtoLink);
+        }
+
+        function generateMarketingCalendar() {
+            const calendar = document.getElementById('marketingCalendar');
+            const today = new Date();
+            const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+            
+            // Generate header
+            daysOfWeek.forEach(day => {
+                const dayHeader = document.createElement('div');
+                dayHeader.className = 'calendar-day';
+                dayHeader.innerHTML = `<div class="calendar-day-number" style="text-align: center; font-weight: bold; color: #CF2030;">${day}</div>`;
+                calendar.appendChild(dayHeader);
+            });
+
+            // Generate calendar days with marketing activities
+            const marketingActivities = [
+                "Send Tier 1A outreach emails",
+                "Follow-up calls scheduled",
+                "Webinar: Agricultural IoT",
+                "Trade show preparation",
+                "Customer success stories",
+                "Social media campaign",
+                "Industry newsletter",
+                "Partner meetings",
+                "Product demo day",
+                "Feedback collection"
+            ];
+
+            for (let i = 1; i <= 35; i++) {
+                const dayElement = document.createElement('div');
+                dayElement.className = 'calendar-day';
+                
+                const dayNumber = i <= 31 ? i : '';
+                dayElement.innerHTML = `<div class="calendar-day-number">${dayNumber}</div>`;
+                
+                // Add random marketing activities
+                if (dayNumber && Math.random() > 0.6) {
+                    const activity = marketingActivities[Math.floor(Math.random() * marketingActivities.length)];
+                    const eventElement = document.createElement('div');
+                    eventElement.className = 'calendar-event';
+                    eventElement.textContent = activity;
+                    dayElement.appendChild(eventElement);
+                }
+                
+                calendar.appendChild(dayElement);
+            }
+        }
+
+        // Search and filter functionality
+        document.getElementById('searchInput').addEventListener('input', filterTable);
+        document.getElementById('tierFilter').addEventListener('change', filterTable);
+        document.getElementById('industryFilter').addEventListener('change', filterTable);
+
+        function filterTable() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const tierFilter = document.getElementById('tierFilter').value;
+            const industryFilter = document.getElementById('industryFilter').value;
+            
+            const tbody = document.getElementById('clientTableBody');
+            const rows = tbody.getElementsByTagName('tr');
+            
+            for (let row of rows) {
+                const cells = row.getElementsByTagName('td');
+                const name = cells[0].textContent.toLowerCase();
+                const company = cells[1].textContent.toLowerCase();
+                const email = cells[2].textContent.toLowerCase();
+                const tier = cells[6].textContent.trim();
+                const industry = cells[7].textContent.toLowerCase();
+                
+                const matchesSearch = name.includes(searchTerm) || 
+                                    company.includes(searchTerm) || 
+                                    email.includes(searchTerm);
+                
+                const matchesTier = tierFilter === 'all' || tier === tierFilter;
+                const matchesIndustry = industryFilter === 'all' || industry === industryFilter;
+                
+                row.style.display = (matchesSearch && matchesTier && matchesIndustry) ? '' : 'none';
+            }
+        }
+
+        // Sort table functionality
+        let sortDirection = {};
+        
+        function sortTable(columnIndex) {
+            const table = document.getElementById('clientTable');
+            const tbody = table.getElementsByTagName('tbody')[0];
+            const rows = Array.from(tbody.getElementsByTagName('tr'));
+            
+            const direction = sortDirection[columnIndex] === 'asc' ? 'desc' : 'asc';
+            sortDirection[columnIndex] = direction;
+            
+            rows.sort((a, b) => {
+                const aValue = a.getElementsByTagName('td')[columnIndex].textContent.trim();
+                const bValue = b.getElementsByTagName('td')[columnIndex].textContent.trim();
+                
+                if (columnIndex === 5) { // P.U.R.E.S. Score column
+                    const aNum = parseInt(aValue.split('/')[0]);
+                    const bNum = parseInt(bValue.split('/')[0]);
+                    return direction === 'asc' ? aNum - bNum : bNum - aNum;
+                }
+                
+                if (direction === 'asc') {
+                    return aValue.localeCompare(bValue, undefined, { numeric: true });
+                } else {
+                    return bValue.localeCompare(aValue, undefined, { numeric: true });
+                }
+            });
+            
+            // Re-append sorted rows
+            rows.forEach(row => tbody.appendChild(row));
+        }
+
+        // Modal functions
+        function openPuresModal() {
+            document.getElementById('puresModal').style.display = 'block';
+        }
+
+        function closePuresModal() {
+            document.getElementById('puresModal').style.display = 'none';
+        }
+
+        function closeContactModal() {
+            document.getElementById('contactModal').style.display = 'none';
+        }
+
+        // P.U.R.E.S. form submission
+        document.getElementById('puresForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const scores = {
+                profitability: parseInt(formData.get('profitability')),
+                urgency: parseInt(formData.get('urgency')),
+                reachability: parseInt(formData.get('reachability')),
+                engagement: parseInt(formData.get('engagement')),
+                sustainability: parseInt(formData.get('sustainability'))
+            };
+            
+            const totalScore = Object.values(scores).reduce((sum, score) => sum + score, 0);
+            
+            let tier;
+            if (totalScore >= 20) tier = '1A';
+            else if (totalScore >= 15) tier = '1B';
+            else tier = '1C';
+            
+            const newClient = {
+                name: formData.get('clientName'),
+                company: formData.get('companyName'),
+                email: formData.get('clientEmail'),
+                phone: formData.get('clientPhone'),
+                address: formData.get('clientAddress'),
+                puresScore: totalScore,
+                tier: tier,
+                industry: formData.get('clientIndustry'),
+                revenue: '$TBD',
+                buyerType: 'TBD'
+            };
+            
+            clientData.push(newClient);
+            populateClientTable();
+            updateStats();
+            closePuresModal();
+            
+            alert(`Client added successfully!\nP.U.R.E.S. Score: ${totalScore}/25\nTier Level: ${tier}`);
+        });
+
+        // Export functionality
+        function exportData() {
+            const csv = [
+                ['Client Name', 'Company', 'Email', 'Phone', 'Address', 'P.U.R.E.S. Score', 'Tier Level', 'Industry', 'Revenue', 'Buyer Type'].join(','),
+                ...clientData.map(client => [
+                    client.name,
+                    client.company,
+                    client.email,
+                    client.phone,
+                    client.address,
+                    `${client.puresScore}/25`,
+                    client.tier,
+                    client.industry,
+                    client.revenue,
+                    client.buyerType
+                ].join(','))
+            ].join('\n');
+            
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.setAttribute('hidden', '');
+            a.setAttribute('href', url);
+            a.setAttribute('download', 'labd_client_database.csv');
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+
+        function viewClientDetails(index) {
+            const client = clientData[index];
+            alert(`Client Details:\n\nName: ${client.name}\nCompany: ${client.company}\nEmail: ${client.email}\nPhone: ${client.phone}\nAddress: ${client.address}\nP.U.R.E.S. Score: ${client.puresScore}/25\nTier: ${client.tier}\nIndustry: ${client.industry}\nRevenue: ${client.revenue}\nBuyer Type: ${client.buyerType}`);
+        }
+
+        // Close modals when clicking outside
+        window.onclick = function(event) {
+            const puresModal = document.getElementById('puresModal');
+            const contactModal = document.getElementById('contactModal');
+            
+            if (event.target === puresModal) {
+                puresModal.style.display = 'none';
+            }
+            if (event.target === contactModal) {
+                contactModal.style.display = 'none';
+            }
+        }
+
+        // Initialize dashboard on page load
+        document.addEventListener('DOMContentLoaded', initDashboard);
+    </script>
+</body>
+</html>

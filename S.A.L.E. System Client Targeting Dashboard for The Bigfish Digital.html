@@ -1,0 +1,873 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>S.A.L.E. System - Client Targeting Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
+            color: #CF2030;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: #000;
+            padding: 20px;
+            text-align: center;
+            border-bottom: 3px solid #CF2030;
+        }
+
+        .header img {
+            max-height: 80px;
+            width: auto;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .dashboard-header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #CF2030;
+        }
+
+        .dashboard-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .tabs {
+            display: flex;
+            background: #1a1a1a;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 15px 20px;
+            background: #333;
+            color: #CF2030;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+
+        .tab.active {
+            background: #CF2030;
+            color: white;
+        }
+
+        .tab:hover {
+            background: #555;
+        }
+
+        .tab.active:hover {
+            background: #CF2030;
+        }
+
+        .tab-content {
+            display: none;
+            background: #1a1a1a;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .search-filters {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+            background: #333;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .search-filters input, .search-filters select {
+            padding: 10px;
+            border: 2px solid #CF2030;
+            border-radius: 5px;
+            background: #000;
+            color: #CF2030;
+            font-size: 14px;
+        }
+
+        .search-filters input::placeholder {
+            color: #CF2030;
+            opacity: 0.7;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            background: #333;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #1a1a1a;
+        }
+
+        th {
+            background: #CF2030;
+            color: white;
+            padding: 15px;
+            text-align: left;
+            cursor: pointer;
+            position: relative;
+            user-select: none;
+        }
+
+        th:hover {
+            background: #a01828;
+        }
+
+        th::after {
+            content: ' ⇅';
+            color: white;
+            font-size: 12px;
+        }
+
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #444;
+            color: #CF2030;
+        }
+
+        tr:nth-child(even) {
+            background: #2a2a2a;
+        }
+
+        tr:hover {
+            background: #444;
+        }
+
+        .tier-1a {
+            background-color: #0f7b0f !important;
+            color: white;
+        }
+
+        .tier-1b {
+            background-color: #b8860b !important;
+            color: white;
+        }
+
+        .tier-1c {
+            background-color: #4682b4 !important;
+            color: white;
+        }
+
+        .contact-btn {
+            background: #CF2030;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 12px;
+            margin: 2px;
+        }
+
+        .contact-btn:hover {
+            background: #a01828;
+        }
+
+        .pure-form {
+            background: #333;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .pure-form h3 {
+            color: #CF2030;
+            margin-bottom: 15px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #CF2030;
+            font-weight: bold;
+        }
+
+        .rating-group {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .rating-stars {
+            display: flex;
+            gap: 2px;
+        }
+
+        .star {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #CF2030;
+            background: #000;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #CF2030;
+            font-weight: bold;
+        }
+
+        .star.active {
+            background: #CF2030;
+            color: white;
+        }
+
+        .marketing-plan {
+            background: #333;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .marketing-plan h3 {
+            color: #CF2030;
+            margin-bottom: 15px;
+        }
+
+        .strategy-card {
+            background: #1a1a1a;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border-left: 4px solid #CF2030;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            background: #000;
+            border-top: 3px solid #CF2030;
+            margin-top: 40px;
+        }
+
+        .footer img {
+            max-height: 40px;
+            opacity: 0.8;
+        }
+
+        .export-btn {
+            background: #CF2030;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px;
+            font-weight: bold;
+        }
+
+        .export-btn:hover {
+            background: #a01828;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .stat-card {
+            background: #333;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            border: 2px solid #CF2030;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #CF2030;
+        }
+
+        .stat-label {
+            color: #CF2030;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports">
+    </div>
+
+    <div class="container">
+        <div class="dashboard-header">
+            <h1>S.A.L.E. System Client Targeting</h1>
+            <h2>The Bigfish Digital - Print Material & Wide-Format Solutions</h2>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number">50</div>
+                <div class="stat-label">Total Prospects</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">15</div>
+                <div class="stat-label">Tier 1A Prospects</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">20</div>
+                <div class="stat-label">Tier 1B Prospects</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">15</div>
+                <div class="stat-label">Tier 1C Prospects</div>
+            </div>
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('sourcing')">S - Sourcing</button>
+            <button class="tab" onclick="showTab('assessing')">A - Assessing</button>
+            <button class="tab" onclick="showTab('listening')">L - Listening</button>
+            <button class="tab" onclick="showTab('empowering')">E - Empowering</button>
+        </div>
+
+        <!-- Sourcing Tab -->
+        <div id="sourcing" class="tab-content active">
+            <h2>Sourcing - P.U.R.E.S. Client Scoring</h2>
+            
+            <div class="pure-form">
+                <h3>P.U.R.E.S. Client Evaluation</h3>
+                <form id="puresForm">
+                    <div class="form-group">
+                        <label>Client Name:</label>
+                        <input type="text" id="clientName" placeholder="Enter client name">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Profitability (Annual Revenue/Budget Capacity):</label>
+                        <div class="rating-group">
+                            <div class="rating-stars" data-rating="profitability">
+                                <span class="star" data-value="1">1</span>
+                                <span class="star" data-value="2">2</span>
+                                <span class="star" data-value="3">3</span>
+                                <span class="star" data-value="4">4</span>
+                                <span class="star" data-value="5">5</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Urgency (Active Pain Points):</label>
+                        <div class="rating-group">
+                            <div class="rating-stars" data-rating="urgency">
+                                <span class="star" data-value="1">1</span>
+                                <span class="star" data-value="2">2</span>
+                                <span class="star" data-value="3">3</span>
+                                <span class="star" data-value="4">4</span>
+                                <span class="star" data-value="5">5</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Reachability (Decision Maker Access):</label>
+                        <div class="rating-group">
+                            <div class="rating-stars" data-rating="reachability">
+                                <span class="star" data-value="1">1</span>
+                                <span class="star" data-value="2">2</span>
+                                <span class="star" data-value="3">3</span>
+                                <span class="star" data-value="4">4</span>
+                                <span class="star" data-value="5">5</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Engagement (Openness to Innovation):</label>
+                        <div class="rating-group">
+                            <div class="rating-stars" data-rating="engagement">
+                                <span class="star" data-value="1">1</span>
+                                <span class="star" data-value="2">2</span>
+                                <span class="star" data-value="3">3</span>
+                                <span class="star" data-value="4">4</span>
+                                <span class="star" data-value="5">5</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Sustainability (Long-term Partnership Potential):</label>
+                        <div class="rating-group">
+                            <div class="rating-stars" data-rating="sustainability">
+                                <span class="star" data-value="1">1</span>
+                                <span class="star" data-value="2">2</span>
+                                <span class="star" data-value="3">3</span>
+                                <span class="star" data-value="4">4</span>
+                                <span class="star" data-value="5">5</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="button" class="export-btn" onclick="calculatePures()">Calculate P.U.R.E.S. Score</button>
+                </form>
+            </div>
+
+            <div class="search-filters">
+                <input type="text" id="searchName" placeholder="Search by name..." oninput="filterTable()">
+                <input type="text" id="searchEmail" placeholder="Search by email..." oninput="filterTable()">
+                <select id="tierFilter" onchange="filterTable()">
+                    <option value="">All Tiers</option>
+                    <option value="1A">Tier 1A (Premium)</option>
+                    <option value="1B">Tier 1B (High-Value)</option>
+                    <option value="1C">Tier 1C (Qualified)</option>
+                </select>
+                <select id="industryFilter" onchange="filterTable()">
+                    <option value="">All Industries</option>
+                    <option value="Print Shop">Print Shop</option>
+                    <option value="Marketing Agency">Marketing Agency</option>
+                    <option value="Retail">Retail</option>
+                    <option value="Manufacturing">Manufacturing</option>
+                    <option value="Healthcare">Healthcare</option>
+                    <option value="Education">Education</option>
+                    <option value="Automotive">Automotive</option>
+                    <option value="Real Estate">Real Estate</option>
+                </select>
+            </div>
+
+            <button class="export-btn" onclick="exportToCSV()">Export to CSV</button>
+            <button class="export-btn" onclick="exportToPDF()">Export to PDF</button>
+
+            <div class="table-container">
+                <table id="clientTable">
+                    <thead>
+                        <tr>
+                            <th onclick="sortTable(0)">Client Name</th>
+                            <th onclick="sortTable(1)">Email</th>
+                            <th onclick="sortTable(2)">Phone</th>
+                            <th onclick="sortTable(3)">Address</th>
+                            <th onclick="sortTable(4)">P.U.R.E.S. Score</th>
+                            <th onclick="sortTable(5)">Tier Level</th>
+                            <th onclick="sortTable(6)">Industry</th>
+                            <th onclick="sortTable(7)">Revenue Estimate</th>
+                            <th onclick="sortTable(8)">Contact Status</th>
+                            <th onclick="sortTable(9)">Last Contact</th>
+                            <th onclick="sortTable(10)">Next Action</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="clientTableBody">
+                        <!-- Client data will be populated here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Assessing Tab -->
+        <div id="assessing" class="tab-content">
+            <h2>Assessing - Buying Pattern Analysis</h2>
+            <div class="marketing-plan">
+                <h3>Buying Profile Categories</h3>
+                <div class="strategy-card">
+                    <h4>Analytical Buyers (25% of prospects)</h4>
+                    <p>• Require detailed ROI analysis and case studies</p>
+                    <p>• Need performance data and competitor comparisons</p>
+                    <p>• Want trial periods or samples before commitment</p>
+                    <p><strong>Strategy:</strong> Provide technical specifications, cost-benefit analysis, and proof-of-concept materials</p>
+                </div>
+                <div class="strategy-card">
+                    <h4>Relationship Buyers (35% of prospects)</h4>
+                    <p>• Value trust, referrals, and long-term partnerships</p>
+                    <p>• Prefer face-to-face meetings and personal connections</p>
+                    <p>• Make decisions based on vendor reliability</p>
+                    <p><strong>Strategy:</strong> Focus on testimonials, referrals, and building personal relationships</p>
+                </div>
+                <div class="strategy-card">
+                    <h4>Efficiency Buyers (25% of prospects)</h4>
+                    <p>• Focus on time-saving and process improvement</p>
+                    <p>• Want streamlined ordering and quick turnaround</p>
+                    <p>• Value automation and workflow optimization</p>
+                    <p><strong>Strategy:</strong> Emphasize speed, convenience, and operational benefits</p>
+                </div>
+                <div class="strategy-card">
+                    <h4>Innovation Buyers (15% of prospects)</h4>
+                    <p>• Seek cutting-edge solutions and competitive advantage</p>
+                    <p>• Early adopters of new technology</p>
+                    <p>• Willing to pay premium for advanced features</p>
+                    <p><strong>Strategy:</strong> Showcase latest technologies like Dimense 3D printing and holographic materials</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Listening Tab -->
+        <div id="listening" class="tab-content">
+            <h2>Listening - Feedback Integration</h2>
+            <div class="marketing-plan">
+                <h3>Feedback Tracking System</h3>
+                <div class="strategy-card">
+                    <h4>Pre-Sale Feedback Collection</h4>
+                    <p>• Initial needs assessment surveys</p>
+                    <p>• Pain point identification calls</p>
+                    <p>• Current workflow analysis</p>
+                    <p>• Budget and timeline discussions</p>
+                </div>
+                <div class="strategy-card">
+                    <h4>During-Sale Progress Tracking</h4>
+                    <p>• Regular check-ins during quote process</p>
+                    <p>• Sample approval feedback</p>
+                    <p>• Project milestone updates</p>
+                    <p>• Delivery and installation feedback</p>
+                </div>
+                <div class="strategy-card">
+                    <h4>Post-Sale Satisfaction Monitoring</h4>
+                    <p>• 30-day follow-up satisfaction survey</p>
+                    <p>• Quarterly business review meetings</p>
+                    <p>• Annual account health assessments</p>
+                    <p>• Upselling opportunity identification</p>
+                </div>
+                <div class="strategy-card">
+                    <h4>Real-time Complaint Resolution</h4>
+                    <p>• 24-hour response guarantee</p>
+                    <p>• Escalation procedures for critical issues</p>
+                    <p>• Root cause analysis and prevention</p>
+                    <p>• Service recovery protocols</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Empowering Tab -->
+        <div id="empowering" class="tab-content">
+            <h2>Empowering - Referral Strategy</h2>
+            <div class="marketing-plan">
+                <h3>Client Advocacy Program</h3>
+                <div class="strategy-card">
+                    <h4>Success Story Documentation</h4>
+                    <p>• Case study development process</p>
+                    <p>• Before/after project showcases</p>
+                    <p>• ROI and efficiency improvement documentation</p>
+                    <p>• Client testimonial video creation</p>
+                </div>
+                <div class="strategy-card">
+                    <h4>Referral Reward System</h4>
+                    <p>• 5% credit for successful referrals</p>
+                    <p>• Tiered rewards based on referral value</p>
+                    <p>• Annual top referrer recognition program</p>
+                    <p>• Exclusive access to new products/technologies</p>
+                </div>
+                <div class="strategy-card">
+                    <h4>Co-Marketing Opportunities</h4>
+                    <p>• Joint trade show participation</p>
+                    <p>• Collaborative content marketing</p>
+                    <p>• Cross-promotional campaigns</p>
+                    <p>• Industry event speaking opportunities</p>
+                </div>
+                <div class="strategy-card">
+                    <h4>Marketing Schedule & Implementation</h4>
+                    <p><strong>Week 1-2:</strong> Launch P.U.R.E.S. assessment for all prospects</p>
+                    <p><strong>Week 3-4:</strong> Segment clients by buying patterns and customize outreach</p>
+                    <p><strong>Month 2:</strong> Implement feedback collection systems</p>
+                    <p><strong>Month 3:</strong> Launch referral program and success story campaign</p>
+                    <p><strong>Ongoing:</strong> Monthly review and optimization of S.A.L.E. metrics</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports">
+        <p style="color: #CF2030; margin-top: 10px;">© 2025 Higgins Reports - S.A.L.E. System Implementation</p>
+    </div>
+
+    <script>
+        // Sample client data for La Habra area
+        const clientData = [
+            ["ABC Print Solutions", "contact@abcprint.com", "(714) 555-0101", "123 Main St, La Habra, CA 90631", "4.2", "1A", "Print Shop", "$500K", "New", "2024-01-15", "Send samples", "tier-1a"],
+            ["Creative Marketing Group", "info@creativemktg.com", "(562) 555-0102", "456 Oak Ave, Whittier, CA 90602", "4.0", "1A", "Marketing Agency", "$750K", "Contacted", "2024-01-20", "Follow-up call", "tier-1a"],
+            ["Metro Sign Company", "orders@metrosign.com", "(714) 555-0103", "789 Pine St, Fullerton, CA 92831", "3.8", "1B", "Retail", "$300K", "New", "2024-01-10", "Initial contact", "tier-1b"],
+            ["Quick Copy Center", "manager@quickcopy.com", "(562) 555-0104", "321 Elm St, La Mirada, CA 90638", "3.6", "1B", "Print Shop", "$200K", "Negotiating", "2024-01-25", "Send quote", "tier-1b"],
+            ["Design Studio Plus", "hello@designplus.com", "(714) 555-0105", "654 Cedar Rd, Brea, CA 92821", "4.4", "1A", "Marketing Agency", "$600K", "New", "", "Research", "tier-1a"],
+            ["Local Retail Chain", "purchasing@localchain.com", "(562) 555-0106", "987 Maple Dr, Norwalk, CA 90650", "3.4", "1C", "Retail", "$150K", "Cold", "2024-01-08", "Cold outreach", "tier-1c"],
+            ["Tech Startup Hub", "ops@techstartup.com", "(714) 555-0107", "147 Birch Ln, La Habra Heights, CA 90631", "4.6", "1A", "Technology", "$800K", "Warm", "2024-01-30", "Demo scheduled", "tier-1a"],
+            ["Medical Office Group", "admin@medgroup.com", "(562) 555-0108", "258 Spruce St, Hacienda Heights, CA 91745", "3.2", "1C", "Healthcare", "$100K", "New", "", "Qualify", "tier-1c"],
+            ["Auto Dealership Network", "marketing@autodealer.com", "(714) 555-0109", "369 Palm Ave, Yorba Linda, CA 92886", "3.8", "1B", "Automotive", "$400K", "Contacted", "2024-01-18", "Proposal review", "tier-1b"],
+            ["Real Estate Office", "info@realestate.com", "(562) 555-0110", "741 Willow Way, Diamond Bar, CA 91765", "3.6", "1B", "Real Estate", "$250K", "Negotiating", "2024-01-22", "Contract terms", "tier-1b"],
+            ["Educational Services", "procurement@eduservices.com", "(714) 555-0111", "852 Ash St, Placentia, CA 92870", "4.0", "1A", "Education", "$450K", "New", "", "Needs assessment", "tier-1a"],
+            ["Manufacturing Corp", "supplies@mfgcorp.com", "(562) 555-0112", "963 Poplar Rd, Rowland Heights, CA 91748", "4.2", "1A", "Manufacturing", "$700K", "Warm", "2024-01-28", "Site visit", "tier-1a"],
+            ["Fitness Center Chain", "operations@fitness.com", "(714) 555-0113", "159 Hickory Dr, Anaheim Hills, CA 92808", "3.4", "1C", "Retail", "$180K", "Cold", "", "Initial research", "tier-1c"],
+            ["Restaurant Group", "corporate@restaurant.com", "(562) 555-0114", "357 Magnolia St, Buena Park, CA 90620", "3.8", "1B", "Food Service", "$320K", "Contacted", "2024-01-16", "Menu printing quote", "tier-1b"],
+            ["Law Firm Alliance", "admin@lawfirm.com", "(714) 555-0115", "468 Sycamore Ave, Fullerton, CA 92832", "3.6", "1B", "Legal", "$280K", "New", "", "Document needs", "tier-1b"],
+            ["Dental Practice Group", "office@dental.com", "(562) 555-0116", "579 Redwood St, La Palma, CA 90623", "3.2", "1C", "Healthcare", "$120K", "Cold", "2024-01-05", "Follow-up needed", "tier-1c"],
+            ["Consulting Services", "contact@consulting.com", "(714) 555-0117", "680 Fir St, Cypress, CA 90630", "4.4", "1A", "Professional Services", "$550K", "Warm", "2024-02-01", "Proposal presentation", "tier-1a"],
+            ["Nonprofit Organization", "development@nonprofit.org", "(562) 555-0118", "791 Pine Crest Dr, Cerritos, CA 90703", "3.0", "1C", "Nonprofit", "$80K", "New", "", "Budget discussion", "tier-1c"],
+            ["Insurance Agency", "info@insurance.com", "(714) 555-0119", "802 Oak Hill Rd, Chino Hills, CA 91709", "3.6", "1B", "Financial Services", "$220K", "Contacted", "2024-01-12", "Brochure samples", "tier-1b"],
+            ["Event Planning Co", "events@planning.com", "(562) 555-0120", "913 Maple Creek Way, West Covina, CA 91790", "4.0", "1A", "Event Services", "$400K", "Negotiating", "2024-01-26", "Contract finalization", "tier-1a"],
+            ["Hardware Store Chain", "purchasing@hardware.com", "(714) 555-0121", "124 Cedar Point Dr, Orange, CA 92869", "3.4", "1C", "Retail", "$160K", "Cold", "", "Store visit", "tier-1c"],
+            ["Beauty Salon Group", "corporate@beauty.com", "(562) 555-0122", "235 Birch Valley Rd, Walnut, CA 91789", "3.8", "1B", "Personal Services", "$300K", "New", "", "Marketing materials", "tier-1b"],
+            ["Veterinary Clinics", "admin@vetclinic.com", "(714) 555-0123", "346 Spruce Mountain Ave, Anaheim, CA 92807", "3.2", "1C", "Healthcare", "$140K", "Cold", "2024-01-03", "Reactivation call", "tier-1c"],
+            ["Construction Company", "office@construction.com", "(562) 555-0124", "457 Palm Desert Ln, Industry, CA 91746", "4.2", "1A", "Construction", "$650K", "Warm", "2024-01-29", "Safety signage quote", "tier-1a"],
+            ["Cleaning Services", "dispatch@cleaning.com", "(714) 555-0125", "568 Willow Brook St, Villa Park, CA 92861", "3.6", "1B", "Commercial Services", "$240K", "Contacted", "2024-01-14", "Uniform printing", "tier-1b"],
+            ["Security Systems", "sales@security.com", "(562) 555-0126", "679 Ash Creek Dr, Pico Rivera, CA 90660", "4.0", "1A", "Security", "$480K", "New", "", "Decal requirements", "tier-1a"],
+            ["Catering Business", "orders@catering.com", "(714) 555-0127", "780 Poplar Springs Rd, Tustin, CA 92780", "3.4", "1C", "Food Service", "$170K", "Cold", "", "Menu design", "tier-1c"],
+            ["Transportation Co", "logistics@transport.com", "(562) 555-0128", "891 Hickory Heights Way, Montebello, CA 90640", "3.8", "1B", "Transportation", "$350K", "Contacted", "2024-01-19", "Vehicle graphics", "tier-1b"],
+            ["Spa & Wellness", "info@spawellness.com", "(714) 555-0129", "902 Magnolia Meadows Dr, Irvine, CA 92602", "3.6", "1B", "Personal Services", "$260K", "Negotiating", "2024-01-23", "Package design", "tier-1b"],
+            ["Pet Store Chain", "corporate@petstore.com", "(562) 555-0130", "113 Sycamore Ridge Ave, Santa Fe Springs, CA 90670", "3.2", "1C", "Retail", "$130K", "New", "", "Signage needs", "tier-1c"],
+            ["Pharmacy Group", "management@pharmacy.com", "(714) 555-0131", "224 Redwood Valley St, Costa Mesa, CA 92627", "4.4", "1A", "Healthcare", "$520K", "Warm", "2024-02-02", "Label printing", "tier-1a"],
+            ["Garden Center", "orders@garden.com", "(562) 555-0132", "335 Fir Mountain Rd, El Monte, CA 91731", "3.0", "1C", "Retail", "$90K", "Cold", "", "Plant labels", "tier-1c"],
+            ["Accounting Firm", "admin@accounting.com", "(714) 555-0133", "446 Pine Forest Dr, Fountain Valley, CA 92708", "3.8", "1B", "Professional Services", "$310K", "Contacted", "2024-01-11", "Tax form printing", "tier-1b"],
+            ["Childcare Center", "director@childcare.com", "(562) 555-0134", "557 Oak Grove Way, Temple City, CA 91780", "3.4", "1C", "Education", "$150K", "New", "", "Educational materials", "tier-1c"],
+            ["Music Store", "info@musicstore.com", "(714) 555-0135", "668 Maple Ridge Ave, Huntington Beach, CA 92646", "3.6", "1B", "Retail", "$200K", "Cold", "2024-01-07", "Band promotional", "tier-1b"],
+            ["Bakery Chain", "corporate@bakery.com", "(562) 555-0136", "779 Cedar Canyon Rd, Arcadia, CA 91007", "4.0", "1A", "Food Service", "$420K", "Negotiating", "2024-01-27", "Packaging design", "tier-1a"],
+            ["Optometry Office", "reception@optometry.com", "(714) 555-0137", "880 Birch Harbor Dr, Newport Beach, CA 92660", "3.2", "1C", "Healthcare", "$110K", "Cold", "", "Eye chart printing", "tier-1c"],
+            ["Florist Network", "orders@florist.com", "(562) 555-0138", "991 Spruce Lake St, Alhambra, CA 91801", "3.8", "1B", "Retail", "$280K", "New", "", "Delivery signage", "tier-1b"],
+            ["Wine Shop", "manager@wineshop.com", "(714) 555-0139", "102 Palm Coast Ave, Laguna Beach, CA 92651", "3.6", "1B", "Retail", "$230K", "Contacted", "2024-01-13", "Wine labels", "tier-1b"],
+            ["Urgent Care", "admin@urgentcare.com", "(562) 555-0140", "213 Willow Park Dr, San Gabriel, CA 91776", "4.2", "1A", "Healthcare", "$580K", "Warm", "2024-01-31", "Wayfinding signs", "tier-1a"],
+            ["Coffee Shop Chain", "corporate@coffee.com", "(714) 555-0141", "324 Ash Valley Rd, Mission Viejo, CA 92691", "3.4", "1C", "Food Service", "$160K", "Cold", "", "Menu boards", "tier-1c"],
+            ["Yoga Studio", "info@yogastudio.com", "(562) 555-0142", "435 Poplar Beach Way, Pasadena, CA 91101", "3.0", "1C", "Personal Services", "$85K", "New", "", "Class schedules", "tier-1c"],
+            ["Auto Repair", "service@autorepair.com", "(714) 555-0143", "546 Hickory Cove St, Aliso Viejo, CA 92656", "3.8", "1B", "Automotive", "$320K", "Contacted", "2024-01-17", "Service banners", "tier-1b"],
+            ["Jewelry Store", "sales@jewelry.com", "(562) 555-0144", "657 Magnolia Park Ave, South Pasadena, CA 91030", "3.6", "1B", "Retail", "$250K", "Negotiating", "2024-01-24", "Display materials", "tier-1b"],
+            ["Dance Studio", "admin@dancestudio.com", "(714) 555-0145", "768 Sycamore Bay Dr, Lake Forest, CA 92630", "3.2", "1C", "Education", "$120K", "New", "", "Recital programs", "tire-1c"],
+            ["Electronics Store", "manager@electronics.com", "(562) 555-0146", "879 Redwood Shore Rd, Monterey Park, CA 91754", "4.0", "1A", "Retail", "$460K", "Warm", "2024-02-03", "Product displays", "tier-1a"],
+            ["Martial Arts Dojo", "sensei@martialarts.com", "(714) 555-0147", "980 Fir Point Way, Rancho Santa Margarita, CA 92688", "3.4", "1C", "Personal Services", "$140K", "Cold", "", "Belt certificates", "tier-1c"],
+            ["Bookstore Cafe", "info@bookstore.com", "(562) 555-0148", "191 Pine Harbor Ave, Rosemead, CA 91770", "3.6", "1B", "Retail", "$210K", "New", "", "Author event signs", "tier-1b"],
+            ["Tutoring Center", "director@tutoring.com", "(714) 555-0149", "202 Oak Beach Dr, Trabuco Canyon, CA 92679", "3.8", "1B", "Education", "$290K", "Contacted", "2024-01-21", "Study materials", "tier-1b"],
+            ["Thrift Store", "manager@thrift.com", "(562) 555-0150", "313 Cedar Shore St, San Marino, CA 91108", "3.0", "1C", "Retail", "$95K", "Cold", "", "Price tags", "tier-1c"]
+        ];
+
+        let currentData = [...clientData];
+        let sortDirection = 1;
+
+        // Initialize the table
+        function initializeTable() {
+            const tbody = document.getElementById('clientTableBody');
+            tbody.innerHTML = '';
+            
+            currentData.forEach((row, index) => {
+                const tr = document.createElement('tr');
+                tr.className = row[12]; // Tier class for styling
+                
+                tr.innerHTML = `
+                    <td>${row[0]}</td>
+                    <td>${row[1]}</td>
+                    <td>${row[2]}</td>
+                    <td>${row[3]}</td>
+                    <td>${row[4]}</td>
+                    <td>${row[5]}</td>
+                    <td>${row[6]}</td>
+                    <td>${row[7]}</td>
+                    <td>${row[8]}</td>
+                    <td>${row[9]}</td>
+                    <td>${row[10]}</td>
+                    <td>
+                        <button class="contact-btn" onclick="contactClient('email', ${index})">Email</button>
+                        <button class="contact-btn" onclick="contactClient('phone', ${index})">Call</button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // Filter table function
+        function filterTable() {
+            const nameFilter = document.getElementById('searchName').value.toLowerCase();
+            const emailFilter = document.getElementById('searchEmail').value.toLowerCase();
+            const tierFilter = document.getElementById('tierFilter').value;
+            const industryFilter = document.getElementById('industryFilter').value;
+
+            currentData = clientData.filter(row => {
+                const nameMatch = row[0].toLowerCase().includes(nameFilter);
+                const emailMatch = row[1].toLowerCase().includes(emailFilter);
+                const tierMatch = tierFilter === '' || row[5] === tierFilter;
+                const industryMatch = industryFilter === '' || row[6] === industryFilter;
+                
+                return nameMatch && emailMatch && tierMatch && industryMatch;
+            });
+
+            initializeTable();
+        }
+
+        // Sort table function
+        function sortTable(columnIndex) {
+            currentData.sort((a, b) => {
+                const aVal = a[columnIndex];
+                const bVal = b[columnIndex];
+                
+                if (columnIndex === 4) { // P.U.R.E.S. Score column
+                    return sortDirection * (parseFloat(aVal) - parseFloat(bVal));
+                }
+                
+                if (aVal < bVal) return -1 * sortDirection;
+                if (aVal > bVal) return 1 * sortDirection;
+                return 0;
+            });
+            
+            sortDirection *= -1;
+            initializeTable();
+        }
+
+        // Contact client function
+        function contactClient(type, index) {
+            const client = currentData[index];
+            const clientName = client[0];
+            const clientEmail = client[1];
+            const clientPhone = client[2];
+            
+            if (type === 'email') {
+                const subject = `Transform Your Print Production with The Bigfish Digital Solutions`;
+                const body = `Dear ${clientName} Team,
+
+I hope this message finds you well. I'm Josh Cormany from The Bigfish Digital, and I wanted to reach out because I believe we can significantly enhance your print production capabilities and help you achieve better results while reducing costs.
+
+Based on your business profile, here's how we can help:
+
+🎯 PREMIUM PRINT SOLUTIONS FOR YOUR BUSINESS:
+• Wide-Format HP Latex Printers (64" with white ink capability)
+• Revolutionary Dimense 3D Printing Technology - the only printer capable of creating 3D imaging on paper on-demand
+• Extensive vinyl collection including holographic, specialty adhesives, and window materials
+• Professional lamination and finishing solutions
+
+💡 WHY PARTNER WITH THE BIGFISH DIGITAL:
+• 27+ years of industry expertise and innovation
+• Unbiased, honest advice you can trust
+• "If it exists, I can find it" - comprehensive material sourcing
+• Sustainable, eco-friendly latex ink technology
+• Competitive pricing with superior quality
+
+🚀 SPECIAL OPPORTUNITIES FOR ${clientName.toUpperCase()}:
+• Free consultation and needs assessment
+• Sample materials at no cost
+• Custom application development for your unique requirements
+• Training and ongoing support included
+
+Our clients typically see 20-40% cost savings while improving print quality and expanding their service offerings. We've helped businesses just like yours transform their operations and increase profitability.
+
+I'd love to discuss how we can specifically help ${clientName} achieve your goals. Would you be available for a brief 15-minute call this week to explore the possibilities?
+
+Best regards,
+
+Josh Cormany
+The Bigfish Digital
+Phone: (714) 878-7989
+Email: josh@thebigfishdigital.com
+Website: https://thebigfishdigital.com
+
+P.S. Ask me about our exclusive Dimense 3D printing technology - it's revolutionizing the wallpaper and interior design markets, and the opportunities are incredible!`;
+
+                const mailtoLink = `mailto:${clientEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+                window.open(mailtoLink);
+                
+            } else if (type === 'phone') {
+                alert(`Calling ${clientName} at ${clientPhone}\n\nKey talking points:\n- 27 years industry experience\n- Innovative Dimense 3D printing technology\n- Cost savings of 20-40% typical\n- Free consultation and samples\n- HP Latex sustainable printing solutions`);
+            }
+        }
+
+        // P.U.R.E.S. rating system
+        document.addEventListener('DOMContentLoaded', function() {
+            const ratingGroups = document.querySelectorAll('.rating-stars');
+            
+            ratingGroups.forEach(group => {
+                const stars = group.querySelectorAll('.star');
+                stars.forEach(star => {
+                    star.addEventListener('click', function() {
+                        const rating = this.dataset.value;
+                        const groupName = group.dataset.rating;
+                        
+                        // Reset all stars in this group
+                        stars.forEach(s => s.classList.remove('active'));
+                        
+                        // Activate stars up to selected rating
+                        for (let i = 0; i < rating; i++) {
+                            stars[i].classList.add('active');
+                        }
+                        
+                        // Store the rating
+                        group.dataset.currentRating = rating;
+                    });
+                });
+            });
+        });
+
+        // Calculate P.U.R.E.S. score
+        function calculatePures() {
+            const ratings = {};
+            const ratingGroups = document.querySelectorAll('.rating-stars');
+            
+            ratingGroups.forEach(group => {
+                const rating = group.dataset.currentRating || 0;
+                ratings[group.dataset.rating] = parseInt(rating);
+            });
+            
+            const totalScore = (ratings.profitability + ratings.urgency + ratings.reachability + 
+                             ratings.engagement + ratings.sustainability) / 5;
+            
+            let tier;
+            if (totalScore >= 4.0) tier = '1A (Premium)';
+            else if (totalScore >= 3.0) tier = '1B (High-Value)';
+            else tier = '1C (Qualified)';
+            
+            alert(`P.U.R.E.S. Score: ${totalScore.toFixed(1)}\nTier Classification: ${tier}\n\nBreakdown:\nProfitability: ${ratings.profitability || 0}\nUrgency: ${ratings.urgency || 0}\nReachability: ${ratings.reachability || 0}\nEngagement: ${ratings.engagement || 0}\nSustainability: ${ratings.sustainability || 0}`);
+        }
+
+        // Tab switching
+        function showTab(tabName) {
+            // Hide all tab contents
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabContents.forEach(content => content.classList.remove('active'));
+            
+            // Remove active class from all tabs
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Show selected tab content and mark tab as active
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // Export functions
+        function exportToCSV() {
+            const headers = ['Client Name', 'Email', 'Phone', 'Address', 'P.U.R.E.S. Score', 'Tier Level', 'Industry', 'Revenue Estimate', 'Contact Status', 'Last Contact', 'Next Action'];
+            const csvContent = [headers.join(','), ...currentData.map(row => row.slice(0, 11).join(','))].join('\n');
+            
+            const blob = new Blob([csvContent], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'bigfish_digital_prospects.csv';
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+
+        function exportToPDF() {
+            alert('PDF export functionality would integrate with a library like jsPDF. For now, please use the CSV export or print this page.');
+        }
+
+        // Initialize the table on page load
+        initializeTable();
+    </script>
+</body>
+</html>

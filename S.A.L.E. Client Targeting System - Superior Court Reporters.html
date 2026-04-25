@@ -1,0 +1,882 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>S.A.L.E. Client Targeting System - Superior Court Reporters</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #000;
+            color: #fff;
+            line-height: 1.6;
+        }
+        
+        .header {
+            background-color: #000;
+            padding: 20px 0;
+            border-bottom: 2px solid #CF2030;
+            text-align: center;
+        }
+        
+        .logo {
+            max-height: 80px;
+            width: auto;
+        }
+        
+        .nav {
+            background-color: #CF2030;
+            padding: 15px 0;
+        }
+        
+        .nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .nav li {
+            margin: 0 20px;
+        }
+        
+        .nav a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 10px 15px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        
+        .nav a:hover, .nav a.active {
+            background-color: rgba(255,255,255,0.2);
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .module {
+            background-color: #1a1a1a;
+            border: 1px solid #CF2030;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .module h2 {
+            color: #CF2030;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+        
+        .module h3 {
+            color: #CF2030;
+            margin: 15px 0 10px 0;
+            font-size: 1.2em;
+        }
+        
+        .pures-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .score-input {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .score-input label {
+            margin-bottom: 5px;
+            color: #ccc;
+        }
+        
+        .score-input input {
+            padding: 8px;
+            border: 1px solid #CF2030;
+            border-radius: 5px;
+            background-color: #333;
+            color: #fff;
+        }
+        
+        .client-table {
+            background-color: #1a1a1a;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 20px;
+        }
+        
+        .table-controls {
+            padding: 15px;
+            background-color: #2a2a2a;
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .search-box {
+            flex: 1;
+            min-width: 200px;
+            padding: 8px;
+            border: 1px solid #CF2030;
+            border-radius: 5px;
+            background-color: #333;
+            color: #fff;
+        }
+        
+        .filter-select {
+            padding: 8px;
+            border: 1px solid #CF2030;
+            border-radius: 5px;
+            background-color: #333;
+            color: #fff;
+            min-width: 150px;
+        }
+        
+        .btn {
+            background-color: #CF2030;
+            color: #fff;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        
+        .btn:hover {
+            background-color: #b01c28;
+        }
+        
+        .btn-small {
+            padding: 5px 10px;
+            font-size: 0.9em;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #1a1a1a;
+        }
+        
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #333;
+        }
+        
+        th {
+            background-color: #CF2030;
+            color: #fff;
+            font-weight: bold;
+            cursor: pointer;
+            user-select: none;
+        }
+        
+        th:hover {
+            background-color: #b01c28;
+        }
+        
+        tr:hover {
+            background-color: #2a2a2a;
+        }
+        
+        .tier-1a { color: #4CAF50; }
+        .tier-1b { color: #FF9800; }
+        .tier-1c { color: #2196F3; }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+        }
+        
+        .modal-content {
+            background-color: #1a1a1a;
+            margin: 5% auto;
+            padding: 20px;
+            border: 2px solid #CF2030;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 600px;
+            color: #fff;
+        }
+        
+        .close {
+            color: #CF2030;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .close:hover {
+            color: #fff;
+        }
+        
+        .email-template {
+            background-color: #2a2a2a;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+        
+        textarea {
+            width: 100%;
+            height: 200px;
+            padding: 10px;
+            border: 1px solid #CF2030;
+            border-radius: 5px;
+            background-color: #333;
+            color: #fff;
+            resize: vertical;
+        }
+        
+        .footer {
+            background-color: #1a1a1a;
+            border-top: 2px solid #CF2030;
+            padding: 20px 0;
+            text-align: center;
+            margin-top: 40px;
+        }
+        
+        .footer-logo {
+            max-height: 40px;
+            width: auto;
+            margin-bottom: 10px;
+        }
+        
+        .metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .metric-card {
+            background-color: #2a2a2a;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            border-left: 4px solid #CF2030;
+        }
+        
+        .metric-value {
+            font-size: 2em;
+            font-weight: bold;
+            color: #CF2030;
+        }
+        
+        .metric-label {
+            color: #ccc;
+            font-size: 0.9em;
+        }
+        
+        @media (max-width: 768px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .table-controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .nav ul {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .nav li {
+                margin: 5px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports" class="logo">
+    </header>
+    
+    <nav class="nav">
+        <ul>
+            <li><a href="#sourcing" class="active">Sourcing</a></li>
+            <li><a href="#assessing">Assessing</a></li>
+            <li><a href="#listening">Listening</a></li>
+            <li><a href="#empowering">Empowering</a></li>
+            <li><a href="#clients">Client Database</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <h1>S.A.L.E. Client Targeting System</h1>
+        <p style="color: #ccc; margin-bottom: 30px;">Superior Court Reporters - Santa Clara County | Comprehensive Legal Services Client Management</p>
+        
+        <div class="metrics">
+            <div class="metric-card">
+                <div class="metric-value">50</div>
+                <div class="metric-label">Total Prospects</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value">15</div>
+                <div class="metric-label">Tier 1A Prospects</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value">85%</div>
+                <div class="metric-label">Contact Success Rate</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value">$2.3M</div>
+                <div class="metric-label">Pipeline Value</div>
+            </div>
+        </div>
+
+        <div class="dashboard-grid">
+            <!-- SOURCING Module -->
+            <div class="module" id="sourcing">
+                <h2>🎯 SOURCING - P.U.R.E.S. Client Scoring</h2>
+                <div class="pures-form">
+                    <div class="score-input">
+                        <label>Profitability (1-5):</label>
+                        <input type="range" min="1" max="5" value="3" id="profitability">
+                        <span id="prof-value">3</span>
+                    </div>
+                    <div class="score-input">
+                        <label>Urgency (1-5):</label>
+                        <input type="range" min="1" max="5" value="3" id="urgency">
+                        <span id="urg-value">3</span>
+                    </div>
+                    <div class="score-input">
+                        <label>Reachability (1-5):</label>
+                        <input type="range" min="1" max="5" value="3" id="reachability">
+                        <span id="reach-value">3</span>
+                    </div>
+                    <div class="score-input">
+                        <label>Engagement (1-5):</label>
+                        <input type="range" min="1" max="5" value="3" id="engagement">
+                        <span id="eng-value">3</span>
+                    </div>
+                    <div class="score-input">
+                        <label>Sustainability (1-5):</label>
+                        <input type="range" min="1" max="5" value="3" id="sustainability">
+                        <span id="sust-value">3</span>
+                    </div>
+                    <div class="score-input">
+                        <label>Total P.U.R.E.S. Score:</label>
+                        <div id="total-score" style="font-size: 1.5em; color: #CF2030; font-weight: bold;">15</div>
+                    </div>
+                </div>
+                
+                <h3>Tier Classification:</h3>
+                <ul style="color: #ccc;">
+                    <li><span class="tier-1a">Tier 1A (Premium):</span> 20-25 points - Large law firms, corporate legal</li>
+                    <li><span class="tier-1b">Tier 1B (High-Value):</span> 15-19 points - Mid-size practices</li>
+                    <li><span class="tier-1c">Tier 1C (Qualified):</span> 10-14 points - Solo practitioners, small firms</li>
+                </ul>
+            </div>
+
+            <!-- ASSESSING Module -->
+            <div class="module" id="assessing">
+                <h2>📊 ASSESSING - Buying Pattern Analysis</h2>
+                <h3>Client Buying Profiles:</h3>
+                <div style="color: #ccc;">
+                    <p><strong>Analytical Buyers:</strong> Require detailed ROI analysis, case studies, service comparisons</p>
+                    <p><strong>Relationship Buyers:</strong> Value trust, referrals, long-term partnerships</p>
+                    <p><strong>Efficiency Buyers:</strong> Focus on time-saving, streamlined processes</p>
+                    <p><strong>Innovation Buyers:</strong> Seek cutting-edge technology, competitive advantages</p>
+                </div>
+                
+                <h3>Assessment Tools:</h3>
+                <button class="btn" onclick="openModal('decisionModal')">Decision Timeline Analyzer</button>
+                <button class="btn" onclick="openModal('stakeholderModal')">Stakeholder Mapping</button>
+                <button class="btn" onclick="openModal('valueModal')">Value Proposition Matrix</button>
+            </div>
+        </div>
+
+        <div class="dashboard-grid">
+            <!-- LISTENING Module -->
+            <div class="module" id="listening">
+                <h2>👂 LISTENING - Feedback Integration</h2>
+                <h3>Feedback Tracking System:</h3>
+                <ul style="color: #ccc;">
+                    <li>Pre-consultation feedback collection</li>
+                    <li>During-service progress tracking</li>
+                    <li>Post-service satisfaction monitoring</li>
+                    <li>Real-time issue resolution protocols</li>
+                </ul>
+                <button class="btn">Track Client Feedback</button>
+                <button class="btn">Generate Satisfaction Report</button>
+            </div>
+
+            <!-- EMPOWERING Module -->
+            <div class="module" id="empowering">
+                <h2>🚀 EMPOWERING - Referral Strategy</h2>
+                <h3>Referral Management:</h3>
+                <ul style="color: #ccc;">
+                    <li>Success story documentation system</li>
+                    <li>Referral reward tracking</li>
+                    <li>Client advocacy program management</li>
+                    <li>Co-marketing opportunity planning</li>
+                </ul>
+                <button class="btn">Launch Referral Campaign</button>
+                <button class="btn">Track Referral ROI</button>
+            </div>
+        </div>
+
+        <!-- Client Database -->
+        <div class="client-table" id="clients">
+            <div class="table-controls">
+                <input type="text" class="search-box" id="searchInput" placeholder="Search clients...">
+                <select class="filter-select" id="tierFilter">
+                    <option value="">All Tiers</option>
+                    <option value="1A">Tier 1A</option>
+                    <option value="1B">Tier 1B</option>
+                    <option value="1C">Tier 1C</option>
+                </select>
+                <select class="filter-select" id="statusFilter">
+                    <option value="">All Status</option>
+                    <option value="New">New</option>
+                    <option value="Contacted">Contacted</option>
+                    <option value="Qualified">Qualified</option>
+                    <option value="Proposal">Proposal</option>
+                </select>
+                <button class="btn" onclick="exportData()">Export CSV</button>
+            </div>
+            
+            <table id="clientTable">
+                <thead>
+                    <tr>
+                        <th onclick="sortTable(0)">Client Name</th>
+                        <th onclick="sortTable(1)">Email</th>
+                        <th onclick="sortTable(2)">Phone</th>
+                        <th onclick="sortTable(3)">Address</th>
+                        <th onclick="sortTable(4)">P.U.R.E.S. Score</th>
+                        <th onclick="sortTable(5)">Tier</th>
+                        <th onclick="sortTable(6)">Law Firm</th>
+                        <th onclick="sortTable(7)">Est. Revenue</th>
+                        <th onclick="sortTable(8)">Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="clientTableBody">
+                    <!-- Client data will be populated here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Email Modal -->
+    <div id="emailModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('emailModal')">&times;</span>
+            <h2>Send Email to <span id="emailClientName"></span></h2>
+            <div class="email-template">
+                <label for="emailSubject">Subject:</label>
+                <input type="text" id="emailSubject" value="Superior Court Reporting Services - Exclusive Offer for Legal Professionals">
+                
+                <label for="emailBody">Email Body:</label>
+                <textarea id="emailBody"></textarea>
+                
+                <button class="btn" onclick="sendEmail()">Send Email</button>
+                <button class="btn" onclick="closeModal('emailModal')">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Decision Timeline Modal -->
+    <div id="decisionModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('decisionModal')">&times;</span>
+            <h2>Decision Timeline Analyzer</h2>
+            <p>Typical decision timelines for legal services:</p>
+            <ul>
+                <li><strong>Court Reporting:</strong> 1-3 days (urgent cases)</li>
+                <li><strong>War Room Rental:</strong> 1-7 days (trial preparation)</li>
+                <li><strong>Ongoing Services:</strong> 2-4 weeks (contract negotiations)</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Stakeholder Mapping Modal -->
+    <div id="stakeholderModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('stakeholderModal')">&times;</span>
+            <h2>Stakeholder Mapping Interface</h2>
+            <p>Key decision makers in legal firms:</p>
+            <ul>
+                <li><strong>Partners:</strong> Final budget approval</li>
+                <li><strong>Trial Attorneys:</strong> Service requirements</li>
+                <li><strong>Office Managers:</strong> Vendor coordination</li>
+                <li><strong>Paralegals:</strong> Day-to-day usage</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Value Proposition Modal -->
+    <div id="valueModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('valueModal')">&times;</span>
+            <h2>Value Proposition Alignment Matrix</h2>
+            <p>Key value propositions for legal professionals:</p>
+            <ul>
+                <li><strong>Proximity:</strong> Steps from Santa Clara Courthouse</li>
+                <li><strong>Technology:</strong> Real-time reporting and digital services</li>
+                <li><strong>Reliability:</strong> Certified court reporters</li>
+                <li><strong>Convenience:</strong> 24/7 access, full amenities</li>
+                <li><strong>Efficiency:</strong> Streamlined trial preparation</li>
+            </ul>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports" class="footer-logo">
+        <p>&copy; 2026 Superior Court Reporters. All Rights Reserved.</p>
+        <p>111 N. Market Street, Suite 414, San Jose, CA 95113 | (669) 353-3090</p>
+    </footer>
+
+    <script>
+        // Client data - 50 legal professionals within 10 miles of San Jose, CA
+        const clientData = [
+            ["Michael Chen", "mchen@chenlegalgroup.com", "(408) 555-0101", "250 W Santa Clara St, San Jose, CA 95113", 23, "1A", "Chen Legal Group", "$2M", "New"],
+            ["Sarah Williams", "swilliams@williamslawfirm.com", "(408) 555-0102", "180 E Santa Clara St, San Jose, CA 95113", 22, "1A", "Williams Law Firm", "$1.8M", "Contacted"],
+            ["Robert Martinez", "rmartinez@martinezassociates.com", "(408) 555-0103", "95 S Market St, San Jose, CA 95113", 21, "1A", "Martinez & Associates", "$1.5M", "Qualified"],
+            ["Jennifer Thompson", "jthompson@tglaw.com", "(408) 555-0104", "333 W Santa Clara St, San Jose, CA 95113", 24, "1A", "Thompson & Garcia", "$2.2M", "Proposal"],
+            ["David Rodriguez", "drodriguez@rodriguezpc.com", "(408) 555-0105", "150 Almaden Blvd, San Jose, CA 95113", 20, "1A", "Rodriguez PC", "$1.2M", "New"],
+            ["Lisa Anderson", "landerson@andersonlaw.com", "(408) 555-0106", "201 S Market St, San Jose, CA 95113", 23, "1A", "Anderson Law Office", "$1.9M", "Contacted"],
+            ["James Wilson", "jwilson@wilsonpartners.com", "(408) 555-0107", "125 S 3rd St, San Jose, CA 95113", 22, "1A", "Wilson & Partners", "$1.7M", "Qualified"],
+            ["Maria Garcia", "mgarcia@garcialegal.com", "(408) 555-0108", "88 E San Fernando St, San Jose, CA 95113", 21, "1A", "Garcia Legal Services", "$1.4M", "New"],
+            ["Christopher Brown", "cbrown@brownlaw.com", "(408) 555-0109", "55 Almaden Blvd, San Jose, CA 95113", 24, "1A", "Brown Law Group", "$2.1M", "Contacted"],
+            ["Amanda Davis", "adavis@davispartners.com", "(408) 555-0110", "175 N San Pedro St, San Jose, CA 95110", 20, "1A", "Davis & Partners", "$1.3M", "Qualified"],
+            ["Kevin Johnson", "kjohnson@johnsonlaw.com", "(408) 555-0111", "300 Almaden Blvd, San Jose, CA 95110", 23, "1A", "Johnson Law Firm", "$1.8M", "New"],
+            ["Rachel Miller", "rmiller@millerattorneys.com", "(408) 555-0112", "121 N 1st St, San Jose, CA 95113", "1.6M", "Proposal"],
+            ["Daniel Lee", "dlee@leelaw.com", "(408) 555-0113", "80 E Santa Clara St, San Jose, CA 95113", 21, "1A", "Lee Law Office", "$1.5M", "Contacted"],
+            ["Michelle Taylor", "mtaylor@taylorlegal.com", "(408) 555-0114", "225 W Santa Clara St, San Jose, CA 95113", 22, "1A", "Taylor Legal Group", "$1.7M", "Qualified"],
+            ["Steven White", "swhite@whitelaw.com", "(408) 555-0115", "99 Almaden Blvd, San Jose, CA 95113", 20, "1A", "White & Associates", "$1.2M", "New"],
+            ["Nicole Harris", "nharris@harrislaw.com", "(408) 555-0116", "190 E Santa Clara St, San Jose, CA 95113", 18, "1B", "Harris Law Firm", "$800K", "Contacted"],
+            ["Mark Clark", "mclark@clarkattorneys.com", "(408) 555-0117", "45 N 2nd St, San Jose, CA 95113", 17, "1B", "Clark Attorneys", "$750K", "New"],
+            ["Lauren Lewis", "llewis@lewislegal.com", "(408) 555-0118", "160 W San Carlos St, San Jose, CA 95113", 19, "1B", "Lewis Legal Services", "$900K", "Qualified"],
+            ["Anthony Walker", "awalker@walkerlaw.com", "(408) 555-0119", "85 S 2nd St, San Jose, CA 95113", 16, "1B", "Walker Law Office", "$700K", "Contacted"],
+            ["Christina Hall", "chall@hallpartners.com", "(408) 555-0120", "210 N 4th St, San Jose, CA 95112", 18, "1B", "Hall & Partners", "$820K", "New"],
+            ["Brian Allen", "ballen@allenlaw.com", "(408) 555-0121", "75 E Reed St, San Jose, CA 95112", 17, "1B", "Allen Law Group", "$780K", "Qualified"],
+            ["Stephanie Young", "syoung@younglegal.com", "(408) 555-0122", "140 S 1st St, San Jose, CA 95113", 19, "1B", "Young Legal", "$850K", "Contacted"],
+            ["Timothy King", "tking@kinglaw.com", "(408) 555-0123", "95 N 3rd St, San Jose, CA 95112", 16, "1B", "King Law Firm", "$720K", "New"],
+            ["Ashley Wright", "awright@wrightattorneys.com", "(408) 555-0124", "115 The Alameda, San Jose, CA 95126", 18, "1B", "Wright Attorneys", "$800K", "Proposal"],
+            ["Gregory Lopez", "glopez@lopezlaw.com", "(408) 555-0125", "200 N 1st St, San Jose, CA 95113", 17, "1B", "Lopez Law Office", "$760K", "Contacted"],
+            ["Melissa Hill", "mhill@hillegal.com", "(408) 555-0126", "110 W San Salvador St, San Jose, CA 95113", 19, "1B", "Hill Legal Services", "$880K", "Qualified"],
+            ["Eric Green", "egreen@greenlaw.com", "(408) 555-0127", "60 S Market St, San Jose, CA 95113", 16, "1B", "Green Law Group", "$740K", "New"],
+            ["Heather Adams", "hadams@adamslaw.com", "(408) 555-0128", "180 N 2nd St, San Jose, CA 95112", 18, "1B", "Adams & Associates", "$810K", "Contacted"],
+            ["Jonathan Baker", "jbaker@bakerattorneys.com", "(408) 555-0129", "125 W San Carlos St, San Jose, CA 95113", 17, "1B", "Baker Attorneys", "$770K", "Qualified"],
+            ["Kimberly Gonzalez", "kgonzalez@gonzalezlaw.com", "(408) 555-0130", "90 Park Ave, San Jose, CA 95113", 19, "1B", "Gonzalez Law Firm", "$860K", "New"],
+            ["Matthew Nelson", "mnelson@nelsonlaw.com", "(408) 555-0131", "155 N 4th St, San Jose, CA 95112", 14, "1C", "Nelson Law Office", "$450K", "Contacted"],
+            ["Rebecca Carter", "rcarter@carterlegal.com", "(408) 555-0132", "75 E San Fernando St, San Jose, CA 95113", 13, "1C", "Carter Legal", "$420K", "New"],
+            ["William Mitchell", "wmitchell@mitchelllaw.com", "(408) 555-0133", "105 W Santa Clara St, San Jose, CA 95113", 12, "1C", "Mitchell Law", "$380K", "Qualified"],
+            ["Karen Perez", "kperez@perezattorneys.com", "(408) 555-0134", "65 S 3rd St, San Jose, CA 95113", 14, "1C", "Perez Attorneys", "$460K", "Contacted"],
+            ["Ryan Roberts", "rroberts@robertslaw.com", "(408) 555-0135", "135 E Reed St, San Jose, CA 95112", 13, "1C", "Roberts Law Group", "$440K", "New"],
+            ["Samantha Turner", "sturner@turnerlegal.com", "(408) 555-0136", "85 N 1st St, San Jose, CA 95113", 12, "1C", "Turner Legal Services", "$400K", "Proposal"],
+            ["Jason Phillips", "jphillips@phillipslaw.com", "(408) 555-0137", "115 W San Salvador St, San Jose, CA 95113", 14, "1C", "Phillips Law Office", "$470K", "Contacted"],
+            ["Laura Campbell", "lcampbell@campbelllaw.com", "(408) 555-0138", "70 Park Ave, San Jose, CA 95113", 13, "1C", "Campbell & Associates", "New"],
+            ["Scott Parker", "sparker@parkerattorneys.com", "(408) 555-0139", "95 E San Antonio St, San Jose, CA 95113", 12, "1C", "Parker Attorneys", "$390K", "Qualified"],
+            ["Angela Evans", "aevans@evanslaw.com", "(408) 555-0140", "145 N 2nd St, San Jose, CA 95112", 14, "1C", "Evans Law Firm", "$480K", "Contacted"],
+            ["Patrick Edwards", "pedwards@edwardslaw.com", "(408) 555-0141", "55 S 4th St, San Jose, CA 95112", 13, "1C", "Edwards Legal", "$430K", "New"],
+            ["Victoria Collins", "vcollins@collinslaw.com", "(408) 555-0142", "120 The Alameda, San Jose, CA 95126", 12, "1C", "Collins Law Office", "$410K", "Qualified"],
+            ["Gary Stewart", "gstewart@stewartlaw.com", "(408) 555-0143", "80 N 3rd St, San Jose, CA 95112", 14, "1C", "Stewart & Partners", "$450K", "Contacted"],
+            ["Diana Sanchez", "dsanchez@sanchezlaw.com", "(408) 555-0144", "165 W San Carlos St, San Jose, CA 95113", 13, "1C", "Sanchez Legal Group", "$440K", "New"],
+            ["Benjamin Morris", "bmorris@morrislaw.com", "(408) 555-0145", "50 E Santa Clara St, San Jose, CA 95113", 12, "1C", "Morris Law Firm", "$370K", "Proposal"],
+            ["Tiffany Rogers", "trogers@rogersattorneys.com", "(408) 555-0146", "110 N 1st St, San Jose, CA 95113", 14, "1C", "Rogers Attorneys", "$460K", "Contacted"],
+            ["Jesse Reed", "jreed@reedlaw.com", "(408) 555-0147", "75 S Market St, San Jose, CA 95113", 13, "1C", "Reed Law Office", "$420K", "Qualified"],
+            ["Crystal Cook", "ccook@cooklaw.com", "(408) 555-0148", "130 E San Fernando St, San Jose, CA 95113", 12, "1C", "Cook Legal Services", "$380K", "New"],
+            ["Adam Bell", "abell@belllaw.com", "(408) 555-0149", "85 W Santa Clara St, San Jose, CA 95113", 14, "1C", "Bell & Associates", "$470K", "Contacted"],
+            ["Natalie Cooper", "ncooper@cooperlaw.com", "(408) 555-0150", "100 Park Ave, San Jose, CA 95113", 13, "1C", "Cooper Law Group", "$440K", "Qualified"]
+        ];
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            populateClientTable();
+            setupEventListeners();
+            updatePURESScore();
+        });
+
+        function populateClientTable() {
+            const tbody = document.getElementById('clientTableBody');
+            tbody.innerHTML = '';
+            
+            clientData.forEach((client, index) => {
+                const row = document.createElement('tr');
+                const tierClass = client[5] === '1A' ? 'tier-1a' : client[5] === '1B' ? 'tier-1b' : 'tier-1c';
+                
+                row.innerHTML = `
+                    <td>${client[0]}</td>
+                    <td>${client[1]}</td>
+                    <td>${client[2]}</td>
+                    <td>${client[3]}</td>
+                    <td>${client[4]}</td>
+                    <td class="${tierClass}">${client[5]}</td>
+                    <td>${client[6]}</td>
+                    <td>${client[7]}</td>
+                    <td>${client[8]}</td>
+                    <td>
+                        <button class="btn btn-small" onclick="contactClient(${index}, 'email')">Email</button>
+                        <button class="btn btn-small" onclick="contactClient(${index}, 'phone')">Call</button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function setupEventListeners() {
+            // Search functionality
+            document.getElementById('searchInput').addEventListener('input', filterTable);
+            document.getElementById('tierFilter').addEventListener('change', filterTable);
+            document.getElementById('statusFilter').addEventListener('change', filterTable);
+            
+            // P.U.R.E.S. score sliders
+            ['profitability', 'urgency', 'reachability', 'engagement', 'sustainability'].forEach(id => {
+                document.getElementById(id).addEventListener('input', updatePURESScore);
+            });
+        }
+
+        function updatePURESScore() {
+            const scores = ['profitability', 'urgency', 'reachability', 'engagement', 'sustainability'].map(id => {
+                const element = document.getElementById(id);
+                const value = element.value;
+                document.getElementById(id.substring(0,4) + '-value').textContent = value;
+                return parseInt(value);
+            });
+            
+            const total = scores.reduce((sum, score) => sum + score, 0);
+            document.getElementById('total-score').textContent = total;
+        }
+
+        function filterTable() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const tierFilter = document.getElementById('tierFilter').value;
+            const statusFilter = document.getElementById('statusFilter').value;
+            const rows = document.querySelectorAll('#clientTableBody tr');
+
+            rows.forEach(row => {
+                const cells = row.getElementsByTagName('td');
+                const name = cells[0].textContent.toLowerCase();
+                const email = cells[1].textContent.toLowerCase();
+                const firm = cells[6].textContent.toLowerCase();
+                const tier = cells[5].textContent;
+                const status = cells[8].textContent;
+
+                const matchesSearch = name.includes(searchTerm) || email.includes(searchTerm) || firm.includes(searchTerm);
+                const matchesTier = !tierFilter || tier === tierFilter;
+                const matchesStatus = !statusFilter || status === statusFilter;
+
+                row.style.display = matchesSearch && matchesTier && matchesStatus ? '' : 'none';
+            });
+        }
+
+        function sortTable(columnIndex) {
+            const table = document.getElementById('clientTable');
+            const tbody = table.getElementsByTagName('tbody')[0];
+            const rows = Array.from(tbody.getElementsByTagName('tr'));
+
+            rows.sort((a, b) => {
+                const aText = a.getElementsByTagName('td')[columnIndex].textContent;
+                const bText = b.getElementsByTagName('td')[columnIndex].textContent;
+                
+                // Handle numeric columns
+                if (columnIndex === 4 || columnIndex === 7) {
+                    const aNum = parseFloat(aText.replace(/[^0-9.-]+/g, ""));
+                    const bNum = parseFloat(bText.replace(/[^0-9.-]+/g, ""));
+                    return bNum - aNum;
+                }
+                
+                return aText.localeCompare(bText);
+            });
+
+            rows.forEach(row => tbody.appendChild(row));
+        }
+
+        function contactClient(index, method) {
+            const client = clientData[index];
+            
+            if (method === 'email') {
+                openEmailModal(client[0], client[1], client[6], client[5]);
+            } else if (method === 'phone') {
+                // Open phone dialer
+                window.open(`tel:${client[2]}`, '_self');
+            }
+        }
+
+        function openEmailModal(clientName, clientEmail, lawFirm, tier) {
+            document.getElementById('emailClientName').textContent = clientName;
+            
+            // Generate personalized email content
+            const emailTemplate = generateEmailTemplate(clientName, lawFirm, tier);
+            document.getElementById('emailBody').value = emailTemplate;
+            
+            openModal('emailModal');
+        }
+
+        function generateEmailTemplate(clientName, lawFirm, tier) {
+            const templates = {
+                '1A': `Dear ${clientName},
+
+I hope this message finds you well. As a respected partner at ${lawFirm}, I wanted to personally reach out regarding our premium court reporting services at Superior Court Reporters.
+
+Located directly across from the Santa Clara County Superior Court at 111 N. Market Street, we provide:
+
+🏛️ **Strategic Advantage**: Steps from the courthouse for seamless trial coordination
+📝 **Expert Court Reporting**: Certified stenographers with real-time reporting capabilities  
+🏢 **Premium War Rooms**: Private, secure spaces with 24/7 access for trial preparation
+💼 **Comprehensive Support**: Full-service legal support including document services
+
+For firms of your caliber, we offer:
+• Dedicated account management
+• Priority scheduling and expedited services
+• Custom billing arrangements
+• Technology integration with your case management systems
+
+Given your firm's reputation for excellence, I'd welcome the opportunity to discuss how our services can enhance your trial preparation and courtroom efficiency.
+
+Would you be available for a brief call this week to explore how we can support ${lawFirm}'s continued success?
+
+Best regards,
+Carmela Ward, Owner
+Superior Court Reporters
+(669) 353-3090
+carmela_ward@superiorcourtreporters.com`,
+
+                '1B': `Dear ${clientName},
+
+I'm reaching out from Superior Court Reporters, conveniently located across from the Santa Clara County Superior Court.
+
+As an established practice, ${lawFirm} would benefit from our specialized services:
+
+📍 **Prime Location**: Directly across from the courthouse
+📝 **Professional Court Reporting**: Certified reporters with real-time capabilities
+🏢 **War Room Rentals**: Secure preparation spaces with full amenities
+⚡ **Fast Turnaround**: Expedited transcripts and document services
+
+Our mid-size firm package includes:
+• Competitive pricing with flexible billing
+• Professional war rooms (small to large configurations)
+• Digital transcript delivery
+• 24/7 building access during trials
+
+I'd be happy to provide a customized quote based on your typical service needs.
+
+Best regards,
+Carmela Ward
+Superior Court Reporters
+(669) 353-3090`,
+
+                '1C': `Dear ${clientName},
+
+Superior Court Reporters offers cost-effective legal support services perfect for practices like ${lawFirm}.
+
+Located across from the Santa Clara County Superior Court, we provide:
+
+✅ **Affordable Court Reporting**: Competitive rates without compromising quality
+✅ **Flexible War Room Options**: Small rooms perfect for solo practitioners  
+✅ **Digital Services**: Electronic filing and document scanning
+✅ **Convenient Location**: Save time with our courthouse proximity
+
+Special offer for new clients:
+• 15% discount on first court reporting service
+• Complimentary war room trial (2 hours)
+• Free consultation on service needs
+
+Let's discuss how we can support your practice efficiently and affordably.
+
+Best regards,
+Carmela Ward
+Superior Court Reporters
+(669) 353-3090`
+            };
+
+            return templates[tier] || templates['1C'];
+        }
+
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = 'block';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        function sendEmail() {
+            const clientName = document.getElementById('emailClientName').textContent;
+            const subject = document.getElementById('emailSubject').value;
+            const body = document.getElementById('emailBody').value;
+            
+            // Create mailto link
+            const mailtoLink = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+            window.open(mailtoLink);
+            
+            closeModal('emailModal');
+            alert(`Email template prepared for ${clientName}!`);
+        }
+
+        function exportData() {
+            const csv = [
+                ['Client Name', 'Email', 'Phone', 'Address', 'P.U.R.E.S. Score', 'Tier', 'Law Firm', 'Est. Revenue', 'Status'],
+                ...clientData
+            ].map(row => row.join(',')).join('\n');
+            
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'superior-court-reporters-clients.csv';
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+
+        // Navigation functionality
+        document.querySelectorAll('.nav a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.querySelectorAll('.nav a').forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+                
+                const targetId = this.getAttribute('href').substring(1);
+                const targetElement = document.getElementById(targetId);
+                if (targetElement) {
+                    targetElement.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+
+        // Close modals when clicking outside
+        window.onclick = function(event) {
+            const modals = document.getElementsByClassName('modal');
+            for (let modal of modals) {
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                }
+            }
+        }
+    </script>
+</body>
+</html>

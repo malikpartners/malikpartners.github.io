@@ -1,0 +1,928 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>S.A.L.E. Client Targeting Dashboard - Express Blinds & More</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #000000;
+            color: #ffffff;
+            line-height: 1.6;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #1a1a1a, #333);
+            padding: 20px;
+            text-align: center;
+            border-bottom: 3px solid #CF2030;
+        }
+        
+        .header img {
+            max-height: 60px;
+            margin-bottom: 10px;
+        }
+        
+        .header h1 {
+            color: #CF2030;
+            margin-bottom: 10px;
+        }
+        
+        .business-info {
+            background: rgba(207, 32, 48, 0.1);
+            border: 1px solid #CF2030;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 20px;
+        }
+        
+        .tabs {
+            display: flex;
+            background: #1a1a1a;
+            border-bottom: 2px solid #CF2030;
+        }
+        
+        .tab {
+            flex: 1;
+            padding: 15px;
+            background: #333;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-right: 1px solid #555;
+        }
+        
+        .tab.active {
+            background: #CF2030;
+        }
+        
+        .tab-content {
+            display: none;
+            padding: 20px;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .filters {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .filter-group label {
+            color: #CF2030;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .filter-group input, .filter-group select {
+            padding: 8px;
+            border: 1px solid #555;
+            border-radius: 4px;
+            background: #333;
+            color: white;
+        }
+        
+        .tier-1a { background: rgba(34, 139, 34, 0.2); }
+        .tier-1b { background: rgba(255, 165, 0, 0.2); }
+        .tier-1c { background: rgba(65, 105, 225, 0.2); }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #1a1a1a;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #555;
+        }
+        
+        th {
+            background: #CF2030;
+            cursor: pointer;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        
+        th:hover {
+            background: #a31a26;
+        }
+        
+        tr:hover {
+            background: rgba(207, 32, 48, 0.1);
+        }
+        
+        .contact-btn {
+            background: #CF2030;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 5px;
+        }
+        
+        .contact-btn:hover {
+            background: #a31a26;
+        }
+        
+        .pures-form {
+            background: #333;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        .pures-scoring {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        
+        .score-item {
+            background: #1a1a1a;
+            padding: 15px;
+            border-radius: 6px;
+            border: 1px solid #555;
+        }
+        
+        .score-item label {
+            display: block;
+            color: #CF2030;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        
+        .score-slider {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+        
+        .email-template {
+            background: #333;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        
+        .email-template textarea {
+            width: 100%;
+            height: 200px;
+            background: #1a1a1a;
+            color: white;
+            border: 1px solid #555;
+            padding: 15px;
+            border-radius: 4px;
+        }
+        
+        .footer {
+            background: #1a1a1a;
+            text-align: center;
+            padding: 20px;
+            border-top: 2px solid #CF2030;
+            margin-top: 40px;
+        }
+        
+        .footer img {
+            max-height: 40px;
+            opacity: 0.7;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: #333;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #CF2030;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 2em;
+            color: #CF2030;
+            font-weight: bold;
+        }
+        
+        .export-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 10px 5px;
+        }
+        
+        .campaign-timeline {
+            background: #333;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .timeline-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 10px;
+            background: #1a1a1a;
+            border-radius: 6px;
+        }
+        
+        .timeline-date {
+            color: #CF2030;
+            font-weight: bold;
+            width: 120px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports" onerror="this.style.display='none'">
+        <h1>S.A.L.E. Client Targeting Dashboard</h1>
+        <p>Express Blinds & More - Strategic Client Acquisition System</p>
+    </div>
+
+    <div class="business-info">
+        <h3>Business Profile: Express Blinds & More</h3>
+        <p><strong>Owner:</strong> Bob Sole | <strong>Phone:</strong> (619) 461-2101 | <strong>Email:</strong> Bob@shopexpressblinds.com</p>
+        <p><strong>Address:</strong> 7424 Jackson Drive, Suite 5, San Diego, CA 92119 | <strong>Website:</strong> www.shopexpressblinds.com</p>
+        <p><strong>Services:</strong> Custom Window Treatments, Blinds, Shutters, Draperies, Motorization</p>
+    </div>
+
+    <div class="tabs">
+        <button class="tab active" onclick="showTab('sourcing')">S.OURCING</button>
+        <button class="tab" onclick="showTab('assessing')">A.SSESSING</button>
+        <button class="tab" onclick="showTab('listening')">L.ISTENING</button>
+        <button class="tab" onclick="showTab('empowering')">E.MPOWERING</button>
+    </div>
+
+    <!-- SOURCING Tab -->
+    <div id="sourcing" class="tab-content active">
+        <h2>S.OURCING - P.U.R.E.S. Client Targeting System</h2>
+        
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value" id="totalClients">50</div>
+                <p>Total Prospects</p>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="tier1aCount">12</div>
+                <p>Tier 1A (Premium)</p>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="tier1bCount">18</div>
+                <p>Tier 1B (High-Value)</p>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="tier1cCount">20</div>
+                <p>Tier 1C (Qualified)</p>
+            </div>
+        </div>
+
+        <div class="filters">
+            <div class="filter-group">
+                <label>Search:</label>
+                <input type="text" id="searchFilter" placeholder="Search clients..." onkeyup="filterTable()">
+            </div>
+            <div class="filter-group">
+                <label>Tier:</label>
+                <select id="tierFilter" onchange="filterTable()">
+                    <option value="">All Tiers</option>
+                    <option value="1A">Tier 1A</option>
+                    <option value="1B">Tier 1B</option>
+                    <option value="1C">Tier 1C</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>Property Type:</label>
+                <select id="propertyFilter" onchange="filterTable()">
+                    <option value="">All Properties</option>
+                    <option value="Single Family">Single Family</option>
+                    <option value="Luxury Home">Luxury Home</option>
+                    <option value="Condo">Condo</option>
+                    <option value="Townhouse">Townhouse</option>
+                    <option value="Commercial">Commercial</option>
+                </select>
+            </div>
+            <button class="export-btn" onclick="exportToCSV()">Export to CSV</button>
+        </div>
+
+        <div style="overflow-x: auto; max-height: 600px;">
+            <table id="clientTable">
+                <thead>
+                    <tr>
+                        <th onclick="sortTable(0)">Client Name ↕</th>
+                        <th onclick="sortTable(1)">Email ↕</th>
+                        <th onclick="sortTable(2)">Phone ↕</th>
+                        <th onclick="sortTable(3)">Address ↕</th>
+                        <th onclick="sortTable(4)">P.U.R.E.S. Score ↕</th>
+                        <th onclick="sortTable(5)">Tier ↕</th>
+                        <th onclick="sortTable(6)">Property Type ↕</th>
+                        <th onclick="sortTable(7)">Est. Budget ↕</th>
+                        <th onclick="sortTable(8)">Contact Status ↕</th>
+                        <th onclick="sortTable(9)">Last Contact ↕</th>
+                        <th onclick="sortTable(10)">Next Action ↕</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="clientTableBody">
+                </tbody>
+            </table>
+        </div>
+
+        <div class="pures-form">
+            <h3>P.U.R.E.S. Client Evaluation System</h3>
+            <div class="pures-scoring">
+                <div class="score-item">
+                    <label>Profitability (Budget Capacity)</label>
+                    <input type="range" class="score-slider" min="1" max="5" value="3" id="profitability">
+                    <p>Score: <span id="profitabilityValue">3</span></p>
+                </div>
+                <div class="score-item">
+                    <label>Urgency (Immediate Need)</label>
+                    <input type="range" class="score-slider" min="1" max="5" value="3" id="urgency">
+                    <p>Score: <span id="urgencyValue">3</span></p>
+                </div>
+                <div class="score-item">
+                    <label>Reachability (Decision Makers)</label>
+                    <input type="range" class="score-slider" min="1" max="5" value="3" id="reachability">
+                    <p>Score: <span id="reachabilityValue">3</span></p>
+                </div>
+                <div class="score-item">
+                    <label>Engagement (Partnership Openness)</label>
+                    <input type="range" class="score-slider" min="1" max="5" value="3" id="engagement">
+                    <p>Score: <span id="engagementValue">3</span></p>
+                </div>
+                <div class="score-item">
+                    <label>Sustainability (Long-term Potential)</label>
+                    <input type="range" class="score-slider" min="1" max="5" value="3" id="sustainability">
+                    <p>Score: <span id="sustainabilityValue">3</span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ASSESSING Tab -->
+    <div id="assessing" class="tab-content">
+        <h2>A.SSESSING - Buying Pattern Analysis</h2>
+        
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value">15</div>
+                <p>Analytical Buyers</p>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">18</div>
+                <p>Relationship Buyers</p>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">12</div>
+                <p>Efficiency Buyers</p>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">5</div>
+                <p>Innovation Buyers</p>
+            </div>
+        </div>
+
+        <div class="campaign-timeline">
+            <h3>Client Buying Profile Categories</h3>
+            <div class="timeline-item">
+                <div class="timeline-date">Analytical</div>
+                <div>Require detailed ROI analysis, case studies, before/after photos, energy savings data</div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-date">Relationship</div>
+                <div>Value trust, referrals, long-term partnerships, local reputation, BBB ratings</div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-date">Efficiency</div>
+                <div>Focus on time-saving, quick installation, minimal disruption, one-stop shopping</div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-date">Innovation</div>
+                <div>Seek cutting-edge solutions, smart home integration, motorization, latest trends</div>
+            </div>
+        </div>
+
+        <div class="email-template">
+            <h3>Buyer-Specific Email Templates</h3>
+            <select id="buyerTypeTemplate" onchange="updateEmailTemplate()">
+                <option value="analytical">Analytical Buyer Template</option>
+                <option value="relationship">Relationship Buyer Template</option>
+                <option value="efficiency">Efficiency Buyer Template</option>
+                <option value="innovation">Innovation Buyer Template</option>
+            </select>
+            <textarea id="emailTemplateText" readonly></textarea>
+        </div>
+    </div>
+
+    <!-- LISTENING Tab -->
+    <div id="listening" class="tab-content">
+        <h2>L.ISTENING - Feedback Integration System</h2>
+        
+        <div class="campaign-timeline">
+            <h3>Feedback Tracking Stages</h3>
+            <div class="timeline-item">
+                <div class="timeline-date">Pre-Sale</div>
+                <div>Initial consultation feedback, needs assessment, design preferences</div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-date">During-Sale</div>
+                <div>Installation progress, communication quality, timeline satisfaction</div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-date">Post-Sale</div>
+                <div>Product satisfaction, functionality, aesthetic results, follow-up needs</div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-date">Resolution</div>
+                <div>Issue tracking, complaint management, warranty service, customer recovery</div>
+            </div>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value">98%</div>
+                <p>Customer Satisfaction</p>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">4.8/5</div>
+                <p>Average Rating</p>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">72 hrs</div>
+                <p>Avg Response Time</p>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">15%</div>
+                <p>Referral Rate</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- EMPOWERING Tab -->
+    <div id="empowering" class="tab-content">
+        <h2>E.MPOWERING - Referral Strategy & Success Stories</h2>
+        
+        <div class="campaign-timeline">
+            <h3>Marketing Campaign Schedule</h3>
+            <div class="timeline-item">
+                <div class="timeline-date">Week 1-2</div>
+                <div>Tier 1A Premium Outreach - Luxury home consultations, high-end materials showcase</div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-date">Week 3-4</div>
+                <div>Tier 1B High-Value Campaign - Energy efficiency focus, cost-benefit analysis</div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-date">Week 5-6</div>
+                <div>Tier 1C Qualified Prospects - Budget-friendly solutions, financing options</div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-date">Ongoing</div>
+                <div>Referral follow-up, success story documentation, review management</div>
+            </div>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value">85%</div>
+                <p>Referral Success Rate</p>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">$3,200</div>
+                <p>Avg Project Value</p>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">28</div>
+                <p>Success Stories</p>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">65%</div>
+                <p>Repeat Customers</p>
+            </div>
+        </div>
+
+        <div class="email-template">
+            <h3>Success Story Template</h3>
+            <textarea readonly style="height: 150px;">Recent Success: Transform your home like the Johnson family in La Jolla!
+
+Before: Their west-facing living room was unbearably hot and bright in the afternoons, forcing them to close curtains and lose their beautiful ocean views.
+
+After: We installed custom solar shades with 5% openness factor that reduced heat gain by 70% while preserving their stunning views. The motorized controls let them adjust light levels effortlessly throughout the day.
+
+Results: 30% reduction in cooling costs, increased home value, and they can now enjoy their living room all day long.
+
+Ready to transform your space? Call (619) 461-2101 for your FREE consultation!</textarea>
+        </div>
+    </div>
+
+    <div class="footer">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports" onerror="this.style.display='none'">
+        <p>&copy; 2026 Express Blinds & More. All rights reserved. | Powered by Higgins Reports S.A.L.E. System</p>
+    </div>
+
+    <script>
+        // Sample client data for San Diego area (within 10 miles)
+        const clientData = [
+            {name: "Jennifer Martinez", email: "j.martinez@gmail.com", phone: "(619) 555-0123", address: "1234 Ocean View Dr, La Jolla, CA 92037", puresScore: 4.8, tier: "1A", propertyType: "Luxury Home", budget: "$8,500", status: "New Lead", lastContact: "2026-03-20", nextAction: "Design Consultation", buyerType: "analytical"},
+            {name: "Robert Chen", email: "rchen.homes@yahoo.com", phone: "(858) 555-0234", address: "5678 Coastal Blvd, Del Mar, CA 92014", puresScore: 4.6, tier: "1A", propertyType: "Single Family", budget: "$6,200", status: "Quoted", lastContact: "2026-03-18", nextAction: "Follow-up Call", buyerType: "relationship"},
+            {name: "Sarah Thompson", email: "sthompson.design@outlook.com", phone: "(619) 555-0345", address: "9012 Sunset Cliffs Dr, Point Loma, CA 92107", puresScore: 4.4, tier: "1B", propertyType: "Condo", budget: "$4,800", status: "Interested", lastContact: "2026-03-15", nextAction: "Send Samples", buyerType: "innovation"},
+            {name: "Michael Rodriguez", email: "mrodriguez@company.com", phone: "(619) 555-0456", address: "3456 Balboa Park Way, San Diego, CA 92101", puresScore: 4.2, tier: "1B", propertyType: "Townhouse", budget: "$5,400", status: "Demo Scheduled", lastContact: "2026-03-22", nextAction: "Installation Quote", buyerType: "efficiency"},
+            {name: "Lisa Wang", email: "lisa.wang.realtor@gmail.com", phone: "(858) 555-0567", address: "7890 Scripps Ranch Blvd, San Diego, CA 92131", puresScore: 4.0, tier: "1B", propertyType: "Single Family", budget: "$3,900", status: "Contacted", lastContact: "2026-03-14", nextAction: "Schedule Visit", buyerType: "analytical"},
+            {name: "David Johnson", email: "d.johnson@techcorp.com", phone: "(619) 555-0678", address: "2345 Mission Bay Dr, Mission Beach, CA 92109", puresScore: 3.8, tier: "1C", propertyType: "Condo", budget: "$3,200", status: "New Lead", lastContact: "2026-03-21", nextAction: "Initial Call", buyerType: "relationship"},
+            {name: "Amanda Foster", email: "afoster.interiors@gmail.com", phone: "(858) 555-0789", address: "6789 Carmel Valley Rd, Carmel Valley, CA 92130", puresScore: 4.7, tier: "1A", propertyType: "Luxury Home", budget: "$9,200", status: "Proposal Sent", lastContact: "2026-03-19", nextAction: "Contract Review", buyerType: "innovation"},
+            {name: "James Wilson", email: "jwilson.construction@yahoo.com", phone: "(619) 555-0890", address: "4567 Pacific Beach Dr, Pacific Beach, CA 92109", puresScore: 3.6, tier: "1C", propertyType: "Commercial", budget: "$12,500", status: "Quoted", lastContact: "2026-03-16", nextAction: "Negotiate Terms", buyerType: "efficiency"},
+            {name: "Patricia Davis", email: "pdavis.homes@outlook.com", phone: "(858) 555-0901", address: "8901 Hillcrest Ave, Hillcrest, CA 92103", puresScore: 4.1, tier: "1B", propertyType: "Single Family", budget: "$4,600", status: "Interested", lastContact: "2026-03-13", nextAction: "Design Meeting", buyerType: "analytical"},
+            {name: "Thomas Brown", email: "tbrown.contractor@gmail.com", phone: "(619) 555-1012", address: "1357 Coronado Beach Rd, Coronado, CA 92118", puresScore: 4.5, tier: "1A", propertyType: "Luxury Home", budget: "$7,800", status: "Demo Scheduled", lastContact: "2026-03-17", nextAction: "Final Presentation", buyerType: "relationship"},
+            {name: "Karen Miller", email: "kmiller.design@yahoo.com", phone: "(858) 555-1123", address: "2468 Poway Hills Dr, Poway, CA 92064", puresScore: 3.7, tier: "1C", propertyType: "Townhouse", budget: "$3,500", status: "Contacted", lastContact: "2026-03-12", nextAction: "Send Brochure", buyerType: "efficiency"},
+            {name: "Christopher Lee", email: "clee.architect@outlook.com", phone: "(619) 555-1234", address: "3579 Gaslamp Quarter, San Diego, CA 92101", puresScore: 4.3, tier: "1B", propertyType: "Condo", budget: "$5,100", status: "New Lead", lastContact: "2026-03-20", nextAction: "Consultation Call", buyerType: "innovation"},
+            {name: "Nancy Garcia", email: "ngarcia.realty@gmail.com", phone: "(858) 555-1345", address: "4680 Rancho Santa Fe Rd, Rancho Santa Fe, CA 92067", puresScore: 4.9, tier: "1A", propertyType: "Luxury Home", budget: "$11,200", status: "Contract Signed", lastContact: "2026-03-21", nextAction: "Installation Planning", buyerType: "analytical"},
+            {name: "Daniel Taylor", email: "dtaylor.homes@yahoo.com", phone: "(619) 555-1456", address: "5791 Chula Vista Blvd, Chula Vista, CA 91910", puresScore: 3.5, tier: "1C", propertyType: "Single Family", budget: "$2,900", status: "Quoted", lastContact: "2026-03-15", nextAction: "Follow-up Email", buyerType: "efficiency"},
+            {name: "Michelle Anderson", email: "manderson.interiors@outlook.com", phone: "(858) 555-1567", address: "6802 National City Dr, National City, CA 91950", puresScore: 3.9, tier: "1C", propertyType: "Townhouse", budget: "$3,700", status: "Interested", lastContact: "2026-03-18", nextAction: "Product Demo", buyerType: "relationship"},
+            {name: "Kevin White", email: "kwhite.builder@gmail.com", phone: "(619) 555-1678", address: "7913 Solana Beach Rd, Solana Beach, CA 92075", puresScore: 4.4, tier: "1B", propertyType: "Single Family", budget: "$5,600", status: "Demo Scheduled", lastContact: "2026-03-16", nextAction: "Measure Windows", buyerType: "analytical"},
+            {name: "Rebecca Martinez", email: "rmartinez.design@yahoo.com", phone: "(858) 555-1789", address: "9024 Encinitas Blvd, Encinitas, CA 92024", puresScore: 4.2, tier: "1B", propertyType: "Luxury Home", budget: "$6,400", status: "Contacted", lastContact: "2026-03-14", nextAction: "Schedule Meeting", buyerType: "innovation"},
+            {name: "Ryan Thompson", email: "rthompson.contractor@outlook.com", phone: "(619) 555-1890", address: "1135 Escondido Ave, Escondido, CA 92025", puresScore: 3.8, tier: "1C", propertyType: "Commercial", budget: "$8,900", status: "New Lead", lastContact: "2026-03-19", nextAction: "Site Visit", buyerType: "efficiency"},
+            {name: "Stephanie Clark", email: "sclark.homes@gmail.com", phone: "(858) 555-1901", address: "2246 Carlsbad Village Dr, Carlsbad, CA 92008", puresScore: 4.6, tier: "1A", propertyType: "Single Family", budget: "$7,100", status: "Proposal Sent", lastContact: "2026-03-17", nextAction: "Decision Call", buyerType: "relationship"},
+            {name: "Anthony Lewis", email: "alewis.architect@yahoo.com", phone: "(619) 555-2012", address: "3357 Vista Way, Oceanside, CA 92054", puresScore: 3.6, tier: "1C", propertyType: "Condo", budget: "$3,100", status: "Quoted", lastContact: "2026-03-13", nextAction: "Price Negotiation", buyerType: "analytical"},
+            {name: "Laura Walker", email: "lwalker.design@outlook.com", phone: "(858) 555-2123", address: "4468 El Cajon Blvd, El Cajon, CA 92020", puresScore: 4.0, tier: "1B", propertyType: "Townhouse", budget: "$4,200", status: "Interested", lastContact: "2026-03-20", nextAction: "Show Portfolio", buyerType: "innovation"},
+            {name: "Mark Hall", email: "mhall.contractor@gmail.com", phone: "(619) 555-2234", address: "5579 Santee Lakes Dr, Santee, CA 92071", puresScore: 3.7, tier: "1C", propertyType: "Single Family", budget: "$3,400", status: "Demo Scheduled", lastContact: "2026-03-15", nextAction: "Product Selection", buyerType: "efficiency"},
+            {name: "Donna Young", email: "dyoung.realty@yahoo.com", phone: "(858) 555-2345", address: "6680 Lakeside Ave, Lakeside, CA 92040", puresScore: 4.1, tier: "1B", propertyType: "Luxury Home", budget: "$5,800", status: "Contacted", lastContact: "2026-03-18", nextAction: "Design Consultation", buyerType: "relationship"},
+            {name: "Paul King", email: "pking.homes@outlook.com", phone: "(619) 555-2456", address: "7791 Alpine Blvd, Alpine, CA 91901", puresScore: 3.9, tier: "1C", propertyType: "Single Family", budget: "$3,600", status: "New Lead", lastContact: "2026-03-16", nextAction: "Initial Contact", buyerType: "analytical"},
+            {name: "Sandra Wright", email: "swright.interiors@gmail.com", phone: "(858) 555-2567", address: "8902 Spring Valley Rd, Spring Valley, CA 91977", puresScore: 4.3, tier: "1B", propertyType: "Townhouse", budget: "$4,900", status: "Proposal Sent", lastContact: "2026-03-14", nextAction: "Contract Review", buyerType: "innovation"},
+            {name: "Eric Lopez", email: "elopez.builder@yahoo.com", phone: "(619) 555-2678", address: "9013 Bonita Rd, Bonita, CA 91902", puresScore: 3.5, tier: "1C", propertyType: "Condo", budget: "$2,800", status: "Quoted", lastContact: "2026-03-19", nextAction: "Follow-up Call", buyerType: "efficiency"},
+            {name: "Janet Scott", email: "jscott.design@outlook.com", phone: "(858) 555-2789", address: "1124 Jamul Dr, Jamul, CA 91935", puresScore: 4.4, tier: "1B", propertyType: "Luxury Home", budget: "$6,700", status: "Interested", lastContact: "2026-03-17", nextAction: "Site Survey", buyerType: "relationship"},
+            {name: "Brian Green", email: "bgreen.contractor@gmail.com", phone: "(619) 555-2890", address: "2235 Lemon Grove Ave, Lemon Grove, CA 91945", puresScore: 3.8, tier: "1C", propertyType: "Single Family", budget: "$3,300", status: "Demo Scheduled", lastContact: "2026-03-13", nextAction: "Material Selection", buyerType: "analytical"},
+            {name: "Helen Adams", email: "hadams.homes@yahoo.com", phone: "(858) 555-2901", address: "3346 Imperial Beach Blvd, Imperial Beach, CA 91932", puresScore: 4.2, tier: "1B", propertyType: "Commercial", budget: "$7,500", status: "Contacted", lastContact: "2026-03-20", nextAction: "Business Meeting", buyerType: "efficiency"},
+            {name: "Gary Baker", email: "gbaker.architect@outlook.com", phone: "(619) 555-3012", address: "4457 Otay Mesa Rd, Otay Mesa, CA 92154", puresScore: 3.6, tier: "1C", propertyType: "Townhouse", budget: "$3,000", status: "New Lead", lastContact: "2026-03-15", nextAction: "Qualification Call", buyerType: "innovation"},
+            {name: "Sharon Nelson", email: "snelson.realty@gmail.com", phone: "(858) 555-3123", address: "5568 San Ysidro Blvd, San Ysidro, CA 92173", puresScore: 4.7, tier: "1A", propertyType: "Luxury Home", budget: "$8,900", status: "Contract Signed", lastContact: "2026-03-18", nextAction: "Installation Start", buyerType: "relationship"},
+            {name: "Jeffrey Carter", email: "jcarter.builder@yahoo.com", phone: "(619) 555-3234", address: "6679 Paradise Hills Rd, Paradise Hills, CA 92139", puresScore: 4.0, tier: "1B", propertyType: "Single Family", budget: "$4,500", status: "Proposal Sent", lastContact: "2026-03-16", nextAction: "Decision Follow-up", buyerType: "analytical"},
+            {name: "Deborah Mitchell", email: "dmitchell.design@outlook.com", phone: "(858) 555-3345", address: "7780 Skyline Dr, Skyline, CA 92145", puresScore: 3.7, tier: "1C", propertyType: "Condo", budget: "$3,200", status: "Quoted", lastContact: "2026-03-14", nextAction: "Budget Discussion", buyerType: "efficiency"},
+            {name: "Frank Perez", email: "fperez.contractor@gmail.com", phone: "(619) 555-3456", address: "8891 Serra Mesa Blvd, Serra Mesa, CA 92111", puresScore: 4.1, tier: "1B", propertyType: "Townhouse", budget: "$5,200", status: "Interested", lastContact: "2026-03-19", nextAction: "Design Review", buyerType: "innovation"},
+            {name: "Carolyn Roberts", email: "croberts.homes@yahoo.com", phone: "(858) 555-3567", address: "9902 Tierrasanta Blvd, Tierrasanta, CA 92124", puresScore: 4.5, tier: "1A", propertyType: "Luxury Home", budget: "$7,600", status: "Demo Scheduled", lastContact: "2026-03-17", nextAction: "Final Quote", buyerType: "relationship"},
+            {name: "Scott Turner", email: "sturner.architect@outlook.com", phone: "(619) 555-3678", address: "1013 Clairemont Mesa Blvd, Clairemont, CA 92117", puresScore: 3.9, tier: "1C", propertyType: "Single Family", budget: "$3,800", status: "Contacted", lastContact: "2026-03-13", nextAction: "Home Visit", buyerType: "analytical"},
+            {name: "Maria Phillips", email: "mphillips.realty@gmail.com", phone: "(858) 555-3789", address: "2124 Kensington Dr, Kensington, CA 92116", puresScore: 4.3, tier: "1B", propertyType: "Commercial", budget: "$9,100", status: "New Lead", lastContact: "2026-03-20", nextAction: "Needs Assessment", buyerType: "efficiency"},
+            {name: "Raymond Campbell", email: "rcampbell.builder@yahoo.com", phone: "(619) 555-3890", address: "3235 Talmadge Ave, Talmadge, CA 92115", puresScore: 3.4, tier: "1C", propertyType: "Condo", budget: "$2,700", status: "Proposal Sent", lastContact: "2026-03-15", nextAction: "Price Review", buyerType: "innovation"},
+            {name: "Virginia Parker", email: "vparker.design@outlook.com", phone: "(858) 555-3901", address: "4346 Normal Heights Blvd, Normal Heights, CA 92116", puresScore: 4.6, tier: "1A", propertyType: "Single Family", budget: "$6,800", status: "Quoted", lastContact: "2026-03-18", nextAction: "Contract Preparation", buyerType: "relationship"},
+            {name: "Jose Evans", email: "jevans.contractor@gmail.com", phone: "(619) 555-4012", address: "5457 University Heights Ave, University Heights, CA 92103", puresScore: 4.2, tier: "1B", propertyType: "Townhouse", budget: "$4,700", status: "Interested", lastContact: "2026-03-16", nextAction: "Technical Consultation", buyerType: "analytical"},
+            {name: "Catherine Edwards", email: "cedwards.homes@yahoo.com", phone: "(858) 555-4123", address: "6568 North Park Way, North Park, CA 92104", puresScore: 3.8, tier: "1C", propertyType: "Luxury Home", budget: "$4,100", status: "Demo Scheduled", lastContact: "2026-03-14", nextAction: "Style Selection", buyerType: "efficiency"},
+            {name: "Harold Collins", email: "hcollins.architect@outlook.com", phone: "(619) 555-4234", address: "7679 South Park Ave, South Park, CA 92114", puresScore: 4.4, tier: "1B", propertyType: "Single Family", budget: "$5,500", status: "Contacted", lastContact: "2026-03-19", nextAction: "Measurement Visit", buyerType: "innovation"},
+            {name: "Frances Stewart", email: "fstewart.realty@gmail.com", phone: "(858) 555-4345", address: "8780 Golden Hill Dr, Golden Hill, CA 92102", puresScore: 4.8, tier: "1A", propertyType: "Luxury Home", budget: "$10,200", status: "Contract Signed", lastContact: "2026-03-17", nextAction: "Project Kickoff", buyerType: "relationship"},
+            {name: "Arthur Sanchez", email: "asanchez.builder@yahoo.com", phone: "(619) 555-4456", address: "9891 Grant Hill Park Way, Grant Hill, CA 92113", puresScore: 3.6, tier: "1C", propertyType: "Condo", budget: "$3,100", status: "New Lead", lastContact: "2026-03-13", nextAction: "Initial Screening", buyerType: "analytical"},
+            {name: "Cheryl Morris", email: "cmorris.design@outlook.com", phone: "(858) 555-4567", address: "1902 Logan Heights Blvd, Logan Heights, CA 92113", puresScore: 4.1, tier: "1B", propertyType: "Commercial", budget: "$6,900", status: "Proposal Sent", lastContact: "2026-03-20", nextAction: "Executive Presentation", buyerType: "efficiency"},
+            {name: "Ralph Rogers", email: "rrogers.contractor@gmail.com", phone: "(619) 555-4678", address: "2013 Sherman Heights Ave, Sherman Heights, CA 92113", puresScore: 3.7, tier: "1C", propertyType: "Townhouse", budget: "$3,400", status: "Quoted", lastContact: "2026-03-15", nextAction: "Terms Negotiation", buyerType: "innovation"},
+            {name: "Julia Reed", email: "jreed.homes@yahoo.com", phone: "(858) 555-4789", address: "3124 Stockton Dr, Stockton, CA 92113", puresScore: 4.5, tier: "1A", propertyType: "Single Family", budget: "$7,300", status: "Interested", lastContact: "2026-03-18", nextAction: "Premium Consultation", buyerType: "relationship"},
+            {name: "Eugene Cook", email: "ecook.architect@outlook.com", phone: "(619) 555-4890", address: "4235 Memorial Way, Memorial, CA 92113", puresScore: 3.9, tier: "1C", propertyType: "Luxury Home", budget: "$4,000", status: "Demo Scheduled", lastContact: "2026-03-16", nextAction: "Solution Presentation", buyerType: "analytical"},
+            {name: "Jacqueline Bailey", email: "jbailey.realty@gmail.com", phone: "(858) 555-4901", address: "5346 East Village St, East Village, CA 92101", puresScore: 4.7, tier: "1A", propertyType: "Commercial", budget: "$12,800", status: "Contacted", lastContact: "2026-03-14", nextAction: "Executive Meeting", buyerType: "efficiency"},
+            {name: "Wayne Rivera", email: "wrivera.builder@yahoo.com", phone: "(619) 555-5012", address: "6457 Little Italy Way, Little Italy, CA 92101", puresScore: 4.2, tier: "1B", propertyType: "Condo", budget: "$5,300", status: "New Lead", lastContact: "2026-03-19", nextAction: "Market Analysis", buyerType: "innovation"},
+            {name: "Gloria Cooper", email: "gcooper.design@outlook.com", phone: "(858) 555-5123", address: "7568 Marina District Blvd, Marina District, CA 92101", puresScore: 4.4, tier: "1B", propertyType: "Luxury Home", budget: "$6,500", status: "Proposal Sent", lastContact: "2026-03-17", nextAction: "Design Finalization", buyerType: "relationship"},
+            {name: "Louis Richardson", email: "lrichardson.contractor@gmail.com", phone: "(619) 555-5234", address: "8679 Banker's Hill Ave, Banker's Hill, CA 92103", puresScore: 3.5, tier: "1C", propertyType: "Single Family", budget: "$2,900", status: "Quoted", lastContact: "2026-03-13", nextAction: "Budget Adjustment", buyerType: "analytical"}
+        ];
+
+        let filteredData = [...clientData];
+        let currentSort = {column: null, direction: 'asc'};
+
+        // Email templates for different buyer types
+        const emailTemplates = {
+            analytical: `Subject: Data-Driven Window Treatment Solutions - Express Blinds & More
+
+Dear [Client Name],
+
+As a leader in San Diego's window treatment industry for over 30 years, Express Blinds & More delivers measurable results for homeowners like you.
+
+KEY PERFORMANCE METRICS:
+• 30% average energy cost reduction with our solar shades
+• 98% customer satisfaction rate (based on 10,000+ installations)
+• 5-year warranty on all custom products
+• BBB A+ rating with verified reviews
+
+PROVEN ROI ANALYSIS:
+Your investment in custom window treatments typically pays for itself within 18-24 months through:
+✓ Reduced HVAC costs
+✓ UV protection preventing furniture fading
+✓ Increased home value (avg. 12% improvement)
+✓ Enhanced security and privacy
+
+CASE STUDY: Similar home in [Area] reduced cooling costs by $180/month with our cellular shade system.
+
+Schedule your FREE consultation for professional measurements and customized cost-benefit analysis.
+
+Best regards,
+Bob Sole, Owner
+Express Blinds & More
+(619) 461-2101`,
+
+            relationship: `Subject: Your Neighbors Recommend Express Blinds & More
+
+Dear [Client Name],
+
+For over 30 years, Express Blinds & More has been the trusted choice for San Diego families seeking beautiful, functional window treatments.
+
+COMMUNITY TESTIMONIALS:
+"Express Blinds transformed our home! Bob and his team were professional, reliable, and delivered exactly what they promised." - Christine W., [Local Area]
+
+"We researched 5 companies and Express Blinds was our top choice. Amazing quality and service!" - Kristin D., [Local Area]
+
+WHY NEIGHBORS CHOOSE US:
+✓ Local family-owned business with deep community roots
+✓ Personal consultations in your home
+✓ Master-level certified installers
+✓ Full-service support even after installation
+✓ BBB A+ rating and Angie's List Super Service Award
+
+We're proud members of the San Diego business community and believe in building lasting relationships through exceptional service and craftsmanship.
+
+Let us show you why your neighbors trust Express Blinds & More with their homes.
+
+Call today for your complimentary design consultation!
+
+Warmly,
+Bob Sole & Family
+Express Blinds & More
+(619) 461-2101`,
+
+            efficiency: `Subject: Quick & Easy Window Treatment Solutions - Express Blinds & More
+
+Dear [Client Name],
+
+Transform your home's windows with Express Blinds & More's streamlined, hassle-free process.
+
+FAST & EFFICIENT SERVICE:
+• Same-week consultations available
+• Precise measurements in one visit
+• Quick turnaround on custom orders
+• Professional installation in 2-4 hours
+• Zero disruption to your daily routine
+
+ONE-STOP SOLUTION:
+✓ Consultation, design, fabrication & installation
+✓ All major brands and styles available
+✓ Financing options for immediate installation
+✓ Post-installation care and maintenance
+✓ Warranty service handled directly
+
+CONVENIENCE FEATURES:
+• We come to you - no showroom visits required
+• Flexible scheduling including evenings/weekends
+• Motorization options for effortless operation
+• Smart home integration available
+• Easy care instructions provided
+
+Save time and avoid the hassle of multiple vendors. Let Express Blinds & More handle everything from start to finish.
+
+Schedule your appointment today!
+
+Efficiently yours,
+Bob Sole, Owner
+Express Blinds & More
+(619) 461-2101`,
+
+            innovation: `Subject: Smart Home Window Treatment Technology - Express Blinds & More
+
+Dear [Client Name],
+
+Experience the future of window treatments with Express Blinds & More's cutting-edge solutions and smart technology integration.
+
+INNOVATIVE FEATURES:
+• Somfy motorization - Platinum-level expertise
+• Smart home integration (Alexa, Google, Apple HomeKit)
+• Solar-powered and battery-operated options
+• Smartphone app control with scheduling
+• Voice activation and automated responses
+
+LATEST TECHNOLOGY:
+✓ Hunter Douglas PowerView Automation
+✓ Automated sun-tracking systems
+✓ Energy-efficient cellular and solar fabrics
+✓ UV-blocking while maintaining views
+✓ Wireless and hardwired motorization options
+
+ADVANCED CUSTOMIZATION:
+• Programmable scenes and schedules
+• Integration with lighting and HVAC systems
+• Remote monitoring and control
+• Multi-room synchronized operation
+• Future-ready expandable systems
+
+COMPETITIVE ADVANTAGE:
+As a Somfy Motorization Expert and Master-Level Installer, we deliver the most advanced window treatment technology available today.
+
+Ready to upgrade to smart window treatments?
+
+Innovatively yours,
+Bob Sole, Motorization Expert
+Express Blinds & More
+(619) 461-2101`
+        };
+
+        function showTab(tabName) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // Remove active class from all tabs
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected tab content
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+        }
+
+        function populateTable() {
+            const tbody = document.getElementById('clientTableBody');
+            tbody.innerHTML = '';
+            
+            filteredData.forEach(client => {
+                const row = tbody.insertRow();
+                row.className = `tier-${client.tier.toLowerCase()}`;
+                
+                row.innerHTML = `
+                    <td>${client.name}</td>
+                    <td>${client.email}</td>
+                    <td>${client.phone}</td>
+                    <td>${client.address}</td>
+                    <td>${client.puresScore}</td>
+                    <td>${client.tier}</td>
+                    <td>${client.propertyType}</td>
+                    <td>${client.budget}</td>
+                    <td>${client.status}</td>
+                    <td>${client.lastContact}</td>
+                    <td>${client.nextAction}</td>
+                    <td>
+                        <button class="contact-btn" onclick="contactClient('${client.email}', '${client.name}', '${client.buyerType}')">Email</button>
+                        <button class="contact-btn" onclick="callClient('${client.phone}')">Call</button>
+                    </td>
+                `;
+            });
+            
+            updateStats();
+        }
+
+        function updateStats() {
+            const tier1a = filteredData.filter(c => c.tier === '1A').length;
+            const tier1b = filteredData.filter(c => c.tier === '1B').length;
+            const tier1c = filteredData.filter(c => c.tier === '1C').length;
+            
+            document.getElementById('totalClients').textContent = filteredData.length;
+            document.getElementById('tier1aCount').textContent = tier1a;
+            document.getElementById('tier1bCount').textContent = tier1b;
+            document.getElementById('tier1cCount').textContent = tier1c;
+        }
+
+        function filterTable() {
+            const search = document.getElementById('searchFilter').value.toLowerCase();
+            const tierFilter = document.getElementById('tierFilter').value;
+            const propertyFilter = document.getElementById('propertyFilter').value;
+            
+            filteredData = clientData.filter(client => {
+                const matchesSearch = client.name.toLowerCase().includes(search) || 
+                                    client.email.toLowerCase().includes(search) ||
+                                    client.address.toLowerCase().includes(search);
+                const matchesTier = !tierFilter || client.tier === tierFilter;
+                const matchesProperty = !propertyFilter || client.propertyType === propertyFilter;
+                
+                return matchesSearch && matchesTier && matchesProperty;
+            });
+            
+            populateTable();
+        }
+
+        function sortTable(columnIndex) {
+            const columns = ['name', 'email', 'phone', 'address', 'puresScore', 'tier', 'propertyType', 'budget', 'status', 'lastContact', 'nextAction'];
+            const column = columns[columnIndex];
+            
+            if (currentSort.column === column) {
+                currentSort.direction = currentSort.direction === 'asc' ? 'desc' : 'asc';
+            } else {
+                currentSort.column = column;
+                currentSort.direction = 'asc';
+            }
+            
+            filteredData.sort((a, b) => {
+                let aVal = a[column];
+                let bVal = b[column];
+                
+                if (column === 'puresScore') {
+                    aVal = parseFloat(aVal);
+                    bVal = parseFloat(bVal);
+                } else if (column === 'budget') {
+                    aVal = parseFloat(aVal.replace(/[$,]/g, ''));
+                    bVal = parseFloat(bVal.replace(/[$,]/g, ''));
+                } else {
+                    aVal = aVal.toString().toLowerCase();
+                    bVal = bVal.toString().toLowerCase();
+                }
+                
+                if (currentSort.direction === 'asc') {
+                    return aVal > bVal ? 1 : -1;
+                } else {
+                    return aVal < bVal ? 1 : -1;
+                }
+            });
+            
+            populateTable();
+        }
+
+        function contactClient(email, name, buyerType) {
+            const template = emailTemplates[buyerType] || emailTemplates.relationship;
+            const personalizedTemplate = template.replace(/\[Client Name\]/g, name);
+            
+            const mailto = `mailto:${email}?subject=${encodeURIComponent('Transform Your Home with Custom Window Treatments')}&body=${encodeURIComponent(personalizedTemplate)}`;
+            window.open(mailto);
+        }
+
+        function callClient(phone) {
+            window.open(`tel:${phone}`);
+        }
+
+        function exportToCSV() {
+            const headers = ['Client Name', 'Email', 'Phone', 'Address', 'P.U.R.E.S. Score', 'Tier', 'Property Type', 'Budget', 'Status', 'Last Contact', 'Next Action'];
+            const csvContent = [
+                headers.join(','),
+                ...filteredData.map(client => [
+                    `"${client.name}"`,
+                    `"${client.email}"`,
+                    `"${client.phone}"`,
+                    `"${client.address}"`,
+                    client.puresScore,
+                    `"${client.tier}"`,
+                    `"${client.propertyType}"`,
+                    `"${client.budget}"`,
+                    `"${client.status}"`,
+                    `"${client.lastContact}"`,
+                    `"${client.nextAction}"`
+                ].join(','))
+            ].join('\n');
+            
+            const blob = new Blob([csvContent], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'express_blinds_prospects.csv';
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+
+        function updateEmailTemplate() {
+            const buyerType = document.getElementById('buyerTypeTemplate').value;
+            const template = emailTemplates[buyerType] || emailTemplates.relationship;
+            document.getElementById('emailTemplateText').value = template;
+        }
+
+        // P.U.R.E.S. scoring sliders
+        function setupSliders() {
+            const sliders = ['profitability', 'urgency', 'reachability', 'engagement', 'sustainability'];
+            
+            sliders.forEach(slider => {
+                const element = document.getElementById(slider);
+                const valueDisplay = document.getElementById(slider + 'Value');
+                
+                element.addEventListener('input', function() {
+                    valueDisplay.textContent = this.value;
+                });
+            });
+        }
+
+        // Initialize the dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            populateTable();
+            updateEmailTemplate();
+            setupSliders();
+        });
+    </script>
+</body>
+</html>

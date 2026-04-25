@@ -1,0 +1,1714 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>S.A.L.E. Client Targeting Dashboard - AD Fashion</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #000000;
+            color: #ffffff;
+            line-height: 1.6;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #CF2030, #a01020);
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(207, 32, 48, 0.3);
+        }
+
+        .logo {
+            max-width: 300px;
+            height: auto;
+            margin-bottom: 10px;
+        }
+
+        .company-info {
+            background: rgba(207, 32, 48, 0.1);
+            padding: 15px;
+            margin: 20px;
+            border-radius: 10px;
+            border: 1px solid #CF2030;
+        }
+
+        .nav-tabs {
+            background: #CF2030;
+            padding: 0;
+            margin: 0 20px;
+            border-radius: 10px 10px 0 0;
+            overflow: hidden;
+        }
+
+        .tab-button {
+            background: transparent;
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s;
+            float: left;
+        }
+
+        .tab-button:hover, .tab-button.active {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .tab-content {
+            display: none;
+            background: #1a1a1a;
+            margin: 0 20px;
+            padding: 20px;
+            border-radius: 0 0 10px 10px;
+            border: 1px solid #CF2030;
+            border-top: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .controls {
+            background: #2a2a2a;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #CF2030;
+        }
+
+        .search-filter {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        input, select, button {
+            padding: 10px;
+            border: 1px solid #CF2030;
+            border-radius: 5px;
+            background: #333;
+            color: white;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #ff4060;
+            box-shadow: 0 0 5px rgba(207, 32, 48, 0.5);
+        }
+
+        button {
+            background: #CF2030;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background: #a01020;
+        }
+
+        .export-btn {
+            background: #4CAF50;
+        }
+
+        .export-btn:hover {
+            background: #45a049;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #2a2a2a;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #444;
+        }
+
+        th {
+            background: #CF2030;
+            color: white;
+            cursor: pointer;
+            user-select: none;
+            position: relative;
+        }
+
+        th:hover {
+            background: #a01020;
+        }
+
+        th::after {
+            content: '⇅';
+            position: absolute;
+            right: 8px;
+            opacity: 0.5;
+        }
+
+        tr:hover {
+            background: rgba(207, 32, 48, 0.1);
+        }
+
+        .tier-1a { background: linear-gradient(90deg, rgba(76, 175, 80, 0.2), transparent); }
+        .tier-1b { background: linear-gradient(90deg, rgba(255, 193, 7, 0.2), transparent); }
+        .tier-1c { background: linear-gradient(90deg, rgba(33, 150, 243, 0.2), transparent); }
+
+        .contact-btn {
+            padding: 5px 10px;
+            margin: 2px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s;
+        }
+
+        .email-btn { background: #2196F3; color: white; }
+        .phone-btn { background: #FF9800; color: white; }
+        .linkedin-btn { background: #0077B5; color: white; }
+
+        .contact-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        .pures-score {
+            display: flex;
+            gap: 5px;
+            align-items: center;
+        }
+
+        .score-badge {
+            background: #CF2030;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+
+        .modal-content {
+            background: #1a1a1a;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #CF2030;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 600px;
+            color: white;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: #CF2030;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            background: #1a1a1a;
+            border-top: 1px solid #CF2030;
+            margin-top: 40px;
+        }
+
+        .footer-logo {
+            max-width: 150px;
+            height: auto;
+            opacity: 0.7;
+        }
+
+        .analytics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .analytics-card {
+            background: #2a2a2a;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #CF2030;
+            text-align: center;
+        }
+
+        .analytics-number {
+            font-size: 2rem;
+            color: #CF2030;
+            font-weight: bold;
+        }
+
+        .form-section {
+            background: #2a2a2a;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #CF2030;
+            margin-bottom: 20px;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .form-group {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #CF2030;
+            font-weight: bold;
+        }
+
+        .slider-container {
+            margin: 10px 0;
+        }
+
+        .slider {
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: #333;
+            outline: none;
+        }
+
+        .slider::-webkit-slider-thumb {
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #CF2030;
+            cursor: pointer;
+        }
+
+        .clearfix::after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports" class="logo">
+        <h1>S.A.L.E. Client Targeting Dashboard</h1>
+    </div>
+
+    <div class="company-info">
+        <h2>AD Fashion - Apparel & Fashion</h2>
+        <p><strong>Location:</strong> Bellflower, California, United States</p>
+        <p><strong>Industry:</strong> Apparel & Fashion | <strong>Company Size:</strong> 11-50 employees</p>
+        <p><strong>Contact:</strong> samucongjangnimellaine@adfashion.com.br | <strong>Website:</strong> www.adfashion.com.br</p>
+    </div>
+
+    <div class="nav-tabs clearfix">
+        <button class="tab-button active" onclick="showTab('sourcing')">S - Sourcing</button>
+        <button class="tab-button" onclick="showTab('assessing')">A - Assessing</button>
+        <button class="tab-button" onclick="showTab('listening')">L - Listening</button>
+        <button class="tab-button" onclick="showTab('empowering')">E - Empowering</button>
+        <button class="tab-button" onclick="showTab('analytics')">Analytics</button>
+    </div>
+
+    <!-- SOURCING Tab -->
+    <div id="sourcing" class="tab-content active">
+        <h2>P.U.R.E.S. Client Scoring & Management</h2>
+        
+        <div class="controls">
+            <div class="search-filter">
+                <input type="text" id="searchInput" placeholder="Search clients..." onkeyup="filterClients()">
+                <select id="tierFilter" onchange="filterClients()">
+                    <option value="">All Tiers</option>
+                    <option value="Tier 1A">Tier 1A (Premium)</option>
+                    <option value="Tier 1B">Tier 1B (High-Value)</option>
+                    <option value="Tier 1C">Tier 1C (Qualified)</option>
+                </select>
+                <select id="industryFilter" onchange="filterClients()">
+                    <option value="">All Industries</option>
+                    <option value="Retail">Retail</option>
+                    <option value="Fashion">Fashion</option>
+                    <option value="Beauty">Beauty</option>
+                    <option value="Lifestyle">Lifestyle</option>
+                </select>
+                <button onclick="exportToCSV()" class="export-btn">Export CSV</button>
+                <button onclick="openScoreModal()">Add New Client</button>
+            </div>
+        </div>
+
+        <div class="analytics-grid">
+            <div class="analytics-card">
+                <div class="analytics-number" id="totalClients">50</div>
+                <div>Total Prospects</div>
+            </div>
+            <div class="analytics-card">
+                <div class="analytics-number" id="tier1aCount">15</div>
+                <div>Tier 1A Clients</div>
+            </div>
+            <div class="analytics-card">
+                <div class="analytics-number" id="avgScore">3.8</div>
+                <div>Average P.U.R.E.S. Score</div>
+            </div>
+            <div class="analytics-card">
+                <div class="analytics-number" id="contactedToday">8</div>
+                <div>Contacted Today</div>
+            </div>
+        </div>
+
+        <table id="clientTable">
+            <thead>
+                <tr>
+                    <th onclick="sortTable(0)">Client Name</th>
+                    <th onclick="sortTable(1)">Email</th>
+                    <th onclick="sortTable(2)">Phone</th>
+                    <th onclick="sortTable(3)">Address</th>
+                    <th onclick="sortTable(4)">P.U.R.E.S. Score</th>
+                    <th onclick="sortTable(5)">Tier Level</th>
+                    <th onclick="sortTable(6)">Industry</th>
+                    <th onclick="sortTable(7)">Revenue Estimate</th>
+                    <th onclick="sortTable(8)">Last Contact</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="clientTableBody">
+                <!-- Client data will be populated by JavaScript -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- ASSESSING Tab -->
+    <div id="assessing" class="tab-content">
+        <h2>Buying Pattern Analysis & Assessment Tools</h2>
+        
+        <div class="form-section">
+            <h3>Client Buying Profile Categories</h3>
+            <div class="analytics-grid">
+                <div class="analytics-card">
+                    <h4>Analytical Buyers (40%)</h4>
+                    <p>Require detailed ROI analysis, case studies, trials</p>
+                </div>
+                <div class="analytics-card">
+                    <h4>Relationship Buyers (30%)</h4>
+                    <p>Value trust, referrals, long-term partnerships</p>
+                </div>
+                <div class="analytics-card">
+                    <h4>Efficiency Buyers (20%)</h4>
+                    <p>Focus on time-saving, process improvement</p>
+                </div>
+                <div class="analytics-card">
+                    <h4>Innovation Buyers (10%)</h4>
+                    <p>Seek cutting-edge solutions, competitive advantage</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-section">
+            <h3>Decision Timeline Analyzer</h3>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Average Decision Timeline:</label>
+                    <select>
+                        <option>2-4 weeks (Fashion Retail)</option>
+                        <option>1-2 weeks (Quick Fashion)</option>
+                        <option>4-8 weeks (Premium Fashion)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Decision Influence Factors:</label>
+                    <select multiple>
+                        <option>Price Point</option>
+                        <option>Quality</option>
+                        <option>Brand Reputation</option>
+                        <option>Delivery Timeline</option>
+                        <option>Customization Options</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-section">
+            <h3>Value Proposition Alignment Matrix</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Client Segment</th>
+                        <th>Key Value Driver</th>
+                        <th>AD Fashion Strength</th>
+                        <th>Alignment Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Young Professionals</td>
+                        <td>Trendy, Affordable Fashion</td>
+                        <td>Current Collections</td>
+                        <td><span class="score-badge">4.5</span></td>
+                    </tr>
+                    <tr>
+                        <td>Fashion Retailers</td>
+                        <td>Wholesale Pricing</td>
+                        <td>Bulk Discounts</td>
+                        <td><span class="score-badge">4.2</span></td>
+                    </tr>
+                    <tr>
+                        <td>Online Boutiques</td>
+                        <td>Unique Designs</td>
+                        <td>Exclusive Collections</td>
+                        <td><span class="score-badge">4.8</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- LISTENING Tab -->
+    <div id="listening" class="tab-content">
+        <h2>Feedback Integration & Customer Voice</h2>
+        
+        <div class="form-section">
+            <h3>Feedback Collection Dashboard</h3>
+            <div class="analytics-grid">
+                <div class="analytics-card">
+                    <div class="analytics-number">4.6</div>
+                    <div>Average Satisfaction Score</div>
+                </div>
+                <div class="analytics-card">
+                    <div class="analytics-number">89%</div>
+                    <div>Response Rate</div>
+                </div>
+                <div class="analytics-card">
+                    <div class="analytics-number">156</div>
+                    <div>Reviews Collected</div>
+                </div>
+                <div class="analytics-card">
+                    <div class="analytics-number">12</div>
+                    <div>Open Issues</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-section">
+            <h3>Pre-Sale Feedback Collection</h3>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Fashion Preferences Survey:</label>
+                    <textarea placeholder="What fashion styles are you most interested in?" style="width: 100%; height: 80px;"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Budget Range:</label>
+                    <select>
+                        <option>$50-$100</option>
+                        <option>$100-$250</option>
+                        <option>$250-$500</option>
+                        <option>$500+</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-section">
+            <h3>Post-Sale Satisfaction Monitoring</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Client Name</th>
+                        <th>Purchase Date</th>
+                        <th>Satisfaction Score</th>
+                        <th>Feedback</th>
+                        <th>Action Required</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Sarah Johnson</td>
+                        <td>2024-01-15</td>
+                        <td><span class="score-badge">5.0</span></td>
+                        <td>"Excellent quality and fast delivery!"</td>
+                        <td>Request Review</td>
+                    </tr>
+                    <tr>
+                        <td>Michael Chen</td>
+                        <td>2024-01-12</td>
+                        <td><span class="score-badge">4.2</span></td>
+                        <td>"Good product, sizing was slightly off"</td>
+                        <td>Size Guide Update</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- EMPOWERING Tab -->
+    <div id="empowering" class="tab-content">
+        <h2>Referral Strategy & Client Advocacy</h2>
+        
+        <div class="form-section">
+            <h3>Referral Management Dashboard</h3>
+            <div class="analytics-grid">
+                <div class="analytics-card">
+                    <div class="analytics-number">23</div>
+                    <div>Active Referral Partners</div>
+                </div>
+                <div class="analytics-card">
+                    <div class="analytics-number">47</div>
+                    <div>Referrals Generated</div>
+                </div>
+                <div class="analytics-card">
+                    <div class="analytics-number">68%</div>
+                    <div>Referral Conversion Rate</div>
+                </div>
+                <div class="analytics-card">
+                    <div class="analytics-number">$15,680</div>
+                    <div>Referral Revenue</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-section">
+            <h3>Success Story Documentation</h3>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Client Success Story:</label>
+                    <textarea placeholder="Describe the client's transformation and results..." style="width: 100%; height: 100px;"></textarea>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Quantifiable Results:</label>
+                    <input type="text" placeholder="e.g., 40% increase in customer engagement">
+                </div>
+                <div class="form-group">
+                    <label>Testimonial Quote:</label>
+                    <input type="text" placeholder="Client's direct testimonial">
+                </div>
+            </div>
+        </div>
+
+        <div class="form-section">
+            <h3>Referral Reward Tracking</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Referring Client</th>
+                        <th>Referred Client</th>
+                        <th>Referral Date</th>
+                        <th>Conversion Status</th>
+                        <th>Reward Earned</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Jennifer Martinez</td>
+                        <td>Lisa Wong</td>
+                        <td>2024-01-10</td>
+                        <td>Converted</td>
+                        <td>$50 Credit</td>
+                    </tr>
+                    <tr>
+                        <td>David Thompson</td>
+                        <td>Amanda Rodriguez</td>
+                        <td>2024-01-08</td>
+                        <td>Pending</td>
+                        <td>TBD</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- ANALYTICS Tab -->
+    <div id="analytics" class="tab-content">
+        <h2>S.A.L.E. Performance Analytics</h2>
+        
+        <div class="analytics-grid">
+            <div class="analytics-card">
+                <h3>Sourcing Metrics</h3>
+                <div class="analytics-number">85%</div>
+                <div>P.U.R.E.S. Score Accuracy</div>
+                <small>Target: >80%</small>
+            </div>
+            <div class="analytics-card">
+                <h3>Assessment Metrics</h3>
+                <div class="analytics-number">92%</div>
+                <div>Needs Assessment Accuracy</div>
+                <small>Target: >90%</small>
+            </div>
+            <div class="analytics-card">
+                <h3>Listening Metrics</h3>
+                <div class="analytics-number">76%</div>
+                <div>Feedback Collection Rate</div>
+                <small>Target: >70%</small>
+            </div>
+            <div class="analytics-card">
+                <h3>Empowerment Metrics</h3>
+                <div class="analytics-number">2.4</div>
+                <div>Referrals per Client</div>
+                <small>Target: 2+</small>
+            </div>
+        </div>
+
+        <div class="form-section">
+            <h3>Revenue Analysis by Tier</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Tier Level</th>
+                        <th>Client Count</th>
+                        <th>Avg. Order Value</th>
+                        <th>Total Revenue</th>
+                        <th>Conversion Rate</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="tier-1a">
+                        <td>Tier 1A (Premium)</td>
+                        <td>15</td>
+                        <td>$850</td>
+                        <td>$12,750</td>
+                        <td>85%</td>
+                    </tr>
+                    <tr class="tier-1b">
+                        <td>Tier 1B (High-Value)</td>
+                        <td>20</td>
+                        <td>$420</td>
+                        <td>$8,400</td>
+                        <td>72%</td>
+                    </tr>
+                    <tr class="tier-1c">
+                        <td>Tier 1C (Qualified)</td>
+                        <td>15</td>
+                        <td>$280</td>
+                        <td>$4,200</td>
+                        <td>58%</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <div id="scoreModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('scoreModal')">&times;</span>
+            <h2>P.U.R.E.S. Client Scoring</h2>
+            <form id="scoreForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Client Name:</label>
+                        <input type="text" id="clientName" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Email:</label>
+                        <input type="email" id="clientEmail" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Profitability (1-5): <span id="profitabilityValue">3</span></label>
+                    <div class="slider-container">
+                        <input type="range" min="1" max="5" value="3" class="slider" id="profitability" oninput="updateSliderValue('profitability')">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Urgency (1-5): <span id="urgencyValue">3</span></label>
+                    <div class="slider-container">
+                        <input type="range" min="1" max="5" value="3" class="slider" id="urgency" oninput="updateSliderValue('urgency')">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Reachability (1-5): <span id="reachabilityValue">3</span></label>
+                    <div class="slider-container">
+                        <input type="range" min="1" max="5" value="3" class="slider" id="reachability" oninput="updateSliderValue('reachability')">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Engagement (1-5): <span id="engagementValue">3</span></label>
+                    <div class="slider-container">
+                        <input type="range" min="1" max="5" value="3" class="slider" id="engagement" oninput="updateSliderValue('engagement')">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Sustainability (1-5): <span id="sustainabilityValue">3</span></label>
+                    <div class="slider-container">
+                        <input type="range" min="1" max="5" value="3" class="slider" id="sustainability" oninput="updateSliderValue('sustainability')">
+                    </div>
+                </div>
+                
+                <button type="submit" style="width: 100%; margin-top: 20px;">Calculate P.U.R.E.S. Score</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="emailModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('emailModal')">&times;</span>
+            <h2>Email Template</h2>
+            <div id="emailContent"></div>
+            <button onclick="sendEmail()" style="width: 100%; margin-top: 20px;">Send Email</button>
+        </div>
+    </div>
+
+    <div class="footer">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports" class="footer-logo">
+        <p>&copy; 2024 Higgins Reports. All rights reserved.</p>
+    </div>
+
+    <script>
+        // Sample client data for AD Fashion (Fashion/Apparel industry in Bellflower, CA area)
+        let clientData = [
+            {
+                name: "Sarah Johnson",
+                email: "sarah.johnson@fashionboutique.com",
+                phone: "(562) 555-0101",
+                address: "12340 Bellflower Blvd, Bellflower, CA 90706",
+                puresScore: 4.5,
+                tierLevel: "Tier 1A",
+                industry: "Fashion",
+                revenue: "$150,000",
+                lastContact: "2024-01-15",
+                buyerType: "Relationship"
+            },
+            {
+                name: "Michael Chen",
+                email: "m.chen@trendilystore.com",
+                phone: "(562) 555-0102",
+                address: "8765 Clark Ave, Bellflower, CA 90706",
+                puresScore: 4.2,
+                tierLevel: "Tier 1A",
+                industry: "Retail",
+                revenue: "$280,000",
+                lastContact: "2024-01-12",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Jennifer Martinez",
+                email: "jennifer@styleconnection.com",
+                phone: "(562) 555-0103",
+                address: "15678 Woodruff Ave, Bellflower, CA 90706",
+                puresScore: 4.8,
+                tierLevel: "Tier 1A",
+                industry: "Fashion",
+                revenue: "$320,000",
+                lastContact: "2024-01-10",
+                buyerType: "Innovation"
+            },
+            {
+                name: "David Thompson",
+                email: "david.t@urbanwear.net",
+                phone: "(562) 555-0104",
+                address: "9876 Artesia Blvd, Bellflower, CA 90706",
+                puresScore: 3.8,
+                tierLevel: "Tier 1B",
+                industry: "Fashion",
+                revenue: "$95,000",
+                lastContact: "2024-01-08",
+                buyerType: "Efficiency"
+            },
+            {
+                name: "Lisa Wong",
+                email: "lisa.wong@chicstyles.com",
+                phone: "(562) 555-0105",
+                address: "14523 Downey Ave, Bellflower, CA 90706",
+                puresScore: 4.1,
+                tierLevel: "Tier 1A",
+                industry: "Retail",
+                revenue: "$175,000",
+                lastContact: "2024-01-05",
+                buyerType: "Relationship"
+            },
+            {
+                name: "Robert Kim",
+                email: "robert.kim@fashionforward.com",
+                phone: "(562) 555-0106",
+                address: "11234 Lakewood Blvd, Bellflower, CA 90706",
+                puresScore: 3.5,
+                tierLevel: "Tier 1B",
+                industry: "Fashion",
+                revenue: "$120,000",
+                lastContact: "2024-01-03",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Amanda Rodriguez",
+                email: "amanda@luxeboutique.com",
+                phone: "(562) 555-0107",
+                address: "16789 Atlantic Ave, Bellflower, CA 90706",
+                puresScore: 4.6,
+                tierLevel: "Tier 1A",
+                industry: "Fashion",
+                revenue: "$240,000",
+                lastContact: "2024-01-01",
+                buyerType: "Innovation"
+            },
+            {
+                name: "James Wilson",
+                email: "james.wilson@streetwear.co",
+                phone: "(562) 555-0108",
+                address: "13456 Paramount Blvd, Bellflower, CA 90706",
+                puresScore: 3.9,
+                tierLevel: "Tier 1B",
+                industry: "Fashion",
+                revenue: "$85,000",
+                lastContact: "2023-12-28",
+                buyerType: "Efficiency"
+            },
+            {
+                name: "Maria Garcia",
+                email: "maria@elegancefashion.com",
+                phone: "(562) 555-0109",
+                address: "18901 Studebaker Rd, Bellflower, CA 90706",
+                puresScore: 4.3,
+                tierLevel: "Tier 1A",
+                industry: "Fashion",
+                revenue: "$195,000",
+                lastContact: "2023-12-25",
+                buyerType: "Relationship"
+            },
+            {
+                name: "Kevin Park",
+                email: "kevin.park@modernstyle.net",
+                phone: "(562) 555-0110",
+                address: "10987 Alondra Blvd, Bellflower, CA 90706",
+                puresScore: 3.7,
+                tierLevel: "Tier 1B",
+                industry: "Retail",
+                revenue: "$110,000",
+                lastContact: "2023-12-22",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Nicole Brown",
+                email: "nicole@fashionfusion.com",
+                phone: "(562) 555-0111",
+                address: "12567 Rose Ave, Bellflower, CA 90706",
+                puresScore: 4.4,
+                tierLevel: "Tier 1A",
+                industry: "Fashion",
+                revenue: "$210,000",
+                lastContact: "2023-12-20",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Daniel Lee",
+                email: "daniel@trendsetters.com",
+                phone: "(562) 555-0112",
+                address: "14678 Flower St, Bellflower, CA 90706",
+                puresScore: 3.6,
+                tierLevel: "Tier 1B",
+                industry: "Fashion",
+                revenue: "$88,000",
+                lastContact: "2023-12-18",
+                buyerType: "Efficiency"
+            },
+            {
+                name: "Stephanie Taylor",
+                email: "stephanie@beautystyle.co",
+                phone: "(562) 555-0113",
+                address: "17890 Bellflower Blvd, Bellflower, CA 90706",
+                puresScore: 4.7,
+                tierLevel: "Tier 1A",
+                industry: "Beauty",
+                revenue: "$290,000",
+                lastContact: "2023-12-15",
+                buyerType: "Relationship"
+            },
+            {
+                name: "Christopher Davis",
+                email: "chris@urbanclothing.net",
+                phone: "(562) 555-0114",
+                address: "11345 Carson St, Bellflower, CA 90706",
+                puresScore: 3.4,
+                tierLevel: "Tier 1C",
+                industry: "Fashion",
+                revenue: "$75,000",
+                lastContact: "2023-12-12",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Jessica Miller",
+                email: "jessica@casualwear.com",
+                phone: "(562) 555-0115",
+                address: "15234 Somerset Blvd, Bellflower, CA 90706",
+                puresScore: 4.0,
+                tierLevel: "Tier 1B",
+                industry: "Fashion",
+                revenue: "$130,000",
+                lastContact: "2023-12-10",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Ryan Anderson",
+                email: "ryan@activewear.co",
+                phone: "(562) 555-0116",
+                address: "13789 Maple Ave, Bellflower, CA 90706",
+                puresScore: 3.8,
+                tierLevel: "Tier 1B",
+                industry: "Fashion",
+                revenue: "$105,000",
+                lastContact: "2023-12-08",
+                buyerType: "Efficiency"
+            },
+            {
+                name: "Michelle White",
+                email: "michelle@luxefashion.com",
+                phone: "(562) 555-0117",
+                address: "16456 Clark Ave, Bellflower, CA 90706",
+                puresScore: 4.5,
+                tierLevel: "Tier 1A",
+                industry: "Fashion",
+                revenue: "$225,000",
+                lastContact: "2023-12-05",
+                buyerType: "Relationship"
+            },
+            {
+                name: "Brandon Johnson",
+                email: "brandon@stylespot.net",
+                phone: "(562) 555-0118",
+                address: "12901 Woodruff Ave, Bellflower, CA 90706",
+                puresScore: 3.3,
+                tierLevel: "Tier 1C",
+                industry: "Retail",
+                revenue: "$68,000",
+                lastContact: "2023-12-03",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Ashley Green",
+                email: "ashley@fashionhub.com",
+                phone: "(562) 555-0119",
+                address: "18345 Artesia Blvd, Bellflower, CA 90706",
+                puresScore: 4.2,
+                tierLevel: "Tier 1A",
+                industry: "Fashion",
+                revenue: "$185,000",
+                lastContact: "2023-12-01",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Tyler Moore",
+                email: "tyler@modernapparel.co",
+                phone: "(562) 555-0120",
+                address: "14567 Downey Ave, Bellflower, CA 90706",
+                puresScore: 3.7,
+                tierLevel: "Tier 1B",
+                industry: "Fashion",
+                revenue: "$115,000",
+                lastContact: "2023-11-28",
+                buyerType: "Efficiency"
+            }
+        ];
+
+        // Add 30 more clients to reach 50 total
+        const additionalClients = [
+            {
+                name: "Samantha Lopez",
+                email: "samantha@boutiquestyle.com",
+                phone: "(562) 555-0121",
+                address: "19678 Lakewood Blvd, Bellflower, CA 90706",
+                puresScore: 4.1,
+                tierLevel: "Tier 1B",
+                industry: "Fashion",
+                revenue: "$140,000",
+                lastContact: "2023-11-25",
+                buyerType: "Relationship"
+            },
+            {
+                name: "Nathan Clark",
+                email: "nathan@streetfashion.net",
+                phone: "(562) 555-0122",
+                address: "20123 Atlantic Ave, Bellflower, CA 90706",
+                puresScore: 3.2,
+                tierLevel: "Tier 1C",
+                industry: "Fashion",
+                revenue: "$62,000",
+                lastContact: "2023-11-22",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Rachel Turner",
+                email: "rachel@elegantfashion.com",
+                phone: "(562) 555-0123",
+                address: "11876 Paramount Blvd, Bellflower, CA 90706",
+                puresScore: 4.4,
+                tierLevel: "Tier 1A",
+                industry: "Fashion",
+                revenue: "$205,000",
+                lastContact: "2023-11-20",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Jordan Baker",
+                email: "jordan@casualstyle.co",
+                phone: "(562) 555-0124",
+                address: "15987 Studebaker Rd, Bellflower, CA 90706",
+                puresScore: 3.6,
+                tierLevel: "Tier 1B",
+                industry: "Fashion",
+                revenue: "$92,000",
+                lastContact: "2023-11-18",
+                buyerType: "Efficiency"
+            },
+            {
+                name: "Brittany Hall",
+                email: "brittany@fashionforward.net",
+                phone: "(562) 555-0125",
+                address: "17234 Alondra Blvd, Bellflower, CA 90706",
+                puresScore: 4.3,
+                tierLevel: "Tier 1A",
+                industry: "Fashion",
+                revenue: "$190,000",
+                lastContact: "2023-11-15",
+                buyerType: "Relationship"
+            },
+            {
+                name: "Gregory Adams",
+                email: "gregory@urbanstyle.com",
+                phone: "(562) 555-0126",
+                address: "13654 Rose Ave, Bellflower, CA 90706",
+                puresScore: 3.1,
+                tierLevel: "Tier 1C",
+                industry: "Retail",
+                revenue: "$58,000",
+                lastContact: "2023-11-12",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Vanessa Scott",
+                email: "vanessa@luxestyle.com",
+                phone: "(562) 555-0127",
+                address: "16789 Flower St, Bellflower, CA 90706",
+                puresScore: 4.6,
+                tierLevel: "Tier 1A",
+                industry: "Fashion",
+                revenue: "$270,000",
+                lastContact: "2023-11-10",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Marcus Rivera",
+                email: "marcus@trendsetter.co",
+                phone: "(562) 555-0128",
+                address: "12098 Bellflower Blvd, Bellflower, CA 90706",
+                puresScore: 3.5,
+                tierLevel: "Tier 1B",
+                industry: "Fashion",
+                revenue: "$82,000",
+                lastContact: "2023-11-08",
+                buyerType: "Efficiency"
+            },
+            {
+                name: "Alexis Cooper",
+                email: "alexis@chicfashion.net",
+                phone: "(562) 555-0129",
+                address: "18567 Carson St, Bellflower, CA 90706",
+                puresScore: 4.0,
+                tierLevel: "Tier 1B",
+                industry: "Fashion",
+                revenue: "$125,000",
+                lastContact: "2023-11-05",
+                buyerType: "Relationship"
+            },
+            {
+                name: "Caleb Reed",
+                email: "caleb@modernfashion.com",
+                phone: "(562) 555-0130",
+                address: "14321 Somerset Blvd, Bellflower, CA 90706",
+                puresScore: 3.3,
+                tierLevel: "Tier 1C",
+                industry: "Fashion",
+                revenue: "$71,000",
+                lastContact: "2023-11-03",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Megan Phillips",
+                email: "megan@stylecenter.co",
+                phone: "(562) 555-0131",
+                address: "19876 Maple Ave, Bellflower, CA 90706",
+                puresScore: 4.2,
+                tierLevel: "Tier 1A",
+                industry: "Fashion",
+                revenue: "$165,000",
+                lastContact: "2023-11-01",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Derek Campbell",
+                email: "derek@fashionspot.net",
+                phone: "(562) 555-0132",
+                address: "11543 Clark Ave, Bellflower, CA 90706",
+                puresScore: 3.7,
+                tierLevel: "Tier 1B",
+                industry: "Fashion",
+                revenue: "$98,000",
+                lastContact: "2023-10-29",
+                buyerType: "Efficiency"
+            },
+            {
+                name: "Tiffany Parker",
+                email: "tiffany@boutiquecenter.com",
+                phone: "(562) 555-0133",
+                address: "15678 Woodruff Ave, Bellflower, CA 90706",
+                puresScore: 4.5,
+                tierLevel: "Tier 1A",
+                industry: "Fashion",
+                revenue: "$230,000",
+                lastContact: "2023-10-26",
+                buyerType: "Relationship"
+            },
+            {
+                name: "Austin Evans",
+                email: "austin@casualwear.net",
+                phone: "(562) 555-0134",
+                address: "17890 Artesia Blvd, Bellflower, CA 90706",
+                puresScore: 3.4,
+                tierLevel: "Tier 1C",
+                industry: "Retail",
+                revenue: "$66,000",
+                lastContact: "2023-10-24",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Courtney Morris",
+                email: "courtney@fashionista.co",
+                phone: "(562) 555-0135",
+                address: "13987 Downey Ave, Bellflower, CA 90706",
+                puresScore: 4.1,
+                tierLevel: "Tier 1B",
+                industry: "Fashion",
+                revenue: "$145,000",
+                lastContact: "2023-10-22",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Zachary Rogers",
+                email: "zachary@activestyle.com",
+                phone: "(562) 555-0136",
+                address: "16234 Lakewood Blvd, Bellflower, CA 90706",
+                puresScore: 3.8,
+                tierLevel: "Tier 1B",
+                industry: "Fashion",
+                revenue: "$108,000",
+                lastContact: "2023-10-20",
+                buyerType: "Efficiency"
+            },
+            {
+                name: "Kayla Stewart",
+                email: "kayla@luxeboutique.net",
+                phone: "(562) 555-0137",
+                address: "18345 Atlantic Ave, Bellflower, CA 90706",
+                puresScore: 4.4,
+                tierLevel: "Tier 1A",
+                industry: "Beauty",
+                revenue: "$215,000",
+                lastContact: "2023-10-18",
+                buyerType: "Relationship"
+            },
+            {
+                name: "Trevor Cook",
+                email: "trevor@streetstyle.co",
+                phone: "(562) 555-0138",
+                address: "12765 Paramount Blvd, Bellflower, CA 90706",
+                puresScore: 3.2,
+                tierLevel: "Tier 1C",
+                industry: "Fashion",
+                revenue: "$64,000",
+                lastContact: "2023-10-15",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Jasmine Bailey",
+                email: "jasmine@fashionworld.com",
+                phone: "(562) 555-0139",
+                address: "14567 Studebaker Rd, Bellflower, CA 90706",
+                puresScore: 4.3,
+                tierLevel: "Tier 1A",
+                industry: "Fashion",
+                revenue: "$180,000",
+                lastContact: "2023-10-12",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Garrett Richardson",
+                email: "garrett@modernwear.net",
+                phone: "(562) 555-0140",
+                address: "19123 Alondra Blvd, Bellflower, CA 90706",
+                puresScore: 3.6,
+                tierLevel: "Tier 1B",
+                industry: "Fashion",
+                revenue: "$89,000",
+                lastContact: "2023-10-10",
+                buyerType: "Efficiency"
+            },
+            {
+                name: "Crystal Cox",
+                email: "crystal@elegantboutique.co",
+                phone: "(562) 555-0141",
+                address: "11789 Rose Ave, Bellflower, CA 90706",
+                puresScore: 4.7,
+                tierLevel: "Tier 1A",
+                industry: "Fashion",
+                revenue: "$285,000",
+                lastContact: "2023-10-08",
+                buyerType: "Relationship"
+            },
+            {
+                name: "Dustin Ward",
+                email: "dustin@casualfashion.com",
+                phone: "(562) 555-0142",
+                address: "15432 Flower St, Bellflower, CA 90706",
+                puresScore: 3.1,
+                tierLevel: "Tier 1C",
+                industry: "Retail",
+                revenue: "$55,000",
+                lastContact: "2023-10-05",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Monique Torres",
+                email: "monique@styleconnection.net",
+                phone: "(562) 555-0143",
+                address: "17654 Bellflower Blvd, Bellflower, CA 90706",
+                puresScore: 4.2,
+                tierLevel: "Tier 1A",
+                industry: "Fashion",
+                revenue: "$170,000",
+                lastContact: "2023-10-03",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Blake Peterson",
+                email: "blake@urbanfashion.co",
+                phone: "(562) 555-0144",
+                address: "13098 Carson St, Bellflower, CA 90706",
+                puresScore: 3.5,
+                tierLevel: "Tier 1B",
+                industry: "Fashion",
+                revenue: "$78,000",
+                lastContact: "2023-10-01",
+                buyerType: "Efficiency"
+            },
+            {
+                name: "Sierra Gray",
+                email: "sierra@fashionplus.com",
+                phone: "(562) 555-0145",
+                address: "16789 Somerset Blvd, Bellflower, CA 90706",
+                puresScore: 4.0,
+                tierLevel: "Tier 1B",
+                industry: "Fashion",
+                revenue: "$135,000",
+                lastContact: "2023-09-28",
+                buyerType: "Relationship"
+            },
+            {
+                name: "Cody Brooks",
+                email: "cody@trendspot.net",
+                phone: "(562) 555-0146",
+                address: "18901 Maple Ave, Bellflower, CA 90706",
+                puresScore: 3.3,
+                tierLevel: "Tier 1C",
+                industry: "Fashion",
+                revenue: "$69,000",
+                lastContact: "2023-09-25",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Kimberly Powell",
+                email: "kimberly@luxefashion.net",
+                phone: "(562) 555-0147",
+                address: "12456 Clark Ave, Bellflower, CA 90706",
+                puresScore: 4.6,
+                tierLevel: "Tier 1A",
+                industry: "Fashion",
+                revenue: "$250,000",
+                lastContact: "2023-09-22",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Cameron Jenkins",
+                email: "cameron@activewear.net",
+                phone: "(562) 555-0148",
+                address: "14789 Woodruff Ave, Bellflower, CA 90706",
+                puresScore: 3.7,
+                tierLevel: "Tier 1B",
+                industry: "Fashion",
+                revenue: "$102,000",
+                lastContact: "2023-09-20",
+                buyerType: "Efficiency"
+            },
+            {
+                name: "Alyssa Perry",
+                email: "alyssa@boutiquestyle.net",
+                phone: "(562) 555-0149",
+                address: "19567 Artesia Blvd, Bellflower, CA 90706",
+                puresScore: 4.4,
+                tierLevel: "Tier 1A",
+                industry: "Fashion",
+                revenue: "$220,000",
+                lastContact: "2023-09-18",
+                buyerType: "Relationship"
+            },
+            {
+                name: "Seth Long",
+                email: "seth@modernstyle.co",
+                phone: "(562) 555-0150",
+                address: "11234 Downey Ave, Bellflower, CA 90706",
+                puresScore: 3.4,
+                tierLevel: "Tier 1C",
+                industry: "Retail",
+                revenue: "$73,000",
+                lastContact: "2023-09-15",
+                buyerType: "Analytical"
+            }
+        ];
+
+        clientData = clientData.concat(additionalClients);
+
+        let currentSortColumn = -1;
+        let currentSortDirection = 1;
+
+        function populateTable() {
+            const tbody = document.getElementById('clientTableBody');
+            tbody.innerHTML = '';
+
+            clientData.forEach((client, index) => {
+                const row = tbody.insertRow();
+                row.className = client.tierLevel === 'Tier 1A' ? 'tier-1a' : 
+                               client.tierLevel === 'Tier 1B' ? 'tier-1b' : 'tier-1c';
+                
+                row.innerHTML = `
+                    <td>${client.name}</td>
+                    <td>${client.email}</td>
+                    <td>${client.phone}</td>
+                    <td>${client.address}</td>
+                    <td>
+                        <div class="pures-score">
+                            <span class="score-badge">${client.puresScore}</span>
+                        </div>
+                    </td>
+                    <td>${client.tierLevel}</td>
+                    <td>${client.industry}</td>
+                    <td>${client.revenue}</td>
+                    <td>${client.lastContact}</td>
+                    <td>
+                        <button class="contact-btn email-btn" onclick="openEmailModal('${client.email}', '${client.name}', '${client.buyerType}')">Email</button>
+                        <button class="contact-btn phone-btn" onclick="callClient('${client.phone}')">Call</button>
+                        <button class="contact-btn linkedin-btn" onclick="openLinkedIn('${client.name}')">LinkedIn</button>
+                    </td>
+                `;
+            });
+        }
+
+        function filterClients() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const tierFilter = document.getElementById('tierFilter').value;
+            const industryFilter = document.getElementById('industryFilter').value;
+            
+            const rows = document.querySelectorAll('#clientTableBody tr');
+            
+            rows.forEach(row => {
+                const cells = row.getElementsByTagName('td');
+                const name = cells[0].textContent.toLowerCase();
+                const email = cells[1].textContent.toLowerCase();
+                const tier = cells[5].textContent;
+                const industry = cells[6].textContent;
+                
+                const matchesSearch = name.includes(searchTerm) || email.includes(searchTerm);
+                const matchesTier = !tierFilter || tier === tierFilter;
+                const matchesIndustry = !industryFilter || industry === industryFilter;
+                
+                row.style.display = matchesSearch && matchesTier && matchesIndustry ? '' : 'none';
+            });
+        }
+
+        function sortTable(columnIndex) {
+            const table = document.getElementById('clientTable');
+            const tbody = table.getElementsByTagName('tbody')[0];
+            const rows = Array.from(tbody.getElementsByTagName('tr'));
+            
+            if (currentSortColumn === columnIndex) {
+                currentSortDirection *= -1;
+            } else {
+                currentSortDirection = 1;
+                currentSortColumn = columnIndex;
+            }
+            
+            rows.sort((a, b) => {
+                const aValue = a.getElementsByTagName('td')[columnIndex].textContent;
+                const bValue = b.getElementsByTagName('td')[columnIndex].textContent;
+                
+                if (columnIndex === 4) { // P.U.R.E.S. Score
+                    return currentSortDirection * (parseFloat(aValue) - parseFloat(bValue));
+                }
+                
+                return currentSortDirection * aValue.localeCompare(bValue);
+            });
+            
+            tbody.innerHTML = '';
+            rows.forEach(row => tbody.appendChild(row));
+        }
+
+        function openEmailModal(email, name, buyerType) {
+            const modal = document.getElementById('emailModal');
+            const content = document.getElementById('emailContent');
+            
+            const emailTemplates = {
+                'Analytical': `
+                    <strong>To:</strong> ${email}<br>
+                    <strong>Subject:</strong> Data-Driven Fashion Solutions for Your Business<br><br>
+                    
+                    <strong>Dear ${name},</strong><br><br>
+                    
+                    I hope this email finds you well. As a data-driven fashion retailer, you understand the importance of making informed decisions based on solid metrics and proven results.<br><br>
+                    
+                    At AD Fashion, we've helped over 200+ fashion retailers increase their profitability by an average of 35% through our strategic approach:<br><br>
+                    
+                    📊 <strong>Proven ROI:</strong> Our wholesale pricing structure delivers 45-60% profit margins<br>
+                    📈 <strong>Market Analysis:</strong> Access to trending fashion data and seasonal forecasting<br>
+                    🔍 <strong>Quality Metrics:</strong> 98.5% customer satisfaction rate with detailed product specifications<br>
+                    📋 <strong>Case Studies:</strong> Success stories from similar businesses in your market segment<br><br>
+                    
+                    I'd be happy to share a detailed ROI analysis specific to your business model, along with references from similar fashion retailers who've seen measurable growth with our partnership.<br><br>
+                    
+                    Would you be available for a 15-minute call this week to review the data?<br><br>
+                    
+                    Best regards,<br>
+                    Ellaine<br>
+                    Business Owner, AD Fashion<br>
+                    samucongjangnimellaine@adfashion.com.br<br>
+                    www.adfashion.com.br
+                `,
+                'Relationship': `
+                    <strong>To:</strong> ${email}<br>
+                    <strong>Subject:</strong> Building Long-Term Fashion Partnerships<br><br>
+                    
+                    <strong>Dear ${name},</strong><br><br>
+                    
+                    I hope you're having a wonderful day! I'm reaching out because I believe there's an incredible opportunity for our businesses to grow together.<br><br>
+                    
+                    At AD Fashion, we don't just sell clothing – we build lasting partnerships with fashion retailers who share our passion for quality and customer satisfaction.<br><br>
+                    
+                    🤝 <strong>Partnership Approach:</strong> We work closely with each retailer to understand their unique needs<br>
+                    💝 <strong>Trust & Reliability:</strong> 5+ years of consistent quality and on-time deliveries<br>
+                    🌟 <strong>Referral Program:</strong> Our partners love referring us - ask Jennifer Martinez at Style Connection!<br>
+                    📞 <strong>Personal Service:</strong> Direct access to me and our team for any questions or concerns<br><br>
+                    
+                    Many of our best partnerships started with a simple conversation over coffee. Our mutual connection, Sarah Johnson, mentioned you might be interested in exploring new fashion suppliers who truly care about your success.<br><br>
+                    
+                    I'd love to learn more about your business goals and see how we can support your growth journey.<br><br>
+                    
+                    Warm regards,<br>
+                    Ellaine<br>
+                    Business Owner, AD Fashion<br>
+                    samucongjangnimellaine@adfashion.com.br<br>
+                    www.adfashion.com.br
+                `,
+                'Efficiency': `
+                    <strong>To:</strong> ${email}<br>
+                    <strong>Subject:</strong> Streamline Your Fashion Inventory - Save Time & Money<br><br>
+                    
+                    <strong>Dear ${name},</strong><br><br>
+                    
+                    Running a fashion business is demanding enough without dealing with complicated suppliers and lengthy procurement processes.<br><br>
+                    
+                    That's why AD Fashion has engineered the most efficient ordering and fulfillment system in the apparel industry:<br><br>
+                    
+                    ⚡ <strong>24-Hour Order Processing:</strong> Place orders today, confirmed tomorrow<br>
+                    📦 <strong>3-Day Shipping:</strong> Fastest delivery in Southern California<br>
+                    💻 <strong>Streamlined Ordering:</strong> Simple online portal with real-time inventory<br>
+                    📱 <strong>Mobile App:</strong> Manage orders and track shipments on the go<br>
+                    🔄 <strong>Automated Reordering:</strong> Never run out of bestsellers again<br><br>
+                    
+                    Our efficiency improvements have helped retailers like yourself reduce ordering time by 75% while increasing inventory turnover by 40%.<br><br>
+                    
+                    I can show you exactly how this system works in a quick 10-minute demo. When would be the best time this week?<br><br>
+                    
+                    Efficiently yours,<br>
+                    Ellaine<br>
+                    Business Owner, AD Fashion<br>
+                    samucongjangnimellaine@adfashion.com.br<br>
+                    www.adfashion.com.br
+                `,
+                'Innovation': `
+                    <strong>To:</strong> ${email}<br>
+                    <strong>Subject:</strong> Cutting-Edge Fashion Tech & Exclusive Collections<br><br>
+                    
+                    <strong>Dear ${name},</strong><br><br>
+                    
+                    As a forward-thinking fashion retailer, you're always looking for the next breakthrough that will set you apart from the competition.<br><br>
+                    
+                    AD Fashion is pioneering the future of fashion retail with innovative solutions that are revolutionizing how businesses like yours operate:<br><br>
+                    
+                    🚀 <strong>AI-Powered Trend Forecasting:</strong> Get exclusive access to next season's trends 6 months early<br>
+                    🎨 <strong>Custom Design Collaboration:</strong> Co-create exclusive pieces using our design lab<br>
+                    📊 <strong>Smart Inventory Analytics:</strong> Predictive ordering based on local market data<br>
+                    🌍 <strong>Sustainable Innovation:</strong> Eco-friendly fabrics and carbon-neutral shipping options<br>
+                    📱 <strong>Virtual Showroom:</strong> AR technology for remote product viewing<br><br>
+                    
+                    We're currently offering beta access to our newest innovation - a Virtual Personal Stylist AI that increases customer engagement by 150%. Only 10 retailers will get early access.<br><br>
+                    
+                    This could give you a significant competitive advantage in the Bellflower fashion market. Are you interested in being one of the select few?<br><br>
+                    
+                    Innovatively,<br>
+                    Ellaine<br>
+                    Business Owner, AD Fashion<br>
+                    samucongjangnimellaine@adfashion.com.br<br>
+                    www.adfashion.com.br
+                `
+            };
+            
+            content.innerHTML = emailTemplates[buyerType] || emailTemplates['Relationship'];
+            modal.style.display = 'block';
+        }
+
+        function sendEmail() {
+            alert('Email template ready! You can now copy this content to your email client.');
+            closeModal('emailModal');
+        }
+
+        function callClient(phone) {
+            alert(`Calling ${phone}...`);
+            // In a real application, this could integrate with VoIP systems
+        }
+
+        function openLinkedIn(name) {
+            const linkedInUrl = `https://www.linkedin.com/search/results/people/?keywords=${encodeURIComponent(name)}`;
+            window.open(linkedInUrl, '_blank');
+        }
+
+        function showTab(tabName) {
+            // Hide all tab contents
+            const tabContents = document.getElementsByClassName('tab-content');
+            for (let i = 0; i < tabContents.length; i++) {
+                tabContents[i].classList.remove('active');
+            }
+            
+            // Remove active class from all buttons
+            const tabButtons = document.getElementsByClassName('tab-button');
+            for (let i = 0; i < tabButtons.length; i++) {
+                tabButtons[i].classList.remove('active');
+            }
+            
+            // Show selected tab and mark button as active
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        function openScoreModal() {
+            document.getElementById('scoreModal').style.display = 'block';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        function updateSliderValue(sliderId) {
+            const slider = document.getElementById(sliderId);
+            const valueSpan = document.getElementById(sliderId + 'Value');
+            valueSpan.textContent = slider.value;
+        }
+
+        function exportToCSV() {
+            const headers = ['Client Name', 'Email', 'Phone', 'Address', 'P.U.R.E.S. Score', 'Tier Level', 'Industry', 'Revenue Estimate', 'Last Contact'];
+            const csvContent = [
+                headers.join(','),
+                ...clientData.map(client => [
+                    `"${client.name}"`,
+                    `"${client.email}"`,
+                    `"${client.phone}"`,
+                    `"${client.address}"`,
+                    client.puresScore,
+                    `"${client.tierLevel}"`,
+                    `"${client.industry}"`,
+                    `"${client.revenue}"`,
+                    `"${client.lastContact}"`
+                ].join(','))
+            ].join('\n');
+            
+            const blob = new Blob([csvContent], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'ad_fashion_client_list.csv';
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+
+        // Handle form submission for P.U.R.E.S. scoring
+        document.getElementById('scoreForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const profitability = parseInt(document.getElementById('profitability').value);
+            const urgency = parseInt(document.getElementById('urgency').value);
+            const reachability = parseInt(document.getElementById('reachability').value);
+            const engagement = parseInt(document.getElementById('engagement').value);
+            const sustainability = parseInt(document.getElementById('sustainability').value);
+            
+            const averageScore = ((profitability + urgency + reachability + engagement + sustainability) / 5).toFixed(1);
+            
+            let tierLevel;
+            if (averageScore >= 4.0) {
+                tierLevel = 'Tier 1A';
+            } else if (averageScore >= 3.0) {
+                tierLevel = 'Tier 1B';
+            } else {
+                tierLevel = 'Tier 1C';
+            }
+            
+            alert(`P.U.R.E.S. Score: ${averageScore}\nTier Level: ${tierLevel}`);
+            closeModal('scoreModal');
+        });
+
+        // Close modals when clicking outside
+        window.onclick = function(event) {
+            const modals = document.getElementsByClassName('modal');
+            for (let i = 0; i < modals.length; i++) {
+                if (event.target === modals[i]) {
+                    modals[i].style.display = 'none';
+                }
+            }
+        }
+
+        // Initialize the table
+        populateTable();
+    </script>
+</body>
+</html>

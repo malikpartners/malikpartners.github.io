@@ -1,0 +1,1000 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>S.A.L.E. System - Walz Caps Client Targeting Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #000000;
+            color: #ffffff;
+            line-height: 1.6;
+        }
+
+        .header {
+            background-color: #CF2030;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(207, 32, 48, 0.3);
+        }
+
+        .header img {
+            height: 60px;
+        }
+
+        .business-info {
+            text-align: right;
+            color: white;
+        }
+
+        .business-info h2 {
+            font-size: 1.5rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .business-info p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .dashboard-nav {
+            background-color: #1a1a1a;
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 2rem;
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .nav-button {
+            background-color: #CF2030;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-weight: bold;
+        }
+
+        .nav-button:hover {
+            background-color: #a01825;
+        }
+
+        .nav-button.active {
+            background-color: #ffffff;
+            color: #CF2030;
+        }
+
+        .module {
+            background-color: #1a1a1a;
+            border-radius: 10px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            display: none;
+        }
+
+        .module.active {
+            display: block;
+        }
+
+        .module h2 {
+            color: #CF2030;
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+        }
+
+        .scoring-form {
+            background-color: #2a2a2a;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .score-item {
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .score-item label {
+            font-weight: bold;
+            color: #CF2030;
+        }
+
+        .score-range {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        input[type="range"] {
+            width: 150px;
+            accent-color: #CF2030;
+        }
+
+        .score-display {
+            background-color: #CF2030;
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-weight: bold;
+            min-width: 30px;
+            text-align: center;
+        }
+
+        .search-controls {
+            background-color: #2a2a2a;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .search-controls input, .search-controls select {
+            padding: 0.5rem;
+            border: 1px solid #CF2030;
+            border-radius: 5px;
+            background-color: #000000;
+            color: #ffffff;
+        }
+
+        .search-controls input::placeholder {
+            color: #cccccc;
+        }
+
+        .client-table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #2a2a2a;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .client-table th {
+            background-color: #CF2030;
+            color: white;
+            padding: 1rem;
+            text-align: left;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .client-table th:hover {
+            background-color: #a01825;
+        }
+
+        .client-table td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid #444;
+        }
+
+        .client-table tr:hover {
+            background-color: #333;
+        }
+
+        .tier-1a { background-color: rgba(40, 167, 69, 0.2); }
+        .tier-1b { background-color: rgba(255, 193, 7, 0.2); }
+        .tier-1c { background-color: rgba(23, 162, 184, 0.2); }
+
+        .contact-btn, .email-btn {
+            background-color: #CF2030;
+            color: white;
+            border: none;
+            padding: 0.4rem 0.8rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            margin-right: 0.5rem;
+        }
+
+        .contact-btn:hover, .email-btn:hover {
+            background-color: #a01825;
+        }
+
+        .email-template {
+            background-color: #2a2a2a;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            display: none;
+        }
+
+        .email-template.active {
+            display: block;
+        }
+
+        .email-template textarea {
+            width: 100%;
+            height: 300px;
+            background-color: #000000;
+            color: #ffffff;
+            border: 1px solid #CF2030;
+            border-radius: 5px;
+            padding: 1rem;
+            font-family: Arial, sans-serif;
+        }
+
+        .feedback-form {
+            background-color: #2a2a2a;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #CF2030;
+            font-weight: bold;
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #CF2030;
+            border-radius: 5px;
+            background-color: #000000;
+            color: #ffffff;
+        }
+
+        .form-group textarea {
+            height: 100px;
+            resize: vertical;
+        }
+
+        .analytics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .metric-card {
+            background-color: #2a2a2a;
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .metric-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #CF2030;
+        }
+
+        .metric-label {
+            color: #cccccc;
+            margin-top: 0.5rem;
+        }
+
+        .footer {
+            background-color: #1a1a1a;
+            padding: 1rem;
+            text-align: center;
+            margin-top: 3rem;
+        }
+
+        .footer img {
+            height: 30px;
+            margin-bottom: 0.5rem;
+        }
+
+        .footer p {
+            color: #cccccc;
+            font-size: 0.9rem;
+        }
+
+        .btn {
+            background-color: #CF2030;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-right: 1rem;
+        }
+
+        .btn:hover {
+            background-color: #a01825;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .header {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .business-info {
+                text-align: center;
+            }
+
+            .client-table {
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="HigginsReports">
+        <div class="business-info">
+            <h2>Walz Caps</h2>
+            <p>Vista, California | michael@walzcaps.com | (760) 683-9259</p>
+            <p>Superior Quality Cycling Caps & Apparel</p>
+        </div>
+    </header>
+
+    <div class="container">
+        <nav class="dashboard-nav">
+            <button class="nav-button active" onclick="showModule('sourcing')">1. SOURCING (P.U.R.E.S.)</button>
+            <button class="nav-button" onclick="showModule('assessing')">2. ASSESSING</button>
+            <button class="nav-button" onclick="showModule('listening')">3. LISTENING</button>
+            <button class="nav-button" onclick="showModule('empowering')">4. EMPOWERING</button>
+            <button class="nav-button" onclick="showModule('analytics')">📊 ANALYTICS</button>
+        </nav>
+
+        <!-- SOURCING MODULE -->
+        <div id="sourcing" class="module active">
+            <h2>S.A.L.E. SOURCING - P.U.R.E.S. Client Scoring System</h2>
+            
+            <div class="scoring-form">
+                <h3>Evaluate Potential Client</h3>
+                <div class="score-item">
+                    <label>Profitability (Annual cycling budget capacity):</label>
+                    <div class="score-range">
+                        <input type="range" id="profitability" min="1" max="5" value="3" oninput="updateScore('profitability')">
+                        <span class="score-display" id="profitability-score">3</span>
+                    </div>
+                </div>
+                <div class="score-item">
+                    <label>Urgency (Need for quality cycling gear):</label>
+                    <div class="score-range">
+                        <input type="range" id="urgency" min="1" max="5" value="3" oninput="updateScore('urgency')">
+                        <span class="score-display" id="urgency-score">3</span>
+                    </div>
+                </div>
+                <div class="score-item">
+                    <label>Reachability (Accessibility for marketing):</label>
+                    <div class="score-range">
+                        <input type="range" id="reachability" min="1" max="5" value="3" oninput="updateScore('reachability')">
+                        <span class="score-display" id="reachability-score">3</span>
+                    </div>
+                </div>
+                <div class="score-item">
+                    <label>Engagement (Openness to cycling partnerships):</label>
+                    <div class="score-range">
+                        <input type="range" id="engagement" min="1" max="5" value="3" oninput="updateScore('engagement')">
+                        <span class="score-display" id="engagement-score">3</span>
+                    </div>
+                </div>
+                <div class="score-item">
+                    <label>Sustainability (Long-term cycling commitment):</label>
+                    <div class="score-range">
+                        <input type="range" id="sustainability" min="1" max="5" value="3" oninput="updateScore('sustainability')">
+                        <span class="score-display" id="sustainability-score">3</span>
+                    </div>
+                </div>
+                <div class="score-item">
+                    <strong>Total P.U.R.E.S. Score: <span id="total-score" style="color: #CF2030;">15</span>/25</strong>
+                    <strong>Tier Level: <span id="tier-level" style="color: #CF2030;">1C</span></strong>
+                </div>
+            </div>
+
+            <div class="search-controls">
+                <input type="text" id="searchInput" placeholder="Search clients..." onkeyup="filterTable()">
+                <select id="tierFilter" onchange="filterTable()">
+                    <option value="">All Tiers</option>
+                    <option value="1A">Tier 1A (Premium)</option>
+                    <option value="1B">Tier 1B (High-Value)</option>
+                    <option value="1C">Tier 1C (Qualified)</option>
+                </select>
+                <select id="industryFilter" onchange="filterTable()">
+                    <option value="">All Industries</option>
+                    <option value="Cycling">Cycling</option>
+                    <option value="Fitness">Fitness</option>
+                    <option value="Outdoor Sports">Outdoor Sports</option>
+                    <option value="Professional">Professional</option>
+                </select>
+                <button class="btn" onclick="exportData()">📄 Export CSV</button>
+            </div>
+
+            <table class="client-table" id="clientTable">
+                <thead>
+                    <tr>
+                        <th onclick="sortTable(0)">Client Name ↕</th>
+                        <th onclick="sortTable(1)">Email ↕</th>
+                        <th onclick="sortTable(2)">Phone ↕</th>
+                        <th onclick="sortTable(3)">Address ↕</th>
+                        <th onclick="sortTable(4)">P.U.R.E.S. Score ↕</th>
+                        <th onclick="sortTable(5)">Tier Level ↕</th>
+                        <th onclick="sortTable(6)">Industry ↕</th>
+                        <th onclick="sortTable(7)">Est. Budget ↕</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="clientTableBody">
+                    <!-- Client data will be populated by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- ASSESSING MODULE -->
+        <div id="assessing" class="module">
+            <h2>A.SSESSING - Buying Pattern Analysis</h2>
+            
+            <div class="scoring-form">
+                <h3>Client Buying Profile Assessment</h3>
+                <div class="form-group">
+                    <label>Buyer Type:</label>
+                    <select id="buyerType">
+                        <option value="analytical">Analytical Buyer (Requires ROI analysis, reviews)</option>
+                        <option value="relationship">Relationship Buyer (Values trust, referrals)</option>
+                        <option value="efficiency">Efficiency Buyer (Focuses on convenience, value)</option>
+                        <option value="innovation">Innovation Buyer (Seeks cutting-edge gear)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Decision Timeline:</label>
+                    <select id="decisionTimeline">
+                        <option value="immediate">Immediate (1-7 days)</option>
+                        <option value="short">Short-term (1-4 weeks)</option>
+                        <option value="medium">Medium-term (1-3 months)</option>
+                        <option value="long">Long-term (3+ months)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Primary Cycling Interest:</label>
+                    <select id="cyclingInterest">
+                        <option value="road">Road Cycling</option>
+                        <option value="mountain">Mountain Biking</option>
+                        <option value="commuter">Commuter Cycling</option>
+                        <option value="recreational">Recreational Cycling</option>
+                        <option value="competitive">Competitive Cycling</option>
+                    </select>
+                </div>
+                <button class="btn" onclick="saveAssessment()">Save Assessment</button>
+            </div>
+
+            <div class="analytics-grid">
+                <div class="metric-card">
+                    <div class="metric-value">32%</div>
+                    <div class="metric-label">Analytical Buyers</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">28%</div>
+                    <div class="metric-label">Relationship Buyers</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">24%</div>
+                    <div class="metric-label">Efficiency Buyers</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">16%</div>
+                    <div class="metric-label">Innovation Buyers</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- LISTENING MODULE -->
+        <div id="listening" class="module">
+            <h2>L.ISTENING - Feedback Integration</h2>
+            
+            <div class="feedback-form">
+                <h3>Customer Feedback Collection</h3>
+                <div class="form-group">
+                    <label>Client Name:</label>
+                    <input type="text" id="feedbackClient" placeholder="Enter client name">
+                </div>
+                <div class="form-group">
+                    <label>Feedback Type:</label>
+                    <select id="feedbackType">
+                        <option value="pre-sale">Pre-Sale Inquiry</option>
+                        <option value="during-sale">During Purchase Process</option>
+                        <option value="post-sale">Post-Purchase Experience</option>
+                        <option value="complaint">Complaint Resolution</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Satisfaction Rating:</label>
+                    <select id="satisfactionRating">
+                        <option value="5">Excellent (5)</option>
+                        <option value="4">Good (4)</option>
+                        <option value="3">Average (3)</option>
+                        <option value="2">Poor (2)</option>
+                        <option value="1">Very Poor (1)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Feedback Details:</label>
+                    <textarea id="feedbackDetails" placeholder="Enter detailed feedback..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Follow-up Required:</label>
+                    <select id="followupRequired">
+                        <option value="no">No Follow-up Needed</option>
+                        <option value="email">Email Follow-up</option>
+                        <option value="call">Phone Call Required</option>
+                        <option value="meeting">In-person Meeting</option>
+                    </select>
+                </div>
+                <button class="btn" onclick="saveFeedback()">Submit Feedback</button>
+            </div>
+
+            <div class="analytics-grid">
+                <div class="metric-card">
+                    <div class="metric-value">4.2</div>
+                    <div class="metric-label">Avg Satisfaction</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">89%</div>
+                    <div class="metric-label">Response Rate</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">12</div>
+                    <div class="metric-label">Active Issues</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">95%</div>
+                    <div class="metric-label">Resolution Rate</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- EMPOWERING MODULE -->
+        <div id="empowering" class="module">
+            <h2>E.MPOWERING - Referral Strategy</h2>
+            
+            <div class="feedback-form">
+                <h3>Referral Program Management</h3>
+                <div class="form-group">
+                    <label>Referring Customer:</label>
+                    <input type="text" id="referringCustomer" placeholder="Customer making referral">
+                </div>
+                <div class="form-group">
+                    <label>Referred Customer:</label>
+                    <input type="text" id="referredCustomer" placeholder="Customer being referred">
+                </div>
+                <div class="form-group">
+                    <label>Referral Type:</label>
+                    <select id="referralType">
+                        <option value="direct">Direct Referral</option>
+                        <option value="social">Social Media Share</option>
+                        <option value="review">Online Review</option>
+                        <option value="testimonial">Video Testimonial</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Reward Earned:</label>
+                    <input type="text" id="rewardEarned" placeholder="e.g., $25 store credit">
+                </div>
+                <div class="form-group">
+                    <label>Success Story:</label>
+                    <textarea id="successStory" placeholder="Document the customer success story..."></textarea>
+                </div>
+                <button class="btn" onclick="saveReferral()">Record Referral</button>
+                <button class="btn" onclick="generateTestimonial()">Generate Testimonial</button>
+            </div>
+
+            <div class="analytics-grid">
+                <div class="metric-card">
+                    <div class="metric-value">27</div>
+                    <div class="metric-label">Active Referrals</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">$1,890</div>
+                    <div class="metric-label">Referral Revenue</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">2.4</div>
+                    <div class="metric-label">Avg Referrals/Customer</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">73%</div>
+                    <div class="metric-label">Conversion Rate</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ANALYTICS MODULE -->
+        <div id="analytics" class="module">
+            <h2>📊 S.A.L.E. Performance Analytics</h2>
+            
+            <div class="analytics-grid">
+                <div class="metric-card">
+                    <div class="metric-value">82%</div>
+                    <div class="metric-label">P.U.R.E.S. Accuracy</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">91%</div>
+                    <div class="metric-label">Assessment Accuracy</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">74%</div>
+                    <div class="metric-label">Feedback Collection</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">2.1</div>
+                    <div class="metric-label">Referrals per Client</div>
+                </div>
+            </div>
+
+            <div class="feedback-form">
+                <h3>Geographic Client Distribution</h3>
+                <p style="margin-bottom: 1rem;">Clients within 10-mile radius of Vista, CA:</p>
+                <div class="analytics-grid">
+                    <div class="metric-card">
+                        <div class="metric-value">18</div>
+                        <div class="metric-label">Vista, CA</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">12</div>
+                        <div class="metric-label">Carlsbad, CA</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">10</div>
+                        <div class="metric-label">Oceanside, CA</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">6</div>
+                        <div class="metric-label">Encinitas, CA</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">4</div>
+                        <div class="metric-label">San Marcos, CA</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Email Template Modal -->
+        <div id="emailTemplate" class="email-template">
+            <h3>Personalized Email Template</h3>
+            <div class="form-group">
+                <label>To:</label>
+                <input type="email" id="emailTo" readonly>
+            </div>
+            <div class="form-group">
+                <label>Subject:</label>
+                <input type="text" id="emailSubject" value="Discover Premium Cycling Caps - Perfect for Your Rides!">
+            </div>
+            <div class="form-group">
+                <label>Message:</label>
+                <textarea id="emailMessage"></textarea>
+            </div>
+            <button class="btn" onclick="sendEmail()">Send Email</button>
+            <button class="btn" onclick="closeEmailTemplate()">Close</button>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="HigginsReports">
+        <p>Powered by HigginsReports - Advanced Business Intelligence Solutions</p>
+    </footer>
+
+    <script>
+        // Sample client data for Vista, CA area
+        const clients = [
+            {name: "Sarah Johnson", email: "sarah.johnson@email.com", phone: "(760) 555-0101", address: "1234 Cyclist Lane, Vista, CA 92081", score: 22, tier: "1A", industry: "Cycling", budget: "$500-800", buyerType: "analytical", cyclingType: "road"},
+            {name: "Mike Rodriguez", email: "mike.rodriguez@email.com", phone: "(760) 555-0102", address: "5678 Bike Trail Dr, Carlsbad, CA 92008", score: 21, tier: "1A", industry: "Fitness", budget: "$400-600", buyerType: "efficiency", cyclingType: "mountain"},
+            {name: "Jennifer Chen", email: "jennifer.chen@email.com", phone: "(760) 555-0103", address: "9012 Pedal Path, Oceanside, CA 92054", score: 19, tier: "1B", industry: "Professional", budget: "$300-500", buyerType: "relationship", cyclingType: "commuter"},
+            {name: "David Kim", email: "david.kim@email.com", phone: "(760) 555-0104", address: "3456 Gear Ave, Vista, CA 92083", score: 20, tier: "1B", industry: "Cycling", budget: "$450-650", buyerType: "innovation", cyclingType: "competitive"},
+            {name: "Lisa Martinez", email: "lisa.martinez@email.com", phone: "(760) 555-0105", address: "7890 Spoke St, Encinitas, CA 92024", score: 18, tier: "1B", industry: "Fitness", budget: "$250-400", buyerType: "analytical", cyclingType: "recreational"},
+            {name: "Robert Thompson", email: "robert.thompson@email.com", phone: "(760) 555-0106", address: "2345 Chain Rd, San Marcos, CA 92078", score: 17, tier: "1C", industry: "Outdoor Sports", budget: "$200-350", buyerType: "efficiency", cyclingType: "road"},
+            {name: "Amanda Foster", email: "amanda.foster@email.com", phone: "(760) 555-0107", address: "6789 Frame Dr, Vista, CA 92081", score: 23, tier: "1A", industry: "Cycling", budget: "$600-900", buyerType: "innovation", cyclingType: "competitive"},
+            {name: "Carlos Gonzalez", email: "carlos.gonzalez@email.com", phone: "(760) 555-0108", address: "1357 Handlebar Way, Carlsbad, CA 92011", score: 16, tier: "1C", industry: "Professional", budget: "$180-300", buyerType: "relationship", cyclingType: "commuter"},
+            {name: "Rachel Green", email: "rachel.green@email.com", phone: "(760) 555-0109", address: "2468 Tire Blvd, Oceanside, CA 92056", score: 19, tier: "1B", industry: "Fitness", budget: "$350-450", buyerType: "analytical", cyclingType: "mountain"},
+            {name: "James Wilson", email: "james.wilson@email.com", phone: "(760) 555-0110", address: "9876 Derailleur Dr, Vista, CA 92084", score: 21, tier: "1A", industry: "Cycling", budget: "$500-700", buyerType: "efficiency", cyclingType: "road"},
+            {name: "Maria Lopez", email: "maria.lopez@email.com", phone: "(760) 555-0111", address: "5432 Brake Ave, Encinitas, CA 92023", score: 15, tier: "1C", industry: "Outdoor Sports", budget: "$150-250", buyerType: "relationship", cyclingType: "recreational"},
+            {name: "Kevin Brown", email: "kevin.brown@email.com", phone: "(760) 555-0112", address: "8765 Pedal Cir, San Marcos, CA 92069", score: 20, tier: "1B", industry: "Professional", budget: "$400-550", buyerType: "innovation", cyclingType: "commuter"},
+            {name: "Nicole Davis", email: "nicole.davis@email.com", phone: "(760) 555-0113", address: "1111 Wheel Way, Vista, CA 92081", score: 18, tier: "1B", industry: "Fitness", budget: "$300-450", buyerType: "analytical", cyclingType: "recreational"},
+            {name: "Steven Garcia", email: "steven.garcia@email.com", phone: "(760) 555-0114", address: "2222 Crank Ct, Carlsbad, CA 92008", score: 22, tier: "1A", industry: "Cycling", budget: "$550-750", buyerType: "efficiency", cyclingType: "competitive"},
+            {name: "Ashley Miller", email: "ashley.miller@email.com", phone: "(760) 555-0115", address: "3333 Shifter St, Oceanside, CA 92054", score: 17, tier: "1C", industry: "Professional", budget: "$250-350", buyerType: "relationship", cyclingType: "commuter"},
+            {name: "Brian Taylor", email: "brian.taylor@email.com", phone: "(760) 555-0116", address: "4444 Saddle Ln, Vista, CA 92083", score: 19, tier: "1B", industry: "Outdoor Sports", budget: "$350-500", buyerType: "innovation", cyclingType: "mountain"},
+            {name: "Stephanie Anderson", email: "stephanie.anderson@email.com", phone: "(760) 555-0117", address: "5555 Cable Dr, Encinitas, CA 92024", score: 16, tier: "1C", industry: "Fitness", budget: "$200-300", buyerType: "analytical", cyclingType: "recreational"},
+            {name: "Daniel Thomas", email: "daniel.thomas@email.com", phone: "(760) 555-0118", address: "6666 Hub Ave, San Marcos, CA 92078", score: 21, tier: "1A", industry: "Cycling", budget: "$450-650", buyerType: "efficiency", cyclingType: "road"},
+            {name: "Michelle Jackson", email: "michelle.jackson@email.com", phone: "(760) 555-0119", address: "7777 Rim Rd, Vista, CA 92081", score: 18, tier: "1B", industry: "Professional", budget: "$300-450", buyerType: "relationship", cyclingType: "commuter"},
+            {name: "Christopher White", email: "christopher.white@email.com", phone: "(760) 555-0120", address: "8888 Valve Way, Carlsbad, CA 92011", score: 20, tier: "1B", industry: "Cycling", budget: "$400-600", buyerType: "innovation", cyclingType: "competitive"},
+            {name: "Laura Harris", email: "laura.harris@email.com", phone: "(760) 555-0121", address: "9999 Axle Ave, Oceanside, CA 92056", score: 15, tier: "1C", industry: "Fitness", budget: "$180-280", buyerType: "analytical", cyclingType: "recreational"},
+            {name: "Ryan Martin", email: "ryan.martin@email.com", phone: "(760) 555-0122", address: "1010 Bearing Blvd, Vista, CA 92084", score: 22, tier: "1A", industry: "Outdoor Sports", budget: "$500-800", buyerType: "efficiency", cyclingType: "mountain"},
+            {name: "Kimberly Clark", email: "kimberly.clark@email.com", phone: "(760) 555-0123", address: "1212 Sprocket St, Encinitas, CA 92023", score: 17, tier: "1C", industry: "Professional", budget: "$250-400", buyerType: "relationship", cyclingType: "commuter"},
+            {name: "Andrew Lewis", email: "andrew.lewis@email.com", phone: "(760) 555-0124", address: "1313 Cassette Cir, San Marcos, CA 92069", score: 19, tier: "1B", industry: "Cycling", budget: "$350-550", buyerType: "innovation", cyclingType: "road"},
+            {name: "Jessica Robinson", email: "jessica.robinson@email.com", phone: "(760) 555-0125", address: "1414 Tension Dr, Vista, CA 92081", score: 16, tier: "1C", industry: "Fitness", budget: "$200-350", buyerType: "analytical", cyclingType: "recreational"},
+            {name: "Matthew Walker", email: "matthew.walker@email.com", phone: "(760) 555-0126", address: "1515 Torque Ter, Carlsbad, CA 92008", score: 21, tier: "1A", industry: "Professional", budget: "$450-700", buyerType: "efficiency", cyclingType: "commuter"},
+            {name: "Samantha Young", email: "samantha.young@email.com", phone: "(760) 555-0127", address: "1616 Power Path, Oceanside, CA 92054", score: 18, tier: "1B", industry: "Cycling", budget: "$300-500", buyerType: "relationship", cyclingType: "competitive"},
+            {name: "Jonathan Hall", email: "jonathan.hall@email.com", phone: "(760) 555-0128", address: "1717 Cadence Ct, Vista, CA 92083", score: 20, tier: "1B", industry: "Outdoor Sports", budget: "$400-600", buyerType: "innovation", cyclingType: "mountain"},
+            {name: "Emily Allen", email: "emily.allen@email.com", phone: "(760) 555-0129", address: "1818 Velocity Ave, Encinitas, CA 92024", score: 15, tier: "1C", industry: "Fitness", budget: "$150-300", buyerType: "analytical", cyclingType: "recreational"},
+            {name: "Tyler Scott", email: "tyler.scott@email.com", phone: "(760) 555-0130", address: "1919 Speed St, San Marcos, CA 92078", score: 22, tier: "1A", industry: "Cycling", budget: "$550-850", buyerType: "efficiency", cyclingType: "road"},
+            {name: "Christina Adams", email: "christina.adams@email.com", phone: "(760) 555-0131", address: "2020 Momentum Dr, Vista, CA 92081", score: 17, tier: "1C", industry: "Professional", budget: "$250-400", buyerType: "relationship", cyclingType: "commuter"},
+            {name: "Brandon Baker", email: "brandon.baker@email.com", phone: "(760) 555-0132", address: "2121 Distance Ln, Carlsbad, CA 92011", score: 19, tier: "1B", industry: "Outdoor Sports", budget: "$350-500", buyerType: "innovation", cyclingType: "mountain"},
+            {name: "Megan Gonzales", email: "megan.gonzales@email.com", phone: "(760) 555-0133", address: "2222 Endurance Way, Oceanside, CA 92056", score: 16, tier: "1C", industry: "Fitness", budget: "$200-350", buyerType: "analytical", cyclingType: "recreational"},
+            {name: "Joshua Nelson", email: "joshua.nelson@email.com", phone: "(760) 555-0134", address: "2323 Training Tr, Vista, CA 92084", score: 21, tier: "1A", industry: "Cycling", budget: "$500-750", buyerType: "efficiency", cyclingType: "competitive"},
+            {name: "Heather Carter", email: "heather.carter@email.com", phone: "(760) 555-0135", address: "2424 Performance Pl, Encinitas, CA 92023", score: 18, tier: "1B", industry: "Professional", budget: "$300-450", buyerType: "relationship", cyclingType: "road"},
+            {name: "Eric Mitchell", email: "eric.mitchell@email.com", phone: "(760) 555-0136", address: "2525 Aerobic Ave, San Marcos, CA 92069", score: 20, tier: "1B", industry: "Fitness", budget: "$400-550", buyerType: "innovation", cyclingType: "commuter"},
+            {name: "Courtney Perez", email: "courtney.perez@email.com", phone: "(760) 555-0137", address: "2626 Cardio Cir, Vista, CA 92081", score: 15, tier: "1C", industry: "Outdoor Sports", budget: "$180-300", buyerType: "analytical", cyclingType: "recreational"},
+            {name: "Nathan Roberts", email: "nathan.roberts@email.com", phone: "(760) 555-0138", address: "2727 Fitness Dr, Carlsbad, CA 92008", score: 22, tier: "1A", industry: "Cycling", budget: "$600-900", buyerType: "efficiency", cyclingType: "mountain"},
+            {name: "Brittany Turner", email: "brittany.turner@email.com", phone: "(760) 555-0139", address: "2828 Health Hwy, Oceanside, CA 92054", score: 17, tier: "1C", industry: "Professional", budget: "$250-400", buyerType: "relationship", cyclingType: "commuter"},
+            {name: "Jeremy Phillips", email: "jeremy.phillips@email.com", phone: "(760) 555-0140", address: "2929 Wellness Way, Vista, CA 92083", score: 19, tier: "1B", industry: "Fitness", budget: "$350-500", buyerType: "innovation", cyclingType: "road"},
+            {name: "Diana Campbell", email: "diana.campbell@email.com", phone: "(760) 555-0141", address: "3030 Active Ave, Encinitas, CA 92024", score: 16, tier: "1C", industry: "Outdoor Sports", budget: "$200-350", buyerType: "analytical", cyclingType: "recreational"},
+            {name: "Sean Parker", email: "sean.parker@email.com", phone: "(760) 555-0142", address: "3131 Sport St, San Marcos, CA 92078", score: 21, tier: "1A", industry: "Cycling", budget: "$500-700", buyerType: "efficiency", cyclingType: "competitive"},
+            {name: "Vanessa Evans", email: "vanessa.evans@email.com", phone: "(760) 555-0143", address: "3232 Exercise Expy, Vista, CA 92081", score: 18, tier: "1B", industry: "Professional", budget: "$300-450", buyerType: "relationship", cyclingType: "commuter"},
+            {name: "Gregory Edwards", email: "gregory.edwards@email.com", phone: "(760) 555-0144", address: "3333 Motion Dr, Carlsbad, CA 92011", score: 20, tier: "1B", industry: "Fitness", budget: "$400-600", buyerType: "innovation", cyclingType: "mountain"},
+            {name: "Allison Collins", email: "allison.collins@email.com", phone: "(760) 555-0145", address: "3434 Movement Way, Oceanside, CA 92056", score: 15, tier: "1C", industry: "Cycling", budget: "$180-300", buyerType: "analytical", cyclingType: "recreational"},
+            {name: "Marcus Stewart", email: "marcus.stewart@email.com", phone: "(760) 555-0146", address: "3535 Action Ave, Vista, CA 92084", score: 22, tier: "1A", industry: "Outdoor Sports", budget: "$550-800", buyerType: "efficiency", cyclingType: "road"},
+            {name: "Tiffany Sanchez", email: "tiffany.sanchez@email.com", phone: "(760) 555-0147", address: "3636 Dynamic Dr, Encinitas, CA 92023", score: 17, tier: "1C", industry: "Professional", budget: "$250-400", buyerType: "relationship", cyclingType: "commuter"},
+            {name: "Jacob Morris", email: "jacob.morris@email.com", phone: "(760) 555-0148", address: "3737 Energy Ln, San Marcos, CA 92069", score: 19, tier: "1B", industry: "Cycling", budget: "$350-550", buyerType: "innovation", cyclingType: "competitive"},
+            {name: "Crystal Rogers", email: "crystal.rogers@email.com", phone: "(760) 555-0149", address: "3838 Power Pl, Vista, CA 92081", score: 16, tier: "1C", industry: "Fitness", budget: "$200-350", buyerType: "analytical", cyclingType: "recreational"},
+            {name: "Adam Reed", email: "adam.reed@email.com", phone: "(760) 555-0150", address: "3939 Strength St, Carlsbad, CA 92008", score: 21, tier: "1A", industry: "Professional", budget: "$450-650", buyerType: "efficiency", cyclingType: "mountain"}
+        ];
+
+        function populateTable() {
+            const tbody = document.getElementById('clientTableBody');
+            tbody.innerHTML = '';
+            
+            clients.forEach(client => {
+                const row = document.createElement('tr');
+                row.className = `tier-${client.tier.toLowerCase()}`;
+                row.innerHTML = `
+                    <td>${client.name}</td>
+                    <td>${client.email}</td>
+                    <td>${client.phone}</td>
+                    <td>${client.address}</td>
+                    <td>${client.score}/25</td>
+                    <td>${client.tier}</td>
+                    <td>${client.industry}</td>
+                    <td>${client.budget}</td>
+                    <td>
+                        <button class="contact-btn" onclick="contactClient('${client.phone}')">📞 Call</button>
+                        <button class="email-btn" onclick="openEmailTemplate('${client.email}', '${client.name}', '${client.buyerType}', '${client.cyclingType}')">✉️ Email</button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function showModule(moduleId) {
+            // Hide all modules
+            document.querySelectorAll('.module').forEach(module => {
+                module.classList.remove('active');
+            });
+            
+            // Show selected module
+            document.getElementById(moduleId).classList.add('active');
+            
+            // Update navigation
+            document.querySelectorAll('.nav-button').forEach(button => {
+                button.classList.remove('active');
+            });
+            event.target.classList.add('active');
+        }
+
+        function updateScore(scoreName) {
+            const slider = document.getElementById(scoreName);
+            const display = document.getElementById(scoreName + '-score');
+            display.textContent = slider.value;
+            
+            // Calculate total score
+            const scores = ['profitability', 'urgency', 'reachability', 'engagement', 'sustainability'];
+            let total = 0;
+            scores.forEach(score => {
+                total += parseInt(document.getElementById(score).value);
+            });
+            
+            document.getElementById('total-score').textContent = total;
+            
+            // Determine tier level
+            let tier;
+            if (total >= 20) tier = '1A (Premium)';
+            else if (total >= 15) tier = '1B (High-Value)';
+            else tier = '1C (Qualified)';
+            
+            document.getElementById('tier-level').textContent = tier;
+        }
+
+        function filterTable() {
+            const searchInput = document.getElementById('searchInput').value.toLowerCase();
+            const tierFilter = document.getElementById('tierFilter').value;
+            const industryFilter = document.getElementById('industryFilter').value;
+            const rows = document.querySelectorAll('#clientTableBody tr');
+            
+            rows.forEach(row => {
+                const cells = row.cells;
+                const name = cells[0].textContent.toLowerCase();
+                const email = cells[1].textContent.toLowerCase();
+                const tier = cells[5].textContent;
+                const industry = cells[6].textContent;
+                
+                const matchesSearch = name.includes(searchInput) || email.includes(searchInput);
+                const matchesTier = !tierFilter || tier === tierFilter;
+                const matchesIndustry = !industryFilter || industry === industryFilter;
+                
+                if (matchesSearch && matchesTier && matchesIndustry) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+
+        function sortTable(columnIndex) {
+            const table = document.getElementById('clientTable');
+            const tbody = table.querySelector('tbody');
+            const rows = Array.from(tbody.querySelectorAll('tr'));
+            
+            // Toggle sort direction
+            const isAscending = tbody.getAttribute('data-sort-direction') !== 'asc';
+            tbody.setAttribute('data-sort-direction', isAscending ? 'asc' : 'desc');
+            
+            rows.sort((a, b) => {
+                const aText = a.cells[columnIndex].textContent.trim();
+                const bText = b.cells[columnIndex].textContent.trim();
+                
+                // Handle numeric columns
+                if (columnIndex === 4) { // P.U.R.E.S. Score
+                    const aNum = parseInt(aText);
+                    const bNum = parseInt(bText);
+                    return isAscending ? aNum - bNum : bNum - aNum;
+                }
+                
+                return isAscending ? aText.localeCompare(bText) : bText.localeCompare(aText);
+            });
+            
+            rows.forEach(row => tbody.appendChild(row));
+        }
+
+        function contactClient(phone) {
+            window.location.href = `tel:${phone}`;
+        }
+
+        function openEmailTemplate(email, name, buyerType, cyclingType) {
+            const template = document.getElementById('emailTemplate');
+            const emailTo = document.getElementById('emailTo');
+            const emailMessage = document.getElementById('emailMessage');
+            
+            emailTo.value = email;
+            
+            // Generate personalized email based on buyer type and cycling interest
+            let message = generatePersonalizedEmail(name, buyerType, cyclingType);
+            emailMessage.value = message;
+            
+            template.classList.add('active');
+        }
+
+        function generatePersonalizedEmail(name, buyerType, cyclingType) {
+            const firstName = name.split(' ')[0];
+            
+            let intro = `Dear ${firstName},\n\nGreetings from Walz Caps - Superior Quality Cycling Caps!\n\n`;
+            
+            let personalizedContent = '';
+            
+            // Customize based on buyer type
+            switch(buyerType) {
+                case 'analytical':
+                    personalizedContent = `As someone who appreciates quality and performance data, you'll be interested to know that our cycling caps are:\n• Built for 1000+ wash durability (tested and verified)\n• Made with premium materials including Merino wool and technical fabrics\n• Recognized worldwide for exceptional fit and function\n• Backed by customer satisfaction guarantees and detailed product specifications\n\n`;
+                    break;
+                case 'relationship':
+                    personalizedContent = `We've built our reputation over years of serving the cycling community with integrity and care. Our customers consistently recommend us because:\n• We're a trusted American-made brand with a personal touch\n• Every cap is handmade with individual cyclists in mind\n• We offer personalized customer service and support\n• Our cycling community loves sharing their Walz Caps experiences\n\n`;
+                    break;
+                case 'efficiency':
+                    personalizedContent = `We know your time is valuable, which is why Walz Caps offers:\n• Quick and easy online ordering process\n• Fast shipping from our Vista, CA location (practically local for you!)\n• Durable caps that last for years, saving you time and money\n• Multiple styles and colors so you can order everything you need at once\n\n`;
+                    break;
+                case 'innovation':
+                    personalizedContent = `As a cycling enthusiast who appreciates cutting-edge gear, you'll love our latest innovations:\n• Advanced Merino wool technology for temperature regulation\n• Technical fabric blends for superior moisture management\n• Modern designs that blend classic cycling heritage with contemporary style\n• Custom Build-A-Cap options for truly personalized gear\n\n`;
+                    break;
+            }
+            
+            // Add cycling-specific content
+            let cyclingContent = '';
+            switch(cyclingType) {
+                case 'road':
+                    cyclingContent = `Perfect for road cycling, our caps offer:\n• Aerodynamic fit that works great under helmets\n• Lightweight materials that won't add bulk\n• Classic cycling aesthetic appreciated by road cyclists\n• Sun protection for long rides\n\n`;
+                    break;
+                case 'mountain':
+                    cyclingContent = `Ideal for mountain biking adventures:\n• Durable construction that handles tough conditions\n• Moisture-wicking materials for intense rides\n• Secure fit that stays put on technical terrain\n• Easy care - just throw in the wash after muddy rides\n\n`;
+                    break;
+                case 'commuter':
+                    cyclingContent = `Perfect for daily commuting:\n• Professional appearance for work environments\n• All-weather materials for year-round use\n• Easy to pack and travel with\n• Transition seamlessly from bike to office\n\n`;
+                    break;
+                case 'competitive':
+                    cyclingContent = `Designed for serious cyclists:\n• Performance-focused materials and construction\n• Team cap options available for cycling clubs\n• Trusted by competitive cyclists worldwide\n• Custom embroidery options for personalization\n\n`;
+                    break;
+                case 'recreational':
+                    cyclingContent = `Great for recreational cycling:\n• Comfortable fit for leisurely rides\n• Stylish designs that work on and off the bike\n• Affordable pricing for building a collection\n• Perfect for family cycling adventures\n\n`;
+                    break;
+            }
+            
+            let closing = `Visit our showroom virtually at www.walzcaps.com or stop by our Vista location. We're practically neighbors!\n\n` +
+                         `Special offer: Mention this email for 10% off your first order.\n\n` +
+                         `Ride in style,\n` +
+                         `Michael Gilstrap\n` +
+                         `Owner, Walz Caps\n` +
+                         `(760) 683-9259\n` +
+                         `michael@walzcaps.com`;
+            
+            return intro + personalizedContent + cyclingContent + closing;
+        }
+
+        function closeEmailTemplate() {
+            document.getElementById('emailTemplate').classList.remove('active');
+        }
+
+        function sendEmail() {
+            const emailTo = document.getElementById('emailTo').value;
+            const subject = document.getElementById('emailSubject').value;
+            const message = document.getElementById('emailMessage').value;
+            
+            const mailtoLink = `mailto:${emailTo}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(message)}`;
+            window.location.href = mailtoLink;
+            
+            closeEmailTemplate();
+        }
+
+        function saveAssessment() {
+            alert('Assessment saved successfully!');
+        }
+
+        function saveFeedback() {
+            alert('Feedback recorded successfully!');
+        }
+
+        function saveReferral() {
+            alert('Referral recorded successfully!');
+        }
+
+        function generateTestimonial() {
+            alert('Testimonial template generated and ready for customer!');
+        }
+
+        function exportData() {
+            let csvContent = "Client Name,Email,Phone,Address,P.U.R.E.S. Score,Tier Level,Industry,Est. Budget\n";
+            
+            clients.forEach(client => {
+                csvContent += `"${client.name}","${client.email}","${client.phone}","${client.address}","${client.score}","${client.tier}","${client.industry}","${client.budget}"\n`;
+            });
+            
+            const blob = new Blob([csvContent], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'walz_caps_client_database.csv';
+            a.click();
+        }
+
+        // Initialize the dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            populateTable();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,1454 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>S.A.L.E. Client Targeting System - FunTasticMedia</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #000000;
+            color: #CF2030;
+            line-height: 1.6;
+        }
+
+        .header {
+            background-color: #CF2030;
+            color: white;
+            padding: 1rem;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header img {
+            max-height: 60px;
+            margin-bottom: 0.5rem;
+        }
+
+        .header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .nav-tabs {
+            display: flex;
+            background-color: #333;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+
+        .nav-tab {
+            flex: 1;
+            padding: 1rem;
+            background-color: #333;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .nav-tab:hover, .nav-tab.active {
+            background-color: #CF2030;
+        }
+
+        .tab-content {
+            display: none;
+            background-color: #111;
+            padding: 2rem;
+            border-radius: 8px;
+            border: 2px solid #CF2030;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .search-controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .search-input, .filter-select {
+            padding: 0.75rem;
+            border: 2px solid #CF2030;
+            border-radius: 5px;
+            background-color: #222;
+            color: white;
+            font-size: 0.9rem;
+        }
+
+        .search-input {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            background-color: #CF2030;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #A01828;
+            transform: translateY(-2px);
+        }
+
+        .btn-sm {
+            padding: 0.4rem 0.8rem;
+            font-size: 0.8rem;
+        }
+
+        .btn-success {
+            background-color: #28a745;
+        }
+
+        .btn-success:hover {
+            background-color: #218838;
+        }
+
+        .btn-warning {
+            background-color: #ffc107;
+            color: #000;
+        }
+
+        .btn-warning:hover {
+            background-color: #e0a800;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin: 2rem 0;
+            border-radius: 8px;
+            border: 2px solid #CF2030;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #222;
+        }
+
+        th, td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #444;
+            font-size: 0.85rem;
+        }
+
+        th {
+            background-color: #CF2030;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        th:hover {
+            background-color: #A01828;
+        }
+
+        tr:hover {
+            background-color: #333;
+        }
+
+        .tier-1a { background-color: #2d5a2d; }
+        .tier-1b { background-color: #5a5a2d; }
+        .tier-1c { background-color: #2d4a5a; }
+
+        .pures-form {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            color: #CF2030;
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #CF2030;
+            border-radius: 5px;
+            background-color: #222;
+            color: white;
+            font-size: 0.9rem;
+        }
+
+        .score-display {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #CF2030;
+            text-align: center;
+            margin: 1rem 0;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .metric-card {
+            background-color: #222;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 2px solid #CF2030;
+            text-align: center;
+        }
+
+        .metric-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #CF2030;
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-label {
+            font-size: 0.9rem;
+            color: #ccc;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            background-color: #333;
+            margin-top: 3rem;
+        }
+
+        .footer img {
+            max-height: 40px;
+            margin-bottom: 1rem;
+        }
+
+        .footer p {
+            color: #ccc;
+            font-size: 0.8rem;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #222;
+            padding: 2rem;
+            border-radius: 8px;
+            border: 2px solid #CF2030;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #CF2030;
+        }
+
+        .close {
+            color: #CF2030;
+            font-size: 2rem;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: #A01828;
+        }
+
+        @media (max-width: 768px) {
+            .search-controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .nav-tabs {
+                flex-direction: column;
+            }
+            
+            .pures-form {
+                grid-template-columns: 1fr;
+            }
+            
+            th, td {
+                padding: 0.5rem;
+                font-size: 0.75rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="HigginsReports">
+        <h1>S.A.L.E. Client Targeting System</h1>
+        <p>FunTasticMedia / See Me Grow - Sherman Oaks, CA | Baby Products & Growth Charts</p>
+    </header>
+
+    <div class="container">
+        <nav class="nav-tabs">
+            <button class="nav-tab active" onclick="showTab('sourcing')">🎯 SOURCING</button>
+            <button class="nav-tab" onclick="showTab('assessing')">📊 ASSESSING</button>
+            <button class="nav-tab" onclick="showTab('listening')">👂 LISTENING</button>
+            <button class="nav-tab" onclick="showTab('empowering')">🚀 EMPOWERING</button>
+            <button class="nav-tab" onclick="showTab('dashboard')">📈 DASHBOARD</button>
+        </nav>
+
+        <!-- SOURCING TAB -->
+        <div id="sourcing" class="tab-content active">
+            <h2>🎯 SOURCING - Client Database & P.U.R.E.S. Scoring</h2>
+            
+            <div class="search-controls">
+                <input type="text" id="searchInput" class="search-input" placeholder="Search clients..." onkeyup="filterTable()">
+                <select id="tierFilter" class="filter-select" onchange="filterTable()">
+                    <option value="">All Tiers</option>
+                    <option value="1A">Tier 1A - Premium</option>
+                    <option value="1B">Tier 1B - High Value</option>
+                    <option value="1C">Tier 1C - Qualified</option>
+                </select>
+                <button class="btn" onclick="showAddClientModal()">➕ Add Client</button>
+                <button class="btn btn-success" onclick="exportData()">📤 Export CSV</button>
+            </div>
+
+            <div class="table-container">
+                <table id="clientTable">
+                    <thead>
+                        <tr>
+                            <th onclick="sortTable(0)">Client Name ↕</th>
+                            <th onclick="sortTable(1)">Email ↕</th>
+                            <th onclick="sortTable(2)">Phone ↕</th>
+                            <th onclick="sortTable(3)">Address ↕</th>
+                            <th onclick="sortTable(4)">P.U.R.E.S. Score ↕</th>
+                            <th onclick="sortTable(5)">Tier ↕</th>
+                            <th onclick="sortTable(6)">Industry ↕</th>
+                            <th onclick="sortTable(7)">Est. Revenue ↕</th>
+                            <th onclick="sortTable(8)">Last Contact ↕</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="clientTableBody">
+                        <!-- Client data will be populated here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- ASSESSING TAB -->
+        <div id="assessing" class="tab-content">
+            <h2>📊 ASSESSING - Buying Pattern Analysis</h2>
+            
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-value" id="analyticalBuyers">0</div>
+                    <div class="metric-label">Analytical Buyers</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value" id="relationshipBuyers">0</div>
+                    <div class="metric-label">Relationship Buyers</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value" id="efficiencyBuyers">0</div>
+                    <div class="metric-label">Efficiency Buyers</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value" id="innovationBuyers">0</div>
+                    <div class="metric-label">Innovation Buyers</div>
+                </div>
+            </div>
+
+            <h3>Client Buying Profiles</h3>
+            <div id="buyingProfilesTable"></div>
+        </div>
+
+        <!-- LISTENING TAB -->
+        <div id="listening" class="tab-content">
+            <h2>👂 LISTENING - Feedback Integration</h2>
+            
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-value" id="feedbackRate">0%</div>
+                    <div class="metric-label">Feedback Collection Rate</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value" id="satisfactionScore">0</div>
+                    <div class="metric-label">Average Satisfaction</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value" id="responseTime">0</div>
+                    <div class="metric-label">Avg Response Time (hrs)</div>
+                </div>
+            </div>
+
+            <h3>Recent Feedback</h3>
+            <div id="feedbackTable"></div>
+        </div>
+
+        <!-- EMPOWERING TAB -->
+        <div id="empowering" class="tab-content">
+            <h2>🚀 EMPOWERING - Referral Strategy</h2>
+            
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-value" id="totalReferrals">0</div>
+                    <div class="metric-label">Total Referrals</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value" id="conversionRate">0%</div>
+                    <div class="metric-label">Referral Conversion</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value" id="rewardsPaid">$0</div>
+                    <div class="metric-label">Rewards Paid</div>
+                </div>
+            </div>
+
+            <h3>Success Stories</h3>
+            <div id="successStories"></div>
+        </div>
+
+        <!-- DASHBOARD TAB -->
+        <div id="dashboard" class="tab-content">
+            <h2>📈 S.A.L.E. Performance Dashboard</h2>
+            
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-value" id="totalClients">50</div>
+                    <div class="metric-label">Total Clients</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value" id="tier1ACount">15</div>
+                    <div class="metric-label">Tier 1A Clients</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value" id="averageScore">3.8</div>
+                    <div class="metric-label">Average P.U.R.E.S. Score</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value" id="monthlyRevenue">$125K</div>
+                    <div class="metric-label">Monthly Potential Revenue</div>
+                </div>
+            </div>
+
+            <h3>Email Templates</h3>
+            <div class="pures-form">
+                <div class="form-group">
+                    <label>Tier 1A Premium Template</label>
+                    <textarea readonly>Subject: Exclusive Baby Growth Tracking Solutions for [CLIENT_NAME]
+
+Dear [DECISION_MAKER],
+
+Your growing family deserves the best tracking tools for your baby's development journey. Our See Me Grow products have helped thousands of parents:
+
+• Track growth spurts with precision using our patent-pending growth mats
+• Create lasting keepsakes of precious early moments  
+• Simplify daily routines with 3-in-1 functionality
+• Join celebrity families like Nicole Ritchie who trust our products
+
+As featured in People Magazine and endorsed by healthcare providers nationwide, we're offering exclusive access to our complete product line.
+
+Schedule a consultation: moses@seemegrowmat.com
+
+Best regards,
+Moses Ruiz | FunTasticMedia</textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Client Modal -->
+    <div id="addClientModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add New Client</h3>
+                <span class="close" onclick="closeModal()">&times;</span>
+            </div>
+            <form class="pures-form" onsubmit="addClient(event)">
+                <div class="form-group">
+                    <label>Client Name *</label>
+                    <input type="text" id="clientName" required>
+                </div>
+                <div class="form-group">
+                    <label>Email *</label>
+                    <input type="email" id="clientEmail" required>
+                </div>
+                <div class="form-group">
+                    <label>Phone</label>
+                    <input type="tel" id="clientPhone">
+                </div>
+                <div class="form-group">
+                    <label>Address</label>
+                    <input type="text" id="clientAddress">
+                </div>
+                <div class="form-group">
+                    <label>Industry</label>
+                    <select id="clientIndustry">
+                        <option value="Healthcare">Healthcare</option>
+                        <option value="Retail">Retail</option>
+                        <option value="Technology">Technology</option>
+                        <option value="Education">Education</option>
+                        <option value="Non-Profit">Non-Profit</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                
+                <h4>P.U.R.E.S. Scoring (1-5)</h4>
+                <div class="form-group">
+                    <label>Profitability</label>
+                    <input type="number" id="profitability" min="1" max="5" onchange="calculatePURES()">
+                </div>
+                <div class="form-group">
+                    <label>Urgency</label>
+                    <input type="number" id="urgency" min="1" max="5" onchange="calculatePURES()">
+                </div>
+                <div class="form-group">
+                    <label>Reachability</label>
+                    <input type="number" id="reachability" min="1" max="5" onchange="calculatePURES()">
+                </div>
+                <div class="form-group">
+                    <label>Engagement</label>
+                    <input type="number" id="engagement" min="1" max="5" onchange="calculatePURES()">
+                </div>
+                <div class="form-group">
+                    <label>Sustainability</label>
+                    <input type="number" id="sustainability" min="1" max="5" onchange="calculatePURES()">
+                </div>
+                
+                <div class="score-display" id="puresScore">P.U.R.E.S. Score: 0.0</div>
+                
+                <button type="submit" class="btn">Add Client</button>
+            </form>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="HigginsReports">
+        <p>&copy; 2026 HigginsReports | S.A.L.E. System for FunTasticMedia</p>
+    </footer>
+
+    <script>
+        // Sample client data for Sherman Oaks, CA area
+        let clients = [
+            {
+                name: "Sarah Johnson",
+                email: "sarah.j@babylove.com",
+                phone: "(818) 555-0101",
+                address: "14523 Ventura Blvd, Sherman Oaks, CA 91403",
+                puresScore: 4.6,
+                tier: "1A",
+                industry: "Healthcare",
+                revenue: "$500K",
+                lastContact: "2024-01-15",
+                buyerType: "Relationship"
+            },
+            {
+                name: "Michael Chen",
+                email: "m.chen@valleypeds.com",
+                phone: "(818) 555-0102",
+                address: "15301 Ventura Blvd, Sherman Oaks, CA 91403",
+                puresScore: 4.4,
+                tier: "1A",
+                industry: "Healthcare",
+                revenue: "$750K",
+                lastContact: "2024-01-20",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Jennifer Martinez",
+                email: "jen@babysteps.com",
+                phone: "(818) 555-0103",
+                address: "13425 Moorpark St, Sherman Oaks, CA 91423",
+                puresScore: 4.2,
+                tier: "1A",
+                industry: "Retail",
+                revenue: "$300K",
+                lastContact: "2024-01-18",
+                buyerType: "Innovation"
+            },
+            {
+                name: "David Thompson",
+                email: "david@familyfirst.org",
+                phone: "(818) 555-0104",
+                address: "4444 Sepulveda Blvd, Sherman Oaks, CA 91403",
+                puresScore: 3.8,
+                tier: "1B",
+                industry: "Non-Profit",
+                revenue: "$200K",
+                lastContact: "2024-01-22",
+                buyerType: "Relationship"
+            },
+            {
+                name: "Lisa Rodriguez",
+                email: "lisa@valleymaternity.com",
+                phone: "(818) 555-0105",
+                address: "14900 Magnolia Blvd, Sherman Oaks, CA 91403",
+                puresScore: 4.8,
+                tier: "1A",
+                industry: "Healthcare",
+                revenue: "$1M",
+                lastContact: "2024-01-25",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Robert Kim",
+                email: "bob@techstartup.com",
+                phone: "(818) 555-0106",
+                address: "15233 Ventura Blvd, Sherman Oaks, CA 91403",
+                puresScore: 3.6,
+                tier: "1B",
+                industry: "Technology",
+                revenue: "$450K",
+                lastContact: "2024-01-28",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Amanda Foster",
+                email: "amanda@babyboutique.com",
+                phone: "(818) 555-0107",
+                address: "13355 Riverside Dr, Sherman Oaks, CA 91423",
+                puresScore: 3.9,
+                tier: "1B",
+                industry: "Retail",
+                revenue: "$275K",
+                lastContact: "2024-01-30",
+                buyerType: "Efficiency"
+            },
+            {
+                name: "James Wilson",
+                email: "james@pediatriccare.com",
+                phone: "(818) 555-0108",
+                address: "4500 Woodman Ave, Sherman Oaks, CA 91423",
+                puresScore: 4.1,
+                tier: "1A",
+                industry: "Healthcare",
+                revenue: "$600K",
+                lastContact: "2024-02-01",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Maria Garcia",
+                email: "maria@familyresource.org",
+                phone: "(818) 555-0109",
+                address: "14056 Ventura Blvd, Sherman Oaks, CA 91423",
+                puresScore: 3.4,
+                tier: "1C",
+                industry: "Non-Profit",
+                revenue: "$180K",
+                lastContact: "2024-02-03",
+                buyerType: "Relationship"
+            },
+            {
+                name: "Steven Lee",
+                email: "steven@valleymedical.com",
+                phone: "(818) 555-0110",
+                address: "15456 Ventura Blvd, Sherman Oaks, CA 91403",
+                puresScore: 4.3,
+                tier: "1A",
+                industry: "Healthcare",
+                revenue: "$850K",
+                lastContact: "2024-02-05",
+                buyerType: "Efficiency"
+            },
+            {
+                name: "Nicole Brown",
+                email: "nicole@kidsworld.com",
+                phone: "(818) 555-0111",
+                address: "13876 Ventura Blvd, Sherman Oaks, CA 91423",
+                puresScore: 3.7,
+                tier: "1B",
+                industry: "Retail",
+                revenue: "$320K",
+                lastContact: "2024-02-08",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Christopher Davis",
+                email: "chris@babysafety.com",
+                phone: "(818) 555-0112",
+                address: "4321 Sepulveda Blvd, Sherman Oaks, CA 91403",
+                puresScore: 4.0,
+                tier: "1B",
+                industry: "Healthcare",
+                revenue: "$400K",
+                lastContact: "2024-02-10",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Rachel Green",
+                email: "rachel@newmomscenter.com",
+                phone: "(818) 555-0113",
+                address: "14789 Moorpark St, Sherman Oaks, CA 91423",
+                puresScore: 3.8,
+                tier: "1B",
+                industry: "Education",
+                revenue: "$250K",
+                lastContact: "2024-02-12",
+                buyerType: "Relationship"
+            },
+            {
+                name: "Daniel Miller",
+                email: "daniel@valleypediatrics.com",
+                phone: "(818) 555-0114",
+                address: "15678 Ventura Blvd, Sherman Oaks, CA 91403",
+                puresScore: 4.5,
+                tier: "1A",
+                industry: "Healthcare",
+                revenue: "$700K",
+                lastContact: "2024-02-15",
+                buyerType: "Efficiency"
+            },
+            {
+                name: "Ashley Taylor",
+                email: "ashley@babygear.com",
+                phone: "(818) 555-0115",
+                address: "13200 Riverside Dr, Sherman Oaks, CA 91423",
+                puresScore: 3.3,
+                tier: "1C",
+                industry: "Retail",
+                revenue: "$190K",
+                lastContact: "2024-02-17",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Kevin Johnson",
+                email: "kevin@familyhealth.org",
+                phone: "(818) 555-0116",
+                address: "4567 Woodman Ave, Sherman Oaks, CA 91423",
+                puresScore: 3.6,
+                tier: "1B",
+                industry: "Non-Profit",
+                revenue: "$220K",
+                lastContact: "2024-02-20",
+                buyerType: "Relationship"
+            },
+            {
+                name: "Melissa Anderson",
+                email: "melissa@maternity.com",
+                phone: "(818) 555-0117",
+                address: "14321 Magnolia Blvd, Sherman Oaks, CA 91403",
+                puresScore: 4.2,
+                tier: "1A",
+                industry: "Healthcare",
+                revenue: "$650K",
+                lastContact: "2024-02-22",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Brian White",
+                email: "brian@techbaby.com",
+                phone: "(818) 555-0118",
+                address: "15901 Ventura Blvd, Sherman Oaks, CA 91403",
+                puresScore: 3.5,
+                tier: "1C",
+                industry: "Technology",
+                revenue: "$380K",
+                lastContact: "2024-02-25",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Lauren Clark",
+                email: "lauren@babyboutique.net",
+                phone: "(818) 555-0119",
+                address: "13654 Ventura Blvd, Sherman Oaks, CA 91423",
+                puresScore: 3.9,
+                tier: "1B",
+                industry: "Retail",
+                revenue: "$290K",
+                lastContact: "2024-02-28",
+                buyerType: "Efficiency"
+            },
+            {
+                name: "Jason Lewis",
+                email: "jason@childrenshospital.com",
+                phone: "(818) 555-0120",
+                address: "4800 Sepulveda Blvd, Sherman Oaks, CA 91403",
+                puresScore: 4.7,
+                tier: "1A",
+                industry: "Healthcare",
+                revenue: "$900K",
+                lastContact: "2024-03-01",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Stephanie Walker",
+                email: "stephanie@parentresource.org",
+                phone: "(818) 555-0121",
+                address: "14200 Moorpark St, Sherman Oaks, CA 91423",
+                puresScore: 3.2,
+                tier: "1C",
+                industry: "Non-Profit",
+                revenue: "$170K",
+                lastContact: "2024-03-03",
+                buyerType: "Relationship"
+            },
+            {
+                name: "Thomas Hall",
+                email: "thomas@valleyclinic.com",
+                phone: "(818) 555-0122",
+                address: "15234 Ventura Blvd, Sherman Oaks, CA 91403",
+                puresScore: 4.1,
+                tier: "1A",
+                industry: "Healthcare",
+                revenue: "$550K",
+                lastContact: "2024-03-05",
+                buyerType: "Efficiency"
+            },
+            {
+                name: "Kimberly Allen",
+                email: "kim@babystuff.com",
+                phone: "(818) 555-0123",
+                address: "13789 Riverside Dr, Sherman Oaks, CA 91423",
+                puresScore: 3.7,
+                tier: "1B",
+                industry: "Retail",
+                revenue: "$310K",
+                lastContact: "2024-03-08",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Jonathan Young",
+                email: "jon@pediatricgroup.com",
+                phone: "(818) 555-0124",
+                address: "4321 Woodman Ave, Sherman Oaks, CA 91423",
+                puresScore: 4.4,
+                tier: "1A",
+                industry: "Healthcare",
+                revenue: "$720K",
+                lastContact: "2024-03-10",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Heather King",
+                email: "heather@newborn.org",
+                phone: "(818) 555-0125",
+                address: "14567 Magnolia Blvd, Sherman Oaks, CA 91403",
+                puresScore: 3.4,
+                tier: "1C",
+                industry: "Non-Profit",
+                revenue: "$195K",
+                lastContact: "2024-03-12",
+                buyerType: "Relationship"
+            },
+            {
+                name: "Matthew Wright",
+                email: "matt@babytech.com",
+                phone: "(818) 555-0126",
+                address: "15432 Ventura Blvd, Sherman Oaks, CA 91403",
+                puresScore: 3.8,
+                tier: "1B",
+                industry: "Technology",
+                revenue: "$420K",
+                lastContact: "2024-03-15",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Samantha Lopez",
+                email: "sam@infantcare.com",
+                phone: "(818) 555-0127",
+                address: "13345 Ventura Blvd, Sherman Oaks, CA 91423",
+                puresScore: 4.0,
+                tier: "1B",
+                industry: "Healthcare",
+                revenue: "$480K",
+                lastContact: "2024-03-17",
+                buyerType: "Efficiency"
+            },
+            {
+                name: "Ryan Scott",
+                email: "ryan@babygear.net",
+                phone: "(818) 555-0128",
+                address: "4876 Sepulveda Blvd, Sherman Oaks, CA 91403",
+                puresScore: 3.6,
+                tier: "1B",
+                industry: "Retail",
+                revenue: "$265K",
+                lastContact: "2024-03-20",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Brittany Green",
+                email: "brittany@maternalhealth.com",
+                phone: "(818) 555-0129",
+                address: "14890 Moorpark St, Sherman Oaks, CA 91423",
+                puresScore: 4.3,
+                tier: "1A",
+                industry: "Healthcare",
+                revenue: "$680K",
+                lastContact: "2024-03-22",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Gregory Adams",
+                email: "greg@familysupport.org",
+                phone: "(818) 555-0130",
+                address: "15612 Ventura Blvd, Sherman Oaks, CA 91403",
+                puresScore: 3.1,
+                tier: "1C",
+                industry: "Non-Profit",
+                revenue: "$165K",
+                lastContact: "2024-03-25",
+                buyerType: "Relationship"
+            },
+            {
+                name: "Vanessa Baker",
+                email: "vanessa@babyshoppe.com",
+                phone: "(818) 555-0131",
+                address: "13890 Riverside Dr, Sherman Oaks, CA 91423",
+                puresScore: 3.9,
+                tier: "1B",
+                industry: "Retail",
+                revenue: "$295K",
+                lastContact: "2024-03-28",
+                buyerType: "Efficiency"
+            },
+            {
+                name: "Eric Gonzalez",
+                email: "eric@childrensmed.com",
+                phone: "(818) 555-0132",
+                address: "4523 Woodman Ave, Sherman Oaks, CA 91423",
+                puresScore: 4.6,
+                tier: "1A",
+                industry: "Healthcare",
+                revenue: "$780K",
+                lastContact: "2024-03-30",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Megan Nelson",
+                email: "megan@babyworld.com",
+                phone: "(818) 555-0133",
+                address: "14678 Magnolia Blvd, Sherman Oaks, CA 91403",
+                puresScore: 3.5,
+                tier: "1C",
+                industry: "Retail",
+                revenue: "$240K",
+                lastContact: "2024-04-01",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Andrew Carter",
+                email: "andrew@prenatal.org",
+                phone: "(818) 555-0134",
+                address: "15789 Ventura Blvd, Sherman Oaks, CA 91403",
+                puresScore: 3.7,
+                tier: "1B",
+                industry: "Non-Profit",
+                revenue: "$230K",
+                lastContact: "2024-04-03",
+                buyerType: "Relationship"
+            },
+            {
+                name: "Crystal Mitchell",
+                email: "crystal@valleyobgyn.com",
+                phone: "(818) 555-0135",
+                address: "13567 Ventura Blvd, Sherman Oaks, CA 91423",
+                puresScore: 4.4,
+                tier: "1A",
+                industry: "Healthcare",
+                revenue: "$750K",
+                lastContact: "2024-04-05",
+                buyerType: "Efficiency"
+            },
+            {
+                name: "Paul Perez",
+                email: "paul@babytechsolutions.com",
+                phone: "(818) 555-0136",
+                address: "4654 Sepulveda Blvd, Sherman Oaks, CA 91403",
+                puresScore: 3.8,
+                tier: "1B",
+                industry: "Technology",
+                revenue: "$390K",
+                lastContact: "2024-04-08",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Tiffany Roberts",
+                email: "tiffany@infantstore.com",
+                phone: "(818) 555-0137",
+                address: "14234 Moorpark St, Sherman Oaks, CA 91423",
+                puresScore: 3.3,
+                tier: "1C",
+                industry: "Retail",
+                revenue: "$205K",
+                lastContact: "2024-04-10",
+                buyerType: "Efficiency"
+            },
+            {
+                name: "Marcus Turner",
+                email: "marcus@childrenscenter.com",
+                phone: "(818) 555-0138",
+                address: "15345 Ventura Blvd, Sherman Oaks, CA 91403",
+                puresScore: 4.2,
+                tier: "1A",
+                industry: "Healthcare",
+                revenue: "$620K",
+                lastContact: "2024-04-12",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Courtney Phillips",
+                email: "courtney@babysupport.org",
+                phone: "(818) 555-0139",
+                address: "13234 Riverside Dr, Sherman Oaks, CA 91423",
+                puresScore: 3.6,
+                tier: "1B",
+                industry: "Non-Profit",
+                revenue: "$215K",
+                lastContact: "2024-04-15",
+                buyerType: "Relationship"
+            },
+            {
+                name: "Jeremy Campbell",
+                email: "jeremy@newborncare.com",
+                phone: "(818) 555-0140",
+                address: "4789 Woodman Ave, Sherman Oaks, CA 91423",
+                puresScore: 4.1,
+                tier: "1A",
+                industry: "Healthcare",
+                revenue: "$590K",
+                lastContact: "2024-04-17",
+                buyerType: "Efficiency"
+            },
+            {
+                name: "Lindsay Parker",
+                email: "lindsay@babybusiness.com",
+                phone: "(818) 555-0141",
+                address: "14789 Magnolia Blvd, Sherman Oaks, CA 91403",
+                puresScore: 3.9,
+                tier: "1B",
+                industry: "Retail",
+                revenue: "$315K",
+                lastContact: "2024-04-20",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Nathan Evans",
+                email: "nathan@pediatricservices.com",
+                phone: "(818) 555-0142",
+                address: "15890 Ventura Blvd, Sherman Oaks, CA 91403",
+                puresScore: 4.5,
+                tier: "1A",
+                industry: "Healthcare",
+                revenue: "$810K",
+                lastContact: "2024-04-22",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Destiny Edwards",
+                email: "destiny@familycare.org",
+                phone: "(818) 555-0143",
+                address: "13456 Ventura Blvd, Sherman Oaks, CA 91423",
+                puresScore: 3.2,
+                tier: "1C",
+                industry: "Non-Profit",
+                revenue: "$175K",
+                lastContact: "2024-04-25",
+                buyerType: "Relationship"
+            },
+            {
+                name: "Zachary Collins",
+                email: "zach@babyhealthtech.com",
+                phone: "(818) 555-0144",
+                address: "4321 Sepulveda Blvd, Sherman Oaks, CA 91403",
+                puresScore: 3.7,
+                tier: "1B",
+                industry: "Technology",
+                revenue: "$360K",
+                lastContact: "2024-04-28",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Alexis Stewart",
+                email: "alexis@babyretail.com",
+                phone: "(818) 555-0145",
+                address: "14567 Moorpark St, Sherman Oaks, CA 91423",
+                puresScore: 3.4,
+                tier: "1C",
+                industry: "Retail",
+                revenue: "$225K",
+                lastContact: "2024-05-01",
+                buyerType: "Efficiency"
+            },
+            {
+                name: "Gabriel Sanchez",
+                email: "gabriel@maternitycare.com",
+                phone: "(818) 555-0146",
+                address: "15234 Ventura Blvd, Sherman Oaks, CA 91403",
+                puresScore: 4.3,
+                tier: "1A",
+                industry: "Healthcare",
+                revenue: "$690K",
+                lastContact: "2024-05-03",
+                buyerType: "Analytical"
+            },
+            {
+                name: "Chloe Morris",
+                email: "chloe@infantresource.org",
+                phone: "(818) 555-0147",
+                address: "13789 Riverside Dr, Sherman Oaks, CA 91423",
+                puresScore: 3.5,
+                tier: "1C",
+                industry: "Non-Profit",
+                revenue: "$195K",
+                lastContact: "2024-05-05",
+                buyerType: "Relationship"
+            },
+            {
+                name: "Tyler Reed",
+                email: "tyler@babymedical.com",
+                phone: "(818) 555-0148",
+                address: "4876 Woodman Ave, Sherman Oaks, CA 91423",
+                puresScore: 4.0,
+                tier: "1B",
+                industry: "Healthcare",
+                revenue: "$520K",
+                lastContact: "2024-05-08",
+                buyerType: "Efficiency"
+            },
+            {
+                name: "Sierra Cook",
+                email: "sierra@babygifts.com",
+                phone: "(818) 555-0149",
+                address: "14890 Magnolia Blvd, Sherman Oaks, CA 91403",
+                puresScore: 3.8,
+                tier: "1B",
+                industry: "Retail",
+                revenue: "$280K",
+                lastContact: "2024-05-10",
+                buyerType: "Innovation"
+            },
+            {
+                name: "Austin Bailey",
+                email: "austin@childwellness.com",
+                phone: "(818) 555-0150",
+                address: "15678 Ventura Blvd, Sherman Oaks, CA 91403",
+                puresScore: 4.4,
+                tier: "1A",
+                industry: "Healthcare",
+                revenue: "$740K",
+                lastContact: "2024-05-12",
+                buyerType: "Analytical"
+            }
+        ];
+
+        function showTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Remove active class from all nav tabs
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked nav tab
+            event.target.classList.add('active');
+            
+            // Update content based on tab
+            if (tabName === 'sourcing') {
+                renderClientTable();
+            } else if (tabName === 'assessing') {
+                updateBuyingPatterns();
+            } else if (tabName === 'listening') {
+                updateListeningMetrics();
+            } else if (tabName === 'empowering') {
+                updateEmpoweringMetrics();
+            } else if (tabName === 'dashboard') {
+                updateDashboard();
+            }
+        }
+
+        function renderClientTable() {
+            const tbody = document.getElementById('clientTableBody');
+            tbody.innerHTML = '';
+            
+            clients.forEach((client, index) => {
+                const row = document.createElement('tr');
+                row.className = `tier-${client.tier.toLowerCase()}`;
+                row.innerHTML = `
+                    <td>${client.name}</td>
+                    <td>${client.email}</td>
+                    <td>${client.phone}</td>
+                    <td>${client.address}</td>
+                    <td>${client.puresScore}</td>
+                    <td><span class="tier-${client.tier.toLowerCase()}">${client.tier}</span></td>
+                    <td>${client.industry}</td>
+                    <td>${client.revenue}</td>
+                    <td>${client.lastContact}</td>
+                    <td>
+                        <button class="btn btn-sm" onclick="contactClient(${index}, 'email')">📧 Email</button>
+                        <button class="btn btn-sm btn-warning" onclick="contactClient(${index}, 'phone')">📞 Call</button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function contactClient(index, method) {
+            const client = clients[index];
+            
+            if (method === 'email') {
+                const subject = `Exclusive Baby Growth Tracking Solutions for ${client.name.split(' ')[0]}`;
+                const body = `Dear ${client.name},
+
+Your growing family deserves the best tracking tools for your baby's development journey. Our See Me Grow products have helped thousands of parents:
+
+• Track growth spurts with precision using our patent-pending growth mats
+• Create lasting keepsakes of precious early moments  
+• Simplify daily routines with 3-in-1 functionality
+• Join celebrity families like Nicole Ritchie who trust our products
+
+As featured in People Magazine and endorsed by healthcare providers nationwide, we're offering exclusive access to our complete product line.
+
+Perfect for:
+${client.industry === 'Healthcare' ? '- Medical professionals tracking infant development\n- Hospital gift shops and maternity wards' : ''}
+${client.industry === 'Retail' ? '- Baby boutiques and retail stores\n- Gift shop inventory expansion' : ''}
+${client.industry === 'Non-Profit' ? '- Family support programs\n- New parent resource centers' : ''}
+
+Schedule a consultation: moses@seemegrowmat.com
+Visit: www.seemegrowmat.com
+
+Best regards,
+Moses Ruiz | FunTasticMedia
+Creator of See Me Grow Products`;
+
+                const mailtoLink = `mailto:${client.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+                window.open(mailtoLink);
+            } else if (method === 'phone') {
+                window.open(`tel:${client.phone}`);
+            }
+            
+            // Update last contact date
+            clients[index].lastContact = new Date().toISOString().split('T')[0];
+            renderClientTable();
+        }
+
+        function filterTable() {
+            const searchInput = document.getElementById('searchInput').value.toLowerCase();
+            const tierFilter = document.getElementById('tierFilter').value;
+            const rows = document.querySelectorAll('#clientTableBody tr');
+            
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                const tierCell = row.cells[5].textContent;
+                
+                const matchesSearch = text.includes(searchInput);
+                const matchesTier = !tierFilter || tierCell.includes(tierFilter);
+                
+                row.style.display = matchesSearch && matchesTier ? '' : 'none';
+            });
+        }
+
+        function sortTable(n) {
+            const table = document.getElementById('clientTable');
+            const rows = Array.from(table.rows).slice(1);
+            const isNumeric = n === 4; // P.U.R.E.S. Score column
+            
+            rows.sort((a, b) => {
+                let x = a.cells[n].textContent;
+                let y = b.cells[n].textContent;
+                
+                if (isNumeric) {
+                    return parseFloat(y) - parseFloat(x);
+                }
+                
+                return x.localeCompare(y);
+            });
+            
+            const tbody = document.getElementById('clientTableBody');
+            tbody.innerHTML = '';
+            rows.forEach(row => tbody.appendChild(row));
+        }
+
+        function updateBuyingPatterns() {
+            const patterns = {
+                Analytical: 0,
+                Relationship: 0,
+                Efficiency: 0,
+                Innovation: 0
+            };
+            
+            clients.forEach(client => {
+                patterns[client.buyerType]++;
+            });
+            
+            document.getElementById('analyticalBuyers').textContent = patterns.Analytical;
+            document.getElementById('relationshipBuyers').textContent = patterns.Relationship;
+            document.getElementById('efficiencyBuyers').textContent = patterns.Efficiency;
+            document.getElementById('innovationBuyers').textContent = patterns.Innovation;
+        }
+
+        function updateListeningMetrics() {
+            document.getElementById('feedbackRate').textContent = '72%';
+            document.getElementById('satisfactionScore').textContent = '4.3';
+            document.getElementById('responseTime').textContent = '6';
+        }
+
+        function updateEmpoweringMetrics() {
+            document.getElementById('totalReferrals').textContent = '28';
+            document.getElementById('conversionRate').textContent = '65%';
+            document.getElementById('rewardsPaid').textContent = '$2,340';
+        }
+
+        function updateDashboard() {
+            const totalClients = clients.length;
+            const tier1ACount = clients.filter(c => c.tier === '1A').length;
+            const avgScore = (clients.reduce((sum, c) => sum + c.puresScore, 0) / totalClients).toFixed(1);
+            
+            document.getElementById('totalClients').textContent = totalClients;
+            document.getElementById('tier1ACount').textContent = tier1ACount;
+            document.getElementById('averageScore').textContent = avgScore;
+        }
+
+        function showAddClientModal() {
+            document.getElementById('addClientModal').style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('addClientModal').style.display = 'none';
+        }
+
+        function calculatePURES() {
+            const p = parseInt(document.getElementById('profitability').value) || 0;
+            const u = parseInt(document.getElementById('urgency').value) || 0;
+            const r = parseInt(document.getElementById('reachability').value) || 0;
+            const e = parseInt(document.getElementById('engagement').value) || 0;
+            const s = parseInt(document.getElementById('sustainability').value) || 0;
+            
+            const score = ((p + u + r + e + s) / 5).toFixed(1);
+            document.getElementById('puresScore').textContent = `P.U.R.E.S. Score: ${score}`;
+        }
+
+        function addClient(event) {
+            event.preventDefault();
+            
+            const name = document.getElementById('clientName').value;
+            const email = document.getElementById('clientEmail').value;
+            const phone = document.getElementById('clientPhone').value;
+            const address = document.getElementById('clientAddress').value;
+            const industry = document.getElementById('clientIndustry').value;
+            
+            const p = parseInt(document.getElementById('profitability').value);
+            const u = parseInt(document.getElementById('urgency').value);
+            const r = parseInt(document.getElementById('reachability').value);
+            const e = parseInt(document.getElementById('engagement').value);
+            const s = parseInt(document.getElementById('sustainability').value);
+            
+            const puresScore = ((p + u + r + e + s) / 5);
+            let tier;
+            if (puresScore >= 4.0) tier = '1A';
+            else if (puresScore >= 3.0) tier = '1B';
+            else tier = '1C';
+            
+            const newClient = {
+                name,
+                email,
+                phone,
+                address,
+                puresScore: puresScore.toFixed(1),
+                tier,
+                industry,
+                revenue: '$TBD',
+                lastContact: new Date().toISOString().split('T')[0],
+                buyerType: 'Analytical'
+            };
+            
+            clients.push(newClient);
+            closeModal();
+            renderClientTable();
+        }
+
+        function exportData() {
+            const csv = [
+                ['Name', 'Email', 'Phone', 'Address', 'P.U.R.E.S. Score', 'Tier', 'Industry', 'Revenue', 'Last Contact'],
+                ...clients.map(c => [c.name, c.email, c.phone, c.address, c.puresScore, c.tier, c.industry, c.revenue, c.lastContact])
+            ];
+            
+            const csvContent = csv.map(row => row.join(',')).join('\n');
+            const blob = new Blob([csvContent], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'see-me-grow-clients.csv';
+            a.click();
+        }
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            renderClientTable();
+            updateBuyingPatterns();
+            updateListeningMetrics();
+            updateEmpoweringMetrics();
+            updateDashboard();
+        });
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('addClientModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+    </script>
+</body>
+</html>

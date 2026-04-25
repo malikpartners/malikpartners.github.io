@@ -1,0 +1,825 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>S.A.L.E. System Client Targeting - Peaceful Valley Farm & Garden Supply</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #000000;
+            color: #ffffff;
+            line-height: 1.6;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #CF2030, #8B1538);
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(207, 32, 48, 0.3);
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            height: 60px;
+        }
+
+        .header-title {
+            color: #ffffff;
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .card {
+            background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 15px rgba(207, 32, 48, 0.2);
+            border: 1px solid #CF2030;
+        }
+
+        .card h3 {
+            color: #CF2030;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .scoring-form {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .score-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .score-item label {
+            flex: 1;
+            color: #cccccc;
+        }
+
+        .score-slider {
+            flex: 0 0 120px;
+            margin-left: 1rem;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            height: 8px;
+            border-radius: 5px;
+            background: #333;
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #CF2030;
+            cursor: pointer;
+        }
+
+        .search-controls {
+            margin-bottom: 1.5rem;
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        input[type="text"], select {
+            background: #2d2d2d;
+            border: 1px solid #CF2030;
+            color: #ffffff;
+            padding: 0.5rem;
+            border-radius: 5px;
+            flex: 1;
+            min-width: 200px;
+        }
+
+        input[type="text"]:focus, select:focus {
+            outline: none;
+            border-color: #ff4757;
+            box-shadow: 0 0 5px rgba(207, 32, 48, 0.5);
+        }
+
+        .table-container {
+            background: #1a1a1a;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #333;
+        }
+
+        th {
+            background: #CF2030;
+            color: #ffffff;
+            font-weight: bold;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        th:hover {
+            background: #8B1538;
+        }
+
+        tr:hover {
+            background: #2d2d2d;
+        }
+
+        .tier-premium { color: #00ff00; font-weight: bold; }
+        .tier-high { color: #ffff00; font-weight: bold; }
+        .tier-qualified { color: #00bfff; font-weight: bold; }
+
+        .btn {
+            background: linear-gradient(135deg, #CF2030, #8B1538);
+            color: #ffffff;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 0.2rem;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 0.9rem;
+        }
+
+        .btn:hover {
+            background: linear-gradient(135deg, #8B1538, #CF2030);
+            transform: translateY(-2px);
+        }
+
+        .tabs {
+            display: flex;
+            background: #2d2d2d;
+            border-radius: 8px 8px 0 0;
+            margin-bottom: 0;
+        }
+
+        .tab {
+            flex: 1;
+            text-align: center;
+            padding: 1rem;
+            background: #333;
+            color: #cccccc;
+            cursor: pointer;
+            border: none;
+            border-right: 1px solid #555;
+        }
+
+        .tab.active {
+            background: #CF2030;
+            color: #ffffff;
+        }
+
+        .tab-content {
+            display: none;
+            background: #1a1a1a;
+            padding: 1.5rem;
+            border-radius: 0 0 8px 8px;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .metric-card {
+            background: #2d2d2d;
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid #CF2030;
+        }
+
+        .metric-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #CF2030;
+        }
+
+        .metric-label {
+            color: #cccccc;
+            margin-top: 0.5rem;
+        }
+
+        .footer {
+            background: #1a1a1a;
+            padding: 1rem 2rem;
+            margin-top: 3rem;
+            border-top: 1px solid #CF2030;
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-logo {
+            height: 40px;
+        }
+
+        .email-template {
+            background: #2d2d2d;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            border: 1px solid #CF2030;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .search-controls {
+                flex-direction: column;
+            }
+            
+            table {
+                font-size: 0.8rem;
+            }
+            
+            th, td {
+                padding: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="HigginsReports" class="logo">
+            <h1 class="header-title">S.A.L.E. System Client Targeting Dashboard</h1>
+            <div>
+                <strong>Peaceful Valley Farm & Garden Supply</strong><br>
+                <small>Grass Valley, CA | (530) 272-4769</small>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Dashboard Overview -->
+        <div class="dashboard-grid">
+            <!-- P.U.R.E.S. Scoring System -->
+            <div class="card">
+                <h3>P.U.R.E.S. Client Scoring</h3>
+                <div class="scoring-form">
+                    <div class="score-item">
+                        <label>Profitability (Budget Capacity):</label>
+                        <div class="score-slider">
+                            <input type="range" id="profitability" min="1" max="5" value="3">
+                            <span id="profitability-value">3</span>
+                        </div>
+                    </div>
+                    <div class="score-item">
+                        <label>Urgency (Immediate Need):</label>
+                        <div class="score-slider">
+                            <input type="range" id="urgency" min="1" max="5" value="3">
+                            <span id="urgency-value">3</span>
+                        </div>
+                    </div>
+                    <div class="score-item">
+                        <label>Reachability (Contact Access):</label>
+                        <div class="score-slider">
+                            <input type="range" id="reachability" min="1" max="5" value="3">
+                            <span id="reachability-value">3</span>
+                        </div>
+                    </div>
+                    <div class="score-item">
+                        <label>Engagement (Partnership Openness):</label>
+                        <div class="score-slider">
+                            <input type="range" id="engagement" min="1" max="5" value="3">
+                            <span id="engagement-value">3</span>
+                        </div>
+                    </div>
+                    <div class="score-item">
+                        <label>Sustainability (Long-term Potential):</label>
+                        <div class="score-slider">
+                            <input type="range" id="sustainability" min="1" max="5" value="3">
+                            <span id="sustainability-value">3</span>
+                        </div>
+                    </div>
+                    <div style="margin-top: 1rem; padding: 1rem; background: #333; border-radius: 5px;">
+                        <strong>Total P.U.R.E.S. Score: <span id="total-score">15</span>/25</strong><br>
+                        <strong>Tier Level: <span id="tier-level">Tier 1C - Qualified</span></strong>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Key Metrics -->
+            <div class="card">
+                <h3>Dashboard Metrics</h3>
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-value">50</div>
+                        <div class="metric-label">Total Prospects</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">8</div>
+                        <div class="metric-label">Tier 1A Premium</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">20</div>
+                        <div class="metric-label">Tier 1B High-Value</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">22</div>
+                        <div class="metric-label">Tier 1C Qualified</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- S.A.L.E. System Tabs -->
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('sourcing')">SOURCING</button>
+            <button class="tab" onclick="showTab('assessing')">ASSESSING</button>
+            <button class="tab" onclick="showTab('listening')">LISTENING</button>
+            <button class="tab" onclick="showTab('empowering')">EMPOWERING</button>
+        </div>
+
+        <!-- Sourcing Tab -->
+        <div id="sourcing" class="tab-content active">
+            <h3>Client Database & Targeting</h3>
+            
+            <div class="search-controls">
+                <input type="text" id="searchInput" placeholder="Search clients..." onkeyup="searchTable()">
+                <select id="tierFilter" onchange="filterByTier()">
+                    <option value="">All Tiers</option>
+                    <option value="1A">Tier 1A - Premium</option>
+                    <option value="1B">Tier 1B - High-Value</option>
+                    <option value="1C">Tier 1C - Qualified</option>
+                </select>
+                <select id="industryFilter" onchange="filterByIndustry()">
+                    <option value="">All Industries</option>
+                    <option value="Residential">Residential</option>
+                    <option value="Commercial">Commercial</option>
+                    <option value="Educational">Educational</option>
+                    <option value="Agricultural">Agricultural</option>
+                </select>
+            </div>
+
+            <div class="table-container">
+                <table id="clientTable">
+                    <thead>
+                        <tr>
+                            <th onclick="sortTable(0)">Client Name ↕</th>
+                            <th onclick="sortTable(1)">Email ↕</th>
+                            <th onclick="sortTable(2)">Phone ↕</th>
+                            <th onclick="sortTable(3)">Address ↕</th>
+                            <th onclick="sortTable(4)">P.U.R.E.S. Score ↕</th>
+                            <th onclick="sortTable(5)">Tier Level ↕</th>
+                            <th onclick="sortTable(6)">Industry ↕</th>
+                            <th onclick="sortTable(7)">Revenue Estimate ↕</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="clientTableBody">
+                        <!-- Client data will be populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Assessing Tab -->
+        <div id="assessing" class="tab-content">
+            <h3>Buying Pattern Analysis</h3>
+            <div class="card">
+                <h4>Client Buying Profiles</h4>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+                    <div class="metric-card">
+                        <div class="metric-value">18</div>
+                        <div class="metric-label">Analytical Buyers<br><small>Require ROI analysis, case studies</small></div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">15</div>
+                        <div class="metric-label">Relationship Buyers<br><small>Value trust, referrals</small></div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">12</div>
+                        <div class="metric-label">Efficiency Buyers<br><small>Focus on time-saving</small></div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">5</div>
+                        <div class="metric-label">Innovation Buyers<br><small>Seek cutting-edge solutions</small></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Listening Tab -->
+        <div id="listening" class="tab-content">
+            <h3>Feedback Integration System</h3>
+            <div class="card">
+                <h4>Feedback Tracking</h4>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                    <div class="metric-card">
+                        <div class="metric-value">92%</div>
+                        <div class="metric-label">Customer Satisfaction</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">156</div>
+                        <div class="metric-label">Feedback Responses</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">3.2</div>
+                        <div class="metric-label">Avg. Response Time (hrs)</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">89%</div>
+                        <div class="metric-label">Issue Resolution Rate</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Empowering Tab -->
+        <div id="empowering" class="tab-content">
+            <h3>Referral Strategy & Success Stories</h3>
+            <div class="card">
+                <h4>Referral Performance</h4>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                    <div class="metric-card">
+                        <div class="metric-value">2.4</div>
+                        <div class="metric-label">Avg. Referrals per Client</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">$125K</div>
+                        <div class="metric-label">Referral Revenue (YTD)</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">68</div>
+                        <div class="metric-label">Active Advocates</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">12</div>
+                        <div class="metric-label">Success Stories</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="HigginsReports" class="footer-logo">
+            <div>
+                <p>&copy; 2026 Peaceful Valley Farm & Garden Supply | Powered by HigginsReports</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Sample client data for Grass Valley, CA area (within 10 miles)
+        const clientData = [
+            ['Sarah Johnson', 'sarah.johnson@email.com', '(530) 555-0123', '145 Pine Street, Grass Valley, CA 95945', 22, '1A', 'Residential', '$75,000'],
+            ['Michael Chen', 'mchen@gardendesign.com', '(530) 555-0124', '892 Mill Street, Nevada City, CA 95959', 21, '1A', 'Commercial', '$180,000'],
+            ['Lisa Rodriguez', 'lisa.r.homestead@gmail.com', '(530) 555-0125', '567 Oakwood Drive, Penn Valley, CA 95946', 20, '1A', 'Residential', '$95,000'],
+            ['David Thompson', 'dthompson@schools.org', '(530) 555-0126', '234 Education Way, Grass Valley, CA 95945', 19, '1B', 'Educational', '$120,000'],
+            ['Jennifer Walsh', 'jen.walsh@organicfarms.com', '(530) 555-0127', '789 Valley View Road, Nevada City, CA 95959', 23, '1A', 'Agricultural', '$250,000'],
+            ['Robert Martinez', 'rmartinez@landscaping.net', '(530) 555-0128', '321 Commercial Street, Auburn, CA 95603', 18, '1B', 'Commercial', '$140,000'],
+            ['Amanda Foster', 'afoster@communitygarden.org', '(530) 555-0129', '456 Community Lane, Grass Valley, CA 95949', 17, '1B', 'Educational', '$65,000'],
+            ['James Wilson', 'jwilson@homeowner.com', '(530) 555-0130', '678 Residential Court, Penn Valley, CA 95946', 16, '1C', 'Residential', '$85,000'],
+            ['Maria Gonzalez', 'mgonzalez@greenthumb.com', '(530) 555-0131', '890 Garden Avenue, Nevada City, CA 95959', 21, '1A', 'Commercial', '$160,000'],
+            ['Thomas Anderson', 'tanderson@family.net', '(530) 555-0132', '123 Family Street, Grass Valley, CA 95945', 15, '1C', 'Residential', '$70,000'],
+            ['Rachel Green', 'rgreen@schooldistrict.edu', '(530) 555-0133', '345 School Road, Auburn, CA 95603', 18, '1B', 'Educational', '$90,000'],
+            ['Christopher Lee', 'clee@organicproduce.com', '(530) 555-0134', '567 Farm Road, Penn Valley, CA 95946', 22, '1A', 'Agricultural', '$200,000'],
+            ['Emily Davis', 'edavis@homemail.com', '(530) 555-0135', '789 Maple Street, Grass Valley, CA 95949', 14, '1C', 'Residential', '$60,000'],
+            ['Kevin Brown', 'kbrown@landscapedesign.net', '(530) 555-0136', '234 Design Boulevard, Nevada City, CA 95959', 19, '1B', 'Commercial', '$130,000'],
+            ['Nicole Taylor', 'ntaylor@communitygroup.org', '(530) 555-0137', '456 Community Center Drive, Auburn, CA 95603', 16, '1C', 'Educational', '$55,000'],
+            ['Daniel Miller', 'dmiller@homeowner.net', '(530) 555-0138', '678 Hillside Avenue, Grass Valley, CA 95945', 13, '1C', 'Residential', '$65,000'],
+            ['Jessica Wilson', 'jwilson@greenspaces.com', '(530) 555-0139', '890 Green Valley Road, Penn Valley, CA 95946', 20, '1B', 'Commercial', '$145,000'],
+            ['Ryan Johnson', 'rjohnson@urbangarden.net', '(530) 555-0140', '123 Urban Street, Nevada City, CA 95959', 17, '1B', 'Residential', '$80,000'],
+            ['Laura Martinez', 'lmartinez@schoolgarden.edu', '(530) 555-0141', '345 Education Drive, Grass Valley, CA 95949', 15, '1C', 'Educational', '$45,000'],
+            ['Mark Thompson', 'mthompson@organicfarm.com', '(530) 555-0142', '567 Agricultural Way, Auburn, CA 95603', 24, '1A', 'Agricultural', '$280,000'],
+            ['Angela Rodriguez', 'arodriguez@homestead.net', '(530) 555-0143', '789 Country Road, Penn Valley, CA 95946', 16, '1C', 'Residential', '$75,000'],
+            ['Brian Foster', 'bfoster@landscape.com', '(530) 555-0144', '234 Professional Way, Nevada City, CA 95959', 18, '1B', 'Commercial', '$155,000'],
+            ['Stephanie Chen', 'schen@community.org', '(530) 555-0145', '456 Community Garden Lane, Grass Valley, CA 95945', 14, '1C', 'Educational', '$50,000'],
+            ['Jonathan Walsh', 'jwalsh@homegardener.net', '(530) 555-0146', '678 Garden Grove, Auburn, CA 95603', 12, '1C', 'Residential', '$55,000'],
+            ['Michelle Anderson', 'manderson@greendesign.com', '(530) 555-0147', '890 Design Center, Penn Valley, CA 95946', 19, '1B', 'Commercial', '$125,000'],
+            ['Andrew Lee', 'alee@family.com', '(530) 555-0148', '123 Family Circle, Nevada City, CA 95959', 13, '1C', 'Residential', '$68,000'],
+            ['Heather Davis', 'hdavis@schoolproject.edu', '(530) 555-0149', '345 School Project Road, Grass Valley, CA 95949', 17, '1B', 'Educational', '$72,000'],
+            ['Matthew Brown', 'mbrown@agriculturalservices.com', '(530) 555-0150', '567 Service Road, Auburn, CA 95603', 21, '1A', 'Agricultural', '$190,000'],
+            ['Karen Taylor', 'ktaylor@homeowner.net', '(530) 555-0151', '789 Taylor Street, Penn Valley, CA 95946', 15, '1C', 'Residential', '$62,000'],
+            ['Steven Miller', 'smiller@commercial.net', '(530) 555-0152', '234 Business Park, Nevada City, CA 95959', 20, '1B', 'Commercial', '$175,000'],
+            ['Ashley Wilson', 'awilson@education.org', '(530) 555-0153', '456 Learning Center, Grass Valley, CA 95945', 16, '1C', 'Educational', '$58,000'],
+            ['Joshua Johnson', 'jjohnson@sustainablefarm.com', '(530) 555-0154', '678 Sustainable Way, Auburn, CA 95603', 23, '1A', 'Agricultural', '$220,000'],
+            ['Kimberly Martinez', 'kmartinez@residential.net', '(530) 555-0155', '890 Residential Lane, Penn Valley, CA 95946', 14, '1C', 'Residential', '$71,000'],
+            ['Charles Thompson', 'cthompson@landscaping.com', '(530) 555-0156', '123 Landscape Road, Nevada City, CA 95959', 18, '1B', 'Commercial', '$138,000'],
+            ['Elizabeth Rodriguez', 'erodriguez@community.edu', '(530) 555-0157', '345 Community College Drive, Grass Valley, CA 95949', 17, '1B', 'Educational', '$85,000'],
+            ['Gregory Foster', 'gfoster@homestead.com', '(530) 555-0158', '567 Homestead Avenue, Auburn, CA 95603', 12, '1C', 'Residential', '$56,000'],
+            ['Megan Chen', 'mchen@greentech.net', '(530) 555-0159', '789 Technology Park, Penn Valley, CA 95946', 19, '1B', 'Commercial', '$142,000'],
+            ['Patrick Walsh', 'pwalsh@familygarden.net', '(530) 555-0160', '234 Garden Circle, Nevada City, CA 95959', 13, '1C', 'Residential', '$64,000'],
+            ['Rebecca Anderson', 'randerson@schools.org', '(530) 555-0161', '456 School Administration, Grass Valley, CA 95945', 16, '1C', 'Educational', '$78,000'],
+            ['Timothy Lee', 'tlee@organicoperations.com', '(530) 555-0162', '678 Operations Center, Auburn, CA 95603', 22, '1A', 'Agricultural', '$210,000'],
+            ['Susan Davis', 'sdavis@neighborhood.net', '(530) 555-0163', '890 Neighborhood Street, Penn Valley, CA 95946', 15, '1C', 'Residential', '$69,000'],
+            ['Benjamin Brown', 'bbrown@designstudio.com', '(530) 555-0164', '123 Design Studio, Nevada City, CA 95959', 20, '1B', 'Commercial', '$158,000'],
+            ['Donna Taylor', 'dtaylor@education.net', '(530) 555-0165', '345 Educational Services, Grass Valley, CA 95949', 14, '1C', 'Educational', '$52,000'],
+            ['Jacob Miller', 'jmiller@homeimprovement.net', '(530) 555-0166', '567 Home Center, Auburn, CA 95603', 11, '1C', 'Residential', '$58,000'],
+            ['Christine Wilson', 'cwilson@businessservices.com', '(530) 555-0167', '789 Business Services, Penn Valley, CA 95946', 17, '1B', 'Commercial', '$132,000'],
+            ['Nathan Johnson', 'njohnson@familylife.net', '(530) 555-0168', '234 Family Life Center, Nevada City, CA 95959', 13, '1C', 'Residential', '$66,000'],
+            ['Victoria Martinez', 'vmartinez@training.edu', '(530) 555-0169', '456 Training Facility, Grass Valley, CA 95945', 18, '1B', 'Educational', '$88,000'],
+            ['Alexander Thompson', 'athompson@agribusiness.com', '(530) 555-0170', '678 Agribusiness Park, Auburn, CA 95603', 25, '1A', 'Agricultural', '$300,000'],
+            ['Samantha Rodriguez', 'srodriguez@homelife.net', '(530) 555-0171', '890 Home Life Avenue, Penn Valley, CA 95946', 16, '1C', 'Residential', '$73,000'],
+            ['Joseph Foster', 'jfoster@commercial.org', '(530) 555-0172', '123 Commercial Plaza, Nevada City, CA 95959', '21', '1A', 'Commercial', '$185,000']
+        ];
+
+        function populateTable() {
+            const tbody = document.getElementById('clientTableBody');
+            tbody.innerHTML = '';
+            
+            clientData.forEach(row => {
+                const tr = document.createElement('tr');
+                
+                // Determine tier class for styling
+                let tierClass = '';
+                if (row[5] === '1A') tierClass = 'tier-premium';
+                else if (row[5] === '1B') tierClass = 'tier-high';
+                else tierClass = 'tier-qualified';
+                
+                tr.innerHTML = `
+                    <td>${row[0]}</td>
+                    <td>${row[1]}</td>
+                    <td>${row[2]}</td>
+                    <td>${row[3]}</td>
+                    <td>${row[4]}</td>
+                    <td class="${tierClass}">Tier ${row[5]} - ${getTierName(row[5])}</td>
+                    <td>${row[6]}</td>
+                    <td>${row[7]}</td>
+                    <td>
+                        <button class="btn" onclick="contactClient('${row[1]}', '${row[0]}', '${row[6]}')">Email</button>
+                        <button class="btn" onclick="callClient('${row[2]}', '${row[0]}')">Call</button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function getTierName(tier) {
+            switch(tier) {
+                case '1A': return 'Premium';
+                case '1B': return 'High-Value';
+                case '1C': return 'Qualified';
+                default: return 'Unknown';
+            }
+        }
+
+        function contactClient(email, name, industry) {
+            const subject = encodeURIComponent(`Transform Your ${industry === 'Residential' ? 'Home Garden' : industry + ' Space'} with Organic Excellence`);
+            
+            let bodyText = `Dear ${name},\n\n`;
+            
+            if (industry === 'Residential') {
+                bodyText += `Transform your home garden into an organic oasis with Peaceful Valley Farm & Garden Supply!\n\n`;
+                bodyText += `🌱 Why Choose Us?\n`;
+                bodyText += `• Over 50 years serving organic gardeners\n`;
+                bodyText += `• 5,000+ certified organic and non-GMO products\n`;
+                bodyText += `• Expert staff with decades of organic growing experience\n`;
+                bodyText += `• Heirloom seeds, fruit trees, and complete growing supplies\n\n`;
+                bodyText += `🏡 Perfect for Your Home Garden:\n`;
+                bodyText += `• Organic fertilizers and soil amendments\n`;
+                bodyText += `• Certified organic vegetable and flower seeds\n`;
+                bodyText += `• Fruit trees and berry plants\n`;
+                bodyText += `• Natural pest control solutions\n`;
+                bodyText += `• Season extenders and garden tools\n\n`;
+            } else if (industry === 'Commercial') {
+                bodyText += `Scale up your commercial operations with our wholesale organic solutions!\n\n`;
+                bodyText += `💼 Commercial Benefits:\n`;
+                bodyText += `• Wholesale pricing with volume discounts\n`;
+                bodyText += `• Dedicated commercial support team\n`;
+                bodyText += `• Bulk quantities without minimums\n`;
+                bodyText += `• Extended payment terms for qualified buyers\n`;
+                bodyText += `• Custom growing solutions and consultation\n\n`;
+                bodyText += `🌿 Commercial Product Lines:\n`;
+                bodyText += `• Bulk organic fertilizers and amendments\n`;
+                bodyText += `• Commercial-grade cover crops\n`;
+                bodyText += `• Landscape and erosion control solutions\n`;
+                bodyText += `• Irrigation supplies and equipment\n`;
+                bodyText += `• Professional landscaping tools\n\n`;
+            } else if (industry === 'Educational') {
+                bodyText += `Cultivate the next generation with our educational garden programs!\n\n`;
+                bodyText += `🎓 Educational Solutions:\n`;
+                bodyText += `• School garden starter kits\n`;
+                bodyText += `• Educational discounts for non-profits\n`;
+                bodyText += `• Curriculum-friendly growing guides\n`;
+                bodyText += `• Season-long growing programs\n`;
+                bodyText += `• Student-safe organic products\n\n`;
+                bodyText += `📚 Perfect for Learning:\n`;
+                bodyText += `• Easy-to-grow seeds for classroom projects\n`;
+                bodyText += `• Raised bed kits ideal for schools\n`;
+                bodyText += `• Composting supplies and education\n`;
+                bodyText += `• Native plant and pollinator gardens\n`;
+                bodyText += `• Hands-on agricultural learning tools\n\n`;
+            } else if (industry === 'Agricultural') {
+                bodyText += `Boost your farm's productivity with our certified organic agricultural solutions!\n\n`;
+                bodyText += `🚜 Agricultural Excellence:\n`;
+                bodyText += `• OMRI-listed fertilizers and amendments\n`;
+                bodyText += `• Certified organic cover crop seeds\n`;
+                bodyText += `• Farmer-to-farmer expertise and support\n`;
+                bodyText += `• Bulk pricing on agricultural supplies\n`;
+                bodyText += `• Soil testing and custom blend services\n\n`;
+                bodyText += `🌾 Organic Farming Solutions:\n`;
+                bodyText += `• Specialty cover crops for soil building\n`;
+                bodyText += `• Organic pest and disease management\n`;
+                bodyText += `• Commercial seed varieties\n`;
+                bodyText += `• Irrigation and water management\n`;
+                bodyText += `• Post-harvest handling supplies\n\n`;
+            }
+            
+            bodyText += `📍 Visit our store at 125 Clydesdale Court, Grass Valley, CA\n`;
+            bodyText += `📞 Call us at (530) 272-4769\n`;
+            bodyText += `🌐 Shop online at www.groworganic.com\n\n`;
+            bodyText += `Special Offer: Mention this email for 10% off your first order!\n\n`;
+            bodyText += `Let's grow organic together!\n\n`;
+            bodyText += `Best regards,\n`;
+            bodyText += `Jill Hageman\n`;
+            bodyText += `Peaceful Valley Farm & Garden Supply\n`;
+            bodyText += `jill-hageman@groworganic.com`;
+
+            const body = encodeURIComponent(bodyText);
+            window.open(`mailto:${email}?subject=${subject}&body=${body}`);
+        }
+
+        function callClient(phone, name) {
+            alert(`Calling ${name} at ${phone}...`);
+            window.open(`tel:${phone}`);
+        }
+
+        function searchTable() {
+            const input = document.getElementById('searchInput').value.toLowerCase();
+            const table = document.getElementById('clientTable');
+            const rows = table.getElementsByTagName('tr');
+
+            for (let i = 1; i < rows.length; i++) {
+                const cells = rows[i].getElementsByTagName('td');
+                let found = false;
+                
+                for (let j = 0; j < cells.length - 1; j++) {
+                    if (cells[j].textContent.toLowerCase().includes(input)) {
+                        found = true;
+                        break;
+                    }
+                }
+                
+                rows[i].style.display = found ? '' : 'none';
+            }
+        }
+
+        function filterByTier() {
+            const filter = document.getElementById('tierFilter').value;
+            const table = document.getElementById('clientTable');
+            const rows = table.getElementsByTagName('tr');
+
+            for (let i = 1; i < rows.length; i++) {
+                const tierCell = rows[i].getElementsByTagName('td')[5];
+                if (!filter || tierCell.textContent.includes(filter)) {
+                    rows[i].style.display = '';
+                } else {
+                    rows[i].style.display = 'none';
+                }
+            }
+        }
+
+        function filterByIndustry() {
+            const filter = document.getElementById('industryFilter').value;
+            const table = document.getElementById('clientTable');
+            const rows = table.getElementsByTagName('tr');
+
+            for (let i = 1; i < rows.length; i++) {
+                const industryCell = rows[i].getElementsByTagName('td')[6];
+                if (!filter || industryCell.textContent.includes(filter)) {
+                    rows[i].style.display = '';
+                } else {
+                    rows[i].style.display = 'none';
+                }
+            }
+        }
+
+        function sortTable(columnIndex) {
+            const table = document.getElementById('clientTable');
+            const rows = Array.from(table.rows).slice(1);
+            const isNumeric = columnIndex === 4; // P.U.R.E.S. Score column
+            
+            rows.sort((a, b) => {
+                const aVal = a.cells[columnIndex].textContent.trim();
+                const bVal = b.cells[columnIndex].textContent.trim();
+                
+                if (isNumeric) {
+                    return parseInt(aVal) - parseInt(bVal);
+                } else {
+                    return aVal.localeCompare(bVal);
+                }
+            });
+            
+            const tbody = table.getElementsByTagName('tbody')[0];
+            rows.forEach(row => tbody.appendChild(row));
+        }
+
+        function showTab(tabName) {
+            // Hide all tab contents
+            const tabContents = document.getElementsByClassName('tab-content');
+            for (let i = 0; i < tabContents.length; i++) {
+                tabContents[i].classList.remove('active');
+            }
+            
+            // Remove active class from all tabs
+            const tabs = document.getElementsByClassName('tab');
+            for (let i = 0; i < tabs.length; i++) {
+                tabs[i].classList.remove('active');
+            }
+            
+            // Show selected tab content and mark tab as active
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        function updatePuresScore() {
+            const profitability = parseInt(document.getElementById('profitability').value);
+            const urgency = parseInt(document.getElementById('urgency').value);
+            const reachability = parseInt(document.getElementById('reachability').value);
+            const engagement = parseInt(document.getElementById('engagement').value);
+            const sustainability = parseInt(document.getElementById('sustainability').value);
+            
+            const totalScore = profitability + urgency + reachability + engagement + sustainability;
+            
+            // Update display values
+            document.getElementById('profitability-value').textContent = profitability;
+            document.getElementById('urgency-value').textContent = urgency;
+            document.getElementById('reachability-value').textContent = reachability;
+            document.getElementById('engagement-value').textContent = engagement;
+            document.getElementById('sustainability-value').textContent = sustainability;
+            document.getElementById('total-score').textContent = totalScore;
+            
+            // Determine tier level
+            let tierLevel = '';
+            if (totalScore >= 20) {
+                tierLevel = 'Tier 1A - Premium';
+            } else if (totalScore >= 15) {
+                tierLevel = 'Tier 1B - High-Value';
+            } else {
+                tierLevel = 'Tier 1C - Qualified';
+            }
+            document.getElementById('tier-level').textContent = tierLevel;
+        }
+
+        // Add event listeners for score sliders
+        document.addEventListener('DOMContentLoaded', function() {
+            populateTable();
+            
+            const sliders = ['profitability', 'urgency', 'reachability', 'engagement', 'sustainability'];
+            sliders.forEach(slider => {
+                document.getElementById(slider).addEventListener('input', updatePuresScore);
+            });
+        });
+    </script>
+</body>
+</html>
