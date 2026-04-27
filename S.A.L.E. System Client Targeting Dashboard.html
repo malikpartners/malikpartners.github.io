@@ -1,0 +1,1042 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>S.A.L.E. System - Client Targeting Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #000000;
+            color: #ffffff;
+            line-height: 1.6;
+        }
+
+        .header {
+            background-color: #CF2030;
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 10px rgba(207, 32, 48, 0.3);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .header-left img {
+            max-height: 50px;
+            width: auto;
+        }
+
+        .header-text {
+            color: #ffffff;
+        }
+
+        .header-text h1 {
+            font-size: 1.5rem;
+            margin: 0;
+            font-weight: bold;
+        }
+
+        .header-text p {
+            margin: 0;
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .header img.higgins-logo {
+            max-height: 40px;
+            width: auto;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .realty-section {
+            background: linear-gradient(135deg, #CF2030, #a81729);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(207, 32, 48, 0.3);
+        }
+
+        .realty-section h2 {
+            color: #ffffff;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .realty-section p {
+            color: #ffffff;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            max-width: 800px;
+            margin: 0 auto 1.5rem;
+        }
+
+        .realty-features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .feature-card {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 1.5rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .feature-card h3 {
+            color: #ffffff;
+            margin-bottom: 0.5rem;
+            font-size: 1.2rem;
+        }
+
+        .feature-card p {
+            color: #ffffff;
+            font-size: 0.95rem;
+            opacity: 0.9;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .module {
+            background-color: #1a1a1a;
+            border: 1px solid #CF2030;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .module h2 {
+            color: #CF2030;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid #CF2030;
+            padding-bottom: 0.5rem;
+        }
+
+        .module h3 {
+            color: #ffffff;
+            margin-bottom: 1rem;
+        }
+
+        .pures-form {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .pures-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem;
+            background-color: #2a2a2a;
+            border-radius: 4px;
+        }
+
+        .pures-item label {
+            color: #ffffff;
+            font-weight: bold;
+        }
+
+        .rating-container {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .rating-btn {
+            background-color: #444;
+            color: #fff;
+            border: 1px solid #CF2030;
+            padding: 0.3rem 0.6rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .rating-btn:hover,
+        .rating-btn.active {
+            background-color: #CF2030;
+            color: #ffffff;
+        }
+
+        .controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .search-box {
+            background-color: #2a2a2a;
+            border: 1px solid #CF2030;
+            color: #ffffff;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            flex-grow: 1;
+            min-width: 200px;
+        }
+
+        .filter-select {
+            background-color: #2a2a2a;
+            border: 1px solid #CF2030;
+            color: #ffffff;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+        }
+
+        .btn {
+            background-color: #CF2030;
+            color: #ffffff;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+
+        .btn:hover {
+            background-color: #a81729;
+            transform: translateY(-2px);
+        }
+
+        .btn-small {
+            padding: 0.3rem 0.6rem;
+            font-size: 0.8rem;
+        }
+
+        .client-table {
+            background-color: #1a1a1a;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(207, 32, 48, 0.1);
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background-color: #CF2030;
+            color: #ffffff;
+            padding: 1rem;
+            text-align: left;
+            cursor: pointer;
+            user-select: none;
+            position: relative;
+        }
+
+        th:hover {
+            background-color: #a81729;
+        }
+
+        th.sortable::after {
+            content: " ↕";
+            color: #ffffff;
+        }
+
+        td {
+            padding: 0.8rem 1rem;
+            border-bottom: 1px solid #333;
+            color: #ffffff;
+        }
+
+        tr:hover {
+            background-color: #2a2a2a;
+        }
+
+        .tier-1a { background-color: rgba(40, 167, 69, 0.2); }
+        .tier-1b { background-color: rgba(255, 193, 7, 0.2); }
+        .tier-1c { background-color: rgba(0, 123, 255, 0.2); }
+
+        .tier-badge {
+            padding: 0.2rem 0.5rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .tier-1a .tier-badge { background-color: #28a745; color: #ffffff; }
+        .tier-1b .tier-badge { background-color: #ffc107; color: #000000; }
+        .tier-1c .tier-badge { background-color: #007bff; color: #ffffff; }
+
+        .email-modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+
+        .modal-content {
+            background-color: #1a1a1a;
+            margin: 5% auto;
+            padding: 2rem;
+            border: 2px solid #CF2030;
+            border-radius: 8px;
+            width: 80%;
+            max-width: 600px;
+            color: #ffffff;
+        }
+
+        .close {
+            color: #CF2030;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: #a81729;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #CF2030;
+            font-weight: bold;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            background-color: #2a2a2a;
+            border: 1px solid #CF2030;
+            color: #ffffff;
+            padding: 0.5rem;
+            border-radius: 4px;
+        }
+
+        .form-group textarea {
+            height: 150px;
+            resize: vertical;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background-color: #2a2a2a;
+            border: 1px solid #CF2030;
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #CF2030;
+        }
+
+        .stat-label {
+            color: #ffffff;
+            margin-top: 0.5rem;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            border-top: 1px solid #CF2030;
+            margin-top: 3rem;
+        }
+
+        .footer img {
+            max-height: 30px;
+            width: auto;
+            opacity: 0.7;
+        }
+
+        .export-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .marketing-plan {
+            background-color: #2a2a2a;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .schedule-item {
+            background-color: #333;
+            border-left: 4px solid #CF2030;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 0 4px 4px 0;
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
+            }
+            
+            .header-left {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .controls {
+                flex-direction: column;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .realty-features {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-left">
+            <img src="https://dtzulyujzhqiu.cloudfront.net/redrealtyllc13541/profiles/1761761890.png" alt="Red Realty">
+            <div class="header-text">
+                <h1>RedRealty.com S.A.L.E. System Report</h1>
+                <p>Prepared for Agent: James Yates</p>
+            </div>
+        </div>
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports" class="higgins-logo">
+    </div>
+
+    <div class="container">
+        <div class="realty-section">
+            <h2>RedRealty.com - Your Premier Real Estate Partner</h2>
+            <p>RedRealty.com is committed to revolutionizing the real estate experience through innovative technology, exceptional service, and strategic client relationships. Our comprehensive platform connects buyers, sellers, and investors with the tools and expertise they need to succeed in today's dynamic real estate market.</p>
+            
+            <div class="realty-features">
+                <div class="feature-card">
+                    <h3>🏠 Comprehensive Listings</h3>
+                    <p>Access to extensive MLS database with real-time updates and advanced search capabilities</p>
+                </div>
+                <div class="feature-card">
+                    <h3>📊 Market Analytics</h3>
+                    <p>Data-driven insights and market trends to make informed real estate decisions</p>
+                </div>
+                <div class="feature-card">
+                    <h3>🤝 Expert Guidance</h3>
+                    <p>Professional agents like James Yates providing personalized service and local market expertise</p>
+                </div>
+                <div class="feature-card">
+                    <h3>💼 Investment Solutions</h3>
+                    <p>Specialized services for real estate investors, including portfolio management and ROI analysis</p>
+                </div>
+                <div class="feature-card">
+                    <h3>🔧 Technology Integration</h3>
+                    <p>Cutting-edge tools including virtual tours, digital transactions, and mobile accessibility</p>
+                </div>
+                <div class="feature-card">
+                    <h3>🌟 Client Success</h3>
+                    <p>Proven track record of successful transactions and satisfied clients across all market segments</p>
+                </div>
+            </div>
+        </div>
+
+        <h1 style="text-align: center; color: #CF2030; margin-bottom: 2rem;">S.A.L.E. System Client Targeting Dashboard</h1>
+        
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value" id="totalClients">50</div>
+                <div class="stat-label">Total Prospects</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="tier1aCount">15</div>
+                <div class="stat-label">Tier 1A (Premium)</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="tier1bCount">20</div>
+                <div class="stat-label">Tier 1B (High-Value)</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="tier1cCount">15</div>
+                <div class="stat-label">Tier 1C (Qualified)</div>
+            </div>
+        </div>
+
+        <div class="dashboard-grid">
+            <div class="module">
+                <h2>S.A.L.E. SOURCING - P.U.R.E.S. Scoring</h2>
+                <div class="pures-form">
+                    <div class="pures-item">
+                        <label>Profitability:</label>
+                        <div class="rating-container" data-category="profitability">
+                            <button class="rating-btn" data-value="1">1</button>
+                            <button class="rating-btn" data-value="2">2</button>
+                            <button class="rating-btn" data-value="3">3</button>
+                            <button class="rating-btn" data-value="4">4</button>
+                            <button class="rating-btn" data-value="5">5</button>
+                        </div>
+                    </div>
+                    <div class="pures-item">
+                        <label>Urgency:</label>
+                        <div class="rating-container" data-category="urgency">
+                            <button class="rating-btn" data-value="1">1</button>
+                            <button class="rating-btn" data-value="2">2</button>
+                            <button class="rating-btn" data-value="3">3</button>
+                            <button class="rating-btn" data-value="4">4</button>
+                            <button class="rating-btn" data-value="5">5</button>
+                        </div>
+                    </div>
+                    <div class="pures-item">
+                        <label>Reachability:</label>
+                        <div class="rating-container" data-category="reachability">
+                            <button class="rating-btn" data-value="1">1</button>
+                            <button class="rating-btn" data-value="2">2</button>
+                            <button class="rating-btn" data-value="3">3</button>
+                            <button class="rating-btn" data-value="4">4</button>
+                            <button class="rating-btn" data-value="5">5</button>
+                        </div>
+                    </div>
+                    <div class="pures-item">
+                        <label>Engagement:</label>
+                        <div class="rating-container" data-category="engagement">
+                            <button class="rating-btn" data-value="1">1</button>
+                            <button class="rating-btn" data-value="2">2</button>
+                            <button class="rating-btn" data-value="3">3</button>
+                            <button class="rating-btn" data-value="4">4</button>
+                            <button class="rating-btn" data-value="5">5</button>
+                        </div>
+                    </div>
+                    <div class="pures-item">
+                        <label>Sustainability:</label>
+                        <div class="rating-container" data-category="sustainability">
+                            <button class="rating-btn" data-value="1">1</button>
+                            <button class="rating-btn" data-value="2">2</button>
+                            <button class="rating-btn" data-value="3">3</button>
+                            <button class="rating-btn" data-value="4">4</button>
+                            <button class="rating-btn" data-value="5">5</button>
+                        </div>
+                    </div>
+                </div>
+                <button class="btn" onclick="calculatePURESScore()" style="width: 100%; margin-top: 1rem;">Calculate P.U.R.E.S. Score</button>
+            </div>
+
+            <div class="module">
+                <h2>A.SSESSING - Buying Patterns</h2>
+                <div class="pures-form">
+                    <div class="pures-item">
+                        <label>Analytical Buyers:</label>
+                        <span>Require ROI analysis, case studies</span>
+                    </div>
+                    <div class="pures-item">
+                        <label>Relationship Buyers:</label>
+                        <span>Value trust, referrals, partnerships</span>
+                    </div>
+                    <div class="pures-item">
+                        <label>Efficiency Buyers:</label>
+                        <span>Focus on time-saving solutions</span>
+                    </div>
+                    <div class="pures-item">
+                        <label>Innovation Buyers:</label>
+                        <span>Seek cutting-edge advantages</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="module">
+            <h2>Marketing Plan & Schedule</h2>
+            <div class="marketing-plan">
+                <div class="schedule-item">
+                    <h3>Week 1-2: Initial Outreach</h3>
+                    <p>Deploy tier-appropriate email templates to Tier 1A prospects. Focus on personalized value propositions.</p>
+                </div>
+                <div class="schedule-item">
+                    <h3>Week 3-4: Follow-up Campaign</h3>
+                    <p>Engage Tier 1B prospects with efficiency-focused messaging. Track engagement metrics.</p>
+                </div>
+                <div class="schedule-item">
+                    <h3>Week 5-6: Relationship Building</h3>
+                    <p>Schedule 1-on-1 meetings with responsive prospects. Gather feedback and refine approach.</p>
+                </div>
+                <div class="schedule-item">
+                    <h3>Week 7-8: Conversion Focus</h3>
+                    <p>Deploy closing sequences to qualified leads. Implement referral programs.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <input type="text" class="search-box" id="searchInput" placeholder="Search clients...">
+            <select class="filter-select" id="tierFilter">
+                <option value="">All Tiers</option>
+                <option value="1A">Tier 1A - Premium</option>
+                <option value="1B">Tier 1B - High-Value</option>
+                <option value="1C">Tier 1C - Qualified</option>
+            </select>
+            <select class="filter-select" id="industryFilter">
+                <option value="">All Industries</option>
+                <option value="Real Estate">Real Estate</option>
+                <option value="Technology">Technology</option>
+                <option value="Finance">Finance</option>
+                <option value="Healthcare">Healthcare</option>
+            </select>
+        </div>
+
+        <div class="export-buttons">
+            <button class="btn" onclick="exportToCSV()">Export CSV</button>
+            <button class="btn" onclick="exportToPDF()">Export PDF</button>
+        </div>
+
+        <div class="client-table">
+            <div class="table-container">
+                <table id="clientTable">
+                    <thead>
+                        <tr>
+                            <th class="sortable" onclick="sortTable(0)">Client Name</th>
+                            <th class="sortable" onclick="sortTable(1)">Email</th>
+                            <th class="sortable" onclick="sortTable(2)">Phone</th>
+                            <th class="sortable" onclick="sortTable(3)">Address</th>
+                            <th class="sortable" onclick="sortTable(4)">P.U.R.E.S Score</th>
+                            <th class="sortable" onclick="sortTable(5)">Tier</th>
+                            <th class="sortable" onclick="sortTable(6)">Industry</th>
+                            <th class="sortable" onclick="sortTable(7)">Revenue Est.</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="clientTableBody">
+                        <!-- Client data will be populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Email Modal -->
+    <div id="emailModal" class="email-modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Send Email</h2>
+            <form id="emailForm">
+                <div class="form-group">
+                    <label for="emailTo">To:</label>
+                    <input type="email" id="emailTo" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="emailSubject">Subject:</label>
+                    <input type="text" id="emailSubject" value="Exclusive Real Estate Opportunity - RedRealty.com">
+                </div>
+                <div class="form-group">
+                    <label for="emailBody">Message:</label>
+                    <textarea id="emailBody"></textarea>
+                </div>
+                <button type="button" class="btn" onclick="sendEmail()">Send Email</button>
+                <button type="button" class="btn" onclick="closeEmailModal()" style="background-color: #666; margin-left: 1rem;">Cancel</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="footer">
+        <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins Reports">
+        <p style="margin-top: 1rem; color: #666;">Powered by Higgins Reports - Advanced Client Intelligence</p>
+    </div>
+
+    <script>
+        // Sample client data based on the uploaded real estate file
+        const clientData = [
+            {name: "Lawrence H.", email: "lawrence.h@realestate.com", phone: "555-0101", address: "Los Angeles, CA", puresScore: 4.2, tier: "1A", industry: "Real Estate", revenue: "$5M", contactStatus: "New", lastContact: "2024-01-15", nextAction: "Initial Email", notes: "High-value investor"},
+            {name: "Joshua Stralko", email: "joshua.stralko@databricks.com", phone: "555-0102", address: "Denver, CO", puresScore: 3.8, tier: "1B", industry: "Technology", revenue: "$2M", contactStatus: "Contacted", lastContact: "2024-01-10", nextAction: "Follow-up Call", notes: "Tech executive"},
+            {name: "Teresa Loos-Tedrow", email: "teresa@teddycoproperties.com", phone: "555-0103", address: "Quincy, IL", puresScore: 4.5, tier: "1A", industry: "Real Estate", revenue: "$8M", contactStatus: "Engaged", lastContact: "2024-01-12", nextAction: "Proposal", notes: "M&A specialist"},
+            {name: "Aubin Kamuanga", email: "kamuangaa@cbtc.com", phone: "555-0104", address: "Washington, DC", puresScore: 3.5, tier: "1B", industry: "Finance", revenue: "$1.5M", contactStatus: "New", lastContact: "2024-01-08", nextAction: "Research", notes: "Banking professional"},
+            {name: "Elizabeth Jones", email: "e.jones@jonesre.net", phone: "555-0105", address: "Chatham, VA", puresScore: 4.0, tier: "1A", industry: "Real Estate", revenue: "$3M", contactStatus: "Qualified", lastContact: "2024-01-14", nextAction: "Demo", notes: "Real estate investor"},
+            {name: "Larry Myer", email: "larry@icrrealestateservices.com", phone: "555-0106", address: "Kansas City, MO", puresScore: 3.9, tier: "1B", industry: "Real Estate", revenue: "$2.5M", contactStatus: "Interested", lastContact: "2024-01-11", nextAction: "Meeting", notes: "Managing partner"},
+            {name: "Leeran Peretz", email: "leeran.peretz@eXpRealty.com", phone: "555-0107", address: "Los Angeles, CA", puresScore: 3.2, tier: "1C", industry: "Real Estate", revenue: "$800K", contactStatus: "Cold", lastContact: "2024-01-05", nextAction: "Warm-up", notes: "Real estate agent"},
+            {name: "Mostafa Kassem", email: "mostafa.kassem@ohiocashbuyers.com", phone: "555-0108", address: "Cairo, Egypt", puresScore: 3.7, tier: "1B", industry: "Real Estate", revenue: "$1.8M", contactStatus: "New", lastContact: "2024-01-13", nextAction: "Initial Call", notes: "Entrepreneur"},
+            {name: "Colin Myers", email: "c.myers@signatureslc.com", phone: "555-0109", address: "Layton, UT", puresScore: 3.4, tier: "1C", industry: "Real Estate", revenue: "$1.2M", contactStatus: "Researching", lastContact: "2024-01-07", nextAction: "Content Send", notes: "Real estate investor"},
+            {name: "Roberto G.", email: "roberto@homecashbuyers.net", phone: "555-0110", address: "Boston, MA", puresScore: 4.1, tier: "1A", industry: "Real Estate", revenue: "$4M", contactStatus: "Hot Lead", lastContact: "2024-01-16", nextAction: "Close", notes: "Serial entrepreneur"},
+            {name: "Miguel Nunez", email: "MMiguel@miami.edu", phone: "555-0111", address: "Miami, FL", puresScore: 3.6, tier: "1B", industry: "Healthcare", revenue: "$2.2M", contactStatus: "Nurturing", lastContact: "2024-01-09", nextAction: "Educational Content", notes: "MD, MBA professional"},
+            {name: "Jason Green", email: "jason@sfrrealty.com", phone: "555-0112", address: "Las Vegas, NV", puresScore: 4.3, tier: "1A", industry: "Real Estate", revenue: "$6M", contactStatus: "Proposal Sent", lastContact: "2024-01-15", nextAction: "Follow-up", notes: "Founder and managing member"},
+            {name: "Joel Brown", email: "Joel@buyersbutler.com.au", phone: "555-0113", address: "Brisbane, AU", puresScore: 3.3, tier: "1C", industry: "Real Estate", revenue: "$900K", contactStatus: "International", lastContact: "2024-01-06", nextAction: "Time Zone Align", notes: "Buyers advocate"},
+            {name: "Doug Kline", email: "doug@nearicoleman.com", phone: "555-0114", address: "Raleigh, NC", puresScore: 3.8, tier: "1B", industry: "Real Estate", revenue: "$2.1M", contactStatus: "Engaged", lastContact: "2024-01-12", nextAction: "Contract Review", notes: "Real estate broker"},
+            {name: "Jeremy Ben-Israel", email: "jeremy@esjhomes.com", phone: "555-0115", address: "Jupiter, FL", puresScore: 4.0, tier: "1A", industry: "Real Estate", revenue: "$3.5M", contactStatus: "Decision Phase", lastContact: "2024-01-14", nextAction: "Final Presentation", notes: "Real estate investor"},
+            {name: "William Guo", email: "wguo@playestates.com", phone: "555-0116", address: "Arcadia, CA", puresScore: 4.4, tier: "1A", industry: "Technology", revenue: "$7M", contactStatus: "Champion", lastContact: "2024-01-16", nextAction: "Implementation", notes: "CEO, Gaming & Real Estate"},
+            {name: "Solomon Kelaty", email: "solomon@asiatic.co.uk", phone: "555-0117", address: "London, UK", puresScore: 3.9, tier: "1B", industry: "Consulting", revenue: "$2.8M", contactStatus: "International Lead", lastContact: "2024-01-10", nextAction: "Cultural Adaptation", notes: "Chief growth officer"},
+            {name: "Jia Tang", email: "jiatang@Pellego.com", phone: "555-0118", address: "Seattle, WA", puresScore: 3.2, tier: "1C", industry: "Real Estate", revenue: "$750K", contactStatus: "Early Stage", lastContact: "2024-01-08", nextAction: "Education", notes: "Real estate agent"},
+            {name: "Paul Kankowski", email: "pkankowski@purepm.co", phone: "555-0119", address: "Reno, NV", puresScore: 3.7, tier: "1B", industry: "Real Estate", revenue: "$1.9M", contactStatus: "Active", lastContact: "2024-01-13", nextAction: "Proposal", notes: "Property management"},
+            {name: "Juan Ramos", email: "jramos@sanjuanmedicalcenter.com", phone: "555-0120", address: "Las Vegas, NV", puresScore: 4.2, tier: "1A", industry: "Healthcare", revenue: "$5.5M", contactStatus: "Qualified", lastContact: "2024-01-15", nextAction: "Demo Scheduled", notes: "Founder & CEO, MBA"},
+            {name: "Frank Klesitz", email: "f-klesitz@getvyral.com", phone: "555-0121", address: "Omaha, NE", puresScore: 4.1, tier: "1A", industry: "Marketing", revenue: "$4.2M", contactStatus: "Interested", lastContact: "2024-01-11", nextAction: "Product Demo", notes: "CEO, Marketing expert"},
+            {name: "Isaac E.", email: "isaac@glennicestudios.com", phone: "555-0122", address: "Sarasota, FL", puresScore: 3.5, tier: "1B", industry: "Media", revenue: "$1.6M", contactStatus: "Content Consumer", lastContact: "2024-01-09", nextAction: "Case Study Share", notes: "Executive producer"},
+            {name: "Joe F.", email: "Joe@fluidcapitalnetwork.com", phone: "555-0123", address: "Nashville, TN", puresScore: 4.5, tier: "1A", industry: "Finance", revenue: "$8.5M", contactStatus: "High Priority", lastContact: "2024-01-16", nextAction: "Executive Meeting", notes: "Director, Multiple ventures"},
+            {name: "Omar Lyn", email: "o.lyn@terraverde.com", phone: "555-0124", address: "Atlanta, GA", puresScore: 3.8, tier: "1B", industry: "Real Estate", revenue: "$2.3M", contactStatus: "Nurturing", lastContact: "2024-01-10", nextAction: "Value Demonstration", notes: "Director investor relations"},
+            {name: "Tyrone Vaughan", email: "t.vaughan@premiermf.com", phone: "555-0125", address: "Manhattan Beach, CA", puresScore: 4.0, tier: "1A", industry: "Real Estate", revenue: "$3.8M", contactStatus: "Evaluation", lastContact: "2024-01-14", nextAction: "ROI Analysis", notes: "Multi-family investor"},
+            {name: "Jan Kroese", email: "kroese@kroesepaternotte.com", phone: "555-0126", address: "Amsterdam, NL", puresScore: 4.3, tier: "1A", industry: "Real Estate", revenue: "$6.2M", contactStatus: "International", lastContact: "2024-01-12", nextAction: "Localization Discussion", notes: "Senior advisor"},
+            {name: "Todd Reimet", email: "todd@eastwest.llc", phone: "555-0127", address: "Ocean City, NJ", puresScore: 3.6, tier: "1B", industry: "Real Estate", revenue: "$1.7M", contactStatus: "Multi-touch", lastContact: "2024-01-11", nextAction: "Consolidation Meeting", notes: "Founder & CFO"},
+            {name: "James T.", email: "jamesthorneiii@gmail.com", phone: "555-0128", address: "Dallas, TX", puresScore: 4.1, tier: "1A", industry: "Real Estate", revenue: "$4.8M", contactStatus: "Director Level", lastContact: "2024-01-15", nextAction: "Strategic Partnership", notes: "EON Capital Partners"},
+            {name: "Blake Woroniecki", email: "blake@zigzy.com", phone: "555-0129", address: "Phoenix, AZ", puresScore: 3.7, tier: "1B", industry: "Marketing", revenue: "$2.0M", contactStatus: "Sales Development", lastContact: "2024-01-13", nextAction: "Business Development", notes: "Director sales & biz dev"},
+            {name: "Trenton Brown", email: "trenton@everagency.co", phone: "555-0130", address: "Dallas, TX", puresScore: 4.2, tier: "1A", industry: "Media", revenue: "$5.1M", contactStatus: "Co-Founder", lastContact: "2024-01-16", nextAction: "Partnership Discussion", notes: "CEO & Co-Founder"},
+            {name: "Nathan Hunnicutt", email: "nathanh@arkansascma.com", phone: "555-0131", address: "Lufkin, TX", puresScore: 3.4, tier: "1C", industry: "Real Estate", revenue: "$1.1M", contactStatus: "Regional", lastContact: "2024-01-08", nextAction: "Market Education", notes: "Arkansas real estate"},
+            {name: "Markus Grahn", email: "markus.grahn@vuokranantajat.fi", phone: "555-0132", address: "Lahti, FI", puresScore: 3.9, tier: "1B", industry: "Real Estate", revenue: "$2.7M", contactStatus: "Nordic Market", lastContact: "2024-01-10", nextAction: "Regional Strategy", notes: "Board member"},
+            {name: "Erik Pond", email: "epond@brickstaffing.com", phone: "555-0133", address: "Nags Head, NC", puresScore: 3.8, tier: "1B", industry: "Staffing", revenue: "$2.4M", contactStatus: "Executive Partner", lastContact: "2024-01-12", nextAction: "Partnership Exploration", notes: "Executive partner"},
+            {name: "Curtis Murray", email: "curtis@ivegotamortgageforthat.com", phone: "555-0134", address: "Kemptville, ON", puresScore: 3.3, tier: "1C", industry: "Finance", revenue: "$950K", contactStatus: "Mortgage Specialist", lastContact: "2024-01-07", nextAction: "Financial Services", notes: "Mortgage agent level 2"},
+            {name: "Jamie Curtis", email: "jamie@whitehorizonpr.com", phone: "555-0135", address: "Newport Beach, CA", puresScore: 4.4, tier: "1A", industry: "Real Estate", revenue: "$7.1M", contactStatus: "Global Advisor", lastContact: "2024-01-15", nextAction: "Luxury Market", notes: "Global real estate advisor"},
+            {name: "Chris Heeren", email: "chris@exithgm.com", phone: "555-0136", address: "Janesville, WI", puresScore: 3.5, tier: "1B", industry: "Real Estate", revenue: "$1.5M", contactStatus: "Property Revival", lastContact: "2024-01-09", nextAction: "Market Revival Strategy", notes: "Real estate agent"},
+            {name: "Long Lam", email: "long.lam@hoozing.com", phone: "555-0137", address: "Ho Chi Minh City, VN", puresScore: 4.0, tier: "1A", industry: "Real Estate", revenue: "$3.6M", contactStatus: "Angel Investor", lastContact: "2024-01-14", nextAction: "Asian Market Entry", notes: "Vietnam angel investor"},
+            {name: "Jordan Nicholaeff", email: "jordan@squarepeg.vc", phone: "555-0138", address: "Tel Aviv, IL", puresScore: 4.5, tier: "1A", industry: "VC", revenue: "$9.2M", contactStatus: "Venture Capital", lastContact: "2024-01-16", nextAction: "Investment Discussion", notes: "Square Peg investor"},
+            {name: "Ramu Chillamcherla", email: "ramu@rnsequity.com", phone: "555-0139", address: "Irving, TX", puresScore: 3.7, tier: "1B", industry: "Real Estate", revenue: "$2.1M", contactStatus: "RNS Equity", lastContact: "2024-01-11", nextAction: "Equity Partnership", notes: "Real estate investor"},
+            {name: "Luis Valls-Taberner", email: "luis@eleveteproperty.com", phone: "555-0140", address: "Zurich, CH", puresScore: 4.3, tier: "1A", industry: "Real Estate", revenue: "$6.5M", contactStatus: "Swiss Market", lastContact: "2024-01-15", nextAction: "European Expansion", notes: "MRICS certification"},
+            {name: "Michael Temple", email: "michael@equityconnection.com", phone: "555-0141", address: "Sylvania, OH", puresScore: 3.6, tier: "1B", industry: "Real Estate", revenue: "$1.8M", contactStatus: "Equity Connection", lastContact: "2024-01-10", nextAction: "Connection Strategy", notes: "Marketing services"},
+            {name: "Grant Bortner", email: "grant@banksmore.com", phone: "555-0142", address: "York, PA", puresScore: 4.1, tier: "1A", industry: "Real Estate", revenue: "$4.5M", contactStatus: "Banksmore", lastContact: "2024-01-14", nextAction: "Banking Integration", notes: "Real estate investor"},
+            {name: "Harvey Feldheim", email: "hfeldheim@waterbridge.com", phone: "555-0143", address: "New York, NY", puresScore: 4.4, tier: "1A", industry: "VC", revenue: "$7.8M", contactStatus: "Waterbridge Capital", lastContact: "2024-01-16", nextAction: "Capital Partnership", notes: "Venture capital"},
+            {name: "Caroline Miller", email: "caroline@latigo-group.com", phone: "555-0144", address: "London, UK", puresScore: 3.9, tier: "1B", industry: "Real Estate", revenue: "$2.9M", contactStatus: "Latigo Group", lastContact: "2024-01-12", nextAction: "Group Strategy", notes: "UK real estate investor"},
+            {name: "Ky Logue", email: "ky@webuysadhouses.com", phone: "555-0145", address: "San Antonio, TX", puresScore: 3.8, tier: "1B", industry: "Real Estate", revenue: "$2.2M", contactStatus: "Sad Houses", lastContact: "2024-01-11", nextAction: "Distressed Properties", notes: "Distressed property buyer"},
+            {name: "Ricardo Adames", email: "ricardo@adamescapital.com", phone: "555-0146", address: "Lake Mary, FL", puresScore: 4.2, tier: "1A", industry: "Real Estate", revenue: "$5.3M", contactStatus: "Adames Capital", lastContact: "2024-01-15", nextAction: "Capital Strategy", notes: "Florida real estate investor"},
+            {name: "Michael Finnegan", email: "michael.finnegan@ctcityhomes.com", phone: "555-0147", address: "Wallingford, CT", puresScore: 3.4, tier: "1C", industry: "Real Estate", revenue: "$1.3M", contactStatus: "CT City Homes", lastContact: "2024-01-08", nextAction: "Connecticut Market", notes: "Connecticut real estate"},
+            {name: "Paxton Hagen", email: "phagen@byebyehouse.com", phone: "555-0148", address: "Costa Mesa, CA", puresScore: 4.0, tier: "1A", industry: "Real Estate", revenue: "$3.7M", contactStatus: "Bye Bye House", lastContact: "2024-01-14", nextAction: "Acquisition Strategy", notes: "Head of acquisitions"},
+            {name: "Jerome Checketts", email: "jerome@skylineheights.homes", phone: "555-0149", address: "Uvalde, TX", puresScore: 3.5, tier: "1B", industry: "Real Estate", revenue: "$1.6M", contactStatus: "Skyline Heights", lastContact: "2024-01-09", nextAction: "Heights Strategy", notes: "Texas real estate investor"},
+            {name: "Camilo Tatis", email: "camilo@camrei.com", phone: "555-0150", address: "Hauppauge, NY", puresScore: 3.9, tier: "1B", industry: "Real Estate", revenue: "$2.6M", contactStatus: "CAM REI", lastContact: "2024-01-13", nextAction: "Management Strategy", notes: "Capitalized acquisitions"}
+        ];
+
+        let currentSort = { column: -1, direction: 'asc' };
+        let filteredData = [...clientData];
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            populateTable();
+            setupEventListeners();
+            updateStats();
+        });
+
+        function setupEventListeners() {
+            // Search functionality
+            document.getElementById('searchInput').addEventListener('input', filterTable);
+            document.getElementById('tierFilter').addEventListener('change', filterTable);
+            document.getElementById('industryFilter').addEventListener('change', filterTable);
+
+            // P.U.R.E.S. rating system
+            document.querySelectorAll('.rating-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const container = this.parentElement;
+                    container.querySelectorAll('.rating-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+
+            // Modal functionality
+            const modal = document.getElementById('emailModal');
+            const span = document.getElementsByClassName('close')[0];
+            
+            span.onclick = function() {
+                modal.style.display = 'none';
+            }
+            
+            window.onclick = function(event) {
+                if (event.target == modal) {
+                    modal.style.display = 'none';
+                }
+            }
+        }
+
+        function populateTable() {
+            const tbody = document.getElementById('clientTableBody');
+            tbody.innerHTML = '';
+
+            filteredData.forEach((client, index) => {
+                const row = document.createElement('tr');
+                row.className = `tier-${client.tier.toLowerCase()}`;
+                
+                row.innerHTML = `
+                    <td>${client.name}</td>
+                    <td>${client.email}</td>
+                    <td>${client.phone}</td>
+                    <td>${client.address}</td>
+                    <td>${client.puresScore}</td>
+                    <td><span class="tier-badge">${client.tier}</span></td>
+                    <td>${client.industry}</td>
+                    <td>${client.revenue}</td>
+                    <td>
+                        <button class="btn btn-small" onclick="openEmailModal('${client.email}', '${client.name}', '${client.tier}')">Email</button>
+                        <button class="btn btn-small" onclick="callClient('${client.phone}', '${client.name}')" style="margin-left: 0.5rem;">Call</button>
+                    </td>
+                `;
+                
+                tbody.appendChild(row);
+            });
+        }
+
+        function filterTable() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const tierFilter = document.getElementById('tierFilter').value;
+            const industryFilter = document.getElementById('industryFilter').value;
+
+            filteredData = clientData.filter(client => {
+                const matchesSearch = 
+                    client.name.toLowerCase().includes(searchTerm) ||
+                    client.email.toLowerCase().includes(searchTerm) ||
+                    client.address.toLowerCase().includes(searchTerm) ||
+                    client.industry.toLowerCase().includes(searchTerm);
+
+                const matchesTier = !tierFilter || client.tier === tierFilter;
+                const matchesIndustry = !industryFilter || client.industry === industryFilter;
+
+                return matchesSearch && matchesTier && matchesIndustry;
+            });
+
+            populateTable();
+            updateStats();
+        }
+
+        function sortTable(column) {
+            const columns = ['name', 'email', 'phone', 'address', 'puresScore', 'tier', 'industry', 'revenue'];
+            const columnKey = columns[column];
+
+            if (currentSort.column === column) {
+                currentSort.direction = currentSort.direction === 'asc' ? 'desc' : 'asc';
+            } else {
+                currentSort.column = column;
+                currentSort.direction = 'asc';
+            }
+
+            filteredData.sort((a, b) => {
+                let aValue = a[columnKey];
+                let bValue = b[columnKey];
+
+                // Handle numeric sorting for P.U.R.E.S. score
+                if (columnKey === 'puresScore') {
+                    aValue = parseFloat(aValue);
+                    bValue = parseFloat(bValue);
+                }
+
+                // Handle revenue sorting
+                if (columnKey === 'revenue') {
+                    aValue = parseFloat(aValue.replace(/[$MK,]/g, ''));
+                    bValue = parseFloat(bValue.replace(/[$MK,]/g, ''));
+                }
+
+                if (aValue < bValue) return currentSort.direction === 'asc' ? -1 : 1;
+                if (aValue > bValue) return currentSort.direction === 'asc' ? 1 : -1;
+                return 0;
+            });
+
+            populateTable();
+        }
+
+        function updateStats() {
+            document.getElementById('totalClients').textContent = filteredData.length;
+            document.getElementById('tier1aCount').textContent = filteredData.filter(c => c.tier === '1A').length;
+            document.getElementById('tier1bCount').textContent = filteredData.filter(c => c.tier === '1B').length;
+            document.getElementById('tier1cCount').textContent = filteredData.filter(c => c.tier === '1C').length;
+        }
+
+        function calculatePURESScore() {
+            const scores = {};
+            document.querySelectorAll('.rating-container').forEach(container => {
+                const category = container.getAttribute('data-category');
+                const activeBtn = container.querySelector('.rating-btn.active');
+                if (activeBtn) {
+                    scores[category] = parseInt(activeBtn.getAttribute('data-value'));
+                }
+            });
+
+            if (Object.keys(scores).length === 5) {
+                const average = Object.values(scores).reduce((a, b) => a + b, 0) / 5;
+                alert(`P.U.R.E.S. Score: ${average.toFixed(1)}\n\nProfitability: ${scores.profitability}\nUrgency: ${scores.urgency}\nReachability: ${scores.reachability}\nEngagement: ${scores.engagement}\nSustainability: ${scores.sustainability}`);
+            } else {
+                alert('Please rate all P.U.R.E.S. categories before calculating.');
+            }
+        }
+
+        function openEmailModal(email, name, tier) {
+            const modal = document.getElementById('emailModal');
+            const emailToField = document.getElementById('emailTo');
+            const emailBodyField = document.getElementById('emailBody');
+            
+            emailToField.value = email;
+            
+            // Generate personalized email based on tier and client profile
+            let emailTemplate = generateEmailTemplate(name, tier);
+            emailBodyField.value = emailTemplate;
+            
+            modal.style.display = 'block';
+        }
+
+        function generateEmailTemplate(name, tier) {
+            const templates = {
+                '1A': `Dear ${name},
+
+I hope this email finds you well. My name is James Yates, and I'm a real estate professional with RedRealty.com. As a premium investor in the real estate industry, I wanted to personally reach out to introduce you to exclusive opportunities that align perfectly with your high-value investment profile.
+
+At RedRealty.com, we specialize in connecting sophisticated investors like yourself with exceptional real estate opportunities that deliver superior returns and long-term value creation.
+
+Exclusive Benefits for Premium Partners:
+• Priority access to off-market luxury properties and commercial investments
+• Dedicated portfolio management and investment advisory services
+• Advanced market analytics and ROI projections for informed decision-making
+• White-glove transaction management from initial review to closing
+• Exclusive networking events with other high-net-worth investors
+• Early access to emerging market opportunities and pre-construction projects
+
+I would be honored to discuss how RedRealty.com can support your continued investment success and portfolio growth. Are you available for a brief 15-minute conversation this week to explore potential opportunities?
+
+I look forward to the opportunity to work together.
+
+Best regards,
+James Yates
+Senior Real Estate Advisor
+RedRealty.com
+Direct: (555) XXX-XXXX
+Email: james.yates@redrealty.com`,
+
+                '1B': `Hello ${name},
+
+I hope you're having a productive week. My name is James Yates from RedRealty.com, and I came across your investment profile and was impressed by your expertise in the real estate sector.
+
+I wanted to introduce you to our comprehensive real estate investment solutions that could significantly enhance your portfolio performance and streamline your investment process.
+
+What Sets RedRealty.com Apart:
+• Proven track record with successful investors in your market segment
+• Streamlined property acquisition and due diligence process
+• Comprehensive market research and investment analysis tools
+• Competitive fee structure with transparent pricing
+• Dedicated support team throughout the entire transaction process
+• Access to exclusive investment opportunities not available to the general public
+
+I'd be happy to share a brief case study of how we helped a similar investor increase their portfolio ROI by 28% over the past 18 months through strategic market positioning and timing.
+
+Would you be interested in a quick 10-15 minute call to explore how RedRealty.com could benefit your investment strategy?
+
+Looking forward to hearing from you,
+
+James Yates
+Real Estate Investment Specialist
+RedRealty.com
+Direct: (555) XXX-XXXX
+Email: james.yates@redrealty.com`,
+
+                '1C': `Hi ${name},
+
+I hope you're doing well. My name is James Yates, and I'm a real estate professional with RedRealty.com. I wanted to reach out because I believe our real estate investment services could be a great fit for your growing portfolio.
+
+We specialize in helping real estate professionals and investors like yourself identify profitable opportunities and navigate the complexities of today's market with confidence.
+
+RedRealty.com Services Overview:
+• Access to comprehensive MLS listings and off-market opportunities
+• Professional market analysis and investment projections
+• Transaction support from contract to closing
+• Competitive commission structure for real estate professionals
+• Educational resources and market insights
+• Network of trusted contractors, inspectors, and financing partners
+
+I'd love to share more information about how we've helped other professionals in your area achieve their real estate goals and expand their business.
+
+Are you available for a brief 10-minute call this week to discuss your current objectives and how RedRealty.com might help?
+
+Best regards,
+
+James Yates
+Real Estate Professional
+RedRealty.com
+Direct: (555) XXX-XXXX
+Email: james.yates@redrealty.com`
+            };
+
+            return templates[tier] || templates['1C'];
+        }
+
+        function closeEmailModal() {
+            document.getElementById('emailModal').style.display = 'none';
+        }
+
+        function sendEmail() {
+            const email = document.getElementById('emailTo').value;
+            const subject = document.getElementById('emailSubject').value;
+            const body = document.getElementById('emailBody').value;
+            
+            // Create mailto link
+            const mailtoLink = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+            window.location.href = mailtoLink;
+            
+            closeEmailModal();
+            alert('Email client opened successfully! Follow up with the prospect within 48 hours.');
+        }
+
+        function callClient(phone, name) {
+            alert(`Initiating call to ${name} at ${phone}\n\nCall preparation checklist:\n✓ Review client profile and P.U.R.E.S. score\n✓ Prepare RedRealty.com value proposition for their tier\n✓ Have relevant property listings or market reports ready\n✓ Set clear call objectives and next steps\n✓ Schedule follow-up actions in CRM\n\nRemember: Focus on their investment goals and how RedRealty.com can help achieve them.`);
+        }
+
+        function exportToCSV() {
+            const headers = ['Client Name', 'Email', 'Phone', 'Address', 'P.U.R.E.S Score', 'Tier', 'Industry', 'Revenue Est.'];
+            const csvContent = [
+                headers.join(','),
+                ...filteredData.map(client => [
+                    client.name,
+                    client.email,
+                    client.phone,
+                    client.address,
+                    client.puresScore,
+                    client.tier,
+                    client.industry,
+                    client.revenue
+                ].join(','))
+            ].join('\n');
+
+            const blob = new Blob([csvContent], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.setAttribute('hidden', '');
+            a.setAttribute('href', url);
+            a.setAttribute('download', 'redrealty_sale_system_clients.csv');
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+
+        function exportToPDF() {
+            alert('PDF export functionality would be implemented with a library like jsPDF. For now, you can print this page to PDF using your browser.');
+        }
+    </script>
+</body>
+</html>
