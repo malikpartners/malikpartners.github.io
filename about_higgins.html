@@ -1,0 +1,824 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/><title>Higgins AI — Business Growth Accelerator | Investor Dashboard v13</title><style>
+:root{--red:#CF2030;--dark:#0a0a0a;--card:#111;--card2:#1a1a1a;--border:#2a2a2a;--text:#e8e8e8;--muted:#888;--green:#22c55e;--gold:#f59e0b;--blue:#3b82f6;--white:#fff;--purple:#9333ea;--teal:#06b6d4;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--dark);color:var(--text);font-family:'Segoe UI',Arial,sans-serif;min-height:100vh;}
+header{background:#000;border-bottom:2px solid var(--red);padding:14px 32px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
+.logo-img{height:36px;object-fit:contain;}
+.tagline{font-size:11px;color:var(--muted);margin-top:2px;}
+.header-right{text-align:right;}.header-right a{color:var(--red);font-size:12px;text-decoration:none;}
+.badge{background:var(--red);color:#fff;font-size:10px;font-weight:700;padding:3px 8px;border-radius:20px;margin-left:6px;}
+nav{background:#0d0d0d;border-bottom:1px solid var(--border);padding:0 24px;display:flex;gap:2px;overflow-x:auto;}
+.tab{padding:12px 14px;cursor:pointer;font-size:11px;font-weight:600;color:var(--muted);border-bottom:3px solid transparent;white-space:nowrap;transition:all .2s;}
+.tab:hover{color:var(--text);}.tab.active{color:var(--white);border-bottom-color:var(--red);}
+.page{display:none;padding:24px 32px;max-width:1400px;margin:0 auto;}.page.active{display:block;}
+.stat-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(165px,1fr));gap:14px;margin-bottom:24px;}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:18px;position:relative;overflow:hidden;}
+.stat-card::before{content:'';position:absolute;top:0;left:0;width:4px;height:100%;background:var(--red);}
+.stat-card.green::before{background:var(--green);}.stat-card.gold::before{background:var(--gold);}
+.stat-card.blue::before{background:var(--blue);}.stat-card.purple::before{background:var(--purple);}
+.stat-card.teal::before{background:var(--teal);}
+.stat-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:5px;}
+.stat-val{font-size:24px;font-weight:800;color:var(--white);}
+.stat-sub{font-size:10px;color:var(--muted);margin-top:3px;}
+.stat-badge{display:inline-block;font-size:10px;font-weight:700;padding:2px 7px;border-radius:20px;margin-top:5px;}
+.stat-badge.green{background:rgba(34,197,94,.15);color:var(--green);}
+.stat-badge.red{background:rgba(207,32,48,.15);color:var(--red);}
+.stat-badge.gold{background:rgba(245,158,11,.15);color:var(--gold);}
+.stat-badge.blue{background:rgba(59,130,246,.15);color:var(--blue);}
+.stat-badge.purple{background:rgba(147,51,234,.15);color:#c084fc;}
+.stat-badge.teal{background:rgba(6,182,212,.15);color:var(--teal);}
+.section-title{font-size:17px;font-weight:700;color:var(--white);margin-bottom:14px;display:flex;align-items:center;gap:10px;}
+.section-title span{background:var(--red);width:4px;height:18px;border-radius:2px;display:inline-block;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:20px;margin-bottom:18px;}
+.card-title{font-size:13px;font-weight:700;color:var(--white);margin-bottom:12px;}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+@media(max-width:1000px){.grid2,.grid3{grid-template-columns:1fr;}}
+.bar-chart{display:flex;flex-direction:column;gap:9px;}
+.bar-row{display:flex;align-items:center;gap:10px;}
+.bar-label{font-size:11px;color:var(--muted);width:155px;flex-shrink:0;text-align:right;}
+.bar-track{flex:1;background:#1e1e1e;border-radius:4px;height:22px;overflow:hidden;}
+.bar-fill{height:100%;border-radius:4px;display:flex;align-items:center;padding-left:8px;font-size:11px;font-weight:700;color:#fff;}
+.bar-val{font-size:11px;color:var(--white);width:75px;flex-shrink:0;}
+table{width:100%;border-collapse:collapse;font-size:12px;}
+th{background:#1a1a1a;color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.7px;padding:9px 11px;text-align:left;border-bottom:1px solid var(--border);}
+td{padding:10px 11px;border-bottom:1px solid #1a1a1a;color:var(--text);}
+tr:hover td{background:#141414;}
+.tag{display:inline-block;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:700;}
+.tag.green{background:rgba(34,197,94,.15);color:var(--green);}
+.tag.red{background:rgba(207,32,48,.15);color:var(--red);}
+.tag.gold{background:rgba(245,158,11,.15);color:var(--gold);}
+.tag.blue{background:rgba(59,130,246,.15);color:var(--blue);}
+.tag.teal{background:rgba(6,182,212,.15);color:var(--teal);}
+.tag.purple{background:rgba(147,51,234,.15);color:#c084fc;}
+.hero-green{background:linear-gradient(135deg,#051a05,#0a0a0a);border:2px solid var(--green);border-radius:14px;padding:28px;margin-bottom:24px;}
+.hero-red{background:linear-gradient(135deg,#1a0505,#0d0d0d);border:2px solid var(--red);border-radius:14px;padding:28px;margin-bottom:24px;text-align:center;}
+.hero-timer{display:inline-block;background:var(--red);color:#fff;font-size:11px;font-weight:700;padding:4px 14px;border-radius:20px;margin-bottom:12px;}
+.hero-timer.green{background:var(--green);color:#000;}
+.simple-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px;margin-bottom:22px;}
+.sc{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:22px;}
+.sc-icon{font-size:32px;margin-bottom:10px;}
+.sc-title{font-size:15px;font-weight:800;color:var(--white);margin-bottom:8px;}
+.sc-body{font-size:13px;color:var(--muted);line-height:1.8;}
+.sc-body strong{color:var(--white);}
+.sc-body .hl{color:var(--red);font-weight:700;}
+.sc.rb{border-top:4px solid var(--red);}
+.sc.gb{border-top:4px solid var(--green);}
+.sc.glb{border-top:4px solid var(--gold);}
+.sc.bb{border-top:4px solid var(--blue);}
+.sc.pb{border-top:4px solid var(--purple);}
+.sc.tb{border-top:4px solid var(--teal);}
+.sale-mod{background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:18px;margin-bottom:10px;}
+.sale-mod-hdr{display:flex;align-items:center;gap:12px;margin-bottom:8px;}
+.sale-letter{width:38px;height:38px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:900;flex-shrink:0;}
+.sale-mod-title{font-size:14px;font-weight:800;color:var(--white);}
+.sale-mod-sub{font-size:10px;color:var(--muted);}
+.sale-mod-body{font-size:12px;color:var(--muted);line-height:1.7;}
+.pures-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:18px;}
+.pures-card{background:#1a1a1a;border:1px solid var(--border);border-radius:8px;padding:12px;text-align:center;}
+.pures-letter{font-size:26px;font-weight:900;color:var(--red);margin-bottom:3px;}
+.pures-word{font-size:11px;font-weight:700;color:var(--white);margin-bottom:3px;}
+.pures-desc{font-size:10px;color:var(--muted);line-height:1.4;}
+.tier-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:18px;}
+.tier-card{border-radius:8px;padding:14px;border:1px solid var(--border);}
+.tier-card.t1a{background:rgba(34,197,94,.06);border-color:var(--green);}
+.tier-card.t1b{background:rgba(245,158,11,.06);border-color:var(--gold);}
+.tier-card.t1c{background:rgba(59,130,246,.06);border-color:var(--blue);}
+.tier-label{font-size:11px;font-weight:700;margin-bottom:5px;}
+.tier-title{font-size:13px;font-weight:800;color:var(--white);margin-bottom:4px;}
+.tier-desc{font-size:11px;color:var(--muted);line-height:1.5;}
+.num-row{display:flex;flex-wrap:wrap;gap:14px;margin-bottom:22px;}
+.num-box{flex:1;min-width:130px;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px;text-align:center;}
+.num-val{font-size:26px;font-weight:900;color:var(--red);}
+.num-val.g{color:var(--green);}.num-val.gl{color:var(--gold);}.num-val.b{color:var(--blue);}
+.num-label{font-size:10px;color:var(--muted);margin-top:3px;}
+.rp{background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:14px;margin-bottom:10px;border-left:4px solid var(--red);}
+.rp.green{border-left-color:var(--green);}.rp.gold{border-left-color:var(--gold);}
+.rp.blue{border-left-color:var(--blue);}.rp.purple{border-left-color:var(--purple);}
+.rp-label{font-size:10px;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:.8px;margin-bottom:3px;}
+.rp.green .rp-label{color:var(--green);}.rp.gold .rp-label{color:var(--gold);}
+.rp.blue .rp-label{color:var(--blue);}.rp.purple .rp-label{color:var(--purple);}
+.rp-title{font-size:13px;font-weight:800;color:var(--white);margin-bottom:5px;}
+.rp-desc{font-size:11px;color:var(--muted);line-height:1.6;}
+.yr-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:20px;}
+.yr-card{border-radius:8px;padding:14px;border:1px solid var(--border);background:var(--card2);}
+.yr-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px;}
+.yr-title{font-size:13px;font-weight:800;color:var(--white);margin-bottom:5px;}
+.yr-desc{font-size:11px;color:var(--muted);line-height:1.5;}
+.quote-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-bottom:18px;}
+.quote-card{background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:14px;}
+.quote-text{font-size:12px;font-style:italic;color:var(--text);margin-bottom:6px;line-height:1.6;}
+.quote-src{font-size:10px;color:var(--red);font-weight:700;}
+.eco-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;}
+.eco-pill{background:#1a1a1a;border:1px solid var(--border);border-radius:20px;padding:5px 12px;font-size:11px;font-weight:700;color:var(--red);}
+.diff-table td:first-child{color:var(--muted);}
+.diff-table td:nth-child(2){color:#ff6b6b;}
+.diff-table td:nth-child(3){color:var(--green);}
+.check{color:var(--green);}.cross{color:var(--red);}
+.pillar{background:#1a1a1a;border-radius:8px;padding:12px;margin-bottom:8px;}
+.pillar-title{font-weight:700;color:#fff;margin-bottom:3px;font-size:13px;}
+.pillar-desc{font-size:11px;color:var(--muted);line-height:1.5;}
+.stack-layer{border-radius:8px;padding:12px;text-align:center;}
+.used-by-img{width:100%;max-width:860px;display:block;margin:18px auto 0;border-radius:10px;}
+.term-search-wrap{margin-bottom:18px;position:relative;}
+.term-search{width:100%;background:#1a1a1a;border:1px solid var(--border);border-radius:8px;padding:11px 16px 11px 38px;color:var(--text);font-size:13px;outline:none;}
+.term-search:focus{border-color:var(--red);}
+.term-search-icon{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--muted);}
+.term-filter-row{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:18px;}
+.term-filter{background:#1a1a1a;border:1px solid var(--border);border-radius:20px;padding:4px 12px;font-size:10px;font-weight:700;color:var(--muted);cursor:pointer;transition:all .2s;}
+.term-filter:hover,.term-filter.active{background:var(--red);color:#fff;border-color:var(--red);}
+.term-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;}
+.term-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px;transition:border-color .2s;}
+.term-card:hover{border-color:var(--red);}
+.term-card-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:7px;gap:8px;}
+.term-name{font-size:13px;font-weight:800;color:var(--white);line-height:1.3;}
+.term-acronym{font-size:10px;font-weight:700;background:rgba(207,32,48,.15);color:var(--red);padding:2px 7px;border-radius:20px;white-space:nowrap;flex-shrink:0;}
+.term-cat{font-size:10px;font-weight:700;margin-bottom:5px;}
+.term-def{font-size:11px;color:var(--muted);line-height:1.6;}
+.term-context{font-size:10px;color:var(--red);margin-top:7px;font-style:italic;border-top:1px solid var(--border);padding-top:7px;}
+.term-count{font-size:11px;color:var(--muted);margin-bottom:14px;}
+.no-results{text-align:center;padding:40px;color:var(--muted);}
+footer{background:#000;border-top:1px solid var(--border);padding:14px 32px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-top:40px;}
+footer .logo-img{height:20px;}
+footer p{font-size:10px;color:var(--muted);}
+
+.flow{display:flex;align-items:stretch;gap:10px;flex-wrap:wrap;margin-bottom:22px;}
+.flow-step{flex:1;min-width:210px;background:var(--card);border:1px solid var(--red);border-radius:12px;padding:16px;}
+.flow-step.g{border-color:var(--green);}.flow-step.y{border-color:var(--gold);}
+.flow-n{display:inline-block;background:var(--red);color:#fff;font-weight:800;font-size:12px;width:24px;height:24px;line-height:24px;text-align:center;border-radius:50%;margin-bottom:6px;}
+.flow-step.g .flow-n{background:var(--green);color:#000;}.flow-step.y .flow-n{background:var(--gold);color:#000;}
+.flow-t{font-size:20px;font-weight:900;color:#fff;}.flow-s{font-size:10px;color:var(--muted);margin:2px 0 8px;text-transform:uppercase;letter-spacing:.5px;}
+.flow-d{font-size:12px;color:var(--text);line-height:1.6;}
+.flow-arrow{align-self:center;color:var(--muted);font-weight:800;font-size:18px;}
+.two-col{display:grid;grid-template-columns:repeat(auto-fit,minmax(420px,1fr));gap:18px;}
+.calc{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;}
+.calc-h{font-size:15px;font-weight:800;color:#fff;margin-bottom:4px;display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;}
+.calc-h span{font-size:11px;font-weight:700;border-radius:20px;padding:2px 9px;}
+.calc-h.green span{background:rgba(34,197,94,.15);color:var(--green);}.calc-h.gold span{background:rgba(245,158,11,.15);color:var(--gold);}
+.calc-note{font-size:11px;color:var(--muted);margin-bottom:10px;line-height:1.5;}
+.crow{background:#0d0d0d;border:1px solid var(--border);border-radius:8px;padding:8px;margin-bottom:8px;}
+.crow .top{display:flex;gap:6px;align-items:center;margin-bottom:6px;}
+.crow input[type=text]{flex:1;background:#000;border:1px solid var(--border);color:#fff;border-radius:6px;padding:5px 8px;font-size:12px;min-width:0;}
+.crow .x{background:none;border:none;color:var(--muted);cursor:pointer;font-size:14px;}
+.crow .dims{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;}
+.crow label{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;display:block;}
+.crow input[type=number],.crow select{width:100%;background:#000;border:1px solid var(--border);color:#fff;border-radius:6px;padding:4px;font-size:12px;}
+.cbtn{background:var(--red);color:#fff;border:none;border-radius:6px;padding:7px 12px;font-size:12px;font-weight:700;cursor:pointer;}
+.cbtn.ghost{background:#000;border:1px solid var(--border);}
+.calc-actions{display:flex;gap:8px;margin:6px 0 12px;}
+.rank{display:flex;align-items:center;gap:8px;padding:7px 9px;border-radius:8px;background:#0d0d0d;border:1px solid var(--border);margin-bottom:6px;font-size:12px;}
+.rank.best{border-color:var(--green);background:rgba(34,197,94,.07);}
+.rank .n{font-weight:900;color:var(--muted);width:18px;}.rank .nm{flex:1;color:#fff;font-weight:600;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.rank .sc2{font-weight:800;color:#fff;}.rank .tg{font-size:10px;font-weight:700;border-radius:20px;padding:2px 8px;}
+.tg.a{background:rgba(34,197,94,.15);color:var(--green);}.tg.b{background:rgba(245,158,11,.15);color:var(--gold);}.tg.c{background:rgba(59,130,246,.15);color:var(--blue);}.tg.d{background:rgba(136,136,136,.15);color:var(--muted);}
+.best-tag{font-size:10px;font-weight:800;color:var(--green);}
+.note-box{background:#0d0d0d;border:1px solid var(--border);border-left:4px solid var(--red);border-radius:8px;padding:14px;font-size:12px;color:var(--muted);line-height:1.7;margin-top:14px;}
+@media(max-width:560px){.two-col{grid-template-columns:1fr;}.crow .dims{grid-template-columns:repeat(3,1fr);}}
+</style></head><body>
+
+<header>
+  <div>
+    <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins AI" class="logo-img" onerror="this.style.display='none'"/>
+    <div class="tagline">AI Business Growth Accelerator (S.A.L.E.s · P.U.R.E.S. · P.I.T.C.H.) → Enterprise aiSaaS Platform — Investor Dashboard v13</div>
+  </div>
+  <div class="header-right">
+    <div style="font-size:11px;color:var(--muted);">Patent: US9971979B2 &amp; 63/794177</div>
+    <a href="mailto:investor@higgins.ai">investor@higgins.ai</a>
+    <span class="badge">CONFIDENTIAL</span>
+  </div>
+</header>
+
+<nav>
+  <div class="tab active" onclick="show('three',this)">⚡ 3 Min Overview</div>
+  <div class="tab" onclick="show('engine',this)">🚀 Growth Engine</div>
+  <div class="tab" onclick="show('overview',this)">📊 Investment Overview</div>
+  <div class="tab" onclick="show('sales',this)">🎯 S.A.L.E.s Accelerator</div>
+  <div class="tab" onclick="show('vision',this)">🔭 5-Year Vision: aiSaaS</div>
+  <div class="tab" onclick="show('diff',this)">🏆 Differentiators</div>
+  <div class="tab" onclick="show('eco',this)">🌐 Ecosystem</div>
+  <div class="tab" onclick="show('team',this)">👥 Team</div>
+  <div class="tab" onclick="show('terminology',this)">📖 Terminology</div>
+</nav>
+
+<!-- ===== 3 MIN OVERVIEW — FIRST ===== -->
+<div id="three" class="page active">
+  <div class="hero-red">
+    <div class="hero-timer">⏱ READ THIS IN 3 MINUTES</div>
+    <h1 style="font-size:26px;font-weight:900;color:var(--white);margin-bottom:8px;">Everything You Need to Know About <span style="color:var(--red);">Higgins AI</span></h1>
+    <p style="font-size:14px;color:var(--muted);max-width:700px;margin:0 auto;">No business degree needed. Plain, simple English — so you understand exactly why Higgins is a big deal.</p>
+  </div>
+
+  <div class="section-title"><span></span>💡 First &amp; Foremost: Higgins is a Business Growth Accelerator — S.A.L.E.s finds the best prospects, P.U.R.E.S. picks the best one, P.I.T.C.H. finds the best investor</div>
+  <div style="background:linear-gradient(135deg,#0a1a0a,#0a0a0a);border:1px solid var(--green);border-radius:12px;padding:22px;margin-bottom:22px;">
+    <h3 style="font-size:15px;font-weight:800;color:var(--green);margin-bottom:10px;">🖥️ Think of it like this...</h3>
+    <p style="font-size:13px;color:var(--text);line-height:1.8;">Imagine your company invested heavily in workplace software — something that tracks every client, contract, and dollar. It stores everything. But it's so complicated that your team spends more time navigating menus than actually doing their real jobs. <strong style="color:#fff;">Higgins is the intelligent layer that sits in front of that system.</strong> Instead of wrestling with your software, you simply talk to Higgins — and Higgins handles the complexity behind the scenes. More importantly, Higgins doesn't just organize your data — it <strong style="color:var(--green);">actively grows your business</strong> on two fronts: <strong style="color:var(--green);">S.A.L.E.s</strong> finds your best prospects and <strong style="color:var(--green);">P.U.R.E.S.</strong> selects the single best one to approach first — while <strong style="color:var(--green);">P.I.T.C.H.</strong> identifies the best investor to fund your growth — guaranteeing you a minimum 130% ROI in Year 1.</p>
+  </div>
+
+  <div class="simple-grid">
+    <div class="sc rb"><div class="sc-icon">🎯</div><div class="sc-title">Growth Accelerator First</div><div class="sc-body">Higgins is built to <strong>grow your revenue</strong> — Sourcing the right clients, Assessing how they buy, Listening to their needs, and Empowering them to refer others. Every business gets a <span class="hl">guaranteed 130% ROI in Year 1</span> — or Higgins works for free until you do.</div></div>
+    <div class="sc gb"><div class="sc-icon">🔗</div><div class="sc-title">Works With Existing Software</div><div class="sc-body">Higgins sits on top of your existing tools and makes them <span class="hl">3,257% more valuable</span> — without replacing them. And over a 5-year roadmap, Higgins will eventually replace traditional SaaS with <strong>aiSaaS</strong> entirely.</div></div>
+    <div class="sc bb"><div class="sc-icon">🧠</div><div class="sc-title">101+ AI Brains Working Together</div><div class="sc-body">Most AI tools use <strong>one general brain</strong>. Higgins uses <strong>101+ specialized AI models working as a team</strong> — like having a doctor, lawyer, accountant, and sales expert all in one room. That's why Higgins consistently outperforms ChatGPT.</div></div>
+  </div>
+
+  <div class="section-title"><span></span>🔥 Why Is Higgins Important?</div>
+  <div class="simple-grid">
+    <div class="sc glb"><div class="sc-icon">💼</div><div class="sc-title">The Problem Higgins Solves</div><div class="sc-body">Businesses spend <strong>millions of dollars</strong> on software that's confusing, takes months to learn, and still doesn't give them the answers they need. Employees waste hours doing paperwork instead of real work. <span class="hl">Higgins fixes all of that</span> — from Day 1, no training required.</div></div>
+    <div class="sc pb"><div class="sc-icon">💰</div><div class="sc-title">It Makes Businesses Way More Money</div><div class="sc-body">When a business adds Higgins, their monthly revenue from each customer is on average <strong>over 350% of investment</strong> with a minimum ROI of <strong>130%</strong> (as stipulated in <a href="https://130roi.com" target="_blank" style="color:var(--red);font-weight:700;">130roi.com</a>). That's like turning a $5 coffee into a $17.50 coffee — same customer, massively more value.</div></div>
+    <div class="sc tb"><div class="sc-icon">🌍</div><div class="sc-title">Every Business Needs This</div><div class="sc-body">Whether you're a doctor, a real estate agent, an insurance company, or a factory — every business has complicated software they struggle with. That means Higgins has a <strong>massive market</strong>. The global opportunity is worth over <strong>$126 Billion</strong> and growing every year.</div></div>
+  </div>
+
+  <div class="section-title"><span></span>⚡ Why Is Higgins Different?</div>
+  <div class="simple-grid">
+    <div class="sc rb"><div class="sc-icon">🔒</div><div class="sc-title">Your Conversations Stay Private</div><div class="sc-body">When you use free AI tools like ChatGPT, your conversations can be used to train their system. <strong>Higgins never sells or shares your chats.</strong> What you say stays with you. Period.</div></div>
+    <div class="sc gb"><div class="sc-icon">⚙️</div><div class="sc-title">Set Up in 72 Hours, Not 6 Months</div><div class="sc-body">Traditional business software takes <strong>months to install</strong>. Higgins can build a custom AI system for any business in <strong>72 hours or less</strong> — and it makes over 90% profit on that setup.</div></div>
+    <div class="sc glb"><div class="sc-icon">🏆</div><div class="sc-title">They Guarantee Results — Nobody Else Does</div><div class="sc-body">Higgins promises every business a <strong>130% return on their investment in Year 1</strong>. If they don't? Higgins keeps working for free until they do. <span class="hl">No other AI company in the world offers this.</span></div></div>
+    <div class="sc bb"><div class="sc-icon">🛡️</div><div class="sc-title">Protected by Patents — Even Google Pays Them</div><div class="sc-body">The technology behind Higgins is <strong>patented</strong>. Companies like <strong>Google, Salesforce, and Slack</strong> already pay to license Higgins' technology. That's the biggest players in the game admitting Higgins figured something out first.</div></div>
+  </div>
+
+  <div class="section-title"><span></span>📈 The Numbers That Matter</div>
+  <div class="num-row">
+    <div class="num-box"><div class="num-val">42,232</div><div class="num-label">Businesses Using Higgins</div></div>
+    <div class="num-box"><div class="num-val g">350%+</div><div class="num-label">Average Client ROI</div></div>
+    <div class="num-box"><div class="num-val">3,257%</div><div class="num-label">Revenue Increase Per Customer</div></div>
+    <div class="num-box"><div class="num-val gl">$126B</div><div class="num-label">Market Higgins Is Entering</div></div>
+    <div class="num-box"><div class="num-val g">130%</div><div class="num-label">Guaranteed Minimum ROI</div></div>
+    <div class="num-box"><div class="num-val b">$1M</div><div class="num-label">Pre-Seed SAFE Round Open Now</div></div>
+  </div>
+
+  <div class="section-title"><span></span>🚀 Higgins Growth — It's Already Happening</div>
+  <div class="simple-grid">
+    <div class="sc gb"><div class="sc-icon">📊</div><div class="sc-title">Revenue Is Growing Fast</div><div class="sc-body">Higgins' main product grew by <strong>588% in one year</strong>. Their payment tool (HigginsPay) grew by <strong>3,481%</strong>. Their automation tool grew by <strong>809%</strong>. These aren't projections — this is <span class="hl">real money that already happened</span>.</div></div>
+    <div class="sc bb"><div class="sc-icon">🏥</div><div class="sc-title">Big Contracts Already Won</div><div class="sc-body">Higgins recently won <strong>Enterprise Biomedical and Pharma contracts</strong> — meaning big hospitals and drug companies are now paying to use Higgins. This shows Higgins isn't just for small businesses — it works at the highest level.</div></div>
+    <div class="sc pb"><div class="sc-icon">🏢</div><div class="sc-title">Used by People at Major Companies</div><div class="sc-body">People who work at <strong>State Farm, Keller Williams, Edward Jones, Liberty Mutual, BNI, New York Life</strong> and more already use Higgins — some of the biggest names in insurance, real estate, and finance in America.</div></div>
+  </div>
+
+  <div class="section-title"><span></span>⭐ What Real People Say</div>
+  <div class="quote-grid">
+    <div class="quote-card"><div class="quote-text">"Higgins has changed my life and the way I work."</div><div class="quote-src">— Insurance Agent</div></div>
+    <div class="quote-card"><div class="quote-text">"It's hard to believe I once worked without Higgins."</div><div class="quote-src">— Lawyer</div></div>
+    <div class="quote-card"><div class="quote-text">"I get so much done, so very quickly with Higgins now."</div><div class="quote-src">— Real Estate Agency</div></div>
+    <div class="quote-card"><div class="quote-text">"Higgins has saved me so much time and money."</div><div class="quote-src">— Networking Franchisee</div></div>
+    <div class="quote-card"><div class="quote-text">"Higgins knows me and what I want."</div><div class="quote-src">— Financial Advisor</div></div>
+    <div class="quote-card"><div class="quote-text">"Wow! How can I get Higgins!!!"</div><div class="quote-src">— National Director</div></div>
+  </div>
+  <img src="https://images.squarespace-cdn.com/content/52990677e4b0c5f2207d3046/bee46b57-cae1-47bb-a75e-66727979f565/Higgins+Used+By+-+Bottom.png?content-type=image%2Fpng" alt="Higgins Used By" class="used-by-img" onerror="this.style.display='none'"/>
+
+  <div class="hero-red" style="margin-top:22px;">
+    <div style="font-size:22px;font-weight:900;color:#fff;margin-bottom:10px;">The Bottom Line</div>
+    <div style="font-size:13px;color:var(--muted);line-height:1.8;max-width:800px;margin:0 auto 16px;">Higgins is a proven Business Growth Accelerator — S.A.L.E.s → P.U.R.E.S. for clients, P.I.T.C.H. for capital — with a <strong style="color:#fff;">guaranteed ROI</strong>, <strong style="color:#fff;">patented technology</strong> that Google already pays for, and a clear 5-year vision to define the aiSaaS category entirely. The <strong style="color:#fff;">$1M Pre-Seed SAFE Round</strong> is open now.</div>
+    <div style="display:flex;justify-content:center;gap:16px;flex-wrap:wrap;">
+      <a href="mailto:investor@higgins.ai" style="background:var(--red);color:#fff;padding:11px 24px;border-radius:8px;font-weight:700;text-decoration:none;font-size:13px;">📧 investor@higgins.ai</a>
+      <a href="tel:18557373386" style="background:#1a1a1a;color:#fff;padding:11px 24px;border-radius:8px;font-weight:700;text-decoration:none;font-size:13px;border:1px solid var(--border);">📞 1.855.737.3386</a>
+      <a href="https://130roi.com" target="_blank" style="background:#1a1a1a;color:var(--green);padding:11px 24px;border-radius:8px;font-weight:700;text-decoration:none;font-size:13px;border:1px solid var(--green);">🌐 130roi.com</a>
+    </div>
+  </div>
+</div>
+
+
+<!-- ===== GROWTH ENGINE ===== -->
+<div id="engine" class="page">
+  <div class="hero-red" style="background:linear-gradient(135deg,#051a05,#0a0a0a);border-color:var(--green);">
+    <div class="hero-timer green">🚀 THE HIGGINS BUSINESS GROWTH ACCELERATOR</div>
+    <h1 style="font-size:28px;font-weight:900;color:var(--white);margin-bottom:8px;">Find the best <span style="color:var(--green);">prospect</span>. Find the best <span style="color:var(--gold);">investor</span>.</h1>
+    <p style="font-size:14px;color:var(--muted);max-width:820px;margin:0 auto;">Higgins uses <strong style="color:#fff;">S.A.L.E.s</strong> to identify the best prospects for a business, then <strong style="color:#fff;">P.U.R.E.S.</strong> to select the best prospect — or <strong style="color:#fff;">P.I.T.C.H.</strong> to identify the best investor. One scoring discipline, two growth engines.</p>
+  </div>
+
+  <div class="section-title"><span></span>⚙️ How the Accelerator Works</div>
+  <div class="flow">
+    <div class="flow-step"><div class="flow-n">1</div><div class="flow-t">S.A.L.E.s</div><div class="flow-s">Sourcing · Assessing · Listening · Empowering</div><div class="flow-d">Identifies the best prospects for the business and builds a prioritized list.</div></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step g"><div class="flow-n">2</div><div class="flow-t">P.U.R.E.S.</div><div class="flow-s">Profitability · Urgency · Reachability · Engagement · Sustainability</div><div class="flow-d">Scores each prospect and selects the <strong>best prospect</strong> to approach first.</div></div>
+    <div class="flow-arrow">or</div>
+    <div class="flow-step y"><div class="flow-n">3</div><div class="flow-t">P.I.T.C.H.</div><div class="flow-s">Positioning · Investment Capacity · Traction · Contactability · Heft</div><div class="flow-d">Scores and ranks investors to identify the <strong>best investor</strong> for the raise.</div></div>
+  </div>
+
+  <div class="two-col">
+    <div class="calc" id="puresCalc">
+      <div class="calc-h green">🎯 P.U.R.E.S. Prospect Scorer <span>Select the best prospect</span></div>
+      <div class="calc-note">Score each prospect 1–5 on every dimension. Tier 1A = 4–5 on all; 1B = 3–4 on most; 1C = 3+ overall.</div>
+      <div id="puresRows"></div>
+      <div class="calc-actions"><button class="cbtn" onclick="addProspect()">+ Add prospect</button><button class="cbtn ghost" onclick="resetProspects()">Reset sample</button></div>
+      <div id="puresOut"></div>
+    </div>
+    <div class="calc" id="pitchCalc">
+      <div class="calc-h gold">💼 P.I.T.C.H. Investor Scorer <span>Identify the best investor</span></div>
+      <div class="calc-note">Score each investor 0–20 on every dimension (100 max). Tier 1 ≥ 80 · Tier 2 66–79 · Tier 3 52–65 · Tier 4 &lt; 52.</div>
+      <div id="pitchRows"></div>
+      <div class="calc-actions"><button class="cbtn" onclick="addInvestor()">+ Add investor</button><button class="cbtn ghost" onclick="resetInvestors()">Reset sample</button></div>
+      <div id="pitchOut"></div>
+    </div>
+  </div>
+  <div style="font-size:11px;color:var(--muted);margin-top:8px;">Sample rows are illustrative placeholders for demonstration only — not real prospects or investors. Edit names and scores to run your own ranking in the browser; nothing is saved or transmitted.</div>
+
+  <div class="section-title" style="margin-top:26px;"><span></span>📐 P.I.T.C.H. 100-Point Investor Fit Score</div>
+  <div class="pures-grid">
+    <div class="pures-card"><div class="pures-letter">P</div><div class="pures-word">Positioning</div><div class="pures-desc">Does the investor's thesis and portfolio show real conviction in this sector? (0–20)</div></div>
+    <div class="pures-card"><div class="pures-letter">I</div><div class="pures-word">Investment Capacity</div><div class="pures-desc">Can their check size fill a slot in the live raise? (0–20)</div></div>
+    <div class="pures-card"><div class="pures-letter">T</div><div class="pures-word">Traction / Stage Fit</div><div class="pures-desc">Does their stage mandate match the company's stage? (0–20)</div></div>
+    <div class="pures-card"><div class="pures-letter">C</div><div class="pures-word">Contactability</div><div class="pures-desc">Email +10 · Phone +4 · LinkedIn +4 · Website +2 (0–20)</div></div>
+    <div class="pures-card"><div class="pures-letter">H</div><div class="pures-word">Heft</div><div class="pures-desc">Decision authority: GP/Founder 20 · Partner 17 · Principal 13 · Associate 10 · Analyst 8 · Unknown 6</div></div>
+  </div>
+  <div class="note-box">
+    <strong style="color:#fff;">Two scoring systems, one discipline.</strong> P.U.R.E.S. (as used in this dashboard and the S.A.L.E.s Sourcing module) scores <em>prospects</em> on five 1–5 dimensions. Higgins also publishes a 100-point P.U.R.E.S. Business Ranking (Product, Uniqueness, Reviews, Employment, Service — 20 points each) used for Higgins Community search ranking. P.I.T.C.H. applies the same tiered, fact-grounded approach to <em>investors</em>. Every score must cite a specific fact; missing data is scored conservatively, never guessed.
+  </div>
+</div>
+
+<!-- ===== INVESTMENT OVERVIEW ===== -->
+<div id="overview" class="page">
+  <div class="hero-green">
+    <div style="display:inline-block;background:var(--green);color:#000;font-size:11px;font-weight:700;padding:4px 14px;border-radius:20px;margin-bottom:14px;">🎯 PRIMARY POSITIONING — WHAT HIGGINS IS TODAY</div>
+    <h1 style="font-size:26px;font-weight:900;color:var(--white);margin-bottom:10px;">Higgins AI: The World's First <span style="color:var(--green);">AI-Powered Business Growth Accelerator</span></h1>
+    <p style="font-size:14px;color:var(--text);line-height:1.8;max-width:900px;">We help <strong>any small, medium, or enterprise business</strong> grow in two directions at once. <strong>S.A.L.E.s</strong> identifies the best prospects for the business, <strong>P.U.R.E.S.</strong> scores them to select the best prospect to approach first, and <strong>P.I.T.C.H.</strong> scores and ranks investors to identify the best investor to fund the next stage — all backed by <strong>101+ specialized AI models</strong>. Every client is <strong>guaranteed a minimum 130% ROI in Year 1</strong>, with an average return of <strong>300–400%</strong> across our existing client base. This is not a promise. It's a guarantee — backed by <a href="https://130roi.com" target="_blank" style="color:var(--green);font-weight:700;">130roi.com</a>. <em style="color:var(--muted);">"We want every business to experience a 130% ROI — so we guarantee it."</em></p>
+  </div>
+
+  <div class="stat-row">
+    <div class="stat-card green"><div class="stat-label">Guaranteed Min. ROI</div><div class="stat-val">130%</div><div class="stat-sub">Year 1 — or We Absorb Cost</div><div class="stat-badge green">130roi.com</div></div>
+    <div class="stat-card gold"><div class="stat-label">Average Client ROI</div><div class="stat-val">350%+</div><div class="stat-sub">300–400% Across All Clients</div><div class="stat-badge gold">Proven</div></div>
+    <div class="stat-card"><div class="stat-label">MRR Uplift</div><div class="stat-val">3,257%</div><div class="stat-sub">$32 → $678/mo per client</div><div class="stat-badge red">S.A.L.E.s Effect</div></div>
+    <div class="stat-card blue"><div class="stat-label">Associated Businesses</div><div class="stat-val">42,232</div><div class="stat-sub">60+ Regions Globally</div><div class="stat-badge blue">Active Traction</div></div>
+    <div class="stat-card purple"><div class="stat-label">AI Models Deployed</div><div class="stat-val">101+</div><div class="stat-sub">Specialized Teams — Patented</div><div class="stat-badge purple">Patented</div></div>
+    <div class="stat-card teal"><div class="stat-label">Pre-Seed Round</div><div class="stat-val">$1M</div><div class="stat-sub">SAFE Pre-Seed — Open Now</div><div class="stat-badge teal">Invest Today</div></div>
+  </div>
+
+  <div class="section-title"><span></span>🎯 Growth Acceleration — How We Grow Every Business</div>
+  <div class="simple-grid">
+    <div class="sc rb"><div class="sc-icon">🔍</div><div class="sc-title">S — Sourcing</div><div class="sc-body">AI-powered <strong>P.U.R.E.S. scoring</strong> identifies Tier 1A, 1B &amp; 1C clients based on Profitability, Urgency, Reachability, Engagement, and Sustainability. Every business gets a prioritized, AI-generated prospect list — automatically.</div></div>
+    <div class="sc glb"><div class="sc-icon">📊</div><div class="sc-title">A — Assessing</div><div class="sc-body">Higgins profiles each client's <strong>buying behavior</strong> — Analytical, Relationship, Efficiency, or Innovation buyer — and aligns the right value proposition to the right decision-maker at the right time.</div></div>
+    <div class="sc gb"><div class="sc-icon">👂</div><div class="sc-title">L — Listening</div><div class="sc-body">Systematic <strong>pre-sale, during-sale, and post-sale feedback loops</strong> keep Higgins continuously optimizing outreach. This is the same methodology that produced our Enterprise Biomedical–Pharma contracts.</div></div>
+    <div class="sc bb"><div class="sc-icon">🚀</div><div class="sc-title">E — Empowering</div><div class="sc-body">Every satisfied client becomes an <strong>active advocate</strong>. Higgins automates referral tracking, co-marketing, and success story documentation — targeting <strong>2+ referrals per client</strong>.</div></div>
+  </div>
+
+  <div class="section-title"><span></span>💰 The S.A.L.E.s ROI Story</div>
+  <div class="num-row">
+    <div class="num-box"><div class="num-val g">130%</div><div class="num-label">Guaranteed Min. ROI — Year 1</div></div>
+    <div class="num-box"><div class="num-val gl">350%+</div><div class="num-label">Average ROI Across All Clients</div></div>
+    <div class="num-box"><div class="num-val">$32</div><div class="num-label">Standard MRR (Pre-S.A.L.E.s)</div></div>
+    <div class="num-box"><div class="num-val g">$678</div><div class="num-label">S.A.L.E.s MRR (Post-Upgrade)</div></div>
+    <div class="num-box"><div class="num-val">$2,719</div><div class="num-label">Standard Client LTV</div></div>
+    <div class="num-box"><div class="num-val gl">$41,358</div><div class="num-label">S.A.L.E.s Client LTV</div></div>
+    <div class="num-box"><div class="num-val b">606%</div><div class="num-label">Overall ARR YoY Growth</div></div>
+    <div class="num-box"><div class="num-val">$252K</div><div class="num-label">Current Overall ARR</div></div>
+  </div>
+
+  <div class="section-title"><span></span>🔭 5-Year Vision — From Business Growth Accelerator to Enterprise aiSaaS</div>
+  <div style="background:linear-gradient(135deg,#050a1a,#0a0a0a);border:1px solid var(--blue);border-radius:12px;padding:24px;margin-bottom:20px;">
+    <div style="display:inline-block;background:var(--blue);color:#fff;font-size:11px;font-weight:700;padding:3px 12px;border-radius:20px;margin-bottom:12px;">🔭 5-YEAR STRATEGIC ROADMAP</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;">
+      <div style="background:#0a0a1a;border:1px solid var(--blue);border-radius:8px;padding:14px;"><div style="font-size:11px;font-weight:700;color:var(--green);margin-bottom:6px;">TODAY — YEARS 1–2</div><div style="font-size:14px;font-weight:800;color:#fff;margin-bottom:6px;">AI Business Growth Accelerator</div><div style="font-size:11px;color:var(--muted);line-height:1.6;">The world's first AI-powered growth system — S.A.L.E.s + P.U.R.E.S. for clients, P.I.T.C.H. for capital. Guaranteed 130% ROI. Average 300–400% across existing clients. Serving 42,232+ businesses in 60+ regions.</div></div>
+      <div style="background:#0a0a1a;border:1px solid var(--gold);border-radius:8px;padding:14px;"><div style="font-size:11px;font-weight:700;color:var(--gold);margin-bottom:6px;">YEARS 2–4</div><div style="font-size:14px;font-weight:800;color:#fff;margin-bottom:6px;">Enterprise SaaS Intelligence Layer</div><div style="font-size:11px;color:var(--muted);line-height:1.6;">Higgins embeds as the AI front end to existing CRMs, ERPs &amp; PLMs — making them 3,257% more valuable without replacement. The S.A.L.E.s engine becomes the intelligence layer for enterprise.</div></div>
+      <div style="background:#0a0a1a;border:1px solid var(--red);border-radius:8px;padding:14px;"><div style="font-size:11px;font-weight:700;color:var(--red);margin-bottom:6px;">YEARS 4–5+</div><div style="font-size:14px;font-weight:800;color:#fff;margin-bottom:6px;">aiSaaS — The New Category</div><div style="font-size:11px;color:var(--muted);line-height:1.6;">Higgins replaces traditional SaaS entirely. Where SaaS stored data, <strong style="color:#fff;">aiSaaS acts on it</strong>. The $126B SaaS market becomes the $250B+ aiSaaS market — and Higgins is positioned at the center.</div></div>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-title">📈 Revenue Performance</div>
+      <div class="bar-chart">
+        <div class="bar-row"><div class="bar-label">Standard MRR</div><div class="bar-track"><div class="bar-fill" style="width:5%;background:var(--muted);">$32</div></div><div class="bar-val">Baseline</div></div>
+        <div class="bar-row"><div class="bar-label">S.A.L.E.s MRR</div><div class="bar-track"><div class="bar-fill" style="width:100%;background:var(--red);">$678</div></div><div class="bar-val">+3,257%</div></div>
+        <div class="bar-row"><div class="bar-label">Standard LTV</div><div class="bar-track"><div class="bar-fill" style="width:7%;background:var(--muted);">$2.7K</div></div><div class="bar-val">Baseline</div></div>
+        <div class="bar-row"><div class="bar-label">S.A.L.E.s LTV</div><div class="bar-track"><div class="bar-fill" style="width:100%;background:var(--green);">$41.3K</div></div><div class="bar-val">+1,521%</div></div>
+        <div class="bar-row"><div class="bar-label">Automations YoY</div><div class="bar-track"><div class="bar-fill" style="width:23%;background:var(--purple);">809%</div></div><div class="bar-val">809%</div></div>
+        <div class="bar-row"><div class="bar-label">Higgins Pay YoY</div><div class="bar-track"><div class="bar-fill" style="width:100%;background:var(--blue);">3,481%</div></div><div class="bar-val">3,481%</div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">🌍 Market Opportunity</div>
+      <div class="bar-chart">
+        <div class="bar-row"><div class="bar-label">TAM — Global SaaS</div><div class="bar-track"><div class="bar-fill" style="width:100%;background:var(--blue);">$126B → $250B+</div></div><div class="bar-val">By 2032</div></div>
+        <div class="bar-row"><div class="bar-label">SAM — N. America</div><div class="bar-track"><div class="bar-fill" style="width:41%;background:var(--gold);">$52B</div></div><div class="bar-val">Top 5 CRM</div></div>
+        <div class="bar-row"><div class="bar-label">SOM — Accessible</div><div class="bar-track"><div class="bar-fill" style="width:8%;background:var(--green);">$87M+</div></div><div class="bar-val">5% convert</div></div>
+        <div class="bar-row"><div class="bar-label">aiSaaS TAM 2030</div><div class="bar-track"><div class="bar-fill" style="width:100%;background:var(--red);">$250B+ New Category</div></div><div class="bar-val">Higgins Leads</div></div>
+      </div>
+      <div style="margin-top:14px;background:#1a1a1a;border-radius:8px;padding:12px;border:1px solid var(--border);">
+        <div style="font-size:11px;font-weight:700;color:var(--white);margin-bottom:6px;">💰 Use of Funds — $1M Pre-Seed SAFE Round</div>
+        <div class="bar-chart">
+          <div class="bar-row"><div class="bar-label">S.A.L.E.s Platform</div><div class="bar-track"><div class="bar-fill" style="width:35%;background:var(--red);">35%</div></div><div class="bar-val">$350K</div></div>
+          <div class="bar-row"><div class="bar-label">Product &amp; Eng.</div><div class="bar-track"><div class="bar-fill" style="width:30%;background:var(--blue);">30%</div></div><div class="bar-val">$300K</div></div>
+          <div class="bar-row"><div class="bar-label">AI Expansion</div><div class="bar-track"><div class="bar-fill" style="width:20%;background:var(--gold);">20%</div></div><div class="bar-val">$200K</div></div>
+          <div class="bar-row"><div class="bar-label">Operations</div><div class="bar-track"><div class="bar-fill" style="width:15%;background:var(--green);">15%</div></div><div class="bar-val">$150K</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title"><span></span>⭐ What Real Clients Say</div>
+  <div class="quote-grid">
+    <div class="quote-card"><div class="quote-text">"Higgins has changed my life and the way I work."</div><div class="quote-src">— Insurance Agent</div></div>
+    <div class="quote-card"><div class="quote-text">"I use Higgins everyday, all the time."</div><div class="quote-src">— Health &amp; Wellness Professional</div></div>
+    <div class="quote-card"><div class="quote-text">"I get so much done, so very quickly with Higgins now."</div><div class="quote-src">— Real Estate Agency</div></div>
+    <div class="quote-card"><div class="quote-text">"It's hard to believe I once worked without Higgins."</div><div class="quote-src">— Lawyer</div></div>
+    <div class="quote-card"><div class="quote-text">"Higgins has saved me so much time and money."</div><div class="quote-src">— Networking Franchisee</div></div>
+    <div class="quote-card"><div class="quote-text">"Wow! How can I get Higgins!!!"</div><div class="quote-src">— National Director</div></div>
+  </div>
+  <img src="https://images.squarespace-cdn.com/content/52990677e4b0c5f2207d3046/bee46b57-cae1-47bb-a75e-66727979f565/Higgins+Used+By+-+Bottom.png?content-type=image%2Fpng" alt="Higgins Used By" class="used-by-img" onerror="this.style.display='none'"/>
+
+  <div class="hero-red" style="margin-top:24px;">
+    <div style="font-size:22px;font-weight:900;color:#fff;margin-bottom:10px;">Ready to Invest in the S.A.L.E.s Revolution?</div>
+    <div style="font-size:13px;color:var(--muted);margin-bottom:16px;max-width:700px;margin-left:auto;margin-right:auto;">Higgins is raising a <strong style="color:#fff;">$1M Pre-Seed SAFE Round</strong> to accelerate the S.A.L.E.s platform deployment across 42,232+ associated businesses worldwide.</div>
+    <div style="display:flex;justify-content:center;gap:16px;flex-wrap:wrap;">
+      <a href="mailto:investor@higgins.ai" style="background:var(--red);color:#fff;padding:11px 24px;border-radius:8px;font-weight:700;text-decoration:none;font-size:13px;">📧 investor@higgins.ai</a>
+      <a href="tel:18557373386" style="background:#1a1a1a;color:#fff;padding:11px 24px;border-radius:8px;font-weight:700;text-decoration:none;font-size:13px;border:1px solid var(--border);">📞 1.855.737.3386</a>
+      <a href="https://130roi.com" target="_blank" style="background:#1a1a1a;color:var(--green);padding:11px 24px;border-radius:8px;font-weight:700;text-decoration:none;font-size:13px;border:1px solid var(--green);">🌐 130roi.com</a>
+    </div>
+  </div>
+</div>
+
+<!-- ===== S.A.L.E.s ACCELERATOR ===== -->
+<div id="sales" class="page">
+  <div class="hero-red" style="background:linear-gradient(135deg,#051a05,#0a0a0a);border-color:var(--green);">
+    <div class="hero-timer green">🎯 THE HIGGINS BUSINESS GROWTH ACCELERATOR — S.A.L.E.s ENGINE</div>
+    <h1 style="font-size:28px;font-weight:900;color:var(--white);margin-bottom:8px;">Guaranteed <span style="color:var(--green);">130% ROI</span> — Average <span style="color:var(--gold);">300–400%</span></h1>
+    <p style="font-size:14px;color:var(--muted);max-width:800px;margin:0 auto;">S.A.L.E.s is the prospect engine of the Higgins Business Growth Accelerator: it identifies the best prospects for any small, medium, or enterprise business, then hands them to P.U.R.E.S. to select the best one — systematically sourcing, assessing, listening to, and empowering every client relationship.</p>
+  </div>
+
+  <div class="stat-row">
+    <div class="stat-card green"><div class="stat-label">Guaranteed Min. ROI</div><div class="stat-val">130%</div><div class="stat-sub">Year 1 or We Absorb Cost</div><div class="stat-badge green">130roi.com</div></div>
+    <div class="stat-card gold"><div class="stat-label">Average Client ROI</div><div class="stat-val">350%+</div><div class="stat-sub">300–400% Proven Range</div><div class="stat-badge gold">All Clients</div></div>
+    <div class="stat-card"><div class="stat-label">MRR Uplift</div><div class="stat-val">3,257%</div><div class="stat-sub">$32 → $678/mo per client</div><div class="stat-badge red">S.A.L.E.s Effect</div></div>
+    <div class="stat-card blue"><div class="stat-label">LTV Uplift</div><div class="stat-val">1,521%</div><div class="stat-sub">$2,719 → $41,358</div><div class="stat-badge blue">Lifetime Value</div></div>
+    <div class="stat-card purple"><div class="stat-label">Referral Target</div><div class="stat-val">2+</div><div class="stat-sub">Per Satisfied Client</div><div class="stat-badge purple">Empowering</div></div>
+    <div class="stat-card teal"><div class="stat-label">Retention Target</div><div class="stat-val">95%+</div><div class="stat-sub">Client Retention Rate</div><div class="stat-badge teal">Listening</div></div>
+  </div>
+
+  <div class="section-title"><span></span>🧭 Choose Your Growth Path</div>
+  <div class="two-col" style="margin-bottom:22px;">
+    <div class="flow-step g" style="min-width:0;"><div class="flow-t" style="font-size:17px;">🎯 Need more clients?</div><div class="flow-s">S.A.L.E.s → P.U.R.E.S.</div><div class="flow-d">S.A.L.E.s sources the best prospects for your business, then P.U.R.E.S. scores them to select the <strong>best prospect</strong> to approach first.</div><div style="margin-top:10px;"><a href="#salesMethod" onclick="document.getElementById('salesMethod').scrollIntoView({behavior:'smooth'});return false;" class="cbtn" style="text-decoration:none;display:inline-block;background:var(--green);color:#000;">See S.A.L.E.s &amp; P.U.R.E.S. ↓</a></div></div>
+    <div class="flow-step y" style="min-width:0;"><div class="flow-t" style="font-size:17px;">💼 Need investment instead?</div><div class="flow-s">P.I.T.C.H.</div><div class="flow-d">P.I.T.C.H. applies the same scoring discipline to investors and capital partners, ranking them to identify the <strong>best investor</strong> for your raise.</div><div style="margin-top:10px;"><a href="#pitchOpt" onclick="document.getElementById('pitchOpt').scrollIntoView({behavior:'smooth'});return false;" class="cbtn" style="text-decoration:none;display:inline-block;background:var(--gold);color:#000;">See P.I.T.C.H. ↓</a></div></div>
+  </div>
+
+  <div id="salesMethod" class="section-title"><span></span>The S.A.L.E.s Methodology — 4 AI-Powered Modules</div>
+  <div class="sale-mod">
+    <div class="sale-mod-hdr"><div class="sale-letter" style="background:rgba(207,32,48,.2);color:var(--red);">S</div><div><div class="sale-mod-title">SOURCING — Find Your Best Clients First</div><div class="sale-mod-sub">P.U.R.E.S. Client Scoring • Tier Classification • AI-Generated Prospect Lists</div></div></div>
+    <div class="sale-mod-body">Higgins uses the proprietary <strong style="color:#fff;">P.U.R.E.S. scoring system</strong> to evaluate every prospect on five dimensions (1–5 scale), automatically classifying them into Tier 1A (Premium), Tier 1B (High-Value), or Tier 1C (Qualified). The AI generates a prioritized outreach list of the highest-value prospects within your service area — complete with contact information, industry data, revenue estimates, and recommended next actions.</div>
+  </div>
+  <div class="pures-grid">
+    <div class="pures-card"><div class="pures-letter">P</div><div class="pures-word">Profitability</div><div class="pures-desc">Annual revenue threshold &amp; budget capacity to invest</div></div>
+    <div class="pures-card"><div class="pures-letter">U</div><div class="pures-word">Urgency</div><div class="pures-desc">Active pain points requiring immediate solutions</div></div>
+    <div class="pures-card"><div class="pures-letter">R</div><div class="pures-word">Reachability</div><div class="pures-desc">Accessible decision-makers with clear contact paths</div></div>
+    <div class="pures-card"><div class="pures-letter">E</div><div class="pures-word">Engagement</div><div class="pures-desc">Openness to innovation, partnerships &amp; new solutions</div></div>
+    <div class="pures-card"><div class="pures-letter">S</div><div class="pures-word">Sustainability</div><div class="pures-desc">Long-term partnership potential with growth trajectory</div></div>
+  </div>
+  <div class="tier-row">
+    <div class="tier-card t1a"><div class="tier-label" style="color:var(--green);">TIER 1A — PREMIUM</div><div class="tier-title">Scores 4–5 on All P.U.R.E.S.</div><div class="tier-desc">Highest-priority outreach. Premium templates with quantified ROI. Dedicated account strategy. Maximum LTV expected.</div></div>
+    <div class="tier-card t1b"><div class="tier-label" style="color:var(--gold);">TIER 1B — HIGH-VALUE</div><div class="tier-title">Scores 3–4 on Most P.U.R.E.S.</div><div class="tier-desc">Strong prospects. Efficiency &amp; growth-focused outreach. Targeted nurture sequences with progressive value delivery.</div></div>
+    <div class="tier-card t1c"><div class="tier-label" style="color:var(--blue);">TIER 1C — QUALIFIED</div><div class="tier-title">Scores 3+ Overall P.U.R.E.S.</div><div class="tier-desc">Solid pipeline prospects. Educational content sequences. Long-term relationship building with periodic check-ins.</div></div>
+  </div>
+  <div class="sale-mod">
+    <div class="sale-mod-hdr"><div class="sale-letter" style="background:rgba(245,158,11,.2);color:var(--gold);">A</div><div><div class="sale-mod-title">ASSESSING — Know How They Buy Before You Sell</div><div class="sale-mod-sub">Buying Profile Analysis • Decision Timeline Mapping • Stakeholder Intelligence</div></div></div>
+    <div class="sale-mod-body">Not every client buys the same way. Higgins profiles each prospect into one of four buyer archetypes and automatically aligns your pitch accordingly. <strong style="color:#fff;">Analytical Buyers</strong> get detailed ROI case studies. <strong style="color:#fff;">Relationship Buyers</strong> get trust-building sequences. <strong style="color:#fff;">Efficiency Buyers</strong> get time-saving metrics. <strong style="color:#fff;">Innovation Buyers</strong> get competitive advantage narratives. Needs assessment accuracy target: <strong style="color:#fff;">&gt;90%</strong>.</div>
+  </div>
+  <div class="sale-mod">
+    <div class="sale-mod-hdr"><div class="sale-letter" style="background:rgba(34,197,94,.2);color:var(--green);">L</div><div><div class="sale-mod-title">LISTENING — Continuous Feedback That Drives Revenue</div><div class="sale-mod-sub">Pre-Sale • During-Sale • Post-Sale Feedback Loops • Real-Time Complaint Resolution</div></div></div>
+    <div class="sale-mod-body">Higgins conducts systematic listening sessions at every stage of the client journey. Pre-sale forms capture unmet needs. During-sale tracking catches friction before deals fall apart. Post-sale monitoring converts happy clients into case studies and referral sources. This exact methodology led directly to Higgins being awarded <strong style="color:#fff;">Enterprise Biomedical–Pharma contracts</strong>. Feedback collection target: <strong style="color:#fff;">&gt;70%</strong>.</div>
+  </div>
+  <div class="sale-mod">
+    <div class="sale-mod-hdr"><div class="sale-letter" style="background:rgba(59,130,246,.2);color:var(--blue);">E</div><div><div class="sale-mod-title">EMPOWERING — Turn Clients Into Your Best Sales Team</div><div class="sale-mod-sub">Referral Management • Success Story Documentation • Co-Marketing Programs</div></div></div>
+    <div class="sale-mod-body">The most powerful sales channel is a satisfied client. Higgins automates the entire referral lifecycle — from identifying advocacy-ready clients to tracking referral rewards, documenting success stories, and building co-marketing campaigns. Target: <strong style="color:#fff;">2+ referrals per client</strong> — turning your existing client base into an organic, self-sustaining growth engine.</div>
+  </div>
+
+  <div id="pitchOpt" class="section-title"><span></span>💼 Option 2: P.I.T.C.H. — Looking for Investment Instead of Clients?</div>
+  <div class="sale-mod" style="border-color:var(--gold);">
+    <div class="sale-mod-hdr"><div class="sale-letter" style="background:rgba(245,158,11,.2);color:var(--gold);">P</div><div><div class="sale-mod-title">P.I.T.C.H. — Find Your Best Investor First</div><div style="font-size:11px;color:var(--muted);">Investor Fit Score • Tier Classification • Ranked Investor Lists</div></div></div>
+    <div class="sale-mod-body">If your goal is capital rather than customers, Higgins swaps the target: instead of prospects, <strong style="color:#fff;">P.I.T.C.H.</strong> sources and scores investors and capital partners against your company profile and live raise. Each investor receives a 100-point Investor Fit Score built from five 20-point dimensions, and a fact-grounded reason for every score. The result is a ranked list that tells you who to approach first, with which ask.</div>
+  </div>
+  <div class="pures-grid">
+    <div class="pures-card"><div class="pures-letter" style="color:var(--gold);">P</div><div class="pures-word">Positioning</div><div class="pures-desc">Thesis and portfolio conviction in your sector (0–20)</div></div>
+    <div class="pures-card"><div class="pures-letter" style="color:var(--gold);">I</div><div class="pures-word">Investment Capacity</div><div class="pures-desc">Check size that can fill a slot in your raise (0–20)</div></div>
+    <div class="pures-card"><div class="pures-letter" style="color:var(--gold);">T</div><div class="pures-word">Traction / Stage Fit</div><div class="pures-desc">Stage mandate matches your company's stage (0–20)</div></div>
+    <div class="pures-card"><div class="pures-letter" style="color:var(--gold);">C</div><div class="pures-word">Contactability</div><div class="pures-desc">Email +10, Phone +4, LinkedIn +4, Website +2 (0–20)</div></div>
+    <div class="pures-card"><div class="pures-letter" style="color:var(--gold);">H</div><div class="pures-word">Heft</div><div class="pures-desc">Decision authority of the named contact (0–20)</div></div>
+  </div>
+  <div class="tier-row" style="grid-template-columns:repeat(auto-fit,minmax(200px,1fr));">
+    <div class="tier-card t1a"><div class="tier-label" style="color:var(--green);">TIER 1 — PRIORITY</div><div class="tier-title">Score 80–100</div><div class="tier-desc">Approach first. Strong thesis, capacity and stage fit with a reachable decision-maker.</div></div>
+    <div class="tier-card t1b"><div class="tier-label" style="color:var(--gold);">TIER 2 — STRONG</div><div class="tier-title">Score 66–79</div><div class="tier-desc">Strong fit with one soft spot. First outreach wave.</div></div>
+    <div class="tier-card t1c"><div class="tier-label" style="color:var(--blue);">TIER 3 — DEVELOPING</div><div class="tier-title">Score 52–65</div><div class="tier-desc">Plausible but unproven fit. Include for volume outreach.</div></div>
+    <div class="tier-card" style="background:rgba(136,136,136,.06);"><div class="tier-label" style="color:var(--muted);">TIER 4 — EMERGING</div><div class="tier-title">Score below 52</div><div class="tier-desc">Long-shot. Use only if the list needs volume.</div></div>
+  </div>
+  <div class="note-box" style="margin-bottom:12px;">Tiers sequence outreach; they never exclude a contact. Every score must cite a specific fact about both the investor and your company. Missing data is flagged and scored conservatively, never guessed. Try the interactive P.I.T.C.H. and P.U.R.E.S. scorers on the <a href="#" onclick="show('engine',document.querySelectorAll('.tab')[1]);return false;" style="color:var(--gold);font-weight:700;">Growth Engine tab</a>.</div>
+
+  <div class="section-title"><span></span>💰 S.A.L.E.s ROI — Before vs After</div>
+  <div class="card">
+    <div class="card-title">📊 Client Revenue Transformation — Standard vs S.A.L.E.s System</div>
+    <table>
+      <tr><th>Metric</th><th>Standard (Pre-S.A.L.E.s)</th><th>S.A.L.E.s Activated</th><th>Uplift</th></tr>
+      <tr><td>Monthly Recurring Revenue</td><td style="color:var(--muted);">$32/mo</td><td style="color:var(--green);">$678/mo</td><td><span class="tag green">+3,257%</span></td></tr>
+      <tr><td>Lifetime Value (LTV)</td><td style="color:var(--muted);">$2,719</td><td style="color:var(--green);">$41,358</td><td><span class="tag green">+1,521%</span></td></tr>
+      <tr><td>Guaranteed Minimum ROI</td><td style="color:var(--muted);">None</td><td style="color:var(--green);">130% Year 1</td><td><span class="tag green">Industry First</span></td></tr>
+      <tr><td>Average Client ROI</td><td style="color:var(--muted);">Unknown</td><td style="color:var(--gold);">300–400%</td><td><span class="tag gold">Proven</span></td></tr>
+      <tr><td>Referrals Per Client</td><td style="color:var(--muted);">Organic / Random</td><td style="color:var(--blue);">2+ Systematic</td><td><span class="tag blue">Empowering</span></td></tr>
+      <tr><td>Client Retention Rate</td><td style="color:var(--muted);">~70% Industry Avg</td><td style="color:var(--green);">95%+ Target</td><td><span class="tag green">+25pp</span></td></tr>
+      <tr><td>Prospect Targeting</td><td style="color:var(--muted);">Manual / Guesswork</td><td style="color:var(--red);">AI P.U.R.E.S. Scored</td><td><span class="tag red">Systematic</span></td></tr>
+      <tr><td>Outreach Personalization</td><td style="color:var(--muted);">Generic Templates</td><td style="color:var(--green);">Tier + Buyer Profile AI</td><td><span class="tag green">Automated</span></td></tr>
+    </table>
+  </div>
+
+  <div class="grid2">
+    <div>
+      <div class="section-title"><span></span>🗓️ Implementation Phases</div>
+      <div class="rp"><div class="rp-label">Phase 1 — Week 1</div><div class="rp-title">Setup &amp; P.U.R.E.S. Calibration</div><div class="rp-desc">Input business parameters. Customize P.U.R.E.S. scoring. Generate initial 50-prospect database. Configure tier-appropriate templates. Immediate MRR uplift begins Day 1.</div></div>
+      <div class="rp gold"><div class="rp-label">Phase 2 — Weeks 2–4</div><div class="rp-title">Active Outreach Campaign</div><div class="rp-desc">Deploy tier-appropriate outreach sequences. Track engagement. Collect pre-sale feedback. Refine targeting based on real-time Listening data.</div></div>
+      <div class="rp blue"><div class="rp-label">Phase 3 — Weeks 5–8</div><div class="rp-title">Optimization &amp; Scaling</div><div class="rp-desc">Analyze ROI metrics. Optimize P.U.R.E.S. accuracy. Scale successful strategies. Activate referral programs. 130% ROI trajectory confirmed.</div></div>
+      <div class="rp purple"><div class="rp-label">Phase 4 — Ongoing</div><div class="rp-title">Systematic Growth Engine</div><div class="rp-desc">Maintain 70%+ feedback. Achieve 2+ referrals per client. Sustain 95%+ retention. Drive 25%+ expansion revenue. Average ROI reaches 300–400%.</div></div>
+    </div>
+    <div>
+      <div class="section-title"><span></span>📈 Performance Targets</div>
+      <div class="card">
+        <table>
+          <tr><th>Module</th><th>Metric</th><th>Target</th><th>Status</th></tr>
+          <tr><td>Sourcing</td><td>P.U.R.E.S. Accuracy</td><td style="color:var(--green);">&gt;80%</td><td><span class="tag green">Active</span></td></tr>
+          <tr><td>Assessing</td><td>Needs Accuracy</td><td style="color:var(--green);">&gt;90%</td><td><span class="tag green">Active</span></td></tr>
+          <tr><td>Listening</td><td>Feedback Collection</td><td style="color:var(--gold);">&gt;70%</td><td><span class="tag gold">Scaling</span></td></tr>
+          <tr><td>Empowering</td><td>Referrals/Client</td><td style="color:var(--blue);">2+</td><td><span class="tag blue">Building</span></td></tr>
+          <tr><td>Retention</td><td>Client Retention</td><td style="color:var(--green);">95%+</td><td><span class="tag green">Tracked</span></td></tr>
+          <tr><td>Growth</td><td>Expansion Revenue</td><td style="color:var(--green);">25%+</td><td><span class="tag green">On Track</span></td></tr>
+          <tr><td>Min. ROI</td><td>Year 1 Guarantee</td><td style="color:var(--green);">130%</td><td><span class="tag green">Guaranteed</span></td></tr>
+          <tr><td>Avg. ROI</td><td>All Clients</td><td style="color:var(--gold);">300–400%</td><td><span class="tag gold">Proven</span></td></tr>
+        </table>
+      </div>
+      <div style="background:linear-gradient(135deg,#0a1a0a,#0a0a0a);border:2px solid var(--green);border-radius:10px;padding:18px;text-align:center;">
+        <div style="font-size:16px;font-weight:900;color:var(--green);margin-bottom:8px;">🏆 The Guarantee</div>
+        <div style="font-size:13px;color:var(--text);line-height:1.7;font-style:italic;">"We want every business to experience a 130% ROI — so we guarantee it. Or we absorb the cost until you do."</div>
+        <div style="margin-top:12px;"><a href="https://130roi.com" target="_blank" style="background:var(--green);color:#000;padding:9px 22px;border-radius:8px;font-weight:700;text-decoration:none;font-size:12px;">🌐 130roi.com</a></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 5-YEAR VISION ===== -->
+<div id="vision" class="page">
+  <div style="background:linear-gradient(135deg,#050a1a,#0a0a0a);border:2px solid var(--blue);border-radius:14px;padding:28px;margin-bottom:24px;">
+    <div class="hero-timer" style="background:var(--blue);">🔭 5-YEAR STRATEGIC VISION</div>
+    <h1 style="font-size:26px;font-weight:900;color:var(--white);margin-bottom:10px;">From <span style="color:var(--green);">Business Growth Accelerator</span> → <span style="color:var(--gold);">SaaS Intelligence Layer</span> → <span style="color:var(--red);">aiSaaS</span></h1>
+    <p style="font-size:13px;color:var(--muted);line-height:1.8;max-width:900px;">Higgins is executing a deliberate, phased evolution — starting as the world's most effective AI sales accelerator, expanding into the enterprise as a SaaS intelligence layer, and ultimately defining a new category: <strong style="color:#fff;">aiSaaS</strong> — AI-native business operating systems that replace traditional SaaS entirely. The $126B SaaS market becomes the $250B+ aiSaaS market, and Higgins is already positioned at the center of that transition today.</p>
+  </div>
+
+  <div class="yr-grid">
+    <div class="yr-card" style="border-color:var(--green);"><div class="yr-label" style="color:var(--green);">Year 1–2 · NOW</div><div class="yr-title">AI S.A.L.E.s Accelerator</div><div class="yr-desc">Guaranteed 130% ROI. Average 300–400%. 42,232+ businesses. 60+ regions. S.A.L.E.s methodology driving 3,257% MRR uplift.</div></div>
+    <div class="yr-card" style="border-color:var(--teal);"><div class="yr-label" style="color:var(--teal);">Year 2–3</div><div class="yr-title">SaaS Intelligence Layer</div><div class="yr-desc">Higgins embeds in front of CRMs, ERPs &amp; PLMs. Makes existing SaaS 3,257% more valuable. No replacement needed — yet.</div></div>
+    <div class="yr-card" style="border-color:var(--gold);"><div class="yr-label" style="color:var(--gold);">Year 3–4</div><div class="yr-title">SaaS Replacement Begins</div><div class="yr-desc">Redundant SaaS modules identified and eliminated. Higgins Automations replace manual workflows. Margin improves dramatically.</div></div>
+    <div class="yr-card" style="border-color:var(--red);"><div class="yr-label" style="color:var(--red);">Year 4–5</div><div class="yr-title">aiSaaS Platform</div><div class="yr-desc">Higgins becomes the single source of truth. GEN4 ecosystem (HigginsPay, HigginsPOS, HigginsLoans) fully unlocked.</div></div>
+    <div class="yr-card" style="border-color:var(--purple);"><div class="yr-label" style="color:var(--purple);">Year 5+</div><div class="yr-title">aiSaaS Category Leader</div><div class="yr-desc">Higgins defines the aiSaaS category. $250B+ market. Where SaaS stored data, aiSaaS acts on it.</div></div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-title">🏗️ The SaaS → aiSaaS Stack Transition</div>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <div class="stack-layer" style="background:#1a0a0a;border:1px solid var(--red);"><div style="font-size:11px;font-weight:700;color:var(--red);margin-bottom:3px;">HIGGINS AI LAYER (Today)</div><div style="font-size:10px;color:var(--muted);">Voice — AI Intelligence — S.A.L.E.s Engine — Interactive Dashboards</div></div>
+        <div style="text-align:center;font-size:18px;color:var(--red);">↕ Enhance</div>
+        <div class="stack-layer" style="background:#0a1a0a;border:1px solid var(--green);"><div style="font-size:11px;font-weight:700;color:var(--green);margin-bottom:3px;">EXISTING ENTERPRISE SAAS (Years 1–3)</div><div style="font-size:10px;color:var(--muted);">CRM — ERP — PLM — SAP — Salesforce — ServiceNow — Teamcenter</div></div>
+        <div style="text-align:center;font-size:18px;color:var(--gold);">↕ Replace</div>
+        <div class="stack-layer" style="background:#1a1000;border:1px solid var(--gold);"><div style="font-size:11px;font-weight:700;color:var(--gold);margin-bottom:3px;">HIGGINS aiSaaS (Years 4–5+)</div><div style="font-size:10px;color:var(--muted);">AI-Native Operating System — One Source of Truth — Acts on Data, Not Just Stores It</div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">🌍 GEN4 Revenue Streams</div>
+      <table>
+        <tr><th>Stream</th><th>Margin</th><th>Model</th><th>Phase</th><th>Status</th></tr>
+        <tr><td>HigginsBot (S.A.L.E.s)</td><td style="color:var(--green);">90%+</td><td>Monthly SaaS</td><td>Year 1</td><td><span class="tag green">Active</span></td></tr>
+        <tr><td>HigginsAssistant</td><td style="color:var(--green);">90%+</td><td>Per-User SaaS</td><td>Year 1</td><td><span class="tag green">Active</span></td></tr>
+        <tr><td>HigginsReports</td><td style="color:var(--green);">90%+</td><td>Report Generation</td><td>Year 1</td><td><span class="tag green">Active</span></td></tr>
+        <tr><td>HigginsAutomations</td><td style="color:var(--green);">85%+</td><td>Workflow Automation</td><td>Year 1–2</td><td><span class="tag gold">Scaling</span></td></tr>
+        <tr><td>HigginsPay</td><td style="color:var(--gold);">20–50%</td><td>Credit/Debit</td><td>Year 2</td><td><span class="tag green">Active</span></td></tr>
+        <tr><td>HigginsPOS</td><td style="color:var(--gold);">35%</td><td>POS Sales</td><td>Year 2–3</td><td><span class="tag gold">Planned</span></td></tr>
+        <tr><td>HigginsHardware</td><td style="color:var(--gold);">30%</td><td>Equipment Lease</td><td>Year 3</td><td><span class="tag gold">Planned</span></td></tr>
+        <tr><td>HigginsLoans</td><td style="color:var(--blue);">10%</td><td>Brokered Loans</td><td>Year 4</td><td><span class="tag blue">Future</span></td></tr>
+        <tr><td>Enterprise aiSaaS</td><td style="color:var(--red);">TBD</td><td>Full Platform License</td><td>Year 4–5</td><td><span class="tag red">Vision</span></td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ===== DIFFERENTIATORS ===== -->
+<div id="diff" class="page">
+  <div class="stat-row">
+    <div class="stat-card green"><div class="stat-label">vs ChatGPT</div><div class="stat-val" style="color:var(--green);">Superior</div><div class="stat-sub">Per Gemini Analysis</div></div>
+    <div class="stat-card"><div class="stat-label">Workflow Deployment</div><div class="stat-val">72 hrs</div><div class="stat-sub">Custom AI Workflow</div></div>
+    <div class="stat-card gold"><div class="stat-label">Setup Profit Margin</div><div class="stat-val">90%+</div><div class="stat-sub">Across All Industries</div></div>
+    <div class="stat-card blue"><div class="stat-label">Privacy Model</div><div class="stat-val">Zero</div><div class="stat-sub">Data Sold or Shared</div></div>
+  </div>
+  <div class="card">
+    <div class="card-title">🏆 Higgins vs Traditional SaaS &amp; Generalist AI</div>
+    <table class="diff-table">
+      <tr><th>Capability</th><th>Traditional SaaS / Generalist AI</th><th>Higgins AI</th></tr>
+      <tr><td>Sales Growth System</td><td><span class="cross">✗</span> No built-in sales methodology</td><td><span class="check">✓</span> Proprietary S.A.L.E.s + P.U.R.E.S. system</td></tr>
+      <tr><td>ROI Guarantee</td><td><span class="cross">✗</span> No guarantee</td><td><span class="check">✓</span> 130% min. ROI Year 1 — guaranteed</td></tr>
+      <tr><td>System Adaptability</td><td><span class="cross">✗</span> You adapt to the system</td><td><span class="check">✓</span> System adapts to you</td></tr>
+      <tr><td>Onboarding Time</td><td><span class="cross">✗</span> Months of training</td><td><span class="check">✓</span> Natural voice &amp; text — Day 1</td></tr>
+      <tr><td>AI Architecture</td><td><span class="cross">✗</span> One generalist model</td><td><span class="check">✓</span> 101+ specialized AI teams</td></tr>
+      <tr><td>Privacy</td><td><span class="cross">✗</span> Chats sold to train models</td><td><span class="check">✓</span> Zero data sharing — admin-inaccessible</td></tr>
+      <tr><td>Customization Speed</td><td><span class="cross">✗</span> Months &amp; expensive</td><td><span class="check">✓</span> Custom workflows in ≤72 hours at 90%+ margin</td></tr>
+      <tr><td>Future Vision</td><td><span class="cross">✗</span> Traditional SaaS (data storage)</td><td><span class="check">✓</span> aiSaaS (AI-native action platform)</td></tr>
+    </table>
+  </div>
+  <div class="grid2">
+    <div class="card">
+      <div class="card-title">📊 Gemini: Higgins vs ChatGPT</div>
+      <div class="bar-chart">
+        <div class="bar-row"><div class="bar-label">Depth of Response</div><div class="bar-track"><div class="bar-fill" style="width:92%;background:var(--green);">High</div></div><div class="bar-val">vs Medium</div></div>
+        <div class="bar-row"><div class="bar-label">Accuracy</div><div class="bar-track"><div class="bar-fill" style="width:90%;background:var(--green);">High</div></div><div class="bar-val">vs Med-High</div></div>
+        <div class="bar-row"><div class="bar-label">Precision</div><div class="bar-track"><div class="bar-fill" style="width:95%;background:var(--green);">Very High</div></div><div class="bar-val">vs Low-Med</div></div>
+        <div class="bar-row"><div class="bar-label">Recall</div><div class="bar-track"><div class="bar-fill" style="width:88%;background:var(--green);">High</div></div><div class="bar-val">vs Medium</div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">🔑 Three Core Pillars</div>
+      <div class="pillar" style="border-left:4px solid var(--red)"><div class="pillar-title">⚡ Powerful</div><div class="pillar-desc">101+ AI models in specialized teams under one Lead AI — delivering accuracy that generalist models can't match across industries and verticals.</div></div>
+      <div class="pillar" style="border-left:4px solid var(--gold)"><div class="pillar-title">🎯 Personal</div><div class="pillar-desc">Every response tailored to the user's profile, expertise, and goals — personalized from the very first request, no training cycles needed.</div></div>
+      <div class="pillar" style="border-left:4px solid var(--green)"><div class="pillar-title">🔒 Private</div><div class="pillar-desc">Zero data sold. Zero chats shared. Each user gets a private environment — admin-inaccessible. Privacy is the bedrock that gains enterprise trust.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== ECOSYSTEM ===== -->
+<div id="eco" class="page">
+  <div class="section-title"><span></span>The Higgins Ecosystem — One Source of Truth AI</div>
+  <div class="grid3">
+    <div class="card" style="border-top:3px solid var(--red)"><div class="card-title">🤖 higginsbot</div><p style="font-size:11px;color:var(--muted);line-height:1.6;">Full-screen website AI interface. Increases client retention and visitor engagement. Instant appointment booking. Monthly analytics via HigginsReports. <strong style="color:var(--red)">35+ hrs setup — 15+ hrs/month.</strong></p></div>
+    <div class="card" style="border-top:3px solid var(--gold)"><div class="card-title">📱 higginsassistant</div><p style="font-size:11px;color:var(--muted);line-height:1.6;">Personal AI app — knows the user specifically. Private &amp; secure per user. Works on any device. Brandable as standalone enterprise app. Clients are yours — you own them and the income. <strong style="color:var(--gold)">25+ hrs setup per region.</strong></p></div>
+    <div class="card" style="border-top:3px solid var(--green)"><div class="card-title">📊 higginsreports</div><p style="font-size:11px;color:var(--muted);line-height:1.6;">Interactive S.A.L.E.s-powered reporting with expansion strategies. Contact customers with tailored messages. Coach or reward staff instantly. <strong style="color:var(--green)">~45 mins to generate per report.</strong></p></div>
+    <div class="card" style="border-top:3px solid var(--blue)"><div class="card-title">⚙️ higginsautomations</div><p style="font-size:11px;color:var(--muted);line-height:1.6;">All-AI process automation. Intelligent department alerts. Automatic HigginsReports updates. Client S.A.L.E.s assessment reporting. Staff onboarding with SOP familiarity. <strong style="color:var(--blue)">In active development.</strong></p></div>
+    <div class="card" style="border-top:3px solid var(--purple)"><div class="card-title">🏢 higginsbusiness</div><p style="font-size:11px;color:var(--muted);line-height:1.6;">Full enterprise AI in a box. Full AI Tech Management, 24/7 support, operations management, billing, user &amp; accounting management. Certified training included. IP &amp; Trademark licensing.</p></div>
+    <div class="card" style="border-top:3px solid var(--teal)"><div class="card-title">🔗 Enterprise Integrations</div><p style="font-size:11px;color:var(--muted);line-height:1.6;">Integrates with SAP, Teamcenter, Veeva, Trackwise, ServiceNow, Microsoft Suite, Google Suite, and dozens of MCPs. Combines unstructured + structured data for unprecedented intelligence.</p></div>
+  </div>
+  <div class="card">
+    <div class="card-title">🤝 Enterprise Clients &amp; Partners</div>
+    <div class="eco-row">
+      <div class="eco-pill">Edward Jones</div><div class="eco-pill">State Farm</div><div class="eco-pill">Liberty Mutual</div>
+      <div class="eco-pill">LPL Financial</div><div class="eco-pill">Keller Williams</div><div class="eco-pill">BNI Global</div>
+      <div class="eco-pill">New York Life</div><div class="eco-pill">Primerica</div><div class="eco-pill">Gold Star Mortgage</div>
+      <div class="eco-pill">Regent University</div><div class="eco-pill">HSA for America</div>
+    </div>
+    <p style="font-size:10px;color:var(--muted);margin-top:12px;">* Utilized by associates from these organizations across 60+ global regions. Enterprise Biomedical–Pharma contracts recently awarded via S.A.L.E.s Listening Sessions.</p>
+  </div>
+</div>
+
+<!-- ===== TEAM ===== -->
+<div id="team" class="page">
+  <div class="section-title"><span></span>The Higgins Team Has Depth</div>
+  <div class="grid2">
+    <div class="card" style="border-left:4px solid var(--red)"><div style="font-size:15px;font-weight:800;color:#fff;margin-bottom:3px;">Dr. Malik Hakim</div><div style="font-size:10px;color:var(--red);font-weight:700;margin-bottom:10px;">FOUNDER &amp; CEO</div><p style="font-size:11px;color:var(--muted);line-height:1.7;">25+ years researching and developing AI-based products. Created foundational patents licensed by Google, Salesforce, and Slack. PhD in Biomedical Engineering (Outstanding Researcher Designation). 979+ journal citations. Cross-trained in 19+ disciplines. Master Six Sigma Black Belt.</p></div>
+    <div class="card" style="border-left:4px solid var(--blue)"><div style="font-size:15px;font-weight:800;color:#fff;margin-bottom:3px;">Michael Barbieri, B.A.Sc.</div><div style="font-size:10px;color:var(--blue);font-weight:700;margin-bottom:10px;">HEAD OF ENTERPRISE TECHNOLOGY</div><p style="font-size:11px;color:var(--muted);line-height:1.7;">Entrepreneur, engineer, and technology executive with 30+ years of experience building and scaling data-driven platforms. Strong track record translating emerging technologies into operational efficiency, revenue growth, and durable enterprise value.</p></div>
+    <div class="card" style="border-left:4px solid var(--gold)"><div style="font-size:15px;font-weight:800;color:#fff;margin-bottom:3px;">Dr. Vickram Bissonauth, Ph.D.</div><div style="font-size:10px;color:var(--gold);font-weight:700;margin-bottom:10px;">HEAD OF INSTITUTIONAL TECHNOLOGY</div><p style="font-size:11px;color:var(--muted);line-height:1.7;">Launched Mauritius' first satellite MIR-SAT-1 via JAXA/UNOOSA Award. Chairs National Healthcare Ethics Committee. PhD Cellular Biology. 306+ journal citations. 15+ years research management. Expertise in government contracts.</p></div>
+    <div class="card" style="border-left:4px solid var(--green)"><div style="font-size:15px;font-weight:800;color:#fff;margin-bottom:3px;">Vinayak Sankaranarayanan</div><div style="font-size:10px;color:var(--green);font-weight:700;margin-bottom:10px;">SOFTWARE ENGINEER</div><p style="font-size:11px;color:var(--muted);line-height:1.7;">Skilled in backend development, data engineering, and machine learning. Experience with APIs, SQL, Datadog, Terraform, and ML models. Built impactful projects in analytics, automation, and full-stack development.</p></div>
+  </div>
+  <div class="card">
+    <div class="card-title">🎓 Advisors &amp; Legal</div>
+    <div style="display:flex;gap:16px;flex-wrap:wrap;">
+      <div style="background:#1a1a1a;border-radius:8px;padding:12px;flex:1;min-width:200px;"><div style="font-weight:700;color:#fff;margin-bottom:3px;">Gary Magnant</div><div style="font-size:10px;color:var(--red);">Formation Venture Engineering</div><div style="font-size:11px;color:var(--muted);margin-top:5px;">Proven track record helping startups achieve enterprise success and investor exits.</div></div>
+      <div style="background:#1a1a1a;border-radius:8px;padding:12px;flex:1;min-width:200px;"><div style="font-weight:700;color:#fff;margin-bottom:3px;">Fei Xu</div><div style="font-size:10px;color:var(--blue);">Fenwick &amp; West LLP</div><div style="font-size:11px;color:var(--muted);margin-top:5px;">Legal counsel specializing in technology IP, patent strategy, and venture financing.</div></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">🔐 Intellectual Property</div>
+    <table>
+      <tr><th>Patent</th><th>Description</th><th>Licensed By</th><th>Status</th></tr>
+      <tr><td>US9971979B2</td><td>Unified intelligent business management applications — AI suggestions integrated into enterprise apps</td><td>Google, Salesforce, Slack</td><td><span class="tag green">Active</span></td></tr>
+      <tr><td>63/794177</td><td>Multiple AI System Orchestration — specialized AI teams under a lead model</td><td>Higgins Proprietary</td><td><span class="tag gold">Provisional</span></td></tr>
+    </table>
+  </div>
+  <div style="background:linear-gradient(135deg,#1a0505,#0a0a0a);border:1px solid var(--red);border-radius:12px;padding:22px;margin-top:16px;text-align:center;">
+    <div style="font-size:17px;font-weight:800;color:#fff;margin-bottom:6px;">📬 Ready to Invest in the $1M Pre-Seed Round?</div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:14px;">Reach out directly to the Higgins AI investor relations team.</div>
+    <div style="display:flex;justify-content:center;gap:16px;flex-wrap:wrap;">
+      <a href="mailto:investor@higgins.ai" style="background:var(--red);color:#fff;padding:11px 24px;border-radius:8px;font-weight:700;text-decoration:none;font-size:13px;">📧 investor@higgins.ai</a>
+      <a href="tel:18557373386" style="background:#1a1a1a;color:#fff;padding:11px 24px;border-radius:8px;font-weight:700;text-decoration:none;font-size:13px;border:1px solid var(--border);">📞 1.855.737.3386</a>
+    </div>
+  </div>
+</div>
+
+<!-- ===== TERMINOLOGY ===== -->
+<div id="terminology" class="page">
+  <div class="section-title"><span></span>📖 Dashboard Terminology Guide</div>
+  <p style="font-size:12px;color:var(--muted);margin-bottom:18px;">Every term, acronym, and metric used throughout this investor dashboard — defined clearly for all audiences.</p>
+  <div class="term-search-wrap">
+    <span class="term-search-icon">🔍</span>
+    <input type="text" class="term-search" id="termSearch" placeholder="Search terms, acronyms, or categories..." oninput="filterTerms()"/>
+  </div>
+  <div class="term-filter-row">
+    <div class="term-filter active" onclick="setFilter('all',this)">All Terms</div>
+    <div class="term-filter" onclick="setFilter('financial',this)">💰 Financial</div>
+    <div class="term-filter" onclick="setFilter('sales',this)">🎯 S.A.L.E.s</div>
+    <div class="term-filter" onclick="setFilter('investment',this)">📈 Investment</div>
+    <div class="term-filter" onclick="setFilter('technology',this)">⚙️ Technology</div>
+    <div class="term-filter" onclick="setFilter('market',this)">🌍 Market</div>
+    <div class="term-filter" onclick="setFilter('product',this)">📦 Products</div>
+  </div>
+  <div class="term-count" id="termCount">Showing all terms</div>
+  <div class="term-grid" id="termGrid"></div>
+</div>
+
+<footer>
+  <img src="https://images.squarespace-cdn.com/content/v1/52990677e4b0c5f2207d3046/cbcfb3db-24de-496e-9df3-1a515b1e9781/HigginsReports-logo-site.png?format=2500w" alt="Higgins AI" class="logo-img" onerror="this.style.display='none'"/>
+  <p>© 2026 Higgins AI — Patent: US9971979B2 &amp; 63/794177 — investor@higgins.ai — 1.855.737.3386</p>
+  <p style="color:var(--red);font-size:10px;font-weight:700;">$1M PRE-SEED SAFE ROUND OPEN — CONFIDENTIAL — FOR INVESTOR USE ONLY</p>
+</footer>
+
+<script>
+function show(id,el){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  el.classList.add('active');
+}
+const terms=[
+  {name:"Business Growth Accelerator",acronym:null,cat:"sales",catLabel:"🎯 S.A.L.E.s",def:"Higgins' category: an AI system that grows a business on two fronts — S.A.L.E.s and P.U.R.E.S. to identify and select the best prospects, and P.I.T.C.H. to identify the best investor.",context:"Replaces the earlier 'S.A.L.E.s Accelerator' positioning; S.A.L.E.s remains the prospect engine within it."},
+  {name:"P.I.T.C.H. Investor Score",acronym:"P.I.T.C.H.",cat:"investment",catLabel:"📈 Investment",def:"A 100-point investor fit score: Positioning, Investment Capacity, Traction/Stage Fit, Contactability, and Heft (0–20 each).",context:"Tier 1 ≥ 80, Tier 2 66–79, Tier 3 52–65, Tier 4 < 52. Used to rank investors and capital partners."},
+  {name:"Monthly Recurring Revenue",acronym:"MRR",cat:"financial",catLabel:"💰 Financial",def:"The predictable, normalized revenue a business collects from all active subscriptions each month.",context:"Higgins Standard MRR = $32/mo. S.A.L.E.s MRR = $678/mo — a 3,257% uplift."},
+  {name:"Annual Recurring Revenue",acronym:"ARR",cat:"financial",catLabel:"💰 Financial",def:"MRR multiplied by 12. Represents the annualized value of all recurring subscription revenue.",context:"Higgins Overall ARR = $252,601 across all product lines with a 606% YoY growth rate."},
+  {name:"Lifetime Value",acronym:"LTV",cat:"financial",catLabel:"💰 Financial",def:"The total revenue a business can expect from a single customer account over the entire duration of their relationship.",context:"Standard LTV = $2,719. S.A.L.E.s LTV = $41,358 — a 1,521% increase."},
+  {name:"Return on Investment",acronym:"ROI",cat:"financial",catLabel:"💰 Financial",def:"A performance measure used to evaluate the efficiency of an investment.",context:"Higgins guarantees a minimum 130% ROI in Year 1. Average client ROI is 300–400%. See 130roi.com."},
+  {name:"Year-Over-Year Growth",acronym:"YoY",cat:"financial",catLabel:"💰 Financial",def:"A comparison of a metric against the same metric from the prior year.",context:"Higgins Pay YoY = 3,481%. Automations YoY = 809%. Overall ARR YoY = 606%."},
+  {name:"Profit Margin",acronym:null,cat:"financial",catLabel:"💰 Financial",def:"The percentage of revenue remaining after all costs are deducted.",context:"Higgins custom AI workflows deploy in ≤72 hours at 90%+ profit margin."},
+  {name:"Customer Acquisition Cost",acronym:"CAC",cat:"financial",catLabel:"💰 Financial",def:"The total cost of acquiring a new customer, including marketing, sales, and onboarding expenses.",context:"Higgins' Empowering module targets 2+ referrals per client, organically reducing CAC over time."},
+  {name:"Churn Rate",acronym:null,cat:"financial",catLabel:"💰 Financial",def:"The percentage of customers who stop using a product or service over a given time period.",context:"Higgins targets 95%+ client retention rate — less than 5% churn."},
+  {name:"S.A.L.E.s System",acronym:"S.A.L.E.s",cat:"sales",catLabel:"🎯 S.A.L.E.s",def:"Higgins' patented client acquisition and retention methodology. Sourcing, Assessing, Listening, and Empowering.",context:"The S.A.L.E.s System drives the 3,257% MRR uplift from $32 to $678 per client with a guaranteed 130% ROI."},
+  {name:"Sourcing",acronym:null,cat:"sales",catLabel:"🎯 S.A.L.E.s",def:"The first S.A.L.E.s module. Identifying, locating, and qualifying ideal client prospects using the P.U.R.E.S. scoring methodology.",context:"Sourcing targets P.U.R.E.S. accuracy above 80%."},
+  {name:"Assessing",acronym:null,cat:"sales",catLabel:"🎯 S.A.L.E.s",def:"The second S.A.L.E.s module. Analyzing client buying patterns, decision timelines, and stakeholder maps.",context:"Assessing targets needs accuracy above 90%."},
+  {name:"Listening",acronym:null,cat:"sales",catLabel:"🎯 S.A.L.E.s",def:"The third S.A.L.E.s module. Systematically collecting, scoring, and acting on client feedback at every stage.",context:"Listening targets a 70%+ feedback collection rate. Led directly to awarded Enterprise Biomedical–Pharma contracts."},
+  {name:"Empowering",acronym:null,cat:"sales",catLabel:"🎯 S.A.L.E.s",def:"The fourth S.A.L.E.s module. Converting satisfied clients into active advocates through referral programs.",context:"Empowering targets 2+ referrals per satisfied client, driving organic pipeline growth."},
+  {name:"P.U.R.E.S. Scoring",acronym:"P.U.R.E.S.",cat:"sales",catLabel:"🎯 S.A.L.E.s",def:"Higgins' proprietary client evaluation framework. Scores prospects 1–5 on: Profitability, Urgency, Reachability, Engagement, and Sustainability.",context:"P.U.R.E.S. scores determine client tier: Tier 1A (Premium), Tier 1B (High-Value), Tier 1C (Qualified)."},
+  {name:"Tier 1A — Premium",acronym:null,cat:"sales",catLabel:"🎯 S.A.L.E.s",def:"Highest-value client classification. Clients who score 4–5 on all five P.U.R.E.S. criteria.",context:"Tier 1A clients receive the premium outreach template with quantified ROI benefits."},
+  {name:"Tier 1B — High-Value",acronym:null,cat:"sales",catLabel:"🎯 S.A.L.E.s",def:"Second client tier. Clients scoring 3–4 on most P.U.R.E.S. criteria.",context:"Tier 1B clients receive simplified outreach templates focused on efficiency and growth."},
+  {name:"Tier 1C — Qualified",acronym:null,cat:"sales",catLabel:"🎯 S.A.L.E.s",def:"Third client tier. Clients scoring 3+ on overall P.U.R.E.S. criteria.",context:"Tier 1C clients enter the pipeline with targeted educational content and progressive engagement sequences."},
+  {name:"Simple Agreement for Future Equity",acronym:"SAFE",cat:"investment",catLabel:"📈 Investment",def:"A financing instrument used in early-stage fundraising. Investors provide capital now in exchange for the right to receive equity in a future priced funding round.",context:"Higgins is raising a $1M Pre-Seed SAFE Round to accelerate S.A.L.E.s platform deployment and begin the aiSaaS transition."},
+  {name:"Pre-Seed Round",acronym:null,cat:"investment",catLabel:"📈 Investment",def:"The earliest formal stage of startup fundraising, used to validate a product, build an initial team, and reach early traction milestones before a larger seed round.",context:"Higgins' $1M Pre-Seed SAFE Round is open now, with proven traction across 42,232 associated businesses in 60+ global regions."},
+  {name:"Go-To-Market Strategy",acronym:"GTM",cat:"investment",catLabel:"📈 Investment",def:"The plan a company uses to bring its product to market.",context:"35% of Higgins' $1M Pre-Seed Round is allocated to S.A.L.E.s Platform &amp; GTM execution ($350K)."},
+  {name:"Intellectual Property",acronym:"IP",cat:"investment",catLabel:"📈 Investment",def:"Legal rights that protect creations of the mind — patents, trademarks, copyrights, and trade secrets.",context:"Higgins holds Patent US9971979B2 (licensed by Google, Salesforce, Slack) and Provisional Patent 63/794177."},
+  {name:"Total Addressable Market",acronym:"TAM",cat:"market",catLabel:"🌍 Market",def:"The total revenue opportunity available if a company achieved 100% market share in its target market.",context:"Higgins TAM = $126B (global CRM/Enterprise SaaS market), projected to exceed $250B by 2032 as aiSaaS emerges."},
+  {name:"Serviceable Addressable Market",acronym:"SAM",cat:"market",catLabel:"🌍 Market",def:"The portion of the TAM that a company can realistically target.",context:"Higgins SAM = $52B (North American market, focused on top 5 CRM supplement opportunities)."},
+  {name:"Serviceable Obtainable Market",acronym:"SOM",cat:"market",catLabel:"🌍 Market",def:"The realistic portion of the SAM that a company can capture in the near term.",context:"Higgins SOM = $87M+, based on converting 5% of the 42,232 associated businesses to the S.A.L.E.s system."},
+  {name:"aiSaaS",acronym:null,cat:"market",catLabel:"🌍 Market",def:"AI-native Software as a Service — the next generation of business operating systems that act on data rather than just storing it. Higgins' 5-year vision category.",context:"Where SaaS stored data, aiSaaS acts on it. Where SaaS required training, aiSaaS requires only conversation. Higgins is defining this category."},
+  {name:"Intelligence Layer",acronym:null,cat:"market",catLabel:"🌍 Market",def:"A software layer that sits between users and existing systems, adding AI-powered analysis, natural language processing, and decision support.",context:"The Higgins AI Intelligence Layer transforms existing CRMs, ERPs, and PLMs from passive data stores into active, voice-activated revenue engines."},
+  {name:"Large Language Model",acronym:"LLM",cat:"technology",catLabel:"⚙️ Technology",def:"A type of AI trained on vast amounts of text data that can understand and generate human language.",context:"Higgins orchestrates 101+ LLMs and specialized AI models in coordinated teams, outperforming single generalist models like ChatGPT."},
+  {name:"AI Orchestration",acronym:null,cat:"technology",catLabel:"⚙️ Technology",def:"The process of coordinating multiple AI models to work together under a lead model.",context:"Higgins' patented AI orchestration (Patent 63/794177) deploys 101+ specialized AI teams under one Lead AI."},
+  {name:"Software as a Service",acronym:"SaaS",cat:"technology",catLabel:"⚙️ Technology",def:"A software delivery model where applications are hosted in the cloud and provided to users over the internet on a subscription basis.",context:"Higgins begins as the AI intelligence layer in front of traditional SaaS — and evolves to replace it with aiSaaS over 5 years."},
+  {name:"Customer Relationship Management",acronym:"CRM",cat:"technology",catLabel:"⚙️ Technology",def:"A software system used to manage a company's interactions and relationships with current and potential customers.",context:"Higgins enhances and can ultimately replace CRM systems by providing AI-powered S.A.L.E.s intelligence."},
+  {name:"Standard Operating Procedure",acronym:"SOP",cat:"technology",catLabel:"⚙️ Technology",def:"A documented, step-by-step process that standardizes how specific tasks are performed within an organization.",context:"Higgins can draft, update, and deliver SOPs using AI — dramatically reducing the time and cost of maintaining operational documentation."},
+  {name:"HigginsBot",acronym:null,cat:"product",catLabel:"📦 Products",def:"Higgins' full-screen website AI interface product. Designed to increase client retention, visitor engagement, and appointment bookings.",context:"HigginsBot is the public-facing AI that sits on a client's website, converting visitors into leads and appointments automatically."},
+  {name:"HigginsAssistant",acronym:null,cat:"product",catLabel:"📦 Products",def:"Higgins' personal AI app product. Private, personalized, and specific to each individual user. Works on any device, can be branded.",context:"HigginsAssistant creates the deepest user relationship — it knows the user specifically and grows smarter with every interaction."},
+  {name:"HigginsReports",acronym:null,cat:"product",catLabel:"📦 Products",def:"Higgins' interactive reporting product. Generates enterprise and industry-specific S.A.L.E.s expansion strategies and tailored customer outreach messages.",context:"HigginsReports transforms raw business data into actionable S.A.L.E.s intelligence — replacing static dashboards with living, interactive reports."},
+  {name:"HigginsAutomations",acronym:null,cat:"product",catLabel:"📦 Products",def:"Higgins' AI process automation product. Handles all-AI departmental workflows, intelligent alerts, automatic report updates, and staff onboarding.",context:"HigginsAutomations is the product driving 809% YoY growth."},
+  {name:"HigginsBusiness",acronym:null,cat:"product",catLabel:"📦 Products",def:"Higgins' full enterprise AI-in-a-box product. Includes full AI tech management, 24/7 client support, operations management, and certified training.",context:"HigginsBusiness is the complete enterprise offering — enabling organizations to own and operate their own Higgins-powered AI ecosystem."},
+  {name:"GEN4 Ecosystem",acronym:null,cat:"product",catLabel:"📦 Products",def:"The next generation of Higgins revenue streams beyond core SaaS subscriptions. Includes HigginsPay, HigginsPOS, HigginsHardware, HigginsAccounting, HigginsLoans, and HigginsSupplies.",context:"The GEN4 Ecosystem positions Higgins as a full business operating system — the foundation of the aiSaaS category."}
+];
+let activeFilter='all';
+function renderTerms(filtered){
+  const grid=document.getElementById('termGrid');
+  const count=document.getElementById('termCount');
+  if(!filtered.length){grid.innerHTML='<div class="no-results">No terms found.</div>';count.textContent='No results found';return;}
+  count.textContent=`Showing ${filtered.length} of ${terms.length} terms`;
+  grid.innerHTML=filtered.map(t=>`<div class="term-card"><div class="term-card-header"><div class="term-name">${t.name}</div>${t.acronym?`<div class="term-acronym">${t.acronym}</div>`:''}</div><div class="term-cat" style="color:${catColor(t.cat)}">${t.catLabel}</div><div class="term-def">${t.def}</div><div class="term-context">💡 ${t.context}</div></div>`).join('');
+}
+function catColor(cat){const map={financial:'#f59e0b',sales:'#CF2030',investment:'#3b82f6',technology:'#22c55e',market:'#06b6d4',product:'#9333ea'};return map[cat]||'#888';}
+function filterTerms(){
+  const q=document.getElementById('termSearch').value.toLowerCase();
+  let filtered=terms;
+  if(activeFilter!=='all')filtered=filtered.filter(t=>t.cat===activeFilter);
+  if(q)filtered=filtered.filter(t=>t.name.toLowerCase().includes(q)||(t.acronym&&t.acronym.toLowerCase().includes(q))||t.def.toLowerCase().includes(q)||t.context.toLowerCase().includes(q));
+  renderTerms(filtered);
+}
+function setFilter(cat,el){
+  activeFilter=cat;
+  document.querySelectorAll('.term-filter').forEach(f=>f.classList.remove('active'));
+  el.classList.add('active');
+  filterTerms();
+}
+renderTerms(terms);
+
+/* ===== Growth Engine scorers ===== */
+const PU=['P','U','R','E','S'],PUN=['Profitability','Urgency','Reachability','Engagement','Sustainability'];
+const sampleP=[["Prospect A (sample)",[5,4,5,4,5]],["Prospect B (sample)",[4,3,4,3,4]],["Prospect C (sample)",[3,3,2,4,3]]];
+let prospects=JSON.parse(JSON.stringify(sampleP));
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function puresTier(s){const t=s.reduce((a,b)=>a+b,0),mn=Math.min(...s);
+  if(mn>=4)return['Tier 1A','a'];
+  if(s.filter(x=>x>=3).length>=4&&t/5>=3.4)return['Tier 1B','b'];
+  if(t/5>=3)return['Tier 1C','c'];return['Below 1C','d'];}
+function renderP(){
+  document.getElementById('puresRows').innerHTML=prospects.map((p,i)=>`<div class="crow"><div class="top"><input type="text" value="${esc(p[0])}" onchange="prospects[${i}][0]=this.value;outP()"><button class="x" onclick="prospects.splice(${i},1);renderP()">✕</button></div><div class="dims">${p[1].map((v,j)=>`<div><label title="${PUN[j]}">${PU[j]} · ${PUN[j].slice(0,5)}</label><input type="number" min="1" max="5" value="${v}" onchange="prospects[${i}][1][${j}]=Math.max(1,Math.min(5,+this.value||1));outP()"></div>`).join('')}</div></div>`).join('');
+  outP();}
+function outP(){
+  const r=prospects.map(p=>({n:p[0],t:p[1].reduce((a,b)=>a+b,0)*4,tier:puresTier(p[1])})).sort((a,b)=>b.t-a.t);
+  document.getElementById('puresOut').innerHTML=r.length?r.map((x,i)=>`<div class="rank ${i==0?'best':''}"><span class="n">${i+1}</span><span class="nm">${esc(x.n)}</span>${i==0?'<span class="best-tag">★ BEST PROSPECT</span>':''}<span class="sc2">${x.t}/100</span><span class="tg ${x.tier[1]}">${x.tier[0]}</span></div>`).join(''):'<div class="calc-note">Add a prospect to begin.</div>';}
+function addProspect(){prospects.push(["New prospect",[3,3,3,3,3]]);renderP();}
+function resetProspects(){prospects=JSON.parse(JSON.stringify(sampleP));renderP();}
+
+const HEFT={20:'GP / Managing Partner / Founder (20)',17:'Partner (17)',13:'Principal (13)',10:'Associate / Investor (10)',8:'Analyst (8)',6:'Unknown (6)'};
+const sampleI=[["Investor A (sample)",[20,18,20,16,20]],["Investor B (sample)",[16,13,12,14,17]],["Investor C (sample)",[11,8,9,10,6]]];
+let investors=JSON.parse(JSON.stringify(sampleI));
+const PD=['P','I','T','C','H'];
+function pitchTier(t){return t>=80?['Tier 1','a']:t>=66?['Tier 2','b']:t>=52?['Tier 3','c']:['Tier 4','d'];}
+function renderI(){
+  document.getElementById('pitchRows').innerHTML=investors.map((p,i)=>`<div class="crow"><div class="top"><input type="text" value="${esc(p[0])}" onchange="investors[${i}][0]=this.value;outI()"><button class="x" onclick="investors.splice(${i},1);renderI()">✕</button></div><div class="dims">${p[1].map((v,j)=>`<div><label>${PD[j]}</label><input type="number" min="0" max="20" value="${v}" onchange="investors[${i}][1][${j}]=Math.max(0,Math.min(20,+this.value||0));outI()"></div>`).join('')}</div></div>`).join('');
+  outI();}
+function outI(){
+  const r=investors.map(p=>({n:p[0],t:p[1].reduce((a,b)=>a+b,0),tier:null})).sort((a,b)=>b.t-a.t);
+  r.forEach(x=>x.tier=pitchTier(x.t));
+  document.getElementById('pitchOut').innerHTML=r.length?r.map((x,i)=>`<div class="rank ${i==0?'best':''}"><span class="n">${i+1}</span><span class="nm">${esc(x.n)}</span>${i==0?'<span class="best-tag">★ BEST INVESTOR</span>':''}<span class="sc2">${x.t}/100</span><span class="tg ${x.tier[1]}">${x.tier[0]}</span></div>`).join(''):'<div class="calc-note">Add an investor to begin.</div>';}
+function addInvestor(){investors.push(["New investor",[10,10,10,10,10]]);renderI();}
+function resetInvestors(){investors=JSON.parse(JSON.stringify(sampleI));renderI();}
+renderP();renderI();
+</script>
+</body></html>
